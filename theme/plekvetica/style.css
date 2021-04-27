@@ -1,0 +1,27 @@
+/*
+Theme Name: Plekvetica
+Description: Child theme for Generatepress theme
+Author: Daniel Spycher
+Author URI: 
+Template: generatepress
+Version: 0.1
+Text Domain:  plek
+*/
+
+
+body{
+    color: white;
+}
+.site-header{
+    background-color: #232323;
+}
+
+/* The Event Calendar */
+.tribe-events-single-event-title,
+.tribe-events-schedule .recurringinfo, .tribe-events-schedule h2, .tribe-related-event-info .recurringinfo,
+.tribe-events-content,
+.tribe-events-meta-group .tribe-events-single-section-title,
+.single-tribe_events .tribe-events-single .tribe-events-event-meta,
+.tribe-events-back a, .tribe-events-back a:visited{
+    color: white;
+}
