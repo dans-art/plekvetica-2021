@@ -23,4 +23,6 @@ $fp_poster = new plekSocialMedia;
 
 //s($fp_poster -> post_photo_to_facebook("Letzer Test\r\nMit newline!?",'https://plekvetica.ch/wp-content/uploads/2020/06/corisa2-2.jpg'));
 //s($plek_event);
+$event_handler = new PlekEventHandler;
+$event_handler -> get_venue_relationship_array();
 ?>

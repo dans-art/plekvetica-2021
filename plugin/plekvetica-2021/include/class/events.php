@@ -150,6 +150,7 @@ class PlekEvents extends PlekEventHandler
                     $band = array();
                     $band['name'] = $line->name;
                     $band['slug'] = $line->slug;
+                    $band['link'] = $band_class -> get_band_link($line -> slug);
                     $band['bandpage'] = $line->slug;
                     $band['flag'] = (isset($line->{'herkunft'})) ? $band_class->get_flag_formated($line->{'herkunft'}) : '';
                     foreach ($this->band_terms as $term_name) {
@@ -170,4 +171,25 @@ class PlekEvents extends PlekEventHandler
             }
         }
     }
+
+    /**
+ * Inject the Band infos into the Tribe Events result
+ *
+ * @param [type] $post
+ * @return void
+ */
+function plek_tribe_get_event($post)
+{
+    $this -> load_event_terms($post -> ID);
+    $bands = $this -> get_event(); 
+    $post -> terms = $bands;
+    return $post;
+}
+
+public function plek_get_featured_startpage(){
+    //load from cache?
+
+    s(tribe_get_events());
+    return "Hello";
+}
 }

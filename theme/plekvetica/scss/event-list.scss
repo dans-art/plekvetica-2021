@@ -1,0 +1,75 @@
+//Event List Style
+
+article.tribe-events-calendar-list__event{
+
+ 
+    .band{
+      white-space: nowrap;
+      padding-right: 0.5em;
+
+      
+      .flag {
+        width: 1.2em;
+        display: inline-block;
+      }
+
+      a{
+        color: $text-color;
+      }
+
+      a:hover{
+        color: $link-color-hover;
+      }
+    
+    }
+}
+
+.tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event{
+  flex-direction: row;
+}
+
+.tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event-details {
+  width: 51%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.plek-events-event-categories,
+.plek-events-event-venue{
+
+  a{
+    color: $text-color;
+  }
+}
+
+.plek-events-event-categories,
+.plek-events-event-venue{
+
+  a:hover{
+    color: $link-color-hover;
+  }
+}
+
+.tribe-events .tribe-events-calendar-list__event-date-tag-datetime{
+  height: auto;
+  background: $color-gray;
+
+  .plek-events-date-day{
+    font-size: 2em;
+    line-height: 0.8em;
+    padding-top: 0.1em;
+  }
+
+}
+
+.tribe-events-calendar-list__event-featured-image-wrapper.tribe-common-g-col{
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.tribe-common-g-row.tribe-events-calendar-list__event-row{
+  padding-left: 9vw;
+}
+

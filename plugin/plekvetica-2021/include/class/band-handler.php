@@ -42,6 +42,7 @@ class plekBandHandler{
         $this -> band['name'] = $term -> name;
         $this -> band['slug'] = $term -> slug;
         $this -> band['description'] = $term -> description;
+        $this -> band['link'] = $this -> get_band_link($term -> slug);
 
         foreach($cFields as $name => $val){
             $this -> band[$name] = $val;
@@ -84,6 +85,10 @@ class plekBandHandler{
             return "<img src='$flag' alt='Flag of ".$country_code."'/>";
         }
         return $country_code; 
+    }
+
+    public function get_band_link(string $band_slug){
+        return site_url('/band/'.$band_slug, 'https' ); 
     }
     
 }

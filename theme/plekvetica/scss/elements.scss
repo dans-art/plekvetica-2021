@@ -1,0 +1,31 @@
+//Elements Style
+
+.info-text-bar,
+.tribe-events-calendar-list__month-separator{
+  background-color: $color-red-gray;
+}
+
+.tribe-events-calendar-list__month-separator{
+  width: 16vw;
+  padding: 0.5em !important;
+
+
+  &::before{
+    //content: "cube";
+    //position: absolute;
+  }
+  
+  & time{
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    
+    &:before{
+      //content:"test";
+      //position: absolute;
+    }
+
+  }
+
+
+}

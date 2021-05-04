@@ -22,28 +22,31 @@ $container_classes = [ 'tribe-common-g-row', 'tribe-events-calendar-list__event-
 $container_classes['tribe-events-calendar-list__event-row--featured'] = $event->featured;
 
 $event_classes = tribe_get_post_class( [ 'tribe-events-calendar-list__event', 'tribe-common-g-row', 'tribe-common-g-row--gutters' ], $event->ID );
-s($event -> terms['bands']);
+//s($event -> terms['bands']);
 //s($event -> terms['genres']);
-s($event -> venues[0]);
-s($event -> venues[0] ->post_title);
+//s($event -> venues[0]);
+//s($event -> venues[0] ->post_title);
 ?>
 <div <?php tribe_classes( $container_classes ); ?>>
 
-	<?php $this->template( 'list/event/date-tag', [ 'event' => $event ] ); ?>
+	
 
 	<div class="tribe-events-calendar-list__event-wrapper tribe-common-g-col">
 		<article <?php tribe_classes( $event_classes ) ?>>
+
+			<?php $this->template( 'list/event/date-tag', [ 'event' => $event ] ); ?>
 			<?php $this->template( 'list/event/featured-image', [ 'event' => $event ] ); ?>
 
 			<div class="tribe-events-calendar-list__event-details tribe-common-g-col">
-
 				<header class="tribe-events-calendar-list__event-header">
-					<?php $this->template( 'list/event/date', [ 'event' => $event ] ); ?>
+					<?php /*$this->template( 'list/event/date', [ 'event' => $event ] );*/ ?>
+					<?php $this->template( 'list/event/genres', [ 'event' => $event ] ); ?>
 					<?php $this->template( 'list/event/title', [ 'event' => $event ] ); ?>
 					<?php $this->template( 'list/event/venue', [ 'event' => $event ] ); ?>
 				</header>
-				<?php $this->template( 'list/event/cost', [ 'event' => $event ] ); ?>
-				<?php PlekTemplateHandler::load_template('bands-compact','meta', $event -> terms['bands']); ?>
+				<?php //$this->template( 'list/event/cost', [ 'event' => $event ] ); ?>
+				<?php $this->template( 'list/event/bands', [ 'event' => $event ] ); ?>
+			
 
 			</div>
 		</article>

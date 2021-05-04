@@ -1,16 +1,15 @@
-<?php 
+<?php
 
 extract(get_defined_vars());
 $bands = $template_args[0];
 //s($bands);
 ?>
 
-<?php foreach($bands as $id => $band):  ?>
+<?php foreach ($bands as $id => $band) :  ?>
 
     <span class="band band-<?php echo $id; ?>">
-    <?php 
-    echo $band['flag'] . ' ' . $band['name']; ?>
+        <span class="flag"><?php echo $band['flag']; ?></span>
+        <span class="name"><?php echo "<a href='" . $band['link'] . "' alt='Bandpage von " . $band['name'] . "'>" . $band['name'] . "</a>"; ?></span>
     </span>
-    <?php if(next($bands) == true){echo ', ';}?>
 
 <?php endforeach; ?>

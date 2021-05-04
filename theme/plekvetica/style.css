@@ -1,4 +1,4 @@
-/*
+/**
 Theme Name: Plekvetica
 Description: Child theme for Generatepress theme
 Author: Daniel Spycher
@@ -7,14 +7,11 @@ Template: generatepress
 Version: 0.1
 Text Domain:  plek
 */
+body {
+  color: white; }
 
-
-body{
-    color: white;
-}
-.site-header{
-    background-color: #232323;
-}
+.site-header {
+  background-color: #232323; }
 
 /* The Event Calendar */
 .tribe-events-single-event-title,
@@ -22,6 +19,102 @@ body{
 .tribe-events-content,
 .tribe-events-meta-group .tribe-events-single-section-title,
 .single-tribe_events .tribe-events-single .tribe-events-event-meta,
-.tribe-events-back a, .tribe-events-back a:visited{
-    color: white;
-}
+.tribe-events-back a, .tribe-events-back a:visited {
+  color: white; }
+
+.nav-float-right #site-navigation {
+  margin-left: 3vh; }
+
+.main-navigation .main-nav ul li a {
+  line-height: 38px; }
+
+.main-navigation:not(.toggled) ul li.sfHover > ul, .main-navigation:not(.toggled) ul li:hover > ul {
+  left: -7vw; }
+
+.main-navigation ul ul {
+  background-color: #595959; }
+
+.main-navigation .main-nav ul.menu li[class*="current-menu-"] > a:before {
+  content: url("data:image/svg+xml;charset=UTF-8, <svg class='nav-triangle' xmlns='http://www.w3.org/2000/svg' version='1.1' height='20' width='20'><polygon points='20,0 20,20 0,20' fill='%23D9042B' /></svg>");
+  position: absolute;
+  right: 0;
+  bottom: -15px; }
+
+.main-navigation .main-nav ul[class*="sub-menu"] li[class*="current-menu-"] > a:before {
+  bottom: -4px; }
+
+.main-navigation .main-nav ul li a {
+  padding-top: 2px; }
+
+.footer {
+  color: white; }
+
+.info-text-bar,
+.tribe-events-calendar-list__month-separator {
+  background-color: #3F2931; }
+
+.tribe-events-calendar-list__month-separator {
+  width: 16vw;
+  padding: 0.5em !important; }
+  .tribe-events-calendar-list__month-separator time {
+    width: 100%;
+    text-align: center;
+    overflow: hidden; }
+
+article.tribe-events-calendar-list__event .band {
+  white-space: nowrap;
+  padding-right: 0.5em; }
+  article.tribe-events-calendar-list__event .band .flag {
+    width: 1.2em;
+    display: inline-block; }
+  article.tribe-events-calendar-list__event .band a {
+    color: white; }
+  article.tribe-events-calendar-list__event .band a:hover {
+    color: #595959; }
+
+.tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event {
+  flex-direction: row; }
+
+.tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event-details {
+  width: 51%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column; }
+
+.plek-events-event-categories a,
+.plek-events-event-venue a {
+  color: white; }
+
+.plek-events-event-categories a:hover,
+.plek-events-event-venue a:hover {
+  color: #595959; }
+
+.tribe-events .tribe-events-calendar-list__event-date-tag-datetime {
+  height: auto;
+  background: #424242; }
+  .tribe-events .tribe-events-calendar-list__event-date-tag-datetime .plek-events-date-day {
+    font-size: 2em;
+    line-height: 0.8em;
+    padding-top: 0.1em; }
+
+.tribe-events-calendar-list__event-featured-image-wrapper.tribe-common-g-col {
+  justify-content: center;
+  display: flex;
+  flex-direction: column; }
+
+.tribe-common-g-row.tribe-events-calendar-list__event-row {
+  padding-left: 9vw; }
+
+.band img {
+  vertical-align: sub;
+  width: 19px; }
+
+#content.site-content {
+  max-width: 1024px;
+  margin: 0 auto;
+  background-color: #232323; }
+
+.separate-containers .inside-article, .separate-containers .comments-area, .separate-containers .page-header, .one-container .container, .separate-containers .paging-navigation, .inside-page-header {
+  background-color: transparent; }
+
+/*# sourceMappingURL=style.css.map */

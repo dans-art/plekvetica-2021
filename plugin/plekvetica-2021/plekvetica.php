@@ -24,3 +24,7 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
  require_once(PLEK_PATH . 'include\class\include.php');
 
  $plek_event = new PlekEvents;
+ $backend_class = new plekBackend;
+
+ require_once(PLEK_PATH . 'include\filter-actions.php');
+ require_once(PLEK_PATH . 'include\shortcodes.php');
