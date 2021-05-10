@@ -5,6 +5,7 @@ class PlekEvents extends PlekEventHandler
 
     protected $event = array();
     protected $band_terms = array('website_link', 'herkunft', 'videos', 'bandpic');
+    public string $poster_size = 'medium';
 
     protected $errors = array();
 
@@ -22,7 +23,7 @@ class PlekEvents extends PlekEventHandler
         return $this->event;
     }
 
-    public function get_field(string $name = 'post_title')
+    public function get_field(string $name = 'post_title', string $template = null)
     {
         switch ($name) {
             case 'bands':
@@ -31,24 +32,34 @@ class PlekEvents extends PlekEventHandler
             case 'date':
                 return $this->format_date();
                 break;
-            case 'venue':
-                //return PlekEventHandler::format_bands($this -> event['bands']);
+            case 'venue_short':
+                return tribe_get_venue($this->event['meta']['_EventVenueID']->meta_value);
                 break;
-            case 'organizer':
-                //return PlekEventHandler::format_bands($this -> event['bands']);
+            case 'genres':
+            case 'datetime':
+            case 'price_links':
+            case 'authors':
+            case 'videos':
+            case 'details':
+                return PlekTemplateHandler::load_template($name,'meta', $this);
                 break;
-
             default:
+                $val = null;
                 if (isset($this->event[0]->{$name})) {
-                    return nl2br($this->event[0]->{$name});
+                    $val = nl2br($this->event[0]->{$name});
                 }
-                if (isset($this->event['meta'][$name]->meta_value)) {
-                    return $this->event['meta'][$name]->meta_value;
+                else if (isset($this->event['meta'][$name]->meta_value)) {
+                    $val = $this->event['meta'][$name]->meta_value;
                 }
+                else{
+                    $val = "Field '$name' not Found";
+                }
+                return ($template === null)?$val:PlekTemplateHandler::load_template($template,'meta', $val);
                 break;
         }
-        return __("Field '$name' not Found");
+        return;
     }
+
 
     public function load_event(int $event_id = null, string $status = 'publish')
     {

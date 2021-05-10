@@ -1,0 +1,19 @@
+//Single Event Style
+
+#event-container{
+   display:flex;
+  flex-direction: row;
+   .event-content,
+   .event-meta{
+    flex-direction: column;
+   }
+
+   .event-links-container{
+
+    img{
+      max-width: 4em;
+      max-height: 2em;
+    }
+   }
+}
+

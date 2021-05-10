@@ -61,6 +61,10 @@ body {
     text-align: center;
     overflow: hidden; }
 
+.band img {
+  vertical-align: sub;
+  width: 19px; }
+
 article.tribe-events-calendar-list__event .band {
   white-space: nowrap;
   padding-right: 0.5em; }
@@ -105,9 +109,15 @@ article.tribe-events-calendar-list__event .band {
 .tribe-common-g-row.tribe-events-calendar-list__event-row {
   padding-left: 9vw; }
 
-.band img {
-  vertical-align: sub;
-  width: 19px; }
+#event-container {
+  display: flex;
+  flex-direction: row; }
+  #event-container .event-content,
+  #event-container .event-meta {
+    flex-direction: column; }
+  #event-container .event-links-container img {
+    max-width: 4em;
+    max-height: 2em; }
 
 #content.site-content {
   max-width: 1024px;

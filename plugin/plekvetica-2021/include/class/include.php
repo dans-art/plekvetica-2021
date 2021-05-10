@@ -1,5 +1,7 @@
 <?php
 
+require_once(PLEK_PATH . 'include\class\plek-handler.php');
+
 require_once(PLEK_PATH . 'include\class\backend.php');
 require_once(PLEK_PATH . 'include\class\band-handler.php');
 

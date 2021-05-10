@@ -19,7 +19,7 @@ class plekBandHandler{
      * - videos
      * - band_galleries
      *
-     * @var [object]
+     * @var [Array]
      */
     protected $band = null;
 
@@ -52,6 +52,10 @@ class plekBandHandler{
 
     public function get_band_object(){
         return $this -> band;
+    }
+    
+    public function set_band_object($band_arr = array()){
+        return $this -> band = $band_arr;
     }
 
     public function get_name(){
@@ -89,6 +93,18 @@ class plekBandHandler{
 
     public function get_band_link(string $band_slug){
         return site_url('/band/'.$band_slug, 'https' ); 
+    }
+
+    /**
+     * Gets the Category / Genre link to the calendar
+     * @todo Make the cat_slug work on english versions of the page.
+     *
+     * @param string $genre_slug
+     * @return void
+     */
+    public function get_genre_link(string $genre_slug){
+        $cat_slug = 'kategorie'; //Does not work on english version?
+        return Tribe__Events__Main::instance()->getLink() . $cat_slug . '/' . $genre_slug; 
     }
     
 }

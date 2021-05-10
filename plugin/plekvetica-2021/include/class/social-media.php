@@ -15,11 +15,12 @@ class plekSocialMedia
     public function __construct()
     {
         //Load the Options
-        $fb_options = get_option('plek_facebook_options');
-        $this->page_id = isset($fb_options['plek_facebook_page_id']) ? $fb_options['plek_facebook_page_id'] : false;
-        $this->page_token = isset($fb_options['plek_facebook_page_token']) ? $fb_options['plek_facebook_page_token'] : false;
-        $this->app_secret = isset($fb_options['plek_facebook_app_secret']) ? $fb_options['plek_facebook_app_secret'] : false;
-        $this->app_id = isset($fb_options['plek_facebook_app_id']) ? $fb_options['plek_facebook_app_id'] : false;
+        //$options = get_option('plek_general_options');
+        global $plek_handler;
+        $this->page_id = $plek_handler -> get_plek_option('plek_facebook_page_id');
+        $this->page_token = $plek_handler -> get_plek_option('plek_facebook_page_token');
+        $this->app_secret = $plek_handler -> get_plek_option('plek_facebook_app_secret');
+        $this->app_id = $plek_handler -> get_plek_option('plek_facebook_app_id');
 
         $this->facebook_object = $this->facebook_login();
     }
@@ -84,14 +85,19 @@ class plekSocialMedia
      */
     public function facebook_login()
     {
-        if ($this->app_id === false) {
+        if (empty($this->app_id) OR empty($this->app_secret)) {
             return false;
         }
-        $fb = new Facebook\Facebook([
-            'app_id' => $this->app_id,
-            'app_secret' => $this->app_secret,
-            'default_graph_version' => 'v10.0',
-        ]);
+        try {
+            $fb = new Facebook\Facebook([
+                'app_id' => $this->app_id,
+                'app_secret' => $this->app_secret,
+                'default_graph_version' => 'v10.0',
+            ]);
+        } catch (\Throwable $th) {
+            echo $th;
+        }
+ 
         return $fb;
     }
 

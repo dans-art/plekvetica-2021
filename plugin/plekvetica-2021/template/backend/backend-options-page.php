@@ -1,20 +1,30 @@
 <h2>Plekvetica</h2>
 
-<form action="options.php" method="post">
+<form id='plek_options_page' action="options.php" method="post"  enctype="multipart/form-data">
     <?php
-    settings_fields('plek_facebook_options');
-    do_settings_sections('plek');
+    //settings_fields('plek_facebook_options'); 
+    settings_fields('plek_general_options'); 
 
-    $options = get_option('plek_facebook_options');
-
+    do_settings_sections('plek_general_options');
+    
+    //do_settings_sections('plek_facebook_options');
+    $options = get_option('plek_general_options');
+    //s($options);
     if (isset($options['plek_facebook_page_id'])) {
         $poster = new plekSocialMedia;
         $poster->facebook_login();
-    ?>
-        <div>Connected with: <?php echo $poster->get_page_name(); ?></div>
-    <?php
+        try { ?>
+            <div>Connected with: <?php echo $poster->get_page_name(); ?></div>
+            <?php
+        } catch (\Throwable $th) {
+            echo "Error while connecting to Facebook.";
+            echo $th;
+            echo '</div>';
+        }
+        
+        ?>
+        <?php
     }
+    submit_button(); 
     ?>
-
-    <input name="submit" class="button button-primary" type="submit" value="<?php esc_attr_e('Save'); ?>" />
 </form>
