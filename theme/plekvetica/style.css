@@ -109,6 +109,9 @@ article.tribe-events-calendar-list__event .band {
 .tribe-common-g-row.tribe-events-calendar-list__event-row {
   padding-left: 9vw; }
 
+#tribe-events-pg-template {
+  max-width: 100%; }
+
 #event-container {
   display: flex;
   flex-direction: row; }

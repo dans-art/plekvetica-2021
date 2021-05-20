@@ -1,8 +1,13 @@
-<?php 
-
-extract(get_defined_vars());
-$thumbnail_id = $template_args[0];
+<?php
 global $plek_event;
-echo wp_get_attachment_image($thumbnail_id, $plek_event -> poster_size);
+extract(get_defined_vars());
+$size = (!empty($template_args[0])) ? $template_args[0] : $plek_event->poster_size;
+$alt = __('Poster von der Veranstaltung', 'pleklang');
+$poster = $plek_event->get_poster($alt, $size);
 ?>
 
+<?php if ($poster) : ?>
+    <?php echo $poster; ?>
+<?php else : ?>
+    <img src="<?php echo $plek_event->poster_placeholder; ?>" alt="<?php echo __('Poster placeholder', 'pleklang'); ?>" />
+<?php endif; ?>

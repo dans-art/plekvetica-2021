@@ -9,7 +9,7 @@ $bands = $template_args[0];
 
     <span class="band band-<?php echo $id; ?>">
         <span class="flag"><?php echo $band['flag']; ?></span>
-        <span class="name"><?php echo "<a href='" . $band['link'] . "' alt='Bandpage von " . $band['name'] . "'>" . $band['name'] . "</a>"; ?></span>
+        <span class="name"><?php echo "<a href='" . $band['link'] . "' title='Bandpage von " . $band['name'] . "'>" . $band['name'] . "</a>"; ?></span>
     </span>
 
 <?php endforeach; ?>

@@ -14,3 +14,5 @@ require_once(PLEK_PATH . 'include\class\events.php');
 require_once(PLEK_PATH . 'include\class\template-handler.php');
 require_once(PLEK_PATH . 'include\facebook\autoload.php');
 require_once(PLEK_PATH . 'include\class\social-media.php');
+
+require_once(PLEK_PATH . 'include\class\youtube.php');

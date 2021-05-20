@@ -21,11 +21,6 @@ get_header();
     if(is_single()){
         $plek_event -> load_event();
         PlekTemplateHandler::load_template('single-view','','testarg');
-        //Test
-        echo "<hr/>";
-        echo "<hr/>";
-        echo "<hr/>";
-        echo tribe( Template_Bootstrap::class )->get_view_html();
     }
     else{
         echo tribe( Template_Bootstrap::class )->get_view_html();

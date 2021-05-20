@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Handles the social media function
+ * Facebook API functions
+ * Youtube functions
+ */
 class plekSocialMedia
 {
 
@@ -14,13 +19,11 @@ class plekSocialMedia
      */
     public function __construct()
     {
-        //Load the Options
-        //$options = get_option('plek_general_options');
         global $plek_handler;
-        $this->page_id = $plek_handler -> get_plek_option('plek_facebook_page_id');
-        $this->page_token = $plek_handler -> get_plek_option('plek_facebook_page_token');
-        $this->app_secret = $plek_handler -> get_plek_option('plek_facebook_app_secret');
-        $this->app_id = $plek_handler -> get_plek_option('plek_facebook_app_id');
+        $this->page_id = $plek_handler->get_plek_option('plek_facebook_page_id');
+        $this->page_token = $plek_handler->get_plek_option('plek_facebook_page_token');
+        $this->app_secret = $plek_handler->get_plek_option('plek_facebook_app_secret');
+        $this->app_id = $plek_handler->get_plek_option('plek_facebook_app_id');
 
         $this->facebook_object = $this->facebook_login();
     }
@@ -85,7 +88,7 @@ class plekSocialMedia
      */
     public function facebook_login()
     {
-        if (empty($this->app_id) OR empty($this->app_secret)) {
+        if (empty($this->app_id) or empty($this->app_secret)) {
             return false;
         }
         try {
@@ -97,7 +100,7 @@ class plekSocialMedia
         } catch (\Throwable $th) {
             echo $th;
         }
- 
+
         return $fb;
     }
 
@@ -113,7 +116,7 @@ class plekSocialMedia
             if (!$fb) {
                 return false;
             }
-            $response = $fb->get($this -> page_id,  $this->page_token);
+            $response = $fb->get($this->page_id,  $this->page_token);
         } catch (\Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
             return 'Graph returned an error: ' . $e->getMessage();
@@ -126,6 +129,38 @@ class plekSocialMedia
         if (isset($response['name'])) {
             return $response['name'];
         }
+        return false;
+    }
+
+    /**
+     * Validates the $video string and runs the shortcode of the yotuwp plugin.
+     *
+     * @param string $video - Youtube url, short url or video id
+     * @return string Error message if yotuwp is not active or false on failure. HTML on success.
+     */
+    public static function single_youtube_video_do_shortcode(string $video)
+    {
+        global $yotuwp;
+        if(!isset($yotuwp)){
+            return __('Error: Plugin YotuWP is not active');
+        }
+        $url = parse_url($video);
+        $id = null;
+        if (count($url) === 1 and !empty($url['path'])) {
+            $id = $url['path']; //$video was just the video ID
+        } elseif (!empty($url['query'])) {
+            $id = preg_replace('/^v=/', '', $url['query']); //$video was the full link
+        } elseif (!empty($url['path'])) {
+            $id = preg_replace('/^\//', '', $url['path']); //$video was the short link (https://youtu.be/jsRQE0O2_XY)
+        }
+        if ($id !== null) {
+            $id = trim($id);
+            $vid_code = do_shortcode("[yotuwp type='videos' id='$id' pagination='off' pagitype='pager' column='1' per_page='1']");
+            if (strpos($vid_code, $id) > 0) {
+                return $vid_code;
+            }
+        }
+
         return false;
     }
 }

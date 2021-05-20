@@ -9,6 +9,8 @@
  * Author: Daniel Spycher
  * Author URI: https://www.dev.dans-art.ch/
  * Textdomain: pleklang
+ * @todo: 
+ *       -  Change ACF "band_genre" callback to Array
  * 
  */
 
@@ -25,6 +27,7 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
  /* if(!class_exists("Tribe__Events__Main")){
     exit('Event Calendar not installed');
  } */
+ 
  //Include all of the classes
  require_once(PLEK_PATH . 'include\class\include.php');
 

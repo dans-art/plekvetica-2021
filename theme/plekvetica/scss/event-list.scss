@@ -54,6 +54,7 @@ article.tribe-events-calendar-list__event{
 .tribe-events .tribe-events-calendar-list__event-date-tag-datetime{
   height: auto;
   background: $color-gray;
+  min-width: 4em;
 
   .plek-events-date-day{
     font-size: 2em;

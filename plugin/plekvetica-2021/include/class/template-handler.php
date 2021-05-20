@@ -73,4 +73,19 @@ class PlekTemplateHandler
         echo sprintf(__('Template "%s" not found!', 'plek'),$template_name);
         return;
     }
+    public static function load_template_to_var(string $template_name = '', string $subfolder = '', ...$template_args){
+        $args = get_defined_vars();
+        $path = PlekTemplateHandler::get_template_path($template_name, $subfolder);
+
+        if($path){
+            ob_start();
+            include($path);
+            $output_string = ob_get_contents();
+            ob_end_clean();
+            wp_reset_postdata();
+            return $output_string;
+        }
+
+        return sprintf(__('Template "%s" not found!', 'plek'),$template_name);
+    }
 }

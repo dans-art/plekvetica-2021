@@ -39,7 +39,10 @@ class plekBackend
         
         add_settings_field('plek_seetickets_logo', 'SeeTickets (Starticket) Logo', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'plek_seetickets_logo', 'type' => 'file'));
         add_settings_field('plek_ticketcorner_logo', 'Ticketcorner Logo', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'plek_ticketcorner_logo', 'type' => 'file'));
-
+        
+        add_settings_field('review_page', 'Review Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'review_page', 'type' => 'input'));
+        add_settings_field('youtube_channel_id', 'Youtube Channel ID', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'youtube_channel_id', 'type' => 'input'));
+        
         add_settings_field('plek_facebook_enable_autopost', 'Enable Facebook Autopost', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_enable_autopost', 'type' => 'checkbox'));
         add_settings_field('plek_facebook_page_id', 'Page ID', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_page_id', 'type' => 'input'));
         add_settings_field('plek_facebook_app_id', 'App ID', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_app_id', 'type' => 'input'));
@@ -57,13 +60,18 @@ class plekBackend
      */
     public function plek_options_validate($input)
     {
+        global $plek_handler;
         if (!empty($_FILES["plek_seetickets_logo"]["tmp_name"])) {
             $urls = wp_handle_upload($_FILES["plek_seetickets_logo"], array('test_form' => FALSE));
             $input['plek_seetickets_logo'] = $urls["url"];
+        }else{
+            $input['plek_seetickets_logo'] =  $plek_handler -> get_plek_option('plek_seetickets_logo');
         }
         if (!empty($_FILES["plek_seetickets_logo"]["tmp_name"])) {
             $urls = wp_handle_upload($_FILES["plek_ticketcorner_logo"], array('test_form' => FALSE));
             $input['plek_ticketcorner_logo'] = $urls["url"];
+        }else{
+            $input['plek_ticketcorner_logo'] =  $plek_handler -> get_plek_option('plek_ticketcorner_logo');
         }
         return $input;
     }

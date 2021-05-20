@@ -1,19 +1,18 @@
-<?php 
+<?php
 
-extract(get_defined_vars());
-$event_class = $template_args[0];
+global $plek_event;
 
-$authors =  $event_class -> get_event_authors();
-if(!$authors){
-    echo ('No Authors found!');
-    return;
+$authors =  $plek_event->get_event_authors();
+if (!$authors) {
+  echo ('No Authors found!');
+  return;
 }
 ?>
-
-<dl class='event-author-container'>
-<?php foreach($authors as $name => $role):?>
-  <dt><?php echo $name;?></dt>
-  <dd><?php echo $role;?></dd>
-  <?php endforeach;?>
-</dl>
-
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Autoren', 'pleklang')); ?>
+<div class="meta-content">
+  <dl class='event-author-container'>
+    <?php foreach ($authors as $id => $name) : ?>
+      <dt><?php echo get_avatar($id);?><a href="<?php echo get_author_posts_url($id); ?>" title="<?php echo sprintf(__('Mehr über den Autor &quot;%s&quot;'), $name); ?>" target="_self"><?php echo $name; ?></a></dt>
+    <?php endforeach; ?>
+  </dl>
+</div>

@@ -10,4 +10,28 @@ class PlekHandler
         return $options[$options_name];
 
     }
+
+    public function print_url(string $url){
+        $new_url = $url;
+        $parse_url = parse_url($url);
+        if(empty($parse_url['scheme'])){
+            $new_url = 'http://'.$url;
+        }
+        return $new_url;
+    }
+
+    public function text_bar_from_shortcode($attr){
+        $attributes = shortcode_atts( array(
+            'text' => 'Add Text...',
+            ), $attr );
+        return PlekTemplateHandler::load_template_to_var('text-bar', 'components', $attributes['text']);
+    }
+
+    public function plek_text_two_line_title_from_shortcode($attr){
+        $attributes = shortcode_atts( array(
+            'line1' => 'Add Text...',
+            'line2' => 'Add Subtext',
+            ), $attr );
+        return PlekTemplateHandler::load_template_to_var('text_two_line', 'components', $attributes['line1'], $attributes['line2']);
+    }
 }

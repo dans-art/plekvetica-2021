@@ -1,18 +1,23 @@
-<?php 
+<?php
 
-extract(get_defined_vars());
-$bands = $template_args[0];
-//s($bands);
+global $plek_event;
+$bands = $plek_event->get_bands();
+if (empty($bands)) {
+    return;
+}
 ?>
 
-<?php foreach($bands as $id => $band):  ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Bands', 'pleklang')); ?>
+<div class="meta-content">
+    <?php foreach ($bands as $id => $band) :  ?>
 
-    <div class="band band-<?php echo $id; ?>">
-    <h3><?php echo $band['flag'] . ' ' .  $band['name']; ?></h3>
-    <?php if(!empty($band['website_link'])):?>
-        <a href="<?php echo $band['website_link']; ?>">Bandweb</a>
-    <?php endif;?>
-    <div><?php echo $band['videos']; ?></div>
-    </div>
+        <div class="band band-<?php echo $id; ?>">
+            <div>
+                <span class="flag"><?php echo $band['flag']; ?></span>
+                <span class="name"><?php echo "<a href='" . $band['link'] . "' title='Bandpage von " . $band['name'] . "'>" . $band['name'] . "</a>"; ?></span>
+            </div>
+            <div><?php echo (is_array($band['band_genre'])) ? implode(', ', $band['band_genre']) : ''; ?></div>
+        </div>
 
-<?php endforeach; ?>
+    <?php endforeach; ?>
+</div>
