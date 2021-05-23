@@ -1,16 +1,11 @@
 <?php
 global $plek_event;
 global $plek_handler;
+extract(get_defined_vars());
 
-if($plek_event -> is_review()){
-    $label = __('Alle Reviews');
-    $events_label_plural = $label;
-    $link = site_url() . '/' . $plek_handler -> get_plek_option('review_page');
-}else{
-    $label = esc_html_x( 'All %s', '%s Events plural label', 'the-events-calendar' );
-    $events_label_plural = tribe_get_event_label_plural();
-    $link = tribe_get_events_link();
-}
+$link = (isset($template_args[0]))?$template_args[0]:''; //URI to page
+$label = (isset($template_args[1]))?$template_args[1]:''; //Label to display
+$events_label_plural = (isset($template_args[2]))?$template_args[2]:$label; //Event Label plural
 
 ?>
 <p class="tribe-events-back">

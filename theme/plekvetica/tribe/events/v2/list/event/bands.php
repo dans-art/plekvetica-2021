@@ -28,5 +28,5 @@ if (empty($event->terms['bands'])) {
 ?>
 
 <span class="plek-events-calendar-list__event-bands">
-	<?php PlekTemplateHandler::load_template('bands-compact','meta', $event -> terms['bands']); ?>
+	<?php PlekTemplateHandler::load_template('bands-compact','event/meta', $event -> terms['bands']); ?>
 </span>

@@ -52,4 +52,36 @@ class plekYoutube{
         }
         return null;
     }
+
+        /**
+     * Validates the $video string and runs the shortcode of the yotuwp plugin.
+     *
+     * @param string $video - Youtube url, short url or video id
+     * @return string Error message if yotuwp is not active or false on failure. HTML on success.
+     */
+    public static function single_youtube_video_do_shortcode(string $video)
+    {
+        global $yotuwp;
+        if(!isset($yotuwp)){
+            return __('Error: Plugin YotuWP is not active');
+        }
+        $url = parse_url($video);
+        $id = null;
+        if (count($url) === 1 and !empty($url['path'])) {
+            $id = $url['path']; //$video was just the video ID
+        } elseif (!empty($url['query'])) {
+            $id = preg_replace('/^v=/', '', $url['query']); //$video was the full link
+        } elseif (!empty($url['path'])) {
+            $id = preg_replace('/^\//', '', $url['path']); //$video was the short link (https://youtu.be/jsRQE0O2_XY)
+        }
+        if ($id !== null) {
+            $id = trim($id);
+            $vid_code = do_shortcode("[yotuwp type='videos' id='$id' pagination='off' pagitype='pager' column='1' per_page='1']");
+            if (strpos($vid_code, $id) > 0) {
+                return $vid_code;
+            }
+        }
+
+        return false;
+    }
 }

@@ -55,10 +55,10 @@ class PlekEvents extends PlekEventHandler
             case 'authors':
             case 'videos':
             case 'details':
-                return PlekTemplateHandler::load_template($name, 'meta', $this);
+                return PlekTemplateHandler::load_template($name, 'event/meta', $this);
                 break;
             default:
-                return ($template === null) ? $this->get_field_value($name) : PlekTemplateHandler::load_template($template, 'meta', $val);
+                return ($template === null) ? $this->get_field_value($name) : PlekTemplateHandler::load_template($template, 'event/meta');
                 break;
         }
         return;
@@ -280,7 +280,7 @@ class PlekEvents extends PlekEventHandler
         if (empty($events)) {
             return __('Keine Herforgehobenen Events gefunden', 'pleklang');
         }
-        return PlekTemplateHandler::load_template_to_var('event-list-container', '', $events, 'featured');
+        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'featured');
     }
 
     /**
@@ -303,9 +303,42 @@ class PlekEvents extends PlekEventHandler
             'meta_query' => $meta_query
         ]);
         if (empty($events)) {
-            return __('Keine Herforgehobenen Events gefunden', 'pleklang');
+            return __('Keine Reviews gefunden', 'pleklang');
         }
-        return PlekTemplateHandler::load_template_to_var('event-list-container', '', $events, 'reviews');
+        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'reviews');
+    }
+
+    /**
+     * Shortcode Function
+     * Gets the latest four review events.
+     *
+     * @return string Formated HTML
+     */
+    public function plek_get_all_reviews()
+    {
+        //Skip if search
+        if(PlekSearchHandler::is_review_search()){
+            return null;
+        }
+        $meta_query = array();
+        $meta_query['is_review'] = array('key' => 'is_review', 'compare' => '=', 'value' => '1');
+        $posts_per_page = tribe_get_option('postsPerPage');
+        $page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
+        $offset =  $page * $posts_per_page;
+        $load_more = PlekTemplateHandler::load_template_to_var('button', 'components',get_pagenum_link($page + 1),'Load more','_self','load_more_reviews', 'ajax-loader-button');
+
+        $events = tribe_get_events([
+            'eventDisplay'   => 'custom',
+            'end_date'     => 'now',
+            'posts_per_page' => $posts_per_page,
+            'offset' => $offset,
+            'order'       => 'DESC',
+            'meta_query' => $meta_query
+        ]);
+        if (empty($events)) {
+            return __('Keine Reviews gefunden', 'pleklang');
+        }
+        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'all_reviews') . $load_more;
     }
 
     /**
@@ -322,6 +355,8 @@ class PlekEvents extends PlekEventHandler
         if (empty($vids)) {
             return __('Keine Videos gefunden', 'pleklang');
         }
-        return PlekTemplateHandler::load_template_to_var('event-list-container', '', $vids, 'youtube');
+        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $vids, 'youtube');
     }
+
+
 }

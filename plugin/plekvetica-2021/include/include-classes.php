@@ -16,3 +16,5 @@ require_once(PLEK_PATH . 'include\facebook\autoload.php');
 require_once(PLEK_PATH . 'include\class\social-media.php');
 
 require_once(PLEK_PATH . 'include\class\youtube.php');
+
+require_once(PLEK_PATH . 'include\class\search-handler.php');

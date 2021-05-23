@@ -3,7 +3,6 @@ global $plek_event;
 $event = $plek_event->get_event();
 $price_boxoffice = $plek_event->get_price_boxoffice();
 $price_vvk = $plek_event->get_price_vvk();
-
 ?>
 <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Details', 'pleklang')); ?>
 <div class="meta-content">

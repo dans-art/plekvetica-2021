@@ -51,6 +51,24 @@ class PlekTemplateHandler
 
     }
 
+    /**
+     * Loads a template file and passes arguments
+     *
+     * @param string $template_name - Name of the file without extension
+     * @param string $subfolder - Subfolder if any
+     * @param mixed ...$template_args - Arguments of any type to pass to the template.
+     * @return void
+     * 
+     * Template arguments:
+     * - components/button
+     * --link
+     * --label
+     * --target
+     * --id
+     * --class
+     * - components/text-bar
+     * -- text
+     */
     public static function load_template(string $template_name = '', string $subfolder = '', ...$template_args){
         $args = get_defined_vars();
         $path = PlekTemplateHandler::get_template_path($template_name, $subfolder);

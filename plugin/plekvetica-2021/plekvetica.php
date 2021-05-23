@@ -29,11 +29,13 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
  } */
  
  //Include all of the classes
- require_once(PLEK_PATH . 'include\class\include.php');
+ require_once(PLEK_PATH . 'include\include-classes.php');
 
  $plek_event = new PlekEvents;
  $plek_handler = new PlekHandler;
+ $plek_search_handler = new PlekSearchHandler;
  $backend_class = new plekBackend;
+ $plek_gallery_handler = new plekGalleryHandler;
 
  require_once(PLEK_PATH . 'include\filter-actions.php');
  require_once(PLEK_PATH . 'include\shortcodes.php');

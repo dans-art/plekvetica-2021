@@ -34,4 +34,22 @@ class PlekHandler
             ), $attr );
         return PlekTemplateHandler::load_template_to_var('text_two_line', 'components', $attributes['line1'], $attributes['line2']);
     }
+
+    public function get_acf_choices(string $field_name, string $type, int $page_id){
+        switch ($type) {
+            case 'term':
+                $page = 'term_'.$page_id;
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+        $acf = get_field_object($field_name, $page);
+        if(!isset($acf['choices'])){
+            return false;
+        }
+        return $acf['choices'];
+        
+    }
 }

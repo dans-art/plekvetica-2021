@@ -13,10 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <?php 
 
-
 get_header();
 
-PlekTemplateHandler::load_template('single-band');
+	PlekTemplateHandler::load_template('single-band','band');
 
 get_footer();
 

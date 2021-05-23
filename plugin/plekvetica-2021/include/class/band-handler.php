@@ -52,6 +52,10 @@ class plekBandHandler
         $this->band['link'] = $this->get_band_link($term->slug);
 
         foreach ($cFields as $name => $val) {
+            if ($name === 'band_genre') {
+                $this->band[$name] = $this->format_band_array($val);
+                continue;
+            }
             $this->band[$name] = $val;
         }
         return $this->band;
@@ -96,7 +100,27 @@ class plekBandHandler
      */
     public function get_videos()
     {
-        return (isset($this->band['videos'])) ? $this->band['videos'] : '';
+        return (isset($this->band['videos'])) ? preg_split('/\r\n|\r|\n/', $this->band['videos']) : '';
+    }
+ 
+    /**
+     * Checks if the Band has Videos.
+     *
+     * @return bool true if Band has videos, else false
+     */
+    public function has_videos()
+    {
+        return (isset($this->band['videos']) AND !empty($this->band['videos'])) ? true : false;
+    }
+
+    /**
+     * Get the Band Photos.
+     *
+     * @return array Gallery Id's as a array
+     */
+    public function get_photos()
+    {
+        return (isset($this->band['band_galleries'])) ? explode(',',$this->band['band_galleries']) : '';
     }
 
     /**
@@ -108,8 +132,17 @@ class plekBandHandler
     {
         return (isset($this->band['id'])) ? $this->band['id'] : '';
     }
+    /**
+     * Get the Genres Array
+     *
+     * @return array Genres
+     */
+    public function get_genres()
+    {
+        return (isset($this->band['band_genre'])) ? $this->band['band_genre'] : array();
+    }
 
-        /**
+    /**
      * Get the Band logo.
      *
      * @return string Band logo link
@@ -119,7 +152,7 @@ class plekBandHandler
         return (isset($this->band['bandlogo'])) ? $this->band['bandlogo'] : '';
     }
 
-            /**
+    /**
      * Get the Band logo, wraped in img tags.
      *
      * @return string Band logo as img tag
@@ -127,10 +160,10 @@ class plekBandHandler
     public function get_logo_formated()
     {
         $img =  (!empty($this->band['bandlogo'])) ? $this->band['bandlogo'] : $this->bandpic_placeholder;
-        return "<img src='$img' alt='". sprintf(__('Bandlogo von &quot;%s&quot;') , $this->get_name()) . "'/>";
+        return "<img src='$img' alt='" . sprintf(__('Bandlogo von &quot;%s&quot;'), $this->get_name()) . "'/>";
     }
 
-                /**
+    /**
      * Get the Band flag, wraped in img tags.
      * Flag images are located in /images/flags/ and the files are named after the ISO country code
      *
@@ -147,6 +180,34 @@ class plekBandHandler
             return "<img src='$flag' alt='Flag of " . $country_code . "'/>";
         }
         return $country_code;
+    }
+
+    public function get_country_name()
+    {
+        global $plek_handler;
+        $country_code = $this->get_country();
+        $country_array = $plek_handler->get_acf_choices('herkunft', 'term', $this->get_id());
+        if (isset($country_array[$country_code])) {
+            return $country_array[$country_code];
+        }
+        return $country_code;
+    }
+
+    public function get_country()
+    {
+        return (isset($this->band['herkunft'])) ? $this->band['herkunft'] : '';
+    }
+    public function get_facebook_link()
+    {
+        return (isset($this->band['facebook__link'])) ? $this->band['facebook__link'] : '';
+    }
+    public function get_instagram_link()
+    {
+        return (isset($this->band['instagram_link'])) ? $this->band['instagram_link'] : '';
+    }
+    public function get_website_link()
+    {
+        return (isset($this->band['website_link'])) ? $this->band['website_link'] : '';
     }
 
     /**
@@ -174,8 +235,16 @@ class plekBandHandler
      */
     public function get_band_link(string $band_slug)
     {
-        $tag_base = get_option( 'tag_base' );
-        return site_url('/'.$tag_base.'/' . $band_slug, 'https');
+        $tag_base = get_option('tag_base');
+        return site_url('/' . $tag_base . '/' . $band_slug, 'https');
+    }
+
+    public static function is_band_link(string $url)
+    {
+        if(preg_match('/\/band\//',$url)){
+            return true;
+        }
+        return false;
     }
 
     /**

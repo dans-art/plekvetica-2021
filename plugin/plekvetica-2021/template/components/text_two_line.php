@@ -7,7 +7,6 @@ $text2 = $template_args[1];
 ?>
 
 <h3 class='info-text-line'>
-<span class='line1'><?php echo $text1; ?></span>
-<span class='line2'><?php echo $text2; ?></span>
-
+<div class='line1'><?php echo $text1; ?></div>
+<div class='line2'><?php echo $text2; ?></div>
 </h3>

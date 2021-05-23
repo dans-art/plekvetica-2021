@@ -7,7 +7,7 @@ $name = $event-> get_name();
 $image = $event -> get_thumbnail_object('medium');
 
 ?>
-<article class="tribe-events-calendar-list__event tribe-common-g-row tribe-common-g-row--gutters tribe_events type-tribe_events status-publish has-post-thumbnail hentry">
+<article class="tribe-events-calendar-list__event <?php echo $event -> get_event_classes(); ?>">
 
     <div class="tribe-events-calendar-list__event-date-tag tribe-common-g-col">
     </div>
