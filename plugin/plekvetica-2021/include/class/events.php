@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class to handle the Events
  * 
@@ -7,7 +8,7 @@ class PlekEvents extends PlekEventHandler
 {
 
     protected $event = array();
-    public string $poster_size = 'big'; 
+    public string $poster_size = 'big';
     public string $poster_placeholder = '';
     public string $default_event_currency = 'CHF';
 
@@ -45,6 +46,10 @@ class PlekEvents extends PlekEventHandler
                 break;
             case 'date':
                 return $this->format_date();
+                break;
+            case 'post_content':
+            case 'text_lead':
+                return apply_filters('the_content', $this->get_field_value($name)); //Apply shortcodes in the Content
                 break;
             case 'venue_short':
                 return tribe_get_venue($this->event['meta']['_EventVenueID'][0]);
@@ -317,7 +322,7 @@ class PlekEvents extends PlekEventHandler
     public function plek_get_all_reviews()
     {
         //Skip if search
-        if(PlekSearchHandler::is_review_search()){
+        if (PlekSearchHandler::is_review_search()) {
             return null;
         }
         $meta_query = array();
@@ -325,7 +330,7 @@ class PlekEvents extends PlekEventHandler
         $posts_per_page = tribe_get_option('postsPerPage');
         $page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
         $offset =  $page * $posts_per_page;
-        $load_more = PlekTemplateHandler::load_template_to_var('button', 'components',get_pagenum_link($page + 1),'Load more','_self','load_more_reviews', 'ajax-loader-button');
+        $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page + 1), 'Load more', '_self', 'load_more_reviews', 'ajax-loader-button');
 
         $events = tribe_get_events([
             'eventDisplay'   => 'custom',
@@ -357,6 +362,4 @@ class PlekEvents extends PlekEventHandler
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $vids, 'youtube');
     }
-
-
 }

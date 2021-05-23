@@ -126,4 +126,17 @@ class plekGalleryHandler
 
         return get_permalink($page_id) . 'maf/galleries/' . $gallery_object->slug;
     }
+
+    /**
+     * 
+     *
+     * @return void
+     */
+    public function plek_get_ngg_Albums_shortcode($attr){
+        $attributes = shortcode_atts( array(
+            'albumid' => '',
+            ), $attr );
+        $album_id = $attributes['albumid'];
+        return $this -> display_album($album_id);
+    }
 }
