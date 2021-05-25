@@ -1,7 +1,7 @@
 //Header Style
 
 .nav-float-right #site-navigation {
-  margin-left: 3vh;
+  /*margin-left: 3vh;*/
 }
 
 .main-navigation .main-nav ul li a {
@@ -9,7 +9,7 @@
 }
 
 .main-navigation:not(.toggled) ul li.sfHover > ul, .main-navigation:not(.toggled) ul li:hover > ul{
-  left: -7vw;
+  left: -99px;
 }
 
 .main-navigation ul ul {
@@ -17,11 +17,12 @@
 }
 
 
-.main-navigation .main-nav ul.menu li[class*="current-menu-"] > a:before{
-  content: url("data:image/svg+xml;charset=UTF-8, <svg class='nav-triangle' xmlns='http://www.w3.org/2000/svg' version='1.1' height='20' width='20'><polygon points='20,0 20,20 0,20' fill='%23D9042B' /></svg>");
+.main-navigation .main-nav ul.menu li[class*="current-menu-"] > a{
+  /*content: url("data:image/svg+xml;charset=UTF-8, <svg class='nav-triangle' xmlns='http://www.w3.org/2000/svg' version='1.1' height='20' width='20'><polygon points='20,0 20,20 0,20' fill='%23D9042B' /></svg>");
   position: absolute;
 right: 0;
-bottom: -15px;
+bottom: -15px;*/
+border-bottom: solid 2px $color-red-light;
 }
 
 .main-navigation .main-nav ul[class*="sub-menu"] li[class*="current-menu-"] > a:before{
@@ -29,5 +30,5 @@ bottom: -15px;
 }
 
 .main-navigation .main-nav ul li a {
-  padding-top: 2px;
+  padding: 2px 15px 0px 15px;
 }

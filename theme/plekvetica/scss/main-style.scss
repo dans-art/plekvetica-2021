@@ -27,13 +27,16 @@ body{
 .tribe-events-back a, .tribe-events-back a:visited{
     color: white;
 }
- @import 'colors.scss';
- @import 'header.scss';
- @import 'footer.scss';
- @import 'elements.scss';
- @import 'event-general.scss';
- @import 'event-list.scss';
- @import 'event-single.scss';
+    @import 'colors.scss';
+    @import 'selectors.scss';
+    @import 'header.scss';
+    @import 'footer.scss';
+    @import 'elements.scss';
+    @import 'event-general.scss';
+    @import 'event-list.scss';
+    @import 'event-single.scss';
+    @import 'pages-style.scss';
+    @import 'breakpoints.scss';
 
  #content.site-content{
     max-width: 1024px;

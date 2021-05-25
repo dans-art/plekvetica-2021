@@ -47,3 +47,11 @@ $event_date_attr = $display_date->format( Dates::DBDATEFORMAT );
 		</span>
 	</time>
 </div>
+
+<div class="tribe-events-calendar-list__event-date-tag-mobile tribe-common-g-col">
+	<time class="tribe-events-calendar-list__event-date-tag-datetime" datetime="<?php echo esc_attr( $event_date_attr ); ?>">
+		<span class="plek-events-date">
+			<?php echo $display_date->format_i18n( 'D, d F Y' ); ?>
+		</span>
+	</time>
+</div>

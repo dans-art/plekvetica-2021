@@ -167,6 +167,11 @@ class PlekEvents extends PlekEventHandler
     {
         global $wpdb;
 
+        //Reset terms
+        $this->event['genres'] = null;
+        $this->event['bands'] = null;
+        $this->event['author'] = null;
+
         $query = "SELECT wt.name, wt.term_id, wt.slug, p.ID AS 'post_id', wtt.taxonomy, user.display_name
         FROM " . $wpdb->prefix . "terms wt
         INNER JOIN " . $wpdb->prefix . "term_taxonomy wtt ON wt.term_id = wtt.term_id
@@ -180,7 +185,7 @@ class PlekEvents extends PlekEventHandler
             $this->errors[$event_id] = __('No Terms found', 'plek');
             return false;
         }
-
+        //s($db_result);
         $this->process_terms($db_result);
         return true;
     }
@@ -236,17 +241,17 @@ class PlekEvents extends PlekEventHandler
                     $this->event['bands'][$line->term_id] = $band;
                     break;
                     //Author
-                case 'author':
-                    $user = array("name" => $line->name, 'display_name' => $line->display_name);
-                    $this->event['author'][$line->term_id] = $user;
-
-                    break;
-                    //Genres
-                case 'tribe_events_cat':
-                    $this->event['genres'][$line->slug] = $line->name;
-                    break;
-            }
-        }
+                    case 'author':
+                        $user = array("name" => $line->name, 'display_name' => $line->display_name);
+                        $this->event['author'][$line->term_id] = $user;
+                        
+                        break;
+                        //Genres
+                        case 'tribe_events_cat':
+                            $this->event['genres'][$line->slug] = $line->name;
+                            break;
+                        }
+                    }
         return true;
     }
 
@@ -259,8 +264,9 @@ class PlekEvents extends PlekEventHandler
      */
     function plek_tribe_add_terms($post)
     {
-        $this->load_event_terms($post->ID);
-        $terms = $this->get_event();
+        $event = new PlekEvents;
+        $event->load_event_terms($post->ID);
+        $terms = $event->get_event();
         $post->terms = $terms;
         return $post;
     }

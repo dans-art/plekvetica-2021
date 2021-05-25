@@ -23,7 +23,7 @@ $container_classes['tribe-events-calendar-list__event-row--featured'] = $event->
 
 $event_classes = tribe_get_post_class( [ 'tribe-events-calendar-list__event', 'tribe-common-g-row', 'tribe-common-g-row--gutters' ], $event->ID );
 //s($event -> terms['bands']);
-//s($event -> terms['genres']);
+//s($event);
 //s($event -> venues[0]);
 //s($event -> venues[0] ->post_title);
 ?>

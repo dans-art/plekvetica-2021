@@ -1,0 +1,12 @@
+//Selectors Style
+
+a{
+
+  transition: none;
+  
+  &:hover,
+  &:focus,
+  &:visited{
+    color: $color-red-light;
+  }
+}

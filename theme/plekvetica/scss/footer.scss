@@ -1,5 +1,37 @@
 //Footer Style
 
-.footer{
-  color:white;
+.site-footer,
+.footer-widgets,
+.footer-widgets .widget-title,
+footer.site-info{
+  background-color: $color-gray-dark;
+  color: $text-color;
+  margin-bottom: 0;
+}
+
+#menu-social-links-menue{
+  display: flex;
+
+  li{
+    margin: 0.5vw;
+  }
+  
+  a{
+    color: $text-color;
+    font-size: 2em;
+  }
+}
+
+.footer-widgets-container.grid-container {
+  padding-bottom: 0px;
+}
+
+.footer-widget-3{
+  display:flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  aside{
+    align-self: flex-end;
+  }
 }

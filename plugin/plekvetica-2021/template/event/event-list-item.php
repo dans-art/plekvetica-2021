@@ -27,6 +27,9 @@ $stime = strtotime($startDatetime);
 
     <div class="tribe-events-calendar-list__event-details tribe-common-g-col">
         <header class="tribe-events-calendar-list__event-header">
+        <time class="tribe-events-calendar-list__event-date-tag-datetime-mobile" datetime="2021-05-21">
+            <span class="plek-events-date"><?php echo date_i18n('D, d F Y', $stime);?></span>
+            </time>
             <h3 class="tribe-events-calendar-list__event-title tribe-common-h6 tribe-common-h4--min-medium">
                 <a href="<?php echo $event->get_permalink(); ?>" title="<?php echo $event->get_name(); ?>" rel="bookmark" class="tribe-events-calendar-list__event-title-link tribe-common-anchor-thin"><?php echo $event->get_name(); ?></a>
             </h3>

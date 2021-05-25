@@ -1,0 +1,33 @@
+
+//Startpage ID
+#post-27146{
+    .info-text-line{
+        position: absolute;
+        left: 0;
+        color: $color-gray-light-two;
+    }
+    article.plek-event-type-youtube,
+    article.plek-event-type-tribe_events{
+        margin-left: 5%;
+    }
+    
+    .plek-pre-button-seperator{
+        flex-basis: 31.33% !important;
+    }
+
+    .wp-block-column:not(:first-child) {
+        margin-left: 0;
+    }
+
+    .wp-block-buttons > .wp-block-button.plek-start-page{
+        width: 30%;
+        margin-left: 0;
+    
+    }
+}
+
+
+
+
+    
+

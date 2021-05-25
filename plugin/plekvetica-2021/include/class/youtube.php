@@ -53,6 +53,10 @@ class plekYoutube{
         return null;
     }
 
+    public function remove_type_in_title(string $title){
+        return preg_replace('/^[{1} *[A-Za-z ]{3,} *\]{1} */', '', $title);
+    }
+
         /**
      * Validates the $video string and runs the shortcode of the yotuwp plugin.
      *

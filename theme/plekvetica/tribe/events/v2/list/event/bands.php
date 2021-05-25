@@ -21,7 +21,7 @@ if (empty($event->terms['bands'])) {
 	return;
 }
 
-
+//s($event -> terms['bands']);
 
 //If no links are required, you can use:
 //$cats = implode(', ', $event->terms['genres']);

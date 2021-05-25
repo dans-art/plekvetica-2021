@@ -6,7 +6,7 @@
 }
 
 .tribe-events-calendar-list__month-separator{
-  width: 16vw;
+  width: 16%;
   padding: 0.5em !important;
 
 
@@ -28,4 +28,51 @@
   }
 
 
+}
+
+/* Buttons */
+button {
+
+  html input[type="button"], 
+  input[type="reset"],
+  input[type="submit"],
+  a.button,
+  a.wp-block-button__link:not(.has-background){
+    background-color: $color-red-light;
+  }
+}
+
+.wp-block-buttons{
+  a,
+  a.wp-block-button__link:not(.has-background){
+    border-radius: 0;
+    background-color: $color-red-light;
+
+  }
+}
+
+/* Title */
+
+.info-text-bar{
+  padding: 0.5em;
+  font-size: 1em;
+}
+
+.info-text-line{
+  font-size: 1em;
+  width: 11em;
+  margin-bottom: 1em;
+  
+  div{
+    text-align: right;
+  }
+
+  .line2{
+    font-size: 1.5em;
+  }
+}
+
+blockquote{
+  font-size: 1em;
+  border-left: 2px solid $color-gray-light;
 }
