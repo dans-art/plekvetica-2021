@@ -78,13 +78,14 @@ footer.site-info {
   .footer-widget-3 aside {
     align-self: flex-end; }
 
-.info-text-bar,
-.tribe-events-calendar-list__month-separator {
-  background-color: #3F2931; }
+#tribe-events-pg-template .tribe-events-calendar-list__month-separator {
+  background-color: unset;
+  border-bottom: solid 2px #8C262E; }
 
 .tribe-events-calendar-list__month-separator {
   width: 16%;
-  padding: 0.5em !important; }
+  padding: 0 !important;
+  font-size: 1.8em; }
   .tribe-events-calendar-list__month-separator time {
     width: 100%;
     text-align: center;
@@ -105,8 +106,22 @@ button a.wp-block-button__link:not(.has-background) {
 
 /* Title */
 .info-text-bar {
-  padding: 0.5em;
-  font-size: 1em; }
+  padding: 0;
+  margin-bottom: 2em;
+  text-align: center;
+  border-bottom: solid 2px #8C262E;
+  font-size: 1.8em;
+  width: 27%; }
+  .info-text-bar .bar-front {
+    /*padding-left: 5%;*/ }
+  .info-text-bar .bar-back {
+    /*display: block;
+    height: 2em;
+    width: 2em;
+    background: red;
+    position: relative;
+    right: -102%;
+    top: -2em;*/ }
 
 .info-text-line {
   font-size: 1em;
@@ -120,6 +135,34 @@ button a.wp-block-button__link:not(.has-background) {
 blockquote {
   font-size: 1em;
   border-left: 2px solid #595959; }
+
+.info-text-banner {
+  display: flex;
+  justify-content: flex-end; }
+  .info-text-banner .banner-bg {
+    border-top: #8C262E solid 30px;
+    border-right: solid transparent 30px;
+    border-left: solid transparent 30px;
+    width: 146px;
+    display: block;
+    position: relative;
+    right: -32px;
+    bottom: 64px;
+    transform: rotate(-45deg); }
+  .info-text-banner .banner-text {
+    display: block;
+    position: relative;
+    right: -145px;
+    bottom: 64px;
+    transform: rotate(-45deg);
+    z-index: 99;
+    text-transform: uppercase; }
+
+.yotu-videos .yotu-video h3.yotu-video-title {
+  color: white; }
+
+.yotu-playlist .yotu-pagination a::after {
+  color: white; }
 
 .band img {
   vertical-align: sub;
@@ -200,12 +243,15 @@ article .tribe-events-calendar-list__event-attributes-tag {
     display: block;
     width: 1em;
     text-align: center; }
-article .tribe-events-calendar-list__event-featured-image-wrapper {
+article .tribe-events-calendar-list__event-featured-image-wrapper,
+article .tribe-events-calendar-list__event-image-wrapper {
   padding: 0 1em;
   width: 30%;
   text-align: center; }
-  article .tribe-events-calendar-list__event-featured-image-wrapper img {
-    padding: 0.5%; }
+  article .tribe-events-calendar-list__event-featured-image-wrapper img,
+  article .tribe-events-calendar-list__event-image-wrapper img {
+    padding: 0.5%;
+    width: 100%; }
 article .tribe-events-calendar-list__event-details {
   align-self: center;
   width: 60%; }
@@ -300,6 +346,16 @@ article .tribe-events-calendar-list__event-details {
 .tribe-events-calendar-list__event-date-tag-mobile {
   display: none; }
 
+.tribe-events .tribe-events-c-events-bar__search-container,
+.tribe-events .tribe-events-c-view-selector__content {
+  background-color: #232323; }
+
+.plek-post-type-all_reviews .info-text-bar,
+.plek-post-type-reviews .info-text-bar,
+.plek-post-type-review-search .info-text-bar {
+  width: 27%;
+  margin-bottom: 2em; }
+
 #tribe-events-pg-template {
   max-width: 100%; }
 
@@ -327,6 +383,107 @@ article .tribe-events-calendar-list__event-details {
 #post-27146 .wp-block-buttons > .wp-block-button.plek-start-page {
   width: 30%;
   margin-left: 0; }
+
+.tribe-events-view .tribe-common-l-container.tribe-events-l-container {
+  padding-top: 1.8em; }
+
+.post-type-archive-tribe_events .entry-header {
+  padding: 40px 0 0 40px; }
+
+#tribe-events-pg-template .single-view .info-text-bar {
+  width: 100%; }
+#tribe-events-pg-template .single-view #event-content {
+  padding: 0 1em 0 0;
+  width: 70%;
+  /* YotuWP*/ }
+  #tribe-events-pg-template .single-view #event-content .plek_album_con {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap; }
+    #tribe-events-pg-template .single-view #event-content .plek_album_con .image_container {
+      width: 48%;
+      min-width: 200px; }
+  #tribe-events-pg-template .single-view #event-content .image_link_wrapper {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1em; }
+    #tribe-events-pg-template .single-view #event-content .image_link_wrapper a {
+      color: white; }
+  #tribe-events-pg-template .single-view #event-content .yotu-playlist {
+    padding: 0; }
+  #tribe-events-pg-template .single-view #event-content .video-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap; }
+    #tribe-events-pg-template .single-view #event-content .video-container .video-band-container {
+      width: 48%; }
+    #tribe-events-pg-template .single-view #event-content .video-container .yotu-videos li {
+      flex: 1; }
+#tribe-events-pg-template .single-view #event-meta {
+  padding: 0 0 0 1em;
+  width: 30%; }
+  #tribe-events-pg-template .single-view #event-meta .meta-content {
+    padding: 0.5em 0.3em; }
+    #tribe-events-pg-template .single-view #event-meta .meta-content a {
+      color: white; }
+    #tribe-events-pg-template .single-view #event-meta .meta-content dl {
+      margin-bottom: 0.5em; }
+    #tribe-events-pg-template .single-view #event-meta .meta-content dt {
+      font-weight: bold; }
+      #tribe-events-pg-template .single-view #event-meta .meta-content dt::after {
+        content: ':'; }
+    #tribe-events-pg-template .single-view #event-meta .meta-content dd {
+      margin: 0 0 0 0.6em; }
+    #tribe-events-pg-template .single-view #event-meta .meta-content i.far,
+    #tribe-events-pg-template .single-view #event-meta .meta-content i.fas,
+    #tribe-events-pg-template .single-view #event-meta .meta-content i.fab {
+      font-size: 1.5em;
+      margin: 0.5em; }
+    #tribe-events-pg-template .single-view #event-meta .meta-content .event-links img {
+      max-height: 1.5em; }
+    #tribe-events-pg-template .single-view #event-meta .meta-content .event-links i:first-child {
+      margin-left: 0; }
+    #tribe-events-pg-template .single-view #event-meta .meta-content .author-image img {
+      max-width: 3em; }
+  #tribe-events-pg-template .single-view #event-meta .band {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    margin-bottom: 0.2em; }
+  #tribe-events-pg-template .single-view #event-meta .band-name a {
+    color: white;
+    font-weight: bold; }
+  #tribe-events-pg-template .single-view #event-meta .band-genre {
+    font-size: 0.8em;
+    color: #ffffffb6; }
+  #tribe-events-pg-template .single-view #event-meta .band-flag {
+    align-self: center;
+    width: 1.5em;
+    margin-right: 0.5em;
+    flex: 0 0 1.5em; }
+    #tribe-events-pg-template .single-view #event-meta .band-flag img {
+      width: 100%; }
+  #tribe-events-pg-template .single-view #event-meta .info-text-bar {
+    margin-bottom: 0.1em; }
+    #tribe-events-pg-template .single-view #event-meta .info-text-bar:not(:first-child) {
+      margin-top: 1.3em; }
+  #tribe-events-pg-template .single-view #event-meta #event-genres {
+    padding: 0;
+    margin: 0; }
+    #tribe-events-pg-template .single-view #event-meta #event-genres li {
+      list-style: none; }
+    #tribe-events-pg-template .single-view #event-meta #event-genres a {
+      color: white; }
+#tribe-events-pg-template .single-view .event-poster {
+  text-align: center; }
+#tribe-events-pg-template .single-view .event-title-container {
+  margin-bottom: 1.5em; }
+  #tribe-events-pg-template .single-view .event-title-container .event-title h1 {
+    margin-bottom: 0; }
+  #tribe-events-pg-template .single-view .event-title-container .event-venue {
+    color: #ffffffb6; }
 
 @media (min-width: 4000px) {
   #post-27146 .info-text-line {
@@ -396,7 +553,14 @@ article .tribe-events-calendar-list__event-details {
       font-size: 1.2em; }
 
   .tribe-events .tribe-events-calendar-list__event-datetime-wrapper, .tribe-events .tribe-events-calendar-list__event-title {
-    font-size: 2.2em; } }
+    font-size: 1.2em; }
+
+  #tribe-events-pg-template #event-container.single-view {
+    flex-direction: column; }
+    #tribe-events-pg-template #event-container.single-view #event-content,
+    #tribe-events-pg-template #event-container.single-view #event-meta {
+      padding: 0;
+      width: 100%; } }
 @media (max-width: 599px) {
   .plek-pre-button-seperator {
     height: 0; }
@@ -441,10 +605,31 @@ article .tribe-events-calendar-list__event-details {
     align-self: center; }
 
   .footer-widget-2 {
-    margin-bottom: 0; } }
+    margin-bottom: 0; }
+
+  .plek-post-type-all_reviews .info-text-bar {
+    width: 50%; }
+
+  .plek-review-search .gp-icon.icon-search {
+    display: inline-flex; }
+
+  .plek-review-search .search-button-text {
+    display: none; } }
 @media (min-width: 599px) {
   .tribe-events-calendar-list__event-date-tag-datetime-mobile {
+    display: none; }
+
+  .plek-review-search .gp-icon.icon-search {
     display: none; } }
+@media (max-width: 479px) {
+  #tribe-events-pg-template .single-view #event-content .plek_album_con {
+    flex-direction: column; }
+    #tribe-events-pg-template .single-view #event-content .plek_album_con .image_container,
+    #tribe-events-pg-template .single-view #event-content .plek_album_con img {
+      width: 100%; }
+
+  .plek-post-type-all_reviews .info-text-bar {
+    width: 100%; } }
 @media (max-width: 400px) {
   .tribe-events-calendar-list__event {
     flex-direction: column; }
@@ -452,6 +637,20 @@ article .tribe-events-calendar-list__event-details {
       width: 100%; }
     .tribe-events-calendar-list__event img {
       width: 100%; } }
+div.plek-review-search {
+  margin-bottom: 1em; }
+  div.plek-review-search form {
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch; }
+  div.plek-review-search form label {
+    width: 20%; }
+  div.plek-review-search form label:first-child {
+    width: 80%; }
+  div.plek-review-search form button,
+  div.plek-review-search form input {
+    width: 100%; }
+
 #content.site-content {
   max-width: 1024px;
   margin: 0 auto;

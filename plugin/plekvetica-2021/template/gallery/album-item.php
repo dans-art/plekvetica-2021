@@ -21,7 +21,7 @@ $image_height = $image_obj->meta_data['thumbnail']['height'];
             </a>
         </span>
         <span class="caption_link">
-            <a href="<?php echo plekGalleryHandler::get_gallery_link($gallery_object, $page_id); ?>" title="<?php echo sprintf(__('Zur Galerie: %s', 'pleklang'), $gallery_object->title); ?>"><?php echo $gallery_object->title; ?></a>
+            <a href="<?php echo plekGalleryHandler::get_gallery_link($gallery_object, $page_id); ?>" title="<?php echo sprintf(__('Zur Galerie: %s', 'pleklang'), $gallery_object->title); ?>"><?php echo plekGalleryHandler::get_band_name($gallery_object); ?></a>
         </span>
         <div class="image_description">
         </div>

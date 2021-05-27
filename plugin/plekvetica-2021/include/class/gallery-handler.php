@@ -127,6 +127,40 @@ class plekGalleryHandler
         return get_permalink($page_id) . 'maf/galleries/' . $gallery_object->slug;
     }
 
+    public static function get_band_name(object $gallery_object){
+        global $wpdb;
+        $gall_id = (string) $gallery_object -> gid;
+        $wild = '%';
+        if(!is_integer($gallery_object -> gid)){
+            return (isset($gallery_object -> name))?$gallery_object -> name:'No Bandname found!';
+        }
+        $like = $wild . $wpdb->esc_like($gallery_object -> gid) . $wild;
+
+        $query = $wpdb->prepare("SELECT meta.meta_value, terms.name  
+        FROM `{$wpdb->prefix}termmeta` as meta
+        LEFT JOIN {$wpdb->prefix}terms as terms
+        ON terms.term_id = meta.term_id
+        WHERE `meta_key` LIKE 'band_galleries' AND meta_value LIKE '%s'", $like);
+
+        $db_result = $wpdb->get_results($query);
+        if(count($db_result) > 1){
+            //Search for the real term
+            foreach($db_result as $item){
+                $galls = explode(',',$item -> meta_value);
+                if(array_search($gall_id,$galls, true) !== false){
+                    return $item -> name;
+                }
+            }
+        }
+        //DB Result was only one entry
+        $galls = explode(',',$db_result[0] -> meta_value);
+        //Make sure the number is in the meta_value from the DB
+        if(isset($db_result[0] -> name) AND (array_search($gall_id,$galls, true) !== false)){
+            return $db_result[0] -> name;
+        }
+        return $gallery_object -> title;
+    }
+
     /**
      * 
      *

@@ -105,8 +105,19 @@
     }
 
     .tribe-events .tribe-events-calendar-list__event-datetime-wrapper, .tribe-events .tribe-events-calendar-list__event-title{
-        font-size: 2.2em;
+        font-size: 1.2em;
     }
+    #tribe-events-pg-template #event-container.single-view {
+            flex-direction: column;
+        
+            #event-content,
+            #event-meta{
+                padding: 0;
+                width: 100%;
+            }
+   
+    }
+
     
 }
 
@@ -163,11 +174,41 @@
     .footer-widget-2{
         margin-bottom: 0;
     }
+
+    .plek-post-type-all_reviews .info-text-bar{
+        width: 50%;
+    }
+
+    .plek-review-search .gp-icon.icon-search{
+        display: inline-flex;
+    }
+    .plek-review-search .search-button-text{
+        display: none;
+    }
+
 }
 
 @media (min-width: 599px){
     .tribe-events-calendar-list__event-date-tag-datetime-mobile{
         display: none;
+    }
+    .plek-review-search .gp-icon.icon-search{
+        display: none;
+    }
+}
+
+@media (max-width: 479px){
+    #tribe-events-pg-template .single-view #event-content .plek_album_con{
+
+        flex-direction: column;
+        .image_container,
+        img{
+               width: 100%;
+           }
+    }
+
+    .plek-post-type-all_reviews .info-text-bar{
+        width: 100%;
     }
 }
 

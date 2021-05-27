@@ -26,7 +26,189 @@
     }
 }
 
+//Kalender - Overview
+.tribe-events-view .tribe-common-l-container.tribe-events-l-container{
+    padding-top: 1.8em;
+}
+.post-type-archive-tribe_events .entry-header{
+    padding: 40px 0 0 40px;
+}
 
+//Single Event
+#tribe-events-pg-template .single-view{
+
+    .info-text-bar{
+        width: 100%;
+    }
+
+    #event-content{
+        padding: 0 1em 0 0;
+        width: 70%;
+
+        .plek_album_con{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            flex-wrap: wrap;
+
+            .image_container{
+                width: 48%;
+                min-width: 200px;
+            }
+        }
+        .image_link_wrapper{
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 1em;
+
+            a{
+                color: $text-color;
+            }
+        }
+
+        /* YotuWP*/
+        .yotu-playlist{
+            padding:0;
+        }
+        .video-container{
+            display:flex;
+            flex-direction: row;
+            justify-content: space-between;
+            flex-wrap: wrap;
+
+ 
+
+            .video-band-container{
+                width:48%;
+            }
+            .yotu-videos li{
+                flex: 1;
+            }
+        }
+    }
+    
+    #event-meta{
+        padding: 0 0 0 1em;
+        width: 30%;
+        
+        .meta-content{
+            padding: 0.5em 0.3em;
+
+            a{
+                color: $text-color;
+            }
+
+            dl{
+                margin-bottom: 0.5em;
+
+            }
+
+            dt{
+                font-weight: bold;
+
+                &::after{
+                    content: ':';
+                }
+
+            }
+
+            dd{
+                margin: 0 0 0 0.6em;
+            }
+
+        
+            i.far,
+            i.fas,
+            i.fab{
+                font-size: 1.5em;
+                margin: 0.5em;
+            }
+
+
+
+            .event-links{
+                img{
+                    max-height: 1.5em;
+                }
+                i:first-child{
+                    margin-left:0;
+                }
+     
+            }
+
+            .author-image{
+                img{
+                    max-width: 3em;
+                }
+            }
+
+        }
+
+        .band{
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            margin-bottom: 0.2em;
+        }
+
+        .band-name a{
+            color: $text-color;
+            font-weight: bold;
+        }
+        .band-genre{
+            font-size: 0.8em;
+            color: $color-gray-light-two;
+        }
+
+        .band-flag{
+            align-self: center;
+            width: 1.5em;
+            margin-right: 0.5em;
+            flex: 0 0 1.5em;
+
+            img{
+                width: 100%;
+            }
+        }
+
+        .info-text-bar{
+            margin-bottom: 0.1em;
+
+            &:not(:first-child){
+                margin-top: 1.3em;
+            }
+        }
+
+        #event-genres{
+            padding: 0;
+            margin: 0;
+
+            li{
+                list-style: none;
+            }
+
+            a{
+                color: $text-color;
+            }
+        }
+    }
+
+    .event-poster{
+        text-align: center;
+    }
+
+    .event-title-container{
+        margin-bottom: 1.5em;
+
+        .event-title h1{
+            margin-bottom: 0;
+        }
+        .event-venue{
+            color: $color-gray-light-two;
+        }
+    }
+    
+}
 
 
     

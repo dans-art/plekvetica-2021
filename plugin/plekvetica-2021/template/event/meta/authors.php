@@ -10,9 +10,16 @@ if (!$authors) {
 ?>
 <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Autoren', 'pleklang')); ?>
 <div class="meta-content">
-  <dl class='event-author-container'>
+  <div class='event-author-container'>
     <?php foreach ($authors as $id => $name) : ?>
-      <dt><?php echo get_avatar($id);?><a href="<?php echo get_author_posts_url($id); ?>" title="<?php echo sprintf(__('Mehr über den Autor &quot;%s&quot;'), $name); ?>" target="_self"><?php echo $name; ?></a></dt>
+      <div class="author">
+        <span class="author-image">
+          <?php echo get_avatar($id); ?>
+        </span>
+        <span class="author-name">
+          <a href="<?php echo get_author_posts_url($id); ?>" title="<?php echo sprintf(__('Mehr über den Autor &quot;%s&quot;'), $name); ?>" target="_self"><?php echo $name; ?></a>
+        </span>
+      </div>
     <?php endforeach; ?>
-  </dl>
+  </div>
 </div>

@@ -12,11 +12,13 @@ if (empty($bands)) {
     <?php foreach ($bands as $id => $band) :  ?>
 
         <div class="band band-<?php echo $id; ?>">
-            <div>
-                <span class="flag"><?php echo $band['flag']; ?></span>
-                <span class="name"><?php echo "<a href='" . $band['link'] . "' title='Bandpage von " . $band['name'] . "'>" . $band['name'] . "</a>"; ?></span>
+            <div class="band-flag">
+                <?php echo $band['flag']; ?>
             </div>
-            <div><?php echo (is_array($band['band_genre'])) ? implode(', ', $band['band_genre']) : ''; ?></div>
+            <div>
+                <div class="band-name"><?php echo "<a href='" . $band['link'] . "' title='Bandpage von " . $band['name'] . "'>" . $band['name'] . "</a>"; ?></div>
+                <div class="band-genre"><?php echo (is_array($band['band_genre'])) ? implode(', ', $band['band_genre']) : ''; ?></div>
+            </div>
         </div>
 
     <?php endforeach; ?>

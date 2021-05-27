@@ -128,13 +128,15 @@ article{
     }
   }
 
-  .tribe-events-calendar-list__event-featured-image-wrapper{
+  .tribe-events-calendar-list__event-featured-image-wrapper,
+  .tribe-events-calendar-list__event-image-wrapper{
     padding: 0 1em;
     width: 30%;
     text-align: center;
 
     img{
       padding: 0.5%;
+      width: 100%;
     }
   }
 
@@ -248,4 +250,20 @@ margin-bottom: 0;
 
 .tribe-events-calendar-list__event-date-tag-mobile{
   display:none;
+}
+
+.tribe-events .tribe-events-c-events-bar__search-container,
+.tribe-events .tribe-events-c-view-selector__content{
+  background-color: $color-gray-dark;
+}
+
+.plek-post-type-all_reviews,
+.plek-post-type-reviews,
+.plek-post-type-review-search{
+
+  .info-text-bar{
+    width: 27%;
+    margin-bottom: 2em;
+  }
+
 }

@@ -6,7 +6,7 @@ $price_vvk = $plek_event->get_price_vvk();
 ?>
 <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Details', 'pleklang')); ?>
 <div class="meta-content">
-  <dl class='event-details-container'>
+  <dl class='event-details-price-container'>
     <?php if (!empty($price_boxoffice) or !empty($price_vvk)) : ?>
       <dt>Preis</dt>
 
@@ -19,6 +19,8 @@ $price_vvk = $plek_event->get_price_vvk();
       <?php endif; ?>
 
     <?php endif; ?>
+  </dl>
+  <dl class='event-details-links-container'>
     <dt>Links</dt>
     <dd class="event-links">
       <span>

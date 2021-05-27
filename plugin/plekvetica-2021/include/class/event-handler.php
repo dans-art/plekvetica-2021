@@ -186,7 +186,7 @@ class PlekEventHandler
     public function get_price_formated(string $cost)
     {
         $currency = (!empty($this->get_field_value('_EventCurrencySymbol'))) ? $this->get_field_value('_EventCurrencySymbol') : $this->default_event_currency;
-        $cost_nr = preg_replace("/[^0-9]- /", "", $cost);
+        $cost_nr = preg_replace("/[^a-zA-Z0-9 -\.]/", "", $cost);
         return trim($cost_nr) . ' ' .  $currency;
     }
 
@@ -270,8 +270,8 @@ class PlekEventHandler
         $link = $this->get_field_value('_EventURL');
         $fb = (strpos($link, 'facebook.com')) ? true : false;
         $title = ($fb) ? __('Link zum Facebook Event', 'pleklang') : __('Link zur Website', 'pleklang');
-        $icon = ($fb) ? 'fa-facebook-square' : 'fa-globe';
-        return "<a href='$link' title='$title' target='_blank'><i class='fab $icon'></i></a>";
+        $icon = ($fb) ? 'fab fa-facebook-square' : 'fas fa-globe';
+        return "<a href='$link' title='$title' target='_blank'><i class='$icon'></i></a>";
     }
 
     public function get_event_ticket_link()

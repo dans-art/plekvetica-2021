@@ -9,15 +9,15 @@ if (!is_object($plek_event)) {
 
 $can_edit = current_user_can('edit_posts');
 $is_review = $plek_event->is_review();
-$plek_event_class = $plek_event -> get_event_classes();
+$plek_event_class = $plek_event->get_event_classes();
 
-if($is_review){
-    $backlink = site_url() . '/' . $plek_handler -> get_plek_option('review_page');
+if ($is_review) {
+    $backlink = site_url() . '/' . $plek_handler->get_plek_option('review_page');
     $backlink_label = __('Alle Reviews');
     $backlink_label_plural = $backlink_label;
-}else{
+} else {
     $backlink = tribe_get_events_link();
-    $backlink_label = esc_html_x( 'All %s', '%s Events plural label', 'the-events-calendar' );
+    $backlink_label = esc_html_x('All %s', '%s Events plural label', 'the-events-calendar');
     $backlink_label_plural = tribe_get_event_label_plural();
 }
 
@@ -26,10 +26,24 @@ if($is_review){
 
 <div id="event-container" class="single-view <?php echo $plek_event->get_field('ID'); ?> <?php echo $plek_event_class; ?>">
     <div id="event-content">
+        <div id="event-header">
+            <div class="event-poster">
+                <?php PlekTemplateHandler::load_template('poster', 'event/meta'); ?>
+                <?php if ($is_review) {
+                    PlekTemplateHandler::load_template('image-banner', 'components', __('Review', 'pleklang'));
+                } ?>
+            </div>
+            <div class="event-title-container">
+                <div class="event-title">
+                    <h1><?php echo $plek_event->get_field('post_title'); ?></h1>
+                </div>
+                <div class="event-venue"><?php echo $plek_event->get_field('venue_short'); ?></div>
+            </div>
+        </div>
         <?php
-        if($is_review){
+        if ($is_review) {
             PlekTemplateHandler::load_template('event-review', 'event');
-        }else{
+        } else {
             PlekTemplateHandler::load_template('event-preview', 'event');
         }
         ?>

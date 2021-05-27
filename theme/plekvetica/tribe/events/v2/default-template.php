@@ -16,7 +16,11 @@ use Tribe\Events\Views\V2\Template_Bootstrap;
 
 get_header();
 ?>
+
 <main id="tribe-events-pg-template" class="tribe-events-pg-template">
+    <header class="entry-header">
+    	<h1 class="entry-title" itemprop="headline">Kalender</h1>
+    </header>
 	<?php
     if(plekGalleryHandler::is_gallery()){
         PlekTemplateHandler::load_template('photo-view','gallery', get_the_ID(), get_permalink(), 'Zurück zum Event');

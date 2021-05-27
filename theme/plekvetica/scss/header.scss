@@ -22,7 +22,7 @@
   position: absolute;
 right: 0;
 bottom: -15px;*/
-border-bottom: solid 2px $color-red-light;
+border-bottom: $red-small-border
 }
 
 .main-navigation .main-nav ul[class*="sub-menu"] li[class*="current-menu-"] > a:before{

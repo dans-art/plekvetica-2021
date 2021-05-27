@@ -1,0 +1,22 @@
+//Form Styles
+
+div.plek-review-search{
+  margin-bottom: 1em;
+
+  form{
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+  }
+
+  form label{
+    width: 20%;
+  }
+  form label:first-child{
+    width: 80%;
+  }
+  form button,
+  form input{
+    width: 100%;
+  }
+}
