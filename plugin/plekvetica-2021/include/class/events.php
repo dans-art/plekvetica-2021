@@ -19,7 +19,9 @@ class PlekEvents extends PlekEventHandler
     public function __construct()
     {
         $this->poster_placeholder = PLEK_PLUGIN_DIR_URL . "images/placeholder/event_poster.jpg";
+
     }
+    
     /**
      * Returns the previous loaded event
      * If no Event is loaded before, empty array will be returned.

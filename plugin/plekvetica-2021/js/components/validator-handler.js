@@ -4,7 +4,7 @@
  */
 var plekvalidator = {
     validate_data(){
-        plekerror.display_error('Test', 'feld');
-        return false;
+        plekerror.display_error('Validator', 'Nicht validiert!');
+        return true;
     }
 }

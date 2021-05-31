@@ -34,10 +34,28 @@ var plektemplate = {
         return jQuery(selector).get(0).outerHTML;
     },
     show_overlay(input) {
-        jQuery(input).parent().find('.plek-search-overlay').show();
+        var id_name = jQuery(input).attr('name');
+        jQuery('#'+id_name+'_overlay').show();
+        window.plektemplate.activate_overlay_background(input);
+
     },
     hide_overlay() {
+        console.log("Hide Overlay");
         jQuery('.plek-search-overlay').hide();
+        window.plektemplate.deactivate_overlay_background();
+    },
+
+    activate_overlay_background(input){
+        var doc_height = jQuery(document).height();
+        jQuery(input).css('z-index', 20);
+        jQuery('.overlay_background').height(doc_height);
+        jQuery('.overlay_background').click(function(){
+            window.plektemplate.hide_overlay();
+        });
+    },
+    deactivate_overlay_background(){
+        jQuery('.overlay_background').height(0);
+        jQuery('.overlay_background').off('click');
     },
 
     prepare_data(object) {

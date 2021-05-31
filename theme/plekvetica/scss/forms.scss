@@ -30,3 +30,115 @@ div.plek-review-search{
     flex-direction: column;
   }
 }
+
+/* Add Event */
+
+.plek-event-form-container,
+.submit.plek-button{
+  margin-left: 20%;
+  }
+.event-basic-container {
+
+  .event-name-container{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+  }
+
+  .event-date-container label{
+    width: 100%;
+  }
+  .event-date-picker{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .date-input-container{
+      flex-basis: 45%;
+
+      input{
+        width: 100%;
+      }
+    }
+    .date-to-seperator{
+      flex-basis: 10%;
+      text-align: center;
+      align-self: center;
+    }
+  }
+  .plek-multi-date{
+    display: inline;
+  }
+
+}
+
+.event-search-bar-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+
+    input{
+      flex-basis: 100%;
+    }
+}
+
+.submit.plek-button input{
+  width: 100%;
+}
+.plek-search-overlay{
+  position: absolute;
+  background-color: $color-gray-light;
+  width: 72%;
+  max-width: 755px;
+  z-index: 9999;
+  
+  .item{
+    padding: 1em;
+
+    &:hover,
+    &:focus{
+      background-color: $color-gray;
+      cursor: pointer;
+    }
+  }
+
+.overlay-header{
+    text-align: center;
+  }
+  img{
+    max-height: 1em;
+  }
+  .title{
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+  .subtitle{
+    padding-left: 2em;
+  }
+
+}
+.overlay_background{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height:0;
+  z-index: 0;
+}
+
+.item.plek-select-item .title{
+  display: flex;
+
+  img{
+    max-height: 1em;
+    margin-right: 1em;
+  }
+  .remove-item{
+    margin-right: 1em;
+  }
+  i{
+    cursor: pointer;
+    font-size: 1.2em;
+  }
+}

@@ -1,5 +1,6 @@
 "use strict";
 
+// @koala-append "components/plek-language.js"
 // @koala-append "components/event-handler.js"
 // @koala-append "components/error-handler.js"
 // @koala-append "components/validator-handler.js"
@@ -52,7 +53,8 @@ $(document).ready(function () {
     jQuery('#plek-submit').click(function(event){
         event.preventDefault();
         jQuery(this).prop( "disabled", true );
-        save_event();
+        var type = jQuery(this).data( "type");
+        window.plekevent.save_event(type);
     });
 
     /** Display and posistion the Output container */
@@ -61,7 +63,12 @@ $(document).ready(function () {
         plektemplate.show_overlay(this);
     });
 
-    jQuery('.plek-search-input').keydown(function(element){
+    jQuery('.plek-search-input').keyup(function(element){
+        var input_length = jQuery(this).val().length;
+        if( input_length === 0){
+            window.plektemplate.hide_overlay();
+            return;
+        }
         pleksearch.fire_search(this);
     });
 });
@@ -99,19 +106,19 @@ function ajaxPreloader(type) {
             }
         },
         error: function error(data) {
-            toastr["error"](pleklang.loaderror + ': ' + type, "Error");
+            window.plekerror.display_info(window.pleklang.loaderror + ': ' + data, "Error");
             return false;
         }
     });
 }
 
 function show_end_date() {
-    jQuery('#end-date-container').show();
+    jQuery('.plek-multi-date').show();
     return;
 }
 
 function hide_end_date() {
-    jQuery('#end-date-container').hide();
+    jQuery('.plek-multi-date').hide();
     return;
 }
 
@@ -126,23 +133,5 @@ function enable_band_input(){
     jQuery('.event-search-bar-container plek-button').removeClass( "disabled");
     jQuery('.event-search-bar-container #event_band').removeClass( "disabled");
     jQuery('.event-band-selection').show();
-}
-
-function save_event(){
-    console.log("save");
-    if(plekevent.existing_event()){
-        jQuery('#plek-submit').prop( "disabled", false ); //Enable the button again.
-        return false;
-    }
-    if(!plekvalidator.validate_data()){
-        jQuery('#plek-submit').prop( "disabled", false ); //Enable the button again.
-        return false;
-    }
-    $data = prepare_data();
-
-}
-
-function prepare_data(){
-
 }
 

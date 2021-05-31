@@ -19,7 +19,7 @@ $event_class = $template_args[0]; //Plek_events_form Object
 		<?php PlekTemplateHandler::load_template('description', 'event/form/components', $event_class); ?>
 
 		<div class="submit plek-button">
-			<input type="submit" name="plek-submit" id="plek-submit" value="<?php echo __('Event eintragen','pleklang');?>">
+			<input type="submit" name="plek-submit" id="plek-submit" data-type = "save_basic_event" value="<?php echo __('Event eintragen','pleklang');?>">
 		</div>
 	</form>
 </div>

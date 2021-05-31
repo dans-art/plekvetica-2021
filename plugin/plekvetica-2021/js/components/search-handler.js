@@ -8,9 +8,9 @@ var pleksearch = {
   treshhold: 60,
 
   fire_search(element) {
-    var result_con = jQuery(element).parent().find('.search-result');
     var search_field_id = jQuery(element).attr('id');
     var type = jQuery('#' + search_field_id).attr('name');
+    var result_con = jQuery('#'+type+'_overlay');
     this.set_type_settings(type);
 
     if (result_con.length == 0) {
@@ -68,11 +68,10 @@ var pleksearch = {
   add_item_Eventlistener(){
       jQuery('.plek-add-item').click(function(element){
         window.plekevent.add_item_to_selection(this);
-        console.log(this);
     });
   },
 
-  search(element) {
+  async search(element) {
     var search_for = jQuery('#' + element).val();
     var search_for_prep = search_for.toLowerCase().replace(/[^a-z 0-9]/, '');
     var type = window.pleksearch.current_type;
