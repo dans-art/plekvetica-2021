@@ -7,7 +7,7 @@ $event_link_label = isset($template_args[2]) ? $template_args[2] : null;
 
 $plek_event_class = is_object($plek_event) ? $plek_event->get_event_classes() : '';
 
-$gallery_object = plekGalleryHandler::get_gallery_from_url();
+$gallery_object = PlekGalleryHandler::get_gallery_from_url();
 if (!is_object($gallery_object)) {
     echo PlekTemplateHandler::load_template('404', 'system', __('Fehler 404: Gallerie nicht gefunden', 'pleklang'), $gallery_object);
     return;

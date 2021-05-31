@@ -2,6 +2,7 @@
 
 article.tribe-events-calendar-list__event{
 
+    display:flex;
  
     .band{
       white-space: nowrap;
@@ -181,7 +182,14 @@ article{
 }
 .tribe-events .tribe-events-c-view-selector__content{
   background-color: unset;
+
+  i.add-event{
+    margin-right: 0.5em;
+    margin-top: -0.1em;
+  }
 }
+
+
 
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-c-view-selector--tabs .tribe-events-c-view-selector__list-item{
   background-color: white;

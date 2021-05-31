@@ -2,7 +2,7 @@
 extract(get_defined_vars());
 $album_id = $template_args[0];
 
-$gallery_class = new plekGalleryHandler;
+$gallery_class = new PlekGalleryHandler;
 
 ?>
 

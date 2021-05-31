@@ -1,5 +1,5 @@
 <?php
-$band = new plekBandHandler();
+$band = new PlekBandHandler();
 $band->load_band_object();
 ?>
 

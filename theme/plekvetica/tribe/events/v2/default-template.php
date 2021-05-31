@@ -22,7 +22,7 @@ get_header();
     	<h1 class="entry-title" itemprop="headline">Kalender</h1>
     </header>
 	<?php
-    if(plekGalleryHandler::is_gallery()){
+    if(PlekGalleryHandler::is_gallery()){
         PlekTemplateHandler::load_template('photo-view','gallery', get_the_ID(), get_permalink(), 'Zurück zum Event');
     }
     elseif(is_single()){

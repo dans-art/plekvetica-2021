@@ -2,7 +2,7 @@
 
 extract(get_defined_vars());
 $band_object = isset($template_args[0]) ? $template_args[0] : null;
-$band_class = new plekBandHandler;
+$band_class = new PlekBandHandler;
 $name = $band_object->get_name();
 $genres = $band_object->get_genres();
 $country = $band_object->get_country_name();

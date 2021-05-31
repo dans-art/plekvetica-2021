@@ -2,7 +2,6 @@
 
 extract(get_defined_vars());
 $event = $template_args[0];
-//s($event);
 $startDatetime = $event->get_field_value('_EventStartDate');
 $stime = strtotime($startDatetime);
 

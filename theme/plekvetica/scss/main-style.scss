@@ -36,8 +36,11 @@ body{
     @import 'event-list.scss';
     @import 'event-single.scss';
     @import 'pages-style.scss';
-    @import 'breakpoints.scss';
     @import 'forms.scss';
+    @import 'posts.scss';
+
+    /*Breakpoints have to be at the end to avoid override*/
+    @import 'breakpoints.scss';
 
  #content.site-content{
     max-width: 1024px;

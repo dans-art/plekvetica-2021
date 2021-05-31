@@ -186,6 +186,12 @@
         display: none;
     }
 
+    .plek-posts-container{
+        .plek-post-item {
+            flex-basis: 45%;
+        }
+    }
+
 }
 
 @media (min-width: 599px){
@@ -198,7 +204,8 @@
 }
 
 @media (max-width: 479px){
-    #tribe-events-pg-template .single-view #event-content .plek_album_con{
+    #tribe-events-pg-template .single-view #event-content .plek_album_con
+    {
 
         flex-direction: column;
         .image_container,
@@ -207,13 +214,28 @@
            }
     }
 
-    .plek-post-type-all_reviews .info-text-bar{
+    .plek-post-type-all_reviews .info-text-bar,
+    .info-text-bar{
         width: 100%;
+    }
+
+    .plek-author-container 
+    {
+        .info-text-bar{
+            width: 100%;
+        }
+        .plek-author-meta{
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        
     }
 }
 
 @media (max-width: 400px){
-    .tribe-events-calendar-list__event {
+    .tribe-events-calendar-list__event,
+    .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event {
         flex-direction: column;
 
         div{
@@ -222,6 +244,12 @@
         
         img{
             width: 100%;
+        }
+    }
+    
+    .plek-posts-container{
+        .plek-post-item {
+            flex-basis: 100%;
         }
     }
 }

@@ -210,6 +210,46 @@
     
 }
 
+/* Win & Partner*/
+
+ul.partner-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-left: 0;
+
+    li{
+        max-width: 200px;
+        display: flex;
+        flex-direction: column;
+        margin: 1em;
+        align-items: center;
+        text-align: center;
+        flex-basis: 200px;
+    }
+    .wp-block-latest-posts__featured-image.alignleft{
+        margin: 0;
+    }
+}
+
+/* Author */
+.plek-author-container{
+    padding: 1em;
+
+    .plek-author-meta{
+        display: flex;
+        justify-content: flex-start;
+    }
+    .plek-author-image{
+        padding-right: 1.5em;
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .info-text-bar{
+        width: 40%
+    }
+}
 
     
 

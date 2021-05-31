@@ -1,6 +1,6 @@
 <?php
 
-class plekGalleryHandler
+class PlekGalleryHandler
 {
 
 

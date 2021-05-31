@@ -23,6 +23,14 @@ class PlekEventHandler
         return ($this->get_field_value('promote_event') === '1') ? true : false;
     }
 
+    public function is_multiday(){
+        $start_date = $this -> get_start_date();
+        $end_date = $this -> get_end_date();
+        if($start_date !== $end_date){
+            return true;
+        }
+        return false;
+    }
     /**
      * Checks if the Event has photos
      *
@@ -155,6 +163,12 @@ class PlekEventHandler
         return date_i18n($format, $seconds);
     }
 
+    public function get_end_date(string $format = 'd m Y')
+    {
+        $seconds = strtotime($this->get_field_value('_EventEndDate'));
+        return date_i18n($format, $seconds);
+    }
+
     public function get_event_classes()
     {
         $classes = array();
@@ -253,6 +267,30 @@ class PlekEventHandler
             arsort($venue_arr[$venue_id]);
         }
         return $venue_arr;
+    }
+
+    public function get_all_venues_json(){
+        $venues = $this -> get_all_venues();
+        $venues_formated = array();
+        foreach($venues as $venue){
+            $vid = $venue -> ID;
+            $venues_formated[$vid]['id'] = $vid;
+            $venues_formated[$vid]['name'] = $venue -> post_title;
+            $venues_formated[$vid]['address'] = tribe_get_address( $vid );
+            $venues_formated[$vid]['zip'] = tribe_get_zip( $vid );
+            $venues_formated[$vid]['city'] = tribe_get_city( $vid );
+            $venues_formated[$vid]['country'] = tribe_get_country( $vid );
+        }
+        return json_encode($venues_formated);
+    }
+
+    public function get_all_venues(){
+        $venues = tribe_get_venues();
+        if($venues){
+            return $venues;
+        }
+        return [];
+        
     }
     public function get_field_value($name = 'post_title')
     {

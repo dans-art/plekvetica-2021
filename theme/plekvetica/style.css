@@ -30,11 +30,25 @@ a {
 .nav-float-right #site-navigation {
   /*margin-left: 3vh;*/ }
 
+.main-navigation .member-area-nav a::before {
+  content: "\f2bd"; }
+.main-navigation .not-logged-in-nav a::before {
+  content: "\f2f6"; }
+.main-navigation .member-area-nav a::before,
+.main-navigation .not-logged-in-nav a::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  padding-right: 0.5em; }
+
 .main-navigation .main-nav ul li a {
   line-height: 38px; }
 
 .main-navigation:not(.toggled) ul li.sfHover > ul, .main-navigation:not(.toggled) ul li:hover > ul {
-  left: -99px; }
+  right: 0;
+  border-top: #232323 2px solid; }
+
+#menu-item-78 .sub-menu {
+  width: 112px; }
 
 .main-navigation ul ul {
   background-color: #595959; }
@@ -168,16 +182,18 @@ blockquote {
   vertical-align: sub;
   width: 19px; }
 
-article.tribe-events-calendar-list__event .band {
-  white-space: nowrap;
-  padding-right: 0.5em; }
-  article.tribe-events-calendar-list__event .band .flag {
-    width: 1.2em;
-    display: inline-block; }
-  article.tribe-events-calendar-list__event .band a {
-    color: white; }
-  article.tribe-events-calendar-list__event .band a:hover {
-    color: #595959; }
+article.tribe-events-calendar-list__event {
+  display: flex; }
+  article.tribe-events-calendar-list__event .band {
+    white-space: nowrap;
+    padding-right: 0.5em; }
+    article.tribe-events-calendar-list__event .band .flag {
+      width: 1.2em;
+      display: inline-block; }
+    article.tribe-events-calendar-list__event .band a {
+      color: white; }
+    article.tribe-events-calendar-list__event .band a:hover {
+      color: #595959; }
 
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event {
   flex-direction: row;
@@ -284,6 +300,9 @@ article .tribe-events-calendar-list__event-details {
 
 .tribe-events .tribe-events-c-view-selector__content {
   background-color: unset; }
+  .tribe-events .tribe-events-c-view-selector__content i.add-event {
+    margin-right: 0.5em;
+    margin-top: -0.1em; }
 
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-c-view-selector--tabs .tribe-events-c-view-selector__list-item {
   background-color: white;
@@ -485,6 +504,68 @@ article .tribe-events-calendar-list__event-details {
   #tribe-events-pg-template .single-view .event-title-container .event-venue {
     color: #ffffffb6; }
 
+/* Win & Partner*/
+ul.partner-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-left: 0; }
+  ul.partner-container li {
+    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+    margin: 1em;
+    align-items: center;
+    text-align: center;
+    flex-basis: 200px; }
+  ul.partner-container .wp-block-latest-posts__featured-image.alignleft {
+    margin: 0; }
+
+/* Author */
+.plek-author-container {
+  padding: 1em; }
+  .plek-author-container .plek-author-meta {
+    display: flex;
+    justify-content: flex-start; }
+  .plek-author-container .plek-author-image {
+    padding-right: 1.5em;
+    width: 100%;
+    max-width: 200px; }
+  .plek-author-container .info-text-bar {
+    width: 40%; }
+
+div.plek-review-search {
+  margin-bottom: 1em; }
+  div.plek-review-search form {
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch; }
+  div.plek-review-search form label {
+    width: 20%; }
+  div.plek-review-search form label:first-child {
+    width: 80%; }
+  div.plek-review-search form button,
+  div.plek-review-search form input {
+    width: 100%; }
+
+.login-form p,
+.reset-password p {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column; }
+
+/* Post and post components */
+.plek-posts-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; }
+  .plek-posts-container .plek-post-item {
+    flex-basis: 30%;
+    margin-bottom: 2em; }
+    .plek-posts-container .plek-post-item a {
+      text-align: center; }
+
+/*Breakpoints have to be at the end to avoid override*/
 @media (min-width: 4000px) {
   #post-27146 .info-text-line {
     left: 20vw; } }
@@ -614,7 +695,10 @@ article .tribe-events-calendar-list__event-details {
     display: inline-flex; }
 
   .plek-review-search .search-button-text {
-    display: none; } }
+    display: none; }
+
+  .plek-posts-container .plek-post-item {
+    flex-basis: 45%; } }
 @media (min-width: 599px) {
   .tribe-events-calendar-list__event-date-tag-datetime-mobile {
     display: none; }
@@ -628,29 +712,28 @@ article .tribe-events-calendar-list__event-details {
     #tribe-events-pg-template .single-view #event-content .plek_album_con img {
       width: 100%; }
 
-  .plek-post-type-all_reviews .info-text-bar {
-    width: 100%; } }
-@media (max-width: 400px) {
-  .tribe-events-calendar-list__event {
-    flex-direction: column; }
-    .tribe-events-calendar-list__event div {
-      width: 100%; }
-    .tribe-events-calendar-list__event img {
-      width: 100%; } }
-div.plek-review-search {
-  margin-bottom: 1em; }
-  div.plek-review-search form {
-    display: flex;
-    flex-direction: row;
-    justify-content: stretch; }
-  div.plek-review-search form label {
-    width: 20%; }
-  div.plek-review-search form label:first-child {
-    width: 80%; }
-  div.plek-review-search form button,
-  div.plek-review-search form input {
+  .plek-post-type-all_reviews .info-text-bar,
+  .info-text-bar {
     width: 100%; }
 
+  .plek-author-container .info-text-bar {
+    width: 100%; }
+  .plek-author-container .plek-author-meta {
+    flex-direction: column;
+    justify-content: center; } }
+@media (max-width: 400px) {
+  .tribe-events-calendar-list__event,
+  .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event {
+    flex-direction: column; }
+    .tribe-events-calendar-list__event div,
+    .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event div {
+      width: 100%; }
+    .tribe-events-calendar-list__event img,
+    .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event img {
+      width: 100%; }
+
+  .plek-posts-container .plek-post-item {
+    flex-basis: 100%; } }
 #content.site-content {
   max-width: 1024px;
   margin: 0 auto;

@@ -1,6 +1,6 @@
 <?php
 
-class plekBackend
+class PlekBackend
 {
 
     /**

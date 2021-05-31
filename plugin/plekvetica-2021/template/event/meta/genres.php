@@ -6,7 +6,7 @@ if(empty($genres)){
   return;
 }
 
-$band_class = new plekBandHandler;
+$band_class = new PlekBandHandler;
 ?>
 
 <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Genres', 'pleklang')); ?>

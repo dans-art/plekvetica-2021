@@ -4,12 +4,34 @@
   /*margin-left: 3vh;*/
 }
 
+.main-navigation{
+  .member-area-nav a::before{
+    content: "\f2bd";
+  }
+  .not-logged-in-nav a::before{
+    content: "\f2f6";
+  }
+
+  .member-area-nav a::before,
+  .not-logged-in-nav a::before{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    padding-right: 0.5em;
+  }
+}
+
 .main-navigation .main-nav ul li a {
   line-height: 38px;
 }
 
 .main-navigation:not(.toggled) ul li.sfHover > ul, .main-navigation:not(.toggled) ul li:hover > ul{
-  left: -99px;
+  right: 0;
+  border-top: $color-gray-dark 2px solid;
+}
+
+//Review Navigation Item
+#menu-item-78 .sub-menu{
+  width: 112px;
 }
 
 .main-navigation ul ul {

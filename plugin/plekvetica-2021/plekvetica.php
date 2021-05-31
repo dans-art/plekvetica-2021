@@ -34,8 +34,10 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
  $plek_event = new PlekEvents;
  $plek_handler = new PlekHandler;
  $plek_search_handler = new PlekSearchHandler;
- $backend_class = new plekBackend;
- $plek_gallery_handler = new plekGalleryHandler;
+ $backend_class = new PlekBackend;
+ $plek_gallery_handler = new PlekGalleryHandler;
+ $plek_login_handler = new PlekLoginHandler;
+ $plek_ajax_handler = new PlekAjaxHandler;
 
  require_once(PLEK_PATH . 'include\filter-actions.php');
  require_once(PLEK_PATH . 'include\shortcodes.php');

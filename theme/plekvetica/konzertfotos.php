@@ -18,9 +18,9 @@ if (!defined('ABSPATH')) {
 get_header();
 
 $referer = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : null;
-$label = (plekBandHandler::is_band_link($referer)) ? __('Zurück zur Bandseite') : null;
+$label = (PlekBandHandler::is_band_link($referer)) ? __('Zurück zur Bandseite') : null;
 
-if (plekGalleryHandler::is_gallery()) {
+if (PlekGalleryHandler::is_gallery()) {
 	PlekTemplateHandler::load_template('photo-view', 'gallery', null, $referer, $label);
 }
 

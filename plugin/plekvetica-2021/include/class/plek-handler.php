@@ -52,4 +52,29 @@ class PlekHandler
         return $acf['choices'];
         
     }
+
+    public function plek_get_team_shortcode(){
+        $authors_handler = new PlekAuthorHandler;
+        $authors = $authors_handler -> get_all_team_authors();
+        return PlekTemplateHandler::load_template_to_var('author-post-items','posts',$authors);
+    }
+
+    public function wp_get_nav_menu_items_filter($items, $menu, $args){
+        if ($menu->slug === 'oberes-menue') {
+            foreach($items as $index => $nav){
+                if($nav -> post_name === 'login-logout'){
+                    if(is_user_logged_in()){
+                        $items[$index] -> title = __('Mein Plekvetica','pleklang'); 
+                        $items[$index] -> classes[] = 'member-area-nav'; 
+                    }
+                    else{
+                        $items[$index] -> title = __('Login','pleklang');
+                        $items[$index] -> classes[] = 'not-logged-in-nav'; 
+                    }
+                }
+            }
+        }
+        return $items;
+    }
+
 }

@@ -1,6 +1,6 @@
 <?php
 
-class plekBandHandler
+class PlekBandHandler
 {
 
     /**
@@ -258,5 +258,41 @@ class plekBandHandler
     {
         $cat_slug = 'kategorie'; //Does not work on english version?
         return Tribe__Events__Main::instance()->getLink() . $cat_slug . '/' . $genre_slug;
+    }
+
+    public function get_all_bands(bool $meta = true){
+        $args = array('hide_empty ' => false, 'get' => 'all');
+		$bands = get_tags($args);
+		if ($meta) {
+			foreach ($bands as $i => $term) {
+				$band_meta = get_fields($term);
+				$bands[$i]->meta = $band_meta;
+			}
+		}
+		return $bands;
+    }
+
+    public function get_all_bands_json(){
+        $bands = $this -> get_all_bands();
+        $bands_formated = array();
+        foreach($bands as $band){
+            $current = array();
+            $current['id'] = $band -> term_id;
+            $current['name'] = $band -> name;
+            $current['flag'] = (isset($band -> meta['herkunft']))?$band -> meta['herkunft']:'';
+            $current['genres'] = (isset($band -> meta['band_genre']))?$this -> band_genres_to_string($band -> meta['band_genre']):'';
+            $bands_formated[$band -> term_id] = $current;
+        }
+        return json_encode($bands_formated);
+    }
+
+    public function band_genres_to_string(array $genres){
+        $ret_arr = array();
+        foreach($genres as $genre){
+            if(isset($genre['label'])){
+                $ret_arr[] = $genre['label'];
+            }
+        }
+        return implode(', ',$ret_arr);
     }
 }

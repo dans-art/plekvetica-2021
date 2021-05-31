@@ -20,3 +20,13 @@ div.plek-review-search{
     width: 100%;
   }
 }
+
+.login-form,
+.reset-password{
+
+  p{
+    display:flex;
+    justify-content: flex-start;
+    flex-direction: column;
+  }
+}

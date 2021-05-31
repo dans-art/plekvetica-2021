@@ -18,3 +18,6 @@ require_once(PLEK_PATH . 'include\class\social-media.php');
 require_once(PLEK_PATH . 'include\class\youtube.php');
 
 require_once(PLEK_PATH . 'include\class\search-handler.php');
+require_once(PLEK_PATH . 'include\class\author-handler.php');
+require_once(PLEK_PATH . 'include\class\login-handler.php');
+require_once(PLEK_PATH . 'include\class\ajax-handler.php');

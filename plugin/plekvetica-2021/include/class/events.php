@@ -32,6 +32,31 @@ class PlekEvents extends PlekEventHandler
     }
 
     /**
+     * Returns the current loaded Event, formated for the Form fields.
+     *
+     * @return object - Event_Form Object
+     */
+    /*public function get_event_for_form(){
+        s($this -> get_event());
+        //s($plek_event);
+        $event_object  = new stdClass;
+        $event_object -> ID = ''; //String
+        $event_object -> post_title = ''; //String
+        $event_object -> post_content = ''; //String
+        $event_object -> start_date = ''; //String
+        $event_object -> end_date = ''; //String
+        $event_object -> multiday = false; //bool
+        $event_object -> bands_ids = ''; //String - Json
+        $event_object -> venue_id = ''; //String
+ 
+        return $event_object;
+    }*/
+/*
+    public function get_event_for_form_json(){
+        return json_encode($this -> get_event_for_form());
+    }
+*/
+    /**
      * Gets a field by name. Loads the template if specified or returns the value.
      *
      * @param string $name - Name of the field. See WP_Posts, Tribe_Event Object
@@ -207,7 +232,7 @@ class PlekEvents extends PlekEventHandler
             switch ($line->taxonomy) {
                     //Band
                 case 'post_tag':
-                    $band_class = new plekBandHandler;
+                    $band_class = new PlekBandHandler;
                     $band = array();
                     $band['name'] = $line->name;
                     $band['slug'] = $line->slug;
@@ -278,7 +303,7 @@ class PlekEvents extends PlekEventHandler
      *
      * @return string Formated HTML
      */
-    public function plek_get_featured()
+    public function plek_get_featured_shortcode()
     {
         //load from cache?
         $events = tribe_get_events([
@@ -300,7 +325,7 @@ class PlekEvents extends PlekEventHandler
      *
      * @return string Formated HTML
      */
-    public function plek_get_reviews()
+    public function plek_get_reviews_shortcode()
     {
         //load from cache?
         $meta_query = array();
@@ -325,7 +350,7 @@ class PlekEvents extends PlekEventHandler
      *
      * @return string Formated HTML
      */
-    public function plek_get_all_reviews()
+    public function plek_get_all_reviews_shortcode()
     {
         //Skip if search
         if (PlekSearchHandler::is_review_search()) {
@@ -358,7 +383,7 @@ class PlekEvents extends PlekEventHandler
      *
      * @return string Formated HTML
      */
-    public function plek_get_videos()
+    public function plek_get_videos_shortcode()
     {
 
         $yt = new plekYoutube;
@@ -367,5 +392,30 @@ class PlekEvents extends PlekEventHandler
             return __('Keine Videos gefunden', 'pleklang');
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $vids, 'youtube');
+    }
+    
+    public function plek_event_form_shortcode(){
+
+        $event = new PlekEvents;
+        $this -> enqueue_event_form_scripts();
+        $this -> enqueue_event_form_styles();
+
+        if(isset($_REQUEST['edit_event_id'])){
+            $event -> load_event($_REQUEST['edit_event_id']);
+        }
+        
+        return PlekTemplateHandler::load_template_to_var('add-event-form-basic', 'event/form', $event);
+    }
+    
+    public function enqueue_event_form_styles(){
+        wp_enqueue_style('toastr-style', PLEK_PLUGIN_DIR_URL . 'plugins/toastr/toastr.min.css');
+        wp_enqueue_style('flatpickr-style', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr.min.css');
+        
+    }
+    public function enqueue_event_form_scripts(){
+        wp_enqueue_script('toastr-script', PLEK_PLUGIN_DIR_URL . 'plugins/toastr/toastr.min.js',['jquery']);
+        wp_enqueue_script('flatpickr-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9.js');
+        wp_enqueue_script('flatpickr-de-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9-de.js');
+        
     }
 }
