@@ -113,6 +113,7 @@ class PlekEvents extends PlekEventHandler
                 return false;
             }
         }
+        $status_query = ($status === 'all')?"":"AND `posts`.`post_status` = '$status'";
         $query = "SELECT
         `posts`.`ID`, 
         `posts`.`post_author`,
@@ -120,7 +121,7 @@ class PlekEvents extends PlekEventHandler
         `posts`.`post_content`
         FROM `" . $wpdb->prefix . "posts` `posts`
         WHERE `posts`.ID = '$event_id' AND `posts`.`post_type` = 'tribe_events' 
-        AND `posts`.`post_status` = '$status'
+        $status_query
         ORDER BY `posts`.`post_date` DESC";
 
         $db_result = $wpdb->get_results($query);

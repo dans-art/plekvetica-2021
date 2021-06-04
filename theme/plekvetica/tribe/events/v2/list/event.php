@@ -16,7 +16,6 @@
  * @see tribe_get_event() For the format of the event object.
  */
 
-use PlekTemplateHandler;
 
 $container_classes = [ 'tribe-common-g-row', 'tribe-events-calendar-list__event-row' ];
 $container_classes['tribe-events-calendar-list__event-row--featured'] = $event->featured;

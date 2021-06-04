@@ -37,21 +37,23 @@ article.tribe-events-calendar-list__event{
   flex-direction: column;
 }
 
-.plek-events-event-categories,
-.plek-events-event-venue{
 
-  a{
+.plek-events-event-venue a{
     color: $text-color;
-  }
-}
 
-.plek-events-event-categories,
-.plek-events-event-venue{
-
-  a:hover{
-    color: $link-color-hover;
+    &:hover{
+      color: $link-color-hover;
+    }
   }
-}
+
+.plek-events-event-categories a{
+    color: $color-gray-light;
+
+    &:hover{
+      color: $color-gray-light-two;
+    }
+  }
+
 
 .tribe-events .tribe-events-calendar-list__event-date-tag-datetime{
   height: auto;

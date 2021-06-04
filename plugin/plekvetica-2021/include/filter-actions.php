@@ -10,6 +10,9 @@ add_filter('tribe_events_pro_pre_get_posts', function($event){
     return $event;
 }, 10, 1);
 
+//Deactivate the Block editor
+//add_filter('use_block_editor_for_post_type', [$plek_handler, 'plek_disable_gutenberg'], 10, 2);
+
 //Add the band dropdown to the gallery view of ngg
 //add_filter( 'ngg_manage_gallery_fields', 'filter_ngg_manage_gallery_fields', 10, 3 );
 
@@ -24,3 +27,12 @@ add_action( 'wp_authenticate', [$plek_login_handler, 'wp_authenticate_action'], 
 //Ajax
 add_action('wp_ajax_plek_ajax_event_form', [$plek_ajax_handler,'plek_ajax_event_form_action']);
 add_action('wp_ajax_nopriv_plek_ajax_event_form', [$plek_ajax_handler, 'plek_ajax_event_form_action']);
+
+//JS Debugger
+add_action( 'plek_js_debug', [$plek_handler,'set_js_error'], 10, 1 );
+add_action( 'wp_footer', [$plek_handler,'get_js_errors']);
+
+//Backend Login Logo
+/* add_filter('login_headertext', 'my_login_logo_url_title');
+add_filter('login_headerurl', 'my_login_logo_url');
+add_filter('login_headertext', 'my_login_logo_url_title'); */

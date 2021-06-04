@@ -23,10 +23,11 @@ class PlekEventHandler
         return ($this->get_field_value('promote_event') === '1') ? true : false;
     }
 
-    public function is_multiday(){
-        $start_date = $this -> get_start_date();
-        $end_date = $this -> get_end_date();
-        if($start_date !== $end_date){
+    public function is_multiday()
+    {
+        $start_date = $this->get_start_date();
+        $end_date = $this->get_end_date();
+        if ($start_date !== $end_date) {
             return true;
         }
         return false;
@@ -269,28 +270,29 @@ class PlekEventHandler
         return $venue_arr;
     }
 
-    public function get_all_venues_json(){
-        $venues = $this -> get_all_venues();
+    public function get_all_venues_json()
+    {
+        $venues = $this->get_all_venues();
         $venues_formated = array();
-        foreach($venues as $venue){
-            $vid = $venue -> ID;
+        foreach ($venues as $venue) {
+            $vid = $venue->ID;
             $venues_formated[$vid]['id'] = $vid;
-            $venues_formated[$vid]['name'] = $venue -> post_title;
-            $venues_formated[$vid]['address'] = tribe_get_address( $vid );
-            $venues_formated[$vid]['zip'] = tribe_get_zip( $vid );
-            $venues_formated[$vid]['city'] = tribe_get_city( $vid );
-            $venues_formated[$vid]['country'] = tribe_get_country( $vid );
+            $venues_formated[$vid]['name'] = $venue->post_title;
+            $venues_formated[$vid]['address'] = tribe_get_address($vid);
+            $venues_formated[$vid]['zip'] = tribe_get_zip($vid);
+            $venues_formated[$vid]['city'] = tribe_get_city($vid);
+            $venues_formated[$vid]['country'] = tribe_get_country($vid);
         }
         return json_encode($venues_formated);
     }
 
-    public function get_all_venues(){
+    public function get_all_venues()
+    {
         $venues = tribe_get_venues();
-        if($venues){
+        if ($venues) {
             return $venues;
         }
         return [];
-        
     }
     public function get_field_value($name = 'post_title')
     {
@@ -341,5 +343,102 @@ class PlekEventHandler
             $authors[$user->ID] = $user->display_name;
         }
         return $authors;
+    }
+    /**
+     * Checks if the current user is allowed to akkredi the event
+     *
+     * @param integer $post_id
+     * @return bool true if allowed, false if not.
+     */
+    public function current_user_can_akkredi(int $post_id = null){
+        $user = wp_get_current_user();
+        $post_id = (!$post_id) ? get_the_ID() : $post_id;
+
+        if($this -> user_is_in_team() !== true){
+            return false;
+        }
+        if(get_post_status($post_id) !== 'publish'){
+            return false;
+        }
+        $akkredi_status = get_field("akk_status", $post_id);
+        //Only allow if akredi status is on "Wunsch"
+        if(!($akkredi_status === "aw" OR empty($akkredi_status))){
+            return false;
+        }
+        //If Event is in the Past
+        if((int) tribe_get_display_end_date(null, false, "Ymd") < (int) date("Ymd")){
+            return false;
+        }
+        //If user is already set
+        $current_crew =  get_field("akkreditiert", $post_id);
+        if($current_crew !== null AND array_search($user -> user_login, $current_crew) !== false){
+            return false;
+        }
+        return true;
+    }
+
+    public function show_publish_button(int $post_id = null){
+        if(!$this -> user_is_in_team()){
+            return false;
+        }
+        $post_id = (!$post_id) ? get_the_ID() : $post_id;
+        $status = get_post_status($post_id);
+        if($status === 'draft'){
+            return true;
+        }
+
+    }
+    /**
+     * Checks if the current unser is allowed to edit this post.
+     *
+     * @param int $post_id - The ID of the Post
+     * @return void
+     */
+    public function current_user_can_edit(int $post_id = null)
+    {
+        if(get_post_status($post_id) !== 'publish'){
+            return false;
+        }
+        $user = wp_get_current_user();
+        $post_id = (!$post_id) ? get_the_ID() : $post_id;
+        return $this->user_can_edit($post_id);
+    }
+
+    public function user_can_edit(int $post_id, object $user = null)
+    {
+        $user = (!is_object($user)) ? wp_get_current_user() : $user;
+        if (!isset($user->roles)) {
+            sj('User not Found!');
+            return false;
+        }
+        $roles = $user->roles;
+        //if roles['communityuser/partner/band']))
+        if (array_search('partner', $roles) or array_search('band', $roles) or array_search('communityuser', $roles)) {
+            //Get Authors of Post
+            $authors = $this->get_event_authors($post_id);
+            $current_user_id = $user -> ID;
+            if(isset($authors[$current_user_id])){
+                return true;
+            }
+        }
+        //if User is Admin or Eventmanager
+        if (array_search('administrator', $roles) or array_search('plekmanager', $roles)) {
+            return true;
+        }
+        return false;
+    }
+    public function user_is_in_team(object $user = null)
+    {
+        $user = (!is_object($user)) ? wp_get_current_user() : $user;
+        if (!isset($user->roles)) {
+            sj('User not Found!');
+            return false;
+        }
+        $roles = $user->roles;
+        //if User is Admin or Eventmanager
+        if (array_search('administrator', $roles) or array_search('plekmanager', $roles)) {
+            return true;
+        }
+        return false;
     }
 }

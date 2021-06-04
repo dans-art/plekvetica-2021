@@ -118,6 +118,22 @@ button a.wp-block-button__link:not(.has-background) {
   border-radius: 0;
   background-color: #8C262E; }
 
+.plek-button {
+  width: 100%;
+  background-color: #8C262E;
+  text-align: center;
+  color: white;
+  padding: 0.5em;
+  background-color: #8C262E;
+  margin: 0.3em 0;
+  display: block;
+  color: white;
+  cursor: pointer; }
+  .plek-button:visited {
+    color: white; }
+  .plek-button:hover, .plek-button:focus {
+    color: black; }
+
 /* Title */
 .info-text-bar {
   padding: 0;
@@ -205,13 +221,15 @@ article.tribe-events-calendar-list__event {
   justify-content: center;
   flex-direction: column; }
 
-.plek-events-event-categories a,
 .plek-events-event-venue a {
   color: white; }
+  .plek-events-event-venue a:hover {
+    color: #595959; }
 
-.plek-events-event-categories a:hover,
-.plek-events-event-venue a:hover {
+.plek-events-event-categories a {
   color: #595959; }
+  .plek-events-event-categories a:hover {
+    color: #ffffffb6; }
 
 .tribe-events .tribe-events-calendar-list__event-date-tag-datetime {
   height: auto;
@@ -375,18 +393,33 @@ article .tribe-events-calendar-list__event-details {
   width: 27%;
   margin-bottom: 2em; }
 
-#tribe-events-pg-template {
+.single-tribe_events #page {
+  padding: 0 1em; }
+.single-tribe_events #tribe-events-pg-template {
   max-width: 100%; }
-
-#event-container {
+.single-tribe_events #event-container {
   display: flex;
   flex-direction: row; }
-  #event-container .event-content,
-  #event-container .event-meta {
+  .single-tribe_events #event-container .event-content,
+  .single-tribe_events #event-container .event-meta {
     flex-direction: column; }
-  #event-container .event-links-container img {
+  .single-tribe_events #event-container .event-links-container img {
     max-width: 4em;
     max-height: 2em; }
+.single-tribe_events .event-description,
+.single-tribe_events .event-video-container {
+  overflow: hidden; }
+.single-tribe_events .plek-expand-shorten-text {
+  text-align: center;
+  margin-bottom: 1em;
+  color: #ffffffb6;
+  cursor: pointer; }
+  .single-tribe_events .plek-expand-shorten-text::before {
+    font-family: "FontAwesome";
+    content: '\f063';
+    margin-right: 0.4em; }
+  .single-tribe_events .plek-expand-shorten-text.arrow-up:before {
+    content: '\f062'; }
 
 #post-27146 .info-text-line {
   position: absolute;
@@ -630,6 +663,382 @@ div.plek-review-search {
   .item.plek-select-item .title i {
     cursor: pointer;
     font-size: 1.2em; }
+
+.plekvetica-add-event {
+  /*Messages*/ }
+  .plekvetica-add-event #plekAddEvent input {
+    width: 100%;
+    color: black; }
+  .plekvetica-add-event .evtIcon {
+    margin-right: 1em; }
+  .plekvetica-add-event #darkenscreen {
+    position: fixed;
+    width: 100%;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7); }
+  .plekvetica-add-event .controls,
+  .plekvetica-add-event .control-group {
+    position: relative; }
+  .plekvetica-add-event div.noResult,
+  .plekvetica-add-event div.resultCount {
+    padding: 0.1em 2em; }
+  .plekvetica-add-event div.resultCount {
+    text-align: center;
+    border-bottom: 1px solid;
+    margin-bottom: 1em; }
+  .plekvetica-add-event .plek_loading {
+    display: inline-block;
+    width: 1em;
+    height: 1em; }
+  .plekvetica-add-event .plek_loading:after {
+    content: " ";
+    display: block;
+    width: 1em;
+    height: 1em;
+    margin: 0.1em;
+    border-radius: 50%;
+    border: 0.1em solid #fff;
+    border-color: #fff transparent #fff transparent;
+    animation: lds-dual-ring 1.2s linear infinite; }
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+  .plekvetica-add-event #plekAddEvent input,
+  .plekvetica-add-event #plekAddEvent textarea,
+  .plekvetica-add-event #plekAddBand input,
+  .plekvetica-add-event #plekAddBand textarea {
+    border: none;
+    background-color: #a2a2a2;
+    color: black;
+    font-size: 1.2em; }
+  .plekvetica-add-event #plekAddEvent input.checkbox {
+    width: 1em;
+    height: 1em; }
+  .plekvetica-add-event #bandAddContainer textarea {
+    width: 100%; }
+  .plekvetica-add-event select#venueCountry {
+    width: 100%; }
+  .plekvetica-add-event .plekFixedRowBtn {
+    width: 99% !important;
+    cursor: pointer;
+    text-align: center; }
+  .plekvetica-add-event p.help-block {
+    font-size: 0.9em;
+    font-style: italic;
+    color: #ababab;
+    margin-bottom: 0; }
+  .plekvetica-add-event .control-label {
+    text-align: center;
+    width: 100%;
+    display: block;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 1em;
+    position: relative; }
+  .plekvetica-add-event .control-box-con {
+    clear: both; }
+  .plekvetica-add-event .control-box-con .control-box {
+    width: 49%;
+    float: left;
+    margin: 0 0.5%; }
+  .plekvetica-add-event .control-box .control-group {
+    float: left;
+    width: 100%;
+    display: block; }
+  .plekvetica-add-event .control-box .control-group .control-label {
+    height: 2em;
+    display: block; }
+  .plekvetica-add-event #formGsDateBox input,
+  .plekvetica-add-event #formGeDateBox input {
+    height: 50px;
+    font-size: 1.2em;
+    color: black;
+    border: none;
+    text-align: center; }
+  .plekvetica-add-event #formGsDateBox input#startDate,
+  .plekvetica-add-event #formGeDateBox input#endDate {
+    border-right: 1px gray solid; }
+  .plekvetica-add-event #formGBands #bandSelectorInput,
+  .plekvetica-add-event #formGVenue #venueSelectorInput,
+  .plekvetica-add-event #formGOrganizer #organizerSelectorInput {
+    width: 100%;
+    float: left; }
+  .plekvetica-add-event #formGBands .sb,
+  .plekvetica-add-event #formGVenue .sb,
+  .plekvetica-add-event #formGOrganizer .sb {
+    width: 29%;
+    height: 50px;
+    background: #434444;
+    font-size: 1.2em;
+    color: white;
+    border: none;
+    display: block;
+    float: left; }
+  .plekvetica-add-event #formGBands,
+  .plekvetica-add-event #formGVenue,
+  .plekvetica-add-event #formGOrganizer {
+    position: relative;
+    z-index: 1; }
+  .plekvetica-add-event div#bandResults,
+  .plekvetica-add-event div#venueResults,
+  .plekvetica-add-event div#organizerResults {
+    /* overflow-y: scroll; */
+    /* max-height: 400px; */
+    position: absolute;
+    z-index: 12;
+    background: #333333;
+    width: 100%; }
+  .plekvetica-add-event #organiAddResults,
+  .plekvetica-add-event #venueAddResults,
+  .plekvetica-add-event #bandAddResults {
+    min-height: 20px; }
+  .plekvetica-add-event div.plekRow .btn {
+    width: 100%; }
+  .plekvetica-add-event div.plekRow {
+    margin-bottom: 1em;
+    padding: 0em 1em 3.6em 0em;
+    cursor: pointer;
+    width: 50%;
+    float: left;
+    height: 5em;
+    overflow: hidden; }
+  .plekvetica-add-event .plekRow span.bflag,
+  .plekvetica-add-event span.bflag,
+  .plekvetica-add-event .bandDetails .flag,
+  .plekvetica-add-event span.flag {
+    width: 1.3em;
+    display: block;
+    height: 1.3em;
+    background-size: contain;
+    float: left;
+    margin-right: 0.5em;
+    margin-top: 0.2em; }
+  .plekvetica-add-event .plekRow .btn {
+    padding: 1em; }
+  .plekvetica-add-event .plekRow .bname {
+    font-weight: bold; }
+  .plekvetica-add-event .plekRow .bandGenres {
+    margin-left: 1.6em;
+    font-style: italic; }
+  .plekvetica-add-event div.plekRow:hover {
+    background: gray; }
+  .plekvetica-add-event .plekRow.perfectMatch {
+    background-color: #5f5038; }
+  .plekvetica-add-event .inputItem {
+    margin-top: 0.2em;
+    width: fit-content; }
+  .plekvetica-add-event .inputItem input,
+  .plekvetica-add-event .plekFixedRowBtn {
+    border: none;
+    display: inherit;
+    background: #5b5f52 !important;
+    color: #ffeded !important;
+    border-radius: 0.5em;
+    width: fit-content;
+    margin: 0.2em; }
+  .plekvetica-add-event .inputItem button {
+    background-color: transparent;
+    border: none;
+    color: #ea0000;
+    font-size: 1.2em;
+    font-weight: bold;
+    font-family: cursive;
+    cursor: pointer; }
+  .plekvetica-add-event #venueinputs input {
+    width: 70%; }
+  .plekvetica-add-event #organizerinputs input {
+    width: 40%; }
+  .plekvetica-add-event #organizerinputs .inputItem {
+    width: 100%;
+    flex-basis: 100%; }
+  .plekvetica-add-event #formGGenres .dropdown-toggle {
+    color: black;
+    background: #a2a2a2;
+    font-size: 1.1em;
+    margin-top: 1em; }
+  .plekvetica-add-event #formGGenres .controls {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap; }
+  .plekvetica-add-event #formGGenres .inputItem {
+    flex-basis: 25%; }
+  .plekvetica-add-event ul.multiselect-container.dropdown-menu.show {
+    width: 100%; }
+  @media only screen and (max-width: 600px) and (min-width: 480px) {
+    .plekvetica-add-event .control-box .control-group {
+      float: none;
+      width: auto;
+      display: block; }
+    .plekvetica-add-event .control-box .control-group .control-label {
+      height: auto;
+      display: block; } }
+  @media only screen and (max-width: 666px) {
+    .plekvetica-add-event #formGsDateBox input#startDate,
+    .plekvetica-add-event #formGsDateBox input#startTime,
+    .plekvetica-add-event #formGeDateBox input#endTime,
+    .plekvetica-add-event #formGeDateBox input#endDate {
+      border-right: none;
+      width: 100%; }
+    .plekvetica-add-event div#bandResults, .plekvetica-add-event div#venueResults, .plekvetica-add-event div#organizerResults {
+      width: 94%;
+      left: 0;
+      margin: 0 3%; } }
+  @media only screen and (max-width: 480px) {
+    .plekvetica-add-event .control-box-con .control-box {
+      width: 100%;
+      float: left; }
+    .plekvetica-add-event .control-box .control-group {
+      float: none;
+      width: 100%;
+      display: block; }
+    .plekvetica-add-event #formGsDateBox input,
+    .plekvetica-add-event #formGeDateBox input {
+      width: 100%; }
+    .plekvetica-add-event .inputItem {
+      display: block;
+      width: 100%; }
+    .plekvetica-add-event .inputItem button {
+      left: 0;
+      top: -1.8em;
+      float: right; }
+    .plekvetica-add-event .inputItem input,
+    .plekvetica-add-event #venueinputs input,
+    .plekvetica-add-event #organizerinputs input {
+      width: 100%;
+      margin: 0; } }
+  .plekvetica-add-event textarea#eventDesc {
+    width: 100%;
+    min-height: 200px; }
+  .plekvetica-add-event input#eventPoster {
+    font-size: 1.2em;
+    border: none;
+    width: 100%; }
+  .plekvetica-add-event #eventSubmit,
+  .plekvetica-add-event .tribe-events-button.submit-button,
+  .plekvetica-add-event .plek-button {
+    background-color: #ec4858;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: block;
+    font-family: unset;
+    font-size: 14px;
+    font-stretch: 100%;
+    font-weight: 400;
+    height: 43px;
+    letter-spacing: 2px;
+    line-height: 17px;
+    margin-bottom: 0px;
+    margin-top: 21px;
+    padding-bottom: 13px;
+    padding-left: 29px;
+    padding-right: 29px;
+    padding-top: 13px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%; }
+  .plekvetica-add-event .plek-inline-button {
+    background-color: #ec4858;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-family: unset;
+    font-size: 14px;
+    font-stretch: 100%;
+    font-weight: 400;
+    height: 43px;
+    letter-spacing: 2px;
+    line-height: 17px;
+    margin-bottom: 0px;
+    margin-top: 21px;
+    padding-bottom: 13px;
+    padding-left: 29px;
+    padding-right: 29px;
+    padding-top: 13px;
+    text-align: center;
+    text-transform: uppercase; }
+  .plekvetica-add-event .tribe-events-button.cancel-button {
+    background-color: #9b9b9b;
+    border: none;
+    color: black;
+    cursor: pointer;
+    display: block;
+    font-family: unset;
+    font-size: 14px;
+    font-stretch: 100%;
+    font-weight: 400;
+    height: 43px;
+    letter-spacing: 2px;
+    line-height: 17px;
+    margin-bottom: 0px;
+    margin-top: 21px;
+    padding-bottom: 13px;
+    padding-left: 29px;
+    padding-right: 29px;
+    padding-top: 13px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%; }
+  .plekvetica-add-event button {
+    font-family: unset; }
+  .plekvetica-add-event #bandinputs,
+  .plekvetica-add-event .inputItem {
+    display: flex; }
+    .plekvetica-add-event #bandinputs button,
+    .plekvetica-add-event .inputItem button {
+      margin-left: -2em; }
+  .plekvetica-add-event #bandinputs {
+    flex-wrap: wrap; }
+  .plekvetica-add-event #addCons {
+    position: relative; }
+  .plekvetica-add-event div#bandAddContainer,
+  .plekvetica-add-event div#venueAddContainer,
+  .plekvetica-add-event div#organizerAddContainer {
+    position: relative;
+    margin: 0;
+    width: 100%;
+    z-index: 11;
+    left: 0; }
+    .plekvetica-add-event div#bandAddContainer input,
+    .plekvetica-add-event div#venueAddContainer input,
+    .plekvetica-add-event div#organizerAddContainer input {
+      width: 100%; }
+  .plekvetica-add-event div#bandAddContainer h2,
+  .plekvetica-add-event div#venueAddContainer h2,
+  .plekvetica-add-event #venueAdd,
+  .plekvetica-add-event div#organizerAddContainer h2,
+  .plekvetica-add-event #organiAdd {
+    width: 100%;
+    text-align: center; }
+  .plekvetica-add-event div#bandAddContainer section,
+  .plekvetica-add-event div#venueAddContainer section,
+  .plekvetica-add-event div#organizerAddContainer section {
+    width: 100%;
+    margin: 0 auto;
+    max-width: 700px;
+    background: #424242;
+    padding: 1em; }
+  .plekvetica-add-event .toast-message a {
+    color: #030303 !important; }
+  .plekvetica-add-event #toast-container > div {
+    -moz-box-shadow: 0 0 12px black !important;
+    -webkit-box-shadow: 0 0 12px black !important;
+    box-shadow: 0 0 12px black !important;
+    opacity: .9 !important; }
+  .plekvetica-add-event .eventerror,
+  .plekvetica-add-event .banderror,
+  .plekvetica-add-event .venueerror,
+  .plekvetica-add-event .organierror {
+    color: red; }
+  .plekvetica-add-event .eventok {
+    color: green; }
+  .plekvetica-add-event .clearfix {
+    display: block;
+    clear: both; }
 
 /* Post and post components */
 .plek-posts-container {

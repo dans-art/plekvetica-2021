@@ -1,0 +1,518 @@
+//Form Styles
+//Delete this file one the new Form is setup!
+
+//is in body class
+.plekvetica-add-event{
+
+
+  #plekAddEvent{
+     input {
+      width: 100%;
+      color:black;
+  }
+  }
+
+
+    .evtIcon{
+      margin-right:1em;
+    }
+    #darkenscreen{
+      position: fixed;
+      width: 100%;
+      z-index: 3;
+      top:0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+    
+    
+    .controls,
+    .control-group{
+      position: relative;
+    }
+    div.noResult, 
+    div.resultCount{
+        padding: 0.1em 2em;
+    }
+    div.resultCount {
+        text-align: center;
+        border-bottom: 1px solid;
+        margin-bottom: 1em;
+    }
+    .plek_loading {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      }
+    .plek_loading:after {
+      content: " ";
+      display: block;
+      width: 1em;
+      height: 1em;
+      margin: 0.1em;
+      border-radius: 50%;
+      border: 0.1em solid #fff;
+      border-color: #fff transparent #fff transparent;
+      animation: lds-dual-ring 1.2s linear infinite;
+      }
+      @keyframes lds-dual-ring {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+      }
+    
+    #plekAddEvent input,
+    #plekAddEvent textarea,
+    #plekAddBand input,
+    #plekAddBand textarea{
+      border:none;
+      background-color: #a2a2a2;
+      color:black;
+      font-size:1.2em;
+    }
+    #plekAddEvent input.checkbox {
+        width: 1em;
+        height: 1em;
+    }
+    #bandAddContainer textarea{
+      width: 100%;
+    }
+    select#venueCountry {
+        width: 100%;
+    }
+    
+    .plekFixedRowBtn{
+      width: 99% !important;
+      cursor: pointer;
+      text-align: center;
+    }
+    
+    p.help-block {
+        font-size: 0.9em;
+        font-style: italic;
+      color: #ababab;
+      margin-bottom: 0;
+    }
+    
+    .control-label{
+      text-align:center;
+      width: 100%;
+        display: block;
+      font-size:1em;
+      font-weight:bold;
+      margin-top: 1em;
+      position: relative;
+    }
+    
+    .control-box-con{
+      clear:both;
+    }
+    .control-box-con .control-box{
+       width: 49%;
+        float: left;
+        margin: 0 0.5%;
+    }
+    
+    .control-box .control-group{
+      float: left;
+      width: 100%;
+        display: block;
+    }
+    .control-box .control-group .control-label{
+        height: 2em;
+        display: block;
+    }
+    
+    
+    #formGsDateBox input,
+    #formGeDateBox input{
+        height: 50px;
+        font-size: 1.2em;
+        color: black;
+        border: none;
+      text-align: center;
+    }
+    #formGsDateBox input#startDate,
+    #formGeDateBox input#endDate{
+      border-right:1px gray solid;
+    }
+    
+    #formGBands #bandSelectorInput,
+    #formGVenue #venueSelectorInput,
+    #formGOrganizer #organizerSelectorInput{
+      width:100%;
+      float:left;
+    }
+    #formGBands .sb,
+    #formGVenue .sb,
+    #formGOrganizer .sb{
+      width: 29%;
+        height: 50px;
+        background: #434444;
+        font-size: 1.2em;
+        color: white;
+        border: none;
+        display: block;
+        float: left;
+      }
+    #formGBands,
+    #formGVenue,
+    #formGOrganizer{
+      position: relative;
+      z-index: 1;
+      }
+      
+    div#bandResults,
+    div#venueResults,
+    div#organizerResults {
+        /* overflow-y: scroll; */
+        /* max-height: 400px; */
+        position: absolute;
+        z-index: 12;
+        background: #333333;
+        width: 100%;
+    }
+    
+    
+    #organiAddResults,
+    #venueAddResults,
+    #bandAddResults{
+      min-height: 20px;
+    }
+    
+    div.plekRow .btn{
+      width: 100%;
+    }
+    div.plekRow {
+        margin-bottom: 1em;
+      padding: 0em 1em 3.6em 0em;
+        cursor: pointer;
+        width: 50%;
+        float: left;
+        height: 5em;
+        overflow: hidden;
+    }
+    
+    .plekRow span.bflag,
+    span.bflag,
+    .bandDetails .flag,
+    span.flag {
+        width: 1.3em;
+        display: block;
+        height: 1.3em;
+        background-size: contain;
+        float: left;
+        margin-right: 0.5em;
+        margin-top: 0.2em;
+    }
+    
+    
+    .plekRow .btn {
+      padding:1em;
+    }
+    .plekRow .bname {
+      font-weight:bold;
+    }
+    .plekRow .bandGenres {
+        margin-left: 1.6em;
+        font-style: italic;
+    }
+    
+    div.plekRow:hover{
+        background:gray;
+    }
+    
+    .plekRow.perfectMatch {
+        background-color: #5f5038;
+    }
+    
+    .inputItem {
+      margin-top: 0.2em;
+      width: fit-content;
+    }
+    .inputItem input,
+    .plekFixedRowBtn {
+        border: none;
+        display: inherit;
+        background: #5b5f52 !important;
+        color: #ffeded !important;
+      border-radius: 0.5em;
+      width: fit-content;
+      margin: 0.2em;
+      }
+    
+    .inputItem button {
+        background-color: transparent;
+        border: none;
+        color: #ea0000;
+        font-size: 1.2em;
+        font-weight: bold;
+      font-family: cursive;
+      cursor:pointer;
+    }
+    
+    
+    #venueinputs input{
+      width: 70%;
+    }
+    
+    #organizerinputs input{
+      width: 40%;
+    }
+
+    #organizerinputs .inputItem{
+      width: 100%;
+      flex-basis: 100%;
+    }
+    
+    #formGGenres .dropdown-toggle {
+        color: black;
+        background: #a2a2a2;
+        font-size: 1.1em;
+      margin-top: 1em;
+    }
+
+    #formGGenres{
+      .controls{
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      .inputItem{
+        flex-basis: 25%;
+      }
+    }
+    ul.multiselect-container.dropdown-menu.show {
+        width: 100%;
+    }
+    
+    
+    @media only screen and (max-width: 600px) and (min-width: 480px) {
+      .control-box .control-group{
+        float: none;
+        width: auto;
+        display: block;
+      }
+      .control-box .control-group .control-label{
+        height: auto;
+        display: block;
+      }
+    }
+    
+    @media only screen and (max-width: 666px) {
+      #formGsDateBox input#startDate,
+      #formGsDateBox input#startTime,
+      #formGeDateBox input#endTime,
+      #formGeDateBox input#endDate{
+        border-right:none;
+        width: 100%;
+      }
+    
+      div#bandResults, div#venueResults, div#organizerResults {
+        width: 94%;
+        left: 0;
+        margin: 0 3%;
+      }
+    }
+    @media only screen and (max-width: 480px) {
+      .control-box-con .control-box{
+        width:100%;
+        float:left;
+      }
+      .control-box .control-group{
+        float: none;
+        width: 100%;
+        display: block;
+      }
+      #formGsDateBox input,
+      #formGeDateBox input{
+        width: 100%;
+      }
+      
+      .inputItem {
+        display: block;
+        width: 100%;
+      }
+      .inputItem button {
+        left: 0;
+        top: -1.8em;
+          float: right;
+      }
+      .inputItem input,
+      #venueinputs input,
+      #organizerinputs input{
+        width: 100%;
+        margin:0;
+      }
+    }
+    
+    textarea#eventDesc {
+        width: 100%;
+        min-height: 200px;
+      }
+      
+    input#eventPoster {
+        font-size: 1.2em;
+        border: none;
+        width: 100%;
+    }
+    
+    #eventSubmit,
+    .tribe-events-button.submit-button,
+    .plek-button{
+      background-color: rgb(236, 72, 88);
+      border:none;
+      color: rgb(255, 255, 255);
+      cursor: pointer;
+      display: block;
+      font-family: unset;
+      font-size: 14px;
+      font-stretch: 100%;
+      font-weight: 400;
+      height: 43px;
+      letter-spacing: 2px;
+      line-height: 17px;
+      margin-bottom: 0px;
+      margin-top: 21px;
+      padding-bottom: 13px;
+      padding-left: 29px;
+      padding-right: 29px;
+      padding-top: 13px;
+      text-align: center;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .plek-inline-button{
+      background-color: rgb(236, 72, 88);
+      border:none;
+      color: rgb(255, 255, 255);
+      cursor: pointer;
+      font-family: unset;
+      font-size: 14px;
+      font-stretch: 100%;
+      font-weight: 400;
+      height: 43px;
+      letter-spacing: 2px;
+      line-height: 17px;
+      margin-bottom: 0px;
+      margin-top: 21px;
+      padding-bottom: 13px;
+      padding-left: 29px;
+      padding-right: 29px;
+      padding-top: 13px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .tribe-events-button.cancel-button{
+      background-color: rgb(155, 155, 155);
+      border:none;
+      color: rgb(0, 0, 0);
+      cursor: pointer;
+      display: block;
+      font-family: unset;
+      font-size: 14px;
+      font-stretch: 100%;
+      font-weight: 400;
+      height: 43px;
+      letter-spacing: 2px;
+      line-height: 17px;
+      margin-bottom: 0px;
+      margin-top: 21px;
+      padding-bottom: 13px;
+      padding-left: 29px;
+      padding-right: 29px;
+      padding-top: 13px;
+      text-align: center;
+      text-transform: uppercase;
+      width: 100%;
+    }
+
+    button{
+      font-family: unset;
+    }
+    
+    #bandinputs,
+    .inputItem{
+      display: flex;
+
+      button{
+        margin-left: -2em;
+      }
+    }
+    #bandinputs{
+      flex-wrap: wrap;
+    }
+
+
+
+
+
+  #addCons{
+    position:relative;
+  }
+
+  div#bandAddContainer,
+  div#venueAddContainer, 
+  div#organizerAddContainer {
+    position: relative;
+    margin: 0;
+    width: 100%;
+    z-index: 11;
+    left: 0;
+
+    input{
+      width: 100%;
+    }
+  }
+
+  div#bandAddContainer h2, 
+  div#venueAddContainer h2,
+  #venueAdd,
+  div#organizerAddContainer h2,
+  #organiAdd {
+    width: 100%;
+    text-align: center;
+  }
+
+  div#bandAddContainer section,
+  div#venueAddContainer section,
+  div#organizerAddContainer section {
+      width: 100%;
+    margin: 0 auto;
+    max-width: 700px;
+    background: rgb(66, 66, 66);
+    padding: 1em;
+  }
+
+  /*Messages*/
+  .toast-message a {
+    color: rgb(3, 3, 3)!important;
+  }
+
+  #toast-container>div {
+   
+    -moz-box-shadow: 0 0 12px rgb(0, 0, 0)!important;
+    -webkit-box-shadow: 0 0 12px rgb(0, 0, 0)!important;
+    box-shadow: 0 0 12px rgb(0, 0, 0)!important;
+    opacity: .9 !important; 
+
+  }
+
+  .eventerror,
+  .banderror,
+  .venueerror,
+  .organierror{
+  color:red;
+  }
+  .eventok{
+  color:green;
+  }
+
+  .clearfix {
+    display: block;
+    clear: both;
+  }
+}

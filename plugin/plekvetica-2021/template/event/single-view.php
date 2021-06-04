@@ -20,6 +20,8 @@ if ($is_review) {
     $backlink_label = esc_html_x('All %s', '%s Events plural label', 'the-events-calendar');
     $backlink_label_plural = tribe_get_event_label_plural();
 }
+//Load the main-event-single.js script
+wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-single.min.js',['jquery']);
 
 ?>
 <?php PlekTemplateHandler::load_template('back-link', 'components', $backlink, $backlink_label, $backlink_label_plural); ?>

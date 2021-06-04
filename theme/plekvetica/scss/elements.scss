@@ -52,6 +52,29 @@ button {
   }
 }
 
+.plek-button{
+  width: 100%;
+  background-color: $color-red-light;
+  text-align: center;
+  color: $text-color;
+  padding: 0.5em;
+  background-color: #8C262E;
+  margin: 0.3em 0;
+  display: block;
+  color: $text-color;
+  cursor: pointer;
+
+  &:visited{
+    color: $text-color;
+  }
+
+  &:hover,
+  &:focus{
+    color: $text-color-black;
+  }
+
+}
+
 /* Title */
 
 .info-text-bar{

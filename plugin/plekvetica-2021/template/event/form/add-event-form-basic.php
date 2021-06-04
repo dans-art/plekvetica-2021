@@ -24,12 +24,5 @@ $event_class = $template_args[0]; //Plek_events_form Object
 	</form>
 </div>
 
-<script type="text/javascript" defer='defer'>
-	
-	var ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
-	var plek_plugin_dir_url = "<?php echo PLEK_PLUGIN_DIR_URL; ?>";
-
-	var bandPreloadedData = null;
-	var venuePreloadedData = null;
-</script>
+<?php PlekTemplateHandler::load_template('js-settings', 'components','manage_event_buttons'); ?>
 <script type="text/javascript" src="<?php echo PLEK_PLUGIN_DIR_URL  ?>js/manage-event.min.js" defer='defer'></script>

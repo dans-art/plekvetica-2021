@@ -11,6 +11,7 @@
  * Textdomain: pleklang
  * @todo: 
  *       -  Change ACF "band_genre" callback to Array
+ *       - Add Roles: communityuser / partner / band
  * 
  */
 
@@ -22,6 +23,16 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
 
 //Debug
  require_once(PLEK_PATH."..\plekvetica\include\scripts\kint.phar");
+ /**
+  * Adds a message to the JS debugger. This will be printed out in the footer of the page.
+  *
+  * @param mixed $msg - The Message to print.
+  * @return void
+  */
+ function sj($msg){
+   do_action( 'plek_js_debug', $msg);
+ }
+ //End Debug
 
  //Check if the Event-Calendar Plugin is active
  /* if(!class_exists("Tribe__Events__Main")){

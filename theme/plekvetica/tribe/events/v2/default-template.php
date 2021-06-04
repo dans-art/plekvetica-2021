@@ -26,7 +26,7 @@ get_header();
         PlekTemplateHandler::load_template('photo-view','gallery', get_the_ID(), get_permalink(), 'Zurück zum Event');
     }
     elseif(is_single()){
-        $plek_event -> load_event();
+        $plek_event -> load_event(null, 'all');
         PlekTemplateHandler::load_template('single-view','event');
     }
     else{

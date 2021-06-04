@@ -1,22 +1,53 @@
 //Single Event Style
 
-#tribe-events-pg-template{
-  max-width: 100%;
-}
-#event-container{
-   display:flex;
-  flex-direction: row;
-   .event-content,
-   .event-meta{
-    flex-direction: column;
+.single-tribe_events{
+
+   #page{
+     padding: 0 1em;
    }
 
-   .event-links-container{
+  #tribe-events-pg-template{
+    max-width: 100%;
+  }
+  #event-container{
+     display:flex;
+    flex-direction: row;
+     .event-content,
+     .event-meta{
+      flex-direction: column;
+     }
+  
+     .event-links-container{
+  
+      img{
+        max-width: 4em;
+        max-height: 2em;
+      }
+     }
+  }
 
-    img{
-      max-width: 4em;
-      max-height: 2em;
+  .event-description,
+  .event-video-container{
+    overflow: hidden;
+  }
+
+  .plek-expand-shorten-text{
+    text-align: center;
+    margin-bottom: 1em;
+    color: $color-gray-light-two;
+    cursor: pointer;
+
+    &::before{
+      font-family: "FontAwesome";
+      content: '\f063';
+      margin-right: 0.4em;
     }
-   }
+
+    &.arrow-up:before{
+      content: '\f062';
+    }
+  }
+
 }
+
 

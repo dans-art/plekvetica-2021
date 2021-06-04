@@ -37,6 +37,7 @@ body{
     @import 'event-single.scss';
     @import 'pages-style.scss';
     @import 'forms.scss';
+    @import 'form-old.scss'; //Delete this once the old form is replaced!
     @import 'posts.scss';
 
     /*Breakpoints have to be at the end to avoid override*/
