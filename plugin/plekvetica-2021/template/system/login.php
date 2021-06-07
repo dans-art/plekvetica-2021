@@ -7,8 +7,6 @@
 global $plek_event;
 $plek_login = new PlekLoginHandler;
 $current_user = wp_get_current_user();
-$obj_id = get_queried_object_id();
-$current_url = get_permalink( $obj_id );
 
 extract(get_defined_vars());
 
@@ -19,8 +17,7 @@ $content = (isset($template_args[1])) ? $template_args[1] : ''; //Content of the
 
 <div id="plek-login-container">
     <?php if(is_user_logged_in()): ?>
-        <?php PlekTemplateHandler::load_template('user-page','system'); ?>
-        <div class="logout-link"><a href="<?php echo $current_url;?>?action=logout"><?php echo __('Abmelden','pleklang');?></a></div>
+        <?php PlekTemplateHandler::load_template('my-plekvetica-page','system', $current_user); ?>
     <?php else: ?>
          <?php PlekTemplateHandler::load_template('login-form','system/login'); ?>
     <?php endif; ?>

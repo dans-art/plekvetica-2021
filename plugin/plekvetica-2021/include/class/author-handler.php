@@ -14,8 +14,8 @@ class PlekAuthorHandler
             ON users.ID = meta_since.user_id
             AND meta_since.meta_key = 'since'
             WHERE meta.meta_key = 'show_member'
-            AND meta.meta_value = '1'
-            ORDER BY since");
+            AND meta.meta_value = '%s'
+            ORDER BY since", '1');
         $authors = $wpdb->get_results($query);
 
         if(empty($authors)){

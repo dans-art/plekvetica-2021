@@ -277,3 +277,66 @@ margin-bottom: 0;
   }
 
 }
+
+article.plek-event-item-compact{
+  
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 2em;
+  
+  .event-icons{
+    width: 2em;
+    font-size: 1.4em;
+
+    & span:before{
+      font-family: "FontAwesome";
+    }
+    & span.aa:before{
+      content: '\f059';
+      color: $color-gray-light-two;
+    }
+    & span.ab:before{
+      content: '\f058';
+      color: $color-green;
+    }
+    & span.aw:before{
+      content: '\f06a';
+      color: $color-blue;
+    }
+    & span.no:before{
+      content: '\f057';
+      color: $color-red;
+    }
+  }
+
+  .poster{
+    margin-right: 1em;
+    align-self: center;
+    width: 150px;
+  }
+
+  .details{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .date{
+      color: $color-gray-light-two;
+    }
+    .title{
+      color: $text-color;
+    }
+  }
+
+  .event-icons{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+    .fas,
+    .far{
+      font-size: 0.8em;
+    }
+  }
+
+}

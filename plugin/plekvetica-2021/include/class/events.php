@@ -186,6 +186,86 @@ class PlekEvents extends PlekEventHandler
     }
 
     /**
+     * Get all events with a akkreditations status of a certain user
+     *
+     * @param string $user_login
+     * @param string $from - date('Y-m-d H:i:s')
+     * @param string $to - date('Y-m-d H:i:s')
+     * @return object Result form the database. 
+     */
+    public function get_user_akkredi_event(string $user_login, string $from = '1970-01-01 00:00:00', string $to = '9999-01-01 00:00:00'){
+        global $wpdb;
+        $user = htmlspecialchars($user_login);
+
+        $wild = '%';
+        $like = $wild . $wpdb->esc_like($user_login) . $wild;
+
+        $query = $wpdb->prepare("SELECT meta.meta_value as akk_team, posts.ID, posts.post_title , status.meta_value as akk_status, startdate.meta_value as startdate
+            FROM `{$wpdb->prefix}postmeta` as meta
+            LEFT JOIN {$wpdb->prefix}posts as posts
+            ON posts.ID = meta.post_id AND posts.post_type = 'tribe_events'
+            LEFT JOIN {$wpdb->prefix}postmeta as status
+            ON posts.ID = status.post_id AND status.meta_key = 'akk_status'
+            LEFT JOIN {$wpdb->prefix}postmeta as startdate
+            ON posts.ID = startdate.post_id AND startdate.meta_key = '_EventStartDate'
+            WHERE meta.`meta_key` LIKE 'akkreditiert'
+            AND meta.`meta_value` LIKE '%s'
+            AND posts.ID IS NOT NULL
+            AND startdate.meta_value > '%s'
+            AND startdate.meta_value < '%s'
+            ORDER BY startdate.meta_value DESC", $like, $from, $to);
+        $posts = $wpdb->get_results($query);
+
+        return $posts;
+    }
+
+    public function get_user_missing_review_events(string $user_login){
+        global $wpdb;
+        $user = htmlspecialchars($user_login);
+
+        $wild = '%';
+        $like = $wild . $wpdb->esc_like($user_login) . $wild;
+        $today = date('Y-m-d 00:00:00');
+
+        $query = $wpdb->prepare("SELECT user.meta_value as akk_team, posts.ID, posts.post_title , 
+        status.meta_value as akk_status, startdate.meta_value as startdate, enddate.meta_value as enddate
+        FROM `{$wpdb->prefix}postmeta` as user
+        LEFT JOIN {$wpdb->prefix}posts as posts
+        ON posts.ID = user.post_id
+        AND posts.post_type = 'tribe_events'
+        LEFT JOIN {$wpdb->prefix}postmeta as status
+        ON posts.ID = status.post_id
+        AND status.meta_key = 'akk_status'
+
+        LEFT JOIN {$wpdb->prefix}postmeta as startdate
+        ON posts.ID = startdate.post_id
+        AND startdate.meta_key = '_EventStartDate'
+        
+        LEFT JOIN {$wpdb->prefix}postmeta as enddate
+        ON posts.ID = enddate.post_id
+        AND enddate.meta_key = '_EventEndDate'
+        
+        LEFT JOIN {$wpdb->prefix}postmeta as review
+        ON posts.ID = review.post_id
+        AND review.meta_key = 'is_review'
+        
+        LEFT JOIN {$wpdb->prefix}postmeta as canceled
+        ON posts.ID = canceled.post_id
+        AND canceled.meta_key = 'cancel_event'
+        
+        WHERE user.`meta_key` LIKE 'akkreditiert'
+        AND user.`meta_value` LIKE '%s'
+        AND posts.ID IS NOT NULL
+        AND status.meta_value = 'ab'
+        AND canceled.meta_value NOT LIKE '1'
+        AND review.meta_value NOT LIKE '1'
+        AND enddate.meta_value < '%s'
+        ORDER BY startdate.meta_value DESC", $like, $today);
+        $posts = $wpdb->get_results($query);
+
+        return $posts;
+    }
+    /**
      * Load the event terms. Calls $this->process_terms which adds the data to the event property
      *
      * @param integer $event_id - Id of the Event.

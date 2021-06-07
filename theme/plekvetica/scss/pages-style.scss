@@ -251,5 +251,35 @@ ul.partner-container{
     }
 }
 
-    
+//My Plekvetica
+.my-plek-header{
+    display: flex;
+    justify-content: flex-start;
 
+    div{
+        flex-basis: 50%;
+    }
+    div:nth-child(2){
+        text-align: right;
+    }
+}
+.my-plek-container{
+
+    .my-plek-head-container {
+        display: flex;
+        justify-content: space-between;
+    
+        .this-week-posts,
+        .missing-reviews-posts{
+            flex-basis: 49%;
+        }
+    }
+    .info-text-bar{
+        width: 100%;
+    }
+
+    .plek-no-open-reviews:after{
+        content: '😃';
+        margin-left: 0.7em;
+    }
+}

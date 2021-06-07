@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /**
 Theme Name: Plekvetica
 Description: Child theme for Generatepress theme
@@ -393,6 +394,47 @@ article .tribe-events-calendar-list__event-details {
   width: 27%;
   margin-bottom: 2em; }
 
+article.plek-event-item-compact {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 2em; }
+  article.plek-event-item-compact .event-icons {
+    width: 2em;
+    font-size: 1.4em; }
+    article.plek-event-item-compact .event-icons span:before {
+      font-family: "FontAwesome"; }
+    article.plek-event-item-compact .event-icons span.aa:before {
+      content: '\f059';
+      color: #ffffffb6; }
+    article.plek-event-item-compact .event-icons span.ab:before {
+      content: '\f058';
+      color: #268c37; }
+    article.plek-event-item-compact .event-icons span.aw:before {
+      content: '\f06a';
+      color: #6278d9; }
+    article.plek-event-item-compact .event-icons span.no:before {
+      content: '\f057';
+      color: #D9042B; }
+  article.plek-event-item-compact .poster {
+    margin-right: 1em;
+    align-self: center;
+    width: 150px; }
+  article.plek-event-item-compact .details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; }
+    article.plek-event-item-compact .details .date {
+      color: #ffffffb6; }
+    article.plek-event-item-compact .details .title {
+      color: white; }
+  article.plek-event-item-compact .event-icons {
+    display: flex;
+    flex-direction: column;
+    text-align: center; }
+    article.plek-event-item-compact .event-icons .fas,
+    article.plek-event-item-compact .event-icons .far {
+      font-size: 0.8em; }
+
 .single-tribe_events #page {
   padding: 0 1em; }
 .single-tribe_events #tribe-events-pg-template {
@@ -413,7 +455,8 @@ article .tribe-events-calendar-list__event-details {
   text-align: center;
   margin-bottom: 1em;
   color: #ffffffb6;
-  cursor: pointer; }
+  cursor: pointer;
+  padding: 1em; }
   .single-tribe_events .plek-expand-shorten-text::before {
     font-family: "FontAwesome";
     content: '\f063';
@@ -566,6 +609,26 @@ ul.partner-container {
     max-width: 200px; }
   .plek-author-container .info-text-bar {
     width: 40%; }
+
+.my-plek-header {
+  display: flex;
+  justify-content: flex-start; }
+  .my-plek-header div {
+    flex-basis: 50%; }
+  .my-plek-header div:nth-child(2) {
+    text-align: right; }
+
+.my-plek-container .my-plek-head-container {
+  display: flex;
+  justify-content: space-between; }
+  .my-plek-container .my-plek-head-container .this-week-posts,
+  .my-plek-container .my-plek-head-container .missing-reviews-posts {
+    flex-basis: 49%; }
+.my-plek-container .info-text-bar {
+  width: 100%; }
+.my-plek-container .plek-no-open-reviews:after {
+  content: '😃';
+  margin-left: 0.7em; }
 
 div.plek-review-search {
   margin-bottom: 1em; }
