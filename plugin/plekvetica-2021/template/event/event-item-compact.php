@@ -11,7 +11,7 @@ if (empty($id)) {
 
 $currrent_event = new PlekEvents;
 $currrent_event -> load_event($id);
-
+$permalink = $currrent_event -> get_permalink();
 
 //$poster = get_the_post_thumbnail($id, ['150', 'auto']);
 $poster = $currrent_event -> get_poster('Event Poster', ['150', 'auto']);
@@ -34,7 +34,7 @@ $class = ($index > $limit)?"hide-event":"";
         <?php endif;?>
     </div>
     <div class="poster">
-        <a href="<?php echo $currrent_event -> get_permalink(); ?>" title="<?php echo __('Gehe zum Event', 'pleklang'); ?>">
+        <a href="<?php echo $permalink; ?>" title="<?php echo __('Gehe zum Event', 'pleklang'); ?>">
             <?php echo $poster; ?>
             <?php if(empty($poster)): ?>
                 <img src="<?php echo $currrent_event->poster_placeholder; ?>"/>

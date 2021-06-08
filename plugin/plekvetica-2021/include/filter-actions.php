@@ -18,6 +18,7 @@ add_filter('tribe_events_pro_pre_get_posts', function($event){
 
 add_action( 'admin_menu', [$backend_class,'setup_options']);
 add_action('admin_init', [$backend_class, 'plek_register_settings']);
+add_action('admin_init', [$backend_class, 'enqueue_admin_style']);
 
 add_filter( 'wp_get_nav_menu_items', [$plek_handler, 'wp_get_nav_menu_items_filter'], 10, 3 );
 
@@ -27,6 +28,8 @@ add_action( 'wp_authenticate', [$plek_login_handler, 'wp_authenticate_action'], 
 //Ajax
 add_action('wp_ajax_plek_ajax_event_form', [$plek_ajax_handler,'plek_ajax_event_form_action']);
 add_action('wp_ajax_nopriv_plek_ajax_event_form', [$plek_ajax_handler, 'plek_ajax_event_form_action']);
+
+add_action('wp_ajax_plek_event_actions',  [$plek_ajax_handler,'plek_ajax_event_actions']);
 
 //JS Debugger
 add_action( 'plek_js_debug', [$plek_handler,'set_js_error'], 10, 1 );

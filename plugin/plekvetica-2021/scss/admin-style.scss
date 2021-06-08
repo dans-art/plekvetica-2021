@@ -1,0 +1,13 @@
+#plek_options_page{
+
+    .logo_image{
+
+        td{
+            display: flex;
+            flex-direction: column;
+        }
+        img{
+            max-width: 200px;
+        }
+    }
+}

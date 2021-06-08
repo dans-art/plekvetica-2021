@@ -37,8 +37,8 @@ class PlekBackend
         add_settings_section('plek_event_settings', 'Eventeinstellungen', null, 'plek_general_options');
         add_settings_section('plek_facebook_settings', 'Facebook', null, 'plek_general_options');
         
-        add_settings_field('plek_seetickets_logo', 'SeeTickets (Starticket) Logo', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'plek_seetickets_logo', 'type' => 'file'));
-        add_settings_field('plek_ticketcorner_logo', 'Ticketcorner Logo', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'plek_ticketcorner_logo', 'type' => 'file'));
+        add_settings_field('plek_seetickets_logo', 'SeeTickets (Starticket) Logo', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'plek_seetickets_logo', 'type' => 'file', 'class' => 'logo_image'));
+        add_settings_field('plek_ticketcorner_logo', 'Ticketcorner Logo', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'plek_ticketcorner_logo', 'type' => 'file', 'class' => 'logo_image'));
         
         add_settings_field('review_page', 'Review Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'review_page', 'type' => 'input'));
         add_settings_field('youtube_channel_id', 'Youtube Channel ID', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'youtube_channel_id', 'type' => 'input'));
@@ -105,5 +105,9 @@ class PlekBackend
                 # code...
                 break;
         }
+    }
+
+    public function enqueue_admin_style(){
+        wp_enqueue_style('plek-admin-style', PLEK_PLUGIN_DIR_URL . 'css/admin-style.min.css');
     }
 }

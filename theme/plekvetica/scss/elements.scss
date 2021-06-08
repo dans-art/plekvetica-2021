@@ -73,6 +73,13 @@ button {
     color: $text-color-black;
   }
 
+  &.blue{
+    background-color: $color-blue;
+  }
+  &.green{
+    background-color: $color-green;
+  }
+
 }
 
 /* Title */

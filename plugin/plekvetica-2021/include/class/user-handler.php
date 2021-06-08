@@ -89,6 +89,10 @@ class PlekUserHandler
         return PlekUserHandler::search_role('community', $user);
     }
 
+    public static function user_is_band(object $user = null){
+        return PlekUserHandler::search_role('band', $user);
+    }
+
     public static function search_role(mixed $rolename = '', object $user = null){
         $user = (!is_object($user)) ? wp_get_current_user() : $user;
         if (!isset($user->roles)) {

@@ -134,6 +134,10 @@ button a.wp-block-button__link:not(.has-background) {
     color: white; }
   .plek-button:hover, .plek-button:focus {
     color: black; }
+  .plek-button.blue {
+    background-color: #6278d9; }
+  .plek-button.green {
+    background-color: #268c37; }
 
 /* Title */
 .info-text-bar {
@@ -430,7 +434,8 @@ article.plek-event-item-compact {
   article.plek-event-item-compact .event-icons {
     display: flex;
     flex-direction: column;
-    text-align: center; }
+    text-align: center;
+    justify-content: center; }
     article.plek-event-item-compact .event-icons .fas,
     article.plek-event-item-compact .event-icons .far {
       font-size: 0.8em; }

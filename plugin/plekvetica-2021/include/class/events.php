@@ -501,4 +501,11 @@ class PlekEvents extends PlekEventHandler
         wp_enqueue_script('flatpickr-de-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9-de.js');
         
     }
+
+    public function promote_on_facebook(){
+        $social = new plekSocialMedia();
+        $message = $this -> get_event_promo_text();
+        $url = $this -> get_poster_url();
+        return $social -> post_photo_to_facebook($message, $url);
+    }
 }

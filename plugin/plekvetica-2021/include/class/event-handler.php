@@ -115,6 +115,15 @@ class PlekEventHandler
         return array();
     }
 
+    public function get_bands_string(string $seperator = ', '){
+        $bands = $this -> get_bands();
+        $ret_arr = [];
+        foreach($bands as $band){
+            $ret_arr[] = $band['name']; 
+        }
+        return implode($seperator, $ret_arr);
+    }
+
     public function get_permalink()
     {
         return get_permalink($this->get_ID());
@@ -147,6 +156,15 @@ class PlekEventHandler
         }
         return null;
     }
+
+    public function get_poster_url($size = 'medium'){
+        $poster_arr = wp_get_attachment_image_src($this->get_field_value('_thumbnail_id'), $size);
+        if(isset($poster_arr[0])){
+            return $poster_arr[0];
+        }
+        return false;
+    }
+
     public function get_thumbnail_object($size = '')
     {
         $size = (empty($size)) ? 'medium' : $size;
@@ -169,6 +187,33 @@ class PlekEventHandler
                 return $thumbs->standard;
                 break;
         }
+    }
+
+    public function get_event_promo_text(){
+        $event_url = $this -> get_permalink();
+        $text = "Plekvetica Event Tipp!".PHP_EOL;
+        $text .= $this -> get_start_date('d. F Y'). " @ " . $this -> get_venue_name() .PHP_EOL;
+        $text .= "Bands: ". $this -> get_bands_string() .PHP_EOL;
+        $text .= "Alle Infos:".PHP_EOL;
+        return $text.$event_url;
+    }
+
+    /**
+     * Returns all Users, who put the Event on their watchlist.
+     *
+     * @return array User Id's
+     */
+    public function get_watchlist(){
+        return get_field('event_watchlist', $this -> get_ID());
+    }
+
+    /**
+     * Returns the total count of the users, which have the event on their watchlist.
+     * 
+     * @return int Lenght of get_watchlist array
+     */
+    public function get_watchlist_count(){
+        return count($this -> get_watchlist());
     }
     /**
      * Returns the startdate of the event. Default format: d m y

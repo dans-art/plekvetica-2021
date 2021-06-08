@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAIQ,iCAAE;EACE,OAAO,EAAE,IAAI;EACb,cAAc,EAAE,MAAM;AAE1B,kCAAG;EACC,SAAS,EAAE,KAAK",
+"sources": ["../scss/admin-style.scss"],
+"names": [],
+"file": "admin-style.min.css"
+}

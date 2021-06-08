@@ -57,9 +57,9 @@ class plekSocialMedia
     /**
      * Create a new post with an image in the facebook site feed.
      *
-     * @param string $msg
-     * @param string $url
-     * @return void
+     * @param string $msg - Message to send with the Photo
+     * @param string $url - URL to the Photo
+     * @return mixed True on success, String on error
      */
     public function post_photo_to_facebook(string $msg, string $url)
     {

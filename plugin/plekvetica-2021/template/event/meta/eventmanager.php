@@ -3,6 +3,7 @@ global $plek_event;
 $current_user = wp_get_current_user();
 $event_id = get_the_ID();
 $review_titel = ($plek_event -> is_review())? __('Review bearbeiten','pleklang'): __('Review schreiben','pleklang');
+
 //s($post_authors);
 ?>
 <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Event Manager', 'pleklang')); ?>
@@ -20,6 +21,11 @@ $review_titel = ($plek_event -> is_review())? __('Review bearbeiten','pleklang')
     <?php if (PlekUserHandler::current_user_can_edit($event_id) AND $plek_event -> is_past_event()) : ?>
     <a name="reviewEvent" class="plek-button full-width green" href='<?php echo site_url() . '/event-bearbeiten/?review=true&edit=' . $event_id; ?>'><?php echo $review_titel; ?></a>
     <?php endif; ?>
+    <?php if (PlekUserHandler::current_user_can_edit($event_id) AND !$plek_event -> is_review()) : ?>
+    <a id="promoteEvent" name="promoteEvent" class="plek-button full-width blue" data-eventid="<?php echo $event_id; ?>"><i class="fab fa-facebook-square"></i> <?php echo __('Promote Event','pleklang'); ?></a>
+    <?php endif; ?>
+    <?php s($plek_event -> get_field('akk_status')); ?>
+    <?php s($plek_event -> get_field('akk_crew')); ?>
 </div>
 
 <?php PlekTemplateHandler::load_template('js-settings', 'components','manage_event_buttons'); ?>

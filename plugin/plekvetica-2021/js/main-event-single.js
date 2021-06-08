@@ -13,6 +13,9 @@ let plek_single_event_main = {
             this.on_resize();
         });
         
+        jQuery(document).ready(() => {
+            this.add_event_listener();
+        });
     },
     
     on_resize(){
@@ -107,6 +110,33 @@ let plek_single_event_main = {
     scroll_to_content_top(content){
         let pos_top = content.position().top;
         jQuery(document).scrollTop(pos_top)
+    },
+
+    add_event_listener(){
+        jQuery('#promoteEvent').click(() => {
+            this.do_ajax_promote_event();
+        });
+    },
+    do_ajax_promote_event(){
+        let button = jQuery('#promoteEvent');
+        let event_id =  button.data('eventid');
+        button.addClass("plek-animate-blue");
+        jQuery.ajax({
+            url: window.ajaxurl,
+            data: {
+              'action': 'plek_event_actions',
+              'do': 'promote_event',
+              'id': event_id
+            },
+            success: function success(data) {
+                jQuery("#ajaxStatus").append("<div>" + data + "</div>");
+              button.removeClass("plek-animate-blue");
+            },
+            error: function error(data) {
+              jQuery("#ajaxStatus").html("Error loading data.... ");
+              button.removeClass("plek-animate-blue");
+            }
+          });
     }
 
 

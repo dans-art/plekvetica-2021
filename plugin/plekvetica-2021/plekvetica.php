@@ -11,8 +11,11 @@
  * Textdomain: pleklang
  * @todo: 
  *       -  Change ACF "band_genre" callback to Array
- *       - Add Roles: communityuser / partner / band
- * 
+ *       - Add Roles: communityuser / partner / band / organizer
+ *  - Add LazyLoading for all images
+ * - Add ACF: User: band_id, organizer_id
+ * - Add ACF: Event
+ * - check if The Event Calendar, ACF is installed
  */
 
 
