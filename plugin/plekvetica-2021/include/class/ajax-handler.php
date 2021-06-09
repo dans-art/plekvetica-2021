@@ -41,6 +41,18 @@ class PlekAjaxHandler
                 }
                 die();
                 break;
+            case 'remove_akkredi_member':
+                global $plek_event;
+                $event_id = (int) $this -> get_ajax_data('id');
+                $user = $this -> get_ajax_data('user');
+                $remove = $plek_event -> remove_akkredi_member($user, $event_id);
+                if($remove === true){
+                    echo __('Mitglied wurde erfolgreich entfernt.','pleklang');
+                }else{
+                    echo $remove;  //Error Message from funciton
+                }
+                die();
+                break;
 
             default:
                 # code...

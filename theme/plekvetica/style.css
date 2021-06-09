@@ -51,6 +51,10 @@ a {
 #menu-item-78 .sub-menu {
   width: 112px; }
 
+#menu-item-27030 .sub-menu {
+  width: 150px;
+  right: -29px; }
+
 .main-navigation ul ul {
   background-color: #595959; }
 
@@ -198,6 +202,26 @@ blockquote {
 
 .yotu-playlist .yotu-pagination a::after {
   color: white; }
+
+.event-icons span:before,
+.event-akkredi-status span:before {
+  font-family: "FontAwesome"; }
+.event-icons span.aa:before,
+.event-akkredi-status span.aa:before {
+  content: '\f059';
+  color: #ffffffb6; }
+.event-icons span.ab:before,
+.event-akkredi-status span.ab:before {
+  content: '\f058';
+  color: #268c37; }
+.event-icons span.aw:before,
+.event-akkredi-status span.aw:before {
+  content: '\f06a';
+  color: #6278d9; }
+.event-icons span.no:before,
+.event-akkredi-status span.no:before {
+  content: '\f057';
+  color: #D9042B; }
 
 .band img {
   vertical-align: sub;
@@ -402,23 +426,10 @@ article.plek-event-item-compact {
   display: flex;
   justify-content: flex-start;
   margin-bottom: 2em; }
-  article.plek-event-item-compact .event-icons {
+  article.plek-event-item-compact .event-icons,
+  article.plek-event-item-compact .event-akkredi-status {
     width: 2em;
     font-size: 1.4em; }
-    article.plek-event-item-compact .event-icons span:before {
-      font-family: "FontAwesome"; }
-    article.plek-event-item-compact .event-icons span.aa:before {
-      content: '\f059';
-      color: #ffffffb6; }
-    article.plek-event-item-compact .event-icons span.ab:before {
-      content: '\f058';
-      color: #268c37; }
-    article.plek-event-item-compact .event-icons span.aw:before {
-      content: '\f06a';
-      color: #6278d9; }
-    article.plek-event-item-compact .event-icons span.no:before {
-      content: '\f057';
-      color: #D9042B; }
   article.plek-event-item-compact .poster {
     margin-right: 1em;
     align-self: center;
@@ -468,6 +479,10 @@ article.plek-event-item-compact {
     margin-right: 0.4em; }
   .single-tribe_events .plek-expand-shorten-text.arrow-up:before {
     content: '\f062'; }
+.single-tribe_events .event-akkredi-container dt {
+  margin-top: 0.5em; }
+.single-tribe_events .event-akkredi-container dd {
+  margin: 0 0 0 1.5em; }
 
 #post-27146 .info-text-line {
   position: absolute;
@@ -1112,7 +1127,7 @@ div.plek-review-search {
 .plek-posts-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between; }
+  column-gap: 5%; }
   .plek-posts-container .plek-post-item {
     flex-basis: 30%;
     margin-bottom: 2em; }

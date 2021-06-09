@@ -113,9 +113,16 @@ let plek_single_event_main = {
     },
 
     add_event_listener(){
+        //Promote Event Button
         jQuery('#promoteEvent').click(() => {
             this.do_ajax_promote_event();
         });
+        //Remove Accreditation Button
+        jQuery("#plekRemoveAkkreiCrewBtn").click(function(){
+            plek_single_event_main.do_ajax_remove_akkredi_member();
+          });
+          
+
     },
     do_ajax_promote_event(){
         let button = jQuery('#promoteEvent');
@@ -127,6 +134,29 @@ let plek_single_event_main = {
               'action': 'plek_event_actions',
               'do': 'promote_event',
               'id': event_id
+            },
+            success: function success(data) {
+                jQuery("#ajaxStatus").append("<div>" + data + "</div>");
+              button.removeClass("plek-animate-blue");
+            },
+            error: function error(data) {
+              jQuery("#ajaxStatus").html("Error loading data.... ");
+              button.removeClass("plek-animate-blue");
+            }
+          });
+    },
+
+    do_ajax_remove_akkredi_member(){
+        let button = jQuery('#plekRemoveAkkreiCrewBtn');
+        let user_name = button.data("user");
+        let event_id = button.data("eventid");
+        jQuery.ajax({
+            url: window.ajaxurl,
+            data: {
+              'action': 'plek_event_actions',
+              'do': 'remove_akkredi_member',
+              'id': event_id,
+              'user': user_name,
             },
             success: function success(data) {
                 jQuery("#ajaxStatus").append("<div>" + data + "</div>");

@@ -426,6 +426,11 @@ class PlekEventHandler
 
     }
 
+    public function get_event_akkredi_crew(){
+        $crew = get_field('akkreditiert', $this -> get_ID());
+        return (!empty($crew))?$crew:false;
+    }
+
     public function get_event_akkredi_status_text(string $akkredi_code = ''){
         if(empty($akkredi_code)){
             return false;
@@ -449,5 +454,18 @@ class PlekEventHandler
                 break;
         }
 
+    }
+
+    public function remove_akkredi_member(string $user_login, int $event_id){
+        $current = get_field('akkreditiert',$event_id);
+        if(empty($current)){
+            return __('Es sind keine Mitglieder registriert','pleklang');
+        }
+        $find = array_search($user_login, $current);
+        if($find === false){
+            return __('Mitglied ist bereits abgemeldet.','pleklang');
+        }
+        unset($current[$find]);
+        return (update_field('akkreditiert',$current, $event_id ))?true:__('Fehler beim Updaten des Akkreditierungs Feld','pleklang');
     }
 }

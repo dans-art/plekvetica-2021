@@ -14,8 +14,9 @@
  *       - Add Roles: communityuser / partner / band / organizer
  *  - Add LazyLoading for all images
  * - Add ACF: User: band_id, organizer_id
- * - Add ACF: Event
+ * - Add ACF: Event: event_watchlist
  * - check if The Event Calendar, ACF is installed
+ * - Fix Search page, add Youtube, Reviews, Band, Seperate by type.
  */
 
 

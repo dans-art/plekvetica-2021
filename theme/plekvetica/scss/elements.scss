@@ -163,3 +163,27 @@ blockquote{
 .yotu-playlist .yotu-pagination a::after{
   color:$text-color;
 }
+
+.event-icons,
+.event-akkredi-status{
+
+  & span:before{
+    font-family: "FontAwesome";
+  }
+  & span.aa:before{
+    content: '\f059';
+    color: $color-gray-light-two;
+  }
+  & span.ab:before{
+    content: '\f058';
+    color: $color-green;
+  }
+  & span.aw:before{
+    content: '\f06a';
+    color: $color-blue;
+  }
+  & span.no:before{
+    content: '\f057';
+    color: $color-red;
+  }
+}
