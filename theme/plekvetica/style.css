@@ -484,6 +484,13 @@ article.plek-event-item-compact {
 .single-tribe_events .event-akkredi-container dd {
   margin: 0 0 0 1.5em; }
 
+.event-author-container .author {
+  display: flex; }
+.event-author-container .author span {
+  align-self: center; }
+.event-author-container .author span:first-child {
+  padding-right: 0.8em; }
+
 #post-27146 .info-text-line {
   position: absolute;
   left: 0;
@@ -556,9 +563,11 @@ article.plek-event-item-compact {
     #tribe-events-pg-template .single-view #event-meta .meta-content i.fab {
       font-size: 1.5em;
       margin: 0.5em; }
-    #tribe-events-pg-template .single-view #event-meta .meta-content .event-links img {
+    #tribe-events-pg-template .single-view #event-meta .meta-content .event-links img,
+    #tribe-events-pg-template .single-view #event-meta .meta-content .organi-contact img {
       max-height: 1.5em; }
-    #tribe-events-pg-template .single-view #event-meta .meta-content .event-links i:first-child {
+    #tribe-events-pg-template .single-view #event-meta .meta-content .event-links i:first-child,
+    #tribe-events-pg-template .single-view #event-meta .meta-content .organi-contact i:first-child {
       margin-left: 0; }
     #tribe-events-pg-template .single-view #event-meta .meta-content .author-image img {
       max-width: 3em; }

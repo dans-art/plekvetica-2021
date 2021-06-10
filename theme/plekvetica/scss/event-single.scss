@@ -59,6 +59,18 @@
       margin: 0 0 0 1.5em;
     }
   }
+
 }
 
+.event-author-container{
+  .author{
+    display: flex;
+  }
+  .author span{
+    align-self: center;
+  }
+  .author span:first-child{
+    padding-right: 0.8em;
+  }
+}
 

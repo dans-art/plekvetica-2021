@@ -37,4 +37,22 @@ class PlekAuthorHandler
     public function get_author_link(string $user_nicename){
         return site_url('author/'.$user_nicename);
     }
+
+    public function get_event_guest_author(int $event_id = null){
+        $guest_author = get_field('guest_author', $event_id);
+        if(empty($guest_author)){
+            return __('Kein Author gefunden','pleklang');
+        }
+        $guest_object = json_decode($guest_author);
+        if(isset($guest_object -> name)){
+            return $guest_object -> name . ' - ' . __('Gast Autor','pleklang'); ;
+        }
+        return false;
+    }
+
+    public function get_guest_author_id(){
+        global $plek_handler;
+        $id = $plek_handler -> get_plek_option('guest_author_id');
+        return (!empty($id))?(int) $id: false;
+    }
 }

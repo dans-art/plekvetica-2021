@@ -413,7 +413,6 @@ class PlekEvents extends PlekEventHandler
         //load from cache?
         $meta_query = array();
         $meta_query['is_review'] = array('key' => 'is_review', 'compare' => '=', 'value' => '1');
-
         $events = tribe_get_events([
             'eventDisplay'   => 'custom',
             'end_date'     => 'now',

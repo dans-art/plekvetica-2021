@@ -399,6 +399,8 @@ class PlekEventHandler
 
     public function get_event_authors()
     {
+        $authors_handler = new PlekAuthorHandler;
+        $guest_author = $authors_handler -> get_guest_author_id();
         $page_id = $this->event['data']->ID;
         if (function_exists('get_coauthors')) {
             $post_authors = get_coauthors($page_id);
@@ -409,6 +411,10 @@ class PlekEventHandler
         }
         $authors = array();
         foreach ($post_authors as $user) {
+            if($user -> ID === $guest_author){
+                $authors[$user->ID] = $authors_handler -> get_event_guest_author($page_id);
+                continue;
+            }
             $authors[$user->ID] = $user->display_name;
         }
         return $authors;

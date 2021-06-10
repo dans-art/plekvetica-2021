@@ -3,6 +3,8 @@
 global $plek_event;
 
 $authors =  $plek_event->get_event_authors();
+$authors_handler = new PlekAuthorHandler;
+$guest_author_id = $authors_handler -> get_guest_author_id();
 if (!$authors) {
   echo ('No Authors found!');
   return;
@@ -17,7 +19,11 @@ if (!$authors) {
           <?php echo get_avatar($id); ?>
         </span>
         <span class="author-name">
-          <a href="<?php echo get_author_posts_url($id); ?>" title="<?php echo sprintf(__('Mehr über den Autor &quot;%s&quot;'), $name); ?>" target="_self"><?php echo $name; ?></a>
+          <?php if($guest_author_id === $id): ?>
+            <?php echo $name; ?>
+          <?php else: ?>
+            <a href="<?php echo get_author_posts_url($id); ?>" title="<?php echo sprintf(__('Mehr über den Autor &quot;%s&quot;'), $name); ?>" target="_self"><?php echo $name; ?></a>
+          <?php endif; ?>
         </span>
       </div>
     <?php endforeach; ?>
