@@ -11,5 +11,5 @@ $page_id = $plek_handler -> get_plek_option('concert_photos_page_id');
 
 <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Fotos', 'pleklang')); ?>
 <div class="meta-content">
-  <?php PlekTemplateHandler::load_template('album-container', 'gallery', $galleries, $page_id); ?>
+  <?php PlekTemplateHandler::load_template('album-container', 'gallery', $galleries, $page_id, ['shorten_title' => false]); ?>
 </div>

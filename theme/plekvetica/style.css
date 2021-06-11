@@ -659,6 +659,50 @@ ul.partner-container {
   content: '😃';
   margin-left: 0.7em; }
 
+.band-single.band-container {
+  display: flex;
+  column-gap: 5%; }
+  .band-single.band-container .info-text-bar {
+    width: 100%;
+    margin: 0.2em 0; }
+  .band-single.band-container .band-content {
+    flex-basis: 70%; }
+  .band-single.band-container .meta-container,
+  .band-single.band-container .mobile-meta-con {
+    flex-basis: 30%;
+    margin-top: 3.8em;
+    padding-right: 1em;
+    display: none; }
+    .band-single.band-container .meta-container ul,
+    .band-single.band-container .mobile-meta-con ul {
+      list-style: none;
+      margin: 0;
+      padding: 0; }
+    .band-single.band-container .meta-container .band-flag img,
+    .band-single.band-container .mobile-meta-con .band-flag img {
+      max-height: 1.2em;
+      vertical-align: sub; }
+    .band-single.band-container .meta-container .event-links a,
+    .band-single.band-container .mobile-meta-con .event-links a {
+      color: white; }
+    .band-single.band-container .meta-container .event-links i.far,
+    .band-single.band-container .meta-container .event-links i.fas,
+    .band-single.band-container .meta-container .event-links i.fab,
+    .band-single.band-container .mobile-meta-con .event-links i.far,
+    .band-single.band-container .mobile-meta-con .event-links i.fas,
+    .band-single.band-container .mobile-meta-con .event-links i.fab {
+      font-size: 1.5em;
+      margin: 0.1em 0.3em; }
+  .band-single.band-container .plek_album_con {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 2%; }
+  .band-single.band-container .image_container {
+    flex-basis: 49%; }
+  .band-single.band-container .image_link_wrapper {
+    display: flex;
+    flex-direction: column; }
+
 div.plek-review-search {
   margin-bottom: 1em; }
   div.plek-review-search form {
@@ -1192,7 +1236,12 @@ div.plek-review-search {
 @media (min-width: 767px) {
   /* Kalender List View*/
   .tribe-common.tribe-events.tribe-events-view.tribe-events-view--list article.tribe-events-calendar-list__event {
-    padding-left: 10%; } }
+    padding-left: 10%; }
+
+  .band-single.band-container .meta-container {
+    display: block; }
+  .band-single.band-container .mobile-meta-con {
+    display: none; } }
 @media (max-width: 767px) {
   .tribe-events-calendar-list__month-separator {
     width: 100%; }
@@ -1219,7 +1268,15 @@ div.plek-review-search {
     #tribe-events-pg-template #event-container.single-view #event-content,
     #tribe-events-pg-template #event-container.single-view #event-meta {
       padding: 0;
-      width: 100%; } }
+      width: 100%; }
+
+  .band-single.band-container {
+    flex-direction: column;
+    padding: 1em; }
+    .band-single.band-container .meta-container {
+      display: none; }
+    .band-single.band-container .mobile-meta-con {
+      display: block; } }
 @media (max-width: 599px) {
   .plek-pre-button-seperator {
     height: 0; }

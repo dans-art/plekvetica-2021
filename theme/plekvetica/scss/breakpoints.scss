@@ -79,6 +79,16 @@
             padding-left: 10%;
         }
     }
+
+    .band-single.band-container {
+        .meta-container{
+            display: block;
+        }
+        .mobile-meta-con{
+            display: none;
+        }
+    }
+
 }
 
 @media (max-width: 767px){
@@ -118,6 +128,17 @@
    
     }
 
+    .band-single.band-container {
+        flex-direction: column;
+        padding: 1em;
+
+        .meta-container{
+            display: none;
+        }
+        .mobile-meta-con{
+            display: block;
+        }
+    }
     
 }
 

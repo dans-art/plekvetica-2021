@@ -179,6 +179,10 @@ class PlekBandHandler
             $flag = PLEK_PLUGIN_DIR_URL  . 'images/flags/' . $country_code . '.png';
             return "<img src='$flag' alt='Flag of " . $country_code . "'/>";
         }
+        if (file_exists(PLEK_PATH . 'images\flags\no-flag.png')) {
+            $flag = PLEK_PLUGIN_DIR_URL  . 'images/flags/no-flag.png';
+            return "<img src='$flag' alt='".  __('Diese Band hat keine Herkunfts informationen.','pleklang') ."'/>";
+        }
         return $country_code;
     }
 

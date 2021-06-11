@@ -16,7 +16,7 @@ $website = $band_object->get_website_link();
   <dl class='event-details-container'>
     <?php if (!empty($country)) : ?>
       <dt>Herkunft</dt>
-      <dd><?php echo $band_object->get_flag_formated(); ?> <?php echo $country; ?></dd>
+      <dd class="band-flag"><?php echo $band_object->get_flag_formated(); ?> <?php echo $country; ?></dd>
     <?php endif; ?>
     <dt>Social & Links</dt>
     <dd class="event-links">
