@@ -23,6 +23,16 @@ class PlekEventHandler
         return ($this->get_field_value('promote_event') === '1') ? true : false;
     }
 
+    public function is_public(string $event_id = null)
+    {
+        if (!$event_id) {
+            $status = $this->$this->get_field_value('post_status');
+        } else {
+            $status = get_post_status($event_id);
+        }
+        return ($status === 'publish') ? true : false;
+    }
+
     public function is_multiday()
     {
         $start_date = $this->get_start_date();
@@ -37,10 +47,11 @@ class PlekEventHandler
      *
      * @return boolean - True if event has happen yet, false if not.
      */
-    public function is_past_event(){
+    public function is_past_event()
+    {
         $end_date = $this->get_end_date('Ymd');
         $today = date('Ymd');
-        if ( $today > $end_date) {
+        if ($today > $end_date) {
             return true;
         }
         return false;
@@ -60,6 +71,96 @@ class PlekEventHandler
             return true; //Test this. Should detect galleries in Content
         }
         return false;
+    }
+
+    public function has_revisions()
+    {
+        $rev_arr = $this->get_event_revisions();
+        if(!is_array($rev_arr)){
+            return false;
+        }
+        $nr_rev = count($rev_arr);
+        return ($nr_rev > 0) ? $nr_rev : false;
+    }
+
+    /**
+     * Checks if the current event got postponed or not
+     * and if the event is the original
+     *
+     * @return boolean true, if the event got postponed and this is the original event, otherwise false.
+     */
+    public function is_postponed_original_event()
+    {
+        $current_id = (int) $this->get_ID();
+        $postponed_obj = $this->get_postponed_obj();
+        if (!$postponed_obj) {
+            return false;
+        }
+        if ($postponed_obj->orig_id === $current_id) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the currente event got postponed or not
+     * and if the event is the postponed one.
+     *
+     * @return boolean true, if the event got postponed and this is the postponed event, otherwise false.
+     */
+    public function is_postponed_event()
+    {
+        $current_id = (int) $this->get_ID();
+        $postponed_obj = $this->get_postponed_obj();
+        if (!$postponed_obj) {
+            return false;
+        }
+        if ($postponed_obj->postponed_id === $current_id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Get the ID of the original event, if the event got postponed.
+     *
+     * @return mixed false if no orig_id was found, ID on success
+     */
+    public function get_postponed_original_event_id()
+    {
+        $postponed_obj = $this->get_postponed_obj();
+        if (!$postponed_obj) {
+            return false;
+        }
+        return $postponed_obj->orig_id;
+    }
+
+    /**
+     * Get the ID of the postponed event, if the event got postponed.
+     *
+     * @return mixed false if no postponed_id was found, ID on success
+     */
+    public function get_postponed_event_id()
+    {
+        $postponed_obj = $this->get_postponed_obj();
+        if (!$postponed_obj) {
+            return false;
+        }
+        return $postponed_obj->postponed_id;
+    }
+
+    public function get_postponed_obj()
+    {
+        $postponed = $this->get_field_value('postponed_event');
+        $postponed_obj = json_decode($postponed);
+        if (empty($postponed)) {
+            return false;
+        }
+        if (!isset($postponed_obj->orig_id) or !isset($postponed_obj->postponed_id)) {
+            return false;
+        }
+        return $postponed_obj;
     }
 
     public function get_event_album()
@@ -115,11 +216,12 @@ class PlekEventHandler
         return array();
     }
 
-    public function get_bands_string(string $seperator = ', '){
-        $bands = $this -> get_bands();
+    public function get_bands_string(string $seperator = ', ')
+    {
+        $bands = $this->get_bands();
         $ret_arr = [];
-        foreach($bands as $band){
-            $ret_arr[] = $band['name']; 
+        foreach ($bands as $band) {
+            $ret_arr[] = $band['name'];
         }
         return implode($seperator, $ret_arr);
     }
@@ -157,9 +259,10 @@ class PlekEventHandler
         return null;
     }
 
-    public function get_poster_url($size = 'medium'){
+    public function get_poster_url($size = 'medium')
+    {
         $poster_arr = wp_get_attachment_image_src($this->get_field_value('_thumbnail_id'), $size);
-        if(isset($poster_arr[0])){
+        if (isset($poster_arr[0])) {
             return $poster_arr[0];
         }
         return false;
@@ -189,13 +292,14 @@ class PlekEventHandler
         }
     }
 
-    public function get_event_promo_text(){
-        $event_url = $this -> get_permalink();
-        $text = "Plekvetica Event Tipp!".PHP_EOL;
-        $text .= $this -> get_start_date('d. F Y'). " @ " . $this -> get_venue_name() .PHP_EOL;
-        $text .= "Bands: ". $this -> get_bands_string() .PHP_EOL;
-        $text .= "Alle Infos:".PHP_EOL;
-        return $text.$event_url;
+    public function get_event_promo_text()
+    {
+        $event_url = $this->get_permalink();
+        $text = "Plekvetica Event Tipp!" . PHP_EOL;
+        $text .= $this->get_start_date('d. F Y') . " @ " . $this->get_venue_name() . PHP_EOL;
+        $text .= "Bands: " . $this->get_bands_string() . PHP_EOL;
+        $text .= "Alle Infos:" . PHP_EOL;
+        return $text . $event_url;
     }
 
     /**
@@ -203,8 +307,9 @@ class PlekEventHandler
      *
      * @return array User Id's
      */
-    public function get_watchlist(){
-        return get_field('event_watchlist', $this -> get_ID());
+    public function get_watchlist()
+    {
+        return get_field('event_watchlist', $this->get_ID());
     }
 
     /**
@@ -212,8 +317,9 @@ class PlekEventHandler
      * 
      * @return int Lenght of get_watchlist array
      */
-    public function get_watchlist_count(){
-        return count($this -> get_watchlist());
+    public function get_watchlist_count()
+    {
+        return count($this->get_watchlist());
     }
     /**
      * Returns the startdate of the event. Default format: d m y
@@ -239,7 +345,7 @@ class PlekEventHandler
         return date_i18n($format, $seconds);
     }
 
-    public function get_event_classes()
+    public function get_event_classes(bool $return_string = true)
     {
         $classes = array();
         $classes[] = ($this->is_featured()) ? 'plek-event-featured' : '';
@@ -247,7 +353,8 @@ class PlekEventHandler
         $classes[] = ($this->is_promoted()) ? 'plek-event-promoted' : '';
         $classes[] = ($this->is_review()) ? 'plek-event-review' : '';
         $classes[] = 'plek-event-type-' . $this->get_field_value('post_type');
-        return implode(' ', $classes);
+        $classes = array_filter($classes);
+        return ($return_string)?implode(' ', $classes):$classes;
     }
 
     public function get_price_boxoffice()
@@ -277,6 +384,9 @@ class PlekEventHandler
     public function event_has_band_videos()
     {
         $bands = $this->get_bands();
+        if(empty($bands)){
+            return false;
+        }
         foreach ($bands as $band) {
             if (!empty($band['videos'][0])) {
                 return true;
@@ -374,6 +484,32 @@ class PlekEventHandler
         return null;
     }
 
+    public function get_event_revisions()
+    {
+        $rev = $this->get_field_value('event_revisions');
+        $rev_arr = json_decode($rev);
+        if(empty($rev_arr)){
+            return false;
+        }
+        foreach ($rev_arr as $index => $rev_id) {
+            if (is_numeric($rev_id)) {
+                $rev_arr[$index] = (int) $rev_id;
+            } else {
+                unset($rev_arr[$index]);
+            }
+        }
+        return $rev_arr;
+    }
+
+    public function get_revision_modified_date(int $revision_id, string $format = 'd m Y - H:i')
+    {
+        $mod_date = get_the_modified_date($format, $revision_id);
+        if (!$mod_date) {
+            return false;
+        }
+        return $mod_date;
+    }
+
     public function get_event_link()
     {
         $link = $this->get_field_value('_EventURL');
@@ -400,7 +536,7 @@ class PlekEventHandler
     public function get_event_authors()
     {
         $authors_handler = new PlekAuthorHandler;
-        $guest_author = $authors_handler -> get_guest_author_id();
+        $guest_author = $authors_handler->get_guest_author_id();
         $page_id = $this->event['data']->ID;
         if (function_exists('get_coauthors')) {
             $post_authors = get_coauthors($page_id);
@@ -411,8 +547,8 @@ class PlekEventHandler
         }
         $authors = array();
         foreach ($post_authors as $user) {
-            if($user -> ID === $guest_author){
-                $authors[$user->ID] = $authors_handler -> get_event_guest_author($page_id);
+            if ($user->ID === $guest_author) {
+                $authors[$user->ID] = $authors_handler->get_event_guest_author($page_id);
                 continue;
             }
             $authors[$user->ID] = $user->display_name;
@@ -420,58 +556,60 @@ class PlekEventHandler
         return $authors;
     }
 
-    public function show_publish_button(int $post_id = null){
-        if(!PlekUserHandler::user_is_in_team()){
+    public function show_publish_button(int $post_id = null)
+    {
+        if (!PlekUserHandler::user_is_in_team()) {
             return false;
         }
         $post_id = (!$post_id) ? get_the_ID() : $post_id;
         $status = get_post_status($post_id);
-        if($status === 'draft'){
+        if ($status === 'draft') {
             return true;
         }
-
     }
 
-    public function get_event_akkredi_crew(){
-        $crew = get_field('akkreditiert', $this -> get_ID());
-        return (!empty($crew))?$crew:false;
+    public function get_event_akkredi_crew()
+    {
+        $crew = get_field('akkreditiert', $this->get_ID());
+        return (!empty($crew)) ? $crew : false;
     }
 
-    public function get_event_akkredi_status_text(string $akkredi_code = ''){
-        if(empty($akkredi_code)){
+    public function get_event_akkredi_status_text(string $akkredi_code = '')
+    {
+        if (empty($akkredi_code)) {
             return false;
         }
         switch ($akkredi_code) {
             case 'aw':
-                return __('Wunsch','pleklang');
+                return __('Wunsch', 'pleklang');
                 break;
             case 'ab':
-                return __('Bestätigt','pleklang');
+                return __('Bestätigt', 'pleklang');
                 break;
             case 'aa':
-                return __('Angefragt','pleklang');
+                return __('Angefragt', 'pleklang');
                 break;
             case 'no':
-                return __('Abgelehnt','pleklang');
+                return __('Abgelehnt', 'pleklang');
                 break;
-            
+
             default:
                 return false;
                 break;
         }
-
     }
 
-    public function remove_akkredi_member(string $user_login, int $event_id){
-        $current = get_field('akkreditiert',$event_id);
-        if(empty($current)){
-            return __('Es sind keine Mitglieder registriert','pleklang');
+    public function remove_akkredi_member(string $user_login, int $event_id)
+    {
+        $current = get_field('akkreditiert', $event_id);
+        if (empty($current)) {
+            return __('Es sind keine Mitglieder registriert', 'pleklang');
         }
         $find = array_search($user_login, $current);
-        if($find === false){
-            return __('Mitglied ist bereits abgemeldet.','pleklang');
+        if ($find === false) {
+            return __('Mitglied ist bereits abgemeldet.', 'pleklang');
         }
         unset($current[$find]);
-        return (update_field('akkreditiert',$current, $event_id ))?true:__('Fehler beim Updaten des Akkreditierungs Feld','pleklang');
+        return (update_field('akkreditiert', $current, $event_id)) ? true : __('Fehler beim Updaten des Akkreditierungs Feld', 'pleklang');
     }
 }

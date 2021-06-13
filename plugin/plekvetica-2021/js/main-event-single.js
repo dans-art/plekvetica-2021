@@ -115,11 +115,24 @@ let plek_single_event_main = {
     add_event_listener(){
         //Promote Event Button
         jQuery('#promoteEvent').click(() => {
+            plek_main.activate_button_loader('#promoteEvent', 'Promote Event...');
             this.do_ajax_promote_event();
         });
+        //Add Accreditation Button
+        jQuery("#plekSetAkkreiCrewBtn").click(() => {
+            plek_main.activate_button_loader('#plekSetAkkreiCrewBtn', 'Registriere akkreditierung...');
+            plek_single_event_main.do_ajax_add_akkredi_member();
+        });
         //Remove Accreditation Button
-        jQuery("#plekRemoveAkkreiCrewBtn").click(function(){
+        jQuery("#plekRemoveAkkreiCrewBtn").click(() =>{
+            plek_main.activate_button_loader('#plekRemoveAkkreiCrewBtn', 'Lösche akkreditierung...');
             plek_single_event_main.do_ajax_remove_akkredi_member();
+          });
+        
+          //Publish Event
+        jQuery("#plekSetEventStatus").click(() =>{
+            plek_main.activate_button_loader('#plekSetEventStatus', 'Veröffentliche Event...');
+            plek_single_event_main.do_ajax_publish_event();
           });
           
 
@@ -127,7 +140,6 @@ let plek_single_event_main = {
     do_ajax_promote_event(){
         let button = jQuery('#promoteEvent');
         let event_id =  button.data('eventid');
-        button.addClass("plek-animate-blue");
         jQuery.ajax({
             url: window.ajaxurl,
             data: {
@@ -136,14 +148,67 @@ let plek_single_event_main = {
               'id': event_id
             },
             success: function success(data) {
-                jQuery("#ajaxStatus").append("<div>" + data + "</div>");
-              button.removeClass("plek-animate-blue");
+                
+                let text = plek_single_event_main.get_text_from_ajax_request(data);
+                plek_main.deactivate_button_loader(button, text);
+                plek_main.deactivate_button(button);
+
             },
             error: function error(data) {
-              jQuery("#ajaxStatus").html("Error loading data.... ");
-              button.removeClass("plek-animate-blue");
+                plek_main.deactivate_button_loader(button, "Error loading data.... ");
+
             }
           });
+          return;
+    },
+
+    do_ajax_add_akkredi_member(){
+        let button = jQuery('#plekSetAkkreiCrewBtn');
+        let event_id =  button.data('eventid');
+        let user =  button.data('user');
+        let type =  button.data('type');
+        jQuery.ajax({
+            url: window.ajaxurl,
+            data: {
+              'action': 'plek_set_Accredi_status',
+              'user': user,
+              'id': event_id,
+              'type': type
+            },
+            success: function success(data) {
+                let text = plek_single_event_main.get_text_from_ajax_request(data);
+                plek_main.deactivate_button_loader(button, text);
+                plek_main.deactivate_button(button);
+
+            },
+            error: function error(data) {
+                plek_main.deactivate_button_loader(button, "Error loading data.... ");
+
+            }
+          });
+          return;
+    },
+
+    get_text_from_ajax_request(data){
+        try {
+            let encoded_data = JSON.parse(data);
+            let text = "";
+            if(encoded_data.success.length > 0){
+                text += encoded_data.success;
+            }
+            if(encoded_data.error.length > 0){
+                text += (text.length === 0)?'':'<br/>';
+                text += 'Error: '+encoded_data.error;
+            }
+            if(encoded_data.system_error.length > 0){
+                text += (text.length === 0)?'':'<br/>';
+                text += 'Error: '+encoded_data.system_error;
+            }
+            return text;
+        } catch(e) {
+            return data;
+        }
+        
     },
 
     do_ajax_remove_akkredi_member(){
@@ -159,14 +224,45 @@ let plek_single_event_main = {
               'user': user_name,
             },
             success: function success(data) {
-                jQuery("#ajaxStatus").append("<div>" + data + "</div>");
-              button.removeClass("plek-animate-blue");
+                let text = plek_single_event_main.get_text_from_ajax_request(data);
+                plek_main.deactivate_button_loader(button, text);
+                plek_main.deactivate_button(button);
+                try {
+                    let encoded_data = JSON.parse(data);
+                    if(encoded_data.success.length > 0){
+                        jQuery('.event-akkredi-container').hide();
+                    }
+                } catch(e) {
+                    
+                }
             },
             error: function error(data) {
-              jQuery("#ajaxStatus").html("Error loading data.... ");
-              button.removeClass("plek-animate-blue");
+                plek_main.deactivate_button_loader(button, "Error loading data.... ");
             }
           });
+          return;
+    },
+    do_ajax_publish_event(){
+        let button = jQuery('#plekSetEventStatus');
+        let type = button.data("type");
+        let event_id = button.data("eventid");
+        jQuery.ajax({
+            url: window.ajaxurl,
+            data: {
+              'action': 'plek_ajax_event_form',
+              'id': event_id,
+              'type': type,
+            },
+            success: function success(data) {
+                let text = plek_single_event_main.get_text_from_ajax_request(data);
+                plek_main.deactivate_button_loader(button, text);
+                plek_main.deactivate_button(button);
+            },
+            error: function error(data) {
+                plek_main.deactivate_button_loader(button, "Error loading data.... ");
+            }
+          });
+          return;
     }
 
 

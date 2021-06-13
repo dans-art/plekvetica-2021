@@ -90,6 +90,16 @@
     #event-meta{
         padding: 0 0 0 1em;
         width: 30%;
+
+        .date-from,
+        .date-to{
+            white-space: nowrap;
+        }
+        .date-seperator{
+            width: 100%;
+            display: block;
+            padding-left: 0.5em;
+        }
         
         .meta-content{
             padding: 0.5em 0.3em;

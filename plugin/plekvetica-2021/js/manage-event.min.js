@@ -9,10 +9,9 @@
 // @koala-append "components/template-handler.js"
 
 //Global Options
-var $ = jQuery;
 var flatpickr_options = { "locale": "de", enableTime: true, dateFormat: "d-m-Y H:i:S", altInput: true, altFormat: "j. F Y - H:i" };
 
-$(document).ready(function () {
+jQuery(document).ready(function () {
     console.log("Ready!");
 
     

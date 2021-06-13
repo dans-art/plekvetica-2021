@@ -142,7 +142,46 @@ button a.wp-block-button__link:not(.has-background) {
     background-color: #6278d9; }
   .plek-button.green {
     background-color: #268c37; }
+  .plek-button.disabeled {
+    background-color: #424242;
+    color: #ffffffb6;
+    cursor: default; }
+  .plek-button.deactivate {
+    cursor: default; }
+    .plek-button.deactivate:hover {
+      color: unset; }
 
+/* Button Animation*/
+/* Loader */
+.plek-button.loader {
+  position: relative; }
+  .plek-button.loader:after {
+    position: absolute;
+    content: '';
+    width: 0;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    background: white;
+    animation-name: plek-button-loader;
+    animation-duration: 2s;
+    animation-iteration-count: infinite; }
+
+@keyframes plek-button-loader {
+  /*0% {width: 0%; left: 0;}
+  25% {width: 100%; left: 0;}
+  50% {width: 0%; left: 100%;}
+  75% {width: 0%}
+  100% {width: 0%}*/
+  0% {
+    width: 0%;
+    left: 0; }
+  50% {
+    width: 100%;
+    left: 0; }
+  100% {
+    width: 0%;
+    left: 100%; } }
 /* Title */
 .info-text-bar {
   padding: 0;
@@ -182,20 +221,23 @@ blockquote {
     border-top: #8C262E solid 30px;
     border-right: solid transparent 30px;
     border-left: solid transparent 30px;
-    width: 146px;
+    width: 216px;
     display: block;
     position: relative;
-    right: -32px;
-    bottom: 64px;
+    right: -43px;
+    bottom: 89px;
     transform: rotate(-45deg); }
   .info-text-banner .banner-text {
     display: block;
     position: relative;
-    right: -145px;
-    bottom: 64px;
+    right: -235px;
+    bottom: 85px;
     transform: rotate(-45deg);
     z-index: 99;
-    text-transform: uppercase; }
+    text-transform: uppercase;
+    width: 170px;
+    overflow: hidden;
+    white-space: nowrap; }
 
 .yotu-videos .yotu-video h3.yotu-video-title {
   color: white; }
@@ -223,12 +265,32 @@ blockquote {
   content: '\f057';
   color: #D9042B; }
 
+.plek-message,
+.tribe-events-calendar-list__event .plek-message {
+  font-size: 1.3em;
+  padding: 0.5em;
+  border: 1px solid white;
+  text-align: center;
+  margin-bottom: 1em; }
+  .plek-message.red,
+  .tribe-events-calendar-list__event .plek-message.red {
+    color: #8C262E;
+    border-color: #8C262E; }
+
 .band img {
   vertical-align: sub;
   width: 19px; }
 
 article.tribe-events-calendar-list__event {
   display: flex; }
+  article.tribe-events-calendar-list__event.plek-event-canceled .tribe-events-calendar-list__event-header * {
+    text-decoration: line-through; }
+  article.tribe-events-calendar-list__event.plek-event-canceled .tribe-events-calendar-list__event-header h3 {
+    text-decoration-color: #8C262E; }
+  article.tribe-events-calendar-list__event.plek-event-canceled img {
+    opacity: 0.4; }
+  article.tribe-events-calendar-list__event .plek-message {
+    margin-bottom: 1em; }
   article.tribe-events-calendar-list__event .band {
     white-space: nowrap;
     padding-right: 0.5em; }
@@ -450,6 +512,16 @@ article.plek-event-item-compact {
     article.plek-event-item-compact .event-icons .fas,
     article.plek-event-item-compact .event-icons .far {
       font-size: 0.8em; }
+  article.plek-event-item-compact.plek-event-canceled img {
+    opacity: 0.4; }
+  article.plek-event-item-compact.plek-event-canceled .details .title,
+  article.plek-event-item-compact.plek-event-canceled .details .date {
+    text-decoration: line-through; }
+  article.plek-event-item-compact.plek-event-canceled .details .title {
+    text-decoration-color: #8C262E; }
+  article.plek-event-item-compact .plek-message {
+    font-size: 1em;
+    padding: 0.4em; }
 
 .single-tribe_events #page {
   padding: 0 1em; }
@@ -490,6 +562,72 @@ article.plek-event-item-compact {
   align-self: center; }
 .event-author-container .author span:first-child {
   padding-right: 0.8em; }
+
+/*Revision Container*/
+#revloader {
+  position: absolute;
+  width: 100%;
+  z-index: 101;
+  background-color: #232323; }
+  #revloader .container {
+    background-color: #595959;
+    margin: 2em auto;
+    width: 90%;
+    max-width: 888px; }
+  #revloader #revloader_title,
+  #revloader #revloader_close {
+    margin: 0.5em;
+    font-size: 1.4em; }
+  #revloader .bandDetails {
+    display: none; }
+  #revloader .content_header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap; }
+  #revloader #revloader_close {
+    width: 1.5em;
+    height: 1.5em;
+    cursor: pointer; }
+    #revloader #revloader_close::before {
+      font-family: "FontAwesome";
+      content: '\f00d'; }
+  #revloader table tr td:first-child {
+    writing-mode: sideways-lr; }
+  #revloader table td {
+    word-break: break-word;
+    max-width: 46%; }
+    #revloader table td:nth-child(2) {
+      width: 46%; }
+    #revloader table td a {
+      color: #FAAD2B; }
+    #revloader table td a.apply_all_changes {
+      color: white; }
+  #revloader .plek_overlay_btn {
+    position: absolute;
+    min-width: 100px;
+    max-width: 250px;
+    width: 20%; }
+    #revloader .plek_overlay_btn div {
+      float: left;
+      text-align: center;
+      cursor: pointer;
+      font-size: 1em;
+      font-family: "FontAwesome"; }
+    #revloader .plek_overlay_btn #change_ok:before,
+    #revloader .plek_overlay_btn #change_ignore:before {
+      padding: 0.5em;
+      width: 2em;
+      height: 2em;
+      color: white; }
+    #revloader .plek_overlay_btn #change_ok:before {
+      content: "\f00c";
+      background-color: #54770f;
+      border: 1px solid #00571a; }
+    #revloader .plek_overlay_btn #change_ignore:before {
+      content: "\f00d";
+      background-color: red;
+      border: 1px solid #840000;
+      padding: 0.5em 0.7em; }
 
 #post-27146 .info-text-line {
   position: absolute;
@@ -546,6 +684,13 @@ article.plek-event-item-compact {
 #tribe-events-pg-template .single-view #event-meta {
   padding: 0 0 0 1em;
   width: 30%; }
+  #tribe-events-pg-template .single-view #event-meta .date-from,
+  #tribe-events-pg-template .single-view #event-meta .date-to {
+    white-space: nowrap; }
+  #tribe-events-pg-template .single-view #event-meta .date-seperator {
+    width: 100%;
+    display: block;
+    padding-left: 0.5em; }
   #tribe-events-pg-template .single-view #event-meta .meta-content {
     padding: 0.5em 0.3em; }
     #tribe-events-pg-template .single-view #event-meta .meta-content a {
@@ -1175,6 +1320,16 @@ div.plek-review-search {
   .plekvetica-add-event .clearfix {
     display: block;
     clear: both; }
+
+#loginform .login-username,
+#loginform .login-password {
+  display: flex;
+  flex-direction: column; }
+  #loginform .login-username input,
+  #loginform .login-username label,
+  #loginform .login-password input,
+  #loginform .login-password label {
+    width: 100%; }
 
 /* Post and post components */
 .plek-posts-container {

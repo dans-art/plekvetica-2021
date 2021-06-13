@@ -79,8 +79,52 @@ button {
   &.green{
     background-color: $color-green;
   }
+  &.disabeled{
+    background-color: $color-gray;
+    color: $color-gray-light-two;
+    cursor: default;
+  }
+  &.deactivate{
+    cursor: default;
+    &:hover{
+      color: unset;
+    }
+  }
 
 }
+
+/* Button Animation*/
+/* Loader */
+.plek-button.loader {
+    position: relative;
+    //overflow:hidden;
+    //transition: .3s;
+    &:after {
+      position: absolute;
+      content: '';
+      width: 0;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      background: $text-color;
+      animation-name: plek-button-loader;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+    }
+  }
+
+  @keyframes plek-button-loader {
+    /*0% {width: 0%; left: 0;}
+    25% {width: 100%; left: 0;}
+    50% {width: 0%; left: 100%;}
+    75% {width: 0%}
+    100% {width: 0%}*/
+    0% {width: 0%; left: 0;}
+    50% {width: 100%; left: 0;}
+    100% {width: 0%; left: 100%;}
+  }
+
+
 
 /* Title */
 
@@ -138,22 +182,25 @@ blockquote{
     border-top: #8C262E solid 30px;
     border-right: solid transparent 30px;
     border-left: solid transparent 30px;
-    width: 146px;
+    width: 216px;
     display: block;
     position: relative;
-    right: -32px;
-    bottom: 64px;
+    right: -43px;
+    bottom: 89px;
     transform: rotate(-45deg);
   }
   
   .banner-text{
     display: block;
     position: relative;
-    right: -145px;
-    bottom: 64px;
+    right: -235px;
+    bottom: 85px;
     transform: rotate(-45deg);
     z-index: 99;
     text-transform: uppercase;
+    width: 170px;
+    overflow: hidden;
+    white-space: nowrap;
   }
 }
 
@@ -185,5 +232,19 @@ blockquote{
   & span.no:before{
     content: '\f057';
     color: $color-red;
+  }
+}
+
+.plek-message,
+.tribe-events-calendar-list__event .plek-message{
+  font-size: 1.3em;
+  padding: 0.5em;
+  border: 1px solid $text-color;
+  text-align: center;
+  margin-bottom: 1em;
+
+  &.red{
+    color: $color-red-light;
+    border-color: $color-red-light;
   }
 }

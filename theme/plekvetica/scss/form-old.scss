@@ -515,4 +515,20 @@
     display: block;
     clear: both;
   }
+
+
+}
+
+#loginform{
+  .login-username,
+  .login-password{
+    display: flex;
+    flex-direction: column;
+    
+    input,
+    label{
+      width: 100%;
+    }
+  }
+
 }

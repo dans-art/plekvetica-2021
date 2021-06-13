@@ -14,9 +14,11 @@
  * @var array $public_views Array of data of the public views, with the slug as the key.
  */
 //s($public_views);
+global $plek_handler;
+$event_add_page_id = $plek_handler -> get_plek_option('add_event_page_id');
 $public_views['add'] = new stdClass;
 $public_views['add'] -> view_class = 'Tribe\Events\Views\V2\Views\List_View';
-$public_views['add'] -> view_url = site_url( 'event-eintragen' );
+$public_views['add'] -> view_url = get_permalink( $event_add_page_id );
 $public_views['add'] -> view_label = __('Event hinzufügen','pleklang');
 
 ?>

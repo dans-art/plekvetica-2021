@@ -114,4 +114,14 @@ class PlekHandler
         if ($post_type === 'tribe_events') return false;
         return $current_status;
     }
+
+    public function enqueue_toastr(){
+        wp_enqueue_style('toastr-style', PLEK_PLUGIN_DIR_URL . 'plugins/toastr/toastr.min.css');
+        wp_enqueue_script('toastr-script', PLEK_PLUGIN_DIR_URL . 'plugins/toastr/toastr.min.js',['jquery']);
+        
+    }
+    public function enqueue_scripts(){
+        wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js',['jquery']);
+        
+    }
 }

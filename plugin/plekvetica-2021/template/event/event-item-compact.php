@@ -17,10 +17,13 @@ $permalink = $currrent_event -> get_permalink();
 $poster = $currrent_event -> get_poster('Event Poster', ['150', 'auto']);
 $akk_status_name = $currrent_event -> get_event_akkredi_status_text($event -> akk_status);
 $limit = 10; //Todo: make this as a user-setting
-$class = ($index > $limit)?"hide-event":"";
+$class = ($index > $limit)?"hide-event":""; //Not in use?
+$event_classes = $currrent_event -> get_event_classes();
+$is_canceled = $currrent_event -> is_canceled();
+$is_postponed = $currrent_event -> is_postponed_original_event();
 
 ?>
-<article id="item_<?php echo $index; ?>" class="plek-event-item-compact <?php echo $class; ?>">
+<article id="item_<?php echo $index; ?>" class="plek-event-item-compact <?php echo $class; ?> <?php echo $event_classes; ?>">
     <div class="event-icons">
         <span class="<?php echo $event->akk_status; ?>" title="<?php echo sprintf(__('Event Status: %s','pleklang'),$akk_status_name); ?>"></span>
         <?php if($currrent_event -> has_photos()): ?>
@@ -48,6 +51,12 @@ $class = ($index > $limit)?"hide-event":"";
                 <?php echo $event->post_title; ?>
             </a>
         </div>
+        <?php if ($is_canceled) : ?>
+                <div class="plek-message red"><?php echo __('Dieser Event wurde abgesagt.', 'pleklang'); ?></div>
+            <?php endif; ?>
+        <?php if ($is_postponed) : ?>
+                <div class="plek-message"><?php echo __('Event wurde verschoben.', 'pleklang'); ?></div>
+            <?php endif; ?>
     </div>
 </article>
 

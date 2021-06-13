@@ -44,6 +44,8 @@ class PlekBackend
         add_settings_field('youtube_channel_id', 'Youtube Channel ID', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'youtube_channel_id', 'type' => 'input'));
         add_settings_field('concert_photos_page_id', 'ID der Konzertfotos-Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'concert_photos_page_id', 'type' => 'input'));
         add_settings_field('guest_author_id', 'ID das Gastautors', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'guest_author_id', 'type' => 'input'));
+        add_settings_field('add_event_page_id', 'ID der "Event eintragen" Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'add_event_page_id', 'type' => 'input'));
+        add_settings_field('edit_event_page_id', 'ID der "Event bearbeiten" Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'edit_event_page_id', 'type' => 'input'));
         
         add_settings_field('plek_facebook_enable_autopost', 'Enable Facebook Autopost', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_enable_autopost', 'type' => 'checkbox'));
         add_settings_field('plek_facebook_page_id', 'Page ID', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_page_id', 'type' => 'input'));

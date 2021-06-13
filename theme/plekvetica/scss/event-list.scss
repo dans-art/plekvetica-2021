@@ -3,6 +3,23 @@
 article.tribe-events-calendar-list__event{
 
     display:flex;
+
+    &.plek-event-canceled .tribe-events-calendar-list__event-header{
+      *{
+        text-decoration: line-through;
+      }
+      h3{
+        text-decoration-color: $color-red-light;
+      }
+    }
+
+    &.plek-event-canceled img{
+      opacity: 0.4;
+    }
+
+    .plek-message{
+      margin-bottom: 1em;
+    }
  
     .band{
       white-space: nowrap;
@@ -319,6 +336,29 @@ article.plek-event-item-compact{
     .far{
       font-size: 0.8em;
     }
+  }
+
+  &.plek-event-canceled{
+    img{
+      opacity: 0.4;
+    }
+
+    .details{
+
+      .title,
+      .date{
+        text-decoration: line-through;
+      }
+
+      .title{
+        text-decoration-color: $color-red-light;
+      }
+    }
+
+  }
+  .plek-message{
+    font-size: 1em;
+    padding: 0.4em;
   }
 
 }

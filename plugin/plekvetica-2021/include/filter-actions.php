@@ -16,7 +16,9 @@ add_filter('tribe_events_pro_pre_get_posts', function($event){
 //Add the band dropdown to the gallery view of ngg
 //add_filter( 'ngg_manage_gallery_fields', 'filter_ngg_manage_gallery_fields', 10, 3 );
 
-add_action( 'admin_menu', [$backend_class,'setup_options']);
+add_action('wp_head', [$plek_handler,'enqueue_scripts']);
+
+add_action('admin_menu', [$backend_class,'setup_options']);
 add_action('admin_init', [$backend_class, 'plek_register_settings']);
 add_action('admin_init', [$backend_class, 'enqueue_admin_style']);
 
@@ -26,10 +28,10 @@ add_action( 'wp_login_failed', [$plek_login_handler, 'wp_login_failed_action'] )
 add_action( 'wp_authenticate', [$plek_login_handler, 'wp_authenticate_action'], 1, 2 );
 
 //Ajax
-add_action('wp_ajax_plek_ajax_event_form', [$plek_ajax_handler,'plek_ajax_event_form_action']);
-add_action('wp_ajax_nopriv_plek_ajax_event_form', [$plek_ajax_handler, 'plek_ajax_event_form_action']);
+add_action('wp_ajax_plek_ajax_event_form', [new PlekAjaxHandler,'plek_ajax_event_form_action']);
+add_action('wp_ajax_nopriv_plek_ajax_event_form', [new PlekAjaxHandler, 'plek_ajax_event_form_action']);
 
-add_action('wp_ajax_plek_event_actions',  [$plek_ajax_handler,'plek_ajax_event_actions']);
+add_action('wp_ajax_plek_event_actions',  [new PlekAjaxHandler,'plek_ajax_event_actions']);
 
 //JS Debugger
 add_action( 'plek_js_debug', [$plek_handler,'set_js_error'], 10, 1 );

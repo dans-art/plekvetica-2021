@@ -79,7 +79,7 @@ class PlekEvents extends PlekEventHandler
                 return apply_filters('the_content', $this->get_field_value($name)); //Apply shortcodes in the Content
                 break;
             case 'venue_short':
-                return tribe_get_venue($this->event['meta']['_EventVenueID'][0]);
+                return tribe_get_venue($this-> get_field_value($name));
                 break;
             case 'genres':
             case 'datetime':
@@ -478,9 +478,11 @@ class PlekEvents extends PlekEventHandler
     
     public function plek_event_form_shortcode(){
 
+        global $plek_handler;
         $event = new PlekEvents;
         $this -> enqueue_event_form_scripts();
         $this -> enqueue_event_form_styles();
+        $plek_handler -> enqueue_toastr();
 
         if(isset($_REQUEST['edit_event_id'])){
             $event -> load_event($_REQUEST['edit_event_id']);
@@ -490,12 +492,10 @@ class PlekEvents extends PlekEventHandler
     }
     
     public function enqueue_event_form_styles(){
-        wp_enqueue_style('toastr-style', PLEK_PLUGIN_DIR_URL . 'plugins/toastr/toastr.min.css');
         wp_enqueue_style('flatpickr-style', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr.min.css');
         
     }
     public function enqueue_event_form_scripts(){
-        wp_enqueue_script('toastr-script', PLEK_PLUGIN_DIR_URL . 'plugins/toastr/toastr.min.js',['jquery']);
         wp_enqueue_script('flatpickr-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9.js');
         wp_enqueue_script('flatpickr-de-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9-de.js');
         

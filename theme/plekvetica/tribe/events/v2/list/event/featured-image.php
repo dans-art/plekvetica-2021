@@ -27,7 +27,7 @@ if ( ! $event->thumbnail->exists ) {
 ?>
 <div class="tribe-events-calendar-list__event-featured-image-wrapper tribe-common-g-col">
 	<a
-		href="<?php echo esc_url( $event->permalink ); ?>"
+		href="<?php echo (!empty($redirect_to))?get_permalink($redirect_to):esc_url( $event->permalink ); ?>"
 		title="<?php echo esc_attr( $event->title ); ?>"
 		rel="bookmark"
 		class="tribe-events-calendar-list__event-featured-image-link"
