@@ -45,27 +45,6 @@
         padding: 0 1em 0 0;
         width: 70%;
 
-        .plek_album_con{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            flex-wrap: wrap;
-
-            .image_container{
-                width: 48%;
-                min-width: 200px;
-            }
-        }
-        .image_link_wrapper{
-            display: flex;
-            flex-direction: column;
-            padding-bottom: 1em;
-
-            a{
-                color: $text-color;
-            }
-        }
-
         /* YotuWP*/
         .yotu-playlist{
             padding:0;
@@ -339,17 +318,44 @@ ul.partner-container{
             }
         }
     }
+}
+
+//Search Page
+#plek-search-page{
+
+    .info-text-bar{
+        width: 100%;
+        margin: 0.2em 0;
+    }
 
     .plek_album_con{
+        justify-content: center;
+    
+        .image_container{
+            width: 23.5%;
+            min-width: 200px;
+        }
+    }
+
+    .plek-search-bands{
         display: flex;
         flex-wrap: wrap;
-        column-gap: 2%;
-    }
-    .image_container{
-        flex-basis: 49%;
-    }
-    .image_link_wrapper{
-        display: flex;
-        flex-direction: column;
-    }
+        row-gap: 2%;
+
+        .band-list-item{
+            flex-basis: 49%;
+        }
+        .band{
+            display: flex;
+            flex-direction: row;
+        }
+        .band-flag{
+            margin-top: 0.8em;
+            margin-right: 1em;
+        }
+   }
+   .tribe-events-calendar-list__event{
+       margin:0.2em 0;
+   }
 }
+

@@ -50,15 +50,51 @@ class PlekBandHandler
         $this->band['slug'] = $term->slug;
         $this->band['description'] = $term->description;
         $this->band['link'] = $this->get_band_link($term->slug);
-
-        foreach ($cFields as $name => $val) {
-            if ($name === 'band_genre') {
-                $this->band[$name] = $this->format_band_array($val);
-                continue;
+        if(!empty($cFields)){
+            foreach ($cFields as $name => $val) {
+                if ($name === 'band_genre') {
+                    $this->band[$name] = $this->format_band_array($val);
+                    continue;
+                }
+                $this->band[$name] = $val;
             }
-            $this->band[$name] = $val;
         }
         return $this->band;
+    }
+
+    /**
+     * Search for a Band.
+     * 
+     *
+     * @param string $query The Search Query
+     * @return array|bool Array with WP_Term Objects, or false if not found.
+     */
+    public static function search_band(string $query = '')
+    {
+        global $wpdb;
+        $query = html_entity_decode($query, ENT_QUOTES);
+        $exact_hit = get_term_by('name', $query, 'post_tag');
+        $part_hits = [];
+        //find similar
+        $wild = '%';
+        $like = $wild . $wpdb->esc_like($query) . $wild;
+
+        $query = $wpdb->prepare("SELECT term_id FROM `{$wpdb->prefix}terms` WHERE `name` LIKE '%s' OR `slug` LIKE '%s'", $like, $like);
+        $posts = $wpdb->get_results($query);
+        if(!empty($posts)){
+            foreach($posts as $item){
+                if(isset($exact_hit -> term_id) AND $exact_hit -> term_id === (int) $item -> term_id){
+                    continue;
+                }
+                $part_hits[] = get_term_by('term_id', $item -> term_id, 'post_tag');
+            }
+
+        }
+        if(empty($exact_hit) AND empty($part_hits)){
+            return false;
+        }
+        $exact_hit = ($exact_hit)?[$exact_hit]:[];
+        return array_merge($exact_hit, $part_hits);
     }
 
     /**
@@ -131,6 +167,15 @@ class PlekBandHandler
     public function get_id()
     {
         return (isset($this->band['id'])) ? $this->band['id'] : '';
+    }
+    /**
+     * Get the Band / Tag Slug.
+     *
+     * @return string Band Slug
+     */
+    public function get_slug()
+    {
+        return (isset($this->band['slug'])) ? $this->band['slug'] : '';
     }
     /**
      * Get the Genres Array
@@ -237,8 +282,11 @@ class PlekBandHandler
      * @param string $band_slug - The Band Slug
      * @return string The permalink to the band page
      */
-    public function get_band_link(string $band_slug)
+    public function get_band_link(string $band_slug = null)
     {
+        if($band_slug === null){
+            $slug = $this -> get_slug();
+        }
         $tag_base = get_option('tag_base');
         return site_url('/' . $tag_base . '/' . $band_slug, 'https');
     }

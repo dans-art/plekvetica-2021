@@ -2,12 +2,9 @@
 
 extract(get_defined_vars());
 $events = $template_args[0]; //Plek_events object
-$type = $template_args[1]; //featured, reviews, youtube
+$type = (isset($template_args[1]))?$template_args[1]:null; //featured, reviews, youtube
 $prev_month = null;
 
-/**Test */
-$search = new PlekSearchHandler;
-//s($search -> search_events_with_bands('trivium'));
 ?>
 <div class="tribe-events">
 	<div class="tribe-common-g-row tribe-events-calendar-list__event-row plek-post-type-<?php echo $type;?>">

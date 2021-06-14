@@ -13,6 +13,7 @@ $stime = strtotime($startDatetime);
             <span class="plek-events-date-weekday"><?php echo date_i18n('D', $stime);?></span>
             <span class="plek-events-date-day"><?php echo date_i18n('d', $stime);?></span>
             <span class="plek-events-date-month"><?php echo date_i18n('M', $stime);?></span>
+            <span class="plek-events-date-year"><?php echo date_i18n('Y', $stime);?></span>
         </time>
     </div>
     <div class="tribe-events-calendar-list__event-featured-image-wrapper tribe-common-g-col">

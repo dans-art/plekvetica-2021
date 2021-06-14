@@ -24,6 +24,53 @@ class plekYoutube{
         return $this -> yotuwp_to_plek_events($vids);
     }
 
+    public function search_videos(string $query){
+        //$yt = new YotuWP(YOTUWP_VERSION);
+        global $yotuwp;
+        //s($yotuwp);
+        $channel_id = 'UC09pSsC1F15QU32jX_2vLHA';
+        $search = $yotuwp -> load_content('https://www.googleapis.com/youtube/v3/search?part=snippet,id&channelId='.$channel_id.'&q='.$query);
+        //filter out, if $query is not in title
+        if(isset($search -> items) AND is_array($search -> items)){
+            foreach($search -> items as $k => $item){
+                if($item -> id -> kind !== 'youtube#video'){
+                    unset($search -> items[$k]);
+                }
+                if(stripos($item -> snippet -> title, $query) === false){
+                    unset($search -> items[$k]); 
+                }
+            }
+        }
+        if(empty($search -> items)){
+            return false;
+        }
+        $search -> totalPage = 0;
+        wp_enqueue_style( 'yotu-style' );
+		wp_enqueue_style( 'yotu-icons' );
+		wp_enqueue_style( 'yotupro' );
+		wp_enqueue_style( 'yotu-presets' );
+		wp_enqueue_style( 'yotupro-effs' );
+
+		wp_enqueue_script( 'yotu-script' );
+		wp_enqueue_script( 'yotupro' );
+
+        $yotuwp_settings = array();
+        $yotuwp_settings['pagination'] = 'on';
+        $yotuwp_settings['pagitype'] = 'loadmore';
+        $yotuwp_settings['column'] = '2';
+        $yotuwp_settings['per_page'] = '5';
+        $yotuwp_settings['template'] = 'grid';
+        $yotuwp_settings['title'] = 'on';
+        $yotuwp_settings['gallery_id'] = uniqid();
+        $yotuwp_settings['description'] = 'off';
+        $yotuwp_settings['player'] = array('mode' => 'popup','controls' => 1,'autoplay' => 0);
+        //CHeck which parts have to be dynamic
+        $yotuwp_settings = array ( 'type' => 'keyword', 'id' => $query, 'pagination' => 'on', 'pagitype' => 'loadmore', 'column' => '2', 'per_page' => '20', 'template' => 'grid', 'title' => 'on', 'description' => 'off', 'thumbratio' => '169', 'meta' => 'off', 'meta_data' => 'off', 'meta_position' => 'off', 'date_format' => 'off', 'meta_align' => 'off', 'subscribe' => 'off', 'duration' => 'off', 'meta_icon' => 'off', 'nexttext' => '', 'prevtext' => '', 'loadmoretext' => '', 'player' => array ( 'mode' => 'popup', 'width' => '1280', 'scrolling' => '100', 'autoplay' => 0, 'controls' => 1, 'modestbranding' => 1, 'loop' => 0, 'autonext' => 0, 'showinfo' => 1, 'rel' => 1, 'playing' => 1, 'playing_description' => 1, 'thumbnails' => 1, 'cc_load_policy' => '0', 'cc_lang_pref' => 0, 'hl' => 0, 'iv_load_policy' => '3', ), 'last_tab' => 'cache', 'use_as_modal' => 'off', 'modal_id' => 'off', 'last_update' => '1575714597', 'styling' => array ( 'pager_layout' => 'default', 'button' => '1', 'button_color' => '', 'button_bg_color' => '', 'button_color_hover' => '', 'button_bg_color_hover' => '', 'video_style' => '', 'playicon_color' => '', 'hover_icon' => '', 'gallery_bg' => '', ), 'effects' => array ( 'video_box' => '', 'flip_effect' => '', ), 'gallery_id' => uniqid(), 'next' => 'CBQQAA', 'prev' => '', ) ;
+
+        return $yotuwp->views->display( 'grid', $search, $yotuwp_settings );
+        return do_shortcode('[yotuwp type="keyword" id="'.$query.'" channelId="UC09pSsC1F15QU32jX_2vLHA" column="2"]');
+    }
+
     public function yotuwp_to_plek_events(object $vids){
         $ret_arr = array();
         if(empty($vids -> items)){return false;}

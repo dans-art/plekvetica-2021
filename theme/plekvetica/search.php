@@ -1,88 +1,83 @@
 <?php
+
 /**
  * The template for displaying Search Results pages.
  *
  * @package GeneratePress
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
 	exit; // Exit if accessed directly.
 }
 
+global $plek_search_handler;
+
 get_header(); ?>
 
-	<div id="primary" <?php generate_do_element_classes( 'content' ); ?>>
-		<main id="main" <?php generate_do_element_classes( 'main' ); ?>>
-			<?php
-			/**
-			 * generate_before_main_content hook.
-			 *
-			 * @since 0.1
-			 */
-			do_action( 'generate_before_main_content' );
+<div id="primary" <?php generate_do_element_classes('content'); ?>>
+	<main id="plek-search-page">
+		<?php
 
-			if ( generate_has_default_loop() ) {
-				if ( have_posts() ) :
-					?>
+		/**
+		 * generate_before_main_content hook.
+		 *
+		 * @since 0.1
+		 */
+		do_action('generate_before_main_content');
+		?>
+		<header class="page-header">
+			<h1 class="page-title">
+				<?php
+				printf(
+					/* translators: 1: Search query name */
+					__('Search Results for: %s', 'generatepress'),
+					'<span>' . get_search_query() . '</span>'
+				);
+				?>
+			</h1>
+		</header>
 
-					<header class="page-header">
-						<h1 class="page-title">
-							<?php
-							printf(
-								/* translators: 1: Search query name */
-								__( 'Search Results for: %s', 'generatepress' ),
-								'<span>' . get_search_query() . '</span>'
-							);
-							?>
-						</h1>
-					</header>
+		<div class="plek-search-bands">
+			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Bands', 'pleklang')); ?>
+			<?php echo $plek_search_handler -> get_bands(); ?>
 
-					<?php
-					while ( have_posts() ) :
+		</div>
+		<div class="plek-search-photos">
+			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Fotos', 'pleklang')); ?>
+			<?php echo $plek_search_handler -> get_photos(); ?>
+		</div>
+		<div class="plek-search-videos">
+			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Videos', 'pleklang')); ?>
+			<?php echo $plek_search_handler -> get_videos(); ?>
+		</div>
+		<div class="plek-search-events">
+			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Events', 'pleklang')); ?>
+			<?php echo $plek_search_handler -> get_events(); ?>
+		</div>
 
-						the_post();
+		<?php
 
-						generate_do_template_part( 'search' );
 
-					endwhile;
+		/**
+		 * generate_after_main_content hook.
+		 *
+		 * @since 0.1
+		 */
+		do_action('generate_after_main_content');
 
-					/**
-					 * generate_after_loop hook.
-					 *
-					 * @since 2.3
-					 */
-					do_action( 'generate_after_loop', 'search' );
 
-				else :
+		?>
+	</main>
+</div>
 
-					generate_do_template_part( 'none' );
+<?php
+/**
+ * generate_after_primary_content_area hook.
+ *
+ * @since 2.0
+ */
+do_action('generate_after_primary_content_area');
 
-				endif;
-			}
+generate_construct_sidebars();
 
-			/**
-			 * generate_after_main_content hook.
-			 *
-			 * @since 0.1
-			 */
-			do_action( 'generate_after_main_content' );
-
-			/**
-			 * Add Youtube search results
-			 */
-			echo PlekSearchHandler::get_youtube_videos();
-			?>
-		</main>
-	</div>
-
-	<?php
-	/**
-	 * generate_after_primary_content_area hook.
-	 *
-	 * @since 2.0
-	 */
-	do_action( 'generate_after_primary_content_area' );
-
-	generate_construct_sidebars();
-
-	get_footer();
+get_footer();

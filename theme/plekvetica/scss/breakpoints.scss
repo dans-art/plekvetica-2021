@@ -44,6 +44,11 @@
     .nav-float-left .has-inline-mobile-toggle #site-navigation {
         order: 10;
     }
+    #plek-search-page{
+        div{
+            margin: 0 0.2em;
+        }
+    }
 }
 
 
@@ -67,7 +72,6 @@
     #post-27146 .wp-block-buttons > .wp-block-button.plek-start-page {
         width: 72%;
     }
-    
 }
 
 /*Tribe Events breakpoint*/
@@ -212,7 +216,10 @@
             flex-basis: 45%;
         }
     }
-
+    #plek-search-page .plek_album_con .image_container{
+        width: 100%;
+        text-align: center;
+    }
 }
 
 @media (min-width: 599px){
