@@ -10,6 +10,7 @@ class PlekSearchHandler
 
     public function get_videos()
     {
+        //return do_shortcode("[yotuwp type='videos' id='B0mhpAQMkBA' pagination='off' pagitype='pager' column='1' per_page='1']");
         $youtube_handler = new plekYoutube;
         $query = get_search_query();
         $search_result = $youtube_handler -> search_videos($query);

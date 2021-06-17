@@ -19,4 +19,10 @@
     a{
         color: $text-color;
     }
+
+    picture {
+        max-height: 31vw;
+        display: block;
+        overflow: hidden;
+    }
 }

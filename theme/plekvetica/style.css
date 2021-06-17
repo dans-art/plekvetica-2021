@@ -645,6 +645,10 @@ article.plek-event-item-compact {
   padding-bottom: 1em; }
   .image_link_wrapper a {
     color: white; }
+  .image_link_wrapper picture {
+    max-height: 31vw;
+    display: block;
+    overflow: hidden; }
 
 #post-27146 .info-text-line {
   position: absolute;
@@ -682,8 +686,6 @@ article.plek-event-item-compact {
     flex-wrap: wrap; }
     #tribe-events-pg-template .single-view #event-content .video-container .video-band-container {
       width: 48%; }
-    #tribe-events-pg-template .single-view #event-content .video-container .yotu-videos li {
-      flex: 1; }
 #tribe-events-pg-template .single-view #event-meta {
   padding: 0 0 0 1em;
   width: 30%; }
@@ -1510,9 +1512,16 @@ div.plek-review-search {
   .plek-posts-container .plek-post-item {
     flex-basis: 45%; }
 
-  #plek-search-page .plek_album_con .image_container {
+  #plek-search-page .plek_album_con .image_container,
+  .plek_album_con .image_container {
     width: 100%;
-    text-align: center; } }
+    text-align: center; }
+    #plek-search-page .plek_album_con .image_container img,
+    .plek_album_con .image_container img {
+      width: 100%; }
+    #plek-search-page .plek_album_con .image_container picture,
+    .plek_album_con .image_container picture {
+      max-height: unset; } }
 @media (min-width: 599px) {
   .tribe-events-calendar-list__event-date-tag-datetime-mobile {
     display: none; }

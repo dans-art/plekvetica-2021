@@ -285,7 +285,7 @@ class PlekBandHandler
     public function get_band_link(string $band_slug = null)
     {
         if($band_slug === null){
-            $slug = $this -> get_slug();
+            $band_slug = $this -> get_slug();
         }
         $tag_base = get_option('tag_base');
         return site_url('/' . $tag_base . '/' . $band_slug, 'https');

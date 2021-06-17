@@ -216,9 +216,19 @@
             flex-basis: 45%;
         }
     }
-    #plek-search-page .plek_album_con .image_container{
+    #plek-search-page .plek_album_con .image_container,
+    .plek_album_con .image_container{
         width: 100%;
         text-align: center;
+
+        img{
+            width: 100%;
+        }
+
+        picture {
+            max-height: unset;
+        }
+        
     }
 }
 
