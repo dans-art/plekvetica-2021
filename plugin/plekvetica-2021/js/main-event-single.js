@@ -1,3 +1,6 @@
+/**
+ * @todo: - Fix flicker bug at resize.
+ */
 let plek_single_event_main = {
 
     breakpoint : 767, //Break at 767 Pixel vw.
@@ -5,12 +8,19 @@ let plek_single_event_main = {
     shorten_threshold : 15, //if the container is 15% bigger than the max allowed, show button & resize
     content_description : jQuery('#event-content .event-description'),
     content_videos : jQuery('#event-content .event-video-container'),
+    current_width : null, //This is to fix the scroll bug some browsers. Triggers resize on scroll.
 
     construct(){
+        this.current_width = jQuery(window).width();
         this.on_resize();
-
+        
         jQuery(window).resize(() =>{
-            this.on_resize();
+            //console.log(jQuery(window).width() +' VS '+ this.current_width);
+            if(jQuery(window).width() !== this.current_width){
+                //console.log("resize");
+                this.on_resize();
+                this.current_width = jQuery(window).width();
+            }
         });
         
         jQuery(document).ready(() => {

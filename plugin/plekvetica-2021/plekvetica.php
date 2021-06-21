@@ -24,7 +24,6 @@ define('PLEK_PATH', plugin_dir_path( __FILE__ ));
 define('PLEK_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ));
 define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
 
-
 //Debug
  require_once(PLEK_PATH."../plekvetica/include/scripts/kint.phar");
  /**

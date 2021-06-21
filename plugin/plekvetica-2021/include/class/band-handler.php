@@ -220,15 +220,15 @@ class PlekBandHandler
             $country_code = (isset($this->band['herkunft'])) ? $this->band['herkunft'] : '';
         }
         $country_code = strtolower($country_code);
-        if (file_exists(PLEK_PATH . 'images\flags\\' . $country_code . '.png')) {
+        if (file_exists(PLEK_PATH . 'images/flags/' . $country_code . '.png')) {
             $flag = PLEK_PLUGIN_DIR_URL  . 'images/flags/' . $country_code . '.png';
             return "<img src='$flag' alt='Flag of " . $country_code . "'/>";
         }
-        if (file_exists(PLEK_PATH . 'images\flags\no-flag.png')) {
+        if (file_exists(PLEK_PATH . 'images/flags/no-flag.png')) {
             $flag = PLEK_PLUGIN_DIR_URL  . 'images/flags/no-flag.png';
             return "<img src='$flag' alt='".  __('Diese Band hat keine Herkunfts informationen.','pleklang') ."'/>";
         }
-        return $country_code;
+        return strtoupper($country_code);
     }
 
     public function get_country_name()
