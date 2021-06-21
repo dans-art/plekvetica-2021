@@ -5,8 +5,9 @@ $current_user = wp_get_current_user();
 $event_id = get_the_ID();
 $review_titel = ($plek_event->is_review()) ? __('Review bearbeiten', 'pleklang') : __('Review schreiben', 'pleklang');
 $akk_status = $plek_event->get_field_value('akk_status');
-$akk_crew = $plek_event-> get_event_akkredi_crew();
-$event_edit_page_id = $plek_handler -> get_plek_option('edit_event_page_id');
+$interviews = $plek_event->get_event_interviews();
+$akk_crew = $plek_event->get_event_akkredi_crew();
+$event_edit_page_id = $plek_handler->get_plek_option('edit_event_page_id');
 $is_canceled = $plek_event->is_canceled();
 
 //s($post_authors);
@@ -14,19 +15,19 @@ $is_canceled = $plek_event->is_canceled();
 <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Event Manager', 'pleklang')); ?>
 <div id='ajaxStatus'></div>
 <div>
-    <?php 
+    <?php
     //Edit Event Button
     if (PlekUserHandler::current_user_can_edit($event_id) and !$plek_event->is_past_event()) : ?>
-        <a name="editEvent" class="plek-button" href="<?php echo get_permalink($event_edit_page_id);?>?edit=<?php echo $event_id; ?>">Event Bearbeiten</a>
+        <a name="editEvent" class="plek-button" href="<?php echo get_permalink($event_edit_page_id); ?>?edit=<?php echo $event_id; ?>">Event Bearbeiten</a>
     <?php endif; ?>
-    <?php 
+    <?php
     //Accreditation add Button
-    if (PlekUserHandler::current_user_can_akkredi($event_id) AND !$is_canceled) : ?>
+    if (PlekUserHandler::current_user_can_akkredi($event_id) and !$is_canceled) : ?>
         <a id="plekSetAkkreiCrewBtn" name="akkrediEvent" class="plek-button full-width blue" data-user="<?php echo isset($current_user->user_login) ? $current_user->user_login : null; ?>" data-eventid="<?php echo $event_id; ?>" data-type="aw">Event akkreditieren</a>
     <?php endif; ?>
     <?php
     //Accreditation remove Button
-    if (PlekUserHandler::current_user_is_akkredi($event_id) AND !$plek_event -> is_review() AND $akk_status === 'aw') : ?>
+    if (PlekUserHandler::current_user_is_akkredi($event_id) and !$plek_event->is_review() and $akk_status === 'aw') : ?>
         <a id="plekRemoveAkkreiCrewBtn" name="akkrediEvent" class="plek-button full-width blue" data-user="<?php echo isset($current_user->user_login) ? $current_user->user_login : null; ?>" data-eventid="<?php echo $event_id; ?>">Akkreditierung zurückziehen</a>
     <?php endif; ?>
     <?php
@@ -46,39 +47,55 @@ $is_canceled = $plek_event->is_canceled();
     <?php endif; ?>
     <?php
     //Revision Event Button    
-    if (PlekUserHandler::current_user_can_edit($event_id) and !$plek_event->is_review() and $plek_event -> has_revisions()) : ?>
-        <?php 
-            global $plek_handler;
-            $plek_handler -> enqueue_toastr();
-            $rev = $plek_event -> get_event_revisions();
-            foreach($rev as $rev_id): 
+    if (PlekUserHandler::current_user_can_edit($event_id) and !$plek_event->is_review() and $plek_event->has_revisions()) : ?>
+        <?php
+        global $plek_handler;
+        $plek_handler->enqueue_toastr();
+        $rev = $plek_event->get_event_revisions();
+        foreach ($rev as $rev_id) :
         ?>
-            <a name="revisionEvent" class="plek-button full-width <?php echo '';?> plekRevision" data-eventid="<?php echo $event_id.",".$rev_id;?>"><?php echo __("Zeige Revision","pleklang"); ?><div class='smallText'><?php echo $plek_event -> get_revision_modified_date($rev_id);?></div></a>
+            <a name="revisionEvent" class="plek-button full-width <?php echo ''; ?> plekRevision" data-eventid="<?php echo $event_id . "," . $rev_id; ?>"><?php echo __("Zeige Revision", "pleklang"); ?><div class='smallText'><?php echo $plek_event->get_revision_modified_date($rev_id); ?></div></a>
         <?php endforeach; ?>
     <?php endif; ?>
 
-    <?php 
-    //Accreditations status and crew
-    if (PlekUserHandler::user_is_in_team() AND !empty($akk_status) AND !empty($akk_crew)) : ?>
+    <?php
+    //Accreditations & Interview status and crew
+    if (PlekUserHandler::user_is_in_team() and !empty($akk_status) and !empty($akk_crew)) : ?>
         <dl class='event-akkredi-container'>
-            <dt><?php echo __('Akkreditierungs Status','pleklang'); ?></dt>
+            <dt><?php echo __('Akkreditierungs Status', 'pleklang'); ?></dt>
             <dd class="event-akkredi-status">
                 <span class="<?php echo $akk_status; ?>">
                     <?php if (!empty($akk_status)) {
-                        echo $plek_event->get_event_akkredi_status_text($akk_status);
+                        echo $plek_event->get_event_status_text($akk_status);
                     } else {
                         echo __('Event wurde noch von keinem Teammitglied akkreditiert.', 'pleklang');;
                     } ?>
                 </span>
             </dd>
-            <dt><?php echo __('Akkreditierte Mitglieder','pleklang'); ?></dt>
-            <?php foreach($akk_crew as $member): ?>
-            <dd class="event-akkredi-crew">
+            <dt><?php echo __('Akkreditierte Mitglieder', 'pleklang'); ?></dt>
+            <?php foreach ($akk_crew as $member) : ?>
+                <dd class="event-akkredi-crew">
                     <?php echo PlekUserHandler::get_user_display_name($member); ?>
-            </dd>
+                </dd>
             <?php endforeach; ?>
+            <dt><?php echo __('Interviews', 'pleklang'); ?></dt>
+            <dd class="event-interview-status">
+                <?php if (!empty($interviews)) {
+                    foreach ($interviews as $int) {
+                        $status = $plek_event->prepare_status_code($int['status']);
+                ?>
+            <dd class="event-interview-band">
+                <span class="<?php echo (!empty($status))?$status:"null"; ?>"><?php echo $int['name']; ?></span>
+            </dd>
+                 <?php
+                    } //End foreach
+                } else {
+                    echo ($plek_event->is_review())?__('Dieser Event hatte keine Interviews.', 'pleklang'):__('Für diesen Event wurden noch keine Interviews registriert.', 'pleklang');
+                } ?>
+            </dd>
         </dl>
-    <?php endif; ?><!-- if (PlekUserHandler::user_is_in_team() AND !empty($akk_status) AND !empty($akk_crew)) : -->
+    <?php endif; //Accreditations & Interview status and crew END
+    ?>
 </div>
 
 <?php PlekTemplateHandler::load_template('js-settings', 'components', 'manage_event_buttons'); ?>

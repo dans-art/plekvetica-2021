@@ -212,26 +212,34 @@ blockquote{
 }
 
 .event-icons,
+.event-interview-band,
 .event-akkredi-status{
 
   & span:before{
     font-family: "FontAwesome";
   }
-  & span.aa:before{
+  & span.aa:before,
+  & span.ia:before{
     content: '\f059';
     color: $color-gray-light-two;
   }
-  & span.ab:before{
+  & span.ab:before,
+  & span.ib:before{
     content: '\f058';
     color: $color-green;
   }
-  & span.aw:before{
+  & span.aw:before,
+  & span.iw:before{
     content: '\f06a';
     color: $color-blue;
   }
   & span.no:before{
     content: '\f057';
     color: $color-red;
+  }
+  & span.null:before{
+    content: '\f068';
+    color: $color-gray-light-two;
   }
 }
 

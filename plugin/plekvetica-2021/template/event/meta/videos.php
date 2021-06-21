@@ -2,7 +2,6 @@
 
 global $plek_event;
 $bands = $plek_event->get_bands();
-$videos = $band_arr['videos'];
 $plek_youtube = new plekYoutube;
 
 ?>

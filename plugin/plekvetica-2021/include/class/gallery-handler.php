@@ -24,16 +24,16 @@ class PlekGalleryHandler
     public static function get_gallery_from_url()
     {
         global $wpdb;
-        $gallery_slug = preg_match('/(\/maf\/galleries\/)([^\/]*)(\/){0,1}/',$_SERVER['REQUEST_URI'], $linkparts);
-        if(isset($linkparts[2])){
+        $gallery_slug = preg_match('/(\/maf\/galleries\/)([^\/]*)(\/){0,1}/', $_SERVER['REQUEST_URI'], $linkparts);
+        if (isset($linkparts[2])) {
             $decoded = urldecode($linkparts[2]);
             $gallery_escaped_slug = htmlspecialchars($decoded);
             //Search in DB for the ID
-            $query = $wpdb->prepare("  SELECT `gid`, `title`, `galdesc` FROM `".$wpdb->prefix."ngg_gallery` WHERE `slug` = '%s'", $gallery_escaped_slug);
+            $query = $wpdb->prepare("  SELECT `gid`, `title`, `galdesc` FROM `" . $wpdb->prefix . "ngg_gallery` WHERE `slug` = '%s'", $gallery_escaped_slug);
             $db_result = $wpdb->get_results($query);
         }
 
-        if (!isset($db_result) OR empty($db_result[0])) {
+        if (!isset($db_result) or empty($db_result[0])) {
             return __("Es wurde keine Gallerie gefunden. Womöglich wurde diese gelöscht oder verschoben.", "pleklang");
         }
 
@@ -56,8 +56,8 @@ class PlekGalleryHandler
         if (empty($album->gallery_ids)) {
             return sprintf(__('Keine Gallerien in dem Album mit der ID: %s'), $id);
         }
-        $galleries = $this -> get_galleries($album -> gallery_ids);
-        
+        $galleries = $this->get_galleries($album->gallery_ids);
+
         return PlekTemplateHandler::load_template_to_var('album-container', 'gallery', $galleries);
     }
     /**
@@ -66,9 +66,10 @@ class PlekGalleryHandler
      * @param [type] $ids Comma separated string or array with gallery ids
      * @return array Array with ngg gallery objects
      */
-    public function get_galleries($ids){
-        if(is_string($ids)){
-            $ids = explode(',',$ids);
+    public function get_galleries($ids)
+    {
+        if (is_string($ids)) {
+            $ids = explode(',', $ids);
         }
         $galleries = array();
         foreach ($ids as $gall_id) {
@@ -127,14 +128,15 @@ class PlekGalleryHandler
         return get_permalink($page_id) . 'maf/galleries/' . $gallery_object->slug;
     }
 
-    public static function get_band_name(object $gallery_object){
+    public static function get_band_name(object $gallery_object)
+    {
         global $wpdb;
-        $gall_id = (string) $gallery_object -> gid;
+        $gall_id = (string) $gallery_object->gid;
         $wild = '%';
-        if(!is_integer($gallery_object -> gid)){
-            return (isset($gallery_object -> name))?$gallery_object -> name:'No Bandname found!';
+        if (!is_integer($gallery_object->gid)) {
+            return (isset($gallery_object->name)) ? $gallery_object->name : 'No Bandname found!';
         }
-        $like = $wild . $wpdb->esc_like($gallery_object -> gid) . $wild;
+        $like = $wild . $wpdb->esc_like($gallery_object->gid) . $wild;
 
         $query = $wpdb->prepare("SELECT meta.meta_value, terms.name  
         FROM `{$wpdb->prefix}termmeta` as meta
@@ -143,22 +145,23 @@ class PlekGalleryHandler
         WHERE `meta_key` LIKE 'band_galleries' AND meta_value LIKE '%s'", $like);
 
         $db_result = $wpdb->get_results($query);
-        if(count($db_result) > 1){
+        if (count($db_result) > 1) {
             //Search for the real term
-            foreach($db_result as $item){
-                $galls = explode(',',$item -> meta_value);
-                if(array_search($gall_id,$galls, true) !== false){
-                    return $item -> name;
+            foreach ($db_result as $item) {
+                $galls = explode(',', $item->meta_value);
+                if (array_search($gall_id, $galls, true) !== false) {
+                    return $item->name;
                 }
             }
         }
         //DB Result was only one entry
-        $galls = explode(',',$db_result[0] -> meta_value);
+        $meta = (isset($db_result[0]->meta_value)) ? $db_result[0]->meta_value : null;
+        $galls = explode(',', $meta);
         //Make sure the number is in the meta_value from the DB
-        if(isset($db_result[0] -> name) AND (array_search($gall_id,$galls, true) !== false)){
-            return $db_result[0] -> name;
+        if (isset($db_result[0]->name) and (array_search($gall_id, $galls, true) !== false)) {
+            return $db_result[0]->name;
         }
-        return $gallery_object -> title;
+        return $gallery_object->title;
     }
 
     /**
@@ -166,11 +169,12 @@ class PlekGalleryHandler
      *
      * @return void
      */
-    public function plek_get_ngg_Albums_shortcode($attr){
-        $attributes = shortcode_atts( array(
+    public function plek_get_ngg_Albums_shortcode($attr)
+    {
+        $attributes = shortcode_atts(array(
             'albumid' => '',
-            ), $attr );
+        ), $attr);
         $album_id = $attributes['albumid'];
-        return $this -> display_album($album_id);
+        return $this->display_album($album_id);
     }
 }

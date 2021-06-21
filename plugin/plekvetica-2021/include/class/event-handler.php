@@ -76,7 +76,7 @@ class PlekEventHandler
     public function has_revisions()
     {
         $rev_arr = $this->get_event_revisions();
-        if(!is_array($rev_arr)){
+        if (!is_array($rev_arr)) {
             return false;
         }
         $nr_rev = count($rev_arr);
@@ -354,7 +354,7 @@ class PlekEventHandler
         $classes[] = ($this->is_review()) ? 'plek-event-review' : '';
         $classes[] = 'plek-event-type-' . $this->get_field_value('post_type');
         $classes = array_filter($classes);
-        return ($return_string)?implode(' ', $classes):$classes;
+        return ($return_string) ? implode(' ', $classes) : $classes;
     }
 
     public function get_price_boxoffice()
@@ -376,6 +376,9 @@ class PlekEventHandler
 
     public function get_price_formated(string $cost)
     {
+        if($cost === "0000"){
+            return __('Gratis/Kollekte','pleklang');
+        }
         $currency = (!empty($this->get_field_value('_EventCurrencySymbol'))) ? $this->get_field_value('_EventCurrencySymbol') : $this->default_event_currency;
         $cost_nr = preg_replace("/[^a-zA-Z0-9 -\.]/", "", $cost);
         return trim($cost_nr) . ' ' .  $currency;
@@ -384,7 +387,7 @@ class PlekEventHandler
     public function event_has_band_videos()
     {
         $bands = $this->get_bands();
-        if(empty($bands)){
+        if (empty($bands)) {
             return false;
         }
         foreach ($bands as $band) {
@@ -488,7 +491,7 @@ class PlekEventHandler
     {
         $rev = $this->get_field_value('event_revisions');
         $rev_arr = json_decode($rev);
-        if(empty($rev_arr)){
+        if (empty($rev_arr)) {
             return false;
         }
         foreach ($rev_arr as $index => $rev_id) {
@@ -533,6 +536,29 @@ class PlekEventHandler
         return "<a href='$link' target='_blank' >$link_icon</a>";
     }
 
+    /**
+     * Get all the Interviews and their status.
+     * Returns array(0 => status_code, 1 => Name of Band)
+     *
+     * @return bool|array - False if no Interviews ar saved, Array if exists 
+     */
+    public function get_event_interviews()
+    {
+        $interviews = $this->get_field_value('interview_with');
+        $int_arr = explode(PHP_EOL, $interviews);
+        $ret_arr = [];
+        if (empty($interviews)) {
+            return false;
+        }
+        foreach ($int_arr as $key => $band) {
+            $item = explode(':', $band);
+            $ret_arr[$key]['status'] = (count($item) > 1) ? $item[0] : '';
+            unset($item[0]);//Remove the Status
+            $ret_arr[$key]['name'] = (count($item) > 1) ? preg_replace('/^[A-Za-z]{0,5}:{1} {0,}/','', $int_arr[$key]) :  implode('', $item);
+        }
+        return $ret_arr;
+    }
+
     public function get_event_authors()
     {
         $authors_handler = new PlekAuthorHandler;
@@ -574,29 +600,39 @@ class PlekEventHandler
         return (!empty($crew)) ? $crew : false;
     }
 
-    public function get_event_akkredi_status_text(string $akkredi_code = '')
+    public function get_event_status_text(string $status_code = '')
     {
-        if (empty($akkredi_code)) {
+        if (empty($status_code)) {
             return false;
         }
-        switch ($akkredi_code) {
+        $status_code = $this->prepare_status_code($status_code);
+        switch ($status_code) {
             case 'aw':
+            case 'iq':
                 return __('Wunsch', 'pleklang');
                 break;
             case 'ab':
+            case 'ib':
                 return __('Bestätigt', 'pleklang');
                 break;
             case 'aa':
+            case 'ia':
                 return __('Angefragt', 'pleklang');
                 break;
             case 'no':
                 return __('Abgelehnt', 'pleklang');
                 break;
-
             default:
                 return false;
                 break;
         }
+    }
+
+    public function prepare_status_code(string $status_code)
+    {
+        $status_code = trim($status_code);
+        $status_code = strtolower($status_code);
+        return $status_code;
     }
 
     public function remove_akkredi_member(string $user_login, int $event_id)

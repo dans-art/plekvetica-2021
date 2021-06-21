@@ -246,24 +246,40 @@ blockquote {
   color: white; }
 
 .event-icons span:before,
+.event-interview-band span:before,
 .event-akkredi-status span:before {
   font-family: "FontAwesome"; }
-.event-icons span.aa:before,
-.event-akkredi-status span.aa:before {
+.event-icons span.aa:before, .event-icons span.ia:before,
+.event-interview-band span.aa:before,
+.event-interview-band span.ia:before,
+.event-akkredi-status span.aa:before,
+.event-akkredi-status span.ia:before {
   content: '\f059';
   color: #ffffffb6; }
-.event-icons span.ab:before,
-.event-akkredi-status span.ab:before {
+.event-icons span.ab:before, .event-icons span.ib:before,
+.event-interview-band span.ab:before,
+.event-interview-band span.ib:before,
+.event-akkredi-status span.ab:before,
+.event-akkredi-status span.ib:before {
   content: '\f058';
   color: #268c37; }
-.event-icons span.aw:before,
-.event-akkredi-status span.aw:before {
+.event-icons span.aw:before, .event-icons span.iw:before,
+.event-interview-band span.aw:before,
+.event-interview-band span.iw:before,
+.event-akkredi-status span.aw:before,
+.event-akkredi-status span.iw:before {
   content: '\f06a';
   color: #6278d9; }
 .event-icons span.no:before,
+.event-interview-band span.no:before,
 .event-akkredi-status span.no:before {
   content: '\f057';
   color: #D9042B; }
+.event-icons span.null:before,
+.event-interview-band span.null:before,
+.event-akkredi-status span.null:before {
+  content: '\f068';
+  color: #ffffffb6; }
 
 .plek-message,
 .tribe-events-calendar-list__event .plek-message {
@@ -628,6 +644,10 @@ article.plek-event-item-compact {
       background-color: red;
       border: 1px solid #840000;
       padding: 0.5em 0.7em; }
+  #revloader #field-categories dt {
+    display: none; }
+  #revloader #field-categories dd {
+    margin: 0; }
 
 /* Gallery Styles*/
 .plek_album_con {
@@ -758,6 +778,9 @@ article.plek-event-item-compact {
     margin-bottom: 0; }
   #tribe-events-pg-template .single-view .event-title-container .event-venue {
     color: #ffffffb6; }
+#tribe-events-pg-template .single-view .event-interview-band span:before {
+  width: 1.5em;
+  display: inline-block; }
 
 /* Win & Partner*/
 ul.partner-container {
@@ -1164,8 +1187,12 @@ div.plek-review-search {
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap; }
+  .plekvetica-add-event #formGGenres #inputItemsCon {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 2%; }
   .plekvetica-add-event #formGGenres .inputItem {
-    flex-basis: 25%; }
+    /*flex-basis: 25%;*/ }
   .plekvetica-add-event ul.multiselect-container.dropdown-menu.show {
     width: 100%; }
   @media only screen and (max-width: 600px) and (min-width: 480px) {

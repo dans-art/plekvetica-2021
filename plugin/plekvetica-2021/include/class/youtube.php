@@ -112,6 +112,8 @@ class plekYoutube
      *
      * @param string $video - Youtube url, short url or video id
      * @return string Error message if yotuwp is not active or false on failure. HTML on success.
+     * @deprecated 0.1
+     * @todo Remove this function.
      */
     public static function single_youtube_video_do_shortcode(string $video)
     {
@@ -182,6 +184,7 @@ class plekYoutube
      * @param array $video_ids The video ids
      * @param object $search_obj The yotuwp Video Object 
      * @return null|string null if video id is empty, string on success 
+     * @todo Replace with Shortcode: do_shortcode("[yotuwp type='videos' id='$videos' column='$columns' per_page='$per_page']"); ??
      */
     public function youtube_videos_nativ(array $video_ids = [], $search_obj = null)
     {

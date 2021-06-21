@@ -26,7 +26,7 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
 
 
 //Debug
- require_once(PLEK_PATH."..\plekvetica\include\scripts\kint.phar");
+ require_once(PLEK_PATH."../plekvetica/include/scripts/kint.phar");
  /**
   * Adds a message to the JS debugger. This will be printed out in the footer of the page.
   *
@@ -44,7 +44,7 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
  } */
  
  //Include all of the classes
- require_once(PLEK_PATH . 'include\include-classes.php');
+ require_once(PLEK_PATH . 'include/include-classes.php');
 
  $plek_event = new PlekEvents;
  $plek_handler = new PlekHandler;
@@ -54,5 +54,5 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
  $plek_login_handler = new PlekLoginHandler;
  $plek_ajax_handler = new PlekAjaxHandler;
 
- require_once(PLEK_PATH . 'include\filter-actions.php');
- require_once(PLEK_PATH . 'include\shortcodes.php');
+ require_once(PLEK_PATH . 'include/filter-actions.php');
+ require_once(PLEK_PATH . 'include/shortcodes.php');
