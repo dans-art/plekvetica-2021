@@ -77,6 +77,7 @@ class PlekLoginHandler
     public function plek_login_page_shortcode(){
 
         PlekLoginHandler::logout_user();
+        PlekLoginHandler::enqueue_scripts();
 
         if(PlekLoginHandler::is_user_register()){
             return PlekTemplateHandler::load_template_to_var('register-form','system/login');
@@ -85,5 +86,9 @@ class PlekLoginHandler
             return PlekTemplateHandler::load_template_to_var('reset-password-form','system/login');
         }
         return PlekTemplateHandler::load_template_to_var('login','system');
+    }
+
+    public static function enqueue_scripts(){
+        wp_enqueue_script('plek-manage-user-script', PLEK_PLUGIN_DIR_URL . 'js/manage-user.min.js',['jquery']);
     }
 }

@@ -28,7 +28,12 @@ class PlekAjaxHandler
         }
         return;
     }
-
+    /**
+     * Event Actions called by ajax.
+     * This functions require a logged in user!
+     *
+     * @return void
+     */
     public function plek_ajax_event_actions()
     {
         $do = $this->get_ajax_do();
@@ -56,6 +61,44 @@ class PlekAjaxHandler
                 }
                 break;
 
+            default:
+                # code...
+                break;
+        }
+        echo $this -> get_ajax_return();
+        die();
+    }
+
+    public function plek_ajax_user_actions(){
+        $do = $this->get_ajax_do();
+        switch ($do) {
+            case 'edit_user_account':
+                //Show form
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+        echo $this -> get_ajax_return();
+        die();
+    }
+    /**
+     * User Actions called by Ajax.
+     * This functions are working for non-logged in users.
+     *
+     * @return void
+     */
+    public function plek_ajax_user_nopriv_actions(){
+        $do = $this->get_ajax_do();
+        switch ($do) {
+            case 'add_user_account':
+                $this -> set_success(__('Neues Konto angelegt. Du erhälst in kürze eine Email mit dem Bestätigunglink.','pleklang'));
+                break;
+            case 'activate_account':
+                //$this -> set_success(__('Neues Konto angelegt. Du erhälst in kürze eine Email mit dem Bestätigunglink.','pleklang'));
+                break;
+            
             default:
                 # code...
                 break;

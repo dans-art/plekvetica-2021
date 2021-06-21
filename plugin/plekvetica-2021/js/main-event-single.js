@@ -159,7 +159,7 @@ let plek_single_event_main = {
             },
             success: function success(data) {
                 
-                let text = plek_single_event_main.get_text_from_ajax_request(data);
+                let text = plek_main.get_text_from_ajax_request(data);
                 plek_main.deactivate_button_loader(button, text);
                 plek_main.deactivate_button(button);
 
@@ -186,7 +186,7 @@ let plek_single_event_main = {
               'type': type
             },
             success: function success(data) {
-                let text = plek_single_event_main.get_text_from_ajax_request(data);
+                let text = plek_main.get_text_from_ajax_request(data);
                 plek_main.deactivate_button_loader(button, text);
                 plek_main.deactivate_button(button);
 
@@ -197,28 +197,6 @@ let plek_single_event_main = {
             }
           });
           return;
-    },
-
-    get_text_from_ajax_request(data){
-        try {
-            let encoded_data = JSON.parse(data);
-            let text = "";
-            if(encoded_data.success.length > 0){
-                text += encoded_data.success;
-            }
-            if(encoded_data.error.length > 0){
-                text += (text.length === 0)?'':'<br/>';
-                text += 'Error: '+encoded_data.error;
-            }
-            if(encoded_data.system_error.length > 0){
-                text += (text.length === 0)?'':'<br/>';
-                text += 'Error: '+encoded_data.system_error;
-            }
-            return text;
-        } catch(e) {
-            return data;
-        }
-        
     },
 
     do_ajax_remove_akkredi_member(){
@@ -234,7 +212,7 @@ let plek_single_event_main = {
               'user': user_name,
             },
             success: function success(data) {
-                let text = plek_single_event_main.get_text_from_ajax_request(data);
+                let text = plek_main.get_text_from_ajax_request(data);
                 plek_main.deactivate_button_loader(button, text);
                 plek_main.deactivate_button(button);
                 try {
@@ -264,7 +242,7 @@ let plek_single_event_main = {
               'type': type,
             },
             success: function success(data) {
-                let text = plek_single_event_main.get_text_from_ajax_request(data);
+                let text = plek_main.get_text_from_ajax_request(data);
                 plek_main.deactivate_button_loader(button, text);
                 plek_main.deactivate_button(button);
             },
