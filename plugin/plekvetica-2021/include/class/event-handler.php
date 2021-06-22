@@ -231,6 +231,10 @@ class PlekEventHandler
         return get_permalink($this->get_ID());
     }
 
+    public function get_guid(){
+        return $this -> get_field_value('guid');
+    }
+
     public function get_venue_name()
     {
         return tribe_get_venue($this->get_field_value('ID'));
