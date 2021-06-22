@@ -93,10 +93,15 @@ class PlekAjaxHandler
         $do = $this->get_ajax_do();
         switch ($do) {
             case 'add_user_account':
+                //Validate user data
+
+                //Save new user
+                
+                //$this -> set_error(__('Save new mail not possible','pleklang'), 'user_email');
+                //$this -> set_error(__('Save new User not possible','pleklang'), 'user_name');
+                //$this -> set_error(__('Save new display not possible','pleklang'), 'user_display_name');
+                //$this -> set_error(__('Display 2','pleklang'), 'user_display_name');
                 $this -> set_success(__('Neues Konto angelegt. Du erhälst in kürze eine Email mit dem Bestätigunglink.','pleklang'));
-                break;
-            case 'activate_account':
-                //$this -> set_success(__('Neues Konto angelegt. Du erhälst in kürze eine Email mit dem Bestätigunglink.','pleklang'));
                 break;
             
             default:
@@ -122,14 +127,21 @@ class PlekAjaxHandler
         return (isset($_REQUEST[$field])) ? htmlspecialchars($_REQUEST[$field]) : "";
     }
 
-    protected function set_error(string $message){
+    protected function set_error(string $message, string $field = ""){
+        if(!empty($field)){
+            $this -> error[$field][] = $message;
+            return;
+        }
         $this -> error[] = $message;
+        return;
     }
     protected function set_system_error(string $message){
         $this -> system_error[] = $message;
+        return;
     }
     protected function set_success(string $message){
         $this -> success[] = $message;
+        return;
     }
     protected function get_ajax_return(){
         $ret = ['success' => $this -> success, 'error' => $this -> error, 'system_error' => $this -> system_error];
