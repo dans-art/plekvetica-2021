@@ -1,3 +1,9 @@
+<?php
+
+global $backend_class;
+$backend_class -> check_plekvetica();
+
+?>
 <h2>Plekvetica</h2>
 
 <form id='plek_options_page' action="options.php" method="post"  enctype="multipart/form-data">
