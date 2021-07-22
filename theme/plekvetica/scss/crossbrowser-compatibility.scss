@@ -1,0 +1,9 @@
+//Hacks for displaying the page on different Browsers
+//Cross browser compatibitliy
+
+//IE10+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+body{
+  color: red !important;
+}
+}

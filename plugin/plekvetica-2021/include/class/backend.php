@@ -3,6 +3,18 @@
 class PlekBackend
 {
 
+        /**
+     * Checks if all neccesary plugins and options are set.
+     * Runs inf Plek Backend Page is called
+     * @todo: Check for Plugins and the other constants
+     */
+    public function check_plekvetica(){
+        global $plek_handler;
+        if(!defined('SMTP_HOST')){
+            echo __('eMail not configured', 'pleklang');
+        }
+    }
+
     /**
      * Adds the Settings page in the Wordpress backend.
      *

@@ -1,5 +1,9 @@
 <h2>Plekvetica</h2>
 
+<?php
+global $backend_class;
+$backend_class -> check_plekvetica();
+?>
 <form id='plek_options_page' action="options.php" method="post"  enctype="multipart/form-data">
     <?php
     //settings_fields('plek_facebook_options'); 
