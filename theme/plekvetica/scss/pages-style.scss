@@ -6,9 +6,13 @@
         left: 0;
         color: $color-gray-light-two;
     }
-    article.plek-event-type-youtube,
-    article.plek-event-type-tribe_events{
+    .plek-event-type-youtube,
+    .plek-event-type-tribe_events{
         margin-left: 5%;
+    }
+
+    .wp-block-separator{
+        border-top: 1px solid rgba(0,0,0,.1);
     }
     
     .plek-pre-button-seperator{
@@ -24,6 +28,7 @@
         margin-left: 0;
     
     }
+
 }
 
 //Kalender - Overview
