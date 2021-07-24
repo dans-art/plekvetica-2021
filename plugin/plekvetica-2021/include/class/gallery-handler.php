@@ -73,7 +73,9 @@ class PlekGalleryHandler
         }
         $galleries = array();
         foreach ($ids as $gall_id) {
-            $galleries[] = $this->get_gallery($gall_id);
+            if(!empty($gall_id)){
+                $galleries[] = $this->get_gallery($gall_id);
+            }
         }
         return $galleries;
     }

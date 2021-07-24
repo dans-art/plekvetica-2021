@@ -3,7 +3,6 @@
 extract(get_defined_vars());
 $search_term = isset($template_args[0]) ? $template_args[0] : null;
 $search_result = isset($template_args[1]) ? $template_args[1] : null;
-
 echo PlekTemplateHandler::load_template_to_var('text-bar', 'components', $search_term);
 ?>
 

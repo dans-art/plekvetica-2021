@@ -86,6 +86,9 @@ class PlekSearchHandler
         if (PlekSearchHandler::is_review_search()) {
             $search_string = $_GET['search_reviews'];
             $post_ids = $this->search_tribe_events($search_string, true);
+            if(!is_array($post_ids)){
+                $post_ids = array();
+            }
             $posts = $this->load_tribe_events_from_ids($post_ids);
             $display .=  PlekTemplateHandler::load_template_to_var('event-review-search', 'event', htmlspecialchars($search_string), $posts);
         }
