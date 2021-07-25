@@ -270,10 +270,12 @@ ul.partner-container{
     .my-plek-head-container {
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
     
         .this-week-posts,
         .missing-reviews-posts{
             flex-basis: 49%;
+            flex-grow: 1;
         }
     }
     .info-text-bar{
@@ -369,5 +371,31 @@ ul.partner-container{
    .tribe-events-calendar-list__event{
        margin:0.2em 0;
    }
+}
+
+//Team Calendar
+body.page-id-24565{
+    #content{
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .eTPoster img{
+        width: 110px;
+    }
+
+ .dataTables_scroll{
+    table, td, th {
+        border: 1px solid gray;
+    }
+ }
+ label,
+ .dataTables_info,
+ .dataTables_paginate a{
+     color:white !important;
+ }
+ td {
+    color: black;
+}
 }
 

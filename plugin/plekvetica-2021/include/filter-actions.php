@@ -40,6 +40,9 @@ add_action('wp_ajax_nopriv_plek_user_actions',  [new PlekAjaxHandler,'plek_ajax_
 add_action( 'plek_js_debug', [$plek_handler,'set_js_error'], 10, 1 );
 add_action( 'wp_footer', [$plek_handler,'get_js_errors']);
 
+//User management
+add_action('after_setup_theme', [new PlekUserHandler,'disable_admin']);
+
 //Backend Login Logo
 /* add_filter('login_headertext', 'my_login_logo_url_title');
 add_filter('login_headerurl', 'my_login_logo_url');

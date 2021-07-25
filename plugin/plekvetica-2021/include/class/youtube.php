@@ -31,7 +31,7 @@ class plekYoutube
         $atts['per_page'] = $posts_per_page;
         $atts['pageToken'] = htmlspecialchars($page);
         $vids = $yotuwp->prepare($atts);
-        if (empty($vids)) {
+        if (empty($vids) OR !is_object($vids)) {
             return null;
         }
         return $this->yotuwp_to_plek_events($vids);

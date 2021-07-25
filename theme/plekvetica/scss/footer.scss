@@ -7,10 +7,19 @@ footer.site-info{
   background-color: $color-gray-dark;
   color: $text-color;
   margin-bottom: 0;
+
+  .wp-block-search .wp-block-search__button{
+    margin-left: 0;
+    border:none;
+  }
+  .wp-block-search__input{
+    border:none;
+  }
 }
 
 #menu-social-links-menue{
   display: flex;
+  justify-content: space-evenly;
 
   li{
     margin: 0.5vw;
@@ -33,5 +42,10 @@ footer.site-info{
 
   aside{
     align-self: flex-end;
+    width: 100%;
+  }
+
+  .wp-block-search__label{
+    display: none;
   }
 }

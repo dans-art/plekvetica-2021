@@ -57,7 +57,7 @@ class PlekGalleryHandler
             return sprintf(__('Keine Gallerien in dem Album mit der ID: %s'), $id);
         }
         $galleries = $this->get_galleries($album->gallery_ids);
-
+        
         return PlekTemplateHandler::load_template_to_var('album-container', 'gallery', $galleries);
     }
     /**

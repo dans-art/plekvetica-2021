@@ -67,7 +67,11 @@ class PlekEventHandler
         if (!empty($this->get_field_value('gallery_id'))) {
             return true;
         }
-        if (strpos('plek_album_con', $this->get_field_value('post_content')) > 0) {
+        $content = $this->get_field_value('post_content');
+        if(empty($content)){
+            return false;
+        }
+        if (strpos('plek_album_con', $content) > 0) {
             return true; //Test this. Should detect galleries in Content
         }
         return false;
