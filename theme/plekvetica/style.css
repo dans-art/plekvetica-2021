@@ -184,6 +184,10 @@ blockquote { font-size: 1em; border-left: 2px solid #595959; }
 /* line 4, scss/event-general.scss */
 .band img { vertical-align: sub; width: 19px; }
 
+/* Hide disabled button */
+/* line 14, scss/event-general.scss */
+.tribe-events-c-nav__list-item.tribe-events-c-nav__list-item--next button:disabled, .tribe-events-c-nav__list-item.tribe-events-c-nav__list-item--next button[disabled], .tribe-events-c-nav__list-item.tribe-events-c-nav__list-item--prev button:disabled, .tribe-events-c-nav__list-item.tribe-events-c-nav__list-item--prev button[disabled] { display: none; }
+
 /* line 3, scss/event-list.scss */
 article.tribe-events-calendar-list__event { display: flex; }
 /* line 8, scss/event-list.scss */

@@ -26,7 +26,8 @@ class PlekUserHandler
      * @return void
      */
     public function disable_admin(){
-        if(!current_user_can('administrator') AND !current_user_can('plekmanager')){
+        $user = wp_get_current_user();
+        if(!current_user_can('administrator') AND !current_user_can('plekmanager') AND !self::user_is_in_team($user)){
             //Disable the admin bar, if user is not admin or manager
             show_admin_bar(false);
             //Redirect to home page, if user tries to access the backend

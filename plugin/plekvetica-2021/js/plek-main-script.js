@@ -2,6 +2,48 @@ let plek_main = {
 
 
     construct(){
+        jQuery(window).resize();
+
+        //If page is tribe events list view
+        if(jQuery(".tribe-common.tribe-events.tribe-events-view.tribe-events-view--list").length === 1){
+            console.log("Is Tribe list view");
+            this.tribe_list_fix();
+            this.tribe_catch_ajax();
+        }
+        
+    },
+
+    tribe_catch_ajax(){
+        //Runs after Ajax request. Fixes the list view after success.
+        (function() {
+            var origOpen = XMLHttpRequest.prototype.open;
+            XMLHttpRequest.prototype.open = function() {
+                console.log('request started!');
+                this.addEventListener('load', function() {
+                    setTimeout(() => {
+                        plek_main.tribe_list_fix();
+                    }, 10);
+                });
+                origOpen.apply(this, arguments);
+            };
+        })();
+    },
+
+    tribe_list_fix(){
+            var tribe_con = jQuery('div.tribe-common.tribe-events.tribe-events-view.tribe-events-view--list');
+            var winwidth = jQuery(window).width();
+            if(winwidth > 767 && tribe_con.hasClass('tribe-common--breakpoint-full') === false){
+                console.log("Is big view");
+                this.tribe_set_desktop_view();
+            }
+            return;
+    },
+
+    tribe_set_desktop_view(){
+        var tribe_con = jQuery('div.tribe-common.tribe-events.tribe-events-view.tribe-events-view--list');
+        tribe_con.addClass('tribe-common--breakpoint-medium');
+        tribe_con.addClass('tribe-common--breakpoint-full');
+        return true;
     },
 
     activate_button_loader(element, text){

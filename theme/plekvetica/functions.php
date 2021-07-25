@@ -13,4 +13,4 @@ function plek_footer_creds_text () {
     $copyright = '<div class="creds">Copyright © ' . date('Y') . ' by <a href="https://'.site_url().'">Plekvetica</a></div>';
     return $copyright;
      }
-    add_filter( 'generate_copyright', 'plek_footer_creds_text' );
+add_filter( 'generate_copyright', 'plek_footer_creds_text' );

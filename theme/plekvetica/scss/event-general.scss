@@ -6,3 +6,14 @@
     width: 19px;
   }
 }
+
+/* Hide disabled button */
+.tribe-events-c-nav__list-item.tribe-events-c-nav__list-item--next,
+.tribe-events-c-nav__list-item.tribe-events-c-nav__list-item--prev{
+
+  button:disabled,
+  button[disabled]{
+    display: none;
+  }
+
+}
