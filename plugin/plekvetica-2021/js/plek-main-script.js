@@ -5,14 +5,16 @@ let plek_main = {
         jQuery(window).resize();
 
         //If page is tribe events list view
-        if(jQuery(".tribe-common.tribe-events.tribe-events-view.tribe-events-view--list").length === 1){
-            console.log("Is Tribe list view");
-            this.tribe_list_fix();
-            this.tribe_catch_ajax();
-        }
+        //This function was to fix the Mobile Display bug. Can be fixed with CSS, so this is not longer needed.
+        //if(jQuery(".tribe-common.tribe-events.tribe-events-view.tribe-events-view--list").length === 1){
+            //this.tribe_list_fix();
+            //this.tribe_catch_ajax();
+        //}
         
     },
-
+    /**
+     * @todo: Delete this.
+     */
     tribe_catch_ajax(){
         //Runs after Ajax request. Fixes the list view after success.
         (function() {
@@ -28,7 +30,9 @@ let plek_main = {
             };
         })();
     },
-
+    /**
+     * @todo: Delete this.
+     */
     tribe_list_fix(){
             var tribe_con = jQuery('div.tribe-common.tribe-events.tribe-events-view.tribe-events-view--list');
             var winwidth = jQuery(window).width();

@@ -17,3 +17,9 @@
   }
 
 }
+
+/* Fixes the Mobile View on Desktop issue*/
+.tribe-events,
+#tribe-events-pg-template {
+    width: 100%;
+}
