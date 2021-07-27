@@ -63,14 +63,16 @@ article.tribe-events-calendar-list__event{
     }
   }
 
+.plek-events-event-categories{
+    color: $color-gray-light-two;
+}
 .plek-events-event-categories a{
-    color: $color-gray-light;
+    color: $color-gray-light-two;
 
     &:hover{
-      color: $color-gray-light-two;
+      color: $color-gray-light;
     }
   }
-
 
 .tribe-events .tribe-events-calendar-list__event-date-tag-datetime{
   height: auto;
@@ -92,6 +94,27 @@ article.tribe-events-calendar-list__event{
     padding-top: 0.1em;
   }
   
+}
+
+.tribe-events-view--list .plek-event-featured{
+
+   .tribe-events-calendar-list__event-date-tag .tribe-events-calendar-list__event-date-tag-datetime {
+    background: $color-red-strong;
+}
+
+.tribe-events-calendar-list__event-featured-image-link{
+  .info-text-banner{
+    width: 100%;
+
+    .banner-bg{
+      border-top: $color-red-strong solid 30px;
+      border-right: solid $color-red-strong 30px;
+    }
+    .banner-text{
+      color:$text-color;
+    }
+  }
+}
 }
 
 .tribe-events-calendar-list__event-featured-image-wrapper{

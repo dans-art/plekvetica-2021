@@ -5,8 +5,7 @@ a{
   transition: none;
   
   &:hover,
-  &:focus,
-  &:visited{
+  &:focus{
     color: $color-red-light;
   }
 }

@@ -16,8 +16,9 @@
  * @see tribe_get_event() For the format of the event object.
  */
 
-if ( ! $event->thumbnail->exists ) {
-    global $plek_event; ?>
+global $plek_event; 
+
+if ( ! $event->thumbnail->exists ) { ?>
     <div class="tribe-events-calendar-list__event-featured-image-wrapper tribe-common-g-col plek-missing-poster">
     <img src="<?php echo $plek_event->poster_placeholder; ?>" alt="<?php echo __('Poster placeholder', 'pleklang'); ?>" />
     </div>
@@ -45,5 +46,9 @@ if ( ! $event->thumbnail->exists ) {
 			<?php endif; ?>
 			class="tribe-events-calendar-list__event-featured-image"
 		/>
+	<?php if ($event->featured) {
+		PlekTemplateHandler::load_template('image-banner', 'components', __('Von uns empfohlen', 'pleklang'));
+	} 
+	?>
 	</a>
 </div>

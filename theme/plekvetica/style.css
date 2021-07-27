@@ -21,7 +21,7 @@ body { color: white; }
 /* line 3, scss/selectors.scss */
 a { transition: none; }
 /* line 7, scss/selectors.scss */
-a:hover, a:focus, a:visited { color: #8C262E; }
+a:hover, a:focus { color: #8C262E; }
 
 /* line 3, scss/header.scss */
 .nav-float-right #site-navigation { /*margin-left: 3vh;*/ }
@@ -223,67 +223,79 @@ article.tribe-events-calendar-list__event .band a:hover { color: #595959; }
 .plek-events-event-venue a:hover { color: #595959; }
 
 /* line 66, scss/event-list.scss */
-.plek-events-event-categories a { color: #595959; }
-/* line 69, scss/event-list.scss */
-.plek-events-event-categories a:hover { color: #ffffffb6; }
+.plek-events-event-categories { color: #ffffffb6; }
 
-/* line 75, scss/event-list.scss */
+/* line 69, scss/event-list.scss */
+.plek-events-event-categories a { color: #ffffffb6; }
+/* line 72, scss/event-list.scss */
+.plek-events-event-categories a:hover { color: #595959; }
+
+/* line 77, scss/event-list.scss */
 .tribe-events .tribe-events-calendar-list__event-date-tag-datetime { height: auto; background: #424242; min-width: 4em; text-align: center; display: block; max-width: 7%; }
-/* line 84, scss/event-list.scss */
+/* line 86, scss/event-list.scss */
 .tribe-events .tribe-events-calendar-list__event-date-tag-datetime span, .tribe-events .tribe-events-calendar-list__event-date-tag-datetime time { display: block; }
-/* line 89, scss/event-list.scss */
+/* line 91, scss/event-list.scss */
 .tribe-events .tribe-events-calendar-list__event-date-tag-datetime .plek-events-date-day { font-size: 2em; line-height: 0.8em; padding-top: 0.1em; }
 
-/* line 99, scss/event-list.scss */
+/* line 101, scss/event-list.scss */
+.tribe-events-view--list .plek-event-featured .tribe-events-calendar-list__event-date-tag .tribe-events-calendar-list__event-date-tag-datetime { background: #c11d1d; }
+/* line 106, scss/event-list.scss */
+.tribe-events-view--list .plek-event-featured .tribe-events-calendar-list__event-featured-image-link .info-text-banner { width: 100%; }
+/* line 109, scss/event-list.scss */
+.tribe-events-view--list .plek-event-featured .tribe-events-calendar-list__event-featured-image-link .info-text-banner .banner-bg { border-top: #c11d1d solid 30px; border-right: solid #c11d1d 30px; }
+/* line 113, scss/event-list.scss */
+.tribe-events-view--list .plek-event-featured .tribe-events-calendar-list__event-featured-image-link .info-text-banner .banner-text { color: white; }
+
+/* line 122, scss/event-list.scss */
 .tribe-events-calendar-list__event-featured-image-wrapper.tribe-common-g-col { justify-content: center; display: flex; flex-direction: column; }
 
-/* line 108, scss/event-list.scss */
+/* line 131, scss/event-list.scss */
 .tribe-events-calendar-list__event-wrapper .info-text-bar { width: 8%; }
 
-/* line 116, scss/event-list.scss */
+/* line 139, scss/event-list.scss */
 article h3 { margin-bottom: 0; font-size: 1.2em; }
-/* line 121, scss/event-list.scss */
+/* line 144, scss/event-list.scss */
 article .tribe-events-calendar-list__event { padding-left: 9%; display: flex; }
-/* line 126, scss/event-list.scss */
+/* line 149, scss/event-list.scss */
 article .tribe-events-calendar-list__event-date-tag, article .tribe-events-calendar-list__event-attributes-tag { width: 20%; display: flex; justify-content: flex-end; align-items: flex-start; }
-/* line 135, scss/event-list.scss */
+/* line 158, scss/event-list.scss */
 article .tribe-events-calendar-list__event-attributes-tag { font-size: 1.1em; justify-content: flex-start; align-items: flex-end; flex-direction: column; }
-/* line 141, scss/event-list.scss */
-article .tribe-events-calendar-list__event-attributes-tag .plek-review-icon, article .tribe-events-calendar-list__event-attributes-tag .plek-photo-icon, article .tribe-events-calendar-list__event-attributes-tag .plek-interview-icon { display: block; width: 1em; text-align: center; }
-/* line 151, scss/event-list.scss */
-article .tribe-events-calendar-list__event-featured-image-wrapper, article .tribe-events-calendar-list__event-image-wrapper { padding: 0 1em; width: 30%; text-align: center; }
-/* line 157, scss/event-list.scss */
-article .tribe-events-calendar-list__event-featured-image-wrapper img, article .tribe-events-calendar-list__event-image-wrapper img { padding: 0.5%; width: 100%; }
 /* line 164, scss/event-list.scss */
+article .tribe-events-calendar-list__event-attributes-tag .plek-review-icon, article .tribe-events-calendar-list__event-attributes-tag .plek-photo-icon, article .tribe-events-calendar-list__event-attributes-tag .plek-interview-icon { display: block; width: 1em; text-align: center; }
+/* line 174, scss/event-list.scss */
+article .tribe-events-calendar-list__event-featured-image-wrapper, article .tribe-events-calendar-list__event-image-wrapper { padding: 0 1em; width: 30%; text-align: center; }
+/* line 180, scss/event-list.scss */
+article .tribe-events-calendar-list__event-featured-image-wrapper img, article .tribe-events-calendar-list__event-image-wrapper img { padding: 0.5%; width: 100%; }
+/* line 187, scss/event-list.scss */
 article .tribe-events-calendar-list__event-details { align-self: center; width: 60%; }
 
-/* line 172, scss/event-list.scss */
+/* line 195, scss/event-list.scss */
 .banner-star-container { position: absolute; color: #FAAD2B; width: 70px; height: 70px; overflow: hidden; }
-/* line 179, scss/event-list.scss */
+/* line 202, scss/event-list.scss */
 .banner-star-container span.banner-star { display: block; background-color: #595959; transform: rotate(45deg); position: absolute; left: -11px; top: -48px; padding: 50px 10px 50px 20px; }
 
 /* Tribe Search Bar*/
-/* line 191, scss/event-list.scss */
+/* line 214, scss/event-list.scss */
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-c-view-selector--tabs .tribe-events-c-view-selector__list-item-link { padding: 0; }
 
-/* line 194, scss/event-list.scss */
+/* line 217, scss/event-list.scss */
 .tribe-events .tribe-events-c-events-bar__search-container { background-color: unset; }
 
-/* line 198, scss/event-list.scss */
+/* line 221, scss/event-list.scss */
 .tribe-common--breakpoint-medium.tribe-common .tribe-common-form-control-text__input { margin: 0; padding: 11px; }
 
-/* line 202, scss/event-list.scss */
+/* line 225, scss/event-list.scss */
 .tribe-events .tribe-events-c-view-selector__content { background-color: unset; }
-/* line 205, scss/event-list.scss */
+/* line 228, scss/event-list.scss */
 .tribe-events .tribe-events-c-view-selector__content i.add-event { margin-right: 0.5em; margin-top: -0.1em; }
 
-/* line 213, scss/event-list.scss */
+/* line 236, scss/event-list.scss */
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-c-view-selector--tabs .tribe-events-c-view-selector__list-item { background-color: white; margin: 12px 0px; padding: 0 1em; }
 
-/* line 219, scss/event-list.scss */
+/* line 242, scss/event-list.scss */
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-c-view-selector--tabs .tribe-events-c-view-selector__content { padding: 0; }
 
-/* line 223, scss/event-list.scss */
+/* line 246, scss/event-list.scss */
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-header__events-bar, .tribe-events-c-top-bar.tribe-events-header__top-bar { margin-bottom: 0; }
 
 /*
@@ -296,53 +308,53 @@ article .tribe-events-calendar-list__event-details { align-self: center; width: 
 
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-header--has-event-search .tribe-events-header__top-bar{ margin-top: -7px;
 }*/
-/* line 251, scss/event-list.scss */
+/* line 274, scss/event-list.scss */
 .tribe-events-c-top-bar__datepicker button, .tribe-common--breakpoint-medium.tribe-common .tribe-common-c-btn-border-small, .tribe-common--breakpoint-medium.tribe-common a.tribe-common-c-btn-border-small, .tribe-events .tribe-events-c-top-bar__nav-link { background-color: #595959; color: white; padding: 0.1em 0.5em 0em 0.5em; }
 
-/* line 258, scss/event-list.scss */
+/* line 281, scss/event-list.scss */
 .tribe-events .tribe-events-c-top-bar__nav-link { padding: 0.2em 0.5em; }
 
-/* line 262, scss/event-list.scss */
+/* line 285, scss/event-list.scss */
 .tribe-events-c-view-selector__button, .tribe-common-c-svgicon.tribe-common-c-svgicon--list.tribe-events-c-view-selector__button-icon-svg { background-color: #595959; color: white; }
 
-/* line 268, scss/event-list.scss */
+/* line 291, scss/event-list.scss */
 .tribe-events .tribe-events-c-events-bar__search-button { background-color: #595959; color: white; padding: 0.1em 0.3em 0em 0.3em; }
 
-/* line 274, scss/event-list.scss */
+/* line 297, scss/event-list.scss */
 .tribe-events .tribe-events-c-events-bar__search-button-icon-svg { width: 1em; }
 
-/* line 278, scss/event-list.scss */
+/* line 301, scss/event-list.scss */
 .tribe-events-calendar-list__event-date-tag-mobile { display: none; }
 
-/* line 282, scss/event-list.scss */
+/* line 305, scss/event-list.scss */
 .tribe-events .tribe-events-c-events-bar__search-container, .tribe-events .tribe-events-c-view-selector__content { background-color: #232323; }
 
-/* line 291, scss/event-list.scss */
+/* line 314, scss/event-list.scss */
 .plek-post-type-all_reviews .info-text-bar, .plek-post-type-reviews .info-text-bar, .plek-post-type-review-search .info-text-bar { width: 27%; margin-bottom: 2em; }
 
-/* line 298, scss/event-list.scss */
-article.plek-event-item-compact { display: flex; justify-content: flex-start; margin-bottom: 2em; }
-/* line 304, scss/event-list.scss */
-article.plek-event-item-compact .event-icons, article.plek-event-item-compact .event-akkredi-status { width: 2em; font-size: 1.4em; }
-/* line 310, scss/event-list.scss */
-article.plek-event-item-compact .poster { margin-right: 1em; align-self: center; width: 150px; }
-/* line 316, scss/event-list.scss */
-article.plek-event-item-compact .details { display: flex; flex-direction: column; justify-content: center; }
 /* line 321, scss/event-list.scss */
+article.plek-event-item-compact { display: flex; justify-content: flex-start; margin-bottom: 2em; }
+/* line 327, scss/event-list.scss */
+article.plek-event-item-compact .event-icons, article.plek-event-item-compact .event-akkredi-status { width: 2em; font-size: 1.4em; }
+/* line 333, scss/event-list.scss */
+article.plek-event-item-compact .poster { margin-right: 1em; align-self: center; width: 150px; }
+/* line 339, scss/event-list.scss */
+article.plek-event-item-compact .details { display: flex; flex-direction: column; justify-content: center; }
+/* line 344, scss/event-list.scss */
 article.plek-event-item-compact .details .date { color: #ffffffb6; }
-/* line 324, scss/event-list.scss */
+/* line 347, scss/event-list.scss */
 article.plek-event-item-compact .details .title { color: white; }
-/* line 329, scss/event-list.scss */
+/* line 352, scss/event-list.scss */
 article.plek-event-item-compact .event-icons { display: flex; flex-direction: column; text-align: center; justify-content: center; }
-/* line 335, scss/event-list.scss */
+/* line 358, scss/event-list.scss */
 article.plek-event-item-compact .event-icons .fas, article.plek-event-item-compact .event-icons .far { font-size: 0.8em; }
-/* line 342, scss/event-list.scss */
+/* line 365, scss/event-list.scss */
 article.plek-event-item-compact.plek-event-canceled img { opacity: 0.4; }
-/* line 348, scss/event-list.scss */
+/* line 371, scss/event-list.scss */
 article.plek-event-item-compact.plek-event-canceled .details .title, article.plek-event-item-compact.plek-event-canceled .details .date { text-decoration: line-through; }
-/* line 353, scss/event-list.scss */
+/* line 376, scss/event-list.scss */
 article.plek-event-item-compact.plek-event-canceled .details .title { text-decoration-color: #8C262E; }
-/* line 359, scss/event-list.scss */
+/* line 382, scss/event-list.scss */
 article.plek-event-item-compact .plek-message { font-size: 1em; padding: 0.4em; }
 
 /* line 5, scss/event-single.scss */
@@ -950,9 +962,8 @@ div.plek-review-search form button, div.plek-review-search form input { width: 1
   /* line 172, scss/breakpoints.scss */
   #post-27146 article.plek-event-type-tribe_events, #post-27146 article.plek-event-type-youtube { margin-left: 0; }
   /* line 177, scss/breakpoints.scss */
-  article.plek-event-type-youtube, article.plek-event-type-tribe_events { justify-content: space-between; flex-wrap: wrap; }
-  /* line 183, scss/breakpoints.scss */
-  article.plek-event-type-youtube .tribe-events-calendar-list__event-date-tag-datetime, article.plek-event-type-tribe_events .tribe-events-calendar-list__event-date-tag-datetime { display: none; }
+  article.plek-event-type-youtube, article.plek-event-type-tribe_events { justify-content: space-between; flex-wrap: wrap; /*.tribe-events-calendar-list__event-date-tag-datetime{ display: none;
+}*/ }
   /* line 186, scss/breakpoints.scss */
   article.plek-event-type-youtube .tribe-events-calendar-list__event-date-tag-datetime-mobile, article.plek-event-type-tribe_events .tribe-events-calendar-list__event-date-tag-datetime-mobile { display: block; }
   /* line 189, scss/breakpoints.scss */
