@@ -32,3 +32,12 @@ $backend_class -> check_plekvetica();
     submit_button(); 
     ?>
 </form>
+
+<h2>Plevetica Status</h2>
+<?php
+    if(PlekUserHandler::check_user_roles()){
+        echo __("User roles exists.");
+    }else{
+        echo __("Not all user roles exist!");
+    }
+?>

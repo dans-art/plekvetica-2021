@@ -124,4 +124,8 @@ class PlekHandler
         wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js',['jquery']);
         
     }
+
+    public function activate_plugin(){
+        PlekUserHandler::add_user_roles();
+    }
 }

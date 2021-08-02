@@ -19,9 +19,8 @@ class PlekEvents extends PlekEventHandler
     public function __construct()
     {
         $this->poster_placeholder = PLEK_PLUGIN_DIR_URL . "images/placeholder/event_poster.jpg";
-
     }
-    
+
     /**
      * Returns the previous loaded event
      * If no Event is loaded before, empty array will be returned.
@@ -53,7 +52,7 @@ class PlekEvents extends PlekEventHandler
  
         return $event_object;
     }*/
-/*
+    /*
     public function get_event_for_form_json(){
         return json_encode($this -> get_event_for_form());
     }
@@ -79,7 +78,7 @@ class PlekEvents extends PlekEventHandler
                 return apply_filters('the_content', $this->get_field_value($name)); //Apply shortcodes in the Content
                 break;
             case 'venue_short':
-                return tribe_get_venue($this-> get_field_value($name));
+                return tribe_get_venue($this->get_field_value($name));
                 break;
             case 'genres':
             case 'datetime':
@@ -113,7 +112,7 @@ class PlekEvents extends PlekEventHandler
                 return false;
             }
         }
-        $status_query = ($status === 'all')?"":"AND `posts`.`post_status` = '$status'";
+        $status_query = ($status === 'all') ? "" : "AND `posts`.`post_status` = '$status'";
         $query = "SELECT
         `posts`.`ID`, 
         `posts`.`post_author`,
@@ -193,7 +192,8 @@ class PlekEvents extends PlekEventHandler
      * @param string $to - date('Y-m-d H:i:s')
      * @return object Result form the database. 
      */
-    public function get_user_akkredi_event(string $user_login, string $from = '1970-01-01 00:00:00', string $to = '9999-01-01 00:00:00'){
+    public function get_user_akkredi_event(string $user_login, string $from = '1970-01-01 00:00:00', string $to = '9999-01-01 00:00:00')
+    {
         global $wpdb;
         $user = htmlspecialchars($user_login);
 
@@ -219,7 +219,8 @@ class PlekEvents extends PlekEventHandler
         return $posts;
     }
 
-    public function get_user_missing_review_events(string $user_login){
+    public function get_user_missing_review_events(string $user_login)
+    {
         global $wpdb;
         $user = htmlspecialchars($user_login);
 
@@ -321,7 +322,7 @@ class PlekEvents extends PlekEventHandler
                     $band['slug'] = $line->slug;
                     $band['link'] = $band_class->get_band_link($line->slug);
                     $band['bandpage'] = $line->slug;
-                    $band['flag'] = $band_class -> get_flag_formated('');
+                    $band['flag'] = $band_class->get_flag_formated('');
                     $band['videos'] = null;
                     $band['band_genre'] = null;
 
@@ -349,17 +350,17 @@ class PlekEvents extends PlekEventHandler
                     $this->event['bands'][$line->term_id] = $band;
                     break;
                     //Author
-                    case 'author':
-                        $user = array("name" => $line->name, 'display_name' => $line->display_name);
-                        $this->event['author'][$line->term_id] = $user;
-                        
-                        break;
-                        //Genres
-                        case 'tribe_events_cat':
-                            $this->event['genres'][$line->slug] = $line->name;
-                            break;
-                        }
-                    }
+                case 'author':
+                    $user = array("name" => $line->name, 'display_name' => $line->display_name);
+                    $this->event['author'][$line->term_id] = $user;
+
+                    break;
+                    //Genres
+                case 'tribe_events_cat':
+                    $this->event['genres'][$line->slug] = $line->name;
+                    break;
+            }
+        }
         return true;
     }
 
@@ -442,8 +443,8 @@ class PlekEvents extends PlekEventHandler
         $meta_query['is_review'] = array('key' => 'is_review', 'compare' => '=', 'value' => '1');
         $posts_per_page = tribe_get_option('postsPerPage');
         $page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
-        $offset =  $page * $posts_per_page;
-        $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page + 1), 'Load more', '_self', 'load_more_reviews', 'ajax-loader-button');
+        $offset = ($page > 1) ? ($page - 1) * $posts_per_page : 0;
+        $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page + 1), __('Weitere Reviews laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
 
         $events = tribe_get_events([
             'eventDisplay'   => 'custom',
@@ -457,6 +458,54 @@ class PlekEvents extends PlekEventHandler
             return __('Keine Reviews gefunden', 'pleklang');
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'all_reviews') . $load_more;
+    }
+
+    /**
+     * Shortcode Function
+     * Gets the all the Events with a raffle and which are in the future.
+     *
+     * @return string Formated HTML
+     */
+    public function plek_get_all_raffle_shortcode()
+    {
+        global $wpdb;
+        $meta_query = array();
+        $result_html = "";
+        $meta_query['win_url'] = array('key' => 'win_url', 'compare' => '!=', 'value' => '0');
+        $posts_per_page = (int) tribe_get_option('postsPerPage');
+        $page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
+        $offset =  ($page > 1) ? ($page - 1) * $posts_per_page : 0;
+        $load_more = '';
+
+        $from = date('Y-m-d H:i:s');
+        $to = '9999-01-01 00:00:00';
+
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title, meta.meta_value as win_url, startdate.meta_value as startdate
+            FROM `{$wpdb->prefix}postmeta` as meta
+            LEFT JOIN {$wpdb->prefix}posts as posts
+            ON posts.ID = meta.post_id
+            AND posts.post_type = 'tribe_events'
+            LEFT JOIN {$wpdb->prefix}postmeta as startdate
+            ON posts.ID = startdate.post_id
+            AND startdate.meta_key = '_EventStartDate'
+            WHERE meta.`meta_key` LIKE 'win_url'
+            AND meta.`meta_value` > ''
+            AND posts.ID IS NOT NULL
+            AND startdate.meta_value > '%s'
+            AND startdate.meta_value < '%s'
+            ORDER BY startdate.meta_value DESC
+            LIMIT %d OFFSET %d", $from, $to, $posts_per_page, $offset);
+        $posts = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        $total_pages = ($total_posts / $posts_per_page);
+
+        if($total_posts > $posts_per_page AND $page < $total_pages){
+            $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page + 1), __('Weitere Events laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
+        }
+        if (empty($posts)) {
+            return __('Keine Verlosungen gefunden', 'pleklang');
+        }
+        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $posts, 'raffle_events') . $load_more;
     }
 
     /**
@@ -475,36 +524,38 @@ class PlekEvents extends PlekEventHandler
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $vids, 'youtube');
     }
-    
-    public function plek_event_form_shortcode(){
+
+    public function plek_event_form_shortcode()
+    {
 
         global $plek_handler;
         $event = new PlekEvents;
-        $this -> enqueue_event_form_scripts();
-        $this -> enqueue_event_form_styles();
-        $plek_handler -> enqueue_toastr();
+        $this->enqueue_event_form_scripts();
+        $this->enqueue_event_form_styles();
+        $plek_handler->enqueue_toastr();
 
-        if(isset($_REQUEST['edit_event_id'])){
-            $event -> load_event($_REQUEST['edit_event_id']);
+        if (isset($_REQUEST['edit_event_id'])) {
+            $event->load_event($_REQUEST['edit_event_id']);
         }
-        
+
         return PlekTemplateHandler::load_template_to_var('add-event-form-basic', 'event/form', $event);
     }
-    
-    public function enqueue_event_form_styles(){
+
+    public function enqueue_event_form_styles()
+    {
         wp_enqueue_style('flatpickr-style', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr.min.css');
-        
     }
-    public function enqueue_event_form_scripts(){
+    public function enqueue_event_form_scripts()
+    {
         wp_enqueue_script('flatpickr-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9.js');
         wp_enqueue_script('flatpickr-de-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9-de.js');
-        
     }
 
-    public function promote_on_facebook(){
+    public function promote_on_facebook()
+    {
         $social = new plekSocialMedia();
-        $message = $this -> get_event_promo_text();
-        $url = $this -> get_poster_url();
-        return $social -> post_photo_to_facebook($message, $url);
+        $message = $this->get_event_promo_text();
+        $url = $this->get_poster_url();
+        return $social->post_photo_to_facebook($message, $url);
     }
 }

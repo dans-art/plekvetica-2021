@@ -287,6 +287,9 @@
     .info-text-banner{
         width: 100%;
     }
+    #tribe-events-pg-template .single-view .event-poster .info-text-banner:nth-child(3){
+        width: 92%;
+    }
 }
 
 @media (max-width: 400px){

@@ -4,7 +4,7 @@
  * Plugin Name: Plekvetica - 2021
  * Plugin URI: https://www.plekvetica.ch/
  * Description: Modifikationen und spezielle Funktionen für die Plekvetica Seite.
- * Version: 0.1
+ * Version: 1.0
  * Date: 2021-04-07
  * Author: Daniel Spycher
  * Author URI: https://www.dev.dans-art.ch/
@@ -13,8 +13,6 @@
  *       -  Change ACF "band_genre" callback to Array
  *       - Add Roles: communityuser / partner / band / organizer
  *  - Add LazyLoading for all images
- * - Add ACF: User: band_id, organizer_id
- * - Add ACF: Event: event_watchlist
  * - check if The Event Calendar, ACF is installed
  * - Fix Search page, add Youtube, Reviews, Band, Seperate by type.
  */
@@ -55,3 +53,6 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
 
  require_once(PLEK_PATH . 'include/filter-actions.php');
  require_once(PLEK_PATH . 'include/shortcodes.php');
+
+ //Activation of Plugin
+register_activation_hook( __FILE__, [$plek_handler,'activate_plugin'] );

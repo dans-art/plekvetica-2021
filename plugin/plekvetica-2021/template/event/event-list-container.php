@@ -32,6 +32,13 @@ $prev_month = null;
 						echo PlekTemplateHandler::load_template_to_var('event-list-item-youtube', 'event', $list_event);
 						break;
 
+					case 'raffle_events':
+						if(!isset($event-> ID)){
+							continue;
+						}
+						$list_event->load_event($event-> ID);
+						echo PlekTemplateHandler::load_template_to_var('event-list-item', 'event', $list_event);
+						break;
 					default:
 						$list_event->load_event_from_tribe_events($event);
 						echo PlekTemplateHandler::load_template_to_var('event-list-item', 'event', $list_event);

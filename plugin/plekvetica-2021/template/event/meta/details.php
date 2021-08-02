@@ -3,6 +3,8 @@ global $plek_event;
 $event = $plek_event->get_event();
 $price_boxoffice = $plek_event->get_price_boxoffice();
 $price_vvk = $plek_event->get_price_vvk();
+$is_raffle = $plek_event -> get_raffle();
+
 ?>
 <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Details', 'pleklang')); ?>
 <div class="meta-content">
@@ -31,6 +33,11 @@ $price_vvk = $plek_event->get_price_vvk();
       <span>
         <?php if ($plek_event->get_field_value('ticket-url')) {
           echo $plek_event->get_event_ticket_link();
+        } ?>
+      </span>
+      <span>
+        <?php if ($is_raffle) {
+          echo $plek_event -> get_raffle_link();
         } ?>
       </span>
     </dd>

@@ -16,6 +16,7 @@ $can_edit = current_user_can('edit_posts');
 $is_review = $plek_event->is_review();
 $is_canceled = $plek_event->is_canceled();
 $is_featured = $plek_event->is_featured();
+$event_raffle = $plek_event -> get_raffle();
 $plek_event_class = $plek_event->get_event_classes();
 
 if ($is_review) {
@@ -53,6 +54,9 @@ wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-sing
                 } ?>
                 <?php if (!$is_review AND $is_featured) {
                     PlekTemplateHandler::load_template('image-banner', 'components', __('Von uns empfohlen', 'pleklang'));
+                } ?>
+                <?php if ($event_raffle) {
+                    PlekTemplateHandler::load_template('image-banner', 'components', __('Ticketverlosung', 'pleklang'), $event_raffle ,array('plek-raffle') );
                 } ?>
             </div>
             <div class="event-title-container">

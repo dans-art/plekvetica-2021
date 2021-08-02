@@ -18,12 +18,23 @@
      }
   
      .event-links-container{
-  
-      img{
-        max-width: 4em;
-        max-height: 2em;
+
+       
+       img{
+         max-width: 4em;
+         max-height: 2em;
+        }
       }
-     }
+      
+      .event-details-links-container{
+        .fa-trophy{
+          color: $color-yellow;
+        }
+        
+        img{
+          margin: 0 0.5em 0 0;
+        }
+      }
   }
 
   .event-description,

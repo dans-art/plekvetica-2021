@@ -191,6 +191,15 @@
 
     .event-poster{
         text-align: center;
+
+        .info-text-banner:nth-child(3){
+            top: -42px;
+            width: 44%;
+        } 
+
+        .banner-text a{
+            color: $text-color;
+        }
     }
 
     .event-title-container{

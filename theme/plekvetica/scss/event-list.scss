@@ -40,6 +40,28 @@ article.tribe-events-calendar-list__event{
       }
     
     }
+
+    .tribe-events-calendar-list__event-image-link,
+    .tribe-events-calendar-list__event-featured-image-link{
+      .info-text-banner{
+        width: 100%;
+    
+        .banner-bg{
+          border-top: $color-red-strong solid 30px;
+          border-right: solid $color-red-strong 30px;
+        }
+        .banner-text{
+          color:$text-color;
+          font-size: 0.8em;
+          top: 27px;
+        }
+      }
+      .info-text-banner:nth-child(3){
+        top:-41px;
+        margin-left: 12%;
+        width: 88%;
+      }
+    }
 }
 
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event{
@@ -100,20 +122,6 @@ article.tribe-events-calendar-list__event{
 
    .tribe-events-calendar-list__event-date-tag .tribe-events-calendar-list__event-date-tag-datetime {
     background: $color-red-strong;
-}
-
-.tribe-events-calendar-list__event-featured-image-link{
-  .info-text-banner{
-    width: 100%;
-
-    .banner-bg{
-      border-top: $color-red-strong solid 30px;
-      border-right: solid $color-red-strong 30px;
-    }
-    .banner-text{
-      color:$text-color;
-    }
-  }
 }
 }
 

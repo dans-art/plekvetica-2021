@@ -16,7 +16,14 @@
  * @see tribe_get_event() For the format of the event object.
  */
 
-global $plek_event; 
+//global $plek_event; 
+
+if(!class_exists('PlekEvents')){
+	return;
+}
+$plek_event = new PlekEvents;
+$plek_event -> load_event_from_tribe_events($event);
+
 
 if ( ! $event->thumbnail->exists ) { ?>
     <div class="tribe-events-calendar-list__event-featured-image-wrapper tribe-common-g-col plek-missing-poster">
@@ -48,7 +55,11 @@ if ( ! $event->thumbnail->exists ) { ?>
 		/>
 	<?php if ($event->featured) {
 		PlekTemplateHandler::load_template('image-banner', 'components', __('Von uns empfohlen', 'pleklang'));
-	} 
+	}
+	?>
+	<?php if ($plek_event-> get_raffle()) {
+		PlekTemplateHandler::load_template('image-banner', 'components', __('Ticketverlosung', 'pleklang'));
+	}
 	?>
 	</a>
 </div>

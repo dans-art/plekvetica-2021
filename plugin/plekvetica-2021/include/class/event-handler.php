@@ -521,6 +521,19 @@ class PlekEventHandler
         return $mod_date;
     }
 
+    /**
+     * Gets the Raffle Link of the Event
+     *
+     * @return string HTML Link element
+     */
+    public function get_raffle_link()
+    {
+        $link = $this->get_field_value('win_url');
+        $title =  __('Link zur Verlosung', 'pleklang');
+        $icon = 'fas fa-trophy';
+        return "<a href='$link' title='$title' target='_blank'><i class='$icon'></i></a>";
+    }
+
     public function get_event_link()
     {
         $link = $this->get_field_value('_EventURL');
@@ -634,6 +647,27 @@ class PlekEventHandler
                 return false;
                 break;
         }
+    }
+
+    /**
+     * Returns the url of a event with a raffle.
+     * If Event is in the past, this function returns always false.
+     *
+     * @return mixed Url if exists, else false.
+     */
+    public function get_raffle(){
+        //Check if event is set in the future.
+        if($this -> get_end_date('YmdHi') > date('YmdHi')){
+            $raffle_url = $this->get_field_value('win_url');
+            if(!empty($raffle_url)){
+                return $raffle_url;
+            }
+            else{
+                return false;
+            }
+        }
+        return false; //No Raffle or past event
+        
     }
 
     public function prepare_status_code(string $status_code)

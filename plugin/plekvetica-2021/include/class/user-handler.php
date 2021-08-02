@@ -3,7 +3,8 @@
 class PlekUserHandler
 {
 
-    protected static $team_roles = array('administrator', 'plekmanager', 'cutter', 'eventmanager','interviewer','photographer','reviewwriter','videograph'); //All the possible roles of the team members
+    protected static $team_roles = array('administrator', 'plekmanager', 'cutter', 'eventmanager', 'interviewer', 'photographer', 'reviewwriter', 'videograph'); //All the possible roles of the team members
+    protected static $plek_custom_roles = array('plek-partner' => 'Partner','plek-community' => 'Community','plek-band' => 'Band','plek-organi' => 'Organizer');
     /**
      * Checks if the current unser is allowed to edit this post.
      *
@@ -25,15 +26,16 @@ class PlekUserHandler
      *
      * @return void
      */
-    public function disable_admin(){
+    public function disable_admin()
+    {
         $user = wp_get_current_user();
-        if(!current_user_can('administrator') AND !current_user_can('plekmanager') AND !self::user_is_in_team($user)){
+        if (!current_user_can('administrator') and !current_user_can('plekmanager') and !self::user_is_in_team($user)) {
             //Disable the admin bar, if user is not admin or manager
             show_admin_bar(false);
             //Redirect to home page, if user tries to access the backend
-            if ( is_admin()  AND !( defined( 'DOING_AJAX' ) AND DOING_AJAX ) ) {
-                wp_redirect( home_url() );
-            exit;
+            if (is_admin()  and !(defined('DOING_AJAX') and DOING_AJAX)) {
+                wp_redirect(home_url());
+                exit;
             }
         }
     }
@@ -62,7 +64,7 @@ class PlekUserHandler
             $current_user_id = $user->ID;
             if (isset($authors[$current_user_id])) {
                 return true;
-            }else{
+            } else {
                 //@todo: Check if user is organizer or bandmember of this event. If so, return true
                 //Get Event organi Ids and band ids. Compare with ID set in user settings
 
@@ -74,7 +76,7 @@ class PlekUserHandler
             return true;
         }
         //if user has editing capabilities
-        if (self::user_can($user,'edit_tribe_events')) {
+        if (self::user_can($user, 'edit_tribe_events')) {
             return true;
         }
         return false;
@@ -87,8 +89,9 @@ class PlekUserHandler
      * @param string $capability - Name of the capability
      * @return bool - True if user can, otherwise false
      */
-    public static function user_can(object $user, string $capability ){
-        if(isset($user -> allcaps[$capability]) AND $user -> allcaps[$capability] === true){
+    public static function user_can(object $user, string $capability)
+    {
+        if (isset($user->allcaps[$capability]) and $user->allcaps[$capability] === true) {
             return true;
         }
         return false;
@@ -150,7 +153,7 @@ class PlekUserHandler
         $user = wp_get_current_user();
         $post_id = (!$post_id) ? get_the_ID() : $post_id;
         $current_crew =  get_field("akkreditiert", $post_id);
-        
+
         if ($current_crew !== null and array_search($user->user_login, $current_crew) !== false) {
             return true;
         }
@@ -206,5 +209,60 @@ class PlekUserHandler
     {
         $user = get_user_by('login', $login_name);
         return (isset($user->display_name)) ? $user->display_name : $login_name;
+    }
+
+    /**
+     * Adds the custom roles to WP
+     *
+     * @return void
+     */
+    public static function add_user_roles()
+    {
+        $added_role = array();
+        //    protected static $plek_custom_roles = array('plek-partner' => 'Partner','plek-community' => 'Community','plek-band' => 'Band','plek-organi' => 'Organizer');
+        if(!self::check_user_roles('plek-partner')){
+            if(add_role('plek-partner',__('Partner','plek'), array('edit_tribe_organizers' => true,'edit_tribe_events' => true))){
+                $added_role[] = "Partner";
+            }
+        }
+        if(!self::check_user_roles('plek-community')){
+            if(add_role('plek-community',__('Community','plek'), array('edit_tribe_organizers' => true,'edit_tribe_events' => true))){
+                $added_role[] = "Community";
+            }
+        }
+        if(!self::check_user_roles('plek-band')){
+            if(add_role('plek-band',__('Band','plek'), array('edit_tribe_organizers' => true,'edit_tribe_events' => true))){
+                $added_role[] = "Band";
+            }
+        }
+        if(!self::check_user_roles('plek-organi')){
+            if(add_role('plek-organi',__('Veranstalter','plek'), array('edit_tribe_organizers' => true,'edit_tribe_events' => true))){
+                $added_role[] = "Veranstalter";
+            }
+        }
+        if(!empty($added_role)){
+            apply_filters('simple_history_log', 'Plekvetica Roles added: '.implode(', ',$added_role));
+        }
+    }
+
+    /**
+     * Check if roles exist.
+     *
+     * @param [type] $rolename
+     * @return void
+     */
+    public static function check_user_roles($rolename = null)
+    {
+        if(!empty($rolename)){
+            return wp_roles()->is_role($rolename);
+        }
+
+        $roles = self::$plek_custom_roles;
+        foreach($roles AS $rolename => $nicename){
+            if(!wp_roles()->is_role($rolename)){
+                return false;
+            }
+        }
+        return true;
     }
 }
