@@ -5,10 +5,9 @@
  * @todo Fire only on event list / month view. Not Single Events!
  */
 add_filter('tribe_get_event', [$plek_event,'plek_tribe_add_terms'], 10, 1);
-add_filter('tribe_events_pro_pre_get_posts', function($event){
-    s($event);
+/*add_filter('tribe_events_pro_pre_get_posts', function($event){
     return $event;
-}, 10, 1);
+}, 10, 1);*/
 
 //Deactivate the Block editor
 //add_filter('use_block_editor_for_post_type', [$plek_handler, 'plek_disable_gutenberg'], 10, 2);
