@@ -33,11 +33,10 @@ $prev_month = null;
 						break;
 
 					case 'raffle_events':
-						if(!isset($event-> ID)){
-							continue;
+						if(isset($event-> ID)){
+							$list_event->load_event($event-> ID);
+							echo PlekTemplateHandler::load_template_to_var('event-list-item', 'event', $list_event);
 						}
-						$list_event->load_event($event-> ID);
-						echo PlekTemplateHandler::load_template_to_var('event-list-item', 'event', $list_event);
 						break;
 					default:
 						$list_event->load_event_from_tribe_events($event);
