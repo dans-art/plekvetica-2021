@@ -4,7 +4,7 @@ class PlekUserHandler
 {
 
     protected static $team_roles = array('administrator', 'plekmanager', 'cutter', 'eventmanager', 'interviewer', 'photographer', 'reviewwriter', 'videograph'); //All the possible roles of the team members
-    protected static $plek_custom_roles = array('plek-partner' => 'Partner','plek-community' => 'Community','plek-band' => 'Band','plek-organi' => 'Organizer');
+    protected static $plek_custom_roles = array('plek-partner' => 'Partner', 'plek-community' => 'Community', 'plek-band' => 'Band', 'plek-organi' => 'Organizer');
     /**
      * Checks if the current unser is allowed to edit this post.
      *
@@ -160,21 +160,76 @@ class PlekUserHandler
         return false;
     }
 
+    /**
+     * Adds all the ACF Meta Fields to the user object.
+     *
+     * @param object $user - WP_User object
+     * @return object - The modified WP_User Object
+     */
+    public static function load_user_meta(object $user){
+        $meta = get_fields("user_{$user -> ID}");
+        if(!empty($meta)){
+            $user -> meta = $meta;
+            return $user;
+        }
+        return $user;
+    }
+
     public static function user_is_organizer(object $user = null)
     {
-        return self::search_role('organizer', $user);
+        return self::search_role('plek-organi', $user);
     }
 
     public static function user_is_community(object $user = null)
     {
-        return self::search_role('community', $user);
+        return self::search_role('plek-community', $user);
     }
 
     public static function user_is_band(object $user = null)
     {
-        return self::search_role('band', $user);
+        return self::search_role('plek-band', $user);
     }
 
+    public static function user_is_partner(object $user = null)
+    {
+        return self::search_role('plek-partner', $user);
+    }
+
+    public static function check_user_setup($rolename)
+    {
+        switch ($rolename) {
+            case 'plek-organi':
+                echo (empty(self::get_user_setting('organizer_id'))) ? __('Fehler: Keine Veranstalter ID festgelegt.', 'pleklang') : '';
+                return;
+                break;
+
+            default:
+                return __('Role not found in setup function.', 'pleklang');
+                break;
+        }
+    }
+
+    /**
+     * Returns the current user id
+     *
+     * @return int Id of the logged in user
+     */
+    public static function get_user_id(){
+            return get_current_user_id();
+    }
+
+    /**
+     * Get the current user role
+     *
+     * @return string User role or null, if not found.
+     */
+    public static function get_user_role(){
+        $user = wp_get_current_user();
+        if(isset($user -> roles[0])){
+            return $user -> roles[0];
+        }
+        return null;
+    }
     /**
      * Search for a specific role.
      *
@@ -212,6 +267,21 @@ class PlekUserHandler
     }
 
     /**
+     * Get a ACF user setting. 
+     *
+     * @param string $name - Name of the ACF setting
+     * @param string $id - ID of the user. Null === current user
+     * @return string - The value of $name
+     */
+    public static function get_user_setting($name = null, $id = null)
+    {
+        if ($id === null) {
+            $id = (string) wp_get_current_user()->ID;
+        }
+        return get_field($name, "user_{$id}");
+    }
+
+    /**
      * Adds the custom roles to WP
      *
      * @return void
@@ -220,28 +290,28 @@ class PlekUserHandler
     {
         $added_role = array();
         //    protected static $plek_custom_roles = array('plek-partner' => 'Partner','plek-community' => 'Community','plek-band' => 'Band','plek-organi' => 'Organizer');
-        if(!self::check_user_roles('plek-partner')){
-            if(add_role('plek-partner',__('Partner','plek'), array('edit_tribe_organizers' => true,'edit_tribe_events' => true))){
+        if (!self::check_user_roles('plek-partner')) {
+            if (add_role('plek-partner', __('Partner', 'plek'), array('edit_tribe_organizers' => true, 'edit_tribe_events' => true))) {
                 $added_role[] = "Partner";
             }
         }
-        if(!self::check_user_roles('plek-community')){
-            if(add_role('plek-community',__('Community','plek'), array('edit_tribe_organizers' => true,'edit_tribe_events' => true))){
+        if (!self::check_user_roles('plek-community')) {
+            if (add_role('plek-community', __('Community', 'plek'), array('edit_tribe_organizers' => true, 'edit_tribe_events' => true))) {
                 $added_role[] = "Community";
             }
         }
-        if(!self::check_user_roles('plek-band')){
-            if(add_role('plek-band',__('Band','plek'), array('edit_tribe_organizers' => true,'edit_tribe_events' => true))){
+        if (!self::check_user_roles('plek-band')) {
+            if (add_role('plek-band', __('Band', 'plek'), array('edit_tribe_organizers' => true, 'edit_tribe_events' => true))) {
                 $added_role[] = "Band";
             }
         }
-        if(!self::check_user_roles('plek-organi')){
-            if(add_role('plek-organi',__('Veranstalter','plek'), array('edit_tribe_organizers' => true,'edit_tribe_events' => true))){
+        if (!self::check_user_roles('plek-organi')) {
+            if (add_role('plek-organi', __('Veranstalter', 'plek'), array('edit_tribe_organizers' => true, 'edit_tribe_events' => true))) {
                 $added_role[] = "Veranstalter";
             }
         }
-        if(!empty($added_role)){
-            apply_filters('simple_history_log', 'Plekvetica Roles added: '.implode(', ',$added_role));
+        if (!empty($added_role)) {
+            apply_filters('simple_history_log', 'Plekvetica Roles added: ' . implode(', ', $added_role));
         }
     }
 
@@ -253,13 +323,13 @@ class PlekUserHandler
      */
     public static function check_user_roles($rolename = null)
     {
-        if(!empty($rolename)){
+        if (!empty($rolename)) {
             return wp_roles()->is_role($rolename);
         }
 
         $roles = self::$plek_custom_roles;
-        foreach($roles AS $rolename => $nicename){
-            if(!wp_roles()->is_role($rolename)){
+        foreach ($roles as $rolename => $nicename) {
+            if (!wp_roles()->is_role($rolename)) {
                 return false;
             }
         }

@@ -21,6 +21,7 @@ $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user 
 /**
  * @todo Add Partner page
  */
+
 if (PlekUserHandler::user_is_in_team()) {
     PlekTemplateHandler::load_template('team-page', 'system/userpage', $user);
 } elseif (PlekUserHandler::user_is_organizer()) {
@@ -29,6 +30,8 @@ if (PlekUserHandler::user_is_in_team()) {
     PlekTemplateHandler::load_template('community-page', 'system/userpage', $user);
 } elseif (PlekUserHandler::user_is_band()) {
     PlekTemplateHandler::load_template('band-page', 'system/userpage', $user);
+} elseif (PlekUserHandler::user_is_partner()) {
+    PlekTemplateHandler::load_template('partner-page', 'system/userpage', $user);
 }
 
 ?>

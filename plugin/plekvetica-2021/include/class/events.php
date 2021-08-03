@@ -196,9 +196,64 @@ class PlekEvents extends PlekEventHandler
     {
         global $wpdb;
         $user = htmlspecialchars($user_login);
+        $page_obj = $this -> get_pages_object();
 
         $wild = '%';
         $like = $wild . $wpdb->esc_like($user_login) . $wild;
+
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS meta.meta_value as akk_team, posts.ID, posts.post_title , status.meta_value as akk_status, startdate.meta_value as startdate
+            FROM `{$wpdb->prefix}postmeta` as meta
+            LEFT JOIN {$wpdb->prefix}posts as posts
+            ON posts.ID = meta.post_id AND posts.post_type = 'tribe_events'
+            LEFT JOIN {$wpdb->prefix}postmeta as status
+            ON posts.ID = status.post_id AND status.meta_key = 'akk_status'
+            LEFT JOIN {$wpdb->prefix}postmeta as startdate
+            ON posts.ID = startdate.post_id AND startdate.meta_key = '_EventStartDate'
+            WHERE meta.`meta_key` LIKE 'akkreditiert'
+            AND meta.`meta_value` LIKE '%s'
+            AND posts.ID IS NOT NULL
+            AND startdate.meta_value > '%s'
+            AND startdate.meta_value < '%s'
+            ORDER BY startdate.meta_value DESC", $like, $from, $to);
+        $posts = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        //$total_pages = ($total_posts / $posts_per_page);
+
+        return $posts;
+    }
+
+    public function get_user_events(string $from = '1970-01-01 00:00:00', string $to = '9999-01-01 00:00:00')
+    {
+        
+        $user_role = PlekUserHandler::get_user_role();
+        switch ($user_role) {
+            case 'plek-organi':
+                return $this -> get_events_of_organizer($from, $to);
+                break;
+            
+            default:
+                return null;
+                break;
+        }
+ 
+    }
+
+    public function get_events_of_organizer($from, $to){
+       global $wpdb;
+       $user_id = PlekUserHandler::get_user_id();
+       $organizer_id = PlekUserHandler::get_user_setting('organizer_id');
+
+       $pages = $this -> get_pages_object();
+       /*
+       $posts_per_page = (int) tribe_get_option('postsPerPage');
+       $page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
+       $offset =  ($page > 1) ? ($page - 1) * $posts_per_page : 0;
+        */
+        $wild = '%';
+        $like = $wild . $wpdb->esc_like($user_login) . $wild;
+
+       s($organizer_id);
+        /*
 
         $query = $wpdb->prepare("SELECT meta.meta_value as akk_team, posts.ID, posts.post_title , status.meta_value as akk_status, startdate.meta_value as startdate
             FROM `{$wpdb->prefix}postmeta` as meta
@@ -216,7 +271,7 @@ class PlekEvents extends PlekEventHandler
             ORDER BY startdate.meta_value DESC", $like, $from, $to);
         $posts = $wpdb->get_results($query);
 
-        return $posts;
+        return $posts;*/
     }
 
     public function get_user_missing_review_events(string $user_login)
@@ -458,6 +513,22 @@ class PlekEvents extends PlekEventHandler
             return __('Keine Reviews gefunden', 'pleklang');
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'all_reviews') . $load_more;
+    }
+
+    /**
+     * Get the standard pages object.
+     * -> posts_per_page - from tribe options
+     * -> page - the current page as set in the query
+     * -> offset - the offset for the sql request
+     *
+     * @return object - Pages object
+     */
+    public function get_pages_object(){
+        $page_obj = new stdClass();
+        $page_obj -> posts_per_page = (int) tribe_get_option('postsPerPage');
+        $page_obj -> page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
+        $page_obj -> offset =  ($page_obj -> page > 1) ? ($page_obj -> page - 1) * $page_obj -> posts_per_page : 0;
+        return $page_obj;
     }
 
     /**
