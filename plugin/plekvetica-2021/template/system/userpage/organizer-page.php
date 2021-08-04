@@ -7,6 +7,7 @@ $user = PlekUserHandler::load_user_meta($user);
 $organi_id = $user->meta->organizer_id ?: null;
 
 $all_posts =  $plek_event -> get_user_events();
+$total_posts = "Get his from the plek_event class. Save total count before.";
 //$this_week =  $plek_event -> get_user_akkredi_event($user -> user_login, $today, $next_week);
 
 ?>

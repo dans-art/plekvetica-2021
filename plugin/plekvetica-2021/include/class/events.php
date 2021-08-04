@@ -11,6 +11,7 @@ class PlekEvents extends PlekEventHandler
     public string $poster_size = 'big';
     public string $poster_placeholder = '';
     public string $default_event_currency = 'CHF';
+    public array $total_posts = array();
 
     protected $errors = array();
 
@@ -214,10 +215,11 @@ class PlekEvents extends PlekEventHandler
             AND posts.ID IS NOT NULL
             AND startdate.meta_value > '%s'
             AND startdate.meta_value < '%s'
-            ORDER BY startdate.meta_value DESC", $like, $from, $to);
+            ORDER BY startdate.meta_value DESC
+            LIMIT %d OFFSET %d", $like, $from, $to, $page_obj -> posts_per_page, $page_obj -> offset);
         $posts = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
-        //$total_pages = ($total_posts / $posts_per_page);
+        $this -> total_posts['get_user_akkredi_event'] = $total_posts;
 
         return $posts;
     }
@@ -237,11 +239,19 @@ class PlekEvents extends PlekEventHandler
         }
  
     }
-
+    /**
+     * Get all the posts from the user with organizer role.
+     * This is only working, when the logged in user has the role "plek-organi"
+     * @todo: Search for author Posts as well
+     *
+     * @param [type] $from
+     * @param [type] $to
+     * @return void
+     */
     public function get_events_of_organizer($from, $to){
        global $wpdb;
        $user_id = PlekUserHandler::get_user_id();
-       $organizer_id = PlekUserHandler::get_user_setting('organizer_id');
+       $organizer_id = (int) PlekUserHandler::get_user_setting('organizer_id');
 
        $pages = $this -> get_pages_object();
        /*
@@ -249,29 +259,54 @@ class PlekEvents extends PlekEventHandler
        $page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
        $offset =  ($page > 1) ? ($page - 1) * $posts_per_page : 0;
         */
-        $wild = '%';
-        $like = $wild . $wpdb->esc_like($user_login) . $wild;
+        //$wild = '%';
+        //$like = $wild . $wpdb->esc_like($user_login) . $wild;
+        $page_obj = $this -> get_pages_object();
 
-       s($organizer_id);
-        /*
+        /*$query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS {$wpdb->prefix}posts.ID, {$wpdb->prefix}posts.post_title, CAST( orderby_event_date_meta.meta_value AS DATETIME ) AS event_date
+        FROM {$wpdb->prefix}posts
+        LEFT JOIN {$wpdb->prefix}postmeta
+        ON ( {$wpdb->prefix}posts.ID = {$wpdb->prefix}postmeta.post_id
+        AND {$wpdb->prefix}postmeta.meta_key = '_EventHideFromUpcoming' )
 
-        $query = $wpdb->prepare("SELECT meta.meta_value as akk_team, posts.ID, posts.post_title , status.meta_value as akk_status, startdate.meta_value as startdate
-            FROM `{$wpdb->prefix}postmeta` as meta
-            LEFT JOIN {$wpdb->prefix}posts as posts
-            ON posts.ID = meta.post_id AND posts.post_type = 'tribe_events'
-            LEFT JOIN {$wpdb->prefix}postmeta as status
-            ON posts.ID = status.post_id AND status.meta_key = 'akk_status'
-            LEFT JOIN {$wpdb->prefix}postmeta as startdate
-            ON posts.ID = startdate.post_id AND startdate.meta_key = '_EventStartDate'
-            WHERE meta.`meta_key` LIKE 'akkreditiert'
-            AND meta.`meta_value` LIKE '%s'
-            AND posts.ID IS NOT NULL
-            AND startdate.meta_value > '%s'
-            AND startdate.meta_value < '%s'
-            ORDER BY startdate.meta_value DESC", $like, $from, $to);
-        $posts = $wpdb->get_results($query);
+        LEFT JOIN {$wpdb->prefix}postmeta AS mt1
+        ON ( {$wpdb->prefix}posts.ID = mt1.post_id )
 
-        return $posts;*/
+        LEFT JOIN {$wpdb->prefix}postmeta AS mt2
+        ON ( {$wpdb->prefix}posts.ID = mt2.post_id )
+
+        LEFT JOIN {$wpdb->prefix}postmeta AS orderby_event_date_meta
+        ON ( orderby_event_date_meta.post_id = {$wpdb->prefix}posts.ID
+        AND orderby_event_date_meta.meta_key = '_EventStartDate' )
+
+        WHERE 1=1
+        AND ( {$wpdb->prefix}postmeta.post_id IS NULL
+        AND ( mt2.meta_key = '_EventOrganizerID' AND mt2.meta_value = '{$organizer_id}' ) )
+
+        AND {$wpdb->prefix}posts.post_type = 'tribe_events'
+        AND (({$wpdb->prefix}posts.post_status = 'publish' OR {$wpdb->prefix}posts.post_status = 'private'))
+
+        GROUP BY {$wpdb->prefix}posts.ID
+        ORDER BY event_date DESC, {$wpdb->prefix}posts.post_date DESC
+        LIMIT %d OFFSET %d",
+        $page_obj -> posts_per_page, $page_obj -> offset);*/
+
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS plek_posts.ID, plek_posts.post_title , date.meta_value, organi.meta_value
+        FROM `plek_posts` 
+        LEFT JOIN plek_postmeta as date
+        ON ( date.post_id = plek_posts.ID AND date.meta_key = '_EventStartDate' )
+        LEFT JOIN plek_postmeta as organi
+        ON ( organi.post_id = plek_posts.ID AND organi.meta_key = '_EventOrganizerID' )
+        WHERE 
+        (post_author = %d OR organi.meta_value = %d) 
+        AND post_type = 'tribe_events'
+        ORDER BY date.meta_value DESC
+        LIMIT %d OFFSET %d",
+        $user_id, $organizer_id, $page_obj -> posts_per_page, $page_obj -> offset);
+      $events = $wpdb->get_results($query);
+      $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+      s($total_posts);
+        return $events;
     }
 
     public function get_user_missing_review_events(string $user_login)
@@ -494,25 +529,57 @@ class PlekEvents extends PlekEventHandler
         if (PlekSearchHandler::is_review_search()) {
             return null;
         }
-        $meta_query = array();
-        $meta_query['is_review'] = array('key' => 'is_review', 'compare' => '=', 'value' => '1');
-        $posts_per_page = tribe_get_option('postsPerPage');
-        $page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
-        $offset = ($page > 1) ? ($page - 1) * $posts_per_page : 0;
-        $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page + 1), __('Weitere Reviews laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
+        $page_obj = $this -> get_pages_object();
+        $date = date('Y-m-d H:i:s');
+        $load_more = '';
 
-        $events = tribe_get_events([
+        /*$events = tribe_get_events([
             'eventDisplay'   => 'custom',
             'end_date'     => 'now',
-            'posts_per_page' => $posts_per_page,
-            'offset' => $offset,
+            'posts_per_page' => $page_obj -> posts_per_page,
+            'offset' => $page_obj -> offset,
             'order'       => 'DESC',
             'meta_query' => $meta_query
-        ]);
+        ]);*/
+
+        global $wpdb;
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS {$wpdb->prefix}posts.*, CAST( orderby_event_date_meta.meta_value AS DATETIME ) AS event_date
+        FROM {$wpdb->prefix}posts
+        LEFT JOIN {$wpdb->prefix}postmeta
+        ON ( {$wpdb->prefix}posts.ID = {$wpdb->prefix}postmeta.post_id
+        AND {$wpdb->prefix}postmeta.meta_key = '_EventHideFromUpcoming' )
+        LEFT JOIN {$wpdb->prefix}postmeta AS mt1
+        ON ( {$wpdb->prefix}posts.ID = mt1.post_id )
+        LEFT JOIN {$wpdb->prefix}postmeta AS mt2
+        ON ( {$wpdb->prefix}posts.ID = mt2.post_id )
+        LEFT JOIN {$wpdb->prefix}postmeta AS orderby_event_date_meta
+        ON ( orderby_event_date_meta.post_id = {$wpdb->prefix}posts.ID
+        AND orderby_event_date_meta.meta_key = '_EventStartDate' )
+        WHERE 1=1
+        AND ( {$wpdb->prefix}postmeta.post_id IS NULL
+        AND ( mt1.meta_key = '_EventEndDate'
+        AND CAST(mt1.meta_value AS DATETIME) <= '{$date}' )
+        AND ( mt2.meta_key = 'is_review'
+        AND mt2.meta_value = '1' ) )
+        AND {$wpdb->prefix}posts.post_type = 'tribe_events'
+        AND (({$wpdb->prefix}posts.post_status = 'publish'
+        OR {$wpdb->prefix}posts.post_status = 'private'))
+        GROUP BY {$wpdb->prefix}posts.ID
+        ORDER BY event_date DESC, {$wpdb->prefix}posts.post_date DESC
+        LIMIT %d OFFSET %d",$page_obj -> posts_per_page, $page_obj -> offset);
+
+        $events = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+ 
+        if($this -> display_more_events_button($total_posts)){
+            $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj -> page + 1), __('Weitere Reviews laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
+        }
         if (empty($events)) {
             return __('Keine Reviews gefunden', 'pleklang');
         }
-        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'all_reviews') . $load_more;
+        $to_posts = (($page_obj -> offset + $page_obj -> posts_per_page) <= $total_posts) ? ($page_obj -> offset + $page_obj -> posts_per_page) : $total_posts;
+        $total_posts_text = '<div class="total_posts">'.sprintf(__('Zeige Events %d bis %d von %d','pleklang'),$page_obj -> offset + 1, $to_posts, $total_posts).'</div>';
+        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'all_reviews') . $total_posts_text . $load_more;
     }
 
     /**
@@ -568,9 +635,8 @@ class PlekEvents extends PlekEventHandler
             LIMIT %d OFFSET %d", $from, $to, $posts_per_page, $offset);
         $posts = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
-        $total_pages = ($total_posts / $posts_per_page);
 
-        if($total_posts > $posts_per_page AND $page < $total_pages){
+        if($this -> display_more_events_button($total_posts)){
             $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page + 1), __('Weitere Events laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
         }
         if (empty($posts)) {
@@ -628,5 +694,22 @@ class PlekEvents extends PlekEventHandler
         $message = $this->get_event_promo_text();
         $url = $this->get_poster_url();
         return $social->post_photo_to_facebook($message, $url);
+    }
+
+    /**
+     * Checks if there are more pages to show or not.
+     *
+     * @param integer/string $total_posts - Total amount of posts
+     * @return bool True, if there are more pages to shown, otherwise false.
+     */
+    public function display_more_events_button($total_posts = 0){
+        $total_posts = (int) $total_posts;
+
+        $page_obj = $this -> get_pages_object();
+        $total_pages = ($total_posts / $page_obj -> posts_per_page);
+        if($total_posts > $page_obj -> posts_per_page AND $page_obj -> page < $total_pages){
+            return true;
+        }
+        return false;
     }
 }

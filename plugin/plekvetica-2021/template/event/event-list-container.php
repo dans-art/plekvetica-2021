@@ -18,7 +18,7 @@ $prev_month = null;
 						echo PlekTemplateHandler::load_template_to_var('event-list-item-review', 'event', $list_event);
 						break;
 					case 'all_reviews':
-						$list_event->load_event_from_tribe_events($event);
+						$list_event->load_event($event -> ID);
 						$current_month = $list_event->get_start_date('F Y');
 						//Display Month seperator, if post is in new month.
 						if (!$prev_month or $prev_month !== $current_month) {
