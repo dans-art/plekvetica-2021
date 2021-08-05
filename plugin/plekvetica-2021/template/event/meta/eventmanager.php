@@ -17,8 +17,13 @@ $is_canceled = $plek_event->is_canceled();
 <div>
     <?php
     //Edit Event Button
-    if (PlekUserHandler::current_user_can_edit($event_id) and !$plek_event->is_past_event()) : ?>
+    if (PlekUserHandler::user_can_edit_post($plek_event) and !$plek_event->is_past_event()) : ?>
         <a name="editEvent" class="plek-button" href="<?php echo get_permalink($event_edit_page_id); ?>?edit=<?php echo $event_id; ?>">Event Bearbeiten</a>
+    <?php endif; ?>
+    <?php
+    //Show notice if not team event, review and user is allowed to edit
+    if (PlekUserHandler::user_can_edit_post($plek_event) and $plek_event->is_review() and !PlekUserHandler::user_is_in_team()) : ?>
+        <?php echo __('Dieser Beitrag kann nicht mehr bearbeitet werden, da schon ein Review existiert.','pleklang'); ?>
     <?php endif; ?>
     <?php
     //Accreditation add Button

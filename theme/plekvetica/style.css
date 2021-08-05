@@ -564,55 +564,59 @@ ul.partner-container .wp-block-latest-posts__featured-image.alignleft { margin: 
 /* line 279, scss/pages-style.scss */
 .my-plek-container .my-plek-head-container { display: flex; justify-content: space-between; flex-wrap: wrap; }
 /* line 284, scss/pages-style.scss */
-.my-plek-container .my-plek-head-container .this-week-posts, .my-plek-container .my-plek-head-container .missing-reviews-posts { flex-basis: 49%; flex-grow: 1; }
-/* line 290, scss/pages-style.scss */
-.my-plek-container .info-text-bar { width: 100%; }
+.my-plek-container .my-plek-head-container .this-week-posts, .my-plek-container .my-plek-head-container .missing-reviews-posts, .my-plek-container .my-plek-head-container .organizer-data { flex-basis: 49%; flex-grow: 1; }
+/* line 291, scss/pages-style.scss */
+.my-plek-container .my-plek-head-container .organizer-data dd { margin: 0 1.5em 0.5em; }
 /* line 294, scss/pages-style.scss */
+.my-plek-container .my-plek-head-container .organizer-data .info { color: #595959; }
+/* line 299, scss/pages-style.scss */
+.my-plek-container .info-text-bar { width: 100%; }
+/* line 303, scss/pages-style.scss */
 .my-plek-container .plek-no-open-reviews:after { content: '😃'; margin-left: 0.7em; }
 
-/* line 302, scss/pages-style.scss */
-.band-single.band-container { display: flex; column-gap: 5%; }
-/* line 306, scss/pages-style.scss */
-.band-single.band-container .info-text-bar { width: 100%; margin: 0.2em 0; }
 /* line 311, scss/pages-style.scss */
+.band-single.band-container { display: flex; column-gap: 5%; }
+/* line 315, scss/pages-style.scss */
+.band-single.band-container .info-text-bar { width: 100%; margin: 0.2em 0; }
+/* line 320, scss/pages-style.scss */
 .band-single.band-container .band-content { flex-basis: 70%; }
-/* line 314, scss/pages-style.scss */
+/* line 323, scss/pages-style.scss */
 .band-single.band-container .meta-container, .band-single.band-container .mobile-meta-con { flex-basis: 30%; margin-top: 3.8em; padding-right: 1em; display: none; }
-/* line 321, scss/pages-style.scss */
+/* line 330, scss/pages-style.scss */
 .band-single.band-container .meta-container ul, .band-single.band-container .mobile-meta-con ul { list-style: none; margin: 0; padding: 0; }
-/* line 327, scss/pages-style.scss */
-.band-single.band-container .meta-container .band-flag img, .band-single.band-container .mobile-meta-con .band-flag img { max-height: 1.2em; vertical-align: sub; }
-/* line 332, scss/pages-style.scss */
-.band-single.band-container .meta-container .event-links a, .band-single.band-container .mobile-meta-con .event-links a { color: white; }
 /* line 336, scss/pages-style.scss */
+.band-single.band-container .meta-container .band-flag img, .band-single.band-container .mobile-meta-con .band-flag img { max-height: 1.2em; vertical-align: sub; }
+/* line 341, scss/pages-style.scss */
+.band-single.band-container .meta-container .event-links a, .band-single.band-container .mobile-meta-con .event-links a { color: white; }
+/* line 345, scss/pages-style.scss */
 .band-single.band-container .meta-container .event-links i.far, .band-single.band-container .meta-container .event-links i.fas, .band-single.band-container .meta-container .event-links i.fab, .band-single.band-container .mobile-meta-con .event-links i.far, .band-single.band-container .mobile-meta-con .event-links i.fas, .band-single.band-container .mobile-meta-con .event-links i.fab { font-size: 1.5em; margin: 0.1em 0.3em; }
 
-/* line 349, scss/pages-style.scss */
+/* line 358, scss/pages-style.scss */
 #plek-search-page .info-text-bar { width: 100%; margin: 0.2em 0; }
-/* line 354, scss/pages-style.scss */
-#plek-search-page .plek_album_con { justify-content: center; }
-/* line 357, scss/pages-style.scss */
-#plek-search-page .plek_album_con .image_container { width: 23.5%; min-width: 200px; }
 /* line 363, scss/pages-style.scss */
+#plek-search-page .plek_album_con { justify-content: center; }
+/* line 366, scss/pages-style.scss */
+#plek-search-page .plek_album_con .image_container { width: 23.5%; min-width: 200px; }
+/* line 372, scss/pages-style.scss */
 #plek-search-page .plek-search-bands { display: flex; flex-wrap: wrap; row-gap: 2%; }
-/* line 368, scss/pages-style.scss */
+/* line 377, scss/pages-style.scss */
 #plek-search-page .plek-search-bands .band-list-item { flex-basis: 49%; }
-/* line 371, scss/pages-style.scss */
-#plek-search-page .plek-search-bands .band { display: flex; flex-direction: row; }
-/* line 375, scss/pages-style.scss */
-#plek-search-page .plek-search-bands .band-flag { margin-top: 0.8em; margin-right: 1em; }
 /* line 380, scss/pages-style.scss */
+#plek-search-page .plek-search-bands .band { display: flex; flex-direction: row; }
+/* line 384, scss/pages-style.scss */
+#plek-search-page .plek-search-bands .band-flag { margin-top: 0.8em; margin-right: 1em; }
+/* line 389, scss/pages-style.scss */
 #plek-search-page .tribe-events-calendar-list__event { margin: 0.2em 0; }
 
-/* line 387, scss/pages-style.scss */
+/* line 396, scss/pages-style.scss */
 body.page-id-24565 #content { width: 100%; max-width: 100%; }
-/* line 392, scss/pages-style.scss */
-body.page-id-24565 .eTPoster img { width: 110px; }
-/* line 397, scss/pages-style.scss */
-body.page-id-24565 .dataTables_scroll table, body.page-id-24565 .dataTables_scroll td, body.page-id-24565 .dataTables_scroll th { border: 1px solid gray; }
 /* line 401, scss/pages-style.scss */
-body.page-id-24565 label, body.page-id-24565 .dataTables_info, body.page-id-24565 .dataTables_paginate a { color: white !important; }
+body.page-id-24565 .eTPoster img { width: 110px; }
 /* line 406, scss/pages-style.scss */
+body.page-id-24565 .dataTables_scroll table, body.page-id-24565 .dataTables_scroll td, body.page-id-24565 .dataTables_scroll th { border: 1px solid gray; }
+/* line 410, scss/pages-style.scss */
+body.page-id-24565 label, body.page-id-24565 .dataTables_info, body.page-id-24565 .dataTables_paginate a { color: white !important; }
+/* line 415, scss/pages-style.scss */
 body.page-id-24565 td { color: black; }
 
 /* line 3, scss/forms.scss */

@@ -5,9 +5,15 @@ global $plek_event;
 $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user object
 $user = PlekUserHandler::load_user_meta($user);
 $organi_id = $user->meta->organizer_id ?: null;
+$today = date('Y-m-d 00:00:00');
+$today_ms = strtotime($today);
+$next_week = date('Y-m-d 23:59:59', strtotime('+7 days', $today_ms));
 
 $all_posts =  $plek_event -> get_user_events();
-$total_posts = "Get his from the plek_event class. Save total count before.";
+$total_posts = isset($plek_event -> total_posts['get_events_of_organizer'])?$plek_event -> total_posts['get_events_of_organizer']:0;
+
+$this_week =  $plek_event -> get_user_events($today, $next_week);
+$page_obj = $plek_event -> get_pages_object();
 //$this_week =  $plek_event -> get_user_akkredi_event($user -> user_login, $today, $next_week);
 
 ?>
@@ -27,7 +33,7 @@ $total_posts = "Get his from the plek_event class. Save total count before.";
         <div class="organizer-data">
             <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Deine Daten', 'pleklang')); ?>
             <?php PlekTemplateHandler::load_template('organizer-data', 'system/userpage', $user); ?>
-            <p>
+            <p class="info">
                 Aktuell können die Daten noch nicht selbst angepasst werden. Bitte schreibe eine mail an <a href="mailto:info@plekvetica.ch">info@plekvetica.ch</a> für Änderungswünsche.
             </p>
         </div>
@@ -38,12 +44,15 @@ $total_posts = "Get his from the plek_event class. Save total count before.";
             <?php foreach ($all_posts as $index => $ap) : ?>
                 <?php PlekTemplateHandler::load_template('event-item-compact', 'event', $ap, $index); ?>
             <?php endforeach; ?>
+            <?php 
+            if($total_posts !== null){
+                echo $plek_event -> get_pages_count_formated($total_posts);
+                if($plek_event -> display_more_events_button($total_posts)){
+                    echo $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj -> page + 1), __('Weitere Events laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
+                }
+            }
+            ?>
         <?php endif; ?>
     </div>
 
 </div>
-
-
-
-Du bist erfolgreich eingeloggt.
-<div class="logout-link"><a href="<?php echo $current_url; ?>?action=logout"><?php echo __('Abmelden', 'pleklang'); ?></a></div>

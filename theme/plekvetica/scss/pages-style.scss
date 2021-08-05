@@ -282,9 +282,18 @@ ul.partner-container{
         flex-wrap: wrap;
     
         .this-week-posts,
-        .missing-reviews-posts{
+        .missing-reviews-posts,
+        .organizer-data{
             flex-basis: 49%;
             flex-grow: 1;
+        }
+        .organizer-data{
+            dd {
+                margin: 0 1.5em 0.5em;
+            }   
+            .info{
+                color: $color-gray-light;
+            }         
         }
     }
     .info-text-bar{

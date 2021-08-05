@@ -195,6 +195,34 @@ class PlekUserHandler
         return self::search_role('plek-partner', $user);
     }
 
+    public static function user_can_edit_post(object $plek_event){
+        if(current_user_can('edit_posts')){
+            return true;
+        }
+        $user_id = self::get_user_id();
+        $post_authors = $plek_event -> get_event_authors();
+        if(isset($post_authors[$user_id])){
+            return true;
+        }
+        $user_role = self::get_user_role();
+        switch ($user_role) {
+            case 'plek-organi':
+                $event_organi = $plek_event -> get_field_value('_EventOrganizerID',true);
+                $user_organi_id = (string) PlekUserHandler::get_user_setting('organizer_id');
+                if(!is_array($event_organi)){
+                    return false;
+                }
+                if(array_search($user_organi_id, $event_organi) !== false){
+                    return true;
+                }
+                break;
+            
+            default:
+                return false;
+                break;
+        }
+    }
+
     public static function check_user_setup($rolename)
     {
         switch ($rolename) {

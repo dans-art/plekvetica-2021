@@ -484,13 +484,24 @@ class PlekEventHandler
         }
         return [];
     }
-    public function get_field_value($name = 'post_title')
+
+    /**
+     * Get any Field from a Event.
+     *
+     * @param string $name Name of the field
+     * @param boolean $return_all If all of the results should be returned or only the first.
+     * @return mixed Returns Null if the field is not found.
+     */
+    public function get_field_value($name = 'post_title', $return_all = false)
     {
         if (isset($this->event['data']->$name)) {
             return $this->event['data']->$name;
         }
         if (isset($this->event['meta'][$name][0])) {
-            return $this->event['meta'][$name][0];
+            if($return_all){
+                return $this->event['meta'][$name]; //Returns all items of this Array
+            }
+            return $this->event['meta'][$name][0]; //Returns only the first item
         }
         return null;
     }

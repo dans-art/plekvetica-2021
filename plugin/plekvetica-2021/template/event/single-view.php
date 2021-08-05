@@ -12,7 +12,8 @@ $postponed_id = $plek_event->get_postponed_event_id();
 $postponed_id_orig = $plek_event->get_postponed_original_event_id();
 $postponed_event_old_date = ($is_postponed_new)?tribe_get_start_date($postponed_id_orig, true ,'d. F Y'):'';
 
-$can_edit = current_user_can('edit_posts');
+$can_edit = PlekUserHandler::user_can_edit_post($plek_event);
+$is_in_team = PlekUserHandler::user_is_in_team();
 $is_review = $plek_event->is_review();
 $is_canceled = $plek_event->is_canceled();
 $is_featured = $plek_event->is_featured();
