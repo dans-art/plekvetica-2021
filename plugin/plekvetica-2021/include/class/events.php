@@ -193,7 +193,7 @@ class PlekEvents extends PlekEventHandler
      * @param string $to - date('Y-m-d H:i:s')
      * @return object Result form the database. 
      */
-    public function get_user_akkredi_event(string $user_login, string $from = '1970-01-01 00:00:00', string $to = '9999-01-01 00:00:00')
+    public function get_user_akkredi_event(string $user_login, string $from = null, string $to = null)
     {
         global $wpdb;
         $user = htmlspecialchars($user_login);
@@ -201,6 +201,9 @@ class PlekEvents extends PlekEventHandler
 
         $wild = '%';
         $like = $wild . $wpdb->esc_like($user_login) . $wild;
+
+        $from = $from ?: '1970-01-01 00:00:00';
+        $to = $to ?: '9999-01-01 00:00:00';
 
         $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS meta.meta_value as akk_team, posts.ID, posts.post_title , status.meta_value as akk_status, startdate.meta_value as startdate
             FROM `{$wpdb->prefix}postmeta` as meta
@@ -210,17 +213,24 @@ class PlekEvents extends PlekEventHandler
             ON posts.ID = status.post_id AND status.meta_key = 'akk_status'
             LEFT JOIN {$wpdb->prefix}postmeta as startdate
             ON posts.ID = startdate.post_id AND startdate.meta_key = '_EventStartDate'
+            
+            LEFT JOIN {$wpdb->prefix}postmeta as postponed
+            ON posts.ID = postponed.post_id
+            AND postponed.meta_key = 'postponed_event'
+            
             WHERE meta.`meta_key` LIKE 'akkreditiert'
             AND meta.`meta_value` LIKE '%s'
             AND posts.ID IS NOT NULL
             AND startdate.meta_value > '%s'
             AND startdate.meta_value < '%s'
+
+            AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
+            
             ORDER BY startdate.meta_value DESC
             LIMIT %d OFFSET %d", $like, $from, $to, $page_obj->posts_per_page, $page_obj->offset);
         $posts = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
         $this->total_posts['get_user_akkredi_event'] = $total_posts;
-
         return $posts;
     }
 
@@ -232,13 +242,13 @@ class PlekEvents extends PlekEventHandler
      * @param string $to - Date to (Y-m-d H:i:s)
      * @return object 
      */
-    public function get_user_events(string $from = '1970-01-01 00:00:00', string $to = '9999-01-01 00:00:00', $limit = 0)
+    public function get_user_events(string $from = null, string $to = null, $limit = 0)
     {
 
         $user_role = PlekUserHandler::get_user_role();
         switch ($user_role) {
             case 'plek-organi':
-                return $this->get_events_of_organizer($from, $to, $limit);
+                return $this->get_events_of_role('_EventOrganizerID', $from, $to, $limit);
                 break;
 
             default:
@@ -251,34 +261,43 @@ class PlekEvents extends PlekEventHandler
      * This is only working, when the logged in user has the role "plek-organi"
      * @todo: Search for author Posts as well
      *
-     * @param [type] $from
-     * @param [type] $to
-     * @param int $limit
+     * @param string $role_tribe_meta_name - The Role to fetch as Meta-Key name. Supported: _EventOrganizerID
+     * @param string $from - Time From (1970-01-01 00:00:00)
+     * @param string $to - Datetime to (9999-01-01 00:00:00)
+     * @param int $limit - Maximum Posts to get. (Posts per page)
      * @return object
      */
-    public function get_events_of_organizer($from, $to, $limit = 0)
+    public function get_events_of_role($role_tribe_meta_name, $from, $to, $limit = 0)
     {
         global $wpdb;
         $user_id = PlekUserHandler::get_user_id();
         $organizer_id = (int) PlekUserHandler::get_user_setting('organizer_id');
         $page_obj = $this->get_pages_object();
         $limit = $limit ?: $page_obj->posts_per_page;
+        $from = $from ?: '1970-01-01 00:00:00';
+        $to = $to ?: '9999-01-01 00:00:00';
 
         $query = $wpdb->prepare(
-            "SELECT SQL_CALC_FOUND_ROWS plek_posts.ID, plek_posts.post_title , CAST(date.meta_value AS DATETIME), organi.meta_value
-        FROM `plek_posts` 
-        LEFT JOIN plek_postmeta as date
-        ON ( date.post_id = plek_posts.ID AND date.meta_key = '_EventStartDate' )
-        LEFT JOIN plek_postmeta as organi
-        ON ( organi.post_id = plek_posts.ID AND organi.meta_key = '_EventOrganizerID' )
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME), rolemeta.meta_value
+        FROM `{$wpdb->prefix}posts` as posts 
+        LEFT JOIN {$wpdb->prefix}postmeta as date
+        ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
+        LEFT JOIN {$wpdb->prefix}postmeta as rolemeta
+        ON ( rolemeta.post_id = posts.ID AND rolemeta.meta_key = '%s' )
+
+        LEFT JOIN {$wpdb->prefix}postmeta as postponed
+        ON (posts.ID = postponed.post_id AND postponed.meta_key = 'postponed_event')
+
         WHERE 
-        (post_author = %d OR organi.meta_value = %d) 
+        (post_author = %d OR rolemeta.meta_value = %d) 
         AND post_type = 'tribe_events'
         AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
-        
-        GROUP BY plek_posts.ID
+        AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
+
+        GROUP BY posts.ID
         ORDER BY date.meta_value DESC
         LIMIT %d OFFSET %d",
+            $role_tribe_meta_name,
             $user_id,
             $organizer_id,
             $from,
@@ -288,7 +307,7 @@ class PlekEvents extends PlekEventHandler
         );
         $events = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
-        $this->total_posts['get_events_of_organizer'] = $total_posts;
+        $this->total_posts['get_events_of_role_' . $role_tribe_meta_name] = $total_posts;
         return $events;
     }
 
@@ -301,7 +320,7 @@ class PlekEvents extends PlekEventHandler
         $like = $wild . $wpdb->esc_like($user_login) . $wild;
         $today = date('Y-m-d 00:00:00');
 
-        $query = $wpdb->prepare("SELECT user.meta_value as akk_team, posts.ID, posts.post_title , 
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS user.meta_value as akk_team, posts.ID, posts.post_title , 
         status.meta_value as akk_status, startdate.meta_value as startdate, enddate.meta_value as enddate
         FROM `{$wpdb->prefix}postmeta` as user
         LEFT JOIN {$wpdb->prefix}posts as posts
@@ -326,17 +345,23 @@ class PlekEvents extends PlekEventHandler
         LEFT JOIN {$wpdb->prefix}postmeta as canceled
         ON posts.ID = canceled.post_id
         AND canceled.meta_key = 'cancel_event'
+
+        LEFT JOIN {$wpdb->prefix}postmeta as postponed
+        ON posts.ID = postponed.post_id
+        AND postponed.meta_key = 'postponed_event'
         
         WHERE user.`meta_key` LIKE 'akkreditiert'
         AND user.`meta_value` LIKE '%s'
         AND posts.ID IS NOT NULL
         AND status.meta_value = 'ab'
         AND canceled.meta_value NOT LIKE '1'
+
+        AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
+
         AND review.meta_value NOT LIKE '1'
         AND enddate.meta_value < '%s'
         ORDER BY startdate.meta_value DESC", $like, $today);
         $posts = $wpdb->get_results($query);
-
         return $posts;
     }
     /**
@@ -629,7 +654,7 @@ class PlekEvents extends PlekEventHandler
             AND posts.ID IS NOT NULL
             AND startdate.meta_value > '%s'
             AND startdate.meta_value < '%s'
-            ORDER BY startdate.meta_value DESC
+            ORDER BY startdate.meta_value ASC
             LIMIT %d OFFSET %d", $from, $to, $posts_per_page, $offset);
         $posts = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");

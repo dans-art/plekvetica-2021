@@ -9,6 +9,7 @@ $interviews = $plek_event->get_event_interviews();
 $akk_crew = $plek_event->get_event_akkredi_crew();
 $event_edit_page_id = $plek_handler->get_plek_option('edit_event_page_id');
 $is_canceled = $plek_event->is_canceled();
+$show_edit_button = $plek_event->show_event_edit_button($plek_event);
 
 //s($post_authors);
 ?>
@@ -17,13 +18,12 @@ $is_canceled = $plek_event->is_canceled();
 <div>
     <?php
     //Edit Event Button
-    if (PlekUserHandler::user_can_edit_post($plek_event) and !$plek_event->is_past_event()) : ?>
-        <a name="editEvent" class="plek-button" href="<?php echo get_permalink($event_edit_page_id); ?>?edit=<?php echo $event_id; ?>">Event Bearbeiten</a>
-    <?php endif; ?>
-    <?php
-    //Show notice if not team event, review and user is allowed to edit
-    if (PlekUserHandler::user_can_edit_post($plek_event) and $plek_event->is_review() and !PlekUserHandler::user_is_in_team()) : ?>
-        <?php echo __('Dieser Beitrag kann nicht mehr bearbeitet werden, da schon ein Review existiert.','pleklang'); ?>
+    if ($show_edit_button === true) : ?>
+        <a name="editEvent" class="plek-button" href="<?php echo get_permalink($event_edit_page_id); ?>?edit=<?php echo $event_id; ?>"><?php echo __('Event Bearbeiten', 'pleklang'); ?></a>
+    <?php elseif (is_string($show_edit_button) and !PlekUserHandler::user_is_in_team()) : ?>
+        <?php echo $show_edit_button; ?>
+    <?php else : ?>
+        <?php echo (PlekUserHandler::user_is_in_team()) ? "" : __('Du bist nicht berechtigt, diesen Beitrag zu bearbeiten.', 'pleklang'); ?>
     <?php endif; ?>
     <?php
     //Accreditation add Button
@@ -42,17 +42,17 @@ $is_canceled = $plek_event->is_canceled();
     <?php endif; ?>
     <?php
     //Write Review Button    
-    if (PlekUserHandler::current_user_can_edit($event_id) and $plek_event->is_past_event()) : ?>
+    if ($plek_event->show_event_edit_review_button($plek_event)) : ?>
         <a name="reviewEvent" class="plek-button full-width green" href='<?php echo get_permalink($event_edit_page_id) . '?review=true&edit=' . $event_id; ?>'><?php echo $review_titel; ?></a>
     <?php endif; ?>
     <?php
     //Promote on Facebook Button    
-    if (PlekUserHandler::current_user_can_edit($event_id) and !$plek_event->is_review()) : ?>
+    if (PlekUserHandler::current_user_can_edit($plek_event) and !$plek_event->is_review() and !$plek_event -> is_past_event() and PlekUserHandler::user_is_in_team()) : ?>
         <a id="promoteEvent" name="promoteEvent" class="plek-button full-width blue" data-eventid="<?php echo $event_id; ?>"><i class="fab fa-facebook-square"></i> <?php echo __('Promote Event', 'pleklang'); ?></a>
     <?php endif; ?>
     <?php
     //Revision Event Button    
-    if (PlekUserHandler::current_user_can_edit($event_id) and !$plek_event->is_review() and $plek_event->has_revisions()) : ?>
+    if (PlekUserHandler::current_user_can_edit($plek_event) and !$plek_event->is_review() and $plek_event->has_revisions()) : ?>
         <?php
         global $plek_handler;
         $plek_handler->enqueue_toastr();
@@ -90,14 +90,14 @@ $is_canceled = $plek_event->is_canceled();
                         $status = $plek_event->prepare_status_code($int['status']);
                 ?>
             <dd class="event-interview-band">
-                <span class="<?php echo (!empty($status))?$status:"null"; ?>"><?php echo $int['name']; ?></span>
+                <span class="<?php echo (!empty($status)) ? $status : "null"; ?>"><?php echo $int['name']; ?></span>
             </dd>
-                 <?php
+    <?php
                     } //End foreach
                 } else {
-                    echo ($plek_event->is_review())?__('Dieser Event hatte keine Interviews.', 'pleklang'):__('Für diesen Event wurden noch keine Interviews registriert.', 'pleklang');
+                    echo ($plek_event->is_review()) ? __('Dieser Event hatte keine Interviews.', 'pleklang') : __('Für diesen Event wurden noch keine Interviews registriert.', 'pleklang');
                 } ?>
-            </dd>
+    </dd>
         </dl>
     <?php endif; //Accreditations & Interview status and crew END
     ?>

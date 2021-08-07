@@ -11,7 +11,7 @@ $next_week = date('Y-m-d 23:59:59', strtotime('+7 days', $today_ms));
 $page_obj = $plek_event -> get_pages_object();
 
 $all_posts =  $plek_event -> get_user_akkredi_event($user -> user_login);
-$all_posts_load_more = $plek_event -> display_more_events_button($plek_event -> total_posts['get_user_akkredi_event']);
+$total_posts = isset($plek_event -> total_posts['get_user_akkredi_event'])?$plek_event -> total_posts['get_user_akkredi_event']:0;
 
 $this_week =  $plek_event -> get_user_akkredi_event($user -> user_login, $today, $next_week);
 $missing_reviews =  $plek_event -> get_user_missing_review_events($user -> user_login);
@@ -47,9 +47,13 @@ $missing_reviews =  $plek_event -> get_user_missing_review_events($user -> user_
             <?php foreach($all_posts as $index => $ap): ?>
                     <?php PlekTemplateHandler::load_template('event-item-compact','event', $ap, $index);?>
                 <?php endforeach; ?>
-            <?php if($all_posts_load_more){
-                echo PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj -> page + 1), __('Weitere Events laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
-            } 
+            <?php 
+            if($total_posts !== null){
+                echo $plek_event -> get_pages_count_formated($total_posts);
+                if($plek_event -> display_more_events_button($total_posts)){
+                    echo $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj -> page + 1), __('Weitere Events laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
+                }
+            }
             ?>
         <?php endif; ?>
     </div>

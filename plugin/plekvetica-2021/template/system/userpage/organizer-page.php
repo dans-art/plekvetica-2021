@@ -10,7 +10,7 @@ $today_ms = strtotime($today);
 $next_week = date('Y-m-d 23:59:59', strtotime('+7 days', $today_ms));
 
 $all_posts =  $plek_event -> get_user_events();
-$total_posts = isset($plek_event -> total_posts['get_events_of_organizer'])?$plek_event -> total_posts['get_events_of_organizer']:0;
+$total_posts = isset($plek_event -> total_posts['get_events_of_role__EventOrganizerID'])?$plek_event -> total_posts['get_events_of_role__EventOrganizerID']:0;
 
 $this_week =  $plek_event -> get_user_events($today, $next_week);
 $page_obj = $plek_event -> get_pages_object();

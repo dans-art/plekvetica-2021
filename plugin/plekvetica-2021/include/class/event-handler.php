@@ -662,11 +662,14 @@ class PlekEventHandler
 
     /**
      * Returns the url of a event with a raffle.
-     * If Event is in the past, this function returns always false.
+     * If Event is in the past or canceled, this function returns always false.
      *
      * @return mixed Url if exists, else false.
      */
     public function get_raffle(){
+        if($this->is_canceled()){
+            return false;
+        }
         //Check if event is set in the future.
         if($this -> get_end_date('YmdHi') > date('YmdHi')){
             $raffle_url = $this->get_field_value('win_url');
@@ -700,5 +703,50 @@ class PlekEventHandler
         }
         unset($current[$find]);
         return (update_field('akkreditiert', $current, $event_id)) ? true : __('Fehler beim Updaten des Akkreditierungs Feld', 'pleklang');
+    }
+
+    /**
+     * Determines if the edit event button should be shown or not.
+     *
+     * @param object $plek_event - Plek Event object
+     * @return mixed true or string with error message. False if not allowed.
+     */
+    public function show_event_edit_button($plek_event){
+        $event_id = $plek_event -> get_ID();
+        $akk_status = $plek_event->get_field_value('akk_status');
+
+        if(!PlekUserHandler::current_user_can_edit($plek_event)){
+            return false;
+        }
+        if($plek_event->is_review()){
+            return __('Dieser Beitrag kann nicht mehr bearbeitet werden, da schon ein Review existiert', 'pleklang');
+        }
+        if($akk_status !== null and $plek_event -> is_past_event()){
+            return __('Dieser Beitrag kann nicht mehr bearbeitet werden, da aktuell ein Review geschrieben wird.', 'pleklang');
+        }
+        return true;
+    }
+
+    /**
+     * Determines if the review event button should be shown or not.
+     *
+     * @param object $plek_event - Plek Event object
+     * @return bool true if allowed, otherwise false
+     */
+    public function show_event_edit_review_button($plek_event){
+        //$event_id = $plek_event -> get_ID();
+        //$akk_status = $plek_event->get_field_value('akk_status');
+
+        if(!PlekUserHandler::current_user_can_edit($plek_event)){
+            return false;
+        }
+        if(!$plek_event -> is_past_event()){
+            return false;
+        }
+        if(!PlekUserHandler::user_is_in_team()){
+            return false;
+        }
+
+        return true;
     }
 }

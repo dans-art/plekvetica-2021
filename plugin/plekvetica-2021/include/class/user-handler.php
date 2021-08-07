@@ -8,17 +8,16 @@ class PlekUserHandler
     /**
      * Checks if the current unser is allowed to edit this post.
      *
-     * @param int $post_id - The ID of the Post
+     * @param object $plek_event - The Plek Event Object
      * @return void
      */
-    public static function current_user_can_edit(int $post_id = null)
+    public static function current_user_can_edit(object $plek_event)
     {
+        $post_id = (!$plek_event -> get_ID()) ? get_the_ID() : $plek_event -> get_ID();
         if (get_post_status($post_id) !== 'publish') {
             return false;
         }
-        $user = wp_get_current_user();
-        $post_id = (!$post_id) ? get_the_ID() : $post_id;
-        return self::user_can_edit($post_id);
+        return self::user_can_edit_post($plek_event);
     }
 
     /**
@@ -44,6 +43,7 @@ class PlekUserHandler
      * Checks if the user is allowed to edit a Post.
      * If the user is a partner, band or community user, it will be checked if they can edit the specific post.
      *
+     * @deprecated 1.0 - Use PlekUserHandler::user_can_edit_post($plek_event) instead
      * @param integer $post_id
      * @param object $user
      * @return bool
