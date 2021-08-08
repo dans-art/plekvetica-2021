@@ -11,7 +11,8 @@ $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user 
     </div>
     <div>
         <div class="logout-link"><a href="<?php echo $current_url; ?>?action=logout"><?php echo __('Abmelden', 'pleklang'); ?></a></div>
-    </div>
+        <div class="settings-link"><a href="<?php echo $current_url; ?>?action=settings"><?php echo __('Einstellungen', 'pleklang'); ?></a></div>
+        </div>
 </div>
 
 

@@ -310,6 +310,20 @@ class PlekUserHandler
     }
 
     /**
+     * Get the User Object with all the metadata.
+     *
+     * @return object Current user with all custom meta fields.
+     */
+    public static function get_all_user_settings(){
+        $user = wp_get_current_user();
+        if(!is_object($user) OR empty($user)){
+            return false;
+        }
+        $user -> meta = get_user_meta( $user->ID );
+        return $user;
+    }
+
+    /**
      * Adds the custom roles to WP
      *
      * @return void

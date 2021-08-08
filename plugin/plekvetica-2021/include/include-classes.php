@@ -22,3 +22,4 @@ require_once(PLEK_PATH . 'include/class/author-handler.php');
 require_once(PLEK_PATH . 'include/class/login-handler.php');
 require_once(PLEK_PATH . 'include/class/ajax-handler.php');
 require_once(PLEK_PATH . 'include/class/user-handler.php');
+require_once(PLEK_PATH . 'include/class/user-form-handler.php');

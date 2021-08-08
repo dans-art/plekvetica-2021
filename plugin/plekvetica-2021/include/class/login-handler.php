@@ -19,6 +19,18 @@ class PlekLoginHandler
         }
         return false;
     }
+    /**
+     * Checks if it is the settings menu.
+     *
+     * @return boolean
+     */
+    public static function is_user_settings()
+    {
+        if(isset($_REQUEST['action']) AND $_REQUEST['action'] === 'settings'){
+            return true;
+        }
+        return false;
+    }
     public static function is_reset_password()
     {
         if(isset($_REQUEST['action']) AND $_REQUEST['action'] === 'reset_password'){
@@ -84,6 +96,9 @@ class PlekLoginHandler
         }
         if(PlekLoginHandler::is_reset_password()){
             return PlekTemplateHandler::load_template_to_var('reset-password-form','system/login');
+        }
+        if(PlekLoginHandler::is_user_settings() AND is_user_logged_in()){
+            return PlekTemplateHandler::load_template_to_var('user-settings-main','system/user-settings');
         }
         return PlekTemplateHandler::load_template_to_var('login','system');
     }

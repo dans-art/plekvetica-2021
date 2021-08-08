@@ -40,24 +40,51 @@ class PlekAjaxHandler
         switch ($do) {
             case 'promote_event':
                 global $plek_event;
-                $event_id = $this -> get_ajax_data('id');
-                $plek_event -> load_event($event_id);
-                $promote = $plek_event -> promote_on_facebook();
-                if($promote === true){
-                    $this -> set_success(__('Event wurde erfolgreich auf Facebook promoted.','pleklang'));
-                }else{
-                    $this -> set_error($promote);  //Error Message from Facebook SDK
+                $event_id = $this->get_ajax_data('id');
+                $plek_event->load_event($event_id);
+                $promote = $plek_event->promote_on_facebook();
+                if ($promote === true) {
+                    $this->set_success(__('Event wurde erfolgreich auf Facebook promoted.', 'pleklang'));
+                } else {
+                    $this->set_error($promote);  //Error Message from Facebook SDK
                 }
                 break;
             case 'remove_akkredi_member':
                 global $plek_event;
-                $event_id = (int) $this -> get_ajax_data('id');
-                $user = $this -> get_ajax_data('user');
-                $remove = $plek_event -> remove_akkredi_member($user, $event_id);
-                if($remove === true){
-                    $this -> set_success(__('Registrierung wurde erfolgreich entfernt.','pleklang'));
-                }else{
-                    $this -> set_error($remove); //Error Message from funciton
+                $event_id = (int) $this->get_ajax_data('id');
+                $user = $this->get_ajax_data('user');
+                $remove = $plek_event->remove_akkredi_member($user, $event_id);
+                if ($remove === true) {
+                    $this->set_success(__('Registrierung wurde erfolgreich entfernt.', 'pleklang'));
+                } else {
+                    $this->set_error($remove); //Error Message from funciton
+                }
+                break;
+            default:
+                # code...
+                break;
+        }
+        echo $this->get_ajax_return();
+        die();
+    }
+
+    public function plek_ajax_user_actions()
+    {
+        $do = $this->get_ajax_do();
+        switch ($do) {
+            case 'save_user_settings':
+                //Validate and save the data
+                $user_form_handler = new PlekUserFormHandler;
+                $validate = $user_form_handler->validate_save_user_settings();
+                if ($validate === true) {
+                    $save = $user_form_handler->save_user_settings();
+                    if ($save === true) {
+                        $this->set_success(__('Einstellungen erfolgreich gespeichert.', 'pleklang'));
+                    } else {
+                        $this->set_error(sprintf(__('Fehler beim speichern der Einstellungen (%s).', 'pleklang'), $save));
+                    }
+                } else {
+                    $this->set_error_array($validate);
                 }
                 break;
 
@@ -65,22 +92,7 @@ class PlekAjaxHandler
                 # code...
                 break;
         }
-        echo $this -> get_ajax_return();
-        die();
-    }
-
-    public function plek_ajax_user_actions(){
-        $do = $this->get_ajax_do();
-        switch ($do) {
-            case 'edit_user_account':
-                //Show form
-                break;
-            
-            default:
-                # code...
-                break;
-        }
-        echo $this -> get_ajax_return();
+        echo $this->get_ajax_return();
         die();
     }
     /**
@@ -89,37 +101,40 @@ class PlekAjaxHandler
      *
      * @return void
      */
-    public function plek_ajax_user_nopriv_actions(){
+    public function plek_ajax_user_nopriv_actions()
+    {
         $do = $this->get_ajax_do();
         switch ($do) {
             case 'add_user_account':
                 //Validate user data
 
                 //Save new user
-                
+
                 //$this -> set_error(__('Save new mail not possible','pleklang'), 'user_email');
                 //$this -> set_error(__('Save new User not possible','pleklang'), 'user_name');
                 //$this -> set_error(__('Save new display not possible','pleklang'), 'user_display_name');
                 //$this -> set_error(__('Display 2','pleklang'), 'user_display_name');
-                $this -> set_success(__('Neues Konto angelegt. Du erhälst in kürze eine Email mit dem Bestätigunglink.','pleklang'));
+                $this->set_success(__('Neues Konto angelegt. Du erhälst in kürze eine Email mit dem Bestätigunglink.', 'pleklang'));
                 break;
-            
+            case 'save_user_settings':
+                $this -> set_error(__('Du musst eingeloggt sein, um deine Kontodaten zu speichern!','pleklang') );
+                break;
             default:
                 # code...
                 break;
         }
-        echo $this -> get_ajax_return();
+        echo $this->get_ajax_return();
         die();
     }
 
     public function get_ajax_type()
     {
-        return $this -> get_ajax_data('type');
+        return $this->get_ajax_data('type');
     }
 
     public function get_ajax_do()
     {
-        return $this -> get_ajax_data('do');
+        return $this->get_ajax_data('do');
     }
 
     public function get_ajax_data(string $field = '')
@@ -127,24 +142,39 @@ class PlekAjaxHandler
         return (isset($_REQUEST[$field])) ? htmlspecialchars($_REQUEST[$field]) : "";
     }
 
-    protected function set_error(string $message, string $field = ""){
-        if(!empty($field)){
-            $this -> error[$field][] = $message;
+    protected function set_error(string $message, string $field = "")
+    {
+        if (!empty($field)) {
+            $this->error[$field][] = $message;
             return;
         }
-        $this -> error[] = $message;
+        $this->error[] = $message;
         return;
     }
-    protected function set_system_error(string $message){
-        $this -> system_error[] = $message;
+
+    protected function set_error_array(array $errors)
+    {
+        if (empty($this->error)) {
+            $this->error = $errors;
+        } else {
+            $this->error = array_merge($this->error, $errors);
+        }
         return;
     }
-    protected function set_success(string $message){
-        $this -> success[] = $message;
+
+    protected function set_system_error(string $message)
+    {
+        $this->system_error[] = $message;
         return;
     }
-    protected function get_ajax_return(){
-        $ret = ['success' => $this -> success, 'error' => $this -> error, 'system_error' => $this -> system_error];
+    protected function set_success(string $message)
+    {
+        $this->success[] = $message;
+        return;
+    }
+    protected function get_ajax_return()
+    {
+        $ret = ['success' => $this->success, 'error' => $this->error, 'system_error' => $this->system_error];
         return json_encode($ret);
     }
 }

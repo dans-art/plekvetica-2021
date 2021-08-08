@@ -18,6 +18,13 @@ let plek_user = {
             //reset Button status
             jQuery('#plek-submit').val(plek_user.default_button_texts.submit);
         })
+
+        //on settings submit input click
+        jQuery('#plek-user-settings-form input[type="submit"]').click(function(e){
+            e.preventDefault();
+            var data = jQuery('#plek-user-settings-form').serialize();
+            plek_user.save_user_settings(data);
+        })
     },
 
     submit(type) {
@@ -68,6 +75,44 @@ let plek_user = {
             }
           });
           return;
+    },
+
+    //User Settings form functions
+    save_user_settings(data){
+        plek_main.activate_button_loader('#user-settings-submit', 'Speichere Einstellungen...');
+        console.log("Save user settings");
+        //let form = jQuery('#plek-user-settings-form');
+
+        let button = jQuery('#plek-submit');
+        /*data = {
+            'action': 'plek_user_actions',
+            'do': 'save_user_settings',
+        }*/
+        console.log(data);
+        data += '&action='+'plek_user_actions';
+        data += '&do='+'save_user_settings';
+        console.log(data);
+
+        jQuery.ajax({
+            url: window.ajaxurl,
+            type: 'POST',
+            cache: false,
+            data: data,
+            success: function success(data) {
+                let text = plek_main.get_text_from_ajax_request(data, true);
+                let errors = plek_main.show_field_errors(data);
+                if(errors === true){
+                    text = "Das Formular enthält Fehler, bitte korrigieren";
+                }
+                plek_main.deactivate_button_loader(button, text);
+
+            },
+            error: function error(data) {
+                plek_main.deactivate_button_loader(button, "Error loading data.... ");
+
+            }
+          });
     }
+
 }
 plek_user.construct();
