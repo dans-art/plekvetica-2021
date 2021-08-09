@@ -25,3 +25,16 @@ echo PlekTemplateHandler::load_template_to_var('text-bar', 'components', $search
 		</div>
 	</div>
 </div>
+<?php 
+global $plek_event;
+$total_posts = $plek_event->total_posts['search_tribe_events'];
+$page_obj = $plek_event -> get_pages_object();
+
+if($plek_event -> display_more_events_button($total_posts)){
+	echo $plek_event -> get_pages_count_formated($total_posts);
+	echo PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj -> page + 1), __('Weitere Reviews laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
+}
+
+
+
+?>

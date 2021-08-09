@@ -13,28 +13,29 @@ class PlekSearchHandler
         //return do_shortcode("[yotuwp type='videos' id='B0mhpAQMkBA' pagination='off' pagitype='pager' column='1' per_page='1']");
         $youtube_handler = new plekYoutube;
         $query = get_search_query();
-        $search_result = $youtube_handler -> search_videos($query);
-        if(!empty($search_result)){
+        $search_result = $youtube_handler->search_videos($query);
+        if (!empty($search_result)) {
             return $search_result;
-        }else{
-            return __('Keine Videos gefunden.','pleklang'); 
+        } else {
+            return __('Keine Videos gefunden.', 'pleklang');
         }
     }
 
-    public function get_bands(){
+    public function get_bands()
+    {
         $query = get_search_query();
         $search_result = PlekBandHandler::search_band($query);
-        if(!empty($search_result)){
-            
+        if (!empty($search_result)) {
+
             $result = "";
-            $this -> found_bands = [];
-            foreach($search_result as $term){
-                $this -> found_bands[] = $term -> term_id;
-                $result .= PlekTemplateHandler::load_template_to_var('band-list-item','band',$term -> slug);
+            $this->found_bands = [];
+            foreach ($search_result as $term) {
+                $this->found_bands[] = $term->term_id;
+                $result .= PlekTemplateHandler::load_template_to_var('band-list-item', 'band', $term->slug);
             }
             return $result;
-        }else{
-            return __('Keine Bands gefunden.','pleklang'); 
+        } else {
+            return __('Keine Bands gefunden.', 'pleklang');
         }
         return "Band";
     }
@@ -44,38 +45,41 @@ class PlekSearchHandler
      *
      * @return void
      */
-    public function get_events(){
+    public function get_events()
+    {
         $query = get_search_query();
-        $search_result = $this -> search_tribe_events($query);
+        $search_result = $this->search_tribe_events($query);
         $search_result_band = null;
-        if(!empty($this -> found_bands)){
-            $search_result_band = $this -> search_events_with_bands_ids($this -> found_bands);
+        /*if (!empty($this->found_bands)) {
+            $search_result_band = $this->search_events_with_bands_ids($this->found_bands);
         }
-        $found_by_band = (is_array($search_result_band))?$search_result_band:[]; 
-        $found_events = (is_array($search_result))?$search_result:[]; 
+        $found_by_band = (is_array($search_result_band)) ? $search_result_band : [];
+        $found_events = (is_array($search_result)) ? $search_result : [];
 
-        $arr_merch = array_merge($found_by_band,$found_events);
-        $final_result = $this -> remove_duplicates($arr_merch);
-
-        if(!empty($search_result) AND is_array($search_result)){
-            $this -> found_events = $search_result;
-            return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $final_result);
-        }else{
-            return __('Keine Events gefunden.','pleklang'); 
+        $arr_merch = array_merge($found_by_band, $found_events);
+        $final_result = $arr_merch;
+        //$final_result = $this->remove_duplicates($arr_merch);
+        */
+        if (!empty($search_result) and is_array($search_result)) {
+            $this->found_events = $search_result;
+            return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $search_result);
+        } else {
+            return __('Keine Events gefunden.', 'pleklang');
         }
     }
-    
-    public function get_photos(){
+
+    public function get_photos()
+    {
         global $nggdb;
         global $plek_handler;
         $query = get_search_query();
-        $search_result = $nggdb -> search_for_galleries($query);
-        if(!empty($search_result)){
-            $this -> found_photos = $search_result;
-            $page_id = $plek_handler -> get_plek_option('concert_photos_page_id');
+        $search_result = $nggdb->search_for_galleries($query);
+        if (!empty($search_result)) {
+            $this->found_photos = $search_result;
+            $page_id = $plek_handler->get_plek_option('concert_photos_page_id');
             return PlekTemplateHandler::load_template_to_var('album-container', 'gallery', $search_result, $page_id, ['shorten_title' => false]);
-        }else{
-            return __('Keine Fotos gefunden.','pleklang'); 
+        } else {
+            return __('Keine Fotos gefunden.', 'pleklang');
         }
     }
 
@@ -86,7 +90,7 @@ class PlekSearchHandler
         if (PlekSearchHandler::is_review_search()) {
             $search_string = $_GET['search_reviews'];
             $post_ids = $this->search_tribe_events($search_string, true);
-            if(!is_array($post_ids)){
+            if (!is_array($post_ids)) {
                 $post_ids = array();
             }
             $posts = $this->load_tribe_events_from_ids($post_ids);
@@ -123,55 +127,137 @@ class PlekSearchHandler
     }
 
 
+    /**
+     * Undocumented function
+     *
+     * @param string $query
+     * @param boolean $review
+     * @return void
+     * @todo Save ids of fetched posts and pass them to the search_events_with_bands function to filter them out.
+     */
     public function search_tribe_events(string $query, bool $review = false)
     {
         global $wpdb;
+        global $plek_event;
         $escaped_query = htmlspecialchars($query);
         //Search in DB for the ID
         $wild = '%';
         $like = $wild . $wpdb->esc_like($escaped_query) . $wild;
-        if($review){
-            $db_query = $wpdb->prepare("SELECT posts.ID, posts.post_title
+        $page_obj = $plek_event->get_pages_object();
+        $review_sql = ($review) ? "AND review.meta_value = '1'" : "";
+
+        $db_query = $wpdb->prepare(
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title
+                FROM {$wpdb->prefix}posts AS posts
+                LEFT JOIN {$wpdb->prefix}term_relationships AS tax_rel ON (posts.ID = tax_rel.object_id)
+                LEFT JOIN {$wpdb->prefix}term_taxonomy AS term_tax ON (tax_rel.term_taxonomy_id = term_tax.term_taxonomy_id)
+                LEFT JOIN {$wpdb->prefix}terms AS terms ON (terms.term_id = term_tax.term_id)
+
+                LEFT JOIN {$wpdb->prefix}postmeta AS eventdate ON (eventdate.post_id = posts.ID AND eventdate.meta_key = '_EventStartDate')
+
+                LEFT JOIN {$wpdb->prefix}postmeta as postponed
+                ON (posts.ID = postponed.post_id AND postponed.meta_key = 'postponed_event')
+
+                LEFT JOIN {$wpdb->prefix}postmeta as review
+                ON (posts.ID = review.post_id AND review.meta_key = 'is_review')
+
+        WHERE post_status = 'publish'
+        AND post_type = 'tribe_events'
+        AND (terms.name LIKE '%s' 
+            OR posts.post_title LIKE '%s'
+            OR posts.post_content LIKE '%s')
+        AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
+        {$review_sql}
+        GROUP BY posts.ID
+        ORDER BY CAST(eventdate.meta_value AS DATETIME) DESC
+        LIMIT %d OFFSET %d",
+            $like,
+            $like,
+            $like,
+            $page_obj->posts_per_page,
+            $page_obj->offset
+        );
+        $db_result = $wpdb->get_results($db_query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+
+        $plek_event->total_posts['search_tribe_events'] = (int) $total_posts;
+
+        if (count($db_result) === 0) {
+            return sprintf(__("Es wurden keine Events mit dem Suchwort &quot;%s&quot; gefunden.", "pleklang"), $query);
+        }
+        return $db_result;
+    }
+    /*public function search_tribe_events(string $query, bool $review = false)
+    {
+        global $wpdb;
+        global $plek_event;
+        $escaped_query = htmlspecialchars($query);
+        //Search in DB for the ID
+        $wild = '%';
+        $like = $wild . $wpdb->esc_like($escaped_query) . $wild;
+        $page_obj = $plek_event->get_pages_object();
+        if ($review) {
+            $db_query = $wpdb->prepare(
+                "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title
                 FROM {$wpdb->prefix}postmeta as review
                 LEFT JOIN
                 {$wpdb->prefix}posts as posts
                 ON posts.ID = review.post_id
+                LEFT JOIN {$wpdb->prefix}postmeta as postponed
+                ON (posts.ID = postponed.post_id AND postponed.meta_key = 'postponed_event')
+
                 WHERE review.meta_key = 'is_review'
                 AND review.meta_value = '1'
                 AND posts.post_type = 'tribe_events'
                 AND posts.post_status = 'publish'
-                AND (posts.post_title LIKE %s OR posts.post_content LIKE %s)", $like, $like);
-        }
-        else{
+                AND (posts.post_title LIKE %s OR posts.post_content LIKE %s)
+                AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
+                LIMIT %d OFFSET %d",
+                $like,
+                $like,
+                $page_obj->posts_per_page,
+                $page_obj->offset
+            );
+        } else {
             //Not Review
             $db_query = $wpdb->prepare("SELECT posts.ID, posts.post_title
                 FROM {$wpdb->prefix}posts as posts
                 WHERE posts.post_type = 'tribe_events'
                 AND posts.post_status = 'publish'
                 AND (posts.post_title LIKE %s OR posts.post_content LIKE %s)", $like, $like);
-
         }
         //$query = $wpdb->prepare("SELECT `ID`, `post_title` FROM `{$wpdb->prefix}posts` WHERE `post_type` = 'tribe_events' AND (`post_title` LIKE %s OR `post_content` LIKE %s)", $like, $like);
         $db_result = $wpdb->get_results($db_query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        
+        $tag_search = $this->search_events_with_bands($escaped_query);
+        
+        $this -> found_tribe_events = $db_result;
+        $plek_event->total_posts['search_tribe_events'] = (integer) $total_posts;
 
-        if (!isset($db_result[0])) {
+        $final_result = $this -> merge_and_sort_array($db_result, $tag_search);
+        s($db_result);
+        s($tag_search);
+        //$final_result = $this->remove_duplicates($arr_merch);
+
+        if (count($final_result) === 0) {
             return sprintf(__("Es wurden keine Events mit dem Suchwort &quot;%s&quot; gefunden.", "pleklang"), $query);
         }
-        $tag_search = $this->search_events_with_bands($escaped_query);
-        $arr_merch = array_merge($db_result,$tag_search);
-        return $this -> remove_duplicates($arr_merch);
-        //return $db_result;
-    }
+        return $final_result;
+    }*/
 
-    /** Get The ID's of events which have a band assined 
+    /** Get The ID's of events which have a band assigned 
      * Finds only reviews!
-    */
+     */
     public function search_events_with_bands(string $band, bool $is_review = null)
     {
+        global $plek_event;
         $band = htmlspecialchars($band);
+        $page_obj = $plek_event->get_pages_object();
         $post_args = array(
-            'posts_per_page' => -1,
+            'posts_per_page' => $page_obj->posts_per_page,
             'post_type' => 'tribe_events',
+            'paged' => $page_obj->page,
             'tax_query' => array(
                 array(
                     'taxonomy' => 'post_tag',
@@ -185,9 +271,11 @@ class PlekSearchHandler
                     'value' => '1',
                     'compare' => '=',
                 )
-             )
+            )
         );
         $posts = get_posts($post_args);
+        $band_query = new WP_Query($post_args);
+        $plek_event->total_posts['search_events_with_bands'] = (int) $band_query->found_posts;
         return $posts;
     }
     public function search_events_with_bands_ids(array $band_ids)
@@ -196,24 +284,25 @@ class PlekSearchHandler
             'posts_per_page' => -1,
             'post_type' => 'tribe_events',
             'tag__in' => $band_ids
-            );
+        );
         $posts = get_posts($post_args);
         return $posts;
     }
 
-    public function remove_duplicates(array $object_array){
+    /*public function remove_duplicates(array $object_array)
+    {
         $end_array = array();
-        foreach($object_array as $obj){
-            if(!isset($obj -> ID)){
+        foreach ($object_array as $obj) {
+            if (!isset($obj->ID)) {
                 continue;
             }
-            if(isset($end_array[$obj -> ID])){
+            if (isset($end_array[$obj->ID])) {
                 continue;
             }
-            $end_array[$obj -> ID] = $obj;
+            $end_array[$obj->ID] = $obj;
         }
         //sort the array, newest posts first.
         krsort($end_array);
         return $end_array;
-    }
+    }*/
 }

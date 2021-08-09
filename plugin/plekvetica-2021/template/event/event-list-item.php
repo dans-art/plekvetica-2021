@@ -1,10 +1,13 @@
 <?php
 
 extract(get_defined_vars());
-$event = $template_args[0];
+$event = isset($template_args[0]) ?  $template_args[0] : false;
+if(!$event){
+    return false;
+}
+
 $startDatetime = $event->get_field_value('_EventStartDate');
 $stime = strtotime($startDatetime);
-
 ?>
 <article class="tribe-events-calendar-list__event <?php echo $event -> get_event_classes(); ?>">
 

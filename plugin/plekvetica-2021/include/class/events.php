@@ -146,6 +146,13 @@ class PlekEvents extends PlekEventHandler
      */
     public function load_event_from_tribe_events(object $tribe_event)
     {
+        if(!isset($tribe_event -> post_type) OR $tribe_event -> post_type !== 'tribe_events'){
+            //Reload the event if not valid tribe event.
+            if(!isset($tribe_event -> ID)){
+                return false;
+            }
+            $this -> load_event($tribe_event -> ID);
+        }
         $this->event['data'] = $tribe_event;
         if (is_int($tribe_event->ID)) {
             $this->load_event_meta($tribe_event->ID);
