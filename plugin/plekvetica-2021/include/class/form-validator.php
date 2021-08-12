@@ -1,19 +1,27 @@
-<?php 
-Class PlekFormValidator {
+<?php
+class PlekFormValidator
+{
 
+    protected $name = array(); //DisplayName of the field 
     protected $type = array(); //Type of the field to validate
-    protected $require = array(); //Defines if the field is required
+    protected $require = array(); //Defines if the field is required and cannot be empty
     protected $ignore = array(); //Validator ignores this fields
     protected $pattern = array(); //The Regex pattern to check for
     protected $max_length = array(); //Max length of the value
     protected $min_length = array(); //Min length of the value
+    protected $hint = array(); //When validation fails, this hint will be displayed to help the user
 
     protected $errors = array(); //The validator errors ('Fieldname' => 'Message')
+    protected $system_errors = array(); //System Errors ('Error1', 'Error2')
 
 
-    public function __construct()
+    public function __construct($ignore_default_fields = true)
     {
-
+        if($ignore_default_fields){
+            $this -> set_ignore('action');
+            $this -> set_ignore('do');
+        }
+        //$this -> set_system_error('Test1');
     }
 
     /**
@@ -23,8 +31,9 @@ Class PlekFormValidator {
      * @param string $fieldname
      * @return void
      */
-    public function set_required(string $fieldname){
-        $this -> require[] = $fieldname;
+    public function set_required(string $fieldname)
+    {
+        $this->require[$fieldname] = true;
         return;
     }
 
@@ -34,8 +43,9 @@ Class PlekFormValidator {
      * @param string $fieldname
      * @return void
      */
-    public function set_ignore(string $fieldname){
-        $this -> ignore[] = $fieldname;
+    public function set_ignore(string $fieldname)
+    {
+        $this->ignore[$fieldname] = true;
         return;
     }
 
@@ -46,8 +56,9 @@ Class PlekFormValidator {
      * @param string $pattern - Regex pattern like '/^([0-9]+)/'
      * @return void
      */
-    public function set_pattern(string $fieldname, string $pattern){
-        $this -> pattern[$fieldname] = $pattern;
+    public function set_pattern(string $fieldname, string $pattern)
+    {
+        $this->pattern[$fieldname] = $pattern;
         return;
     }
     /**
@@ -57,8 +68,9 @@ Class PlekFormValidator {
      * @param int $length - Max. Length of the received string / data
      * @return void
      */
-    public function set_max_length(string $fieldname, int $length){
-        $this -> max_length[$fieldname] = $length;
+    public function set_max_length(string $fieldname, int $length)
+    {
+        $this->max_length[$fieldname] = $length;
         return;
     }
 
@@ -69,8 +81,50 @@ Class PlekFormValidator {
      * @param int $length - Min. Length of the received string / data
      * @return void
      */
-    public function set_min_length(string $fieldname, int $length){
-        $this -> min_length[$fieldname] = $length;
+    public function set_min_length(string $fieldname, int $length)
+    {
+        $this->min_length[$fieldname] = $length;
+        return;
+    }
+
+    /**
+     * Sets the display name of a field
+     *
+     * @param string $fieldname
+     * @param string $name - Displayname of the field
+     * @return void
+     * @todo: check if function is needed
+     */
+    public function set_name(string $fieldname, string $name)
+    {
+        $this->name[$fieldname] = $name;
+        return;
+    }
+
+    /**
+     * Sets the type of the field
+     *
+     * @param string $fieldname
+     * @param string $type - Displayname of the field
+     * @return void
+     */
+    public function set_type(string $fieldname, string $type)
+    {
+        $this->type[$fieldname] = $type;
+        return;
+    }
+
+    /**
+     * Sets the hint of a field
+     * When validation fails, this hint will be displayed to help the user
+     *
+     * @param string $fieldname
+     * @param string $hint - Hint that appears when validation fails.
+     * @return void
+     */
+    public function set_hint(string $fieldname, int $hint)
+    {
+        $this->hint[$fieldname] = $hint;
         return;
     }
 
@@ -78,16 +132,143 @@ Class PlekFormValidator {
      * Sets the errors for a field
      *
      * @param string $fieldname
-     * @param int $length - Min. Length of the received string / data
+     * @param int $message - Message to save
      * @return void
      */
-    public function set_error(string $fieldname, string $message){
-        $this -> error[$fieldname] = $message;
+    public function set_error(string $fieldname, string $message)
+    {
+        $this->errors[$fieldname][] = $message;
         return;
     }
 
-    public function field_is_valid(string $fieldname){
-        $this -> setup_field($fieldname);
+    /**
+     * Sets the system errors
+     *
+     * @param string $fieldname
+     * @param int $message - Message to save
+     * @return void
+     */
+    public function set_system_error(string $message)
+    {
+        //$this->system_errors[] = $message;
+        $this->errors['plek_validator_system'][] = $message;
+        return;
+    }
+
+    /**
+     * Gets all the system errors
+     *
+     * @param string $fieldname
+     * @return array Null if no errors, otherwise ('message1', 'message2')
+     */
+    public function get_system_errors()
+    {
+        if(isset($this->errors['plek_validator_system'])){
+            return $this->errors['plek_validator_system'];
+        }
+        return null;
+    }
+
+    /**
+     * Gets all the errors
+     *
+     * @param string $fieldname
+     * @return array Empty array if no errors, otherwise ('fieldname' => 'message')
+     */
+    public function get_errors()
+    {
+        return $this->errors;
+    }
+
+    public function field_is_valid(string $fieldname, mixed $value)
+    {
+        //s($fieldname);
+        //s($value);
+        //Sets the default values
+        $this->setup_field($fieldname);
+
+        //Check if field should be ignored
+        if (isset($this->ignore[$fieldname])) {
+            return true;
+        }
+
+        //Check if field is required but empty
+        if (isset($this->require[$fieldname]) and empty($value)) {
+            $this->set_error($fieldname, __('Darf nicht leer sein.', 'pleklang'));
+            return false;
+        }
+
+        //Check for min_length
+
+        if ($this->min_length[$fieldname] !== 0 AND !empty($value) AND $this->min_length[$fieldname] > strlen($value)) {
+            $calc_length = (int)($this->min_length[$fieldname] - strlen($value));
+            $msg = sprintf(__('Eingabe ist %d Zeichen zu kurz.', 'pleklang'), $calc_length);
+            $this->set_error($fieldname, $msg);
+        }
+
+        //Check for max_length
+        if ($this->max_length[$fieldname] !== 0 AND !empty($value) AND strlen($value) > $this->max_length[$fieldname]) {
+            $calc_length = (int)(strlen($value) - $this->max_length[$fieldname]);
+            $msg = sprintf(__('Eingabe ist %d Zeichen zu lang.', 'pleklang'), $calc_length);
+            $this->set_error($fieldname, $msg);
+        }
+
+        //Check for regex pattern
+        if ($this->pattern[$fieldname] !== false) {
+            if (preg_match($this->pattern[$fieldname], $value, $out) !== 1) {
+                if (!empty($this->hint[$fieldname])) {
+                    $this->set_error($fieldname, sprintf(__('Falsches Format für "%s". Hinweis: %s', 'pleklang'), $fieldname, $this->hint[$fieldname]));
+                } else {
+                    $this->set_error($fieldname, __('Falsches Format.', 'pleklang'));
+                }
+            }
+        }
+
+        //Check for special types
+        $type = isset($this->type[$fieldname]) ? $this->type[$fieldname] : null ;
+        switch ($type) {
+            case 'password':
+                if(!empty($value)){
+                    if(preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[^\w\d\s:])([^\s])*$/m',$value) !== 1){
+                        $this->set_error($fieldname, __('Passwort muss einen Buchstaben, eine Zahl und ein Sonderzeichen enthalten.', 'pleklang'));
+                    }
+                }
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+        if(!empty($this -> errors[$fieldname])){
+            return false;
+        }
+        //All checks have been passed.
+        return true;
+    }
+
+    /**
+     * Checks if all the values of the input are valid.
+     * If no input is given, all the items from the $_REQUEST will be used.
+     *
+     * @param array $input - Array to check
+     * @return bool true on success, false on error
+     */
+    public function all_fields_are_valid(array $input = null)
+    {
+        $input = ($input === null) ? $_REQUEST : $input;
+        if (!is_array($input)) {
+            $this->set_system_error('all_fields_are_valid() - Input has to be array');
+            return false;
+        }
+        foreach ($input as $fkey => $fvalue) {
+            $this->field_is_valid($fkey, $fvalue);
+        }
+        if (count($this->errors) !== 0) {
+            return false;
+        }
+        //Field passed all the tests. Field is valid.
+        return true;
     }
 
     /**
@@ -96,37 +277,61 @@ Class PlekFormValidator {
      * @param string $fieldname
      * @return void
      */
-    public function setup_field(string $fieldname){
+    public function setup_field(string $fieldname)
+    {
         //Sets the validator options to their default values by type.
-        if(isset($this -> type[$fieldname])){
-            $this -> set_defaults($fieldname, $this -> type[$fieldname]);
+        if (isset($this->type[$fieldname])) {
+            $this->set_defaults($fieldname, $this->type[$fieldname]);
         }
-
+        //s($this);
+        return;
     }
-    
-    protected function set_defaults(string $fieldname, string $type){
+
+    /**
+     * Sets the default values if a type is given.
+     * If any values are already set, those will not be overridden.
+     *
+     * @param string $fieldname
+     * @param string $type
+     * @return void
+     */
+    protected function set_defaults(string $fieldname, string $type)
+    {
         $defaults = array();
-        $defaults['default'] = array("name" => __("Text", "pleklang"), "minlen" => 1, "maxlen" => 0, "regex" => false);
-		$defaults['text'] = array("name" => __("Text", "pleklang"), "minlen" => 1, "maxlen" => 0, "regex" => false);
-		$defaults['ytvideos'] = array("name" => __("Youtube Videos", "pleklang"), "minlen" => 1, "maxlen" => 0, "regex" => false);
-		$defaults['image'] = array("name" => __("Image", "pleklang"), "minlen" => 0, "maxlen" => 0, "regex" => false);
-		$defaults['alpha_number'] = array("name" => __("Alpha Number", "pleklang"), "minlen" => 1, "maxlen" => 0, "regex" => '/^[a-z]+_([0-9]+)/');
-		$defaults['int'] = array("name" => __("Number", "pleklang"), "minlen" => 1, "maxlen" => 0, "regex" => '/^([0-9]+)/');
-		$defaults['phone'] = array("name" => __("Phone Number", "pleklang"), "minlen" => 10, "maxlen" => 17, "regex" => '/^[+]{0,1}[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s0-9]*$/');
-		$defaults['email'] = array("name" => __("Email", "pleklang"), "minlen" => 5, "maxlen" => 0, "regex" => '/\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/');
-		$defaults['textlong'] = array("name" => __("Text", "pleklang"), "minlen" => 1, "maxlen" => 0, "regex" => false);
-		$defaults['time'] = array("name" => __("Time", "pleklang"), "minlen" => 4, "maxlen" => 5, "regex" => '/^[0-2][0-9]:?[0-9][0-9]$/');
-		$defaults['date'] = array("name" => __("Date", "pleklang"), "minlen" => 2, "maxlen" => 10, "regex" => '/^[0-3]{0,1}[0-9][-.\/]{0,1}[0-1]{0,1}[0-9][-.\/]{0,1}[0-9]{0,1}[0-9]{0,1}[0-9][0-9]$/');
-		//$defaults['url'] = array("name" => __("URL","pleklang"),"minlen" => 2, "maxlen" => 50, "regex" => "^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$");
-		$defaults['url'] = array("name" => __("URL", "pleklang"), "minlen" => 2, "maxlen" => 0, "regex" => false);
-		$defaults['facebookurl'] = array("name" => __("Facebook URL", "pleklang"), "minlen" => 2, "maxlen" => 0, "regex" => '/(?:https?:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-\.]*)/');
-		$defaults['numbershort'] = array("name" => __("Number short", "pleklang"), "minlen" => 1, "maxlen" => 0, "regex" => '/^[0-9]+$/');
-		$defaults['price'] = array("name" => __("Preis", "pleklang"), "minlen" => 1, "maxlen" => 20, "regex" => '/^[0-9.\- ]+$/', "hint" =>  __('Darf nur Zahlen, Punkt und Minus enthalten','pleklang'));
-        
-        if(!isset($defaults[$type])){
-            $this -> set_error($fieldname, __('Fieldtype not find in default validator','pleklang') );
-            return false;
-        }
-    }
+        $defaults['default'] = array("name" => __("Text", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => false);
+        $defaults['text'] = array("name" => __("Text", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => false);
+        $defaults['ytvideos'] = array("name" => __("Youtube Videos", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => false);
+        $defaults['image'] = array("name" => __("Image", "pleklang"), "min_length" => 0, "max_length" => 0, "pattern" => false);
+        $defaults['alpha_number'] = array("name" => __("Alpha Number", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => '/^[a-z]+_([0-9]+)/');
+        $defaults['int'] = array("name" => __("Number", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => '/^([0-9]+)/');
+        $defaults['phone'] = array("name" => __("Phone Number", "pleklang"), "min_length" => 10, "max_length" => 17, "pattern" => '/^[+]{0,1}[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s0-9]*$/');
+        $defaults['email'] = array("name" => __("Email", "pleklang"), "min_length" => 5, "max_length" => 0, "pattern" => '/\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/');
+        $defaults['textlong'] = array("name" => __("Text", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => false);
+        $defaults['time'] = array("name" => __("Time", "pleklang"), "min_length" => 4, "max_length" => 5, "pattern" => '/^[0-2][0-9]:?[0-9][0-9]$/');
+        $defaults['date'] = array("name" => __("Date", "pleklang"), "min_length" => 2, "max_length" => 10, "pattern" => '/^[0-3]{0,1}[0-9][-.\/]{0,1}[0-1]{0,1}[0-9][-.\/]{0,1}[0-9]{0,1}[0-9]{0,1}[0-9][0-9]$/');
+        $defaults['url'] = array("name" => __("URL", "pleklang"), "min_length" => 2, "max_length" => 0, "pattern" => false);
+        $defaults['facebookurl'] = array("name" => __("Facebook URL", "pleklang"), "min_length" => 2, "max_length" => 0, "pattern" => '/(?:https?:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-\.]*)/');
+        $defaults['numbershort'] = array("name" => __("Number short", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => '/^[0-9]+$/');
+        $defaults['price'] = array("name" => __("Preis", "pleklang"), "min_length" => 1, "max_length" => 20, "pattern" => '/^[0-9.\- ]+$/', "hint" =>  __('Darf nur Zahlen, Punkt und Minus enthalten', 'pleklang'));
+        $defaults['password'] = array("name" => __("Passwort", "pleklang"), "min_length" => 10, "max_length" => 0, "pattern" => false);
 
+        if (!isset($defaults[$type])) {
+            //$this -> set_error($fieldname, __('Fieldtype not find in default validator','pleklang') );
+            //return false;
+            $type = 'default';
+        }
+        if (!isset($this->name[$fieldname])) {
+            $this->name[$fieldname] = $defaults[$type]['name'];
+        }
+        if (!isset($this->pattern[$fieldname])) {
+            $this->pattern[$fieldname] = $defaults[$type]['pattern'];
+        }
+        if (!isset($this->min_length[$fieldname])) {
+            $this->min_length[$fieldname] = $defaults[$type]['min_length'];
+        }
+        if (!isset($this->max_length[$fieldname])) {
+            $this->max_length[$fieldname] = $defaults[$type]['max_length'];
+        }
+        return true;
+    }
 }

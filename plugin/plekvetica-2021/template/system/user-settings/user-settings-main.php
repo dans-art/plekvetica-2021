@@ -13,6 +13,8 @@ if(!isset($user -> meta['nickname'])){
 
 ?>
 <form id='plek-user-settings-form'>
+    <input id="user-id" name="user-id" type="text" class='plek-hidden' value="<?php echo $user -> ID; ?>"></input>
+
     <label for="first-name"><?php echo __('Vornamen','pleklang'); ?></label>
     <input id="first-name" name="first-name" type="text" value="<?php echo $user -> meta['first_name'][0]; ?>"></input>
     
@@ -26,7 +28,7 @@ if(!isset($user -> meta['nickname'])){
     <input id="new-password" name="new-password" type="password" value=""></input>
     
     <label for="new-password-retype"><?php echo __('Neues Passwort wiederholung','pleklang'); ?></label>
-    <input id="new-password-retype" type="password" value=""></input>
+    <input id="new-password-retype" name="new-password-repeat" type="password" value=""></input>
     
     <?php 
     
@@ -35,12 +37,12 @@ if(!isset($user -> meta['nickname'])){
     }
     
     ?>
-    <input id="user-settings-submit" type="submit" value="<?php echo __('Speichern','pleklang'); ?>"></input>
+    <div class="buttons">
+        <input id="user-settings-cancel" class="plek-button plek-button-cancel" type="submit" value="<?php echo __('Abbrechen','pleklang'); ?>"></input>
+        <input id="user-settings-submit" class="plek-button" type="submit" value="<?php echo __('Speichern','pleklang'); ?>"></input>
+    </div>
 </form>
 <script type="text/javascript" defer='defer'>
 	var ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
 	var plek_plugin_dir_url = "<?php echo PLEK_PLUGIN_DIR_URL; ?>";
 </script>
-<?php 
-s($user);
- ?>

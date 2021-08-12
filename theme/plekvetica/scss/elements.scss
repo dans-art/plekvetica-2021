@@ -258,3 +258,14 @@ blockquote{
     border-color: $color-red-light;
   }
 }
+
+//Generate Press Fix
+input[type="phone"]{
+  color: #666666;
+  background-color: #fafafa;
+  border-color: #cccccc;
+  border: 1px solid;
+  border-radius: 0;
+  padding: 10px 15px;
+  max-width: 100%;
+}

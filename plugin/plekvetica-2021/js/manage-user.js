@@ -22,6 +22,10 @@ let plek_user = {
         //on settings submit input click
         jQuery('#plek-user-settings-form input[type="submit"]').click(function(e){
             e.preventDefault();
+            if(e.currentTarget.id === 'user-settings-cancel'){
+                history.back();
+                return;
+            }
             var data = jQuery('#plek-user-settings-form').serialize();
             plek_user.save_user_settings(data);
         })
@@ -80,10 +84,11 @@ let plek_user = {
     //User Settings form functions
     save_user_settings(data){
         plek_main.activate_button_loader('#user-settings-submit', 'Speichere Einstellungen...');
+        plek_main.remove_field_errors();
         console.log("Save user settings");
         //let form = jQuery('#plek-user-settings-form');
 
-        let button = jQuery('#plek-submit');
+        let button = jQuery('#user-settings-submit');
         /*data = {
             'action': 'plek_user_actions',
             'do': 'save_user_settings',
@@ -102,7 +107,10 @@ let plek_user = {
                 let text = plek_main.get_text_from_ajax_request(data, true);
                 let errors = plek_main.show_field_errors(data);
                 if(errors === true){
+                    console.log("Contains Errors");
                     text = "Das Formular enthält Fehler, bitte korrigieren";
+                }else{
+                    text = plek_main.get_text_from_ajax_request(data, true);
                 }
                 plek_main.deactivate_button_loader(button, text);
 

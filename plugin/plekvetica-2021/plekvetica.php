@@ -51,6 +51,9 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
  $plek_login_handler = new PlekLoginHandler;
  $plek_ajax_handler = new PlekAjaxHandler;
 
+ //Error Handling
+ $plek_ajax_errors = new WP_Error();
+
  require_once(PLEK_PATH . 'include/filter-actions.php');
  require_once(PLEK_PATH . 'include/shortcodes.php');
 

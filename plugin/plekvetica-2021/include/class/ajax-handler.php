@@ -68,8 +68,14 @@ class PlekAjaxHandler
         die();
     }
 
+    /**
+     * Ajax User actions
+     *
+     * @return string $this -> get_ajax_return() - JSON String
+     */
     public function plek_ajax_user_actions()
     {
+        global $plek_ajax_errors;
         $do = $this->get_ajax_do();
         switch ($do) {
             case 'save_user_settings':
@@ -79,9 +85,13 @@ class PlekAjaxHandler
                 if ($validate === true) {
                     $save = $user_form_handler->save_user_settings();
                     if ($save === true) {
-                        $this->set_success(__('Einstellungen erfolgreich gespeichert.', 'pleklang'));
+                        $this->set_success(__('Einstellungen gespeichert.', 'pleklang'));
                     } else {
-                        $this->set_error(sprintf(__('Fehler beim speichern der Einstellungen (%s).', 'pleklang'), $save));
+                        if ($plek_ajax_errors->has_errors()) {
+                            $errors = implode(', ',$plek_ajax_errors->get_error_messages('save_user_settings'));
+                            //$plek_ajax_errors->get_all_error_data('save_user_settings'); //@todo: Send message to plek manager?
+                        }
+                        $this->set_error(sprintf(__('Fehler beim speichern der Einstellungen (%s).', 'pleklang'), $errors));
                     }
                 } else {
                     $this->set_error_array($validate);
@@ -117,7 +127,7 @@ class PlekAjaxHandler
                 $this->set_success(__('Neues Konto angelegt. Du erhälst in kürze eine Email mit dem Bestätigunglink.', 'pleklang'));
                 break;
             case 'save_user_settings':
-                $this -> set_error(__('Du musst eingeloggt sein, um deine Kontodaten zu speichern!','pleklang') );
+                $this->set_error(__('Du musst eingeloggt sein, um deine Kontodaten zu speichern!', 'pleklang'));
                 break;
             default:
                 # code...
@@ -140,6 +150,23 @@ class PlekAjaxHandler
     public function get_ajax_data(string $field = '')
     {
         return (isset($_REQUEST[$field])) ? htmlspecialchars($_REQUEST[$field]) : "";
+    }
+
+    /**
+     * Get all the data from $_REQUEST.
+     * If $ignore_defaults is set, the keys "do" and "action" will be removed.
+     *
+     * @param boolean $ignore_defaults - Ignores the "do" and "action" fields
+     * @return array $_REQUEST array
+     */
+    public function get_all_ajax_data(bool $ignore_defaults = true)
+    {
+        $data = $_REQUEST;
+        if ($ignore_defaults) {
+            unset($data['do']);
+            unset($data['action']);
+        }
+        return $data;
     }
 
     protected function set_error(string $message, string $field = "")

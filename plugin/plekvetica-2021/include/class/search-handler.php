@@ -278,6 +278,13 @@ class PlekSearchHandler
         $plek_event->total_posts['search_events_with_bands'] = (int) $band_query->found_posts;
         return $posts;
     }
+    /**
+     * Searches all events with the given tag id
+     * 
+     *@todo This function is currently unused!
+     * @param array $band_ids - array of band/tag ids
+     * @return void
+     */
     public function search_events_with_bands_ids(array $band_ids)
     {
         $post_args = array(

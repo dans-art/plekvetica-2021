@@ -181,6 +181,9 @@ blockquote { font-size: 1em; border-left: 2px solid #595959; }
 /* line 256, scss/elements.scss */
 .plek-message.red, .tribe-events-calendar-list__event .plek-message.red { color: #8C262E; border-color: #8C262E; }
 
+/* line 263, scss/elements.scss */
+input[type="phone"] { color: #666666; background-color: #fafafa; border-color: #cccccc; border: 1px solid; border-radius: 0; padding: 10px 15px; max-width: 100%; }
+
 /* line 4, scss/event-general.scss */
 .band img { vertical-align: sub; width: 19px; }
 
@@ -619,73 +622,95 @@ body.page-id-24565 label, body.page-id-24565 .dataTables_info, body.page-id-2456
 /* line 415, scss/pages-style.scss */
 body.page-id-24565 td { color: black; }
 
-/* line 3, scss/forms.scss */
+/* line 5, scss/forms.scss */
+form .plek-field-error { color: #D9042B; display: block; }
+
+/* line 11, scss/forms.scss */
 div.plek-review-search { margin-bottom: 1em; }
-/* line 6, scss/forms.scss */
+/* line 14, scss/forms.scss */
 div.plek-review-search form { display: flex; flex-direction: row; justify-content: stretch; }
-/* line 12, scss/forms.scss */
+/* line 20, scss/forms.scss */
 div.plek-review-search form label { width: 20%; }
-/* line 15, scss/forms.scss */
+/* line 23, scss/forms.scss */
 div.plek-review-search form label:first-child { width: 80%; }
-/* line 18, scss/forms.scss */
+/* line 26, scss/forms.scss */
 div.plek-review-search form button, div.plek-review-search form input { width: 100%; }
 
-/* line 27, scss/forms.scss */
+/* line 35, scss/forms.scss */
 .login-form p, .reset-password p { display: flex; justify-content: flex-start; flex-direction: column; }
 
 /* Add Event */
-/* line 36, scss/forms.scss */
+/* line 44, scss/forms.scss */
 .plek-event-form-container, .submit.plek-button { margin-left: 20%; }
 
-/* line 42, scss/forms.scss */
+/* line 50, scss/forms.scss */
 .event-basic-container .event-name-container { display: flex; flex-direction: column; margin-bottom: 1em; }
-/* line 48, scss/forms.scss */
-.event-basic-container .event-date-container label { width: 100%; }
-/* line 51, scss/forms.scss */
-.event-basic-container .event-date-picker { display: flex; flex-direction: row; justify-content: space-between; }
 /* line 56, scss/forms.scss */
-.event-basic-container .event-date-picker .date-input-container { flex-basis: 45%; }
+.event-basic-container .event-date-container label { width: 100%; }
 /* line 59, scss/forms.scss */
+.event-basic-container .event-date-picker { display: flex; flex-direction: row; justify-content: space-between; }
+/* line 64, scss/forms.scss */
+.event-basic-container .event-date-picker .date-input-container { flex-basis: 45%; }
+/* line 67, scss/forms.scss */
 .event-basic-container .event-date-picker .date-input-container input { width: 100%; }
-/* line 63, scss/forms.scss */
+/* line 71, scss/forms.scss */
 .event-basic-container .event-date-picker .date-to-seperator { flex-basis: 10%; text-align: center; align-self: center; }
-/* line 69, scss/forms.scss */
+/* line 77, scss/forms.scss */
 .event-basic-container .plek-multi-date { display: inline; }
 
-/* line 75, scss/forms.scss */
+/* line 83, scss/forms.scss */
 .event-search-bar-container { display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between; }
-/* line 81, scss/forms.scss */
+/* line 89, scss/forms.scss */
 .event-search-bar-container input { flex-basis: 100%; }
 
-/* line 86, scss/forms.scss */
+/* line 94, scss/forms.scss */
 .submit.plek-button input { width: 100%; }
 
-/* line 89, scss/forms.scss */
+/* line 97, scss/forms.scss */
 .plek-search-overlay { position: absolute; background-color: #595959; width: 72%; max-width: 755px; z-index: 9999; }
-/* line 96, scss/forms.scss */
+/* line 104, scss/forms.scss */
 .plek-search-overlay .item { padding: 1em; }
-/* line 99, scss/forms.scss */
+/* line 107, scss/forms.scss */
 .plek-search-overlay .item:hover, .plek-search-overlay .item:focus { background-color: #424242; cursor: pointer; }
-/* line 106, scss/forms.scss */
+/* line 114, scss/forms.scss */
 .plek-search-overlay .overlay-header { text-align: center; }
-/* line 109, scss/forms.scss */
+/* line 117, scss/forms.scss */
 .plek-search-overlay img { max-height: 1em; }
-/* line 112, scss/forms.scss */
+/* line 120, scss/forms.scss */
 .plek-search-overlay .title { font-size: 1.1em; font-weight: bold; }
-/* line 116, scss/forms.scss */
+/* line 124, scss/forms.scss */
 .plek-search-overlay .subtitle { padding-left: 2em; }
 
-/* line 121, scss/forms.scss */
+/* line 129, scss/forms.scss */
 .overlay_background { position: absolute; top: 0; left: 0; width: 100%; height: 0; z-index: 0; }
 
-/* line 130, scss/forms.scss */
+/* line 138, scss/forms.scss */
 .item.plek-select-item .title { display: flex; }
-/* line 133, scss/forms.scss */
+/* line 141, scss/forms.scss */
 .item.plek-select-item .title img { max-height: 1em; margin-right: 1em; }
-/* line 137, scss/forms.scss */
+/* line 145, scss/forms.scss */
 .item.plek-select-item .title .remove-item { margin-right: 1em; }
-/* line 140, scss/forms.scss */
+/* line 148, scss/forms.scss */
 .item.plek-select-item .title i { cursor: pointer; font-size: 1.2em; }
+
+/* line 154, scss/forms.scss */
+#plek-user-settings-form { margin-left: 2em; }
+/* line 158, scss/forms.scss */
+#plek-user-settings-form h2 { margin-left: -1em; margin-top: 1em; }
+/* line 163, scss/forms.scss */
+#plek-user-settings-form .plek-hidden { display: none; }
+/* line 167, scss/forms.scss */
+#plek-user-settings-form input, #plek-user-settings-form textarea { width: 100%; }
+/* line 171, scss/forms.scss */
+#plek-user-settings-form label { width: 100%; }
+/* line 175, scss/forms.scss */
+#plek-user-settings-form input.plek-button { width: 25%; white-space: normal; }
+/* line 180, scss/forms.scss */
+#plek-user-settings-form #user-settings-submit { background-color: #8C262E; }
+/* line 183, scss/forms.scss */
+#plek-user-settings-form .plek-button-cancel { width: 25%; }
+/* line 187, scss/forms.scss */
+#plek-user-settings-form .buttons { display: flex; justify-content: flex-end; gap: 1em; }
 
 /* line 5, scss/form-old.scss */
 .plekvetica-add-event { /*Messages*/ }
