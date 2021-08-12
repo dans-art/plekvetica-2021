@@ -22,13 +22,13 @@ if(!isset($user -> meta['nickname'])){
     <input id="last-name" name="last-name" type="text" value="<?php echo $user -> meta['last_name'][0]; ?>"></input>
     
     <label for="description"><?php echo __('Beschreibung','pleklang'); ?></label>
-    <textarea id="description" name="description" type="text"><?php echo $user -> meta['description'][0]; ?></textarea>
+    <textarea id="description" name="description" type="text"><?php echo htmlspecialchars_decode($user -> meta['description'][0]); ?></textarea>
     
     <label for="new-password"><?php echo __('Neues Passwort','pleklang'); ?></label>
     <input id="new-password" name="new-password" type="password" value=""></input>
     
-    <label for="new-password-retype"><?php echo __('Neues Passwort wiederholung','pleklang'); ?></label>
-    <input id="new-password-retype" name="new-password-repeat" type="password" value=""></input>
+    <label for="new-password-repeat"><?php echo __('Neues Passwort wiederholung','pleklang'); ?></label>
+    <input id="new-password-repeat" name="new-password-repeat" type="password" value=""></input>
     
     <?php 
     
@@ -38,8 +38,8 @@ if(!isset($user -> meta['nickname'])){
     
     ?>
     <div class="buttons">
-        <input id="user-settings-cancel" class="plek-button plek-button-cancel" type="submit" value="<?php echo __('Abbrechen','pleklang'); ?>"></input>
-        <input id="user-settings-submit" class="plek-button" type="submit" value="<?php echo __('Speichern','pleklang'); ?>"></input>
+        <button id="user-settings-cancel" class="plek-button plek-button-cancel" type="button"><?php echo __('Abbrechen','pleklang'); ?></button>
+        <button id="user-settings-submit" class="plek-button" type="submit"><?php echo __('Speichern','pleklang'); ?></button>
     </div>
 </form>
 <script type="text/javascript" defer='defer'>

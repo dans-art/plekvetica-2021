@@ -33,9 +33,6 @@ $page_obj = $plek_event -> get_pages_object();
         <div class="organizer-data">
             <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Deine Daten', 'pleklang')); ?>
             <?php PlekTemplateHandler::load_template('organizer-data', 'system/userpage', $user); ?>
-            <p class="info">
-                Aktuell können die Daten noch nicht selbst angepasst werden. Bitte schreibe eine mail an <a href="mailto:info@plekvetica.ch">info@plekvetica.ch</a> für Änderungswünsche.
-            </p>
         </div>
     </div>
     <div class="all-posts">

@@ -245,6 +245,17 @@
         }
         
     }
+    #plek-user-settings-form{
+      
+        button.plek-button{
+          width: 100%;
+        }
+
+        .buttons{
+            flex-direction: column;
+            gap: 0;
+          }
+    }
 }
 
 @media (min-width: 599px){

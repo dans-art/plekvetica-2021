@@ -52,7 +52,7 @@ let plek_main = {
 
     activate_button_loader(element, text){
         jQuery(element).addClass('loader');
-        if(jQuery(element).attr('type') === "submit"){
+        if(jQuery(element).is("input")){
             jQuery(element).val(text);
         }else{
             jQuery(element).html(text);
@@ -60,7 +60,7 @@ let plek_main = {
     },
     deactivate_button_loader(element, text){
         jQuery(element).removeClass('loader');
-        if(jQuery(element).attr('type') === "submit"){
+        if(jQuery(element).is("input")){
             jQuery(element).val(text);
         }else{
             jQuery(element).html(text);

@@ -167,12 +167,13 @@ div.plek-review-search{
   input,
   textarea{
     width: 100%;
+    margin-bottom: 0.5em;
   }
   label{
     width: 100%;
   }
 
-  input.plek-button{
+  button.plek-button{
     width: 25%;
     white-space: normal;
   }
@@ -181,11 +182,17 @@ div.plek-review-search{
     background-color: $color-red-light;
   }
   .plek-button-cancel{
-    width: 25%;
+    background-color: $color-gray;
+    color: $text-color;
+
+    &:hover{
+      color: $color-red-light-two;
+    }
   }
 
   .buttons{
     display: flex;
+    flex-direction: row;
     justify-content: flex-end;
     gap: 1em
   }

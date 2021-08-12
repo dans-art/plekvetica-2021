@@ -5,7 +5,7 @@ let plek_user = {
 
     construct() {
 
-        default_button_texts.submit = jQuery('input[type="submit"]').val();
+        default_button_texts.submit = jQuery('#user-settings-submit').text();
         //On Submitbutton click
         jQuery('#plek-submit').click(function (e) {
             e.preventDefault();
@@ -20,8 +20,9 @@ let plek_user = {
         })
 
         //on settings submit input click
-        jQuery('#plek-user-settings-form input[type="submit"]').click(function(e){
+        jQuery('#plek-user-settings-form button').click(function(e){
             e.preventDefault();
+            //Check if cancel button
             if(e.currentTarget.id === 'user-settings-cancel'){
                 history.back();
                 return;
@@ -85,18 +86,10 @@ let plek_user = {
     save_user_settings(data){
         plek_main.activate_button_loader('#user-settings-submit', 'Speichere Einstellungen...');
         plek_main.remove_field_errors();
-        console.log("Save user settings");
-        //let form = jQuery('#plek-user-settings-form');
 
         let button = jQuery('#user-settings-submit');
-        /*data = {
-            'action': 'plek_user_actions',
-            'do': 'save_user_settings',
-        }*/
-        console.log(data);
         data += '&action='+'plek_user_actions';
         data += '&do='+'save_user_settings';
-        console.log(data);
 
         jQuery.ajax({
             url: window.ajaxurl,
@@ -113,6 +106,9 @@ let plek_user = {
                     text = plek_main.get_text_from_ajax_request(data, true);
                 }
                 plek_main.deactivate_button_loader(button, text);
+                setTimeout(() => {
+                    jQuery('#user-settings-submit').text(plek_user.default_button_texts.submit);
+                }, 5000);
 
             },
             error: function error(data) {

@@ -103,7 +103,7 @@ button html input[type="button"], button input[type="reset"], button input[type=
 /* line 67, scss/elements.scss */
 .plek-button:visited { color: white; }
 /* line 71, scss/elements.scss */
-.plek-button:hover, .plek-button:focus { color: black; }
+.plek-button:hover, .plek-button:focus { color: #e6c2c2; }
 /* line 76, scss/elements.scss */
 .plek-button.blue { background-color: #6278d9; }
 /* line 79, scss/elements.scss */
@@ -563,63 +563,69 @@ ul.partner-container .wp-block-latest-posts__featured-image.alignleft { margin: 
 .my-plek-header div { flex-basis: 50%; }
 /* line 273, scss/pages-style.scss */
 .my-plek-header div:nth-child(2) { text-align: right; }
+/* line 277, scss/pages-style.scss */
+.my-plek-header .logout-link a::after, .my-plek-header .settings-link a::after { font-family: "FontAwesome"; padding-left: 0.5em; }
+/* line 282, scss/pages-style.scss */
+.my-plek-header .logout-link a::after { content: '\f2f5'; }
+/* line 285, scss/pages-style.scss */
+.my-plek-header .settings-link a::after { content: '\f013'; }
 
-/* line 279, scss/pages-style.scss */
-.my-plek-container .my-plek-head-container { display: flex; justify-content: space-between; flex-wrap: wrap; }
-/* line 284, scss/pages-style.scss */
-.my-plek-container .my-plek-head-container .this-week-posts, .my-plek-container .my-plek-head-container .missing-reviews-posts, .my-plek-container .my-plek-head-container .organizer-data { flex-basis: 49%; flex-grow: 1; }
 /* line 291, scss/pages-style.scss */
-.my-plek-container .my-plek-head-container .organizer-data dd { margin: 0 1.5em 0.5em; }
-/* line 294, scss/pages-style.scss */
-.my-plek-container .my-plek-head-container .organizer-data .info { color: #595959; }
-/* line 299, scss/pages-style.scss */
-.my-plek-container .info-text-bar { width: 100%; }
+.my-plek-container .my-plek-head-container { display: flex; justify-content: space-between; flex-wrap: wrap; }
+/* line 296, scss/pages-style.scss */
+.my-plek-container .my-plek-head-container .this-week-posts, .my-plek-container .my-plek-head-container .missing-reviews-posts, .my-plek-container .my-plek-head-container .organizer-data { flex-basis: 49%; flex-grow: 1; }
 /* line 303, scss/pages-style.scss */
+.my-plek-container .my-plek-head-container .organizer-data dd { margin: 0 1.5em 0.5em; }
+/* line 306, scss/pages-style.scss */
+.my-plek-container .my-plek-head-container .organizer-data .info { color: #595959; }
+/* line 311, scss/pages-style.scss */
+.my-plek-container .info-text-bar { width: 100%; }
+/* line 315, scss/pages-style.scss */
 .my-plek-container .plek-no-open-reviews:after { content: '😃'; margin-left: 0.7em; }
 
-/* line 311, scss/pages-style.scss */
-.band-single.band-container { display: flex; column-gap: 5%; }
-/* line 315, scss/pages-style.scss */
-.band-single.band-container .info-text-bar { width: 100%; margin: 0.2em 0; }
-/* line 320, scss/pages-style.scss */
-.band-single.band-container .band-content { flex-basis: 70%; }
 /* line 323, scss/pages-style.scss */
+.band-single.band-container { display: flex; column-gap: 5%; }
+/* line 327, scss/pages-style.scss */
+.band-single.band-container .info-text-bar { width: 100%; margin: 0.2em 0; }
+/* line 332, scss/pages-style.scss */
+.band-single.band-container .band-content { flex-basis: 70%; }
+/* line 335, scss/pages-style.scss */
 .band-single.band-container .meta-container, .band-single.band-container .mobile-meta-con { flex-basis: 30%; margin-top: 3.8em; padding-right: 1em; display: none; }
-/* line 330, scss/pages-style.scss */
+/* line 342, scss/pages-style.scss */
 .band-single.band-container .meta-container ul, .band-single.band-container .mobile-meta-con ul { list-style: none; margin: 0; padding: 0; }
-/* line 336, scss/pages-style.scss */
+/* line 348, scss/pages-style.scss */
 .band-single.band-container .meta-container .band-flag img, .band-single.band-container .mobile-meta-con .band-flag img { max-height: 1.2em; vertical-align: sub; }
-/* line 341, scss/pages-style.scss */
+/* line 353, scss/pages-style.scss */
 .band-single.band-container .meta-container .event-links a, .band-single.band-container .mobile-meta-con .event-links a { color: white; }
-/* line 345, scss/pages-style.scss */
+/* line 357, scss/pages-style.scss */
 .band-single.band-container .meta-container .event-links i.far, .band-single.band-container .meta-container .event-links i.fas, .band-single.band-container .meta-container .event-links i.fab, .band-single.band-container .mobile-meta-con .event-links i.far, .band-single.band-container .mobile-meta-con .event-links i.fas, .band-single.band-container .mobile-meta-con .event-links i.fab { font-size: 1.5em; margin: 0.1em 0.3em; }
 
-/* line 358, scss/pages-style.scss */
+/* line 370, scss/pages-style.scss */
 #plek-search-page .info-text-bar { width: 100%; margin: 0.2em 0; }
-/* line 363, scss/pages-style.scss */
+/* line 375, scss/pages-style.scss */
 #plek-search-page .plek_album_con { justify-content: center; }
-/* line 366, scss/pages-style.scss */
+/* line 378, scss/pages-style.scss */
 #plek-search-page .plek_album_con .image_container { width: 23.5%; min-width: 200px; }
-/* line 372, scss/pages-style.scss */
-#plek-search-page .plek-search-bands { display: flex; flex-wrap: wrap; row-gap: 2%; }
-/* line 377, scss/pages-style.scss */
-#plek-search-page .plek-search-bands .band-list-item { flex-basis: 49%; }
-/* line 380, scss/pages-style.scss */
-#plek-search-page .plek-search-bands .band { display: flex; flex-direction: row; }
 /* line 384, scss/pages-style.scss */
-#plek-search-page .plek-search-bands .band-flag { margin-top: 0.8em; margin-right: 1em; }
+#plek-search-page .plek-search-bands { display: flex; flex-wrap: wrap; row-gap: 2%; }
 /* line 389, scss/pages-style.scss */
+#plek-search-page .plek-search-bands .band-list-item { flex-basis: 49%; }
+/* line 392, scss/pages-style.scss */
+#plek-search-page .plek-search-bands .band { display: flex; flex-direction: row; }
+/* line 396, scss/pages-style.scss */
+#plek-search-page .plek-search-bands .band-flag { margin-top: 0.8em; margin-right: 1em; }
+/* line 401, scss/pages-style.scss */
 #plek-search-page .tribe-events-calendar-list__event { margin: 0.2em 0; }
 
-/* line 396, scss/pages-style.scss */
+/* line 408, scss/pages-style.scss */
 body.page-id-24565 #content { width: 100%; max-width: 100%; }
-/* line 401, scss/pages-style.scss */
+/* line 413, scss/pages-style.scss */
 body.page-id-24565 .eTPoster img { width: 110px; }
-/* line 406, scss/pages-style.scss */
+/* line 418, scss/pages-style.scss */
 body.page-id-24565 .dataTables_scroll table, body.page-id-24565 .dataTables_scroll td, body.page-id-24565 .dataTables_scroll th { border: 1px solid gray; }
-/* line 410, scss/pages-style.scss */
+/* line 422, scss/pages-style.scss */
 body.page-id-24565 label, body.page-id-24565 .dataTables_info, body.page-id-24565 .dataTables_paginate a { color: white !important; }
-/* line 415, scss/pages-style.scss */
+/* line 427, scss/pages-style.scss */
 body.page-id-24565 td { color: black; }
 
 /* line 5, scss/forms.scss */
@@ -700,17 +706,19 @@ div.plek-review-search form button, div.plek-review-search form input { width: 1
 /* line 163, scss/forms.scss */
 #plek-user-settings-form .plek-hidden { display: none; }
 /* line 167, scss/forms.scss */
-#plek-user-settings-form input, #plek-user-settings-form textarea { width: 100%; }
-/* line 171, scss/forms.scss */
+#plek-user-settings-form input, #plek-user-settings-form textarea { width: 100%; margin-bottom: 0.5em; }
+/* line 172, scss/forms.scss */
 #plek-user-settings-form label { width: 100%; }
-/* line 175, scss/forms.scss */
-#plek-user-settings-form input.plek-button { width: 25%; white-space: normal; }
-/* line 180, scss/forms.scss */
+/* line 176, scss/forms.scss */
+#plek-user-settings-form button.plek-button { width: 25%; white-space: normal; }
+/* line 181, scss/forms.scss */
 #plek-user-settings-form #user-settings-submit { background-color: #8C262E; }
-/* line 183, scss/forms.scss */
-#plek-user-settings-form .plek-button-cancel { width: 25%; }
-/* line 187, scss/forms.scss */
-#plek-user-settings-form .buttons { display: flex; justify-content: flex-end; gap: 1em; }
+/* line 184, scss/forms.scss */
+#plek-user-settings-form .plek-button-cancel { background-color: #424242; color: white; }
+/* line 188, scss/forms.scss */
+#plek-user-settings-form .plek-button-cancel:hover { color: #e6c2c2; }
+/* line 193, scss/forms.scss */
+#plek-user-settings-form .buttons { display: flex; flex-direction: row; justify-content: flex-end; gap: 1em; }
 
 /* line 5, scss/form-old.scss */
 .plekvetica-add-event { /*Messages*/ }
@@ -1029,34 +1037,38 @@ div.plek-review-search form button, div.plek-review-search form input { width: 1
   /* line 239, scss/breakpoints.scss */
   #plek-search-page .plek_album_con .image_container img, .plek_album_con .image_container img { width: 100%; }
   /* line 243, scss/breakpoints.scss */
-  #plek-search-page .plek_album_con .image_container picture, .plek_album_con .image_container picture { max-height: unset; } }
-@media (min-width: 599px) { /* line 251, scss/breakpoints.scss */
-  .tribe-events-calendar-list__event-date-tag-datetime-mobile { display: none; }
+  #plek-search-page .plek_album_con .image_container picture, .plek_album_con .image_container picture { max-height: unset; }
+  /* line 250, scss/breakpoints.scss */
+  #plek-user-settings-form button.plek-button { width: 100%; }
   /* line 254, scss/breakpoints.scss */
+  #plek-user-settings-form .buttons { flex-direction: column; gap: 0; } }
+@media (min-width: 599px) { /* line 262, scss/breakpoints.scss */
+  .tribe-events-calendar-list__event-date-tag-datetime-mobile { display: none; }
+  /* line 265, scss/breakpoints.scss */
   .plek-review-search .gp-icon.icon-search { display: none; } }
-@media (max-width: 479px) { /* line 260, scss/breakpoints.scss */
+@media (max-width: 479px) { /* line 271, scss/breakpoints.scss */
   #tribe-events-pg-template .single-view #event-content .plek_album_con { flex-direction: column; }
-  /* line 264, scss/breakpoints.scss */
+  /* line 275, scss/breakpoints.scss */
   #tribe-events-pg-template .single-view #event-content .plek_album_con .image_container, #tribe-events-pg-template .single-view #event-content .plek_album_con img { width: 100%; }
-  /* line 270, scss/breakpoints.scss */
+  /* line 281, scss/breakpoints.scss */
   .plek-post-type-all_reviews .info-text-bar, .info-text-bar { width: 100%; }
-  /* line 277, scss/breakpoints.scss */
+  /* line 288, scss/breakpoints.scss */
   .plek-author-container .info-text-bar { width: 100%; }
-  /* line 280, scss/breakpoints.scss */
+  /* line 291, scss/breakpoints.scss */
   .plek-author-container .plek-author-meta { flex-direction: column; justify-content: center; }
-  /* line 287, scss/breakpoints.scss */
+  /* line 298, scss/breakpoints.scss */
   .info-text-banner { width: 100%; }
-  /* line 290, scss/breakpoints.scss */
+  /* line 301, scss/breakpoints.scss */
   #tribe-events-pg-template .single-view .event-poster .info-text-banner:nth-child(3) { width: 92%; } }
-@media (max-width: 400px) { /* line 296, scss/breakpoints.scss */
+@media (max-width: 400px) { /* line 307, scss/breakpoints.scss */
   .tribe-events-calendar-list__event, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event { flex-direction: column; }
-  /* line 300, scss/breakpoints.scss */
+  /* line 311, scss/breakpoints.scss */
   .tribe-events-calendar-list__event div, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event div { width: 100%; }
-  /* line 304, scss/breakpoints.scss */
+  /* line 315, scss/breakpoints.scss */
   .tribe-events-calendar-list__event img, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event img { width: 100%; }
-  /* line 309, scss/breakpoints.scss */
+  /* line 320, scss/breakpoints.scss */
   .banner-star-container { max-width: 100px; }
-  /* line 314, scss/breakpoints.scss */
+  /* line 325, scss/breakpoints.scss */
   .plek-posts-container .plek-post-item { flex-basis: 100%; } }
 /* line 48, scss/main-style.scss */
 #content.site-content { max-width: 1024px; margin: 0 auto; background-color: #232323; }

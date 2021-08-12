@@ -273,6 +273,18 @@ ul.partner-container{
     div:nth-child(2){
         text-align: right;
     }
+
+    .logout-link a::after,
+    .settings-link a::after{
+        font-family: "FontAwesome";
+        padding-left: 0.5em;
+    }
+    .logout-link a::after{
+        content: '\f2f5';
+    }
+    .settings-link a::after{
+        content: '\f013';
+    }
 }
 .my-plek-container{
 
