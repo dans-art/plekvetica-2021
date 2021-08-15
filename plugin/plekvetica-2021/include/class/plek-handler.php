@@ -66,6 +66,14 @@ class PlekHandler
         return PlekTemplateHandler::load_template_to_var('text_two_line', 'components', $attributes['line1'], $attributes['line2']);
     }
 
+    /**
+     * Get all the options from a ACF - Field
+     *
+     * @param string $field_name
+     * @param string $type - type of field to get. Leave empty if data from a normal post gets fetched
+     * @param integer $page_id
+     * @return array|false Array on success, false if field is not found.
+     */
     public function get_acf_choices(string $field_name, string $type, int $page_id)
     {
         switch ($type) {
@@ -122,6 +130,7 @@ class PlekHandler
     }
     public function enqueue_scripts(){
         wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js',['jquery']);
+        wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.min.js',['jquery']);
         
     }
 

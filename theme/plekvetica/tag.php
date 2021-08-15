@@ -15,7 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-	PlekTemplateHandler::load_template('single-band','band');
+	if(PlekBandHandler::is_band_edit()){
+		PlekTemplateHandler::load_template('band-form','band','edit');
+	}else{
+		PlekTemplateHandler::load_template('single-band','band');
+	}
 
 get_footer();
 

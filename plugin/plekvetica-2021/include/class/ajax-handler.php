@@ -69,6 +69,61 @@ class PlekAjaxHandler
     }
 
     /**
+     * Band Actions called by ajax.
+     * This functions are available for all users
+     *
+     * @return void
+     */
+    public function plek_ajax_band_nopriv_actions()
+    {
+        $do = $this->get_ajax_do();
+        switch ($do) {
+            case 'get_youtube_video':
+                $yt = new plekYoutube;
+                echo $yt -> get_ajax_single_video();
+                return;
+                break;
+            default:
+                # code...
+                break;
+        }
+        echo $this->get_ajax_return();
+        die();
+    }
+
+    /**
+     * Band Actions called by ajax.
+     * This functions require a logged in user!
+     *
+     * @return void
+     */
+    public function plek_ajax_band_actions()
+    {
+        global $plek_ajax_errors;
+        $do = $this->get_ajax_do();
+        switch ($do) {
+            case 'get_youtube_video':
+                $this -> plek_ajax_band_nopriv_actions();
+                return;
+                break;
+
+            case 'save_band':
+                $plek_band = new PlekBandHandler;
+                if($plek_band -> save_band()){
+                    $this->set_success(__('Band gespeichert', 'pleklang'));
+                }else{
+                    $this->set_error(__('Fehler beim speichern der Band', 'pleklang'));
+                }
+                break;
+            default:
+                # code...
+                break;
+        }
+        echo $this->get_ajax_return();
+        die();
+    }
+
+    /**
      * Ajax User actions
      *
      * @return string $this -> get_ajax_return() - JSON String
@@ -129,6 +184,7 @@ class PlekAjaxHandler
             case 'save_user_settings':
                 $this->set_error(__('Du musst eingeloggt sein, um deine Kontodaten zu speichern!', 'pleklang'));
                 break;
+
             default:
                 # code...
                 break;
@@ -149,7 +205,33 @@ class PlekAjaxHandler
 
     public function get_ajax_data(string $field = '')
     {
-        return (isset($_REQUEST[$field])) ? htmlspecialchars($_REQUEST[$field]) : "";
+        return (isset($_REQUEST[$field])) ? $_REQUEST[$field] : "";
+    }
+
+    public function get_ajax_files_data(string $field = '')
+    {
+        return (isset($_FILES[$field]['name']) AND !empty($_FILES[$field]['name'])) ? $_FILES[$field] : "";
+    }
+
+
+
+    /**
+     * Returns the Value from a $_Request field and applies htmlspecialchars() function 
+     */
+    public function get_ajax_data_esc(string $field = '')
+    {
+        if(isset($_REQUEST[$field]) AND is_string($_REQUEST[$field])){
+            return htmlspecialchars($_REQUEST[$field]);
+        }
+        if(isset($_REQUEST[$field]) AND is_array($_REQUEST[$field])){
+            $new_arr = array();
+            foreach($_REQUEST[$field] AS $id => $value){
+                $new_arr[htmlspecialchars($id)] = htmlspecialchars($value);
+            }
+            return $new_arr;
+        }
+        return '';
+
     }
 
     /**
@@ -199,8 +281,21 @@ class PlekAjaxHandler
         $this->success[] = $message;
         return;
     }
+
+    /**
+     * Get the Errors from the global $plek_ajax_errors
+     * Adds the errors to the $error variable
+     * @return void
+     */
+    public function get_ajax_errors(){
+        global $plek_ajax_errors;
+        if ($plek_ajax_errors->has_errors()) {
+            $this -> error = array_merge($this -> error, $plek_ajax_errors -> get_error_messages());
+        }
+    }
     protected function get_ajax_return()
     {
+        $this -> get_ajax_errors();
         $ret = ['success' => $this->success, 'error' => $this->error, 'system_error' => $this->system_error];
         return json_encode($ret);
     }

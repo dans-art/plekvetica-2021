@@ -23,6 +23,7 @@ class PlekBandHandler
      * @var [Array]
      */
     protected $band = null;
+    protected $band_genres = null; //All the Band Genres / Tribe Events Categories
 
     protected $bandpic_placeholder = PLEK_PLUGIN_DIR_URL . "images/placeholder/band_logo.jpg";
 
@@ -43,6 +44,10 @@ class PlekBandHandler
             $slug = $cTag->slug;
         }
         $term = get_term_by('slug', $slug, 'post_tag');
+
+        if(!$term){
+            return false;
+        }
         $cFields = get_fields($term);
 
         $this->band['id'] = $term->term_id;
@@ -60,6 +65,31 @@ class PlekBandHandler
             }
         }
         return $this->band;
+    }
+
+    public function load_band_object_by_id(string $id = '')
+    {
+        $term = get_term_by('id', $id, 'post_tag');
+        return $this -> term_to_band_object($term);
+    }
+
+    public function term_to_band_object(object $term){
+        $cFields = get_fields($term);
+        $this->band['id'] = $term->term_id;
+        $this->band['name'] = $term->name;
+        $this->band['slug'] = $term->slug;
+        $this->band['description'] = $term->description;
+        $this->band['link'] = $this->get_band_link($term->slug);
+        if(!empty($cFields)){
+            foreach ($cFields as $name => $val) {
+                if ($name === 'band_genre') {
+                    $this->band[$name] = $this->format_band_array($val);
+                    continue;
+                }
+                $this->band[$name] = $val;
+            }
+        }
+        return $this -> band;
     }
 
     /**
@@ -130,13 +160,26 @@ class PlekBandHandler
     }
 
     /**
-     * Get the Band Videos.
+     * Get the Band description.
      *
-     * @return string Band Video links as string
+     * @return string Band Description
      */
-    public function get_videos()
+    public function get_description()
     {
-        return (isset($this->band['videos'])) ? preg_split('/\r\n|\r|\n/', $this->band['videos']) : '';
+        return (isset($this->band['description'])) ? $this->band['description'] : '';
+    }
+
+    /**
+     * Get the Band Videos.
+     * @param bool $return_array - Defines if the output should be an array or string
+     * @return string|array Band Video links as an array or string
+     */
+    public function get_videos($return_array = true)
+    {
+        if($return_array){
+            return (isset($this->band['videos'])) ? preg_split('/\r\n|\r|\n/', $this->band['videos']) : '';
+        }
+        return (isset($this->band['videos'])) ? $this->band['videos'] : '';
     }
  
     /**
@@ -233,13 +276,22 @@ class PlekBandHandler
 
     public function get_country_name()
     {
-        global $plek_handler;
         $country_code = $this->get_country();
-        $country_array = $plek_handler->get_acf_choices('herkunft', 'term', $this->get_id());
+        $country_array = $this -> get_all_countries();
         if (isset($country_array[$country_code])) {
             return $country_array[$country_code];
         }
         return $country_code;
+    }
+
+    /**
+     * Get all the available countries for a band
+     *
+     * @return void
+     */
+    public function get_all_countries(){
+        global $plek_handler;
+        return $plek_handler->get_acf_choices('herkunft', 'term', $this->get_id());
     }
 
     public function get_country()
@@ -300,6 +352,20 @@ class PlekBandHandler
     }
 
     /**
+     * Checks if it is the band edit page
+     *
+     * @return boolean
+     */
+    public static function is_band_edit()
+    {
+        $url = (isset($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : null;
+        if(strpos($url,'do=edit_band') !== false){
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Gets the Category / Genre link to the calendar
      * @todo Make the cat_slug work on non German versions of the page.
      *
@@ -324,6 +390,25 @@ class PlekBandHandler
 		return $bands;
     }
 
+    /**
+     * Get all the Genres
+     * Loads the Genres in $this -> band_genres
+     *
+     * @return array Array with WP_Term Objects
+     */
+    public function get_all_genres(){
+        if(!empty($this -> band_genres)){
+            return $this -> band_genres;
+        }
+        $args = array('orderby' => 'name', 'hide_empty' => 0, 'hierarchical' => 1, 'taxonomy' => 'tribe_events_cat');
+        $cats = get_categories($args);
+        if (!$cats) {
+            return false;
+        }
+        $this -> band_genres = $cats;
+        return $cats;
+    }
+
     public function get_all_bands_json(){
         $bands = $this -> get_all_bands();
         $bands_formated = array();
@@ -332,13 +417,13 @@ class PlekBandHandler
             $current['id'] = $band -> term_id;
             $current['name'] = $band -> name;
             $current['flag'] = (isset($band -> meta['herkunft']))?$band -> meta['herkunft']:'';
-            $current['genres'] = (isset($band -> meta['band_genre']))?$this -> band_genres_to_string($band -> meta['band_genre']):'';
+            $current['genres'] = (isset($band -> meta['band_genre']))?$this -> format_band_genres($band -> meta['band_genre']):'';
             $bands_formated[$band -> term_id] = $current;
         }
         return json_encode($bands_formated);
     }
 
-    public function band_genres_to_string(array $genres){
+    public function format_band_genres(array $genres){
         $ret_arr = array();
         foreach($genres as $genre){
             if(isset($genre['label'])){
@@ -346,5 +431,123 @@ class PlekBandHandler
             }
         }
         return implode(', ',$ret_arr);
+    }
+
+    public function enqueue_form_styles()
+    {
+        //wp_enqueue_style('flatpickr-style', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr.min.css');
+    }
+    public function enqueue_form_scripts()
+    {
+        wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css' );
+	    wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array('jquery') );
+        wp_enqueue_script('plek-band-scripts', PLEK_PLUGIN_DIR_URL . 'js/manage-band.min.js', array('jquery', 'select2'));
+    }
+
+    /**
+     * validates and saves the data for the band
+     *
+     * @return bool True if saved, false on error
+     */
+    public function save_band(){
+        global $plek_ajax_handler;
+        global $plek_ajax_errors;
+        $band_id = $plek_ajax_handler -> get_ajax_data('band-id');
+        $this -> load_band_object_by_id($band_id);
+        if(PlekUserHandler::user_can_edit_band($this) !== true){
+            $plek_ajax_errors -> add('save_band', __('Du bist nicht berechtigt, diese Band zu bearbeiten.','pleklang') );
+            return false;
+        }
+        $validate = $this -> validate_band_data();
+        if($validate !== true){
+            $plek_ajax_errors -> add('save_band_validator', $validate);
+            return false;
+        }
+        
+        return $this -> update_band();
+    }
+
+    /**
+     * Validates all Band data
+     *
+     * @return bool|array true on success, error array on failure.
+     */
+    public function validate_band_data(){
+        $validator = new PlekFormValidator;
+        
+        $validator -> set('band-id', true, 'int');
+        $validator -> set('band-name', true, 'textshort');
+        $validator -> set('band-logo', false, 'image');
+        $validator -> set('band-description', false, 'text');
+        $validator -> set('band-genre', true, 'textshort');
+        $validator -> set('band-origin', true, 'textshort');
+        $validator -> set('band-link-fb', false, 'url');
+        $validator -> set('band-link-web', false, 'url');
+        $validator -> set('band-link-insta', false, 'url');
+        $validator -> set('band-videos', false, 'text');
+        $validator -> set_ignore('band-logo-data');
+
+        return true;
+        if ($validator->all_fields_are_valid() !== true) {
+            return $validator->get_errors();
+        }
+        return true;
+    }
+
+    /**
+     * Saves the Data to the database and acf.
+     *
+     * @return bool true on success, false on error.
+     */
+    public function update_band(){
+        global $plek_ajax_handler;
+        global $plek_ajax_errors;
+
+        $id = (int) $plek_ajax_handler -> get_ajax_data_esc('band-id');
+        $name = $plek_ajax_handler -> get_ajax_data_esc('band-name');
+        $description = $plek_ajax_handler -> get_ajax_data_esc('band-description');
+        $genre = $plek_ajax_handler -> get_ajax_data_esc('band-genre');
+        $origin = $plek_ajax_handler -> get_ajax_data_esc('band-origin');
+        $web = $plek_ajax_handler -> get_ajax_data_esc('band-link-web');
+        $facebook = $plek_ajax_handler -> get_ajax_data_esc('band-link-fb');
+        $insta = $plek_ajax_handler -> get_ajax_data_esc('band-link-insta');
+        $videos = $plek_ajax_handler -> get_ajax_data_esc('band-videos');
+
+        $acf = array();
+        $acf['website_link'] = $web;
+        $acf['facebook__link'] = $facebook;
+        $acf['instagram_link'] = $insta;
+        $acf['herkunft'] = $origin;
+        $acf['videos'] = $videos;
+        $acf['band_genre'] = $genre;
+        //Upload Logo
+        if(!empty($plek_ajax_handler -> get_ajax_files_data('band-logo'))){
+            //Save resized File
+            $title = sprintf(__('Bandlogo von %s','pleklang'), $name);
+            $fh = new PlekFileHandler;
+            $fh -> set_image_options(680, 680, 'jpeg', 70);
+
+            $attachment_id = $fh -> resize_uploaded_image('band-logo', $title);
+            if(is_int($attachment_id)){
+                $acf['bandlogo'] = $attachment_id;
+            }
+        }
+        $term_args = array('name' => $name, 'description' => $description);
+
+        //Update the Term
+        $update_term = wp_update_term($id, 'post_tag', $term_args);
+        if(is_wp_error($update_term)){
+            $ut_error = $update_term -> get_error_message();
+            $plek_ajax_errors -> add('save_band', sprintf(__('Fehler beim Speichern der Band (%s)','pleklang'), $ut_error) );
+        }
+        //update the acf / term meta
+        foreach($acf as $afc_name => $value){
+            update_field($afc_name,$value,'term_'.$id);
+        }
+
+        if($plek_ajax_errors -> has_errors()){
+            return false;
+        }
+        return true;
     }
 }

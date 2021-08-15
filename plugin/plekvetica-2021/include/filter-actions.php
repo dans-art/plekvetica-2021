@@ -35,6 +35,9 @@ add_action('wp_ajax_plek_event_actions',  [new PlekAjaxHandler,'plek_ajax_event_
 add_action('wp_ajax_plek_user_actions',  [new PlekAjaxHandler,'plek_ajax_user_actions']);
 add_action('wp_ajax_nopriv_plek_user_actions',  [new PlekAjaxHandler,'plek_ajax_user_nopriv_actions']);
 
+add_action('wp_ajax_plek_band_actions',  [new PlekAjaxHandler,'plek_ajax_band_actions']);
+add_action('wp_ajax_nopriv_plek_band_actions',  [new PlekAjaxHandler,'plek_ajax_band_nopriv_actions']);
+
 //JS Debugger
 add_action( 'plek_js_debug', [$plek_handler,'set_js_error'], 10, 1 );
 add_action( 'wp_footer', [$plek_handler,'get_js_errors']);

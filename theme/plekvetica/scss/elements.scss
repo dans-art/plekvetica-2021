@@ -269,3 +269,50 @@ input[type="phone"]{
   padding: 10px 15px;
   max-width: 100%;
 }
+
+/* Select2 Plugin*/
+.select2-container{
+  width: 100% !important;
+
+  .select2-selection{
+    border-radius: 0px;
+    min-height: 2.5em;
+  }
+
+  .select2-selection__rendered{
+    padding-top: 0.5em;
+  }
+
+  li.select2-selection__choice{
+    background-color: $color-gray-dark !important;
+    font-size: 1em;
+  }
+
+  .select2-results__option{
+    background-color: $color-gray-dark;
+    color:$text-color !important;
+
+    &:hover{
+
+    }
+  }
+
+  .select2-results__option[aria-selected=true]{
+    background-color: $color-gray-dark;
+    color:$color-gray-light;
+  }
+
+  .select2-results__option--highlighted[aria-selected]{
+    background-color: $color-red-light;
+    color:$color-gray-light;
+  }
+
+  .select2-selection__choice__remove{
+    font-size: 2em;
+    margin: 0;
+    padding: 0;
+    height: 1em;
+    color: $color-red-strong !important;
+    margin-top: -1em;
+  }
+}

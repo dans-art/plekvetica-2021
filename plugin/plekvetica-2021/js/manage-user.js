@@ -106,6 +106,7 @@ let plek_user = {
                     text = plek_main.get_text_from_ajax_request(data, true);
                 }
                 plek_main.deactivate_button_loader(button, text);
+                jQuery('#user-settings-cancel').text(plek_lang.trans('Zurück'));
                 setTimeout(() => {
                     jQuery('#user-settings-submit').text(plek_user.default_button_texts.submit);
                 }, 5000);

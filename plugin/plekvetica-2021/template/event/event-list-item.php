@@ -5,7 +5,6 @@ $event = isset($template_args[0]) ?  $template_args[0] : false;
 if(!$event){
     return false;
 }
-
 $startDatetime = $event->get_field_value('_EventStartDate');
 $stime = strtotime($startDatetime);
 ?>

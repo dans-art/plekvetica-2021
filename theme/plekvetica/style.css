@@ -184,6 +184,24 @@ blockquote { font-size: 1em; border-left: 2px solid #595959; }
 /* line 263, scss/elements.scss */
 input[type="phone"] { color: #666666; background-color: #fafafa; border-color: #cccccc; border: 1px solid; border-radius: 0; padding: 10px 15px; max-width: 100%; }
 
+/* Select2 Plugin*/
+/* line 274, scss/elements.scss */
+.select2-container { width: 100% !important; }
+/* line 277, scss/elements.scss */
+.select2-container .select2-selection { border-radius: 0px; min-height: 2.5em; }
+/* line 282, scss/elements.scss */
+.select2-container .select2-selection__rendered { padding-top: 0.5em; }
+/* line 286, scss/elements.scss */
+.select2-container li.select2-selection__choice { background-color: #232323 !important; font-size: 1em; }
+/* line 291, scss/elements.scss */
+.select2-container .select2-results__option { background-color: #232323; color: white !important; }
+/* line 300, scss/elements.scss */
+.select2-container .select2-results__option[aria-selected=true] { background-color: #232323; color: #595959; }
+/* line 305, scss/elements.scss */
+.select2-container .select2-results__option--highlighted[aria-selected] { background-color: #8C262E; color: #595959; }
+/* line 310, scss/elements.scss */
+.select2-container .select2-selection__choice__remove { font-size: 2em; margin: 0; padding: 0; height: 1em; color: #c11d1d !important; margin-top: -1em; }
+
 /* line 4, scss/event-general.scss */
 .band img { vertical-align: sub; width: 19px; }
 
@@ -252,55 +270,55 @@ article.tribe-events-calendar-list__event .tribe-events-calendar-list__event-ima
 .tribe-events-view--list .plek-event-featured .tribe-events-calendar-list__event-date-tag .tribe-events-calendar-list__event-date-tag-datetime { background: #c11d1d; }
 
 /* line 130, scss/event-list.scss */
-.tribe-events-calendar-list__event-featured-image-wrapper.tribe-common-g-col { justify-content: center; display: flex; flex-direction: column; }
+.tribe-events-calendar-list__event-featured-image-wrapper.tribe-common-g-col { justify-content: center; display: flex; flex-direction: column; min-height: 123px; }
 
-/* line 139, scss/event-list.scss */
+/* line 140, scss/event-list.scss */
 .tribe-events-calendar-list__event-wrapper .info-text-bar { width: 8%; }
 
-/* line 147, scss/event-list.scss */
+/* line 148, scss/event-list.scss */
 article h3 { margin-bottom: 0; font-size: 1.2em; }
-/* line 152, scss/event-list.scss */
+/* line 153, scss/event-list.scss */
 article .tribe-events-calendar-list__event { padding-left: 9%; display: flex; }
-/* line 157, scss/event-list.scss */
+/* line 158, scss/event-list.scss */
 article .tribe-events-calendar-list__event-date-tag, article .tribe-events-calendar-list__event-attributes-tag { width: 20%; display: flex; justify-content: flex-end; align-items: flex-start; }
-/* line 166, scss/event-list.scss */
+/* line 167, scss/event-list.scss */
 article .tribe-events-calendar-list__event-attributes-tag { font-size: 1.1em; justify-content: flex-start; align-items: flex-end; flex-direction: column; }
-/* line 172, scss/event-list.scss */
+/* line 173, scss/event-list.scss */
 article .tribe-events-calendar-list__event-attributes-tag .plek-review-icon, article .tribe-events-calendar-list__event-attributes-tag .plek-photo-icon, article .tribe-events-calendar-list__event-attributes-tag .plek-interview-icon { display: block; width: 1em; text-align: center; }
-/* line 182, scss/event-list.scss */
+/* line 183, scss/event-list.scss */
 article .tribe-events-calendar-list__event-featured-image-wrapper, article .tribe-events-calendar-list__event-image-wrapper { padding: 0 1em; width: 30%; text-align: center; }
-/* line 188, scss/event-list.scss */
+/* line 189, scss/event-list.scss */
 article .tribe-events-calendar-list__event-featured-image-wrapper img, article .tribe-events-calendar-list__event-image-wrapper img { padding: 0.5%; width: 100%; }
-/* line 195, scss/event-list.scss */
+/* line 196, scss/event-list.scss */
 article .tribe-events-calendar-list__event-details { align-self: center; width: 60%; }
 
-/* line 203, scss/event-list.scss */
+/* line 204, scss/event-list.scss */
 .banner-star-container { position: absolute; color: #FAAD2B; width: 70px; height: 70px; overflow: hidden; }
-/* line 210, scss/event-list.scss */
+/* line 211, scss/event-list.scss */
 .banner-star-container span.banner-star { display: block; background-color: #595959; transform: rotate(45deg); position: absolute; left: -11px; top: -48px; padding: 50px 10px 50px 20px; }
 
 /* Tribe Search Bar*/
-/* line 222, scss/event-list.scss */
+/* line 223, scss/event-list.scss */
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-c-view-selector--tabs .tribe-events-c-view-selector__list-item-link { padding: 0; }
 
-/* line 225, scss/event-list.scss */
+/* line 226, scss/event-list.scss */
 .tribe-events .tribe-events-c-events-bar__search-container { background-color: unset; }
 
-/* line 229, scss/event-list.scss */
+/* line 230, scss/event-list.scss */
 .tribe-common--breakpoint-medium.tribe-common .tribe-common-form-control-text__input { margin: 0; padding: 11px; }
 
-/* line 233, scss/event-list.scss */
+/* line 234, scss/event-list.scss */
 .tribe-events .tribe-events-c-view-selector__content { background-color: unset; }
-/* line 236, scss/event-list.scss */
+/* line 237, scss/event-list.scss */
 .tribe-events .tribe-events-c-view-selector__content i.add-event { margin-right: 0.5em; margin-top: -0.1em; }
 
-/* line 244, scss/event-list.scss */
+/* line 245, scss/event-list.scss */
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-c-view-selector--tabs .tribe-events-c-view-selector__list-item { background-color: white; margin: 12px 0px; padding: 0 1em; }
 
-/* line 250, scss/event-list.scss */
+/* line 251, scss/event-list.scss */
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-c-view-selector--tabs .tribe-events-c-view-selector__content { padding: 0; }
 
-/* line 254, scss/event-list.scss */
+/* line 255, scss/event-list.scss */
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-header__events-bar, .tribe-events-c-top-bar.tribe-events-header__top-bar { margin-bottom: 0; }
 
 /*
@@ -313,53 +331,53 @@ article .tribe-events-calendar-list__event-details { align-self: center; width: 
 
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-header--has-event-search .tribe-events-header__top-bar{ margin-top: -7px;
 }*/
-/* line 282, scss/event-list.scss */
+/* line 283, scss/event-list.scss */
 .tribe-events-c-top-bar__datepicker button, .tribe-common--breakpoint-medium.tribe-common .tribe-common-c-btn-border-small, .tribe-common--breakpoint-medium.tribe-common a.tribe-common-c-btn-border-small, .tribe-events .tribe-events-c-top-bar__nav-link { background-color: #595959; color: white; padding: 0.1em 0.5em 0em 0.5em; }
 
-/* line 289, scss/event-list.scss */
+/* line 290, scss/event-list.scss */
 .tribe-events .tribe-events-c-top-bar__nav-link { padding: 0.2em 0.5em; }
 
-/* line 293, scss/event-list.scss */
+/* line 294, scss/event-list.scss */
 .tribe-events-c-view-selector__button, .tribe-common-c-svgicon.tribe-common-c-svgicon--list.tribe-events-c-view-selector__button-icon-svg { background-color: #595959; color: white; }
 
-/* line 299, scss/event-list.scss */
+/* line 300, scss/event-list.scss */
 .tribe-events .tribe-events-c-events-bar__search-button { background-color: #595959; color: white; padding: 0.1em 0.3em 0em 0.3em; }
 
-/* line 305, scss/event-list.scss */
+/* line 306, scss/event-list.scss */
 .tribe-events .tribe-events-c-events-bar__search-button-icon-svg { width: 1em; }
 
-/* line 309, scss/event-list.scss */
+/* line 310, scss/event-list.scss */
 .tribe-events-calendar-list__event-date-tag-mobile { display: none; }
 
-/* line 313, scss/event-list.scss */
+/* line 314, scss/event-list.scss */
 .tribe-events .tribe-events-c-events-bar__search-container, .tribe-events .tribe-events-c-view-selector__content { background-color: #232323; }
 
-/* line 322, scss/event-list.scss */
+/* line 323, scss/event-list.scss */
 .plek-post-type-all_reviews .info-text-bar, .plek-post-type-reviews .info-text-bar, .plek-post-type-review-search .info-text-bar { width: 27%; margin-bottom: 2em; }
 
-/* line 329, scss/event-list.scss */
+/* line 330, scss/event-list.scss */
 article.plek-event-item-compact { display: flex; justify-content: flex-start; margin-bottom: 2em; }
-/* line 335, scss/event-list.scss */
+/* line 336, scss/event-list.scss */
 article.plek-event-item-compact .event-icons, article.plek-event-item-compact .event-akkredi-status { width: 2em; font-size: 1.4em; }
-/* line 341, scss/event-list.scss */
+/* line 342, scss/event-list.scss */
 article.plek-event-item-compact .poster { margin-right: 1em; align-self: center; width: 150px; }
-/* line 347, scss/event-list.scss */
+/* line 348, scss/event-list.scss */
 article.plek-event-item-compact .details { display: flex; flex-direction: column; justify-content: center; }
-/* line 352, scss/event-list.scss */
+/* line 353, scss/event-list.scss */
 article.plek-event-item-compact .details .date { color: #ffffffb6; }
-/* line 355, scss/event-list.scss */
+/* line 356, scss/event-list.scss */
 article.plek-event-item-compact .details .title { color: white; }
-/* line 360, scss/event-list.scss */
+/* line 361, scss/event-list.scss */
 article.plek-event-item-compact .event-icons { display: flex; flex-direction: column; text-align: center; justify-content: center; }
-/* line 366, scss/event-list.scss */
+/* line 367, scss/event-list.scss */
 article.plek-event-item-compact .event-icons .fas, article.plek-event-item-compact .event-icons .far { font-size: 0.8em; }
-/* line 373, scss/event-list.scss */
+/* line 374, scss/event-list.scss */
 article.plek-event-item-compact.plek-event-canceled img { opacity: 0.4; }
-/* line 379, scss/event-list.scss */
+/* line 380, scss/event-list.scss */
 article.plek-event-item-compact.plek-event-canceled .details .title, article.plek-event-item-compact.plek-event-canceled .details .date { text-decoration: line-through; }
-/* line 384, scss/event-list.scss */
+/* line 385, scss/event-list.scss */
 article.plek-event-item-compact.plek-event-canceled .details .title { text-decoration-color: #8C262E; }
-/* line 390, scss/event-list.scss */
+/* line 391, scss/event-list.scss */
 article.plek-event-item-compact .plek-message { font-size: 1em; padding: 0.4em; }
 
 /* line 5, scss/event-single.scss */
@@ -699,26 +717,29 @@ div.plek-review-search form button, div.plek-review-search form input { width: 1
 /* line 148, scss/forms.scss */
 .item.plek-select-item .title i { cursor: pointer; font-size: 1.2em; }
 
-/* line 154, scss/forms.scss */
-#plek-user-settings-form { margin-left: 2em; }
-/* line 158, scss/forms.scss */
-#plek-user-settings-form h2 { margin-left: -1em; margin-top: 1em; }
-/* line 163, scss/forms.scss */
-#plek-user-settings-form .plek-hidden { display: none; }
-/* line 167, scss/forms.scss */
-#plek-user-settings-form input, #plek-user-settings-form textarea { width: 100%; margin-bottom: 0.5em; }
-/* line 172, scss/forms.scss */
-#plek-user-settings-form label { width: 100%; }
-/* line 176, scss/forms.scss */
-#plek-user-settings-form button.plek-button { width: 25%; white-space: normal; }
+/* User Settings form, Band form*/
+/* line 155, scss/forms.scss */
+#plek-user-settings-form, #plek-band-form { margin-left: 2em; /*Band Form*/ }
+/* line 160, scss/forms.scss */
+#plek-user-settings-form h2, #plek-band-form h2 { margin-left: -1em; margin-top: 1em; }
+/* line 165, scss/forms.scss */
+#plek-user-settings-form .plek-hidden, #plek-band-form .plek-hidden { display: none; }
+/* line 169, scss/forms.scss */
+#plek-user-settings-form input, #plek-user-settings-form textarea, #plek-user-settings-form select, #plek-band-form input, #plek-band-form textarea, #plek-band-form select { width: 100%; margin-bottom: 0.5em; }
+/* line 175, scss/forms.scss */
+#plek-user-settings-form label, #plek-band-form label { width: 100%; display: block; padding-top: 0.5em; }
 /* line 181, scss/forms.scss */
-#plek-user-settings-form #user-settings-submit { background-color: #8C262E; }
-/* line 184, scss/forms.scss */
-#plek-user-settings-form .plek-button-cancel { background-color: #424242; color: white; }
-/* line 188, scss/forms.scss */
-#plek-user-settings-form .plek-button-cancel:hover { color: #e6c2c2; }
+#plek-user-settings-form button.plek-button, #plek-band-form button.plek-button { width: 25%; white-space: normal; }
+/* line 186, scss/forms.scss */
+#plek-user-settings-form #user-settings-submit, #plek-band-form #user-settings-submit { background-color: #8C262E; }
+/* line 189, scss/forms.scss */
+#plek-user-settings-form .plek-button-cancel, #plek-band-form .plek-button-cancel { background-color: #424242; color: white; }
 /* line 193, scss/forms.scss */
-#plek-user-settings-form .buttons { display: flex; flex-direction: row; justify-content: flex-end; gap: 1em; }
+#plek-user-settings-form .plek-button-cancel:hover, #plek-band-form .plek-button-cancel:hover { color: #e6c2c2; }
+/* line 198, scss/forms.scss */
+#plek-user-settings-form .buttons, #plek-band-form .buttons { display: flex; flex-direction: row; justify-content: flex-end; gap: 1em; }
+/* line 207, scss/forms.scss */
+#plek-user-settings-form #band-basic-infos img, #plek-band-form #band-basic-infos img { max-width: 200px; }
 
 /* line 5, scss/form-old.scss */
 .plekvetica-add-event { /*Messages*/ }

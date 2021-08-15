@@ -223,11 +223,48 @@ class PlekUserHandler
         }
     }
 
+    /**
+     * Checks if the current user is allowed to edit the band
+     *
+     * @param object $plek_band - Plek Band Object
+     * @return bool true if allowed, otherwise false
+     * @todo Check if User is author of the Band
+     */
+    public static function user_can_edit_band(object $plek_band){
+        if(PlekUserHandler::user_is_in_team()){
+            return true; //Team Members are always allowed to edit.
+        }
+        $user_role = self::get_user_role();
+        switch ($user_role) {
+            case 'plek-band':
+                $user_band_id = PlekUserHandler::get_user_setting('band_id');
+                if(empty($user_band_id)){
+                    return false;
+                }
+                if(is_string($user_band_id)){
+                    $user_band_id = explode(',', $user_band_id);
+                }
+                if(array_search($plek_band -> get_id(), $user_band_id) !== false){
+                    return true;
+                }
+                break;
+            
+            default:
+                return false;
+                break;
+        }
+        return false;
+    }
+
     public static function check_user_setup($rolename)
     {
         switch ($rolename) {
             case 'plek-organi':
                 echo (empty(self::get_user_setting('organizer_id'))) ? __('Fehler: Keine Veranstalter ID festgelegt.', 'pleklang') : '';
+                return;
+                break;
+            case 'plek-band':
+                echo (empty(self::get_user_setting('band_id'))) ? __('Fehler: Keine Band ID festgelegt.', 'pleklang') : '';
                 return;
                 break;
 

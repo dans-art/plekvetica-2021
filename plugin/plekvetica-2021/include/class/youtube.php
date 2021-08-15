@@ -113,7 +113,7 @@ class plekYoutube
      * @param string $video - Youtube url, short url or video id
      * @return string Error message if yotuwp is not active or false on failure. HTML on success.
      * @deprecated 0.1
-     * @todo Remove this function.
+     * @todo Remove this function. Use 
      */
     public static function single_youtube_video_do_shortcode(string $video)
     {
@@ -241,5 +241,13 @@ class plekYoutube
         //s($yotuwp->views->display( 'grid', $search_obj, $yotuwp_settings ));
         //return;
         return $yotuwp->views->display('grid', $search_obj, $yotuwp_settings);
+    }
+
+    public function get_ajax_single_video(){
+        $id = (isset($_REQUEST['video_id'])) ? $_REQUEST['video_id'] : null;
+        if($id === null){
+            return __('Keine Youtube Video ID gefunden','pleklang');
+        }
+        return $this -> videos_do_shortcode(array($id));
     }
 }

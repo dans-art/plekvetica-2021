@@ -146,12 +146,12 @@ class PlekEvents extends PlekEventHandler
      */
     public function load_event_from_tribe_events(object $tribe_event)
     {
-        if(!isset($tribe_event -> post_type) OR $tribe_event -> post_type !== 'tribe_events'){
+        if (!isset($tribe_event->post_type) or $tribe_event->post_type !== 'tribe_events') {
             //Reload the event if not valid tribe event.
-            if(!isset($tribe_event -> ID)){
+            if (!isset($tribe_event->ID)) {
                 return false;
             }
-            $this -> load_event($tribe_event -> ID);
+            $this->load_event($tribe_event->ID);
         }
         $this->event['data'] = $tribe_event;
         if (is_int($tribe_event->ID)) {
@@ -230,6 +230,7 @@ class PlekEvents extends PlekEventHandler
             AND posts.ID IS NOT NULL
             AND startdate.meta_value > '%s'
             AND startdate.meta_value < '%s'
+            AND posts.post_status IN ('publish', 'draft')
 
             AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
             
@@ -258,6 +259,10 @@ class PlekEvents extends PlekEventHandler
                 return $this->get_events_of_role('_EventOrganizerID', $from, $to, $limit);
                 break;
 
+            case 'plek-band':
+                return $this->get_events_of_band_user($from, $to, $limit);
+                break;
+
             default:
                 return null;
                 break;
@@ -266,7 +271,7 @@ class PlekEvents extends PlekEventHandler
     /**
      * Get all the posts from the user with organizer role.
      * This is only working, when the logged in user has the role "plek-organi"
-     * @todo: Search for author Posts as well
+     * @todo: also search for posts which the user is co-author
      *
      * @param string $role_tribe_meta_name - The Role to fetch as Meta-Key name. Supported: _EventOrganizerID
      * @param string $from - Time From (1970-01-01 00:00:00)
@@ -298,6 +303,7 @@ class PlekEvents extends PlekEventHandler
         WHERE 
         (post_author = %d OR rolemeta.meta_value = %d) 
         AND post_type = 'tribe_events'
+        AND posts.post_status IN ('publish', 'draft')
         AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
         AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
 
@@ -315,6 +321,106 @@ class PlekEvents extends PlekEventHandler
         $events = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
         $this->total_posts['get_events_of_role_' . $role_tribe_meta_name] = $total_posts;
+        return $events;
+    }
+
+    public function get_events_of_band_user($from, $to, $limit = 0)
+    {
+        global $wpdb;
+        $user_id = PlekUserHandler::get_user_id();
+        $band_id = (int) PlekUserHandler::get_user_setting('band_id');
+        $page_obj = $this->get_pages_object();
+        $limit = $limit ?: $page_obj->posts_per_page;
+        $from = $from ?: '1970-01-01 00:00:00';
+        $to = $to ?: '9999-01-01 00:00:00';
+
+        $query = $wpdb->prepare(
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)
+        FROM `{$wpdb->prefix}posts` as posts 
+        LEFT JOIN {$wpdb->prefix}postmeta as date
+        ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
+
+        LEFT JOIN {$wpdb->prefix}postmeta as postponed
+        ON (posts.ID = postponed.post_id AND postponed.meta_key = 'postponed_event')
+
+        LEFT JOIN {$wpdb->prefix}term_relationships AS tax_rel
+        ON (posts.ID = tax_rel.object_id)
+
+        WHERE 
+        (post_author = %d OR tax_rel.term_taxonomy_id = '%d') 
+        AND post_type = 'tribe_events'
+        AND posts.post_status IN ('publish', 'draft')
+        AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
+        AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
+
+        GROUP BY posts.ID
+        ORDER BY date.meta_value DESC
+        LIMIT %d OFFSET %d",
+            $user_id,
+            $band_id,
+            $from,
+            $to,
+            $limit,
+            $page_obj->offset
+        );
+        $events = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        $this->total_posts['get_events_of_band_user'] = $total_posts;
+        return $events;
+    }
+
+    /**
+     * Returns all posts form an user.
+     * Searches in taxonomy as well to get all the user posts by id.
+     *
+     * @param string $user_id
+     * @param string $from
+     * @param string $to
+     * @param integer $limit
+     * @return void
+     */
+    public function get_events_of_user($user_id = '', string $from = '', string $to = '', int $limit = 0)
+    {
+        global $wpdb;
+        $user_id = (int) $user_id ?: PlekUserHandler::get_user_id();
+        $like_user = '% ' . $wpdb->esc_like($user_id) . ' %'; //Add spaces to make sure, only this user id is found.
+        $page_obj = $this->get_pages_object();
+        $limit = $limit ?: $page_obj->posts_per_page;
+        $from = $from ?: '1970-01-01 00:00:00';
+        $to = $to ?: '9999-01-01 00:00:00';
+
+        $query = $wpdb->prepare(
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)
+        FROM `{$wpdb->prefix}posts` as posts 
+        LEFT JOIN {$wpdb->prefix}postmeta as date
+        ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
+
+        LEFT JOIN {$wpdb->prefix}postmeta as postponed
+        ON (posts.ID = postponed.post_id AND postponed.meta_key = 'postponed_event')
+
+        LEFT JOIN {$wpdb->prefix}term_relationships AS tax_rel ON (posts.ID = tax_rel.object_id)
+        LEFT JOIN {$wpdb->prefix}term_taxonomy AS term_tax ON (tax_rel.term_taxonomy_id = term_tax.term_taxonomy_id)
+        LEFT JOIN {$wpdb->prefix}terms AS terms ON (terms.term_id = term_tax.term_id)
+   
+        WHERE ((post_author = %d) OR  (term_tax.taxonomy = 'author' AND term_tax.description LIKE %s))
+        AND post_type = 'tribe_events'
+        AND posts.post_status IN ('publish', 'draft')
+        AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
+        AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
+
+        GROUP BY posts.ID
+        ORDER BY date.meta_value DESC
+        LIMIT %d OFFSET %d",
+            $user_id,
+            $like_user,
+            $from,
+            $to,
+            $limit,
+            $page_obj->offset
+        );
+        $events = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        $this->total_posts['get_events_of_user'] = $total_posts;
         return $events;
     }
 
@@ -577,7 +683,8 @@ class PlekEvents extends PlekEventHandler
         AND ( mt2.meta_key = 'is_review'
         AND mt2.meta_value = '1' ) )
         AND {$wpdb->prefix}posts.post_type = 'tribe_events'
-        AND (({$wpdb->prefix}posts.post_status = 'publish'
+        AND ((.post_status = 'publish'
+        AND {$wpdb->prefix}posts.post_status IN ('publish', 'draft')
         OR {$wpdb->prefix}posts.post_status = 'private'))
         GROUP BY {$wpdb->prefix}posts.ID
         ORDER BY event_date DESC, {$wpdb->prefix}posts.post_date DESC
@@ -625,7 +732,7 @@ class PlekEvents extends PlekEventHandler
     {
         $page_obj = $this->get_pages_object();
         $to_posts = (($page_obj->offset + $page_obj->posts_per_page) <= $total_posts) ? ($page_obj->offset + $page_obj->posts_per_page) : $total_posts;
-        return '<div class="total_posts">' . sprintf(__('Zeige Events %d bis %d von %d', 'pleklang'), $page_obj->offset + 1, $to_posts, $total_posts) . '</div>';
+        return '<div class="total_posts">' . sprintf(__('Events %d bis %d von %d', 'pleklang'), $page_obj->offset + 1, $to_posts, $total_posts) . '</div>';
     }
 
     /**
@@ -657,6 +764,7 @@ class PlekEvents extends PlekEventHandler
             ON posts.ID = startdate.post_id
             AND startdate.meta_key = '_EventStartDate'
             WHERE meta.`meta_key` LIKE 'win_url'
+            AND posts.post_status IN ('publish', 'draft')
             AND meta.`meta_value` > ''
             AND posts.ID IS NOT NULL
             AND startdate.meta_value > '%s'

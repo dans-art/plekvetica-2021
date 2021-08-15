@@ -151,7 +151,9 @@ div.plek-review-search{
   }
 }
 
-#plek-user-settings-form{
+/* User Settings form, Band form*/
+#plek-user-settings-form,
+#plek-band-form{
 
   margin-left: 2em;
 
@@ -165,12 +167,15 @@ div.plek-review-search{
   }
 
   input,
-  textarea{
+  textarea,
+  select{
     width: 100%;
     margin-bottom: 0.5em;
   }
   label{
     width: 100%;
+    display: block;
+    padding-top: 0.5em;
   }
 
   button.plek-button{
@@ -197,4 +202,10 @@ div.plek-review-search{
     gap: 1em
   }
 
+  /*Band Form*/
+  #band-basic-infos{
+    img{
+      max-width: 200px;
+    }
+  }
 }

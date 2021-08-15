@@ -104,8 +104,16 @@ let plek_main = {
         let error_count = 0;
         try {
             let encoded_data = JSON.parse(data);
-            //console.log(encoded_data.error);
             for(const [id, value] of Object.entries(encoded_data.error)){
+                
+                if(id == '0'){
+                    for(const [sub_id, sub_value] of Object.entries(value)){
+                        jQuery(sub_value).each(function(i){
+                            jQuery('#'+sub_id).after(plek_main.format_error_message(sub_value[i]));
+                            error_count++;
+                        });
+                    }
+                }
                 //Set the error message
                 jQuery(value).each(function(i){
                     jQuery('#'+id).after(plek_main.format_error_message(value[i]));
