@@ -19,9 +19,9 @@ class PlekFormValidator
 
     public function __construct($ignore_default_fields = true)
     {
-        if($ignore_default_fields){
-            $this -> set_ignore('action');
-            $this -> set_ignore('do');
+        if ($ignore_default_fields) {
+            $this->set_ignore('action');
+            $this->set_ignore('do');
         }
         //$this -> set_system_error('Test1');
     }
@@ -38,24 +38,25 @@ class PlekFormValidator
      * @param string $hint
      * @return void
      */
-    public function set($fieldname, $required = null, $type = null, $pattern = null, $max_length = null, $min_length = null, $hint = null){
-        if($required === true){
-            $this -> set_required($fieldname);
+    public function set($fieldname, $required = null, $type = null, $pattern = null, $max_length = null, $min_length = null, $hint = null)
+    {
+        if ($required === true) {
+            $this->set_required($fieldname);
         }
-        if($type !== null){
-            $this -> set_type($fieldname, $type);
+        if ($type !== null) {
+            $this->set_type($fieldname, $type);
         }
-        if($pattern !== null){
-            $this -> set_pattern($fieldname, $pattern);
+        if ($pattern !== null) {
+            $this->set_pattern($fieldname, $pattern);
         }
-        if($max_length !== null){
-            $this -> set_max_length($fieldname, $max_length);
+        if ($max_length !== null) {
+            $this->set_max_length($fieldname, $max_length);
         }
-        if($min_length !== null){
-            $this -> set_min_length($fieldname, $min_length);
+        if ($min_length !== null) {
+            $this->set_min_length($fieldname, $min_length);
         }
-        if($hint !== null){
-            $this -> set_hint($fieldname, $hint);
+        if ($hint !== null) {
+            $this->set_hint($fieldname, $hint);
         }
     }
 
@@ -211,7 +212,7 @@ class PlekFormValidator
      */
     public function get_system_errors()
     {
-        if(isset($this->errors['plek_validator_system'])){
+        if (isset($this->errors['plek_validator_system'])) {
             return $this->errors['plek_validator_system'];
         }
         return null;
@@ -230,31 +231,27 @@ class PlekFormValidator
 
     public function field_is_valid(string $fieldname, mixed $value)
     {
-        //s($fieldname);
-        //s($value);
         //Sets the default values
         $this->setup_field($fieldname);
-        $type = isset($this->type[$fieldname]) ? $this->type[$fieldname] : null ;
+        $type = isset($this->type[$fieldname]) ? $this->type[$fieldname] : null;
         //Check if field should be ignored
         if (isset($this->ignore[$fieldname])) {
             return true;
         }
-
         //Check if field is required but empty
-        if (isset($this->require[$fieldname]) AND empty($value)) {
+        if (isset($this->require[$fieldname]) and $this->require[$fieldname] === true and empty($value)) {
             $this->set_error($fieldname, __('Darf nicht leer sein.', 'pleklang'));
             return false;
         }
         //Check for min_length
-
-        if ($this->min_length[$fieldname] !== 0 AND !empty($value) AND $this->min_length[$fieldname] > strlen($value)) {
+        if ($this->min_length[$fieldname] !== 0 and !empty($value) and $this->min_length[$fieldname] > strlen($value)) {
             $calc_length = (int)($this->min_length[$fieldname] - strlen($value));
             $msg = sprintf(__('Eingabe ist %d Zeichen zu kurz.', 'pleklang'), $calc_length);
             $this->set_error($fieldname, $msg);
         }
 
         //Check for max_length
-        if ($this->max_length[$fieldname] !== 0 AND !empty($value) AND strlen($value) > $this->max_length[$fieldname]) {
+        if ($this->max_length[$fieldname] !== 0 and !empty($value) and strlen($value) > $this->max_length[$fieldname]) {
             $calc_length = (int)(strlen($value) - $this->max_length[$fieldname]);
             $msg = sprintf(__('Eingabe ist %d Zeichen zu lang.', 'pleklang'), $calc_length);
             $this->set_error($fieldname, $msg);
@@ -274,25 +271,26 @@ class PlekFormValidator
         //Check for special types
         switch ($type) {
             case 'password':
-                if(!empty($value)){
-                    if(preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[^\w\d\s:])([^\s])*$/m',$value) !== 1){
+                if (!empty($value)) {
+                    if (preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[^\w\d\s:])([^\s])*$/m', $value) !== 1) {
                         $this->set_error($fieldname, __('Passwort muss einen Buchstaben, eine Zahl und ein Sonderzeichen enthalten.', 'pleklang'));
                     }
                 }
                 break;
             case 'file':
             case 'image':
-                return $this -> file_upload_is_valid($fieldname);
+                return $this->file_upload_is_valid($fieldname);
                 break;
-            
+
             default:
                 # code...
                 break;
         }
 
-        if(!empty($this -> errors[$fieldname])){
+        if (!empty($this->errors[$fieldname])) {
             return false;
         }
+
         //All checks have been passed.
         return true;
     }
@@ -312,11 +310,11 @@ class PlekFormValidator
             return false;
         }
         foreach ($input as $fkey => $fvalue) {
-            if(!is_array($fvalue)){
+            if (!is_array($fvalue)) {
                 $fvalue = array($fvalue);
             }
-            foreach($fvalue as $value){
-                $this->field_is_valid($fkey, $value);
+            foreach ($fvalue as $value) {
+               $this->field_is_valid($fkey, $value);
             }
         }
         if (count($this->errors) !== 0) {
@@ -332,23 +330,30 @@ class PlekFormValidator
      * @param string $fieldname
      * @return bool true if valid, false if invalid.
      */
-    public function file_upload_is_valid($fieldname){
-        if(!isset($_FILES[$fieldname])){
-            $this->set_error($fieldname, __('Hochgeladene Datei nicht gefunden', 'pleklang'));
+    public function file_upload_is_valid($fieldname)
+    {
+        if (!isset($_FILES[$fieldname]['tmp_name']) OR empty($_FILES[$fieldname]['tmp_name'])) {
+            //Check if is required
+            if(isset($this->require[$fieldname]) and $this->require[$fieldname] === true){
+                $this->set_error($fieldname, __('Hochgeladene Datei nicht gefunden', 'pleklang'));
+                return false;
+            }else{
+                return true; //Is empty and not required
+            }
         }
         $file_name = $_FILES[$fieldname]['tmp_name'];
         $file_size = $_FILES[$fieldname]['size'];
         $image_info = getimagesize($file_name);
         $mime = isset($image_info['mime']) ? $image_info['mime'] : null;
         $max_upload_size = wp_max_upload_size();
-        $max_size_formated = number_format( $max_upload_size / 1048576, 0);
+        $max_size_formated = number_format($max_upload_size / 1048576, 0);
 
-        if($max_upload_size < $file_size){
-            $this->set_error($fieldname, sprintf(__('Datei ist zu gross (Max %d MB)', 'pleklang'), $max_size_formated ));
+        if ($max_upload_size < $file_size) {
+            $this->set_error($fieldname, sprintf(__('Datei ist zu gross (Max %d MB)', 'pleklang'), $max_size_formated));
         }
 
-        if(!isset($this -> allowed_file_types[$fieldname][$mime])){
-            $this->set_error($fieldname, sprintf(__('Dieser Dateityp ist nicht erlaubt. (Nur %s)', 'pleklang'), implode(', ', $this -> allowed_file_types[$fieldname])));
+        if (!isset($this->allowed_file_types[$fieldname][$mime])) {
+            $this->set_error($fieldname, sprintf(__('Dieser Dateityp ist nicht erlaubt. (Nur %s)', 'pleklang'), implode(', ', $this->allowed_file_types[$fieldname])));
         }
         if (isset($this->errors[$fieldname])) {
             return false;
@@ -400,7 +405,7 @@ class PlekFormValidator
         $defaults['numbershort'] = array("name" => __("Number short", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => '/^[0-9]+$/');
         $defaults['price'] = array("name" => __("Preis", "pleklang"), "min_length" => 1, "max_length" => 20, "pattern" => '/^[0-9.\- ]+$/', "hint" =>  __('Darf nur Zahlen, Punkt und Minus enthalten', 'pleklang'));
         $defaults['password'] = array("name" => __("Passwort", "pleklang"), "min_length" => 10, "max_length" => 0, "pattern" => false);
-        $defaults['image'] = array("name" => __("Bild", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => false, 'allowed_file_types' =>  array('image/gif' => 'GIF','image/png' => 'PNG','image/jpeg' => 'JPG','image/webp' => 'WEBP'));
+        $defaults['image'] = array("name" => __("Bild", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => false, 'allowed_file_types' =>  array('image/gif' => 'GIF', 'image/png' => 'PNG', 'image/jpeg' => 'JPG', 'image/webp' => 'WEBP'));
 
         if (!isset($defaults[$type])) {
             //$this -> set_error($fieldname, __('Fieldtype not find in default validator','pleklang') );
@@ -419,7 +424,7 @@ class PlekFormValidator
         if (!isset($this->max_length[$fieldname])) {
             $this->max_length[$fieldname] = $defaults[$type]['max_length'];
         }
-        if (!isset($this->allowed_file_types[$fieldname]) AND isset($defaults[$type]['allowed_file_types'])) {
+        if (!isset($this->allowed_file_types[$fieldname]) and isset($defaults[$type]['allowed_file_types'])) {
             $this->allowed_file_types[$fieldname] = $defaults[$type]['allowed_file_types'];
         }
         return true;

@@ -487,7 +487,6 @@ class PlekBandHandler
         $validator -> set('band-videos', false, 'text');
         $validator -> set_ignore('band-logo-data');
 
-        return true;
         if ($validator->all_fields_are_valid() !== true) {
             return $validator->get_errors();
         }
@@ -505,7 +504,7 @@ class PlekBandHandler
 
         $id = (int) $plek_ajax_handler -> get_ajax_data_esc('band-id');
         $name = $plek_ajax_handler -> get_ajax_data_esc('band-name');
-        $description = $plek_ajax_handler -> get_ajax_data_esc('band-description');
+        $description = $plek_ajax_handler -> get_ajax_data('band-description');
         $genre = $plek_ajax_handler -> get_ajax_data_esc('band-genre');
         $origin = $plek_ajax_handler -> get_ajax_data_esc('band-origin');
         $web = $plek_ajax_handler -> get_ajax_data_esc('band-link-web');

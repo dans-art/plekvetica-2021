@@ -100,19 +100,24 @@ let plek_main = {
         
     },
 
-    show_field_errors(data){
+    show_field_errors(data, form = 'form'){
         let error_count = 0;
         try {
             let encoded_data = JSON.parse(data);
+            console.log(encoded_data);
             for(const [id, value] of Object.entries(encoded_data.error)){
-                
-                if(id == '0'){
+                if(typeof value == "object"){
                     for(const [sub_id, sub_value] of Object.entries(value)){
                         jQuery(sub_value).each(function(i){
                             jQuery('#'+sub_id).after(plek_main.format_error_message(sub_value[i]));
                             error_count++;
                         });
                     }
+                }
+                if(typeof value == "string"){
+                    //Error not assigned to field 
+                    jQuery(form).after(plek_main.format_error_message(value));
+                    console.log("not assigned");
                 }
                 //Set the error message
                 jQuery(value).each(function(i){

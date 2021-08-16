@@ -6,9 +6,16 @@ let plek_band = {
     construct() {
 
         jQuery(document).ready(function(){
-            jQuery('select').select2();
+            jQuery('select').select2({
+                theme: "plek"
+            });
         }
         );
+
+        jQuery("input#band-logo").change(function () {
+            let btn = jQuery('.plek-upload-button-container .plek-button');
+            plek_band.change_file_upload_button(btn, plek_lang.trans('Datei gewählt'));
+          });
 
         default_button_texts.submit = jQuery('#band-form-submit').text();
         //this.get_youtube_video('MKL8ecPO3gc');
@@ -28,6 +35,10 @@ let plek_band = {
                 return;
             }
         })
+    },
+
+    change_file_upload_button(btn, text){
+        jQuery(btn).text(text);
     },
 
     get_youtube_video(video_id){
@@ -65,6 +76,7 @@ let plek_band = {
         data.append('action', 'plek_band_actions');
         data.append('do','save_band');
         var file_data = jQuery('#band-logo').prop('files')[0];
+        data.append('band-description', tinymce.editors['band-description'].getContent());
         data.append('band-logo-data', file_data);
         data.append('band-logo', '666'); //This is just a placeholder for the validator to validate.
 

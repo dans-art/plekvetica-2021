@@ -15,7 +15,7 @@ $details = PlekTemplateHandler::load_template_to_var('details', 'band/meta', $ba
             <?php echo $band->get_logo_formated(); ?>
         </div>
         <div class='description-con'>
-            <?php echo $band->get_description(); ?>
+            <?php echo wpautop($band->get_description()); ?>
         </div>
         <div class='mobile-meta-con'>
             <?php echo $genres; ?>

@@ -3,6 +3,7 @@ $band = new PlekBandHandler();
 $band -> enqueue_form_scripts();
 $band->load_band_object(); //Loads the current band object. If not on Band page, this returns false
 $type = (isset($template_args[0]) and $template_args[0] === 'edit') ? 'edit' : 'new';
+$editor_options = array('media_buttons' => false, 'textarea_rows' => 10);
 
 if(PlekUserHandler::user_can_edit_band($band) !== true){
     echo __('Du bist nicht berechtigt, diese Band zu bearbeiten!','pleklang');
@@ -24,11 +25,10 @@ if(PlekUserHandler::user_can_edit_band($band) !== true){
             <input id="band-name" name="band-name" type="text" value="<?php echo $band->get_name(); ?>"></input>
 
             <label for="band-description"><?php echo __('Beschreibung', 'pleklang'); ?></label>
-            <?php wp_editor( $band->get_description(), 'band-description' ); ?>
+            <?php wp_editor( wpautop($band->get_description()), 'band-description', $editor_options ); ?>
 
             <label for="band-logo"><?php echo __('Logo', 'pleklang'); ?></label>
-            <img src="<?php echo $band->get_logo(); ?>" />
-            <input id="band-logo" name="band-logo" type="file"></input>
+            <?php PlekTemplateHandler::load_template('image-upload-button', 'components', 'band-logo', $band->get_logo() ); ?>
         </fieldset>
         <!-- Genre and Origin -->
         <fieldset id="band-secondary-infos">

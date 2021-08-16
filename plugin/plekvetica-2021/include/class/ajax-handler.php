@@ -111,8 +111,6 @@ class PlekAjaxHandler
                 $plek_band = new PlekBandHandler;
                 if($plek_band -> save_band()){
                     $this->set_success(__('Band gespeichert', 'pleklang'));
-                }else{
-                    $this->set_error(__('Fehler beim speichern der Band', 'pleklang'));
                 }
                 break;
             default:
@@ -141,15 +139,10 @@ class PlekAjaxHandler
                     $save = $user_form_handler->save_user_settings();
                     if ($save === true) {
                         $this->set_success(__('Einstellungen gespeichert', 'pleklang'));
-                    } else {
-                        if ($plek_ajax_errors->has_errors()) {
-                            $errors = implode(', ',$plek_ajax_errors->get_error_messages('save_user_settings'));
-                            //$plek_ajax_errors->get_all_error_data('save_user_settings'); //@todo: Send message to plek manager?
-                        }
-                        $this->set_error(sprintf(__('Fehler beim speichern der Einstellungen (%s)', 'pleklang'), $errors));
                     }
                 } else {
-                    $this->set_error_array($validate);
+                    //$this->set_error_array($validate);
+                    $plek_ajax_errors -> add('save_user_validator', $validate);
                 }
                 break;
 

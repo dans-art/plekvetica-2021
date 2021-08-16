@@ -192,7 +192,7 @@ input[type="phone"] { color: #666666; background-color: #fafafa; border-color: #
 /* line 282, scss/elements.scss */
 .select2-container .select2-selection__rendered { padding-top: 0.5em; }
 /* line 286, scss/elements.scss */
-.select2-container li.select2-selection__choice { background-color: #232323 !important; font-size: 1em; }
+.select2-container li.select2-selection__choice { background-color: #424242 !important; font-size: 1em; }
 /* line 291, scss/elements.scss */
 .select2-container .select2-results__option { background-color: #232323; color: white !important; }
 /* line 300, scss/elements.scss */
@@ -201,6 +201,83 @@ input[type="phone"] { color: #666666; background-color: #fafafa; border-color: #
 .select2-container .select2-results__option--highlighted[aria-selected] { background-color: #8C262E; color: #595959; }
 /* line 310, scss/elements.scss */
 .select2-container .select2-selection__choice__remove { font-size: 2em; margin: 0; padding: 0; height: 1em; color: #c11d1d !important; margin-top: -1em; }
+
+/* Assign min-width to container */
+/* line 322, scss/elements.scss */
+.select2-container { min-width: 200px; }
+
+/* line 327, scss/elements.scss */
+.select2-container--open .select2-dropdown--below, .select2-container--open .select2-dropdown--above { margin-top: -0.5em; }
+
+/* line 338, scss/elements.scss */
+.select2-container--plek .select2-results__option[aria-selected=true] { opacity: 0.8; }
+/* line 341, scss/elements.scss */
+.select2-container--plek .select2-selection--single { border-radius: 0px; }
+/* line 346, scss/elements.scss */
+.select2-container--plek.select2-container--open .select2-selection__arrow b { transform: rotate(180deg); -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg); }
+/* line 354, scss/elements.scss */
+.select2-container--plek span.select2-search input { height: 30px !important; }
+
+/* line 361, scss/elements.scss */
+.select2-container .select2-choice { border: 2px solid #dce4ec; height: 36px; border-radius: 0px; font-size: 14px; text-indent: 1px; box-shadow: none; background-image: none; }
+/* line 369, scss/elements.scss */
+.select2-container .select2-choice div { border-left: 2px solid #dce4ec; border-radius: 0 4px 4px 0; background-clip: padding-box; }
+/* line 374, scss/elements.scss */
+.select2-container .select2-choice .select2-arrow { border: 0px; border-radius: 0px; background: transparent; background-image: none; }
+/* line 381, scss/elements.scss */
+.select2-container *:focus { outline: 0px; }
+/* line 384, scss/elements.scss */
+.select2-container.select2-drop-above .select2-choice { border-bottom-color: #dce4ec; border-radius: 0px; }
+
+/* line 390, scss/elements.scss */
+.select2-drop { margin-top: -2px; border: 2px solid #dce4ec; border-top: 0; border-radius: 0px !important; border-radius: 0 0 6px 6px; box-shadow: none; }
+/* line 397, scss/elements.scss */
+.select2-drop.select2-drop-above { margin-top: 2px; border-top: 2px solid #dce4ec; border-bottom: 0; border-radius: 6px 6px 0 0; box-shadow: none; }
+
+/* line 406, scss/elements.scss */
+.select2-search { margin-top: 3px; }
+/* line 408, scss/elements.scss */
+.select2-search input { height: 26px; border: 2px solid #dce4ec; }
+
+/* line 414, scss/elements.scss */
+.select2-container-active .select2-choice, .select2-container-active .select2-choices { border: 2px solid #dce4ec; outline: none; box-shadow: none; }
+
+/* line 421, scss/elements.scss */
+.select2-dropdown-open .select2-choice { box-shadow: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+/* line 425, scss/elements.scss */
+.select2-dropdown-open .select2-choice .select2-choice div { background: transparent; border-left: none; filter: none; }
+
+/* line 432, scss/elements.scss */
+.select2-results { padding: 0 0 0 0px; margin: 4px 0px 0px 0; }
+/* line 435, scss/elements.scss */
+.select2-results .select2-highlighted { color: #fff; border-radius: 0px; }
+
+/* line 442, scss/elements.scss */
+.select2-container-multi .select2-choices { height: auto !important; height: 1%; border: 2px solid #dce4ec; }
+/* line 448, scss/elements.scss */
+.select2-container-multi.select2-container-active .select2-choices { border: 2px solid #dce4ec; border-radius: 6px; box-shadow: none; }
+
+/* line 457, scss/elements.scss */
+.select2-container--plek .select2-selection--single { background: white; border: 0px; height: 34px; }
+/* line 461, scss/elements.scss */
+.select2-container--plek .select2-selection--single .select2-selection__rendered { color: #666666; line-height: 34px; }
+/* line 465, scss/elements.scss */
+.select2-container--plek .select2-selection--single .select2-selection__arrow { height: 26px; position: absolute; top: 1px; right: 1px; width: 20px; }
+/* line 471, scss/elements.scss */
+.select2-container--plek .select2-selection--single .select2-selection__arrow b { border-color: #fff transparent transparent transparent; top: 60%; border-style: solid; border-width: 5px 4px 0 4px; height: 0; left: 50%; margin-left: -4px; margin-top: -2px; position: absolute; width: 0; }
+/* line 484, scss/elements.scss */
+.select2-container--plek .select2-selection--single .select2-selection__placeholder { color: #fff; }
+/* line 490, scss/elements.scss */
+.select2-container--plek .select2-selection--single .select2-selection__clear { cursor: pointer; float: right; font-weight: bold; }
+
+/* line 501, scss/elements.scss */
+.select2-container--plek .select2-selection--multiple .select2-selection__choice__remove:hover { cursor: pointer; }
+/* line 504, scss/elements.scss */
+.select2-container--plek .select2-selection--multiple .select2-selection__rendered { background: white; box-sizing: border-box; list-style: none; margin: 0; padding: 0em 0.5em 0.3em 0; width: 100%; }
+/* line 512, scss/elements.scss */
+.select2-container--plek .select2-selection--multiple .select2-selection__choice { color: #fff; border-radius: 0px; padding: 0em 0.5em 0.2em 0; cursor: default; float: left; margin-right: 5px; margin-top: 5px; }
+/* line 521, scss/elements.scss */
+.select2-container--plek .select2-selection--multiple .select2-selection__choice__remove { padding: 0; margin: 0; }
 
 /* line 4, scss/event-general.scss */
 .band img { vertical-align: sub; width: 19px; }
@@ -719,27 +796,40 @@ div.plek-review-search form button, div.plek-review-search form input { width: 1
 
 /* User Settings form, Band form*/
 /* line 155, scss/forms.scss */
-#plek-user-settings-form, #plek-band-form { margin-left: 2em; /*Band Form*/ }
-/* line 160, scss/forms.scss */
+.band-edit-container { width: 100%; }
+
+/* line 159, scss/forms.scss */
+#plek-user-settings-form, #plek-band-form { margin-left: 2%; width: 96%; /*Band Form*/ }
+/* line 164, scss/forms.scss */
 #plek-user-settings-form h2, #plek-band-form h2 { margin-left: -1em; margin-top: 1em; }
-/* line 165, scss/forms.scss */
-#plek-user-settings-form .plek-hidden, #plek-band-form .plek-hidden { display: none; }
 /* line 169, scss/forms.scss */
+#plek-user-settings-form .plek-hidden, #plek-band-form .plek-hidden { display: none; }
+/* line 173, scss/forms.scss */
 #plek-user-settings-form input, #plek-user-settings-form textarea, #plek-user-settings-form select, #plek-band-form input, #plek-band-form textarea, #plek-band-form select { width: 100%; margin-bottom: 0.5em; }
-/* line 175, scss/forms.scss */
+/* line 179, scss/forms.scss */
 #plek-user-settings-form label, #plek-band-form label { width: 100%; display: block; padding-top: 0.5em; }
-/* line 181, scss/forms.scss */
+/* line 185, scss/forms.scss */
 #plek-user-settings-form button.plek-button, #plek-band-form button.plek-button { width: 25%; white-space: normal; }
-/* line 186, scss/forms.scss */
+/* line 190, scss/forms.scss */
 #plek-user-settings-form #user-settings-submit, #plek-band-form #user-settings-submit { background-color: #8C262E; }
-/* line 189, scss/forms.scss */
-#plek-user-settings-form .plek-button-cancel, #plek-band-form .plek-button-cancel { background-color: #424242; color: white; }
 /* line 193, scss/forms.scss */
+#plek-user-settings-form .plek-button-cancel, #plek-band-form .plek-button-cancel { background-color: #424242; color: white; }
+/* line 197, scss/forms.scss */
 #plek-user-settings-form .plek-button-cancel:hover, #plek-band-form .plek-button-cancel:hover { color: #e6c2c2; }
-/* line 198, scss/forms.scss */
+/* line 202, scss/forms.scss */
 #plek-user-settings-form .buttons, #plek-band-form .buttons { display: flex; flex-direction: row; justify-content: flex-end; gap: 1em; }
-/* line 207, scss/forms.scss */
+/* line 211, scss/forms.scss */
 #plek-user-settings-form #band-basic-infos img, #plek-band-form #band-basic-infos img { max-width: 200px; }
+/* line 215, scss/forms.scss */
+#plek-user-settings-form .band-edit-container, #plek-band-form .band-edit-container { width: 100%; flex: 1; }
+
+/* line 222, scss/forms.scss */
+.plek-upload-button-container { position: relative; overflow: hidden; width: 200px; margin-top: -3em; }
+/* line 228, scss/forms.scss */
+.plek-upload-button-container input { position: absolute; top: 0; left: 0; padding: 0.5em 0; margin: 0; opacity: 0; filter: alpha(opacity=0); cursor: pointer; }
+
+/* line 240, scss/forms.scss */
+.plek-upload-button-container.no-img { margin-top: 0; }
 
 /* line 5, scss/form-old.scss */
 .plekvetica-add-event { /*Messages*/ }

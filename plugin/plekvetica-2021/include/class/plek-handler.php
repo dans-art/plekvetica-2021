@@ -85,7 +85,17 @@ class PlekHandler
                 # code...
                 break;
         }
-        $acf = get_field_object($field_name, $page);
+        $acf = get_field_object($field_name, 'term');
+        if(!$acf){
+            //ACF not set yet. Try to fetch the data from the DB
+            global $wpdb;
+            $query = $wpdb->prepare("SELECT post_content  FROM {$wpdb->prefix}posts 
+            WHERE 
+            post_excerpt LIKE %s
+            AND post_type = 'acf-field'", $field_name);
+            $acf_field = $wpdb->get_var($query);
+            $acf = unserialize($acf_field);   
+        }
         if (!isset($acf['choices'])) {
             return false;
         }

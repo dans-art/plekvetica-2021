@@ -152,10 +152,14 @@ div.plek-review-search{
 }
 
 /* User Settings form, Band form*/
+.band-edit-container{
+  width: 100%;
+}
+
 #plek-user-settings-form,
 #plek-band-form{
-
-  margin-left: 2em;
+  margin-left: 2%;
+  width: 96%;
 
   h2{
     margin-left: -1em;
@@ -208,4 +212,32 @@ div.plek-review-search{
       max-width: 200px;
     }
   }
+  .band-edit-container{
+    width: 100%;
+    flex: 1;
+  }
+}
+
+//File Upload Button
+.plek-upload-button-container{
+  position: relative;
+  overflow: hidden;
+  width: 200px;
+  margin-top: -3em;
+
+  input{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.5em 0;
+    margin: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer;
+  }
+}
+
+.plek-upload-button-container.no-img{
+  margin-top: 0;
+
 }
