@@ -1,0 +1,16 @@
+/* Post and post components */
+
+.plek-posts-container{
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 5%;
+
+    .plek-post-item {
+        flex-basis: 30%;
+        margin-bottom: 2em;
+
+        a{
+            text-align: center;
+        }
+    }
+}

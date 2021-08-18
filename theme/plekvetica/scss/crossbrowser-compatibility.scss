@@ -1,0 +1,118 @@
+//Hacks for displaying the page on different Browsers
+//Cross browser compatibitliy
+
+//IE10+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+   
+  .grid-container{
+
+    main{
+      width: 100%;
+    }
+
+    .tribe-events-calendar-list__month-separator{
+      width: auto;
+    }
+
+    .tribe-events .tribe-events-calendar-list__event-date-tag{
+      display: block;
+      width: auto;
+    }
+  
+    .tribe-events-calendar-list__event-featured-image-wrapper.tribe-common-g-col{
+      display: block;
+    }
+    .tribe-events .tribe-events-calendar-list__event{
+      float:left;
+    }
+    .tribe-events-calendar-list__event-featured-image-wrapper.tribe-common-g-col{
+      width:30%;
+    }
+    .tribe-events-calendar-list__event-details.tribe-common-g-col{
+      width:57%;
+    }
+
+    .tribe-common.tribe-events.tribe-events-view.tribe-events-view--list article.tribe-events-calendar-list__event{
+      padding-left: 0;
+    }
+    .plek-button.ajax-loader-button{
+      color: white;
+      clear:both;
+    }
+    .plek-button.ajax-loader-button:hover,
+    .plek-button.ajax-loader-button:focus{
+      color: black;
+    }
+
+    .plek-post-type-reviews,
+    .plek-post-type-all_reviews,
+    .review-search{
+
+      article .tribe-events-calendar-list__event-attributes-tag{
+        max-width: 25px;
+      }
+      .tribe-events-calendar-list__event-featured-image-wrapper.tribe-common-g-col{
+        width: 250px;
+      }
+
+    }
+  }
+
+  article.tribe-events-calendar-list__event.plek-event-review,
+  article.tribe-events-calendar-list__event.plek-event-type-tribe_events,
+  article.tribe-events-calendar-list__event.plek-event-type-youtube{
+    width:100%
+  }
+
+  /* Gallery*/
+  .page.plek_is_gallery{
+    .site-content{
+      display:block;
+    }
+  }
+
+  /* Startpage */
+  .page-id-27146{
+    .wp-block-columns{
+      width: 100%;
+    }
+    .plek-event-type-youtube, 
+    .plek-event-type-tribe_events{
+      margin-bottom:1em;
+    }
+  }
+
+  .plek-review-search,
+  .search-form{
+     input{
+      height: 47px;
+    }
+  }
+
+  .band-single.band-container{
+    width: 100%;
+  }
+  .band-single.band-container .band-content{
+    padding-right: 1em;
+  }
+
+  .inside-footer-widgets{
+    float:left;
+    width: 100%;
+
+    .footer-widget-1,
+    .footer-widget-2,
+    .footer-widget-3{
+      width: 33%;
+    }
+  }
+  footer.site-info{
+    width: 100%;
+    clear: both;
+    text-align: center;
+    .copyright-bar{
+      width: 100%;
+    }
+  }
+
+}

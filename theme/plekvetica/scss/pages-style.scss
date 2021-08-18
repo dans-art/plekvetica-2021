@@ -1,0 +1,431 @@
+
+//Startpage ID
+#post-27146{
+    .info-text-line{
+        position: absolute;
+        left: 0;
+        color: $color-gray-light-two;
+    }
+    .plek-event-type-youtube,
+    .plek-event-type-tribe_events{
+        margin-left: 5%;
+    }
+
+    .wp-block-separator{
+        border-top: 1px solid rgba(0,0,0,.1);
+    }
+    
+    .plek-pre-button-seperator{
+        flex-basis: 31.33% !important;
+    }
+
+    .wp-block-column:not(:first-child) {
+        margin-left: 0;
+    }
+
+    .wp-block-buttons > .wp-block-button.plek-start-page{
+        width: 30%;
+        margin-left: 0;
+    
+    }
+
+}
+
+//Kalender - Overview
+.tribe-events-view .tribe-common-l-container.tribe-events-l-container{
+    padding-top: 1.8em;
+}
+.post-type-archive-tribe_events .entry-header{
+    padding: 40px 0 0 40px;
+}
+
+//Single Event
+#tribe-events-pg-template .single-view{
+
+    .info-text-bar{
+        width: 100%;
+    }
+
+    #event-content{
+        padding: 0 1em 0 0;
+        width: 70%;
+
+        /* YotuWP*/
+        .yotu-playlist{
+            padding:0;
+        }
+        .video-container{
+            display:flex;
+            flex-direction: row;
+            justify-content: space-between;
+            flex-wrap: wrap;
+
+ 
+
+            .video-band-container{
+                width:48%;
+            }
+            .yotu-videos li{
+                //flex: 1;
+                //flex-basis: 100%;
+            }
+        }
+    }
+    
+    #event-meta{
+        padding: 0 0 0 1em;
+        width: 30%;
+
+        .date-from,
+        .date-to{
+            white-space: nowrap;
+        }
+        .date-seperator{
+            width: 100%;
+            display: block;
+            padding-left: 0.5em;
+        }
+        
+        .meta-content{
+            padding: 0.5em 0.3em;
+
+            a{
+                color: $text-color;
+            }
+
+            dl{
+                margin-bottom: 0.5em;
+
+            }
+
+            dt{
+                font-weight: bold;
+
+                &::after{
+                    content: ':';
+                }
+
+            }
+
+            dd{
+                margin: 0 0 0 0.6em;
+            }
+
+        
+            i.far,
+            i.fas,
+            i.fab{
+                font-size: 1.5em;
+                margin: 0.5em;
+            }
+
+
+
+            .event-links,
+            .organi-contact{
+                img{
+                    max-height: 1.5em;
+                }
+                i:first-child{
+                    margin-left:0;
+                }
+     
+            }
+
+            .author-image{
+                img{
+                    max-width: 3em;
+                }
+            }
+
+        }
+
+        .band{
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            margin-bottom: 0.2em;
+        }
+
+        .band-name a{
+            color: $text-color;
+            font-weight: bold;
+        }
+        .band-genre{
+            font-size: 0.8em;
+            color: $color-gray-light-two;
+        }
+
+        .band-flag{
+            align-self: center;
+            width: 1.5em;
+            margin-right: 0.5em;
+            flex: 0 0 1.5em;
+
+            img{
+                width: 100%;
+            }
+        }
+
+        .info-text-bar{
+            margin-bottom: 0.1em;
+
+            &:not(:first-child){
+                margin-top: 1.3em;
+            }
+        }
+
+        #event-genres{
+            padding: 0;
+            margin: 0;
+
+            li{
+                list-style: none;
+            }
+
+            a{
+                color: $text-color;
+            }
+        }
+    }
+
+    .event-poster{
+        text-align: center;
+
+        .info-text-banner:nth-child(3){
+            top: -42px;
+            width: 44%;
+        } 
+
+        .banner-text a{
+            color: $text-color;
+        }
+    }
+
+    .event-title-container{
+        margin-bottom: 1.5em;
+
+        .event-title h1{
+            margin-bottom: 0;
+        }
+        .event-venue{
+            color: $color-gray-light-two;
+        }
+    }
+    
+    .event-interview-band{
+        span:before{
+            width: 1.5em;
+            display: inline-block;
+        }
+    }
+}
+
+/* Win & Partner*/
+
+ul.partner-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-left: 0;
+
+    li{
+        max-width: 200px;
+        display: flex;
+        flex-direction: column;
+        margin: 1em;
+        align-items: center;
+        text-align: center;
+        flex-basis: 200px;
+    }
+    .wp-block-latest-posts__featured-image.alignleft{
+        margin: 0;
+    }
+}
+
+/* Author */
+.plek-author-container{
+    padding: 1em;
+
+    .plek-author-meta{
+        display: flex;
+        justify-content: flex-start;
+    }
+    .plek-author-image{
+        padding-right: 1.5em;
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .info-text-bar{
+        width: 40%
+    }
+}
+
+//My Plekvetica
+.my-plek-header{
+    display: flex;
+    justify-content: flex-start;
+
+    div{
+        flex-basis: 50%;
+    }
+    div:nth-child(2){
+        text-align: right;
+    }
+
+    .logout-link a::after,
+    .settings-link a::after{
+        font-family: "FontAwesome";
+        padding-left: 0.5em;
+    }
+    .logout-link a::after{
+        content: '\f2f5';
+    }
+    .settings-link a::after{
+        content: '\f013';
+    }
+}
+.my-plek-container{
+
+    .my-plek-head-container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    
+        .this-week-posts,
+        .missing-reviews-posts,
+        .organizer-data{
+            flex-basis: 49%;
+            flex-grow: 1;
+        }
+        .organizer-data{
+            dd {
+                margin: 0 1.5em 0.5em;
+            }   
+            .info{
+                color: $color-gray-light;
+            }         
+        }
+    }
+    .info-text-bar{
+        width: 100%;
+    }
+
+    .plek-no-open-reviews:after{
+        content: '😃';
+        margin-left: 0.7em;
+    }
+}
+
+//Bandpage / Tag page
+
+.band-single.band-container{
+    display: flex;
+    column-gap: 5%;
+
+    .info-text-bar{
+        width: 100%;
+        margin: 0.2em 0;
+    }
+
+    .band-content{
+        flex-basis: 70%;
+    }
+    .meta-container,
+    .mobile-meta-con{
+        flex-basis: 30%;
+        margin-top: 3.8em;
+        padding-right: 1em;
+        display: none;
+
+        ul{
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .band-flag img{
+            max-height: 1.2em;
+            vertical-align: sub;
+        }
+        .event-links{
+            a{
+                color:$text-color;
+            }
+
+            i.far,
+            i.fas,
+            i.fab{
+                font-size: 1.5em;
+                margin: 0.1em 0.3em;
+            }
+        }
+    }
+}
+
+//Search Page
+#plek-search-page{
+
+    .info-text-bar{
+        width: 100%;
+        margin: 0.2em 0;
+    }
+
+    .plek_album_con{
+        justify-content: center;
+    
+        .image_container{
+            width: 23.5%;
+            min-width: 200px;
+        }
+    }
+
+    .plek-search-bands{
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 2%;
+
+        .band-list-item{
+            flex-basis: 49%;
+        }
+        .band{
+            display: flex;
+            flex-direction: row;
+        }
+        .band-flag{
+            margin-top: 0.8em;
+            margin-right: 1em;
+        }
+   }
+   .tribe-events-calendar-list__event{
+       margin:0.2em 0;
+   }
+}
+
+//Team Calendar
+body.page-id-24565{
+    #content{
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .eTPoster img{
+        width: 110px;
+    }
+
+ .dataTables_scroll{
+    table, td, th {
+        border: 1px solid gray;
+    }
+ }
+ label,
+ .dataTables_info,
+ .dataTables_paginate a{
+     color:white !important;
+ }
+ td {
+    color: black;
+}
+}
+

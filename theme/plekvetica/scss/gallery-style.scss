@@ -1,0 +1,28 @@
+/* Gallery Styles*/
+
+.plek_album_con{
+    display: flex;
+    flex-direction: row;
+    column-gap: 2%;
+    flex-wrap: wrap;
+
+    .image_container{
+        width: 49%;
+        min-width: 200px;
+    }
+}
+.image_link_wrapper{
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1em;
+
+    a{
+        color: $text-color;
+    }
+
+    picture {
+        max-height: 31vw;
+        display: block;
+        overflow: hidden;
+    }
+}

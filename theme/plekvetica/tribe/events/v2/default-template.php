@@ -13,19 +13,23 @@
  */
 
 use Tribe\Events\Views\V2\Template_Bootstrap;
+$event = (is_single())?$plek_event -> load_event(null, 'all'):false;
+$review = $plek_event -> is_review();
 
 get_header();
+
 ?>
+
 <main id="tribe-events-pg-template" class="tribe-events-pg-template">
+    <header class="entry-header">
+    	<h1 class="entry-title" itemprop="headline"><?php echo ($review)?__('Review','pleklang'):__('Kalender','pleklang'); ?></h1>
+    </header>
 	<?php
-    if(is_single()){
-        $plek_event -> load_event();
-        PlekTemplateHandler::load_template('single-view','','testarg');
-        //Test
-        echo "<hr/>";
-        echo "<hr/>";
-        echo "<hr/>";
-        echo tribe( Template_Bootstrap::class )->get_view_html();
+    if(PlekGalleryHandler::is_gallery()){
+        PlekTemplateHandler::load_template('photo-view','gallery', get_the_ID(), get_permalink(), 'Zurück zum Event');
+    }
+    elseif($event){
+        PlekTemplateHandler::load_template('single-view','event');
     }
     else{
         echo tribe( Template_Bootstrap::class )->get_view_html();

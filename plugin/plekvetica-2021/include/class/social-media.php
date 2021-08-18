@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Handles the social media function
+ * Facebook API functions
+ * Youtube functions
+ */
 class plekSocialMedia
 {
 
@@ -14,12 +19,11 @@ class plekSocialMedia
      */
     public function __construct()
     {
-        //Load the Options
-        $fb_options = get_option('plek_facebook_options');
-        $this->page_id = isset($fb_options['plek_facebook_page_id']) ? $fb_options['plek_facebook_page_id'] : false;
-        $this->page_token = isset($fb_options['plek_facebook_page_token']) ? $fb_options['plek_facebook_page_token'] : false;
-        $this->app_secret = isset($fb_options['plek_facebook_app_secret']) ? $fb_options['plek_facebook_app_secret'] : false;
-        $this->app_id = isset($fb_options['plek_facebook_app_id']) ? $fb_options['plek_facebook_app_id'] : false;
+        global $plek_handler;
+        $this->page_id = $plek_handler->get_plek_option('plek_facebook_page_id');
+        $this->page_token = $plek_handler->get_plek_option('plek_facebook_page_token');
+        $this->app_secret = $plek_handler->get_plek_option('plek_facebook_app_secret');
+        $this->app_id = $plek_handler->get_plek_option('plek_facebook_app_id');
 
         $this->facebook_object = $this->facebook_login();
     }
@@ -53,9 +57,9 @@ class plekSocialMedia
     /**
      * Create a new post with an image in the facebook site feed.
      *
-     * @param string $msg
-     * @param string $url
-     * @return void
+     * @param string $msg - Message to send with the Photo
+     * @param string $url - URL to the Photo
+     * @return mixed True on success, String on error
      */
     public function post_photo_to_facebook(string $msg, string $url)
     {
@@ -84,14 +88,19 @@ class plekSocialMedia
      */
     public function facebook_login()
     {
-        if ($this->app_id === false) {
+        if (empty($this->app_id) or empty($this->app_secret)) {
             return false;
         }
-        $fb = new Facebook\Facebook([
-            'app_id' => $this->app_id,
-            'app_secret' => $this->app_secret,
-            'default_graph_version' => 'v10.0',
-        ]);
+        try {
+            $fb = new Facebook\Facebook([
+                'app_id' => $this->app_id,
+                'app_secret' => $this->app_secret,
+                'default_graph_version' => 'v10.0',
+            ]);
+        } catch (\Throwable $th) {
+            echo $th;
+        }
+
         return $fb;
     }
 
@@ -107,7 +116,7 @@ class plekSocialMedia
             if (!$fb) {
                 return false;
             }
-            $response = $fb->get($this -> page_id,  $this->page_token);
+            $response = $fb->get($this->page_id,  $this->page_token);
         } catch (\Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
             return 'Graph returned an error: ' . $e->getMessage();

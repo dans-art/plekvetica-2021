@@ -1,0 +1,56 @@
+/**
+Theme Name: Plekvetica
+Description: Child theme for Generatepress theme
+Author: Daniel Spycher
+Author URI: 
+Template: generatepress
+Version: 0.1
+Text Domain:  plek
+*/
+
+
+body{
+    color: white;
+}
+.site-header{
+    background-color: #232323;
+}
+
+
+
+/* The Event Calendar */
+.tribe-events-single-event-title,
+.tribe-events-schedule .recurringinfo, .tribe-events-schedule h2, .tribe-related-event-info .recurringinfo,
+.tribe-events-content,
+.tribe-events-meta-group .tribe-events-single-section-title,
+.single-tribe_events .tribe-events-single .tribe-events-event-meta,
+.tribe-events-back a, .tribe-events-back a:visited{
+    color: white;
+}
+    @import 'colors.scss';
+    @import 'selectors.scss';
+    @import 'header.scss';
+    @import 'footer.scss';
+    @import 'elements.scss';
+    @import 'event-general.scss';
+    @import 'event-list.scss';
+    @import 'event-single.scss';
+    @import 'gallery-style.scss';
+    @import 'pages-style.scss';
+    @import 'forms.scss';
+    @import 'form-old.scss'; //Delete this once the old form is replaced!
+    @import 'posts.scss';
+    @import 'crossbrowser-compatibility.scss';
+
+    /*Breakpoints have to be at the end to avoid override*/
+    @import 'breakpoints.scss';
+
+ #content.site-content{
+    max-width: 1024px;
+    margin: 0 auto;
+    background-color: $color-gray-dark;
+}
+
+.separate-containers .inside-article, .separate-containers .comments-area, .separate-containers .page-header, .one-container .container, .separate-containers .paging-navigation, .inside-page-header{
+    background-color: transparent;
+}
