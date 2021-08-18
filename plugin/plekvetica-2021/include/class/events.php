@@ -683,7 +683,7 @@ class PlekEvents extends PlekEventHandler
         AND ( mt2.meta_key = 'is_review'
         AND mt2.meta_value = '1' ) )
         AND {$wpdb->prefix}posts.post_type = 'tribe_events'
-        AND ((.post_status = 'publish'
+        AND ((post_status = 'publish'
         AND {$wpdb->prefix}posts.post_status IN ('publish', 'draft')
         OR {$wpdb->prefix}posts.post_status = 'private'))
         GROUP BY {$wpdb->prefix}posts.ID

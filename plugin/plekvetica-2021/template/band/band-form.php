@@ -48,10 +48,13 @@ if(PlekUserHandler::user_can_edit_band($band) !== true){
 
             <label for="band-link-web"><?php echo __('Website', 'pleklang'); ?></label>
             <input id="band-link-web" name="band-link-web" type="text" value="<?php echo $band->get_website_link(); ?>"></input>
-
+            
             <label for="band-videos"><?php echo __('Videos', 'pleklang'); ?></label>
+            <div id="band-genre-loader">
+                <input id="add-band-video-input" type="text" value=""></input>
+                <button id="add-band-video" class="plek-button" type="button"><?php echo __('Hinzufügen', 'pleklang'); ?></button>
+            </div>
             <textarea id="band-videos" name="band-videos" type="text"><?php echo $band->get_videos(false); ?></textarea>
-            <p class="help-block"><?php __('Links zu Youtube Videos. Als ganzer Link, Shortlink oder mit der ID des Videos. Jedes Video in eine neue Zeile. ','pleklang'); ?></p>
         </fieldset>
 
         <div class="buttons">

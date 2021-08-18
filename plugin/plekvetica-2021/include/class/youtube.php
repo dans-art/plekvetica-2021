@@ -248,6 +248,8 @@ class plekYoutube
         if($id === null){
             return __('Keine Youtube Video ID gefunden','pleklang');
         }
-        return $this -> videos_do_shortcode(array($id));
+        $id = $this -> extract_video_ids(array($id));
+        //$this -> videos_per_page = 1;
+        return $this -> videos_do_shortcode($id);
     }
 }

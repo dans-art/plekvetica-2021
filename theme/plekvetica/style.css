@@ -279,6 +279,30 @@ input[type="phone"] { color: #666666; background-color: #fafafa; border-color: #
 /* line 521, scss/elements.scss */
 .select2-container--plek .select2-selection--multiple .select2-selection__choice__remove { padding: 0; margin: 0; }
 
+/* line 529, scss/elements.scss */
+#video_preview_con { display: flex; gap: 1%; flex-wrap: wrap; justify-content: space-between; }
+/* line 535, scss/elements.scss */
+#video_preview_con a { cursor: default; }
+/* line 539, scss/elements.scss */
+#video_preview_con .video_preview_item { max-width: 250px; background-color: #595959; width: 250px; min-height: 150px; position: relative; padding: 0.5em; flex-basis: 24%; margin-bottom: 0.5em; }
+/* line 549, scss/elements.scss */
+#video_preview_con .video_preview_item ul, #video_preview_con .video_preview_item li { list-style: none; padding: 0; margin: 0; }
+/* line 554, scss/elements.scss */
+#video_preview_con .video_preview_item .yotu-video-title { font-size: 1em; }
+/* line 557, scss/elements.scss */
+#video_preview_con .video_preview_item .yotu-pagination { display: none; }
+/* line 560, scss/elements.scss */
+#video_preview_con .video_preview_item .loading-youtube { text-align: center; width: 100%; padding-top: 75px; }
+/* line 566, scss/elements.scss */
+#video_preview_con .remove_video { color: #D9042B; font-size: 1.5em; font-weight: bold; cursor: pointer; position: absolute; top: 0; right: 15px; }
+/* line 576, scss/elements.scss */
+#video_preview_con .yotu-video-thumb-wrp div { overflow: hidden; position: relative; height: 6.5em; margin-bottom: 10px; margin-top: 32px; max-height: 119px; width: 12em; }
+/* line 585, scss/elements.scss */
+#video_preview_con .yotu-video-thumb-wrp div img { position: absolute; top: -1.1em; }
+
+/* line 593, scss/elements.scss */
+#add-band-video { height: 2.8em; margin: 0; }
+
 /* line 4, scss/event-general.scss */
 .band img { vertical-align: sub; width: 19px; }
 
@@ -809,7 +833,7 @@ div.plek-review-search form button, div.plek-review-search form input { width: 1
 /* line 179, scss/forms.scss */
 #plek-user-settings-form label, #plek-band-form label { width: 100%; display: block; padding-top: 0.5em; }
 /* line 185, scss/forms.scss */
-#plek-user-settings-form button.plek-button, #plek-band-form button.plek-button { width: 25%; white-space: normal; }
+#plek-user-settings-form button.plek-button, #plek-band-form button.plek-button { width: 24%; white-space: normal; }
 /* line 190, scss/forms.scss */
 #plek-user-settings-form #user-settings-submit, #plek-band-form #user-settings-submit { background-color: #8C262E; }
 /* line 193, scss/forms.scss */
@@ -817,18 +841,24 @@ div.plek-review-search form button, div.plek-review-search form input { width: 1
 /* line 197, scss/forms.scss */
 #plek-user-settings-form .plek-button-cancel:hover, #plek-band-form .plek-button-cancel:hover { color: #e6c2c2; }
 /* line 202, scss/forms.scss */
-#plek-user-settings-form .buttons, #plek-band-form .buttons { display: flex; flex-direction: row; justify-content: flex-end; gap: 1em; }
+#plek-user-settings-form .buttons, #plek-band-form .buttons { display: flex; flex-direction: row; justify-content: flex-end; gap: 1.3%; }
 /* line 211, scss/forms.scss */
 #plek-user-settings-form #band-basic-infos img, #plek-band-form #band-basic-infos img { max-width: 200px; }
 /* line 215, scss/forms.scss */
 #plek-user-settings-form .band-edit-container, #plek-band-form .band-edit-container { width: 100%; flex: 1; }
-
-/* line 222, scss/forms.scss */
-.plek-upload-button-container { position: relative; overflow: hidden; width: 200px; margin-top: -3em; }
+/* line 220, scss/forms.scss */
+#plek-user-settings-form #band-videos, #plek-band-form #band-videos { display: none; }
+/* line 224, scss/forms.scss */
+#plek-user-settings-form #add-band-video, #plek-band-form #add-band-video { width: 35%; }
 /* line 228, scss/forms.scss */
+#plek-user-settings-form #band-genre-loader, #plek-band-form #band-genre-loader { display: flex; }
+
+/* line 236, scss/forms.scss */
+.plek-upload-button-container { position: relative; overflow: hidden; width: 200px; margin-top: -3em; }
+/* line 242, scss/forms.scss */
 .plek-upload-button-container input { position: absolute; top: 0; left: 0; padding: 0.5em 0; margin: 0; opacity: 0; filter: alpha(opacity=0); cursor: pointer; }
 
-/* line 240, scss/forms.scss */
+/* line 254, scss/forms.scss */
 .plek-upload-button-container.no-img { margin-top: 0; }
 
 /* line 5, scss/form-old.scss */
@@ -1170,16 +1200,22 @@ div.plek-review-search form button, div.plek-review-search form input { width: 1
   /* line 298, scss/breakpoints.scss */
   .info-text-banner { width: 100%; }
   /* line 301, scss/breakpoints.scss */
-  #tribe-events-pg-template .single-view .event-poster .info-text-banner:nth-child(3) { width: 92%; } }
-@media (max-width: 400px) { /* line 307, scss/breakpoints.scss */
+  #tribe-events-pg-template .single-view .event-poster .info-text-banner:nth-child(3) { width: 92%; }
+  /* line 308, scss/breakpoints.scss */
+  #plek-user-settings-form .buttons, #plek-band-form .buttons { flex-direction: column; }
+  /* line 312, scss/breakpoints.scss */
+  #plek-user-settings-form button.plek-button, #plek-band-form button.plek-button { width: 100%; white-space: normal; }
+  /* line 318, scss/breakpoints.scss */
+  #video_preview_con { justify-content: center; } }
+@media (max-width: 400px) { /* line 325, scss/breakpoints.scss */
   .tribe-events-calendar-list__event, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event { flex-direction: column; }
-  /* line 311, scss/breakpoints.scss */
+  /* line 329, scss/breakpoints.scss */
   .tribe-events-calendar-list__event div, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event div { width: 100%; }
-  /* line 315, scss/breakpoints.scss */
+  /* line 333, scss/breakpoints.scss */
   .tribe-events-calendar-list__event img, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event img { width: 100%; }
-  /* line 320, scss/breakpoints.scss */
+  /* line 338, scss/breakpoints.scss */
   .banner-star-container { max-width: 100px; }
-  /* line 325, scss/breakpoints.scss */
+  /* line 343, scss/breakpoints.scss */
   .plek-posts-container .plek-post-item { flex-basis: 100%; } }
 /* line 48, scss/main-style.scss */
 #content.site-content { max-width: 1024px; margin: 0 auto; background-color: #232323; }

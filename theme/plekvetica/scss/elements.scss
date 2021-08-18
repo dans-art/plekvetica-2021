@@ -524,3 +524,73 @@ margin: 4px 0px 0px 0;
   }
 }
 }
+
+//Youtube Videos
+#video_preview_con{
+  display: flex;
+  gap: 1%;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+   a{
+     cursor: default;
+   }
+
+  .video_preview_item{
+    max-width: 250px;
+    background-color: $color-gray-light;
+    width: 250px;
+    min-height: 150px;
+    position: relative;
+    padding: 0.5em;
+    flex-basis: 24%;
+    margin-bottom: 0.5em;
+
+    ul, li{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .yotu-video-title{
+      font-size: 1em;
+    }
+    .yotu-pagination{
+      display: none;
+    }
+    .loading-youtube{
+      text-align: center;
+      width: 100%;
+      padding-top: 75px;
+    }
+  }
+  .remove_video{
+    color: $color-red;
+    font-size: 1.5em;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 15px;
+  }
+
+  .yotu-video-thumb-wrp div{
+    overflow: hidden;
+    position: relative;
+    height: 6.5em;
+    margin-bottom: 10px;
+    margin-top: 32px;
+    max-height: 119px;
+    width: 12em;
+
+    img{
+      position: absolute;
+      top: -1.1em;
+    }
+  }
+
+}
+
+#add-band-video{
+  height: 2.8em;
+  margin: 0;
+}

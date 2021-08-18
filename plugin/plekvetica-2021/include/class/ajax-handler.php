@@ -81,7 +81,7 @@ class PlekAjaxHandler
             case 'get_youtube_video':
                 $yt = new plekYoutube;
                 echo $yt -> get_ajax_single_video();
-                return;
+                die();
                 break;
             default:
                 # code...

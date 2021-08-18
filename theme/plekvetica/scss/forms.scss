@@ -183,7 +183,7 @@ div.plek-review-search{
   }
 
   button.plek-button{
-    width: 25%;
+    width: 24%;
     white-space: normal;
   }
 
@@ -203,7 +203,7 @@ div.plek-review-search{
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    gap: 1em
+    gap: 1.3%;
   }
 
   /*Band Form*/
@@ -215,6 +215,20 @@ div.plek-review-search{
   .band-edit-container{
     width: 100%;
     flex: 1;
+  }
+
+  #band-videos{
+    display: none;
+  }
+
+  #add-band-video{
+    width: 35%;
+  }
+
+  #band-genre-loader{
+    display: flex;
+
+
   }
 }
 
