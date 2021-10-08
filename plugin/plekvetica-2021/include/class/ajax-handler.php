@@ -161,21 +161,39 @@ class PlekAjaxHandler
      */
     public function plek_ajax_user_nopriv_actions()
     {
+        global $plek_ajax_errors;
+        global $plek_handler;
         $do = $this->get_ajax_do();
         switch ($do) {
             case 'add_user_account':
                 //Validate user data
-
+                $user_form_handler = new PlekUserFormHandler;
+                $user_handler = new PlekUserHandler;
+                $validate = $user_form_handler->validate_user_register();
+                if ($validate !== true) {
+                    $plek_ajax_errors -> add('save_user_validator', $validate);
+                    echo $this->get_ajax_return();
+                    die();
+                }
+                
                 //Save new user
+                $user_lock_key = $user_handler -> save_new_user();
 
-                //$this -> set_error(__('Save new mail not possible','pleklang'), 'user_email');
-                //$this -> set_error(__('Save new User not possible','pleklang'), 'user_name');
-                //$this -> set_error(__('Save new display not possible','pleklang'), 'user_display_name');
-                //$this -> set_error(__('Display 2','pleklang'), 'user_display_name');
-                $this->set_success(__('Neues Konto angelegt. Du erhälst in kürze eine Email mit dem Bestätigunglink.', 'pleklang'));
+                if(!$user_lock_key){
+                    $this->set_error(__('Error while creating a new user', 'pleklang'));
+                    echo $this->get_ajax_return();
+                    die();
+                }
+
+                //Send Email
+                if(!$user_handler -> send_email_to_new_user()){
+                    $error_msg = sprintf(__('Account created but failed to send email. Please contact the IT Support: %s.', 'pleklang'), $plek_handler -> get_plek_option('it_support_email'));
+                    $this->set_error($error_msg);
+                }
+                $this->set_success(__('New account created! Check your email to complete the sign up.', 'pleklang'));
                 break;
             case 'save_user_settings':
-                $this->set_error(__('Du musst eingeloggt sein, um deine Kontodaten zu speichern!', 'pleklang'));
+                $this->set_error(__('You have to be logged in in order to save the settings.', 'pleklang'));
                 break;
 
             default:

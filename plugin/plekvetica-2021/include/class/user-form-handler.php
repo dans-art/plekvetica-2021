@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 class PlekUserFormHandler extends PlekUserHandler
 {
 
@@ -42,7 +46,7 @@ class PlekUserFormHandler extends PlekUserHandler
     public function validate_general_settings()
     {
 
-       $validator = $this -> set_general_validator();
+        $validator = $this->set_general_validator();
 
         if ($validator->all_fields_are_valid() !== true) {
             return $validator->get_errors();
@@ -56,15 +60,16 @@ class PlekUserFormHandler extends PlekUserHandler
      *
      * @return object PlekFormValidator class object
      */
-    public function set_general_validator(){
+    public function set_general_validator()
+    {
         global $plek_ajax_handler;
         $user_id = get_current_user_id();
 
         $validator = new PlekFormValidator;
-        
+
         $validator->set_required('first-name');
         $validator->set_type('first-name', 'default');
-        
+
         $validator->set_required('user-id');
         $validator->set_type('user-id', 'int');
 
@@ -88,12 +93,12 @@ class PlekUserFormHandler extends PlekUserHandler
             if ($pass !== $pass_rep) {
                 $validator->set_error('new-password-repeat', __('Passwörter stimmen nicht überein', 'pleklang'));
             }
-        }else{
-            $validator -> set_min_length('new-password', 0);
-            $validator -> set_min_length('new-password-repeat', 0);
+        } else {
+            $validator->set_min_length('new-password', 0);
+            $validator->set_min_length('new-password-repeat', 0);
         }
 
-        if((int)$plek_ajax_handler->get_ajax_data('user-id') !== (int) $user_id){
+        if ((int)$plek_ajax_handler->get_ajax_data('user-id') !== (int) $user_id) {
             $validator->set_system_error(__('Du bist nicht berechtigt, diesen Benutzer zu bearbeiten!', 'pleklang'));
         }
         return $validator;
@@ -111,7 +116,7 @@ class PlekUserFormHandler extends PlekUserHandler
         $role_settings_saved = true;
         switch ($role) {
             case 'plek-organi':
-                $role_settings_saved = $this -> save_organizer_settings();
+                $role_settings_saved = $this->save_organizer_settings();
                 break;
 
             default:
@@ -119,9 +124,9 @@ class PlekUserFormHandler extends PlekUserHandler
                 break;
         }
 
-        $save_user_settings = $this -> save_general_settings();
+        $save_user_settings = $this->save_general_settings();
 
-        if($role_settings_saved AND $save_user_settings){
+        if ($role_settings_saved and $save_user_settings) {
             return true;
         }
         return false;
@@ -142,12 +147,12 @@ class PlekUserFormHandler extends PlekUserHandler
         $userdata['first_name'] = htmlspecialchars($plek_ajax_handler->get_ajax_data('first-name'));
         $userdata['last_name'] = htmlspecialchars($plek_ajax_handler->get_ajax_data('last-name'));
         $userdata['description'] = htmlspecialchars($plek_ajax_handler->get_ajax_data('description'));
-        if(!empty($plek_ajax_handler->get_ajax_data('new-password'))){
+        if (!empty($plek_ajax_handler->get_ajax_data('new-password'))) {
             $userdata['user_pass'] = $plek_ajax_handler->get_ajax_data('new-password');
         }
         $save = wp_update_user($userdata);
-        if(is_object($save)){
-            $plek_ajax_errors -> add('save_user_settings', __('Fehler bei speichern der Kontoinformationen','pleklang'), $save );
+        if (is_object($save)) {
+            $plek_ajax_errors->add('save_user_settings', __('Fehler bei speichern der Kontoinformationen', 'pleklang'), $save);
             return false;
         }
         return true;
@@ -164,7 +169,7 @@ class PlekUserFormHandler extends PlekUserHandler
         global $plek_ajax_errors;
 
         $request_data = $plek_ajax_handler->get_all_ajax_data();
-        
+
         $organi_data = array();
         $organi_data['ID'] = htmlspecialchars($request_data['organizer-id']);
         $organi_data['Organizer'] = htmlspecialchars($request_data['organizer-name']);
@@ -172,8 +177,8 @@ class PlekUserFormHandler extends PlekUserHandler
         $organi_data['Email'] = htmlspecialchars($request_data['organizer-email']);
         $organi_data['Website'] = htmlspecialchars($request_data['organizer-web']);
         $organi_data['Description'] = htmlspecialchars($request_data['organizer-description']);
-        if(tribe_update_organizer($organi_data['ID'], $organi_data) === false){
-            $plek_ajax_errors -> add('save_user_settings', __('Fehler bei speichern der Veranstalter Einstellungen.','pleklang'));
+        if (tribe_update_organizer($organi_data['ID'], $organi_data) === false) {
+            $plek_ajax_errors->add('save_user_settings', __('Fehler bei speichern der Veranstalter Einstellungen.', 'pleklang'));
             return false;
         }
         return true;
@@ -188,7 +193,7 @@ class PlekUserFormHandler extends PlekUserHandler
     public function validate_role_data_organizer()
     {
         global $plek_ajax_handler;
-        $validator = $this -> set_general_validator(); //Sets the general user fields like name, description and password.
+        $validator = $this->set_general_validator(); //Sets the general user fields like name, description and password.
 
         $validator->set_required('organizer-id');
         $validator->set_type('organizer-id', 'int');
@@ -205,7 +210,7 @@ class PlekUserFormHandler extends PlekUserHandler
 
         $validator->set_type('organizer-description', 'textlong');
 
-        if((int)$plek_ajax_handler->get_ajax_data('organizer-id') !== (int) PlekUserHandler::get_user_setting('organizer_id')){
+        if ((int)$plek_ajax_handler->get_ajax_data('organizer-id') !== (int) PlekUserHandler::get_user_setting('organizer_id')) {
             $validator->set_system_error(__('Du bist nicht berechtigt, die Veranstalter ID zu bearbeiten!', 'pleklang'));
         }
 
@@ -214,4 +219,57 @@ class PlekUserFormHandler extends PlekUserHandler
         }
         return true;
     }
+
+    /**
+     * Validates the data of a new registering user
+     * Checks if all the fields are valid and if the email of the user is not existing
+     * Set in template/system/login/register-form.php
+     *
+     * @return mixed true on success, error array if any errors
+     */
+    public function validate_user_register()
+    {
+        global $plek_ajax_handler;
+        $validator = new PlekFormValidator;
+        $plek_user_handler = new PlekUserHandler;
+
+        $validator->set_required('user-display-name');
+        $validator->set_type('user-display-name', 'default');
+
+        $validator->set_required('user-email');
+        $validator->set_type('user-email', 'email');
+
+        $validator->set_required('user-pass');
+        $validator->set_type('user-pass', 'password');
+
+        $validator->set_required('user-pass-repeat');
+        $validator->set_type('user-pass-repeat', 'password');
+
+        $pass = $plek_ajax_handler->get_ajax_data('user-pass');
+        $pass_rep = $plek_ajax_handler->get_ajax_data('user-pass-repeat');
+
+        if ($pass !== $pass_rep) {
+            $validator->set_error('user-pass-repeat', __('Passwords are not matching', 'pleklang'));
+        }
+
+        //Check if the account type is valid
+        $validator->set_ignore('user-account-type');
+        $account_type = $plek_ajax_handler->get_ajax_data('user-account-type');
+        $roles = $plek_user_handler->get_public_user_roles();
+        if (!isset($roles[$account_type])) {
+            $validator->set_error('user-account-type', __('Account type not selected', 'pleklang'));
+        }
+        
+        //Check if email already exists
+        $user_email = $plek_ajax_handler->get_ajax_data('user-email');
+        if(email_exists($user_email)){
+            $validator->set_error('user-email', __('This email address is already registered', 'pleklang'));
+        }
+
+        if ($validator->all_fields_are_valid() !== true) {
+            return $validator->get_errors();
+        }
+        return true;
+    }
+
 }

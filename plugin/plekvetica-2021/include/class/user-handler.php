@@ -4,7 +4,18 @@ class PlekUserHandler
 {
 
     protected static $team_roles = array('administrator', 'plekmanager', 'cutter', 'eventmanager', 'interviewer', 'photographer', 'reviewwriter', 'videograph'); //All the possible roles of the team members
-    protected static $plek_custom_roles = array('plek-partner' => 'Partner', 'plek-community' => 'Community', 'plek-band' => 'Band', 'plek-organi' => 'Organizer');
+    protected static $plek_custom_roles = array();
+
+    public function __construct()
+    {
+        self::$plek_custom_roles = array(
+            'plek-community' => __('Community / Fan', 'pleklang'),
+            'plek-band' => __('Band', 'pleklang'),
+            'plek-organi' => __('Organizer', 'pleklang'),
+            'plek-partner' => __('Partner', 'pleklang'),
+        );
+    }
+
     /**
      * Checks if the current unser is allowed to edit this post.
      *
@@ -13,7 +24,7 @@ class PlekUserHandler
      */
     public static function current_user_can_edit(object $plek_event)
     {
-        $post_id = (!$plek_event -> get_ID()) ? get_the_ID() : $plek_event -> get_ID();
+        $post_id = (!$plek_event->get_ID()) ? get_the_ID() : $plek_event->get_ID();
         if (get_post_status($post_id) !== 'publish') {
             return false;
         }
@@ -166,10 +177,11 @@ class PlekUserHandler
      * @param object $user - WP_User object
      * @return object - The modified WP_User Object
      */
-    public static function load_user_meta(object $user){
-        $meta = get_fields("user_{$user -> ID}");
-        if(!empty($meta)){
-            $user -> meta = $meta;
+    public static function load_user_meta(object $user)
+    {
+        $meta = get_fields("user_{$user->ID}");
+        if (!empty($meta)) {
+            $user->meta = $meta;
             return $user;
         }
         return $user;
@@ -195,28 +207,29 @@ class PlekUserHandler
         return self::search_role('plek-partner', $user);
     }
 
-    public static function user_can_edit_post(object $plek_event){
-        if(current_user_can('edit_posts')){
+    public static function user_can_edit_post(object $plek_event)
+    {
+        if (current_user_can('edit_posts')) {
             return true;
         }
         $user_id = self::get_user_id();
-        $post_authors = $plek_event -> get_event_authors();
-        if(isset($post_authors[$user_id])){
+        $post_authors = $plek_event->get_event_authors();
+        if (isset($post_authors[$user_id])) {
             return true;
         }
         $user_role = self::get_user_role();
         switch ($user_role) {
             case 'plek-organi':
-                $event_organi = $plek_event -> get_field_value('_EventOrganizerID',true);
+                $event_organi = $plek_event->get_field_value('_EventOrganizerID', true);
                 $user_organi_id = (string) PlekUserHandler::get_user_setting('organizer_id');
-                if(!is_array($event_organi)){
+                if (!is_array($event_organi)) {
                     return false;
                 }
-                if(array_search($user_organi_id, $event_organi) !== false){
+                if (array_search($user_organi_id, $event_organi) !== false) {
                     return true;
                 }
                 break;
-            
+
             default:
                 return false;
                 break;
@@ -230,25 +243,26 @@ class PlekUserHandler
      * @return bool true if allowed, otherwise false
      * @todo Check if User is author of the Band
      */
-    public static function user_can_edit_band(object $plek_band){
-        if(PlekUserHandler::user_is_in_team()){
+    public static function user_can_edit_band(object $plek_band)
+    {
+        if (PlekUserHandler::user_is_in_team()) {
             return true; //Team Members are always allowed to edit.
         }
         $user_role = self::get_user_role();
         switch ($user_role) {
             case 'plek-band':
                 $user_band_id = PlekUserHandler::get_user_setting('band_id');
-                if(empty($user_band_id)){
+                if (empty($user_band_id)) {
                     return false;
                 }
-                if(is_string($user_band_id)){
+                if (is_string($user_band_id)) {
                     $user_band_id = explode(',', $user_band_id);
                 }
-                if(array_search($plek_band -> get_id(), $user_band_id) !== false){
+                if (array_search($plek_band->get_id(), $user_band_id) !== false) {
                     return true;
                 }
                 break;
-            
+
             default:
                 return false;
                 break;
@@ -279,8 +293,9 @@ class PlekUserHandler
      *
      * @return int Id of the logged in user
      */
-    public static function get_user_id(){
-            return get_current_user_id();
+    public static function get_user_id()
+    {
+        return get_current_user_id();
     }
 
     /**
@@ -288,10 +303,11 @@ class PlekUserHandler
      *
      * @return string User role or null, if not found.
      */
-    public static function get_user_role(){
+    public static function get_user_role()
+    {
         $user = wp_get_current_user();
-        if(isset($user -> roles[0])){
-            return $user -> roles[0];
+        if (isset($user->roles[0])) {
+            return $user->roles[0];
         }
         return null;
     }
@@ -351,12 +367,13 @@ class PlekUserHandler
      *
      * @return object Current user with all custom meta fields.
      */
-    public static function get_all_user_settings(){
+    public static function get_all_user_settings()
+    {
         $user = wp_get_current_user();
-        if(!is_object($user) OR empty($user)){
+        if (!is_object($user) or empty($user)) {
             return false;
         }
-        $user -> meta = get_user_meta( $user->ID );
+        $user->meta = get_user_meta($user->ID);
         return $user;
     }
 
@@ -413,5 +430,119 @@ class PlekUserHandler
             }
         }
         return true;
+    }
+
+    /**
+     * Gets an array of the custom user roles.
+     *
+     * @return array Array with the user Roles.
+     */
+    public function get_public_user_roles()
+    {
+        return self::$plek_custom_roles;
+    }
+
+    /**
+     * Saves a new user with the metadata to the database
+     *
+     * @return bool true if no errors, false
+     */
+    public function save_new_user()
+    {
+        global $plek_ajax_handler;
+        global $plek_ajax_errors;
+        $request_data = $plek_ajax_handler->get_all_ajax_data();
+        $display_name = $request_data['user-display-name'];
+        $username = $this->get_unique_username($display_name);
+        $password = $request_data['user-pass'];
+        $email = sanitize_email($request_data['user-email']);
+        $user_lock_key = md5($username.$email);
+
+
+        //Prepare the data for insert as a new user
+        $user_login = wp_slash( $username );
+        $user_email = wp_slash( $email );
+        $user_pass  = $password;
+        $display_name  = wp_slash($display_name);
+        $role = $request_data['user-account-type'];
+     
+        $userdata = compact( 'user_login', 'user_email', 'user_pass', 'role' );
+        $new_user = wp_insert_user( $userdata );
+
+        if (is_wp_error($new_user)) {
+            $error_code = array_key_first($new_user->errors);
+            $error_message = $new_user->errors[$error_code][0];
+            $plek_ajax_errors->add('save_user', sprintf(__('Failed to create new user (%s)', 'pleklang'), $error_message));
+            return false;
+        }
+
+        //Save the Meta data
+        update_user_meta($new_user, 'plek_user_lock_key', $user_lock_key);
+
+        return $user_lock_key;
+
+    }
+
+    /**
+     * Checks if the username exists and returns a unique name
+     * It adds numbers from 1 up till a unique username exists.
+     * 
+     * @param string $username
+     * @return string The new username
+     */
+    public function get_unique_username(string $username)
+    {
+        $username = sanitize_user($username);
+        if (username_exists($username) !== false) {
+            $number = 1;
+            while (username_exists($username . $number) !== false) {
+                $number++;
+            }
+            return $username . $number;
+        }
+        return $username; //Given username is unique
+    }
+
+    public function send_email_to_new_user(){
+        global $plek_ajax_handler;
+        global $plek_ajax_errors;
+        global $plek_handler;
+        $request_data = $plek_ajax_handler->get_all_ajax_data();
+
+        $username = $this->get_unique_username($request_data['user-display-name']);
+        $email = sanitize_email($request_data['user-email']);
+        $user_lock_key = md5($username.$email);
+        $subject = __('Only one step left for your account at plekvetica!','pleklang');
+        $my_plek_id = $plek_handler -> get_plek_option('my_plek_page_id');
+        $my_plekvetica_url = get_permalink($my_plek_id);
+
+        $emailer = new PlekEmailSender;
+        $emailer -> set_to($email);
+        $emailer -> set_subject($subject);
+        $emailer -> set_default();
+        $emailer -> set_message_from_template("user/new-user", $subject, $username, $email, $user_lock_key, $my_plekvetica_url);
+        return $emailer -> send_mail();
+    }
+
+    public static function is_user_unlock_page(){
+        if(!empty($_REQUEST['unlock']) AND !empty($_REQUEST['key'])){
+            return true;
+        }
+        return false;
+    }
+    public static function unlock_user_and_login(){
+        if(empty($_REQUEST['unlock']) OR empty($_REQUEST['key'])){
+            return false;
+        }
+        $email = sanitize_email($_REQUEST['unlock']);
+        $user = get_user_by('email', $email);
+        $unlock_key = get_user_meta($user -> ID, 'plek_user_lock_key', true);
+        s($unlock_key);
+        if($unlock_key === $_REQUEST['key']){
+            echo "Its a match!!";
+            echo "unlock!";
+            s($user);
+        }
+        return false;
     }
 }

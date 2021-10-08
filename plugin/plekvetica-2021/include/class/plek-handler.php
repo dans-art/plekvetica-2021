@@ -4,6 +4,12 @@ class PlekHandler
 {
 
     protected $js_debug = array();
+    public $version = "";
+
+    public function __construct()
+    {
+
+    }
 
     public function set_js_error($msg)
     {
@@ -139,8 +145,11 @@ class PlekHandler
         
     }
     public function enqueue_scripts(){
-        wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js',['jquery']);
-        wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.min.js',['jquery']);
+        $plugin_meta = get_plugin_data(PLEK_PATH . 'plekvetica.php');
+        $this -> version = (!empty($plugin_meta['Version'])) ? $plugin_meta['Version'] : "000";
+
+        wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js',['jquery'], $this -> version);
+        wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.min.js',['jquery'], $this -> version);
         
     }
 

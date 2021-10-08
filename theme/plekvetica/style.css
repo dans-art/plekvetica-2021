@@ -818,47 +818,53 @@ div.plek-review-search form button, div.plek-review-search form input { width: 1
 /* line 148, scss/forms.scss */
 .item.plek-select-item .title i { cursor: pointer; font-size: 1.2em; }
 
+/* Register User*/
+/* line 156, scss/forms.scss */
+#register-new-user-form .submit.plek-button { width: 100%; margin-left: 0; }
+
 /* User Settings form, Band form*/
-/* line 155, scss/forms.scss */
+/* line 162, scss/forms.scss */
 .band-edit-container { width: 100%; }
 
-/* line 159, scss/forms.scss */
-#plek-user-settings-form, #plek-band-form { margin-left: 2%; width: 96%; /*Band Form*/ }
-/* line 164, scss/forms.scss */
-#plek-user-settings-form h2, #plek-band-form h2 { margin-left: -1em; margin-top: 1em; }
-/* line 169, scss/forms.scss */
-#plek-user-settings-form .plek-hidden, #plek-band-form .plek-hidden { display: none; }
-/* line 173, scss/forms.scss */
-#plek-user-settings-form input, #plek-user-settings-form textarea, #plek-user-settings-form select, #plek-band-form input, #plek-band-form textarea, #plek-band-form select { width: 100%; margin-bottom: 0.5em; }
-/* line 179, scss/forms.scss */
-#plek-user-settings-form label, #plek-band-form label { width: 100%; display: block; padding-top: 0.5em; }
-/* line 185, scss/forms.scss */
-#plek-user-settings-form button.plek-button, #plek-band-form button.plek-button { width: 24%; white-space: normal; }
-/* line 190, scss/forms.scss */
-#plek-user-settings-form #user-settings-submit, #plek-band-form #user-settings-submit { background-color: #8C262E; }
+/* line 166, scss/forms.scss */
+#plek-user-settings-form, #plek-band-form, #register-new-user-form { margin-left: 2%; width: 96%; /*Band Form*/ }
+/* line 172, scss/forms.scss */
+#plek-user-settings-form h2, #plek-band-form h2, #register-new-user-form h2 { margin-left: -1em; margin-top: 1em; }
+/* line 177, scss/forms.scss */
+#plek-user-settings-form .plek-hidden, #plek-band-form .plek-hidden, #register-new-user-form .plek-hidden { display: none; }
+/* line 181, scss/forms.scss */
+#plek-user-settings-form input, #plek-user-settings-form textarea, #plek-user-settings-form select, #plek-band-form input, #plek-band-form textarea, #plek-band-form select, #register-new-user-form input, #register-new-user-form textarea, #register-new-user-form select { width: 100%; margin-bottom: 0.5em; }
+/* line 187, scss/forms.scss */
+#plek-user-settings-form label, #plek-band-form label, #register-new-user-form label { width: 100%; display: block; padding-top: 0.5em; }
 /* line 193, scss/forms.scss */
-#plek-user-settings-form .plek-button-cancel, #plek-band-form .plek-button-cancel { background-color: #424242; color: white; }
-/* line 197, scss/forms.scss */
-#plek-user-settings-form .plek-button-cancel:hover, #plek-band-form .plek-button-cancel:hover { color: #e6c2c2; }
-/* line 202, scss/forms.scss */
-#plek-user-settings-form .buttons, #plek-band-form .buttons { display: flex; flex-direction: row; justify-content: flex-end; gap: 1.3%; }
-/* line 211, scss/forms.scss */
-#plek-user-settings-form #band-basic-infos img, #plek-band-form #band-basic-infos img { max-width: 200px; }
-/* line 215, scss/forms.scss */
-#plek-user-settings-form .band-edit-container, #plek-band-form .band-edit-container { width: 100%; flex: 1; }
-/* line 220, scss/forms.scss */
-#plek-user-settings-form #band-videos, #plek-band-form #band-videos { display: none; }
-/* line 224, scss/forms.scss */
-#plek-user-settings-form #add-band-video, #plek-band-form #add-band-video { width: 35%; }
-/* line 228, scss/forms.scss */
-#plek-user-settings-form #band-genre-loader, #plek-band-form #band-genre-loader { display: flex; }
+#plek-user-settings-form button.plek-button, #plek-band-form button.plek-button, #register-new-user-form button.plek-button { width: 24%; white-space: normal; }
+/* line 199, scss/forms.scss */
+#plek-user-settings-form button.plek-button.full-width, #plek-band-form button.plek-button.full-width, #register-new-user-form button.plek-button.full-width { width: 100%; }
+/* line 205, scss/forms.scss */
+#plek-user-settings-form #user-settings-submit, #plek-band-form #user-settings-submit, #register-new-user-form #user-settings-submit { background-color: #8C262E; }
+/* line 208, scss/forms.scss */
+#plek-user-settings-form .plek-button-cancel, #plek-band-form .plek-button-cancel, #register-new-user-form .plek-button-cancel { background-color: #424242; color: white; }
+/* line 212, scss/forms.scss */
+#plek-user-settings-form .plek-button-cancel:hover, #plek-band-form .plek-button-cancel:hover, #register-new-user-form .plek-button-cancel:hover { color: #e6c2c2; }
+/* line 217, scss/forms.scss */
+#plek-user-settings-form .buttons, #plek-band-form .buttons, #register-new-user-form .buttons { display: flex; flex-direction: row; justify-content: flex-end; gap: 1.3%; }
+/* line 226, scss/forms.scss */
+#plek-user-settings-form #band-basic-infos img, #plek-band-form #band-basic-infos img, #register-new-user-form #band-basic-infos img { max-width: 200px; }
+/* line 230, scss/forms.scss */
+#plek-user-settings-form .band-edit-container, #plek-band-form .band-edit-container, #register-new-user-form .band-edit-container { width: 100%; flex: 1; }
+/* line 235, scss/forms.scss */
+#plek-user-settings-form #band-videos, #plek-band-form #band-videos, #register-new-user-form #band-videos { display: none; }
+/* line 239, scss/forms.scss */
+#plek-user-settings-form #add-band-video, #plek-band-form #add-band-video, #register-new-user-form #add-band-video { width: 35%; }
+/* line 243, scss/forms.scss */
+#plek-user-settings-form #band-genre-loader, #plek-band-form #band-genre-loader, #register-new-user-form #band-genre-loader { display: flex; }
 
-/* line 236, scss/forms.scss */
+/* line 251, scss/forms.scss */
 .plek-upload-button-container { position: relative; overflow: hidden; width: 200px; margin-top: -3em; }
-/* line 242, scss/forms.scss */
+/* line 257, scss/forms.scss */
 .plek-upload-button-container input { position: absolute; top: 0; left: 0; padding: 0.5em 0; margin: 0; opacity: 0; filter: alpha(opacity=0); cursor: pointer; }
 
-/* line 254, scss/forms.scss */
+/* line 269, scss/forms.scss */
 .plek-upload-button-container.no-img { margin-top: 0; }
 
 /* line 5, scss/form-old.scss */

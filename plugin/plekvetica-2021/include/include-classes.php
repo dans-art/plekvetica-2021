@@ -27,4 +27,5 @@ require_once(PLEK_PATH . 'include/class/user-handler.php');
 require_once(PLEK_PATH . 'include/class/user-form-handler.php');
 
 require_once(PLEK_PATH . 'include/class/file-handler.php');
+require_once(PLEK_PATH . 'include/class/email-sender.php');
 

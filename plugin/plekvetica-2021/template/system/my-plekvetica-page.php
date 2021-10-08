@@ -1,4 +1,9 @@
 <?php
+
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 extract(get_defined_vars());
 $obj_id = get_queried_object_id();
 $current_url = get_permalink($obj_id);

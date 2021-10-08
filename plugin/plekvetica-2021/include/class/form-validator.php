@@ -1,4 +1,9 @@
 <?php
+
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 class PlekFormValidator
 {
 
@@ -158,7 +163,7 @@ class PlekFormValidator
      * @param string $hint - Hint that appears when validation fails.
      * @return void
      */
-    public function set_hint(string $fieldname, int $hint)
+    public function set_hint(string $fieldname, string $hint)
     {
         $this->hint[$fieldname] = $hint;
         return;
@@ -229,7 +234,7 @@ class PlekFormValidator
         return $this->errors;
     }
 
-    public function field_is_valid(string $fieldname, mixed $value)
+    public function field_is_valid(string $fieldname, $value)
     {
         //Sets the default values
         $this->setup_field($fieldname);
@@ -261,7 +266,7 @@ class PlekFormValidator
         if ($this->pattern[$fieldname] !== false) {
             if (preg_match($this->pattern[$fieldname], $value, $out) !== 1) {
                 if (!empty($this->hint[$fieldname])) {
-                    $this->set_error($fieldname, sprintf(__('Falsches Format für "%s". Hinweis: %s', 'pleklang'), $fieldname, $this->hint[$fieldname]));
+                    $this->set_error($fieldname, sprintf(__('Falsches Format. Hinweis: %s', 'pleklang'), $this->hint[$fieldname]));
                 } else {
                     $this->set_error($fieldname, __('Falsches Format.', 'pleklang'));
                 }
@@ -392,7 +397,7 @@ class PlekFormValidator
         $defaults['text'] = array("name" => __("Text", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => false);
         $defaults['ytvideos'] = array("name" => __("Youtube Videos", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => false);
         $defaults['image'] = array("name" => __("Image", "pleklang"), "min_length" => 0, "max_length" => 0, "pattern" => false);
-        $defaults['alpha_number'] = array("name" => __("Alpha Number", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => '/^[a-z]+_([0-9]+)/');
+        $defaults['alpha_number'] = array("name" => __("Alpha Number", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => '/^[A-Za-z0-9_]*$/');
         $defaults['int'] = array("name" => __("Number", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => '/^([0-9]+)/');
         $defaults['phone'] = array("name" => __("Phone Number", "pleklang"), "min_length" => 10, "max_length" => 17, "pattern" => '/^[+]{0,1}[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s0-9]*$/');
         $defaults['email'] = array("name" => __("Email", "pleklang"), "min_length" => 5, "max_length" => 0, "pattern" => '/\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/');
