@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 class PlekUserHandler
 {
 
@@ -209,6 +213,9 @@ class PlekUserHandler
 
     public static function user_can_edit_post(object $plek_event)
     {
+        if (self::current_user_is_locked()) {
+            return false;
+        }
         if (current_user_can('edit_posts')) {
             return true;
         }
@@ -229,7 +236,19 @@ class PlekUserHandler
                     return true;
                 }
                 break;
-
+            
+            case 'plek-band':
+                $managing_bands = PlekUserHandler::get_user_meta('band_id');
+                $managing_bands = explode(',', $managing_bands);
+                $event_bands = $plek_event -> get_bands();
+                if(!empty($managing_bands)){
+                    foreach($managing_bands as $band_id){
+                        if(isset($event_bands[$band_id])){
+                            return true; //If one band is found, which is managed by the user, return true.
+                        }
+                    }
+                }
+            break;
             default:
                 return false;
                 break;
@@ -245,6 +264,10 @@ class PlekUserHandler
      */
     public static function user_can_edit_band(object $plek_band)
     {
+        $band_handler = new PlekBandHandler;
+        if (self::current_user_is_locked()) {
+            return false;
+        }
         if (PlekUserHandler::user_is_in_team()) {
             return true; //Team Members are always allowed to edit.
         }
@@ -274,14 +297,11 @@ class PlekUserHandler
     {
         switch ($rolename) {
             case 'plek-organi':
-                echo (empty(self::get_user_setting('organizer_id'))) ? __('Fehler: Keine Veranstalter ID festgelegt.', 'pleklang') : '';
-                return;
+                return (empty(self::get_user_setting('organizer_id'))) ? __('No organizer set. Please select a organizer in the settings menu.', 'pleklang') : true;
                 break;
             case 'plek-band':
-                echo (empty(self::get_user_setting('band_id'))) ? __('Fehler: Keine Band ID festgelegt.', 'pleklang') : '';
-                return;
+                return (empty(self::get_user_setting('band_id'))) ? __('No Band set. Please select a band in the settings menu.', 'pleklang') : true;
                 break;
-
             default:
                 return __('Role not found in setup function.', 'pleklang');
                 break;
@@ -378,6 +398,22 @@ class PlekUserHandler
     }
 
     /**
+     * Get the User Meta with all the metadata.
+     * 
+     * @param string $name - Key of the meta field
+     * @param string $id - ID of the user. Null === current user
+     * @return string - The value of $name
+     */
+    public static function get_user_meta($name = null, $id = null)
+    {
+        if ($id === null) {
+            $id = (string) wp_get_current_user()->ID;
+        }
+
+        return get_user_meta($id, $name, true);
+    }
+
+    /**
      * Adds the custom roles to WP
      *
      * @return void
@@ -456,18 +492,18 @@ class PlekUserHandler
         $username = $this->get_unique_username($display_name);
         $password = $request_data['user-pass'];
         $email = sanitize_email($request_data['user-email']);
-        $user_lock_key = md5($username.$email);
+        $user_lock_key = md5($username . $email);
 
 
         //Prepare the data for insert as a new user
-        $user_login = wp_slash( $username );
-        $user_email = wp_slash( $email );
+        $user_login = wp_slash($username);
+        $user_email = wp_slash($email);
         $user_pass  = $password;
         $display_name  = wp_slash($display_name);
         $role = $request_data['user-account-type'];
-     
-        $userdata = compact( 'user_login', 'user_email', 'user_pass', 'role' );
-        $new_user = wp_insert_user( $userdata );
+
+        $userdata = compact('user_login', 'user_email', 'user_pass', 'role');
+        $new_user = wp_insert_user($userdata);
 
         if (is_wp_error($new_user)) {
             $error_code = array_key_first($new_user->errors);
@@ -480,7 +516,6 @@ class PlekUserHandler
         update_user_meta($new_user, 'plek_user_lock_key', $user_lock_key);
 
         return $user_lock_key;
-
     }
 
     /**
@@ -503,7 +538,14 @@ class PlekUserHandler
         return $username; //Given username is unique
     }
 
-    public function send_email_to_new_user(){
+    /**
+     * Sends a email to the new user to unlock the account
+     *
+     * @param string $user_lock_key - The user_meta key for plek_user_lock_key
+     * @return void
+     */
+    public function send_email_to_new_user(string $user_lock_key)
+    {
         global $plek_ajax_handler;
         global $plek_ajax_errors;
         global $plek_handler;
@@ -511,38 +553,80 @@ class PlekUserHandler
 
         $username = $this->get_unique_username($request_data['user-display-name']);
         $email = sanitize_email($request_data['user-email']);
-        $user_lock_key = md5($username.$email);
-        $subject = __('Only one step left for your account at plekvetica!','pleklang');
-        $my_plek_id = $plek_handler -> get_plek_option('my_plek_page_id');
+
+        $subject = __('Only one step left for your account at plekvetica!', 'pleklang');
+        $my_plek_id = $plek_handler->get_plek_option('my_plek_page_id');
         $my_plekvetica_url = get_permalink($my_plek_id);
 
         $emailer = new PlekEmailSender;
-        $emailer -> set_to($email);
-        $emailer -> set_subject($subject);
-        $emailer -> set_default();
-        $emailer -> set_message_from_template("user/new-user", $subject, $username, $email, $user_lock_key, $my_plekvetica_url);
-        return $emailer -> send_mail();
+        $emailer->set_to($email);
+        $emailer->set_subject($subject);
+        $emailer->set_default();
+        $emailer->set_message_from_template("user/new-user", $subject, $username, $email, $user_lock_key, $my_plekvetica_url);
+        return $emailer->send_mail();
     }
 
-    public static function is_user_unlock_page(){
-        if(!empty($_REQUEST['unlock']) AND !empty($_REQUEST['key'])){
+    /**
+     * Checks if the current page has the query parameters "unlock" and "key"
+     * If so, then it is the user unlock page
+     *
+     * @return boolean
+     */
+    public static function is_user_unlock_page()
+    {
+        if (!empty($_REQUEST['unlock']) and !empty($_REQUEST['key'])) {
             return true;
         }
         return false;
     }
-    public static function unlock_user_and_login(){
-        if(empty($_REQUEST['unlock']) OR empty($_REQUEST['key'])){
+
+    /**
+     * Unlockes the user and logs the user in.
+     *
+     * @return void
+     */
+    public static function unlock_user_and_login()
+    {
+        if (empty($_REQUEST['unlock']) or empty($_REQUEST['key'])) {
             return false;
         }
         $email = sanitize_email($_REQUEST['unlock']);
         $user = get_user_by('email', $email);
-        $unlock_key = get_user_meta($user -> ID, 'plek_user_lock_key', true);
-        s($unlock_key);
-        if($unlock_key === $_REQUEST['key']){
-            echo "Its a match!!";
-            echo "unlock!";
-            s($user);
+        $unlock_key = get_user_meta($user->ID, 'plek_user_lock_key', true);
+        if (empty($unlock_key)) {
+            $_GET['user_already_unlocked'] = true;
+            return;
         }
-        return false;
+        if ($unlock_key === $_REQUEST['key']) {
+            //Remove the lock_key
+            if (update_user_meta($user->ID, 'plek_user_lock_key', '')) {
+                $_GET['user_unlocked'] = true;
+                //Login the user
+                wp_clear_auth_cookie();
+                wp_set_current_user($user->ID);
+                wp_set_auth_cookie($user->ID, 1);
+                return;
+            }
+            return;
+        }
+        return;
+    }
+
+    /**
+     * Checks if the current user account is locked
+     *
+     * @return void
+     */
+    public static function current_user_is_locked()
+    {
+        $user = wp_get_current_user();
+        if (!is_object($user) or empty($user)) {
+            return false;
+        }
+        $lock_key = get_user_meta($user->ID, 'plek_user_lock_key', true);
+        if (empty($lock_key)) {
+            return false;
+        }
+        return true;
     }
 }

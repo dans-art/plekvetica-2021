@@ -328,7 +328,9 @@ class PlekEvents extends PlekEventHandler
     {
         global $wpdb;
         $user_id = PlekUserHandler::get_user_id();
-        $band_id = (int) PlekUserHandler::get_user_setting('band_id');
+        $band_ids = PlekUserHandler::get_user_setting('band_id');
+        $band_id_arr = explode(',',$band_ids);
+
         $page_obj = $this->get_pages_object();
         $limit = $limit ?: $page_obj->posts_per_page;
         $from = $from ?: '1970-01-01 00:00:00';
@@ -343,11 +345,11 @@ class PlekEvents extends PlekEventHandler
         LEFT JOIN {$wpdb->prefix}postmeta as postponed
         ON (posts.ID = postponed.post_id AND postponed.meta_key = 'postponed_event')
 
-        LEFT JOIN {$wpdb->prefix}term_relationships AS tax_rel
-        ON (posts.ID = tax_rel.object_id)
+        LEFT JOIN {$wpdb->prefix}term_relationships AS band_term
+        ON (posts.ID = band_term.object_id)
 
         WHERE 
-        (post_author = %d OR tax_rel.term_taxonomy_id = '%d') 
+        (post_author = %d OR band_term.term_taxonomy_id IN (".implode(',',$band_id_arr).")) 
         AND post_type = 'tribe_events'
         AND posts.post_status IN ('publish', 'draft')
         AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
@@ -357,7 +359,6 @@ class PlekEvents extends PlekEventHandler
         ORDER BY date.meta_value DESC
         LIMIT %d OFFSET %d",
             $user_id,
-            $band_id,
             $from,
             $to,
             $limit,

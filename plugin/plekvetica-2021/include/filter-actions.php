@@ -44,6 +44,7 @@ add_action( 'wp_footer', [$plek_handler,'get_js_errors']);
 
 //User management
 add_action('after_setup_theme', [new PlekUserHandler,'disable_admin']);
+add_action('after_setup_theme', [new PlekUserHandler,'unlock_user_and_login'], 10, 1);
 
 //Backend Login Logo
 /* add_filter('login_headertext', 'my_login_logo_url_title');

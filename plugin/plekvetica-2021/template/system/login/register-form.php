@@ -1,5 +1,9 @@
 <?php
 $plek_user_handler = new PlekUserHandler;
+if(is_user_logged_in()){
+	echo __('You have already an account. Please logout first before creating a new account.','pleklang');
+	return;
+}
 ?>
 <h1><?php echo __('Anmelden', 'pleklang'); ?></h1>
 
@@ -21,6 +25,7 @@ $plek_user_handler = new PlekUserHandler;
 		<select name="user-account-type" id="user-account-type" class="dropdown">
 			<option value="null"><?php echo __('Please select...','pleklang'); ?></option>
 			<?php foreach($plek_user_handler -> get_public_user_roles() AS $role_id => $role_name): ?>
+				<?php if($role_id === 'plek-partner'){continue;} ?>
 				<option value="<?php echo $role_id; ?>"><?php echo $role_name; ?></option>
 			<?php endforeach; ?>
 		</select>

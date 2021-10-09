@@ -186,7 +186,7 @@ class PlekAjaxHandler
                 }
 
                 //Send Email
-                if(!$user_handler -> send_email_to_new_user()){
+                if(!$user_handler -> send_email_to_new_user($user_lock_key)){
                     $error_msg = sprintf(__('Account created but failed to send email. Please contact the IT Support: %s.', 'pleklang'), $plek_handler -> get_plek_option('it_support_email'));
                     $this->set_error($error_msg);
                 }

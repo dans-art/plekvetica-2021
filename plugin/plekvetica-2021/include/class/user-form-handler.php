@@ -23,6 +23,9 @@ class PlekUserFormHandler extends PlekUserHandler
             case 'plek-organi':
                 return $this->validate_role_data_organizer();
                 break;
+            case 'plek-band':
+                return $this->validate_role_data_band();
+                break;
 
             default:
                 //No specific Role
@@ -118,6 +121,9 @@ class PlekUserFormHandler extends PlekUserHandler
             case 'plek-organi':
                 $role_settings_saved = $this->save_organizer_settings();
                 break;
+            case 'plek-band':
+                $role_settings_saved = $this->save_band_settings();
+                break;
 
             default:
                 //No specific Role
@@ -185,6 +191,26 @@ class PlekUserFormHandler extends PlekUserHandler
     }
 
     /**
+     * Saves the band settings.
+     * 
+     * @todo: check if update of the metadata was successfully or not.
+     *
+     * @return bool true
+     */
+    public function save_band_settings()
+    {
+        global $plek_ajax_handler;
+        global $plek_ajax_errors;
+        $user = wp_get_current_user();
+        $band_ids = $plek_ajax_handler->get_ajax_data('band-ids');
+        $band_ids_imploded = implode(',', $band_ids);
+
+        update_user_meta($user->ID, 'band_id', $band_ids_imploded);
+        
+        return true;
+    }
+
+    /**
      * Validates the additional fields of the organizer
      * Set in template/system/user-settings/organizer-settings-form.php
      *
@@ -213,6 +239,36 @@ class PlekUserFormHandler extends PlekUserHandler
         if ((int)$plek_ajax_handler->get_ajax_data('organizer-id') !== (int) PlekUserHandler::get_user_setting('organizer_id')) {
             $validator->set_system_error(__('Du bist nicht berechtigt, die Veranstalter ID zu bearbeiten!', 'pleklang'));
         }
+
+        if ($validator->all_fields_are_valid() !== true) {
+            return $validator->get_errors();
+        }
+        return true;
+    }
+
+    /**
+     * Validates the additional fields of the band
+     * Set in template/system/user-settings/band-settings-form.php
+     *
+     * @return mixed true on success, error array if any errors
+     */
+    public function validate_role_data_band()
+    {
+        global $plek_ajax_handler;
+        $validator = $this->set_general_validator(); //Sets the general user fields like name, description and password.
+
+        $validator->set_required('band-ids');
+        $validator->set_type('band-ids', 'int');
+
+        if(!$plek_ajax_handler->get_ajax_data('band-ids')){
+            $validator->set_error('band-ids', __('No Band selected', 'pleklang'));
+        }
+
+        /*if ((int)$plek_ajax_handler->get_ajax_data('band-ids') !== (int) PlekUserHandler::get_user_setting('band_id')) {
+            $validator->set_system_error(__('Du bist nicht berechtigt, die Veranstalter ID zu bearbeiten!', 'pleklang'));
+        }*/
+        //Check if band is managed by the current user
+
 
         if ($validator->all_fields_are_valid() !== true) {
             return $validator->get_errors();

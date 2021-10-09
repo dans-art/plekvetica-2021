@@ -35,6 +35,10 @@ if(!isset($user -> meta['nickname'])){
     if(PlekUserHandler::user_is_organizer($user)){
         PlekTemplateHandler::load_template('organizer-settings-form', 'system/user-settings', $user);
     }
+
+    if(PlekUserHandler::user_is_band($user)){
+        PlekTemplateHandler::load_template('band-settings-form', 'system/user-settings', $user);
+    }
     
     ?>
     <div class="buttons">

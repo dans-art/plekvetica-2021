@@ -70,6 +70,9 @@ class PlekBandHandler
     public function load_band_object_by_id(string $id = '')
     {
         $term = get_term_by('id', $id, 'post_tag');
+        if(!$term){
+            return false;
+        }
         return $this -> term_to_band_object($term);
     }
 
@@ -548,5 +551,65 @@ class PlekBandHandler
             return false;
         }
         return true;
+    }
+
+    /**
+     * Checks if a band is managed by anyone.
+     *
+     * @param integer $band_id
+     * @return mixed False if band is not managed, otherwise an array with the user_ids
+     */
+    public function band_is_managed(int $band_id){
+        global $wpdb;
+        $wild = '%';
+        $like = $wild . $wpdb->esc_like($band_id) . $wild;
+
+        $query = $wpdb->prepare("SELECT user_id
+            FROM `{$wpdb->prefix}usermeta` as meta
+            WHERE meta.`meta_key` LIKE 'band_id'
+            AND meta.`meta_value` LIKE '%s'", $like);
+        $check = $wpdb->get_col($query);
+        if(empty($check)){
+            return false;
+        }
+        return $check;
+    }
+
+    /**
+     * Checks if a band is managed by a specific user.
+     *
+     * @param integer $band_id
+     * @param integer $user_id
+     * @return bool True if user is managing band
+     */
+    public function band_is_managed_by_user(int $band_id, int $user_id){
+        $check = $this -> band_is_managed($band_id);
+        if(array_search($user_id, $check)){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get all the Authors, which are managing the band given
+     *
+     * @param integer $band_id
+     * @return void
+     */
+    public function get_band_managers_names(int $band_id){
+        $user_ids = $this -> band_is_managed($band_id);
+
+        $return = array();
+        if(is_array($user_ids)){
+            foreach($user_ids as $id){
+                $user = get_user_by('ID', $id);
+                if($user){
+                    $url = get_author_posts_url($user -> ID);
+                    $return[] = array($user -> ID, $user -> display_name, $url);
+                }
+            }
+            return $return;
+        }
+        return false;
     }
 }

@@ -16,18 +16,34 @@ $content = (isset($template_args[1])) ? $template_args[1] : ''; //Content of the
 ?>
 
 <div id="plek-login-container">
-    <?php if (is_user_logged_in()) : ?>
-        <?php PlekTemplateHandler::load_template('my-plekvetica-page', 'system', $current_user); ?>
-
-    <?php elseif (PlekUserHandler::is_user_unlock_page()) : ?>
+    <?php
+    if (PlekUserHandler::current_user_is_locked()) {
+        $message = __('You account is currently locked. Please check your mail for unlock instructions', 'pleklang');
+        PlekTemplateHandler::load_template('user-notice', 'system', 'info', $message);
+        return;
+    }
+    ?>
+    <?php if (PlekUserHandler::is_user_unlock_page()) : ?>
         <?php
-        if(PlekUserHandler::unlock_user_and_login()){
-            PlekTemplateHandler::load_template('my-plekvetica-page', 'system', $current_user);
-        }else{
-            echo __('Could not activate the account. Probably it has been activated already.','pleklang');
-            PlekTemplateHandler::load_template('login-form', 'system/login');
+        if (isset($_GET['user_unlocked'])) {
+            $activate_ok = __('Account activated! Welcome to Plekvetica!', 'pleklang');
+            PlekTemplateHandler::load_template('user-notice', 'system', 'info', $activate_ok);
+        } elseif (isset($_GET['user_already_unlocked'])) {
+            $activate_error = __('Account is already unlocked.', 'pleklang');
+            PlekTemplateHandler::load_template('user-notice', 'system', 'warning', $activate_error);
+        } else {
+            //If user unlock page but user is not locked
+            //This can happen, when user is not logged in, or user is not locked.
+            if (PlekUserHandler::current_user_is_locked() === false) {
+                $activate_error = __('Account could not be activated.', 'pleklang');
+                PlekTemplateHandler::load_template('user-notice', 'system', 'error', $activate_error);
+            }
         }
         ?>
+    <?php endif; ?>
+
+    <?php if (is_user_logged_in()) : ?>
+        <?php PlekTemplateHandler::load_template('my-plekvetica-page', 'system', $current_user); ?>
     <?php else : ?>
         <?php PlekTemplateHandler::load_template('login-form', 'system/login'); ?>
     <?php endif; ?>

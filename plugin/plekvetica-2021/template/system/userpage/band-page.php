@@ -4,7 +4,7 @@ global $plek_event;
 
 $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user object
 $user = PlekUserHandler::load_user_meta($user);
-$organi_id = $user->meta->organizer_id ?: null;
+
 $today = date('Y-m-d 00:00:00');
 $today_ms = strtotime($today);
 $next_week = date('Y-m-d 23:59:59', strtotime('+7 days', $today_ms));
@@ -30,7 +30,7 @@ $page_obj = $plek_event -> get_pages_object();
                 <span class="plek-no-next-events"><?php echo __('Für die nächsten 7 Tage stehen keine Events an!', 'pleklang'); ?></span>
             <?php endif; ?>
         </div>
-        <div class="organizer-data">
+        <div class="band-data">
             <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Deine Daten', 'pleklang')); ?>
             <?php PlekTemplateHandler::load_template('band-data', 'system/userpage', $user); ?>
         </div>

@@ -31,6 +31,45 @@
 
 }
 
+/* User Notices*/
+
+.plek-notice{
+  width: 100%;
+  padding: 0.4em;
+  margin: 0.2em;
+
+  &::before{
+    font-family: "FontAwesome";
+    margin-left: 0.5em;
+  }
+
+}
+
+.plek-notice-info{
+  background-color: $color-blue;
+
+  &::before{
+    content: '\f129';
+    margin-right: 0.5em;
+  }
+}
+
+.plek-notice-warning{
+  background-color: $color-yellow;
+
+  &::before{
+    content: '\f071';
+  }
+}
+
+.plek-notice-error{
+  background-color: $color-red;
+
+  &::before{
+    content: '\f00d';
+  }
+}
+
 /* Buttons */
 button {
 

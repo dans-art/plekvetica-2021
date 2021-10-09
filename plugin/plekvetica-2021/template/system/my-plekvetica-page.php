@@ -28,6 +28,12 @@ $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user 
  * @todo Add Partner page
  */
 
+$user_setup = PlekUserHandler::check_user_setup(PlekUserHandler::get_user_role());
+if($user_setup !== true){
+    PlekTemplateHandler::load_template('user-notice', 'system', 'warning', $user_setup);
+}
+//s(wp_get_current_user());
+
 if (PlekUserHandler::user_is_in_team()) {
     PlekTemplateHandler::load_template('team-page', 'system/userpage', $user);
 } elseif (PlekUserHandler::user_is_organizer()) {
