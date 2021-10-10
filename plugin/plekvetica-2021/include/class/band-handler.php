@@ -442,8 +442,8 @@ class PlekBandHandler
     }
     public function enqueue_form_scripts()
     {
-        wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css' );
-	    wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array('jquery') );
+        global $plek_handler;
+        $plek_handler -> enqueue_select2();
         wp_enqueue_script('plek-band-scripts', PLEK_PLUGIN_DIR_URL . 'js/manage-band.min.js', array('jquery', 'select2'));
     }
 

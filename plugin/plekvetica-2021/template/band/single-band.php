@@ -1,4 +1,8 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 $band = new PlekBandHandler();
 $band->load_band_object();
 

@@ -175,18 +175,28 @@ class PlekUserFormHandler extends PlekUserHandler
         global $plek_ajax_errors;
 
         $request_data = $plek_ajax_handler->get_all_ajax_data();
+        $old_organi_id = PlekUserHandler::get_user_setting('organizer_id');
+        $organi_id = htmlspecialchars($request_data['organizer-id']);
 
-        $organi_data = array();
-        $organi_data['ID'] = htmlspecialchars($request_data['organizer-id']);
-        $organi_data['Organizer'] = htmlspecialchars($request_data['organizer-name']);
-        $organi_data['Phone'] = htmlspecialchars($request_data['organizer-phone']);
-        $organi_data['Email'] = htmlspecialchars($request_data['organizer-email']);
-        $organi_data['Website'] = htmlspecialchars($request_data['organizer-web']);
-        $organi_data['Description'] = htmlspecialchars($request_data['organizer-description']);
-        if (tribe_update_organizer($organi_data['ID'], $organi_data) === false) {
-            $plek_ajax_errors->add('save_user_settings', __('Fehler bei speichern der Veranstalter Einstellungen.', 'pleklang'));
-            return false;
+        //Save the organizer id
+        if (empty($old_organi_id)) {
+            $user = wp_get_current_user();
+            update_user_meta($user->ID, 'organizer_id', $organi_id);
+        } else {
+            //Save the organizer data
+            $organi_data = array();
+            $organi_data['ID'] = htmlspecialchars($request_data['organizer-id']);
+            $organi_data['Organizer'] = htmlspecialchars($request_data['organizer-name']);
+            $organi_data['Phone'] = htmlspecialchars($request_data['organizer-phone']);
+            $organi_data['Email'] = htmlspecialchars($request_data['organizer-email']);
+            $organi_data['Website'] = htmlspecialchars($request_data['organizer-web']);
+            $organi_data['Description'] = htmlspecialchars($request_data['organizer-description']);
+            if (tribe_update_organizer($organi_data['ID'], $organi_data) === false) {
+                $plek_ajax_errors->add('save_user_settings', __('Fehler bei speichern der Veranstalter Einstellungen.', 'pleklang'));
+                return false;
+            }
         }
+
         return true;
     }
 
@@ -206,7 +216,7 @@ class PlekUserFormHandler extends PlekUserHandler
         $band_ids_imploded = implode(',', $band_ids);
 
         update_user_meta($user->ID, 'band_id', $band_ids_imploded);
-        
+
         return true;
     }
 
@@ -220,6 +230,7 @@ class PlekUserFormHandler extends PlekUserHandler
     {
         global $plek_ajax_handler;
         $validator = $this->set_general_validator(); //Sets the general user fields like name, description and password.
+        $user_organi_setting = PlekUserHandler::get_user_setting('organizer_id');
 
         $validator->set_required('organizer-id');
         $validator->set_type('organizer-id', 'int');
@@ -236,8 +247,8 @@ class PlekUserFormHandler extends PlekUserHandler
 
         $validator->set_type('organizer-description', 'textlong');
 
-        if ((int)$plek_ajax_handler->get_ajax_data('organizer-id') !== (int) PlekUserHandler::get_user_setting('organizer_id')) {
-            $validator->set_system_error(__('Du bist nicht berechtigt, die Veranstalter ID zu bearbeiten!', 'pleklang'));
+        if ((!empty($user_organi_setting)) AND (int)$plek_ajax_handler->get_ajax_data('organizer-id') !== (int) $user_organi_setting) {
+            $validator->set_system_error(__('Organizer already set. Please contact the site owner to change the organizer.', 'pleklang'));
         }
 
         if ($validator->all_fields_are_valid() !== true) {
@@ -260,15 +271,15 @@ class PlekUserFormHandler extends PlekUserHandler
         $validator->set_required('band-ids');
         $validator->set_type('band-ids', 'int');
 
-        if(!$plek_ajax_handler->get_ajax_data('band-ids')){
+        if (!$plek_ajax_handler->get_ajax_data('band-ids')) {
             $validator->set_error('band-ids', __('No Band selected', 'pleklang'));
         }
 
-        /*if ((int)$plek_ajax_handler->get_ajax_data('band-ids') !== (int) PlekUserHandler::get_user_setting('band_id')) {
-            $validator->set_system_error(__('Du bist nicht berechtigt, die Veranstalter ID zu bearbeiten!', 'pleklang'));
-        }*/
         //Check if band is managed by the current user
-
+        $band_ids = $plek_ajax_handler->get_ajax_data('band-ids');
+        if(is_array($band_ids) AND count($band_ids) > 5){
+            $validator->set_error('band-ids', __('To many Bands selected! Are you sure you have more than 5 Bands!?', 'pleklang'));
+        }
 
         if ($validator->all_fields_are_valid() !== true) {
             return $validator->get_errors();
@@ -315,10 +326,10 @@ class PlekUserFormHandler extends PlekUserHandler
         if (!isset($roles[$account_type])) {
             $validator->set_error('user-account-type', __('Account type not selected', 'pleklang'));
         }
-        
+
         //Check if email already exists
         $user_email = $plek_ajax_handler->get_ajax_data('user-email');
-        if(email_exists($user_email)){
+        if (email_exists($user_email)) {
             $validator->set_error('user-email', __('This email address is already registered', 'pleklang'));
         }
 
@@ -327,5 +338,4 @@ class PlekUserFormHandler extends PlekUserHandler
         }
         return true;
     }
-
 }

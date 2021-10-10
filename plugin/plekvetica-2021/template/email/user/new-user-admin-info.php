@@ -9,10 +9,9 @@ $email_attr = (isset($template_args[1])) ? $template_args[1] : ''; // The email 
 
 $name = (isset($email_attr[0])) ? $email_attr[0] : ''; // The name of the user
 $email = (isset($email_attr[1])) ? $email_attr[1] : '';
-$plek_lock_key = (isset($email_attr[2])) ? $email_attr[2] : '';
-$my_plek_url = (isset($email_attr[3])) ? $email_attr[3] : '';
+$user_id = (isset($email_attr[2])) ? $email_attr[2] : ''; // The id of the user
 
-$unlock_url = "{$my_plek_url}?unlock={$email}&key={$plek_lock_key}";
+$user_account_link = get_site_url( )."/wp-admin/user-edit.php?user_id=".$user_id;
 
 include(PLEK_PATH . 'template/email/email-styles.php');
 
@@ -22,16 +21,12 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
 <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo $email_bg_dark; ?>" color="<?php echo $text_color; ?>" style="padding:10px; margin: 0; color:<?php echo $text_color; ?>;">
     <tr>
         <td id="email-content" style="color: <?php echo $text_color; ?>;">
-            <h1><?php echo __('Welcome to Plekvetica!','pleklang'); ?></h1>
+            <h1><?php echo __('New user unlocked!','pleklang'); ?></h1>
             <div>
-                <?php echo sprintf(__('Hello, %s','pleklang'),$name); ?>
+                <?php echo __('A new user has been created and unlocked.','pleklang'); ?>
                 <br />
-                <?php echo __('Your account has been successfully created. Please confirm your registration with the link below.','pleklang'); ?>
+                <a href="<?php echo $user_account_link; ?>"> <?php echo $name; ?> (<?php echo $email; ?>)</a>
                 <br />
-                <a  style="color: <?php echo $link_color; ?>;" href="<?php echo $unlock_url; ?>"><?php echo $unlock_url; ?></a>
-                <br />
-                <br />
-                <?php echo __('Thanks for being a part of our Community!','pleklang'); ?>
             </div>
         </td>
     </tr>

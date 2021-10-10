@@ -67,11 +67,11 @@ class PlekEmailSender
      * @param string $template - The Template to use. e.g. user/new-user
      * @param string $subject - Subject and title of the email
      * @param mixed ...$args - Arguments for the template 
-     * @return void
+     * @return string The created message
      */
     public function set_message_from_template(string $template, string $subject = '', ...$args){
        $this -> message = PlekTemplateHandler::load_template_to_var($template, 'email', $subject, $args);
-       return;
+       return $this -> message;
     }
 
     public function set_from($email, $name = ''){

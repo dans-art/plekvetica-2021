@@ -153,7 +153,17 @@ class PlekHandler
         
     }
 
+    public function enqueue_select2(){
+        wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css' );
+	    wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array('jquery') );
+    }
+
     public function activate_plugin(){
         PlekUserHandler::add_user_roles();
     }
+
+    public function load_textdomain(){
+        load_textdomain('pleklang', PLEK_PATH . 'languages/plekvetica-2021-' . determine_locale() . '.mo');
+    }
+
 }

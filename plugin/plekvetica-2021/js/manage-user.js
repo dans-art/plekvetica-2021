@@ -24,7 +24,16 @@ let plek_user = {
             e.preventDefault();
             //Check if cancel button
             if(e.currentTarget.id === 'user-settings-cancel'){
-                history.back();
+                var prev_url = document.referrer;
+                //Try to remove the activation key of the url.
+                //@todo: Remove the unlock parameter as well. For some reason, this does not work...
+                if (typeof URLSearchParams !== 'undefined' &&  prev_url.includes('?')) {
+                    var params = new URLSearchParams(prev_url)
+                    params.delete('key');
+                    params.delete('unlock'); //Not working??
+                    prev_url = unescape(params.toString());
+                }
+                location.href = prev_url;
                 return;
             }
             var data = jQuery('#plek-user-settings-form').serialize();
@@ -63,7 +72,7 @@ let plek_user = {
             data: data,
             success: function success(data) {
                 let text = plek_main.get_text_from_ajax_request(data, true);
-                let errors = plek_main.show_field_errors(data);
+                let errors = plek_main.show_field_errors(data, '#register-new-user-form');
                 if(errors === true){
                     text = "Das Formular enthält Fehler, bitte korrigieren";
                     plek_user.reset_button_text_after_input_focus(button, button_cta);
@@ -99,7 +108,7 @@ let plek_user = {
             data: data,
             success: function success(data) {
                 let text = plek_main.get_text_from_ajax_request(data, true);
-                let errors = plek_main.show_field_errors(data);
+                let errors = plek_main.show_field_errors(data, '#plek-user-settings-form');
                 if(errors === true){
                     console.log("Contains Errors");
                     text = "Das Formular enthält Fehler, bitte korrigieren";

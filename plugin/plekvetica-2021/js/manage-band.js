@@ -173,7 +173,7 @@ let plek_band = {
             data: data,
             success: function success(data) {
                 let text = plek_main.get_text_from_ajax_request(data, true);
-                let errors = plek_main.show_field_errors(data);
+                let errors = plek_main.show_field_errors(data, form);
                 if (errors === true) {
                     console.log("Contains Errors");
                     text = "Das Formular enthält Fehler, bitte korrigieren";

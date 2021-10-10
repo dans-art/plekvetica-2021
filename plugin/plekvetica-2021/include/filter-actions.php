@@ -15,6 +15,7 @@ add_filter('tribe_get_event', [$plek_event,'plek_tribe_add_terms'], 10, 1);
 //Add the band dropdown to the gallery view of ngg
 //add_filter( 'ngg_manage_gallery_fields', 'filter_ngg_manage_gallery_fields', 10, 3 );
 
+add_action('init', [$plek_handler, 'load_textdomain']); //load language 
 add_action('wp_head', [$plek_handler,'enqueue_scripts']);
 
 add_action('admin_menu', [$backend_class,'setup_options']);

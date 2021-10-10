@@ -295,6 +295,10 @@ class PlekUserHandler
 
     public static function check_user_setup($rolename)
     {
+        if (self::user_is_in_team()) {
+            //Ignore this checks if user is in Team
+            return true;
+        }
         switch ($rolename) {
             case 'plek-organi':
                 return (empty(self::get_user_setting('organizer_id'))) ? __('No organizer set. Please select a organizer in the settings menu.', 'pleklang') : true;
@@ -587,6 +591,7 @@ class PlekUserHandler
      */
     public static function unlock_user_and_login()
     {
+        global $plek_handler;
         if (empty($_REQUEST['unlock']) or empty($_REQUEST['key'])) {
             return false;
         }
@@ -605,6 +610,16 @@ class PlekUserHandler
                 wp_clear_auth_cookie();
                 wp_set_current_user($user->ID);
                 wp_set_auth_cookie($user->ID, 1);
+
+                //Send Info to Admin
+                $admin_email = $plek_handler -> get_plek_option('admin_email');
+                $subject = __('New user account activated','pleklang');
+                $emailer = new PlekEmailSender;
+                $emailer->set_to($admin_email);
+                $emailer->set_subject($subject);
+                $emailer->set_default();
+                $emailer->set_message_from_template("user/new-user-admin-info", $subject, $user -> display_name, $email, $user -> ID);
+                $emailer -> send_mail();
                 return;
             }
             return;

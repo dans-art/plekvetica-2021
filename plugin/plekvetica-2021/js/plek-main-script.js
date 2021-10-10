@@ -103,13 +103,22 @@ let plek_main = {
     show_field_errors(data, form = 'form'){
         let error_count = 0;
         try {
-            let encoded_data = JSON.parse(data);
-            console.log(encoded_data);
+            console.log(data);
+            var encoded_data = data;
+            if(typeof data != 'object'){
+                encoded_data = JSON.parse(data);
+            }
+            //console.log(encoded_data);
             for(const [id, value] of Object.entries(encoded_data.error)){
                 if(typeof value == "object"){
                     for(const [sub_id, sub_value] of Object.entries(value)){
                         jQuery(sub_value).each(function(i){
-                            jQuery('#'+sub_id).after(plek_main.format_error_message(sub_value[i]));
+                            console.log("set "+sub_id);
+                            var field_selector = jQuery('#'+sub_id);
+                            if(field_selector.length === 0){
+                                var field_selector = jQuery(form); //If field is not found, attach the error at the end of the given form
+                            }
+                            jQuery(field_selector).after(plek_main.format_error_message(sub_value[i]));
                             error_count++;
                         });
                     }
@@ -118,6 +127,7 @@ let plek_main = {
                     //Error not assigned to field 
                     jQuery(form).after(plek_main.format_error_message(value));
                     console.log("not assigned");
+                    console.log(form);
                 }
                 //Set the error message
                 jQuery(value).each(function(i){

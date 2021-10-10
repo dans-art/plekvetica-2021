@@ -8,6 +8,8 @@
  * Date: 2021-04-07
  * Author: Daniel Spycher
  * Author URI: https://www.dev.dans-art.ch/
+ * 
+ * Domain Path: /languages
  * Textdomain: pleklang
  * @todo: 
  *       -  Change ACF "band_genre" callback to Array
@@ -17,6 +19,9 @@
  * - Fix Search page, add Youtube, Reviews, Band, Seperate by type.
  */
 
+if (!defined('ABSPATH')) {
+  exit; // Exit if accessed directly
+}
 
 define('PLEK_PATH', plugin_dir_path( __FILE__ ));
 define('PLEK_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ));

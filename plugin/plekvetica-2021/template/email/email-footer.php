@@ -1,10 +1,36 @@
-<?php 
+<?php
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
+
+include(PLEK_PATH . 'template/email/email-styles.php');
+
 ?>
-<div id="footer">
-    Footer
-</div>
+<table id="footer" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo $email_bg_dark; ?>" color="<?php echo $text_color; ?>" style="padding: 30px 0 40px 0;  margin: 0;">
+    <tr id="email-menu-social-links" width='100%'>
+        <td width="100%" style="text-align: center;">
+            <a style="padding:0 10px;" target="_blank" href="https://www.youtube.com/c/plekvetica">
+                <img width="46px" src="https://plekvetica.ch/wp-content/uploads/email/logos/youtube-brands.png" />
+            </a>
+            <a style="padding:0 10px;" target="_blank" href="https://www.facebook.com/plekvetica">
+                <img width="33px" src="https://plekvetica.ch/wp-content/uploads/email/logos/facebook-square-brands.png" />
+            </a>
+            <a style="padding:0 10px;" target="_blank" href="https://www.instagram.com/plekvetica">
+                <img width="33px" src="https://plekvetica.ch/wp-content/uploads/email/logos/instagram-brands.png" />
+            </a>
+            <a style="padding:0 10px;" target="_blank" href="https://www.plekvetica.ch/kontakt"><img width="40px" src="https://plekvetica.ch/wp-content/uploads/email/logos/envelope-solid.png" /></a>
+    </tr>
+    <tr width='100%'>
+        <td id="plek-links" style="text-align:center; padding:0; width:100%;" width='100%'>
+            <img src="https://plekvetica.ch/wp-content/uploads/2017/06/MAF.gif" width="237" height="47" /><br />
+            <a style="color: <?php echo $link_color; ?>;" href="https://plekvetica.ch">www.plekvetica.ch</a>
+        </td>
+    </tr>
+</table><!-- Footer Table End-->
+
+</td>
+</tr>
+</table><!-- Main Table End-->
 </body>
+
 </html>
