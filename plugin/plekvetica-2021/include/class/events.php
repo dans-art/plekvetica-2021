@@ -195,19 +195,18 @@ class PlekEvents extends PlekEventHandler
     /**
      * Get all events with a akkreditations status of a certain user
      *
-     * @param string $user_login
      * @param string $from - date('Y-m-d H:i:s')
      * @param string $to - date('Y-m-d H:i:s')
      * @return object Result form the database. 
      */
-    public function get_user_akkredi_event(string $user_login, string $from = null, string $to = null)
+    public function get_user_akkredi_event(string $from = null, string $to = null)
     {
         global $wpdb;
-        $user = htmlspecialchars($user_login);
+        $user = PlekUserHandler::get_user_login_name();
         $page_obj = $this->get_pages_object();
 
         $wild = '%';
-        $like = $wild . $wpdb->esc_like($user_login) . $wild;
+        $like = $wild . $wpdb->esc_like($user) . $wild;
 
         $from = $from ?: '1970-01-01 00:00:00';
         $to = $to ?: '9999-01-01 00:00:00';
@@ -261,6 +260,15 @@ class PlekEvents extends PlekEventHandler
 
             case 'plek-band':
                 return $this->get_events_of_band_user($from, $to, $limit);
+                break;
+
+            case 'plek-community':
+                return $this->get_events_of_community_user($from, $to, $limit);
+                break;
+            
+            case 'administrator':
+                //Add photographer, Reviewer, interviewer....
+                return $this->get_events_of_community_user($from, $to, $limit);
                 break;
 
             default:
@@ -367,6 +375,52 @@ class PlekEvents extends PlekEventHandler
         $events = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
         $this->total_posts['get_events_of_band_user'] = $total_posts;
+        return $events;
+    }
+    
+    public function get_events_of_community_user($from, $to, $limit = 0)
+    {
+        global $wpdb;
+        $user_id = PlekUserHandler::get_user_id();
+        $band_ids = PlekUserHandler::get_user_setting('band_id');
+        $band_id_arr = explode(',',$band_ids);
+
+        $page_obj = $this->get_pages_object();
+        $limit = $limit ?: $page_obj->posts_per_page;
+        $from = $from ?: '1970-01-01 00:00:00';
+        $to = $to ?: '9999-01-01 00:00:00';
+
+        $query = $wpdb->prepare(
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)
+        FROM `{$wpdb->prefix}posts` as posts 
+        LEFT JOIN {$wpdb->prefix}postmeta as date
+        ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
+
+        LEFT JOIN {$wpdb->prefix}postmeta as postponed
+        ON (posts.ID = postponed.post_id AND postponed.meta_key = 'postponed_event')
+
+        LEFT JOIN {$wpdb->prefix}term_relationships AS band_term
+        ON (posts.ID = band_term.object_id)
+
+        WHERE 
+        post_author = %d
+        AND post_type = 'tribe_events'
+        AND posts.post_status IN ('publish', 'draft')
+        AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
+        AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
+
+        GROUP BY posts.ID
+        ORDER BY date.meta_value DESC
+        LIMIT %d OFFSET %d",
+            $user_id,
+            $from,
+            $to,
+            $limit,
+            $page_obj->offset
+        );
+        $events = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        $this->total_posts['get_events_of_community_user'] = $total_posts;
         return $events;
     }
 

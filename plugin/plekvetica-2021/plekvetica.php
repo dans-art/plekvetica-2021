@@ -55,6 +55,7 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
  $plek_gallery_handler = new PlekGalleryHandler;
  $plek_login_handler = new PlekLoginHandler;
  $plek_ajax_handler = new PlekAjaxHandler;
+ $plek_event_blocks = new PlekEventBlocks;
 
  //Error Handling
  $plek_ajax_errors = new WP_Error();

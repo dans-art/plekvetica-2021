@@ -145,8 +145,39 @@ let plek_single_event_main = {
             plek_single_event_main.do_ajax_publish_event();
           });
           
+        jQuery("#plekToggleWatchlist").click(() =>{
+            //plek_main.activate_button_loader('#plekSetEventStatus', 'Veröffentliche Event...');
+            plek_single_event_main.do_ajax_watchlist_toggle();
+          });
 
     },
+
+    do_ajax_watchlist_toggle(){
+        console.log("Toggle");
+        let button = jQuery('#plekToggleWatchlist');
+        let event_id =  button.data('eventid');
+        jQuery.ajax({
+            url: window.ajaxurl,
+            data: {
+              'action': 'plek_event_actions',
+              'do': 'toggle_watchlist',
+              'event-id': event_id
+            },
+            success: function success(data) {
+                
+                let text = plek_main.get_text_from_ajax_request(data);
+                plek_main.deactivate_button_loader(button, text);
+                plek_main.deactivate_button(button);
+
+            },
+            error: function error(data) {
+                plek_main.deactivate_button_loader(button, "Error loading data.... ");
+
+            }
+          });
+          return;
+    },
+
     do_ajax_promote_event(){
         let button = jQuery('#promoteEvent');
         let event_id =  button.data('eventid');

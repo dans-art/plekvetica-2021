@@ -133,6 +133,26 @@ class PlekHandler
         return $items;
     }
 
+	/**
+	 * Updates a ACF and checks.
+	 * This function will give Null, if no change
+	 *
+	 * @param [type] $field
+	 * @param [type] $value
+	 * @param [type] $id
+	 * @return bool true on success, false on error, null if no changes
+	 */
+	public function update_field($field,$value,$id){
+		$oldval = get_field($field,$id);
+		if(update_field($field, $value, $id) === false){
+			if($oldval === $value){return null;}
+			else{return false;}
+		}
+		else{
+			return true;
+		}
+	}
+
     public function plek_disable_gutenberg($current_status, $post_type)
     {
         if ($post_type === 'tribe_events') return false;

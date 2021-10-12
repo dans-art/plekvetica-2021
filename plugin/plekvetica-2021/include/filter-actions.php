@@ -32,6 +32,7 @@ add_action('wp_ajax_plek_ajax_event_form', [new PlekAjaxHandler,'plek_ajax_event
 add_action('wp_ajax_nopriv_plek_ajax_event_form', [new PlekAjaxHandler, 'plek_ajax_event_form_action']);
 
 add_action('wp_ajax_plek_event_actions',  [new PlekAjaxHandler,'plek_ajax_event_actions']);
+add_action('wp_ajax_nopriv_plek_event_actions',  [new PlekAjaxHandler,'plek_ajax_nopriv_event_actions']);
 
 add_action('wp_ajax_plek_user_actions',  [new PlekAjaxHandler,'plek_ajax_user_actions']);
 add_action('wp_ajax_nopriv_plek_user_actions',  [new PlekAjaxHandler,'plek_ajax_user_nopriv_actions']);

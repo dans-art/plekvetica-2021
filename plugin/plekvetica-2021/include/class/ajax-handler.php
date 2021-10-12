@@ -37,9 +37,9 @@ class PlekAjaxHandler
     public function plek_ajax_event_actions()
     {
         $do = $this->get_ajax_do();
+        global $plek_event;
         switch ($do) {
             case 'promote_event':
-                global $plek_event;
                 $event_id = $this->get_ajax_data('id');
                 $plek_event->load_event($event_id);
                 $promote = $plek_event->promote_on_facebook();
@@ -50,7 +50,6 @@ class PlekAjaxHandler
                 }
                 break;
             case 'remove_akkredi_member':
-                global $plek_event;
                 $event_id = (int) $this->get_ajax_data('id');
                 $user = $this->get_ajax_data('user');
                 $remove = $plek_event->remove_akkredi_member($user, $event_id);
@@ -60,6 +59,59 @@ class PlekAjaxHandler
                     $this->set_error($remove); //Error Message from funciton
                 }
                 break;
+            case 'toggle_watchlist':
+                //Check if user is on watchlist
+                $event_id = (integer) $this->get_ajax_data('event-id');
+                $plek_event->load_event($event_id);
+
+                if(empty($event_id)){
+                    $this->set_error(__('Could not manage watchlist', 'pleklang'));
+                    echo $this->get_ajax_return();
+                    die(); 
+                }
+                $watchlist_action = ($plek_event->current_user_is_on_watchlist($event_id))?'remove':'add';
+                //Remove or add to watchlist
+                switch ($watchlist_action) {
+                    case 'remove':
+                        $watchlist_result = $plek_event->remove_from_watchlist($event_id);
+                        if ($watchlist_result === true) {
+                            $wl_button = $plek_event -> get_watchlist_button();
+                            $this->set_success($wl_button);
+                        } else {
+                            $this->set_error(__('Error while removing from watchlist', 'pleklang'));
+                        }
+                        break;
+                    case 'add':
+                        $watchlist_result = $plek_event->add_to_watchlist($event_id);
+                        if ($watchlist_result === true) {
+                            $wl_button = $plek_event -> get_watchlist_button();
+                            $this->set_success($wl_button);
+                        } else {
+                            $this->set_error(__('Error while adding to watchlist', 'pleklang'));
+                        }
+                        break;
+                    default:
+                        $this->set_error(__('Could not manage watchlist', 'pleklang'));
+                        break;
+                }
+                break;
+            default:
+                # code...
+                break;
+        }
+        echo $this->get_ajax_return();
+        die();
+    }
+
+    /**
+     * Event Actions called by ajax for non logged in users.
+     *
+     * @return void
+     */
+    public function plek_ajax_nopriv_event_actions()
+    {
+        $do = $this->get_ajax_do();
+        switch ($do) {
             default:
                 # code...
                 break;
@@ -80,7 +132,7 @@ class PlekAjaxHandler
         switch ($do) {
             case 'get_youtube_video':
                 $yt = new plekYoutube;
-                echo $yt -> get_ajax_single_video();
+                echo $yt->get_ajax_single_video();
                 die();
                 break;
             default:
@@ -103,13 +155,13 @@ class PlekAjaxHandler
         $do = $this->get_ajax_do();
         switch ($do) {
             case 'get_youtube_video':
-                $this -> plek_ajax_band_nopriv_actions();
+                $this->plek_ajax_band_nopriv_actions();
                 return;
                 break;
 
             case 'save_band':
                 $plek_band = new PlekBandHandler;
-                if($plek_band -> save_band()){
+                if ($plek_band->save_band()) {
                     $this->set_success(__('Band gespeichert', 'pleklang'));
                 }
                 break;
@@ -142,10 +194,9 @@ class PlekAjaxHandler
                     }
                 } else {
                     //$this->set_error_array($validate);
-                    $plek_ajax_errors -> add('save_user_validator', $validate);
+                    $plek_ajax_errors->add('save_user_validator', $validate);
                 }
                 break;
-
             default:
                 # code...
                 break;
@@ -171,23 +222,23 @@ class PlekAjaxHandler
                 $user_handler = new PlekUserHandler;
                 $validate = $user_form_handler->validate_user_register();
                 if ($validate !== true) {
-                    $plek_ajax_errors -> add('save_user_validator', $validate);
+                    $plek_ajax_errors->add('save_user_validator', $validate);
                     echo $this->get_ajax_return();
                     die();
                 }
-                
-                //Save new user
-                $user_lock_key = $user_handler -> save_new_user();
 
-                if(!$user_lock_key){
+                //Save new user
+                $user_lock_key = $user_handler->save_new_user();
+
+                if (!$user_lock_key) {
                     $this->set_error(__('Error while creating a new user', 'pleklang'));
                     echo $this->get_ajax_return();
                     die();
                 }
 
                 //Send Email
-                if(!$user_handler -> send_email_to_new_user($user_lock_key)){
-                    $error_msg = sprintf(__('Account created but failed to send email. Please contact the IT Support: %s.', 'pleklang'), $plek_handler -> get_plek_option('it_support_email'));
+                if (!$user_handler->send_email_to_new_user($user_lock_key)) {
+                    $error_msg = sprintf(__('Account created but failed to send email. Please contact the IT Support: %s.', 'pleklang'), $plek_handler->get_plek_option('it_support_email'));
                     $this->set_error($error_msg);
                 }
                 $this->set_success(__('New account created! Check your email to complete the sign up.', 'pleklang'));
@@ -221,7 +272,7 @@ class PlekAjaxHandler
 
     public function get_ajax_files_data(string $field = '')
     {
-        return (isset($_FILES[$field]['name']) AND !empty($_FILES[$field]['name'])) ? $_FILES[$field] : "";
+        return (isset($_FILES[$field]['name']) and !empty($_FILES[$field]['name'])) ? $_FILES[$field] : "";
     }
 
 
@@ -231,18 +282,17 @@ class PlekAjaxHandler
      */
     public function get_ajax_data_esc(string $field = '')
     {
-        if(isset($_REQUEST[$field]) AND is_string($_REQUEST[$field])){
+        if (isset($_REQUEST[$field]) and is_string($_REQUEST[$field])) {
             return htmlspecialchars($_REQUEST[$field]);
         }
-        if(isset($_REQUEST[$field]) AND is_array($_REQUEST[$field])){
+        if (isset($_REQUEST[$field]) and is_array($_REQUEST[$field])) {
             $new_arr = array();
-            foreach($_REQUEST[$field] AS $id => $value){
+            foreach ($_REQUEST[$field] as $id => $value) {
                 $new_arr[htmlspecialchars($id)] = htmlspecialchars($value);
             }
             return $new_arr;
         }
         return '';
-
     }
 
     /**
@@ -298,15 +348,16 @@ class PlekAjaxHandler
      * Adds the errors to the $error variable
      * @return void
      */
-    public function get_ajax_errors(){
+    public function get_ajax_errors()
+    {
         global $plek_ajax_errors;
         if ($plek_ajax_errors->has_errors()) {
-            $this -> error = array_merge($this -> error, $plek_ajax_errors -> get_error_messages());
+            $this->error = array_merge($this->error, $plek_ajax_errors->get_error_messages());
         }
     }
     protected function get_ajax_return()
     {
-        $this -> get_ajax_errors();
+        $this->get_ajax_errors();
         $ret = ['success' => $this->success, 'error' => $this->error, 'system_error' => $this->system_error];
         return json_encode($ret);
     }

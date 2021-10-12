@@ -62,6 +62,15 @@ article.tribe-events-calendar-list__event{
         width: 88%;
       }
     }
+    .tribe-events-calendar-list__event-title-link{
+      color: $link-color;
+      }
+      
+      .tribe-events-calendar-list__event-title-link:active, 
+      .tribe-events-calendar-list__event-title-link:visited, 
+      .tribe-events-calendar-list__event-title-link:hover{
+        color: $link-color;
+      }
 }
 
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event{

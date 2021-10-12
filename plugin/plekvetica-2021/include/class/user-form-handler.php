@@ -70,14 +70,15 @@ class PlekUserFormHandler extends PlekUserHandler
 
         $validator = new PlekFormValidator;
 
-        $validator->set_required('first-name');
-        $validator->set_type('first-name', 'default');
-
         $validator->set_required('user-id');
         $validator->set_type('user-id', 'int');
 
-        $validator->set_required('last-name');
+        $validator->set_type('first-name', 'default');
+
         $validator->set_type('last-name', 'default');
+
+        $validator->set_required('display-name');
+        $validator->set_type('display-name', 'default');
 
         $validator->set_type('description', 'test');
 
@@ -152,6 +153,7 @@ class PlekUserFormHandler extends PlekUserHandler
         $userdata['ID'] = htmlspecialchars($plek_ajax_handler->get_ajax_data('user-id'));
         $userdata['first_name'] = htmlspecialchars($plek_ajax_handler->get_ajax_data('first-name'));
         $userdata['last_name'] = htmlspecialchars($plek_ajax_handler->get_ajax_data('last-name'));
+        $userdata['display_name'] = htmlspecialchars($plek_ajax_handler->get_ajax_data('display-name'));
         $userdata['description'] = htmlspecialchars($plek_ajax_handler->get_ajax_data('description'));
         if (!empty($plek_ajax_handler->get_ajax_data('new-password'))) {
             $userdata['user_pass'] = $plek_ajax_handler->get_ajax_data('new-password');
@@ -247,7 +249,7 @@ class PlekUserFormHandler extends PlekUserHandler
 
         $validator->set_type('organizer-description', 'textlong');
 
-        if ((!empty($user_organi_setting)) AND (int)$plek_ajax_handler->get_ajax_data('organizer-id') !== (int) $user_organi_setting) {
+        if ((!empty($user_organi_setting)) and (int)$plek_ajax_handler->get_ajax_data('organizer-id') !== (int) $user_organi_setting) {
             $validator->set_system_error(__('Organizer already set. Please contact the site owner to change the organizer.', 'pleklang'));
         }
 
@@ -277,7 +279,7 @@ class PlekUserFormHandler extends PlekUserHandler
 
         //Check if band is managed by the current user
         $band_ids = $plek_ajax_handler->get_ajax_data('band-ids');
-        if(is_array($band_ids) AND count($band_ids) > 5){
+        if (is_array($band_ids) and count($band_ids) > 5) {
             $validator->set_error('band-ids', __('To many Bands selected! Are you sure you have more than 5 Bands!?', 'pleklang'));
         }
 

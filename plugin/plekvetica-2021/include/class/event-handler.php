@@ -321,13 +321,96 @@ class PlekEventHandler
     }
 
     /**
+     * Checks if the user is on the watchlist.
+     *
+     * @param int $event_id
+     * @param int $user_id
+     * @return bool true on success, false on error
+     */
+    public function current_user_is_on_watchlist(int $event_id, $user_id = null)
+    {
+        if(!is_integer($user_id)){
+            $user = wp_get_current_user();
+            $user_id = $user -> ID;
+        }
+        $current_watchlist = get_field('event_watchlist', $event_id);
+        if(is_array($current_watchlist)){
+            $user_key = array_search($user_id, $current_watchlist);
+            if($user_key === false){
+                return false; //User is not on watchlist
+            }else{
+                return true; //User is on watchlist
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Adds a user to the watchlist of the current event.
+     *
+     * @param int $event_id
+     * @param int $user_id
+     * @return bool true on success, false on error
+     */
+    public function add_to_watchlist(int $event_id, $user_id = null)
+    {
+        global $plek_handler;
+        if(!is_integer($user_id)){
+            $user = wp_get_current_user();
+            $user_id = $user -> ID;
+        }
+        $current_watchlist = get_field('event_watchlist', $event_id);
+        if(is_array($current_watchlist)){
+            $user_key = array_search($user_id, $current_watchlist);
+        }else{
+            $user_key = false;
+        }
+        if($user_key === false){
+            //Only add if user is not already added
+            $current_watchlist[] = $user_id;
+            return $plek_handler -> update_field("event_watchlist", $current_watchlist, $event_id);
+        }else{
+            return false; //No user has been added
+        }
+    }
+
+    /**
+     * Removes a user to the watchlist of the current event.
+     *
+     * @param int $event_id
+     * @param int $user_id
+     * @return bool true on success, false on error
+     */
+    public function remove_from_watchlist(int $event_id, $user_id = null)
+    {
+        global $plek_handler;
+        if(!is_integer($user_id)){
+            $user = wp_get_current_user();
+            $user_id = $user -> ID;
+        }
+        $current_watchlist = get_field('event_watchlist', $event_id);
+        if(is_array($current_watchlist)){
+            $user_key = array_search($user_id, $current_watchlist);
+            if($user_key !== false){
+                unset($current_watchlist[$user_key]);
+                return $plek_handler -> update_field("event_watchlist", $current_watchlist, $event_id);
+            }
+        }
+        return false;
+    }
+
+    /**
      * Returns the total count of the users, which have the event on their watchlist.
      * 
-     * @return int Lenght of get_watchlist array
+     * @return int Lenght of get_watchlist array or 0 when empty
      */
     public function get_watchlist_count()
     {
-        return count($this->get_watchlist());
+        $watchlist = $this->get_watchlist();
+        if(is_array($watchlist)){
+            return (integer) count($watchlist);
+        }
+        return 0;
     }
     /**
      * Returns the startdate of the event. Default format: d m y
@@ -543,6 +626,21 @@ class PlekEventHandler
         $title =  __('Link zur Verlosung', 'pleklang');
         $icon = 'fas fa-trophy';
         return "<a href='$link' title='$title' target='_blank'><i class='$icon'></i></a>";
+    }
+
+    /**
+     * Add the Button for toggling the watchlist
+     *
+     * @return string HTML button
+     */
+    public function get_watchlist_button()
+    {
+        $event_id = $this -> get_ID();
+        $wl_count = $this -> get_watchlist_count();
+        $on_watchlist = $this -> current_user_is_on_watchlist($event_id);
+        $title = ($on_watchlist) ? __('Remove me from the watchlist', 'pleklang') : __('Add me to the watchlist', 'pleklang');
+        $icon = 'fas fa-clipboard-list';
+        return "<span id='plekToggleWatchlist' title='{$title}' data-eventid='{$event_id}'><i class='$icon'></i><span id='watchlistCount'>{$wl_count}</span></a>";
     }
 
     public function get_event_link()

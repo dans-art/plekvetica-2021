@@ -14,7 +14,6 @@ $total_posts = isset($plek_event -> total_posts['get_events_of_band_user'])?$ple
 
 $this_week =  $plek_event -> get_user_events($today, $next_week);
 $page_obj = $plek_event -> get_pages_object();
-//$this_week =  $plek_event -> get_user_akkredi_event($user -> user_login, $today, $next_week);
 
 ?>
 

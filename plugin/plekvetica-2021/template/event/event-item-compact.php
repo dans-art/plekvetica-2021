@@ -15,7 +15,7 @@ $permalink = $currrent_event->get_permalink();
 
 //$poster = get_the_post_thumbnail($id, ['150', 'auto']);
 $poster = $currrent_event->get_poster('Event Poster', ['150', 'auto']);
-$akk_status_name = ($event->akk_status !== null) ? $currrent_event->get_event_status_text($event->akk_status) : null;
+$akk_status_name = (isset($event->akk_status) AND $event->akk_status !== null) ? $currrent_event->get_event_status_text($event->akk_status) : null;
 $limit = 10; //Todo: make this as a user-setting
 $class = ($index > $limit) ? "hide-event" : ""; //Not in use?
 $event_classes = $currrent_event->get_event_classes();
@@ -25,7 +25,7 @@ $is_postponed = $currrent_event->is_postponed_original_event();
 ?>
 <article id="item_<?php echo $index; ?>" class="plek-event-item-compact <?php echo $class; ?> <?php echo $event_classes; ?>">
     <div class="event-icons">
-        <span class="<?php echo $event->akk_status; ?>" title="<?php echo sprintf(__('Event Status: %s', 'pleklang'), $akk_status_name); ?>"></span>
+        <span class="<?php echo (isset($event->akk_status))?$event->akk_status:""; ?>" title="<?php echo sprintf(__('Event Status: %s', 'pleklang'), $akk_status_name); ?>"></span>
         <?php if ($currrent_event->has_photos()) : ?>
             <span class="plek-photo-icon"><i class="fas fa-camera"></i></span>
         <?php endif; ?>

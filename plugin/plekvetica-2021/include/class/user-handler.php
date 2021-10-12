@@ -125,6 +125,19 @@ class PlekUserHandler
     }
 
     /**
+     * Checks if the current user is logged in and not locked.
+     *
+     * @return bool true if logged in and unlocked, otherwise false.
+     */
+    public static function user_is_logged_in()
+    {
+        if (self::current_user_is_locked()) {
+            return false;
+        }
+        return is_user_logged_in();
+    }
+
+    /**
      * Checks if the current user is allowed to akkredi the event
      *
      * @param integer $post_id
@@ -236,19 +249,19 @@ class PlekUserHandler
                     return true;
                 }
                 break;
-            
+
             case 'plek-band':
                 $managing_bands = PlekUserHandler::get_user_meta('band_id');
                 $managing_bands = explode(',', $managing_bands);
-                $event_bands = $plek_event -> get_bands();
-                if(!empty($managing_bands)){
-                    foreach($managing_bands as $band_id){
-                        if(isset($event_bands[$band_id])){
+                $event_bands = $plek_event->get_bands();
+                if (!empty($managing_bands)) {
+                    foreach ($managing_bands as $band_id) {
+                        if (isset($event_bands[$band_id])) {
                             return true; //If one band is found, which is managed by the user, return true.
                         }
                     }
                 }
-            break;
+                break;
             default:
                 return false;
                 break;
@@ -306,6 +319,9 @@ class PlekUserHandler
             case 'plek-band':
                 return (empty(self::get_user_setting('band_id'))) ? __('No Band set. Please select a band in the settings menu.', 'pleklang') : true;
                 break;
+            case 'plek-community':
+                return true; //No setup for community user
+                break;
             default:
                 return __('Role not found in setup function.', 'pleklang');
                 break;
@@ -321,6 +337,21 @@ class PlekUserHandler
     {
         return get_current_user_id();
     }
+ 
+    /**
+     * Returns the current user login name
+     *
+     * @return string login name of the logged in user or false if user is not found.
+     */
+    public static function get_user_login_name()
+    {
+        $user = wp_get_current_user();
+        if(isset($user -> user_login)){
+            return $user -> user_login;
+        }else{
+            return false;
+        }
+    }
 
     /**
      * Get the current user role
@@ -330,10 +361,9 @@ class PlekUserHandler
     public static function get_user_role()
     {
         $user = wp_get_current_user();
-        if (isset($user->roles[0])) {
-            return $user->roles[0];
-        }
-        return null;
+        $roles = $user->roles;
+        $first_role = reset($roles);
+        return (!empty($first_role)) ? $first_role : null;
     }
     /**
      * Search for a specific role.
@@ -612,14 +642,14 @@ class PlekUserHandler
                 wp_set_auth_cookie($user->ID, 1);
 
                 //Send Info to Admin
-                $admin_email = $plek_handler -> get_plek_option('admin_email');
-                $subject = __('New user account activated','pleklang');
+                $admin_email = $plek_handler->get_plek_option('admin_email');
+                $subject = __('New user account activated', 'pleklang');
                 $emailer = new PlekEmailSender;
                 $emailer->set_to($admin_email);
                 $emailer->set_subject($subject);
                 $emailer->set_default();
-                $emailer->set_message_from_template("user/new-user-admin-info", $subject, $user -> display_name, $email, $user -> ID);
-                $emailer -> send_mail();
+                $emailer->set_message_from_template("user/new-user-admin-info", $subject, $user->display_name, $email, $user->ID);
+                $emailer->send_mail();
                 return;
             }
             return;
