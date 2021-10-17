@@ -506,6 +506,9 @@ article.plek-event-item-compact.plek-event-canceled .details .title { text-decor
 /* line 400, scss/event-list.scss */
 article.plek-event-item-compact .plek-message { font-size: 1em; padding: 0.4em; }
 
+/* line 407, scss/event-list.scss */
+.plek-event-data-separator { border-bottom: 2px solid #D9042B; margin-bottom: 2em; width: 100%; text-transform: uppercase; }
+
 /* line 5, scss/event-single.scss */
 .single-tribe_events #page { padding: 0 1em; }
 /* line 9, scss/event-single.scss */

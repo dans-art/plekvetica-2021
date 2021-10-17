@@ -12,6 +12,7 @@ class PlekEventBlocks extends PlekEvents
     //Get user blocks
     protected $display_type = 'event-item-compact'; //event-item-compact, event-list-item
     protected $number_of_posts = 5; //Number of posts to get
+    protected $add_current_date_separator = true; 
     protected $block_total_posts = null; //Number of posts last fetched
 
     /**
@@ -26,6 +27,18 @@ class PlekEventBlocks extends PlekEvents
     public function set_display_type(string $type)
     {
         $this->display_type = $type;
+    }
+
+    /**
+     * Defines if a "current date" separator should be shown.
+     * Default is on. This will only be shown when the block "my_events" is used.
+     *
+     * @param boolean $seperator_on
+     * @return void
+     */
+    public function set_add_current_date_separator(bool $seperator_on)
+    {
+        $this->add_current_date_separator = $seperator_on;
     }
 
     /**
@@ -50,28 +63,40 @@ class PlekEventBlocks extends PlekEvents
      */
     public function load_block(string $block_id = null, array $data)
     {
+        global $plek_event;
         $user = new PlekUserHandler;
         $today = date('Y-m-d 00:00:00');
         $today_ms = strtotime($today);
         $next_week = date('Y-m-d 23:59:59', strtotime('+7 days', $today_ms));
+        $ret = array('data' => '', 'error' => false);
 
         switch ($block_id) {
             case 'my_week':
                 //Load the data
                 if ($user->user_is_in_team()) {
-                    $dat = $this->get_user_akkredi_event($today, $next_week);
+                    $ret['data'] = $this->get_user_akkredi_event($today, $next_week);
                 } else {
-                    $dat = $this->get_user_events($today, $next_week);
+                    $ret['data'] = $this->get_user_events($today, $next_week);
                 }
                 break;
             case 'my_events':
                 //Load the data
                 if ($user->user_is_in_team()) {
-                    $dat = $this->get_user_akkredi_event();
+                    $ret['data'] = $this->get_user_akkredi_event();
                     $this -> block_total_posts = (isset($this -> total_posts['get_user_akkredi_event']))?$this -> total_posts['get_user_akkredi_event']:0;
                 } else {
-                    $dat = $this->get_user_events();
+                    $ret['data'] = $this->get_user_events();
                     $this -> block_total_posts = (isset($this -> total_posts['get_user_events']))?$this -> total_posts['get_user_events']:0;
+                }
+                break;
+
+             case 'my_missing_reviews':
+                //Load the data
+                if ($user->user_is_in_team()) {
+                    $ret['data'] =  $plek_event->get_user_missing_review_events();
+                } else {
+                    $ret['data'] = __('This Data can only be displayed to team members','pleklang');
+                    $ret['error'] = true;
                 }
                 break;
 
@@ -79,7 +104,7 @@ class PlekEventBlocks extends PlekEvents
                 # code...
                 break;
         }
-        return $dat;
+        return $ret;
     }
 
 
@@ -88,7 +113,8 @@ class PlekEventBlocks extends PlekEvents
      * Adds a "Load more" button
      * Define set_display_type() first to change the template to use for each event.
      * Available are: my_events, my_week
-     * @todo: my_watchlist, my_reviews
+     * @todo: my_watchlist
+     * @todo: cache block content
      *
      * @param string $block_id
      * @param array $data 
@@ -97,17 +123,28 @@ class PlekEventBlocks extends PlekEvents
     public function get_block(string $block_id, array $data = array())
     {
         $page_obj = $this -> get_pages_object();
-        $content = $this->load_block($block_id, $data);
+        $load = $this->load_block($block_id, $data);
+        $total_posts = $this -> block_total_posts;
+        $this -> block_total_posts = null; //Reset the total posts
+        $last_events_date = '';
+
+        if($load['error'] !== false){
+            return $load['data'];
+        }else{
+            $content = $load['data'];
+        }
         $html = "";
         if (is_array($content) and !empty($content)) {
             foreach ($content as $index => $content_data) {
+                if($block_id === 'my_events' AND $this -> add_current_date_separator === true){
+                   $html .= $this -> show_date_separator($last_events_date, $content_data -> startdate);
+                   $last_events_date = $content_data -> startdate;
+                }
                 $html .= PlekTemplateHandler::load_template_to_var($this->display_type, 'event', $content_data, $index);
             }
-            if($this -> block_total_posts !== null){
-                $html .= $this -> get_pages_count_formated($this -> block_total_posts);
-                if($this -> display_more_events_button($this -> block_total_posts)){
-                    $html .= PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj -> page + 1), __('Weitere Events laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
-                }
+            if($this->display_more_events_button($total_posts)){
+                $html .= $this -> get_pages_count_formated($total_posts);
+                $html .= PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj -> page + 1), __('Weitere Events laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
             }
             return $html;
         }

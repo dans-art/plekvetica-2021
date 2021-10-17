@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @todo Check if user is logged in before showing the follow button!?
+ */
 extract(get_defined_vars());
 $band_object = isset($template_args[0]) ? $template_args[0] : null;
 $band_class = new PlekBandHandler;
@@ -9,6 +12,8 @@ $country = $band_object->get_country_name();
 $facebook = $band_object->get_facebook_link();
 $insta = $band_object->get_instagram_link();
 $website = $band_object->get_website_link();
+
+$follow_text = (!$band_object->user_is_follower())?__('Follow','pleklang'):__('Unfollow','pleklang');
 ?>
 
 <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Details', 'pleklang')); ?>
@@ -21,9 +26,9 @@ $website = $band_object->get_website_link();
     <dt>Social & Links</dt>
     <dd class="event-links">
       <span>
-        <?php if (!empty($facebook)) :?>
+        <?php if (!empty($facebook)) : ?>
           <a href="<?php echo $facebook; ?>" target="_blank" title="<?php echo sprintf(__('Zur Facebook Seite von %s', 'pleklang'), $name); ?>"><i class='fab fa-facebook-square'></i></a>
-        <?php endif;?>
+        <?php endif; ?>
       </span>
       <span>
         <?php if (!empty($insta)) : ?>
@@ -36,6 +41,12 @@ $website = $band_object->get_website_link();
         <?php endif; ?>
       </span>
     </dd>
+    <dt><?php echo __('Follower', 'pleklang'); ?></dt>
+    <dd class="band-follow-counter"><?php echo $band_object->get_follower_count(); ?></dd>
+    <dd class="band-follow-button"><?php PlekTemplateHandler::load_template('button', 'components', '', $follow_text, '_self', '' ,'plek-follow-band-btn'); ?></dd>
   </dl>
 </div>
+<?php
+   
+ ?>
 <?php

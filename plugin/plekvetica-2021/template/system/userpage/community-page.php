@@ -6,51 +6,30 @@ global $plek_event_blocks;
 $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user object
 $user = PlekUserHandler::load_user_meta($user);
 
-$today = date('Y-m-d 00:00:00');
-$today_ms = strtotime($today);
-$next_week = date('Y-m-d 23:59:59', strtotime('+7 days', $today_ms));
-
-$all_posts =  $plek_event -> get_user_events();
-$total_posts = isset($plek_event -> total_posts['get_events_of_community_user'])?$plek_event -> total_posts['get_events_of_community_user']:0;
-
-$this_week =  $plek_event -> get_user_events($today, $next_week);
-$page_obj = $plek_event -> get_pages_object();
-$my_week_block = $plek_event_blocks -> get_block('my_week');
-s($my_week_block);
+$my_week_block = $plek_event_blocks->get_block('my_week');
+$my_events_block = $plek_event_blocks->get_block('my_events');
 ?>
 
 <div class="my-plek-container">
     <div class="my-plek-head-container">
         <div class="this-week-posts">
             <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Deine Woche', 'pleklang')); ?>
-            <?php if (!empty($this_week)) : ?>
-                <?php foreach ($this_week as $index => $ap) : ?>
-                    <?php PlekTemplateHandler::load_template('event-item-compact', 'event', $ap, $index); ?>
-                <?php endforeach; ?>
+            <?php if (!empty($my_week_block)) : ?>
+                <?php echo $my_week_block; ?>
             <?php else : ?>
                 <span class="plek-no-next-events"><?php echo __('Für die nächsten 7 Tage stehen keine Events an!', 'pleklang'); ?></span>
             <?php endif; ?>
         </div>
-        <div class="organizer-data">
+        <div class="user-watchlist">
             <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Events on your Watchlist', 'pleklang')); ?>
 
             <?php echo 'No followed Events. This feature will be added soon'; ?>
         </div>
     </div>
     <div class="all-posts">
-        <?php if (!empty($all_posts)) : ?>
+        <?php if (!empty($my_events_block)) : ?>
             <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Alle deine Events', 'pleklang')); ?>
-            <?php foreach ($all_posts as $index => $ap) : ?>
-                <?php PlekTemplateHandler::load_template('event-item-compact', 'event', $ap, $index); ?>
-            <?php endforeach; ?>
-            <?php 
-            if($total_posts !== null){
-                echo $plek_event -> get_pages_count_formated($total_posts);
-                if($plek_event -> display_more_events_button($total_posts)){
-                    echo $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj -> page + 1), __('Weitere Events laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
-                }
-            }
-            ?>
+            <?php echo $my_events_block; ?>
         <?php endif; ?>
     </div>
 

@@ -100,10 +100,39 @@ let plek_main = {
         
     },
 
+    get_first_error_from_ajax_request(data){
+        try {
+            let encoded_data = JSON.parse(data);
+            let text = "";
+            if(encoded_data.error.length > 0){
+                text += encoded_data.error[0];
+            }
+            return text;
+        } catch(e) {
+            return data;
+        }
+        
+    },
+
+    response_has_errors(data){
+        try {
+            var encoded_data = data;
+            if(typeof data != 'object'){
+                encoded_data = JSON.parse(data);
+            }
+            if(encoded_data.error.length === 0){
+                return false;
+            }
+            return true;
+        } catch(e) {
+            console.log(e);
+            return false;
+        }
+    },
+
     show_field_errors(data, form = 'form'){
         let error_count = 0;
         try {
-            console.log(data);
             var encoded_data = data;
             if(typeof data != 'object'){
                 encoded_data = JSON.parse(data);

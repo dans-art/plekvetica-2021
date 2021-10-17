@@ -612,4 +612,105 @@ class PlekBandHandler
         }
         return false;
     }
+
+    /**
+     * Checks if the user given is following the band or not.
+     * Use load_band_object() before this function
+     *
+     * @param integer|null $user_id
+     * @return bool true if follower, otherwise false.
+     */
+    public function user_is_follower(int $user_id = null){
+        $user_id = (empty($user_id)) ? get_current_user_id():$user_id;
+        $followers =  (isset($this->band['band_follower'])) ? $this->band['band_follower'] : '';
+        if(is_array($followers) AND (array_search($user_id, $followers) !== false)){
+          return true;
+        }
+        return false;
+    }
+
+    /**
+     * Retuns the total follower of the band.
+     * Use load_band_object() before this function
+     *
+     * @return int The total users following the band
+     */
+    public function get_follower_count(){
+        $followers =  (isset($this->band['band_follower'])) ? $this->band['band_follower'] : '';
+        if(is_array($followers)){
+            return count($followers);
+        }
+        return 0;
+    }
+
+    /**
+     * Updates the Follower list.
+     * If the user is already a follower, he will be removed, otherwise added.
+     * Use load_band_object() before this function
+     *
+     * @param integer|null $user_id
+     * @return bool true, if follower list has been updated, otherwise false
+     */
+    public function toggle_follower(int $user_id = null){
+        global $plek_handler;
+        $band_id = $this -> get_id();
+        $user_id = (empty($user_id)) ? get_current_user_id():$user_id;
+        $followers =  (isset($this->band['band_follower'])) ? $this->band['band_follower'] : array();
+        $action = false;
+
+        if(empty($band_id)){
+            return false;
+        }
+
+        if(!is_array($followers)){
+            return false;
+        }
+        if($this -> user_is_follower($user_id)){
+            //Remove from follower list
+            $index = array_search($user_id, $followers);
+            if($index !== false){
+                unset($followers[$index]);
+                $action = 'remove';
+            }else{
+                return false; //User not found in list
+            }
+        }else{
+            //Add to follower list
+            $followers[] = (int) $user_id;
+            $action = 'add';
+        }
+        //Saves the value
+        $save = $plek_handler -> update_field("band_follower", $followers, 'term_'.$band_id);
+        if($save !== false){
+            return $action;
+        }
+        return false;
+    }
+
+    /**
+     * Toggles the follower from ajax.
+     * It uses the current user and the band_id given
+     *
+     * @return bool
+     */
+    public function toggle_follower_from_ajax(){
+        $band_id = isset($_REQUEST['band_id'])?$_REQUEST['band_id']:false;
+        if(!$band_id){
+            return false;
+        }
+        $band = new PlekBandHandler; 
+        $band -> load_band_object_by_id($band_id);
+        if(!$band){
+            return false;
+        }
+        $toggle =  $band ->  toggle_follower();
+        if(!$toggle){
+            return false;
+        }
+        if($toggle === 'add'){
+            return __('Unfollow','pleklang');
+        }else{
+            return __('Follow','pleklang');
+        }
+    }
 }

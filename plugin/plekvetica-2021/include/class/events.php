@@ -265,7 +265,7 @@ class PlekEvents extends PlekEventHandler
             case 'plek-community':
                 return $this->get_events_of_community_user($from, $to, $limit);
                 break;
-            
+
             case 'administrator':
                 //Add photographer, Reviewer, interviewer....
                 return $this->get_events_of_community_user($from, $to, $limit);
@@ -298,7 +298,7 @@ class PlekEvents extends PlekEventHandler
         $to = $to ?: '9999-01-01 00:00:00';
 
         $query = $wpdb->prepare(
-            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME), rolemeta.meta_value
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME) as startdate, rolemeta.meta_value
         FROM `{$wpdb->prefix}posts` as posts 
         LEFT JOIN {$wpdb->prefix}postmeta as date
         ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
@@ -328,7 +328,7 @@ class PlekEvents extends PlekEventHandler
         );
         $events = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
-        $this->total_posts['get_events_of_role_' . $role_tribe_meta_name] = $total_posts;
+        $this->total_posts['get_user_events'] = $total_posts;
         return $events;
     }
 
@@ -337,7 +337,7 @@ class PlekEvents extends PlekEventHandler
         global $wpdb;
         $user_id = PlekUserHandler::get_user_id();
         $band_ids = PlekUserHandler::get_user_setting('band_id');
-        $band_id_arr = explode(',',$band_ids);
+        $band_id_arr = explode(',', $band_ids);
 
         $page_obj = $this->get_pages_object();
         $limit = $limit ?: $page_obj->posts_per_page;
@@ -345,7 +345,7 @@ class PlekEvents extends PlekEventHandler
         $to = $to ?: '9999-01-01 00:00:00';
 
         $query = $wpdb->prepare(
-            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)  as startdate
         FROM `{$wpdb->prefix}posts` as posts 
         LEFT JOIN {$wpdb->prefix}postmeta as date
         ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
@@ -357,7 +357,7 @@ class PlekEvents extends PlekEventHandler
         ON (posts.ID = band_term.object_id)
 
         WHERE 
-        (post_author = %d OR band_term.term_taxonomy_id IN (".implode(',',$band_id_arr).")) 
+        (post_author = %d OR band_term.term_taxonomy_id IN (" . implode(',', $band_id_arr) . ")) 
         AND post_type = 'tribe_events'
         AND posts.post_status IN ('publish', 'draft')
         AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
@@ -374,16 +374,16 @@ class PlekEvents extends PlekEventHandler
         );
         $events = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
-        $this->total_posts['get_events_of_band_user'] = $total_posts;
+        $this->total_posts['get_user_events'] = $total_posts;
         return $events;
     }
-    
+
     public function get_events_of_community_user($from, $to, $limit = 0)
     {
         global $wpdb;
         $user_id = PlekUserHandler::get_user_id();
         $band_ids = PlekUserHandler::get_user_setting('band_id');
-        $band_id_arr = explode(',',$band_ids);
+        $band_id_arr = explode(',', $band_ids);
 
         $page_obj = $this->get_pages_object();
         $limit = $limit ?: $page_obj->posts_per_page;
@@ -391,7 +391,7 @@ class PlekEvents extends PlekEventHandler
         $to = $to ?: '9999-01-01 00:00:00';
 
         $query = $wpdb->prepare(
-            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)  as startdate
         FROM `{$wpdb->prefix}posts` as posts 
         LEFT JOIN {$wpdb->prefix}postmeta as date
         ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
@@ -420,7 +420,7 @@ class PlekEvents extends PlekEventHandler
         );
         $events = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
-        $this->total_posts['get_events_of_community_user'] = $total_posts;
+        $this->total_posts['get_user_events'] = $total_posts;
         return $events;
     }
 
@@ -445,7 +445,7 @@ class PlekEvents extends PlekEventHandler
         $to = $to ?: '9999-01-01 00:00:00';
 
         $query = $wpdb->prepare(
-            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)  as startdate
         FROM `{$wpdb->prefix}posts` as posts 
         LEFT JOIN {$wpdb->prefix}postmeta as date
         ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
@@ -479,13 +479,13 @@ class PlekEvents extends PlekEventHandler
         return $events;
     }
 
-    public function get_user_missing_review_events(string $user_login)
+    public function get_user_missing_review_events(string $user_login = "")
     {
         global $wpdb;
         $user = htmlspecialchars($user_login);
-
+        $user = (!empty($user)) ? $user : PlekUserHandler::get_user_login_name();
         $wild = '%';
-        $like = $wild . $wpdb->esc_like($user_login) . $wild;
+        $like = $wild . $wpdb->esc_like($user) . $wild;
         $today = date('Y-m-d 00:00:00');
 
         $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS user.meta_value as akk_team, posts.ID, posts.post_title , 
@@ -898,12 +898,28 @@ class PlekEvents extends PlekEventHandler
     public function display_more_events_button($total_posts = 0)
     {
         $total_posts = (int) $total_posts;
-
         $page_obj = $this->get_pages_object();
+
         $total_pages = ($total_posts / $page_obj->posts_per_page);
         if ($total_posts > $page_obj->posts_per_page and $page_obj->page < $total_pages) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Checks if the current date is between the previous and next date
+     * If so, a div with the plek-event-data-separator will be returned.
+     *
+     * @param string $date_prev - Date previous
+     * @param string $date_next - Next date
+     * @return string Separator or empty string
+     */
+    public function show_date_separator(string $date_prev, string $date_next){
+        $current_date = strtotime(date('Y-m-d H:m:s'));
+        if(!empty($date_prev) AND $current_date < strtotime($date_prev) AND $current_date > strtotime($date_next)){
+            return "<div class='plek-event-data-separator'>".__('Today','pleklang')."</div>";
+        }
+        return "";
     }
 }

@@ -16,7 +16,7 @@ if(PlekUserHandler::user_can_edit_band($band) !== true){
 ?>
 
 <div id='band-<?php echo $type; ?>-<?php echo $band->get_id(); ?>' class='band-<?php echo $type; ?> band-<?php echo $type; ?>-container'>
-
+    <h1><?php echo __('Edit Band','pleklang'); ?></h1>
     <form id='plek-band-form'>
         <!-- Name, Description and image-->
         <fieldset id="band-basic-infos">
