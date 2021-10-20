@@ -11,7 +11,7 @@ class PlekEventBlocks extends PlekEvents
 
     //Get user blocks
     protected $display_type = 'event-item-compact'; //event-item-compact, event-list-item
-    protected $number_of_posts = 5; //Number of posts to get
+    protected $number_of_posts = 10; //Number of posts to get
     protected $add_current_date_separator = true; 
     protected $block_total_posts = null; //Number of posts last fetched
 
@@ -69,20 +69,21 @@ class PlekEventBlocks extends PlekEvents
         $today_ms = strtotime($today);
         $next_week = date('Y-m-d 23:59:59', strtotime('+7 days', $today_ms));
         $ret = array('data' => '', 'error' => false);
+        $limit = $this -> number_of_posts;
 
         switch ($block_id) {
             case 'my_week':
                 //Load the data
                 if ($user->user_is_in_team()) {
-                    $ret['data'] = $this->get_user_akkredi_event($today, $next_week);
+                    $ret['data'] = $this->get_user_akkredi_event($today, $next_week, $limit);
                 } else {
-                    $ret['data'] = $this->get_user_events($today, $next_week);
+                    $ret['data'] = $this->get_user_events($today, $next_week, $limit);
                 }
                 break;
             case 'my_events':
                 //Load the data
                 if ($user->user_is_in_team()) {
-                    $ret['data'] = $this->get_user_akkredi_event();
+                    $ret['data'] = $this->get_user_akkredi_event(null, null, $limit);
                     $this -> block_total_posts = (isset($this -> total_posts['get_user_akkredi_event']))?$this -> total_posts['get_user_akkredi_event']:0;
                 } else {
                     $ret['data'] = $this->get_user_events();
@@ -98,6 +99,12 @@ class PlekEventBlocks extends PlekEvents
                     $ret['data'] = __('This Data can only be displayed to team members','pleklang');
                     $ret['error'] = true;
                 }
+                break;
+                
+                case 'band_events':
+                    $band_id = (isset($data['band_id']))?$data['band_id']:0;
+                    $ret['data'] =  $this->get_events_of_band($band_id, '', '', $limit);
+                    $this -> block_total_posts = (isset($this -> total_posts['get_band_events']))?$this -> total_posts['get_band_events']:0;
                 break;
 
             default:
@@ -115,6 +122,7 @@ class PlekEventBlocks extends PlekEvents
      * Available are: my_events, my_week
      * @todo: my_watchlist
      * @todo: cache block content
+     * @todo: Reset the total posts to the pages object default.
      *
      * @param string $block_id
      * @param array $data 
@@ -122,7 +130,7 @@ class PlekEventBlocks extends PlekEvents
      */
     public function get_block(string $block_id, array $data = array())
     {
-        $page_obj = $this -> get_pages_object();
+        $page_obj = $this -> get_pages_object($this -> number_of_posts);
         $load = $this->load_block($block_id, $data);
         $total_posts = $this -> block_total_posts;
         $this -> block_total_posts = null; //Reset the total posts
@@ -142,9 +150,9 @@ class PlekEventBlocks extends PlekEvents
                 }
                 $html .= PlekTemplateHandler::load_template_to_var($this->display_type, 'event', $content_data, $index);
             }
-            if($this->display_more_events_button($total_posts)){
-                $html .= $this -> get_pages_count_formated($total_posts);
-                $html .= PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj -> page + 1), __('Weitere Events laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
+            $html .= PlekTemplateHandler::load_template_to_var('pagination-buttons', 'components', $total_posts, $this -> number_of_posts, 'ajax-loader-button');
+            if($this->display_more_events_button($total_posts, $this -> number_of_posts)){
+                //$html .= $this -> get_pages_count_formated($total_posts, $this -> number_of_posts);
             }
             return $html;
         }

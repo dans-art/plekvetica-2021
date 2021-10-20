@@ -14,6 +14,7 @@ $insta = $band_object->get_instagram_link();
 $website = $band_object->get_website_link();
 
 $follow_text = (!$band_object->user_is_follower())?__('Follow','pleklang'):__('Unfollow','pleklang');
+$follower_count = $band_object -> get_follower_count();
 ?>
 
 <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Details', 'pleklang')); ?>
@@ -41,10 +42,8 @@ $follow_text = (!$band_object->user_is_follower())?__('Follow','pleklang'):__('U
         <?php endif; ?>
       </span>
     </dd>
-    <dt><?php echo __('Follower', 'pleklang'); ?></dt>
-    <dd class="band-follow-counter"><?php echo $band_object->get_follower_count(); ?></dd>
-    <dd class="band-follow-button"><?php PlekTemplateHandler::load_template('button', 'components', '', $follow_text, '_self', '' ,'plek-follow-band-btn'); ?></dd>
   </dl>
+  <div class="band-follow-button"><?php PlekTemplateHandler::load_template('button-counter', 'components', $follower_count, $follow_text, '' ,'plek-follow-band-btn'); ?></div>
 </div>
 <?php
    

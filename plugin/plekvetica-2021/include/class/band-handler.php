@@ -45,7 +45,7 @@ class PlekBandHandler
         }
         $term = get_term_by('slug', $slug, 'post_tag');
 
-        if(!$term){
+        if (!$term) {
             return false;
         }
         $cFields = get_fields($term);
@@ -55,7 +55,7 @@ class PlekBandHandler
         $this->band['slug'] = $term->slug;
         $this->band['description'] = $term->description;
         $this->band['link'] = $this->get_band_link($term->slug);
-        if(!empty($cFields)){
+        if (!empty($cFields)) {
             foreach ($cFields as $name => $val) {
                 if ($name === 'band_genre') {
                     $this->band[$name] = $this->format_band_array($val);
@@ -70,20 +70,21 @@ class PlekBandHandler
     public function load_band_object_by_id(string $id = '')
     {
         $term = get_term_by('id', $id, 'post_tag');
-        if(!$term){
+        if (!$term) {
             return false;
         }
-        return $this -> term_to_band_object($term);
+        return $this->term_to_band_object($term);
     }
 
-    public function term_to_band_object(object $term){
+    public function term_to_band_object(object $term)
+    {
         $cFields = get_fields($term);
         $this->band['id'] = $term->term_id;
         $this->band['name'] = $term->name;
         $this->band['slug'] = $term->slug;
         $this->band['description'] = $term->description;
         $this->band['link'] = $this->get_band_link($term->slug);
-        if(!empty($cFields)){
+        if (!empty($cFields)) {
             foreach ($cFields as $name => $val) {
                 if ($name === 'band_genre') {
                     $this->band[$name] = $this->format_band_array($val);
@@ -92,7 +93,7 @@ class PlekBandHandler
                 $this->band[$name] = $val;
             }
         }
-        return $this -> band;
+        return $this->band;
     }
 
     /**
@@ -114,19 +115,18 @@ class PlekBandHandler
 
         $query = $wpdb->prepare("SELECT term_id FROM `{$wpdb->prefix}terms` WHERE `name` LIKE '%s' OR `slug` LIKE '%s'", $like, $like);
         $posts = $wpdb->get_results($query);
-        if(!empty($posts)){
-            foreach($posts as $item){
-                if(isset($exact_hit -> term_id) AND $exact_hit -> term_id === (int) $item -> term_id){
+        if (!empty($posts)) {
+            foreach ($posts as $item) {
+                if (isset($exact_hit->term_id) and $exact_hit->term_id === (int) $item->term_id) {
                     continue;
                 }
-                $part_hits[] = get_term_by('term_id', $item -> term_id, 'post_tag');
+                $part_hits[] = get_term_by('term_id', $item->term_id, 'post_tag');
             }
-
         }
-        if(empty($exact_hit) AND empty($part_hits)){
+        if (empty($exact_hit) and empty($part_hits)) {
             return false;
         }
-        $exact_hit = ($exact_hit)?[$exact_hit]:[];
+        $exact_hit = ($exact_hit) ? [$exact_hit] : [];
         return array_merge($exact_hit, $part_hits);
     }
 
@@ -179,12 +179,12 @@ class PlekBandHandler
      */
     public function get_videos($return_array = true)
     {
-        if($return_array){
+        if ($return_array) {
             return (isset($this->band['videos'])) ? preg_split('/\r\n|\r|\n/', $this->band['videos']) : '';
         }
         return (isset($this->band['videos'])) ? $this->band['videos'] : '';
     }
- 
+
     /**
      * Checks if the Band has Videos.
      *
@@ -192,7 +192,7 @@ class PlekBandHandler
      */
     public function has_videos()
     {
-        return (isset($this->band['videos']) AND !empty($this->band['videos'])) ? true : false;
+        return (isset($this->band['videos']) and !empty($this->band['videos'])) ? true : false;
     }
 
     /**
@@ -202,7 +202,7 @@ class PlekBandHandler
      */
     public function get_photos()
     {
-        return (isset($this->band['band_galleries'])) ? explode(',',$this->band['band_galleries']) : '';
+        return (isset($this->band['band_galleries'])) ? explode(',', $this->band['band_galleries']) : '';
     }
 
     /**
@@ -272,7 +272,7 @@ class PlekBandHandler
         }
         if (file_exists(PLEK_PATH . 'images/flags/no-flag.png')) {
             $flag = PLEK_PLUGIN_DIR_URL  . 'images/flags/no-flag.png';
-            return "<img src='$flag' alt='".  __('Diese Band hat keine Herkunfts informationen.','pleklang') ."'/>";
+            return "<img src='$flag' alt='" .  __('Diese Band hat keine Herkunfts informationen.', 'pleklang') . "'/>";
         }
         return strtoupper($country_code);
     }
@@ -280,7 +280,7 @@ class PlekBandHandler
     public function get_country_name()
     {
         $country_code = $this->get_country();
-        $country_array = $this -> get_all_countries();
+        $country_array = $this->get_all_countries();
         if (isset($country_array[$country_code])) {
             return $country_array[$country_code];
         }
@@ -292,7 +292,8 @@ class PlekBandHandler
      *
      * @return void
      */
-    public function get_all_countries(){
+    public function get_all_countries()
+    {
         global $plek_handler;
         return $plek_handler->get_acf_choices('herkunft', 'term', $this->get_id());
     }
@@ -339,8 +340,8 @@ class PlekBandHandler
      */
     public function get_band_link(string $band_slug = null)
     {
-        if($band_slug === null){
-            $band_slug = $this -> get_slug();
+        if ($band_slug === null) {
+            $band_slug = $this->get_slug();
         }
         $tag_base = get_option('tag_base');
         return site_url('/' . $tag_base . '/' . $band_slug, 'https');
@@ -348,7 +349,7 @@ class PlekBandHandler
 
     public static function is_band_link(string $url)
     {
-        if(preg_match('/\/band\//',$url)){
+        if (preg_match('/\/band\//', $url)) {
             return true;
         }
         return false;
@@ -362,7 +363,7 @@ class PlekBandHandler
     public static function is_band_edit()
     {
         $url = (isset($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : null;
-        if(strpos($url,'do=edit_band') !== false){
+        if (strpos($url, 'do=edit_band') !== false) {
             return true;
         }
         return false;
@@ -381,16 +382,17 @@ class PlekBandHandler
         return Tribe__Events__Main::instance()->getLink() . $cat_slug . '/' . $genre_slug;
     }
 
-    public function get_all_bands(bool $meta = true){
+    public function get_all_bands(bool $meta = true)
+    {
         $args = array('hide_empty ' => false, 'get' => 'all');
-		$bands = get_tags($args);
-		if ($meta) {
-			foreach ($bands as $i => $term) {
-				$band_meta = get_fields($term);
-				$bands[$i]->meta = $band_meta;
-			}
-		}
-		return $bands;
+        $bands = get_tags($args);
+        if ($meta) {
+            foreach ($bands as $i => $term) {
+                $band_meta = get_fields($term);
+                $bands[$i]->meta = $band_meta;
+            }
+        }
+        return $bands;
     }
 
     /**
@@ -399,41 +401,44 @@ class PlekBandHandler
      *
      * @return array Array with WP_Term Objects
      */
-    public function get_all_genres(){
-        if(!empty($this -> band_genres)){
-            return $this -> band_genres;
+    public function get_all_genres()
+    {
+        if (!empty($this->band_genres)) {
+            return $this->band_genres;
         }
         $args = array('orderby' => 'name', 'hide_empty' => 0, 'hierarchical' => 1, 'taxonomy' => 'tribe_events_cat');
         $cats = get_categories($args);
         if (!$cats) {
             return false;
         }
-        $this -> band_genres = $cats;
+        $this->band_genres = $cats;
         return $cats;
     }
 
-    public function get_all_bands_json(){
-        $bands = $this -> get_all_bands();
+    public function get_all_bands_json()
+    {
+        $bands = $this->get_all_bands();
         $bands_formated = array();
-        foreach($bands as $band){
+        foreach ($bands as $band) {
             $current = array();
-            $current['id'] = $band -> term_id;
-            $current['name'] = $band -> name;
-            $current['flag'] = (isset($band -> meta['herkunft']))?$band -> meta['herkunft']:'';
-            $current['genres'] = (isset($band -> meta['band_genre']))?$this -> format_band_genres($band -> meta['band_genre']):'';
-            $bands_formated[$band -> term_id] = $current;
+            $current['id'] = $band->term_id;
+            $current['name'] = $band->name;
+            $current['flag'] = (isset($band->meta['herkunft'])) ? $band->meta['herkunft'] : '';
+            $current['genres'] = (isset($band->meta['band_genre'])) ? $this->format_band_genres($band->meta['band_genre']) : '';
+            $bands_formated[$band->term_id] = $current;
         }
         return json_encode($bands_formated);
     }
 
-    public function format_band_genres(array $genres){
+    public function format_band_genres(array $genres)
+    {
         $ret_arr = array();
-        foreach($genres as $genre){
-            if(isset($genre['label'])){
+        foreach ($genres as $genre) {
+            if (isset($genre['label'])) {
                 $ret_arr[] = $genre['label'];
             }
         }
-        return implode(', ',$ret_arr);
+        return implode(', ', $ret_arr);
     }
 
     public function enqueue_form_styles()
@@ -443,7 +448,7 @@ class PlekBandHandler
     public function enqueue_form_scripts()
     {
         global $plek_handler;
-        $plek_handler -> enqueue_select2();
+        $plek_handler->enqueue_select2();
         wp_enqueue_script('plek-band-scripts', PLEK_PLUGIN_DIR_URL . 'js/manage-band.min.js', array('jquery', 'select2'));
     }
 
@@ -452,22 +457,23 @@ class PlekBandHandler
      *
      * @return bool True if saved, false on error
      */
-    public function save_band(){
+    public function save_band()
+    {
         global $plek_ajax_handler;
         global $plek_ajax_errors;
-        $band_id = $plek_ajax_handler -> get_ajax_data('band-id');
-        $this -> load_band_object_by_id($band_id);
-        if(PlekUserHandler::user_can_edit_band($this) !== true){
-            $plek_ajax_errors -> add('save_band', __('Du bist nicht berechtigt, diese Band zu bearbeiten.','pleklang') );
+        $band_id = $plek_ajax_handler->get_ajax_data('band-id');
+        $this->load_band_object_by_id($band_id);
+        if (PlekUserHandler::user_can_edit_band($this) !== true) {
+            $plek_ajax_errors->add('save_band', __('Du bist nicht berechtigt, diese Band zu bearbeiten.', 'pleklang'));
             return false;
         }
-        $validate = $this -> validate_band_data();
-        if($validate !== true){
-            $plek_ajax_errors -> add('save_band_validator', $validate);
+        $validate = $this->validate_band_data();
+        if ($validate !== true) {
+            $plek_ajax_errors->add('save_band_validator', $validate);
             return false;
         }
-        
-        return $this -> update_band();
+
+        return $this->update_band();
     }
 
     /**
@@ -475,20 +481,21 @@ class PlekBandHandler
      *
      * @return bool|array true on success, error array on failure.
      */
-    public function validate_band_data(){
+    public function validate_band_data()
+    {
         $validator = new PlekFormValidator;
-        
-        $validator -> set('band-id', true, 'int');
-        $validator -> set('band-name', true, 'textshort');
-        $validator -> set('band-logo', false, 'image');
-        $validator -> set('band-description', false, 'text');
-        $validator -> set('band-genre', true, 'textshort');
-        $validator -> set('band-origin', true, 'textshort');
-        $validator -> set('band-link-fb', false, 'url');
-        $validator -> set('band-link-web', false, 'url');
-        $validator -> set('band-link-insta', false, 'url');
-        $validator -> set('band-videos', false, 'text');
-        $validator -> set_ignore('band-logo-data');
+
+        $validator->set('band-id', true, 'int');
+        $validator->set('band-name', true, 'textshort');
+        $validator->set('band-logo', false, 'image');
+        $validator->set('band-description', false, 'text');
+        $validator->set('band-genre', true, 'textshort');
+        $validator->set('band-origin', true, 'textshort');
+        $validator->set('band-link-fb', false, 'url');
+        $validator->set('band-link-web', false, 'url');
+        $validator->set('band-link-insta', false, 'url');
+        $validator->set('band-videos', false, 'text');
+        $validator->set_ignore('band-logo-data');
 
         if ($validator->all_fields_are_valid() !== true) {
             return $validator->get_errors();
@@ -501,19 +508,20 @@ class PlekBandHandler
      *
      * @return bool true on success, false on error.
      */
-    public function update_band(){
+    public function update_band()
+    {
         global $plek_ajax_handler;
         global $plek_ajax_errors;
 
-        $id = (int) $plek_ajax_handler -> get_ajax_data_esc('band-id');
-        $name = $plek_ajax_handler -> get_ajax_data_esc('band-name');
-        $description = $plek_ajax_handler -> get_ajax_data('band-description');
-        $genre = $plek_ajax_handler -> get_ajax_data_esc('band-genre');
-        $origin = $plek_ajax_handler -> get_ajax_data_esc('band-origin');
-        $web = $plek_ajax_handler -> get_ajax_data_esc('band-link-web');
-        $facebook = $plek_ajax_handler -> get_ajax_data_esc('band-link-fb');
-        $insta = $plek_ajax_handler -> get_ajax_data_esc('band-link-insta');
-        $videos = $plek_ajax_handler -> get_ajax_data_esc('band-videos');
+        $id = (int) $plek_ajax_handler->get_ajax_data_esc('band-id');
+        $name = $plek_ajax_handler->get_ajax_data_esc('band-name');
+        $description = $plek_ajax_handler->get_ajax_data('band-description');
+        $genre = $plek_ajax_handler->get_ajax_data_esc('band-genre');
+        $origin = $plek_ajax_handler->get_ajax_data_esc('band-origin');
+        $web = $plek_ajax_handler->get_ajax_data_esc('band-link-web');
+        $facebook = $plek_ajax_handler->get_ajax_data_esc('band-link-fb');
+        $insta = $plek_ajax_handler->get_ajax_data_esc('band-link-insta');
+        $videos = $plek_ajax_handler->get_ajax_data_esc('band-videos');
 
         $acf = array();
         $acf['website_link'] = $web;
@@ -523,14 +531,14 @@ class PlekBandHandler
         $acf['videos'] = $videos;
         $acf['band_genre'] = $genre;
         //Upload Logo
-        if(!empty($plek_ajax_handler -> get_ajax_files_data('band-logo'))){
+        if (!empty($plek_ajax_handler->get_ajax_files_data('band-logo'))) {
             //Save resized File
-            $title = sprintf(__('Bandlogo von %s','pleklang'), $name);
+            $title = sprintf(__('Bandlogo von %s', 'pleklang'), $name);
             $fh = new PlekFileHandler;
-            $fh -> set_image_options(680, 680, 'jpeg', 70);
+            $fh->set_image_options(680, 680, 'jpeg', 70);
 
-            $attachment_id = $fh -> resize_uploaded_image('band-logo', $title);
-            if(is_int($attachment_id)){
+            $attachment_id = $fh->resize_uploaded_image('band-logo', $title);
+            if (is_int($attachment_id)) {
                 $acf['bandlogo'] = $attachment_id;
             }
         }
@@ -538,16 +546,16 @@ class PlekBandHandler
 
         //Update the Term
         $update_term = wp_update_term($id, 'post_tag', $term_args);
-        if(is_wp_error($update_term)){
-            $ut_error = $update_term -> get_error_message();
-            $plek_ajax_errors -> add('save_band', sprintf(__('Fehler beim Speichern der Band (%s)','pleklang'), $ut_error) );
+        if (is_wp_error($update_term)) {
+            $ut_error = $update_term->get_error_message();
+            $plek_ajax_errors->add('save_band', sprintf(__('Fehler beim Speichern der Band (%s)', 'pleklang'), $ut_error));
         }
         //update the acf / term meta
-        foreach($acf as $afc_name => $value){
-            update_field($afc_name,$value,'term_'.$id);
+        foreach ($acf as $afc_name => $value) {
+            update_field($afc_name, $value, 'term_' . $id);
         }
 
-        if($plek_ajax_errors -> has_errors()){
+        if ($plek_ajax_errors->has_errors()) {
             return false;
         }
         return true;
@@ -559,7 +567,8 @@ class PlekBandHandler
      * @param integer $band_id
      * @return mixed False if band is not managed, otherwise an array with the user_ids
      */
-    public function band_is_managed(int $band_id){
+    public function band_is_managed(int $band_id)
+    {
         global $wpdb;
         $wild = '%';
         $like = $wild . $wpdb->esc_like($band_id) . $wild;
@@ -569,7 +578,7 @@ class PlekBandHandler
             WHERE meta.`meta_key` LIKE 'band_id'
             AND meta.`meta_value` LIKE '%s'", $like);
         $check = $wpdb->get_col($query);
-        if(empty($check)){
+        if (empty($check)) {
             return false;
         }
         return $check;
@@ -582,9 +591,10 @@ class PlekBandHandler
      * @param integer $user_id
      * @return bool True if user is managing band
      */
-    public function band_is_managed_by_user(int $band_id, int $user_id){
-        $check = $this -> band_is_managed($band_id);
-        if(array_search($user_id, $check)){
+    public function band_is_managed_by_user(int $band_id, int $user_id)
+    {
+        $check = $this->band_is_managed($band_id);
+        if (array_search($user_id, $check)) {
             return true;
         }
         return false;
@@ -596,16 +606,17 @@ class PlekBandHandler
      * @param integer $band_id
      * @return void
      */
-    public function get_band_managers_names(int $band_id){
-        $user_ids = $this -> band_is_managed($band_id);
+    public function get_band_managers_names(int $band_id)
+    {
+        $user_ids = $this->band_is_managed($band_id);
 
         $return = array();
-        if(is_array($user_ids)){
-            foreach($user_ids as $id){
+        if (is_array($user_ids)) {
+            foreach ($user_ids as $id) {
                 $user = get_user_by('ID', $id);
-                if($user){
-                    $url = get_author_posts_url($user -> ID);
-                    $return[] = array($user -> ID, $user -> display_name, $url);
+                if ($user) {
+                    $url = get_author_posts_url($user->ID);
+                    $return[] = array($user->ID, $user->display_name, $url);
                 }
             }
             return $return;
@@ -620,11 +631,12 @@ class PlekBandHandler
      * @param integer|null $user_id
      * @return bool true if follower, otherwise false.
      */
-    public function user_is_follower(int $user_id = null){
-        $user_id = (empty($user_id)) ? get_current_user_id():$user_id;
+    public function user_is_follower(int $user_id = null)
+    {
+        $user_id = (empty($user_id)) ? get_current_user_id() : $user_id;
         $followers =  (isset($this->band['band_follower'])) ? $this->band['band_follower'] : '';
-        if(is_array($followers) AND (array_search($user_id, $followers) !== false)){
-          return true;
+        if (is_array($followers) and (array_search($user_id, $followers) !== false)) {
+            return true;
         }
         return false;
     }
@@ -632,12 +644,19 @@ class PlekBandHandler
     /**
      * Retuns the total follower of the band.
      * Use load_band_object() before this function
-     *
+     * 
+     * @param bool $cache - If true, the value gets loaded from the previous load_band_object. Otherwise it will load it from the DB
      * @return int The total users following the band
      */
-    public function get_follower_count(){
-        $followers =  (isset($this->band['band_follower'])) ? $this->band['band_follower'] : '';
-        if(is_array($followers)){
+    public function get_follower_count($cache = true)
+    {
+        if ($cache === true) {
+            $followers =  (isset($this->band['band_follower'])) ? $this->band['band_follower'] : '';
+        } else {
+            $band_id = $this->get_id();
+            $followers = get_field('band_follower', 'term_' . $band_id);
+        }
+        if (is_array($followers)) {
             return count($followers);
         }
         return 0;
@@ -651,37 +670,38 @@ class PlekBandHandler
      * @param integer|null $user_id
      * @return bool true, if follower list has been updated, otherwise false
      */
-    public function toggle_follower(int $user_id = null){
+    public function toggle_follower(int $user_id = null)
+    {
         global $plek_handler;
-        $band_id = $this -> get_id();
-        $user_id = (empty($user_id)) ? get_current_user_id():$user_id;
+        $band_id = $this->get_id();
+        $user_id = (empty($user_id)) ? get_current_user_id() : $user_id;
         $followers =  (isset($this->band['band_follower'])) ? $this->band['band_follower'] : array();
         $action = false;
 
-        if(empty($band_id)){
+        if (empty($band_id)) {
             return false;
         }
 
-        if(!is_array($followers)){
+        if (!is_array($followers)) {
             return false;
         }
-        if($this -> user_is_follower($user_id)){
+        if ($this->user_is_follower($user_id)) {
             //Remove from follower list
             $index = array_search($user_id, $followers);
-            if($index !== false){
+            if ($index !== false) {
                 unset($followers[$index]);
                 $action = 'remove';
-            }else{
+            } else {
                 return false; //User not found in list
             }
-        }else{
+        } else {
             //Add to follower list
             $followers[] = (int) $user_id;
             $action = 'add';
         }
         //Saves the value
-        $save = $plek_handler -> update_field("band_follower", $followers, 'term_'.$band_id);
-        if($save !== false){
+        $save = $plek_handler->update_field("band_follower", $followers, 'term_' . $band_id);
+        if ($save !== false) {
             return $action;
         }
         return false;
@@ -693,24 +713,40 @@ class PlekBandHandler
      *
      * @return bool
      */
-    public function toggle_follower_from_ajax(){
-        $band_id = isset($_REQUEST['band_id'])?$_REQUEST['band_id']:false;
-        if(!$band_id){
+    public function toggle_follower_from_ajax()
+    {
+        $band_id = isset($_REQUEST['band_id']) ? $_REQUEST['band_id'] : false;
+        if (!$band_id) {
             return false;
         }
-        $band = new PlekBandHandler; 
-        $band -> load_band_object_by_id($band_id);
-        if(!$band){
+        $this->load_band_object_by_id($band_id);
+        if (empty($this->get_id())) {
             return false;
         }
-        $toggle =  $band ->  toggle_follower();
-        if(!$toggle){
+        $toggle =  $this->toggle_follower();
+        if (!$toggle) {
             return false;
         }
-        if($toggle === 'add'){
-            return __('Unfollow','pleklang');
-        }else{
-            return __('Follow','pleklang');
+        if ($toggle === 'add') {
+            return __('Unfollow', 'pleklang');
+        } else {
+            return __('Follow', 'pleklang');
         }
+    }
+
+    /**
+     * Hack to prevent 404 Page on Tag Page
+     *
+     * @param object $query
+     * @return object
+     */
+    public function bandpage_pagination_hack($query)
+    {
+        if (!is_main_query() or !is_tag())
+            return $query;
+
+        $query->set('posts_per_page', 1); //Hack to prevent 404 Page shown on Tag page > 1
+
+        return $query;
     }
 }

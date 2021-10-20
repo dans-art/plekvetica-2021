@@ -2,7 +2,7 @@
 
 /**
  * Class to handle the Events
- * 
+ * @todo: Use set_posts_per_page() to populate the pages_obj. Use the Page_object!
  */
 class PlekEvents extends PlekEventHandler
 {
@@ -199,11 +199,12 @@ class PlekEvents extends PlekEventHandler
      * @param string $to - date('Y-m-d H:i:s')
      * @return object Result form the database. 
      */
-    public function get_user_akkredi_event(string $from = null, string $to = null)
+    public function get_user_akkredi_event(string $from = null, string $to = null,  $limit = 0)
     {
         global $wpdb;
         $user = PlekUserHandler::get_user_login_name();
-        $page_obj = $this->get_pages_object();
+        $page_obj = $this->get_pages_object($limit);
+        //$limit = $limit ?: $page_obj->posts_per_page;
 
         $wild = '%';
         $like = $wild . $wpdb->esc_like($user) . $wild;
@@ -234,7 +235,7 @@ class PlekEvents extends PlekEventHandler
             AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
             
             ORDER BY startdate.meta_value DESC
-            LIMIT %d OFFSET %d", $like, $from, $to, $page_obj->posts_per_page, $page_obj->offset);
+            LIMIT %d OFFSET %d", $like, $from, $to, $limit, $page_obj->offset);
         $posts = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
         $this->total_posts['get_user_akkredi_event'] = $total_posts;
@@ -292,7 +293,7 @@ class PlekEvents extends PlekEventHandler
         global $wpdb;
         $user_id = PlekUserHandler::get_user_id();
         $organizer_id = (int) PlekUserHandler::get_user_setting('organizer_id');
-        $page_obj = $this->get_pages_object();
+        $page_obj = $this->get_pages_object($limit);
         $limit = $limit ?: $page_obj->posts_per_page;
         $from = $from ?: '1970-01-01 00:00:00';
         $to = $to ?: '9999-01-01 00:00:00';
@@ -339,7 +340,7 @@ class PlekEvents extends PlekEventHandler
         $band_ids = PlekUserHandler::get_user_setting('band_id');
         $band_id_arr = explode(',', $band_ids);
 
-        $page_obj = $this->get_pages_object();
+        $page_obj = $this->get_pages_object($limit);
         $limit = $limit ?: $page_obj->posts_per_page;
         $from = $from ?: '1970-01-01 00:00:00';
         $to = $to ?: '9999-01-01 00:00:00';
@@ -378,6 +379,49 @@ class PlekEvents extends PlekEventHandler
         return $events;
     }
 
+    public function get_events_of_band($band_id, $from = '1970-01-01 00:00:00' , $to = '9999-01-01 00:00:00', $limit = 0)
+    {
+        global $wpdb;
+        $band_id = (int) $band_id;
+        $page_obj = $this->get_pages_object($limit);
+        $limit = $limit ?: $page_obj->posts_per_page;
+        $from = $from ?: '1970-01-01 00:00:00';
+        $to = $to ?: '9999-01-01 00:00:00';
+
+        $query = $wpdb->prepare(
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)  as startdate
+        FROM `{$wpdb->prefix}posts` as posts 
+        LEFT JOIN {$wpdb->prefix}postmeta as date
+        ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
+
+        LEFT JOIN {$wpdb->prefix}postmeta as postponed
+        ON (posts.ID = postponed.post_id AND postponed.meta_key = 'postponed_event')
+
+        LEFT JOIN {$wpdb->prefix}term_relationships AS band_term
+        ON (posts.ID = band_term.object_id)
+
+        WHERE 
+        (band_term.term_taxonomy_id IN (%d)) 
+        AND post_type = 'tribe_events'
+        AND posts.post_status IN ('publish')
+        AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
+        AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
+
+        GROUP BY posts.ID
+        ORDER BY date.meta_value DESC
+        LIMIT %d OFFSET %d",
+            $band_id,
+            $from,
+            $to,
+            $limit,
+            $page_obj->offset
+        );
+        $events = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        $this->total_posts['get_band_events'] = $total_posts;
+        return $events;
+    }
+
     public function get_events_of_community_user($from, $to, $limit = 0)
     {
         global $wpdb;
@@ -385,7 +429,7 @@ class PlekEvents extends PlekEventHandler
         $band_ids = PlekUserHandler::get_user_setting('band_id');
         $band_id_arr = explode(',', $band_ids);
 
-        $page_obj = $this->get_pages_object();
+        $page_obj = $this->get_pages_object($limit);
         $limit = $limit ?: $page_obj->posts_per_page;
         $from = $from ?: '1970-01-01 00:00:00';
         $to = $to ?: '9999-01-01 00:00:00';
@@ -439,7 +483,7 @@ class PlekEvents extends PlekEventHandler
         global $wpdb;
         $user_id = (int) $user_id ?: PlekUserHandler::get_user_id();
         $like_user = '% ' . $wpdb->esc_like($user_id) . ' %'; //Add spaces to make sure, only this user id is found.
-        $page_obj = $this->get_pages_object();
+        $page_obj = $this->get_pages_object($limit);
         $limit = $limit ?: $page_obj->posts_per_page;
         $from = $from ?: '1970-01-01 00:00:00';
         $to = $to ?: '9999-01-01 00:00:00';
@@ -765,14 +809,20 @@ class PlekEvents extends PlekEventHandler
      * -> page - the current page as set in the query
      * -> offset - the offset for the sql request
      *
+     * @param integer $posts_per_page - Number of posts per page.
      * @return object - Pages object
      */
-    public function get_pages_object()
+    public function get_pages_object($posts_per_page = null, $total_posts = 0)
     {
         $page_obj = new stdClass();
-        $page_obj->posts_per_page = (int) tribe_get_option('postsPerPage');
+        if(!is_int($posts_per_page)){
+            $page_obj->posts_per_page = (int) tribe_get_option('postsPerPage');
+        }else{
+            $page_obj->posts_per_page = $posts_per_page;
+        }
         $page_obj->page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
         $page_obj->offset =  ($page_obj->page > 1) ? ($page_obj->page - 1) * $page_obj->posts_per_page : 0;
+        $page_obj->total_pages = ($total_posts > 0)?ceil(($total_posts / $posts_per_page)):0;
         return $page_obj;
     }
 
@@ -781,11 +831,12 @@ class PlekEvents extends PlekEventHandler
      * Like: Show Events 1 to 10 from 200
      *
      * @param integer $total_posts - Number of total posts.
+     * @param integer/null $number_of_posts - Number of posts.
      * @return string - Formated string
      */
-    public function get_pages_count_formated(int $total_posts)
+    public function get_pages_count_formated(int $total_posts, $number_of_posts = null)
     {
-        $page_obj = $this->get_pages_object();
+        $page_obj = $this->get_pages_object($number_of_posts);
         $to_posts = (($page_obj->offset + $page_obj->posts_per_page) <= $total_posts) ? ($page_obj->offset + $page_obj->posts_per_page) : $total_posts;
         return '<div class="total_posts">' . sprintf(__('Events %d bis %d von %d', 'pleklang'), $page_obj->offset + 1, $to_posts, $total_posts) . '</div>';
     }
@@ -893,12 +944,13 @@ class PlekEvents extends PlekEventHandler
      * Checks if there are more pages to show or not.
      *
      * @param integer/string $total_posts - Total amount of posts
+     * @param integer/null $posts_per_page - Number of Posts
      * @return bool True, if there are more pages to shown, otherwise false.
      */
-    public function display_more_events_button($total_posts = 0)
+    public function display_more_events_button($total_posts = 0, $posts_per_page = null)
     {
         $total_posts = (int) $total_posts;
-        $page_obj = $this->get_pages_object();
+        $page_obj = $this->get_pages_object($posts_per_page);
 
         $total_pages = ($total_posts / $page_obj->posts_per_page);
         if ($total_posts > $page_obj->posts_per_page and $page_obj->page < $total_pages) {

@@ -136,11 +136,20 @@ button html input[type="button"], button input[type="reset"], button input[type=
 /* line 128, scss/elements.scss */
 .plek-button.deactivate:hover { color: unset; }
 
+/* line 135, scss/elements.scss */
+.plek-counter-button { padding: 0; display: flex; }
+/* line 138, scss/elements.scss */
+.plek-counter-button .counter { padding: 0.5em 1em; background-color: #752026; }
+/* line 142, scss/elements.scss */
+.plek-counter-button:hover > .counter { color: white; }
+/* line 145, scss/elements.scss */
+.plek-counter-button .label { padding: 0.5em; width: 100%; }
+
 /* Button Animation*/
 /* Loader */
-/* line 137, scss/elements.scss */
+/* line 154, scss/elements.scss */
 .plek-button.loader { position: relative; }
-/* line 141, scss/elements.scss */
+/* line 158, scss/elements.scss */
 .plek-button.loader:after { position: absolute; content: ''; width: 0; left: 0; bottom: 0; height: 2px; background: white; animation-name: plek-button-loader; animation-duration: 2s; animation-iteration-count: infinite; }
 
 @keyframes plek-button-loader { /*0% {width: 0%; left: 0;} 25% {width: 100%; left: 0;} 50% {width: 0%; left: 100%;} 75% {width: 0%} 100% {width: 0%}*/
@@ -148,11 +157,11 @@ button html input[type="button"], button input[type="reset"], button input[type=
   50% { width: 100%; left: 0; }
   100% { width: 0%; left: 100%; } }
 /* Title */
-/* line 170, scss/elements.scss */
+/* line 187, scss/elements.scss */
 .info-text-bar { padding: 0; margin-bottom: 2em; text-align: center; border-bottom: solid 2px #8C262E; font-size: 1.8em; width: 27%; }
-/* line 178, scss/elements.scss */
+/* line 195, scss/elements.scss */
 .info-text-bar .bar-front { /*padding-left: 5%;*/ }
-/* line 182, scss/elements.scss */
+/* line 199, scss/elements.scss */
 .info-text-bar .bar-back { /*display: block;
 height: 2em;
 width: 2em;
@@ -161,167 +170,167 @@ position: relative;
 right: -102%;
 top: -2em;*/ }
 
-/* line 197, scss/elements.scss */
+/* line 214, scss/elements.scss */
 .info-text-line { font-size: 1em; width: 11em; margin-bottom: 1em; }
-/* line 202, scss/elements.scss */
+/* line 219, scss/elements.scss */
 .info-text-line div { text-align: right; }
-/* line 206, scss/elements.scss */
+/* line 223, scss/elements.scss */
 .info-text-line .line2 { font-size: 1.5em; }
 
-/* line 211, scss/elements.scss */
+/* line 228, scss/elements.scss */
 blockquote { font-size: 1em; border-left: 2px solid #595959; }
 
-/* line 216, scss/elements.scss */
+/* line 233, scss/elements.scss */
 .info-text-banner { display: block; position: relative; width: 50%; top: -24px; right: 0; margin-left: auto; margin-right: 0; }
-/* line 226, scss/elements.scss */
+/* line 243, scss/elements.scss */
 .info-text-banner .banner-bg { border-top: #c11d1d solid 30px; border-right: solid #c11d1d 30px; border-left: solid transparent 30px; display: block; position: relative; right: 0; bottom: 0; }
-/* line 236, scss/elements.scss */
+/* line 253, scss/elements.scss */
 .info-text-banner .banner-text { display: block; position: relative; z-index: 99; text-transform: uppercase; overflow: hidden; white-space: nowrap; top: 29px; margin-left: 28px; }
 
-/* line 248, scss/elements.scss */
+/* line 265, scss/elements.scss */
 .yotu-videos .yotu-video h3.yotu-video-title { color: white; }
 
-/* line 251, scss/elements.scss */
+/* line 268, scss/elements.scss */
 .yotu-playlist .yotu-pagination a::after { color: white; }
 
-/* line 259, scss/elements.scss */
+/* line 276, scss/elements.scss */
 .event-icons span:before, .event-interview-band span:before, .event-akkredi-status span:before { font-family: "FontAwesome"; }
-/* line 262, scss/elements.scss */
+/* line 279, scss/elements.scss */
 .event-icons span.aa:before, .event-icons span.ia:before, .event-interview-band span.aa:before, .event-interview-band span.ia:before, .event-akkredi-status span.aa:before, .event-akkredi-status span.ia:before { content: '\f059'; color: #ffffffb6; }
-/* line 267, scss/elements.scss */
+/* line 284, scss/elements.scss */
 .event-icons span.ab:before, .event-icons span.ib:before, .event-interview-band span.ab:before, .event-interview-band span.ib:before, .event-akkredi-status span.ab:before, .event-akkredi-status span.ib:before { content: '\f058'; color: #268c37; }
-/* line 272, scss/elements.scss */
+/* line 289, scss/elements.scss */
 .event-icons span.aw:before, .event-icons span.iw:before, .event-interview-band span.aw:before, .event-interview-band span.iw:before, .event-akkredi-status span.aw:before, .event-akkredi-status span.iw:before { content: '\f06a'; color: #6278d9; }
-/* line 277, scss/elements.scss */
+/* line 294, scss/elements.scss */
 .event-icons span.no:before, .event-interview-band span.no:before, .event-akkredi-status span.no:before { content: '\f057'; color: #D9042B; }
-/* line 281, scss/elements.scss */
+/* line 298, scss/elements.scss */
 .event-icons span.null:before, .event-interview-band span.null:before, .event-akkredi-status span.null:before { content: '\f068'; color: #ffffffb6; }
 
-/* line 287, scss/elements.scss */
+/* line 304, scss/elements.scss */
 .plek-message, .tribe-events-calendar-list__event .plek-message { font-size: 1.3em; padding: 0.5em; border: 1px solid white; text-align: center; margin-bottom: 1em; }
-/* line 295, scss/elements.scss */
+/* line 312, scss/elements.scss */
 .plek-message.red, .tribe-events-calendar-list__event .plek-message.red { color: #8C262E; border-color: #8C262E; }
 
-/* line 302, scss/elements.scss */
+/* line 319, scss/elements.scss */
 input[type="phone"] { color: #666666; background-color: #fafafa; border-color: #cccccc; border: 1px solid; border-radius: 0; padding: 10px 15px; max-width: 100%; }
 
 /* Select2 Plugin*/
-/* line 313, scss/elements.scss */
-.select2-container { width: 100% !important; }
-/* line 316, scss/elements.scss */
-.select2-container .select2-selection { border-radius: 0px; min-height: 2.5em; }
-/* line 321, scss/elements.scss */
-.select2-container .select2-selection__rendered { padding-top: 0.5em; }
-/* line 325, scss/elements.scss */
-.select2-container li.select2-selection__choice { background-color: #424242 !important; font-size: 1em; }
 /* line 330, scss/elements.scss */
+.select2-container { width: 100% !important; }
+/* line 333, scss/elements.scss */
+.select2-container .select2-selection { border-radius: 0px; min-height: 2.5em; }
+/* line 338, scss/elements.scss */
+.select2-container .select2-selection__rendered { padding-top: 0.5em; }
+/* line 342, scss/elements.scss */
+.select2-container li.select2-selection__choice { background-color: #424242 !important; font-size: 1em; }
+/* line 347, scss/elements.scss */
 .select2-container .select2-results__option { background-color: #232323; color: white !important; }
-/* line 339, scss/elements.scss */
+/* line 356, scss/elements.scss */
 .select2-container .select2-results__option[aria-selected=true] { background-color: #232323; color: #595959; }
-/* line 344, scss/elements.scss */
+/* line 361, scss/elements.scss */
 .select2-container .select2-results__option--highlighted[aria-selected] { background-color: #8C262E; color: #595959; }
-/* line 349, scss/elements.scss */
+/* line 366, scss/elements.scss */
 .select2-container .select2-selection__choice__remove { font-size: 2em; margin: 0; padding: 0; height: 1em; color: #c11d1d !important; margin-top: -1em; }
 
 /* Assign min-width to container */
-/* line 361, scss/elements.scss */
+/* line 378, scss/elements.scss */
 .select2-container { min-width: 200px; }
 
-/* line 366, scss/elements.scss */
+/* line 383, scss/elements.scss */
 .select2-container--open .select2-dropdown--below, .select2-container--open .select2-dropdown--above { margin-top: -0.5em; }
 
-/* line 377, scss/elements.scss */
+/* line 394, scss/elements.scss */
 .select2-container--plek .select2-results__option[aria-selected=true] { opacity: 0.8; }
-/* line 380, scss/elements.scss */
+/* line 397, scss/elements.scss */
 .select2-container--plek .select2-selection--single { border-radius: 0px; }
-/* line 385, scss/elements.scss */
+/* line 402, scss/elements.scss */
 .select2-container--plek.select2-container--open .select2-selection__arrow b { transform: rotate(180deg); -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg); }
-/* line 393, scss/elements.scss */
+/* line 410, scss/elements.scss */
 .select2-container--plek span.select2-search input { height: 30px !important; }
 
-/* line 400, scss/elements.scss */
+/* line 417, scss/elements.scss */
 .select2-container .select2-choice { border: 2px solid #dce4ec; height: 36px; border-radius: 0px; font-size: 14px; text-indent: 1px; box-shadow: none; background-image: none; }
-/* line 408, scss/elements.scss */
+/* line 425, scss/elements.scss */
 .select2-container .select2-choice div { border-left: 2px solid #dce4ec; border-radius: 0 4px 4px 0; background-clip: padding-box; }
-/* line 413, scss/elements.scss */
+/* line 430, scss/elements.scss */
 .select2-container .select2-choice .select2-arrow { border: 0px; border-radius: 0px; background: transparent; background-image: none; }
-/* line 420, scss/elements.scss */
+/* line 437, scss/elements.scss */
 .select2-container *:focus { outline: 0px; }
-/* line 423, scss/elements.scss */
+/* line 440, scss/elements.scss */
 .select2-container.select2-drop-above .select2-choice { border-bottom-color: #dce4ec; border-radius: 0px; }
 
-/* line 429, scss/elements.scss */
+/* line 446, scss/elements.scss */
 .select2-drop { margin-top: -2px; border: 2px solid #dce4ec; border-top: 0; border-radius: 0px !important; border-radius: 0 0 6px 6px; box-shadow: none; }
-/* line 436, scss/elements.scss */
+/* line 453, scss/elements.scss */
 .select2-drop.select2-drop-above { margin-top: 2px; border-top: 2px solid #dce4ec; border-bottom: 0; border-radius: 6px 6px 0 0; box-shadow: none; }
 
-/* line 445, scss/elements.scss */
+/* line 462, scss/elements.scss */
 .select2-search { margin-top: 3px; }
-/* line 447, scss/elements.scss */
+/* line 464, scss/elements.scss */
 .select2-search input { height: 26px; border: 2px solid #dce4ec; }
 
-/* line 453, scss/elements.scss */
+/* line 470, scss/elements.scss */
 .select2-container-active .select2-choice, .select2-container-active .select2-choices { border: 2px solid #dce4ec; outline: none; box-shadow: none; }
 
-/* line 460, scss/elements.scss */
+/* line 477, scss/elements.scss */
 .select2-dropdown-open .select2-choice { box-shadow: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
-/* line 464, scss/elements.scss */
+/* line 481, scss/elements.scss */
 .select2-dropdown-open .select2-choice .select2-choice div { background: transparent; border-left: none; filter: none; }
 
-/* line 471, scss/elements.scss */
+/* line 488, scss/elements.scss */
 .select2-results { padding: 0 0 0 0px; margin: 4px 0px 0px 0; }
-/* line 474, scss/elements.scss */
+/* line 491, scss/elements.scss */
 .select2-results .select2-highlighted { color: #fff; border-radius: 0px; }
 
-/* line 481, scss/elements.scss */
+/* line 498, scss/elements.scss */
 .select2-container-multi .select2-choices { height: auto !important; height: 1%; border: 2px solid #dce4ec; }
-/* line 487, scss/elements.scss */
+/* line 504, scss/elements.scss */
 .select2-container-multi.select2-container-active .select2-choices { border: 2px solid #dce4ec; border-radius: 6px; box-shadow: none; }
 
-/* line 496, scss/elements.scss */
+/* line 513, scss/elements.scss */
 .select2-container--plek .select2-selection--single { background: white; border: 0px; height: 34px; }
-/* line 500, scss/elements.scss */
+/* line 517, scss/elements.scss */
 .select2-container--plek .select2-selection--single .select2-selection__rendered { color: #666666; line-height: 34px; }
-/* line 504, scss/elements.scss */
+/* line 521, scss/elements.scss */
 .select2-container--plek .select2-selection--single .select2-selection__arrow { height: 26px; position: absolute; top: 1px; right: 1px; width: 20px; }
-/* line 510, scss/elements.scss */
+/* line 527, scss/elements.scss */
 .select2-container--plek .select2-selection--single .select2-selection__arrow b { border-color: #fff transparent transparent transparent; top: 60%; border-style: solid; border-width: 5px 4px 0 4px; height: 0; left: 50%; margin-left: -4px; margin-top: -2px; position: absolute; width: 0; }
-/* line 523, scss/elements.scss */
+/* line 540, scss/elements.scss */
 .select2-container--plek .select2-selection--single .select2-selection__placeholder { color: #fff; }
-/* line 529, scss/elements.scss */
+/* line 546, scss/elements.scss */
 .select2-container--plek .select2-selection--single .select2-selection__clear { cursor: pointer; float: right; font-weight: bold; }
 
-/* line 540, scss/elements.scss */
+/* line 557, scss/elements.scss */
 .select2-container--plek .select2-selection--multiple .select2-selection__choice__remove:hover { cursor: pointer; }
-/* line 543, scss/elements.scss */
-.select2-container--plek .select2-selection--multiple .select2-selection__rendered { background: white; box-sizing: border-box; list-style: none; margin: 0; padding: 0em 0.5em 0.3em 0; width: 100%; }
-/* line 551, scss/elements.scss */
-.select2-container--plek .select2-selection--multiple .select2-selection__choice { color: #fff; border-radius: 0px; padding: 0em 0.5em 0.2em 0; cursor: default; float: left; margin-right: 5px; margin-top: 5px; }
 /* line 560, scss/elements.scss */
+.select2-container--plek .select2-selection--multiple .select2-selection__rendered { background: white; box-sizing: border-box; list-style: none; margin: 0; padding: 0em 0.5em 0.3em 0; width: 100%; }
+/* line 568, scss/elements.scss */
+.select2-container--plek .select2-selection--multiple .select2-selection__choice { color: #fff; border-radius: 0px; padding: 0em 0.5em 0.2em 0; cursor: default; float: left; margin-right: 5px; margin-top: 5px; }
+/* line 577, scss/elements.scss */
 .select2-container--plek .select2-selection--multiple .select2-selection__choice__remove { padding: 0; margin: 0; }
 
-/* line 568, scss/elements.scss */
+/* line 585, scss/elements.scss */
 #video_preview_con { display: flex; gap: 1%; flex-wrap: wrap; justify-content: space-between; }
-/* line 574, scss/elements.scss */
+/* line 591, scss/elements.scss */
 #video_preview_con a { cursor: default; }
-/* line 578, scss/elements.scss */
+/* line 595, scss/elements.scss */
 #video_preview_con .video_preview_item { max-width: 250px; background-color: #595959; width: 250px; min-height: 150px; position: relative; padding: 0.5em; flex-basis: 24%; margin-bottom: 0.5em; }
-/* line 588, scss/elements.scss */
-#video_preview_con .video_preview_item ul, #video_preview_con .video_preview_item li { list-style: none; padding: 0; margin: 0; }
-/* line 593, scss/elements.scss */
-#video_preview_con .video_preview_item .yotu-video-title { font-size: 1em; }
-/* line 596, scss/elements.scss */
-#video_preview_con .video_preview_item .yotu-pagination { display: none; }
-/* line 599, scss/elements.scss */
-#video_preview_con .video_preview_item .loading-youtube { text-align: center; width: 100%; padding-top: 75px; }
 /* line 605, scss/elements.scss */
+#video_preview_con .video_preview_item ul, #video_preview_con .video_preview_item li { list-style: none; padding: 0; margin: 0; }
+/* line 610, scss/elements.scss */
+#video_preview_con .video_preview_item .yotu-video-title { font-size: 1em; }
+/* line 613, scss/elements.scss */
+#video_preview_con .video_preview_item .yotu-pagination { display: none; }
+/* line 616, scss/elements.scss */
+#video_preview_con .video_preview_item .loading-youtube { text-align: center; width: 100%; padding-top: 75px; }
+/* line 622, scss/elements.scss */
 #video_preview_con .remove_video { color: #D9042B; font-size: 1.5em; font-weight: bold; cursor: pointer; position: absolute; top: 0; right: 15px; }
-/* line 615, scss/elements.scss */
+/* line 632, scss/elements.scss */
 #video_preview_con .yotu-video-thumb-wrp div { overflow: hidden; position: relative; height: 6.5em; margin-bottom: 10px; margin-top: 32px; max-height: 119px; width: 12em; }
-/* line 624, scss/elements.scss */
+/* line 641, scss/elements.scss */
 #video_preview_con .yotu-video-thumb-wrp div img { position: absolute; top: -1.1em; }
 
-/* line 632, scss/elements.scss */
+/* line 649, scss/elements.scss */
 #add-band-video { height: 2.8em; margin: 0; }
 
 /* line 4, scss/event-general.scss */
@@ -508,6 +517,15 @@ article.plek-event-item-compact .plek-message { font-size: 1em; padding: 0.4em; 
 
 /* line 407, scss/event-list.scss */
 .plek-event-data-separator { border-bottom: 2px solid #D9042B; margin-bottom: 2em; width: 100%; text-transform: uppercase; }
+
+/* line 415, scss/event-list.scss */
+.plek-pagination-container { display: flex; justify-content: space-between; flex-direction: row; width: 100%; }
+/* line 421, scss/event-list.scss */
+.plek-pagination-container .pagination-prev, .plek-pagination-container .pagination-next { flex-basis: 25%; }
+/* line 426, scss/event-list.scss */
+.plek-pagination-container .page-count { padding: 0 1em; text-align: center; display: flex; align-items: center; }
+/* line 432, scss/event-list.scss */
+.plek-pagination-container .page-count div { width: 100%; }
 
 /* line 5, scss/event-single.scss */
 .single-tribe_events #page { padding: 0 1em; }
@@ -1244,16 +1262,22 @@ div.plek-review-search form button, div.plek-review-search form input { width: 1
   /* line 312, scss/breakpoints.scss */
   #plek-user-settings-form button.plek-button, #plek-band-form button.plek-button { width: 100%; white-space: normal; }
   /* line 318, scss/breakpoints.scss */
-  #video_preview_con { justify-content: center; } }
-@media (max-width: 400px) { /* line 325, scss/breakpoints.scss */
+  #video_preview_con { justify-content: center; }
+  /* line 322, scss/breakpoints.scss */
+  .plek-pagination-container { flex-direction: column; }
+  /* line 325, scss/breakpoints.scss */
+  .plek-pagination-container .pagination-prev, .plek-pagination-container .pagination-next { flex-basis: 100%; }
+  /* line 330, scss/breakpoints.scss */
+  .plek-pagination-container .page-count { order: -1; } }
+@media (max-width: 400px) { /* line 338, scss/breakpoints.scss */
   .tribe-events-calendar-list__event, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event { flex-direction: column; }
-  /* line 329, scss/breakpoints.scss */
+  /* line 342, scss/breakpoints.scss */
   .tribe-events-calendar-list__event div, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event div { width: 100%; }
-  /* line 333, scss/breakpoints.scss */
+  /* line 346, scss/breakpoints.scss */
   .tribe-events-calendar-list__event img, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event img { width: 100%; }
-  /* line 338, scss/breakpoints.scss */
+  /* line 351, scss/breakpoints.scss */
   .banner-star-container { max-width: 100px; }
-  /* line 343, scss/breakpoints.scss */
+  /* line 356, scss/breakpoints.scss */
   .plek-posts-container .plek-post-item { flex-basis: 100%; } }
 /* line 48, scss/main-style.scss */
 #content.site-content { max-width: 1024px; margin: 0 auto; background-color: #232323; }

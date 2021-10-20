@@ -319,6 +319,19 @@
         justify-content: center;
     }
 
+    .plek-pagination-container{
+        flex-direction: column;
+      
+        .pagination-prev,
+        .pagination-next{
+          flex-basis: 100%;
+        }
+      
+        .page-count{
+          order: -1;
+        }
+      }
+
 }
 
 @media (max-width: 400px){

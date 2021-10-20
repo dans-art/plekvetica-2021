@@ -412,3 +412,25 @@ article.plek-event-item-compact{
 }
 
 
+.plek-pagination-container{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+
+  .pagination-prev,
+  .pagination-next{
+    flex-basis: 25%;
+  }
+
+  .page-count{
+    padding:0 1em;
+    text-align: center;
+    display: flex;
+    align-items: center;
+
+    div{
+      width: 100%;
+    }
+  }
+}

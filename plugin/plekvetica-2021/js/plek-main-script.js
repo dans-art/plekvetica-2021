@@ -51,7 +51,7 @@ let plek_main = {
     },
 
     activate_button_loader(element, text){
-        jQuery(element).addClass('loader');
+        this.activate_loader_style(element);
         if(jQuery(element).is("input")){
             jQuery(element).val(text);
         }else{
@@ -59,7 +59,7 @@ let plek_main = {
         }
     },
     deactivate_button_loader(element, text){
-        jQuery(element).removeClass('loader');
+        this.deactivate_loader_style(element);
         if(jQuery(element).is("input")){
             jQuery(element).val(text);
         }else{
@@ -73,6 +73,14 @@ let plek_main = {
     },
     disable_button(element){
         jQuery(element).addClass('disable');
+    },
+
+    activate_loader_style(element){
+        jQuery(element).addClass('loader');
+    },
+
+    deactivate_loader_style(element){
+        jQuery(element).removeClass('loader');
     },
     
     get_text_from_ajax_request(data, only_success = false){
@@ -98,6 +106,18 @@ let plek_main = {
             return data;
         }
         
+    },
+
+    get_ajax_success_object(data){
+        try {
+            let encoded_data = JSON.parse(data);
+            if(encoded_data.success.length > 0){
+                return encoded_data.success;
+            }
+
+        } catch(e) {
+            return data;
+        }
     },
 
     get_first_error_from_ajax_request(data){

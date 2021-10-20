@@ -42,6 +42,7 @@ $is_raffle = $plek_event->get_raffle();
       </span>
     </dd>
   </dl>
+  <div class="band-follow-button"><?php PlekTemplateHandler::load_template('button-counter', 'components', 0, 'Follow....', '' ,'plek-follow-event-btn'); ?></div>
   <?php if (PlekUserHandler::user_is_logged_in()) : ?>
     <dt><?php echo __('Watchlist','pleklang'); ?></dt>
     <dd class="event-watchlist">

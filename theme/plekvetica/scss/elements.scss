@@ -132,6 +132,23 @@ button {
 
 }
 
+.plek-counter-button{
+  padding: 0;
+  display: flex;
+  .counter{
+    padding: 0.5em 1em;
+    background-color: #752026;
+  }
+  &:hover > .counter{
+    color: $text-color;
+  }
+  .label{
+    padding: 0.5em;
+    width: 100%;
+  }
+
+}
+
 /* Button Animation*/
 /* Loader */
 .plek-button.loader {

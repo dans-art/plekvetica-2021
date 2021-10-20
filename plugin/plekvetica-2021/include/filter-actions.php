@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+  }
 
 /**
  * Adds the terms to the Events Object
@@ -48,7 +51,12 @@ add_action( 'wp_footer', [$plek_handler,'get_js_errors']);
 add_action('after_setup_theme', [new PlekUserHandler,'disable_admin']);
 add_action('after_setup_theme', [new PlekUserHandler,'unlock_user_and_login'], 10, 1);
 
+//Band Page
+add_filter( 'pre_get_posts', [new PlekBandHandler, 'bandpage_pagination_hack'] );
+
 //Backend Login Logo
 /* add_filter('login_headertext', 'my_login_logo_url_title');
 add_filter('login_headerurl', 'my_login_logo_url');
 add_filter('login_headertext', 'my_login_logo_url_title'); */
+
+

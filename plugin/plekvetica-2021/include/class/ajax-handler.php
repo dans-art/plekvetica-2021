@@ -62,6 +62,7 @@ class PlekAjaxHandler
                 break;
             case 'toggle_watchlist':
                 //Check if user is on watchlist
+                //@todo Toggle watchlist like band follow. Rename to follow.
                 $event_id = (int) $this->get_ajax_data('event-id');
                 $plek_event->load_event($event_id);
 
@@ -172,7 +173,9 @@ class PlekAjaxHandler
             case 'follow_band_toggle':
                 $plek_band = new PlekBandHandler;
                 $toggle = $plek_band->toggle_follower_from_ajax();
+                $counter = $plek_band -> get_follower_count(false);
                 if ($toggle) {
+                    $this->set_success($counter);
                     $this->set_success($toggle);
                 } else {
                     $this->set_error(__('Error while changing the following status', 'pleklang'));
