@@ -171,14 +171,22 @@ class PlekEvents extends PlekEventHandler
         $this->event['data'] = $yt['data'];
         return;
     }
-    /**
-     * Undocumented function
-     *
-     * @param integer $event_id
-     * @return void
-     * @todo: Delete this function, old.
-     */
 
+    /**
+     * Loads a single event to the event class from ajax.
+     * Send $_REQUEST['event_id'] to use this function
+     *
+     * @return bool
+     */
+    public function load_event_from_ajax(){
+        global $plek_ajax_handler;
+        $event_id = (int) $plek_ajax_handler->get_ajax_data('event_id');
+        if($event_id === 0){
+            return false;
+        }
+        $this -> load_event($event_id);
+        return;
+    }
 
     /**
      * Loads the Tribe Event Meta.
@@ -973,5 +981,37 @@ class PlekEvents extends PlekEventHandler
             return "<div class='plek-event-data-separator'>".__('Today','pleklang')."</div>";
         }
         return "";
+    }
+
+    /**
+     * Adds or removes a user from the events watchlist / follower list
+     *
+     * @return bool true on success, false on error
+     */
+    public function toggle_follower_from_ajax(){
+        global $plek_ajax_handler;
+        $event_id = (int) $plek_ajax_handler->get_ajax_data('event_id');
+        $toggle = "add";
+        if($event_id === 0){
+            return false;
+        }
+        if($this->current_user_is_on_watchlist($event_id)){
+            //Remove user
+            if(!$this -> remove_from_watchlist($event_id)){
+                return false;
+            }
+            $toggle = "remove";
+        }else{
+            //Add user
+            if(!$this -> add_to_watchlist($event_id)){
+                return false;
+            }
+        }
+        if ($toggle === 'add') {
+            return __('Unfollow', 'pleklang');
+        } else {
+            return __('Follow', 'pleklang');
+        }
+        return false;
     }
 }

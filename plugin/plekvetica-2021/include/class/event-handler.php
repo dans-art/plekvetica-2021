@@ -628,21 +628,6 @@ class PlekEventHandler
         return "<a href='$link' title='$title' target='_blank'><i class='$icon'></i></a>";
     }
 
-    /**
-     * Add the Button for toggling the watchlist
-     *
-     * @return string HTML button
-     */
-    public function get_watchlist_button()
-    {
-        $event_id = $this -> get_ID();
-        $wl_count = $this -> get_watchlist_count();
-        $on_watchlist = $this -> current_user_is_on_watchlist($event_id);
-        $title = ($on_watchlist) ? __('Remove me from the watchlist', 'pleklang') : __('Add me to the watchlist', 'pleklang');
-        $icon = 'fas fa-clipboard-list';
-        return "<span id='plekToggleWatchlist' title='{$title}' data-eventid='{$event_id}'><i class='$icon'></i><span id='watchlistCount'>{$wl_count}</span></a>";
-    }
-
     public function get_event_link()
     {
         $link = $this->get_field_value('_EventURL');

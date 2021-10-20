@@ -4,6 +4,15 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
   }
 
+/**
+ * @todo: User attribute array for all Button properties.
+ * E.g: 
+ * array(
+ * "total_posts" => "15"
+ * )
+ * Therefore, changes are easier to made, because the function PlekTemplateHandler::load_template expects only one parameter.
+ */
+
 global $plek_event;
 global $plek_handler;
 extract(get_defined_vars());

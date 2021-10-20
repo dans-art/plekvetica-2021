@@ -5,6 +5,7 @@ if (!defined('ABSPATH')) {
 
  /**
   * Manages the Template Blocks for the my_Plekvetica page.
+  * @todo: Add Blocks for following Bands and Events
   */
 class PlekEventBlocks extends PlekEvents
 {
@@ -105,6 +106,18 @@ class PlekEventBlocks extends PlekEvents
                     $band_id = (isset($data['band_id']))?$data['band_id']:0;
                     $ret['data'] =  $this->get_events_of_band($band_id, '', '', $limit);
                     $this -> block_total_posts = (isset($this -> total_posts['get_band_events']))?$this -> total_posts['get_band_events']:0;
+                break;
+                
+                case 'my_band_follows':
+                    $band_id = (isset($data['band_id']))?$data['band_id']:0;
+                    //$ret['data'] =  $this->get_events_of_band($band_id, '', '', $limit);
+                    //$this -> block_total_posts = (isset($this -> total_posts['get_band_events']))?$this -> total_posts['get_band_events']:0;
+                break;
+
+                case 'my_event_watchlist':
+                    //$band_id = (isset($data['band_id']))?$data['band_id']:0;
+                    //$ret['data'] =  $this->get_events_of_band($band_id, '', '', $limit);
+                    //$this -> block_total_posts = (isset($this -> total_posts['get_band_events']))?$this -> total_posts['get_band_events']:0;
                 break;
 
             default:

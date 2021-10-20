@@ -42,7 +42,7 @@ wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-sing
 
 
 <?php PlekTemplateHandler::load_template('back-link', 'components', $backlink, $backlink_label, $backlink_label_plural); ?>
-<div id="event-container" class="single-view <?php echo $plek_event->get_field('ID'); ?> <?php echo $plek_event_class; ?>">
+<div id="event-container" data-event_id="<?php echo $plek_event->get_field('ID'); ?>" class="single-view <?php echo $plek_event->get_field('ID'); ?> <?php echo $plek_event_class; ?>">
     <div id="event-content">
         <div id="event-header">
             <div class="event-poster">

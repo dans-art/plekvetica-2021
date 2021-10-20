@@ -26,6 +26,7 @@ let plek_single_event_main = {
         jQuery(document).ready(() => {
             this.add_event_listener();
         });
+
     },
     
     on_resize(){
@@ -126,7 +127,7 @@ let plek_single_event_main = {
         //Promote Event Button
         jQuery('#promoteEvent').click(() => {
             plek_main.activate_button_loader('#promoteEvent', 'Promote Event...');
-            this.do_ajax_promote_event();
+            plek_single_event_main.do_ajax_promote_event();
         });
         //Add Accreditation Button
         jQuery("#plekSetAkkreiCrewBtn").click(() => {
@@ -149,6 +150,10 @@ let plek_single_event_main = {
             //plek_main.activate_button_loader('#plekSetEventStatus', 'Veröffentliche Event...');
             plek_single_event_main.do_ajax_watchlist_toggle();
           });
+
+        jQuery(document).on("click", '.plek-follow-event-btn', function () {
+            plek_single_event_main.toggle_follower(this);
+        });
 
     },
 
@@ -282,6 +287,48 @@ let plek_single_event_main = {
             }
           });
           return;
+    },
+    toggle_follower() {
+        let event_id = jQuery('#event-container').data('event_id');
+
+        plek_main.remove_field_errors();
+
+        let button = jQuery('.plek-follow-event-btn');
+        plek_main.activate_loader_style(button);
+        var data = new FormData();
+        data.append('action', 'plek_event_actions');
+        data.append('do', 'toggle_watchlist');
+
+        data.append('event_id', event_id);
+
+        jQuery.ajax({
+            url: window.ajaxurl,
+            type: 'POST',
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function success(data) {
+                plek_main.deactivate_loader_style(button);
+                let text = plek_main.get_text_from_ajax_request(data, true);
+                let errors = plek_main.response_has_errors(data);
+                if (errors === true) {
+                    console.log("Contains Errors");
+                    text = plek_main.get_first_error_from_ajax_request(data);
+                } else {
+                    //Returns two success messages. [0] count, [1] Label
+                    let success = plek_main.get_ajax_success_object(data);
+                    text = success[1];
+                    jQuery('.plek-follow-event-btn .counter').text(success[0]);
+                }
+                jQuery('.plek-follow-event-btn .label').text(text);
+
+            },
+            error: function error(data) {
+                plek_main.deactivate_loader_style(button);
+                jQuery('.plek-follow-event-btn .label').text('Error loading data....');
+            }
+        });
     }
 
 

@@ -61,40 +61,15 @@ class PlekAjaxHandler
                 }
                 break;
             case 'toggle_watchlist':
-                //Check if user is on watchlist
                 //@todo Toggle watchlist like band follow. Rename to follow.
-                $event_id = (int) $this->get_ajax_data('event-id');
-                $plek_event->load_event($event_id);
-
-                if (empty($event_id)) {
-                    $this->set_error(__('Could not manage watchlist', 'pleklang'));
-                    echo $this->get_ajax_return();
-                    die();
-                }
-                $watchlist_action = ($plek_event->current_user_is_on_watchlist($event_id)) ? 'remove' : 'add';
-                //Remove or add to watchlist
-                switch ($watchlist_action) {
-                    case 'remove':
-                        $watchlist_result = $plek_event->remove_from_watchlist($event_id);
-                        if ($watchlist_result === true) {
-                            $wl_button = $plek_event->get_watchlist_button();
-                            $this->set_success($wl_button);
-                        } else {
-                            $this->set_error(__('Error while removing from watchlist', 'pleklang'));
-                        }
-                        break;
-                    case 'add':
-                        $watchlist_result = $plek_event->add_to_watchlist($event_id);
-                        if ($watchlist_result === true) {
-                            $wl_button = $plek_event->get_watchlist_button();
-                            $this->set_success($wl_button);
-                        } else {
-                            $this->set_error(__('Error while adding to watchlist', 'pleklang'));
-                        }
-                        break;
-                    default:
-                        $this->set_error(__('Could not manage watchlist', 'pleklang'));
-                        break;
+                $plek_event -> load_event_from_ajax();
+                $toggle = $plek_event->toggle_follower_from_ajax();
+                $counter = $plek_event->get_watchlist_count();
+                if ($toggle) {
+                    $this->set_success($counter);
+                    $this->set_success($toggle);
+                } else {
+                    $this->set_error(__('Error while changing the following status', 'pleklang'));
                 }
                 break;
             default:
@@ -114,6 +89,9 @@ class PlekAjaxHandler
     {
         $do = $this->get_ajax_do();
         switch ($do) {
+            case 'toggle_watchlist':
+                $this->set_error(__('You have to be logged in to perform this action', 'pleklang'));
+                break;
             default:
                 # code...
                 break;
@@ -173,7 +151,7 @@ class PlekAjaxHandler
             case 'follow_band_toggle':
                 $plek_band = new PlekBandHandler;
                 $toggle = $plek_band->toggle_follower_from_ajax();
-                $counter = $plek_band -> get_follower_count(false);
+                $counter = $plek_band->get_follower_count(false);
                 if ($toggle) {
                     $this->set_success($counter);
                     $this->set_success($toggle);

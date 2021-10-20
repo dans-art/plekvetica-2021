@@ -4,6 +4,8 @@ $event = $plek_event->get_event();
 $price_boxoffice = $plek_event->get_price_boxoffice();
 $price_vvk = $plek_event->get_price_vvk();
 $is_raffle = $plek_event->get_raffle();
+$watchlist_status = ($plek_event -> current_user_is_on_watchlist($plek_event -> get_ID()))?__('Unfollow','pleklang'):__('Follow','pleklang');
+$watchlist_count = ($plek_event -> get_watchlist_count());
 
 ?>
 <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Details', 'pleklang')); ?>
@@ -42,14 +44,5 @@ $is_raffle = $plek_event->get_raffle();
       </span>
     </dd>
   </dl>
-  <div class="band-follow-button"><?php PlekTemplateHandler::load_template('button-counter', 'components', 0, 'Follow....', '' ,'plek-follow-event-btn'); ?></div>
-  <?php if (PlekUserHandler::user_is_logged_in()) : ?>
-    <dt><?php echo __('Watchlist','pleklang'); ?></dt>
-    <dd class="event-watchlist">
-      <span>
-        <?php echo $plek_event->get_watchlist_button(); ?>
-      </span>
-    </dd>
-    </dl>
-  <?php endif; ?>
+  <div class="band-follow-button"><?php PlekTemplateHandler::load_template('button-counter', 'components', $watchlist_count, $watchlist_status, '' ,'plek-follow-event-btn'); ?></div>
 </div>
