@@ -650,3 +650,32 @@ margin: 4px 0px 0px 0;
   height: 2.8em;
   margin: 0;
 }
+
+.flex-table-view{
+  display: flex;
+  gap: 1em;
+  justify-content: space-between;
+  width: 100%;
+
+    div{
+      flex-basis: 15%;
+      text-align: center;
+    }
+    div.band-country{
+      flex-basis: 15%;
+      min-width: 1.5em;
+
+      img{
+        max-width: 1.5em;
+        width: 100%;
+      }
+    }
+    div.band-name{
+      flex-basis: 40%;
+      text-align: left;
+    }
+
+
+ 
+
+}

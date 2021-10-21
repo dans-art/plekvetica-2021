@@ -333,6 +333,17 @@ input[type="phone"] { color: #666666; background-color: #fafafa; border-color: #
 /* line 649, scss/elements.scss */
 #add-band-video { height: 2.8em; margin: 0; }
 
+/* line 654, scss/elements.scss */
+.flex-table-view { display: flex; gap: 1em; justify-content: space-between; width: 100%; }
+/* line 660, scss/elements.scss */
+.flex-table-view div { flex-basis: 15%; text-align: center; }
+/* line 664, scss/elements.scss */
+.flex-table-view div.band-country { flex-basis: 15%; min-width: 1.5em; }
+/* line 668, scss/elements.scss */
+.flex-table-view div.band-country img { max-width: 1.5em; width: 100%; }
+/* line 673, scss/elements.scss */
+.flex-table-view div.band-name { flex-basis: 40%; text-align: left; }
+
 /* line 4, scss/event-general.scss */
 .band img { vertical-align: sub; width: 19px; }
 

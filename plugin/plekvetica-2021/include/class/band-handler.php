@@ -1,5 +1,7 @@
 <?php
-
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 class PlekBandHandler
 {
 
@@ -22,13 +24,24 @@ class PlekBandHandler
      *
      * @var [Array]
      */
-    protected $band = null;
+    public $band = null;
     protected $band_genres = null; //All the Band Genres / Tribe Events Categories
 
     protected $bandpic_placeholder = PLEK_PLUGIN_DIR_URL . "images/placeholder/band_logo.jpg";
+    public $total_posts = array();
 
     public function __construct()
     {
+    }
+
+    /**
+     * Shortcode for the Bandpage
+     *
+     * @return void
+     */
+    public function plek_band_page_shortcode(){
+        PlekTemplateHandler::load_template('band-page', 'band');
+        return;
     }
 
     /**
@@ -260,9 +273,9 @@ class PlekBandHandler
      *
      * @return string Band flag as img tag
      */
-    public function get_flag_formated(string $country_code = '')
+    public function get_flag_formated($country_code = '')
     {
-        if (empty($country_code)) {
+        if (empty($country_code) OR $country_code === null) {
             $country_code = (isset($this->band['herkunft'])) ? $this->band['herkunft'] : '';
         }
         $country_code = strtolower($country_code);
@@ -413,6 +426,40 @@ class PlekBandHandler
         }
         $this->band_genres = $cats;
         return $cats;
+    }
+
+    /**
+     * Get all the Bands
+     *
+     * @param integer $limit
+     * @todo: use custom query? use offset for second page
+     * @return void
+     */
+    public function get_bands($limit = 10){
+        global $wpdb;
+        global $plek_event;
+        $page_obj = $plek_event->get_pages_object($limit);
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS 
+        t.term_id as id, t.name, t.slug, 
+        tt.count, 
+        herkunft.meta_value as herkunft, future_count.meta_value as future_count, band_follower.meta_value as band_follower
+        FROM {$wpdb->prefix}terms AS t
+        INNER JOIN {$wpdb->prefix}term_taxonomy AS tt
+        ON t.term_id = tt.term_id
+        LEFT JOIN {$wpdb->prefix}termmeta AS herkunft
+        ON t.term_id = herkunft.term_id AND herkunft.meta_key = 'herkunft'
+        LEFT JOIN {$wpdb->prefix}termmeta AS future_count
+        ON t.term_id = future_count.term_id AND future_count.meta_key = 'future_events_count'
+        LEFT JOIN {$wpdb->prefix}termmeta AS band_follower
+        ON t.term_id = band_follower.term_id AND band_follower.meta_key = 'band_follower'
+        WHERE tt.taxonomy IN ('post_tag')
+        ORDER BY t.name ASC
+        LIMIT %d OFFSET %d", $limit, $page_obj -> offset);
+
+        $bands_result = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        $this->total_posts['get_bands'] = $total_posts;
+        return $bands_result;
     }
 
     public function get_all_bands_json()

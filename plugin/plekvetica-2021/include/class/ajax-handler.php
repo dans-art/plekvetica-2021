@@ -72,6 +72,15 @@ class PlekAjaxHandler
                     $this->set_error(__('Error while changing the following status', 'pleklang'));
                 }
                 break;
+            case 'load_block_content':
+                global $plek_event_blocks;
+                $content = $plek_event_blocks -> get_block_from_ajax();
+                if ($content) {
+                    $this->set_success($content);
+                } else {
+                    $this->set_error(__('Error while loading the data', 'pleklang'));
+                }
+                break;
             default:
                 # code...
                 break;

@@ -1,53 +1,10 @@
 let plek_main = {
 
-
     construct(){
         jQuery(window).resize();
-
-        //If page is tribe events list view
-        //This function was to fix the Mobile Display bug. Can be fixed with CSS, so this is not longer needed.
-        //if(jQuery(".tribe-common.tribe-events.tribe-events-view.tribe-events-view--list").length === 1){
-            //this.tribe_list_fix();
-            //this.tribe_catch_ajax();
-        //}
-        
-    },
-    /**
-     * @todo: Delete this.
-     */
-    tribe_catch_ajax(){
-        //Runs after Ajax request. Fixes the list view after success.
-        (function() {
-            var origOpen = XMLHttpRequest.prototype.open;
-            XMLHttpRequest.prototype.open = function() {
-                console.log('request started!');
-                this.addEventListener('load', function() {
-                    setTimeout(() => {
-                        plek_main.tribe_list_fix();
-                    }, 10);
-                });
-                origOpen.apply(this, arguments);
-            };
-        })();
-    },
-    /**
-     * @todo: Delete this.
-     */
-    tribe_list_fix(){
-            var tribe_con = jQuery('div.tribe-common.tribe-events.tribe-events-view.tribe-events-view--list');
-            var winwidth = jQuery(window).width();
-            if(winwidth > 767 && tribe_con.hasClass('tribe-common--breakpoint-full') === false){
-                console.log("Is big view");
-                this.tribe_set_desktop_view();
-            }
-            return;
-    },
-
-    tribe_set_desktop_view(){
-        var tribe_con = jQuery('div.tribe-common.tribe-events.tribe-events-view.tribe-events-view--list');
-        tribe_con.addClass('tribe-common--breakpoint-medium');
-        tribe_con.addClass('tribe-common--breakpoint-full');
-        return true;
+        jQuery(document).ready(function(){
+            plek_main.add_event_listener();
+        });
     },
 
     activate_button_loader(element, text){
@@ -106,6 +63,13 @@ let plek_main = {
             return data;
         }
         
+    },
+
+    add_event_listener(){
+        jQuery('.block-container').on('click', '.ajax-loader-button' ,function(e){
+            e.preventDefault();
+            plek_main.load_block(this);
+        });
     },
 
     get_ajax_success_object(data){
@@ -200,7 +164,77 @@ let plek_main = {
 
     format_error_message(msg){
         return `<span class="plek-error plek-field-error">${msg}</span>`;
+    },
+
+    load_block(button){
+
+        let container = jQuery(button).closest('.block-container');
+        //this.default_values.original_document_title = document.title;
+
+        plek_main.remove_field_errors();
+
+        //let button = jQuery('.plek-follow-band-btn');
+        plek_main.activate_loader_style(button);
+        var send_data = new FormData();
+        send_data.append('action', 'plek_event_actions');
+        send_data.append('do', 'load_block_content');
+        send_data = plek_main.get_block_data(container, send_data, button);
+        
+
+        jQuery.ajax({
+            url: window.ajaxurl,
+            type: 'POST',
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: send_data,
+            success: function success(data) {
+                plek_main.deactivate_loader_style(button);
+                let text = plek_main.get_text_from_ajax_request(data, true);
+                let errors = plek_main.response_has_errors(data);
+                if (errors === true) {
+                    console.log("Contains Errors");
+                    text = plek_main.get_first_error_from_ajax_request(data);
+                } else {
+                    //Replace all the container content
+                    jQuery(container).replaceWith(text);
+                    //Set the new URL and Title
+                    let page = send_data.get('paged');
+                    if(page){
+                        window.history.pushState({},"Page", plek_main.url_add_page(page));
+                        //document.title = plek_main.default_values.original_document_title + ' - Page '+page;
+                    }
+                }
+                jQuery(button).text(text);
+
+            },
+            error: function error(data) {
+                plek_main.deactivate_loader_style(button);
+                jQuery(button).text('Error loading data....');
+            }
+        });
+    },
+
+    get_block_data(container, formdata, button){
+        for(const [id, val] of Object.entries(jQuery(container).data())){
+            formdata.append(id, val);
+        }
+        formdata.append('paged', jQuery(button).data('paged'));
+        return formdata;
+    },
+
+    url_add_page(page_number){
+        let base = window.location.pathname;
+        let new_url = '';
+        if(base.search('page/') > 0){
+            new_url = base.replace(/(page\/[0-9]+)/,'page/'+page_number);
+        }else{
+            new_url = base + '/page/' + page_number;
+            new_url = new_url.replace('//','/', base + '/page/' + page_number);
+        }
+        return new_url;
     }
+
 
     
     
