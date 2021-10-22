@@ -4,17 +4,35 @@ if (!defined('ABSPATH')) {
 }
 extract(get_defined_vars());
 $block_id = (isset($template_args[0])) ? $template_args[0] : 0; //Object
-$html_data = (isset($template_args[1])) ? $template_args[1] : ""; //Object
-$html = (isset($template_args[2])) ? $template_args[2] : __('No data received', 'pleklang'); //Object
+$html_data = (isset($template_args[1])) ? $template_args[1] : ""; //string, html data attributes for the block-container
+$html = (isset($template_args[2])) ? $template_args[2] : __('No data received', 'pleklang'); //string, html data
+
+$order_by = (!empty($_REQUEST['order'])) ? $_REQUEST['order'] : 'name';
+$direction = (!empty($_REQUEST['direction'])) ? $_REQUEST['direction'] : 'DESC';
+
+$link_base = get_permalink( );
+//$link_base = add_query_arg('direction', $direction, $link_base);
+
+$items = array('herkunft' => __('Origin', 'pleklang'),
+'name' => __('Bandname', 'pleklang'),
+'count' => __('Band Events', 'pleklang'),
+'future_count' => __('Future Events', 'pleklang'),
+'band_follower' => __('Band follower', 'pleklang'));
 
 ?>
 <div class='block-container block-<?php echo $block_id; ?>' <?php echo $html_data; ?>>
-    <article id="container_head" class="flex-table-view">
-        <div class='band-country'><?php echo __('Origin', 'pleklang'); ?></div>
-        <div class='band-name'><?php echo __('Bandname', 'pleklang'); ?></div>
-        <div class='band-event-count'><?php echo __('Band Events', 'pleklang'); ?></div>
-        <div class='band-future-event-count'><?php echo __('Future Events', 'pleklang'); ?></div>
-        <div class='band-follower'><?php echo __('Band follower', 'pleklang'); ?></div>
+    <article id="container-head" class="flex-table-view">
+        <?php foreach($items as $name => $display_name): ?>
+            <?php 
+                $selected = ($name === $order_by)?'sort-selected':'';
+                $direction_link= ($name === $order_by AND $direction === 'DESC')?'ASC':'DESC'; //Switch the sort if current element
+                $href = add_query_arg('order', $name, $link_base);    
+                $href = add_query_arg('direction', $direction_link, $href);   
+            ?>
+            <div class='band-<?php echo $name;?> <?php echo $selected; ?> <?php echo $direction; ?>'>
+                <a href="<?php echo $href; ?>"><?php echo $display_name; ?></a>
+            </div>
+        <?php endforeach; ?>
     </article>
     <?php echo $html; ?>
 </div>

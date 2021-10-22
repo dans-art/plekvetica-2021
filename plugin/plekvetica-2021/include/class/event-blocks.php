@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 
 /**
  * Manages the Template Blocks for the my_Plekvetica page.
- * @todo: Add Blocks for following Bands and Events
+ * @todo: creat setter function type, dir and container
  */
 class PlekEventBlocks extends PlekEvents
 {
@@ -18,6 +18,26 @@ class PlekEventBlocks extends PlekEvents
     protected $add_current_date_separator = true;
     protected $block_total_posts = null; //Number of posts last fetched
 
+    /**
+     * Set the current template to use
+     *
+     * @param string $file
+     * @param string $dir
+     * @param string $container
+     * @return void
+     */
+    public function set_template(string $file = "", string $dir = "", string $container = ""){
+        if(!empty($file)){
+            $this -> set_display_type($file);
+        }
+        if(!empty($dir)){
+            $this -> set_template_dir($dir);
+        }
+        if(!empty($container)){
+            $this -> set_template_container($container);
+        }
+        return;
+    }
     /**
      * Sets the display type, aka. Name of the template to use.
      * You can set your custom template in the template/event/ 
@@ -97,7 +117,7 @@ class PlekEventBlocks extends PlekEvents
         $today = date('Y-m-d 00:00:00');
         $today_ms = strtotime($today);
         $next_week = date('Y-m-d 23:59:59', strtotime('+7 days', $today_ms));
-        $ret = array('data' => '', 'error' => false);
+        $ret = array('data' => '', 'error' => false, 'post_type' => 'events');
         $limit = $this->number_of_posts;
 
         switch ($block_id) {
@@ -137,23 +157,24 @@ class PlekEventBlocks extends PlekEvents
                 break;
 
             case 'my_band_follows':
-                $band_id = (isset($data['band_id'])) ? $data['band_id'] : 0;
-                //$ret['data'] =  $this->get_events_of_band($band_id, '', '', $limit);
-                //$this -> block_total_posts = (isset($this -> total_posts['get_band_events']))?$this -> total_posts['get_band_events']:0;
+                $band_handler = new PlekBandHandler;
+                $ret['data'] =  $band_handler->get_all_bands_followed_by_user(null, $limit);
+                $this -> block_total_posts = (isset($band_handler -> total_posts['get_followed_bands']))?$band_handler -> total_posts['get_followed_bands']:0;
                 break;
 
             case 'my_event_watchlist':
+                $ret['template'] = 'event-item-watchlist';
                 //$band_id = (isset($data['band_id']))?$data['band_id']:0;
-                //$ret['data'] =  $this->get_events_of_band($band_id, '', '', $limit);
-                //$this -> block_total_posts = (isset($this -> total_posts['get_band_events']))?$this -> total_posts['get_band_events']:0;
+                $ret['data'] =  $this->plek_get_all_watchlisted_events_by_user( null, true, $limit);
+                $this -> block_total_posts = (isset($this -> total_posts['get_user_watchlist_events']))?$this -> total_posts['get_user_watchlist_events']:0;
                 break;
 
             case 'bands':
                 $band_handler = new PlekBandHandler;
-                $limit = 13;
-                $ret['data'] = $band_handler->get_bands($limit);
+                $ret['data'] = $band_handler->get_bands($this -> number_of_posts);
                 $ret['template'] = '';
                 $ret['template_dir'] = '';
+                $ret['post_type'] = 'bands';
                 $this->block_total_posts = (isset($band_handler->total_posts['get_bands'])) ? $band_handler->total_posts['get_bands'] : 0;
                 break;
 
@@ -186,6 +207,7 @@ class PlekEventBlocks extends PlekEvents
         $total_posts = $this->block_total_posts;
         $this->block_total_posts = null; //Reset the total posts
         $last_events_date = '';
+        $posts_type = (!empty($load['post_type']))?$load['post_type']:'events';
         if ($load['error'] !== false) {
             return $load['data'];
         } else {
@@ -200,10 +222,8 @@ class PlekEventBlocks extends PlekEvents
                 }
                 $html .= PlekTemplateHandler::load_template_to_var($this->display_type, $this->template_dir, $content_data, $index);
             }
-            $html .= PlekTemplateHandler::load_template_to_var('pagination-buttons', 'components', $total_posts, $this->number_of_posts, 'ajax-loader-button');
-            if ($this->display_more_events_button($total_posts, $this->number_of_posts)) {
-                //$html .= $this -> get_pages_count_formated($total_posts, $this -> number_of_posts);
-            }
+            $html .= PlekTemplateHandler::load_template_to_var('pagination-buttons', 'components', $total_posts, $this->number_of_posts, 'ajax-loader-button','_self', $posts_type);
+
             $html_data = $this->get_block_container_html_data($data, $block_id, $page_obj->page, $this->number_of_posts);
             return PlekTemplateHandler::load_template_to_var($this -> template_container, $this->template_dir, $block_id, $html_data, $html);
              
@@ -211,6 +231,16 @@ class PlekEventBlocks extends PlekEvents
         return false;
     }
 
+    /**
+     * Returns the HTML data attributes
+     * e.g. data-page-id=2 data-block-id=events ...
+     *
+     * @param array $data
+     * @param string $block_id
+     * @param int|string $current_page
+     * @param int|string $posts_per_page
+     * @return string The HTML data attributes as a string
+     */
     public function get_block_container_html_data($data, $block_id, $current_page, $posts_per_page)
     {
         $page_id = get_the_ID();

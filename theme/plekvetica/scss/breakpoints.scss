@@ -332,6 +332,56 @@
         }
       }
 
+    /* Band List*/
+    #container-head{
+        flex-direction: column;
+        gap: 0.5em;
+       
+      }
+      .block-container .flex-table-view {
+        flex-wrap: wrap;
+        gap: 2%;
+        margin-bottom: 1em;
+        justify-content: flex-end;
+
+        div{
+          flex-basis: 100%;
+        }
+        .band-country{
+            flex-basis: 19%;
+        }
+        .band-name{
+            flex-basis: 79%;
+        }
+        .band-event-count,
+        .band-future-event-count,
+        .band-follower{
+            padding-right: 2em;
+            text-align:right;
+            
+            &::after{
+                font-family: "FontAwesome";
+                margin-left: 0.5em;
+                position: absolute;
+                margin-top: -0.1em;
+                color: $color-gray-light-two;
+                min-height: 1em;
+            }
+        }
+        .band-event-count{
+            margin-left: 10%;
+        }
+        .band-event-count::after{
+            content: '\f073';
+        }
+        .band-future-event-count::after{
+            content: '\f271';
+        }
+        .band-follower::after{
+            content: '\f0c0';
+        }
+    }
+
 }
 
 @media (max-width: 400px){

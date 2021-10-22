@@ -1,0 +1,69 @@
+//Band List Style
+
+.block-container{
+
+  
+  .plek-band-item-compact.flex-table-view{
+    margin: 0.5em 0;
+  }
+  
+  .plek-band-item-compact .band-name{
+    display: flex;
+    flex-direction: column;
+    
+    a{
+      color: $text-color;
+      font-weight: bold;
+    }
+    .band-genre{
+      font-size: 0.8em;
+      color: $color-gray-light-two;
+    }
+  } 
+  
+  
+}
+
+/* Band List*/
+#container-head{
+  div{
+    color: $text-color;
+    background-color: $color-gray-light;
+    padding: 0.3em 0;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    
+    &:hover{
+      color: $text-color;
+      background-color: $color-gray-light-two;
+    }
+
+    a{
+      color: $text-color;
+      font-weight: bold;
+      text-align: center;
+      padding: 0 1em;
+      width: 100%;
+      display: inline-block; 
+    }
+  }
+
+  div.sort-selected.ASC::before,
+  div.sort-selected.DESC::before{
+    font-family: "FontAwesome";
+    position: absolute;
+    margin-left: 0.5em;
+    font-size: 1.5em;
+  }
+
+  div.sort-selected.ASC::before{
+    content: '\f0dd';
+    margin-top: -0.46em;
+  }
+  div.sort-selected.DESC::before{
+    content: '\f0de';
+    margin-top: 0.3em;
+  }
+
+}

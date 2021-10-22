@@ -66,7 +66,7 @@ let plek_main = {
     },
 
     add_event_listener(){
-        jQuery('.block-container').on('click', '.ajax-loader-button' ,function(e){
+        jQuery('#main').on('click', '.ajax-loader-button' ,function(e){
             e.preventDefault();
             plek_main.load_block(this);
         });
@@ -179,6 +179,7 @@ let plek_main = {
         send_data.append('action', 'plek_event_actions');
         send_data.append('do', 'load_block_content');
         send_data = plek_main.get_block_data(container, send_data, button);
+        send_data = plek_main.get_url_query_data(send_data);
         
 
         jQuery.ajax({
@@ -217,9 +218,22 @@ let plek_main = {
 
     get_block_data(container, formdata, button){
         for(const [id, val] of Object.entries(jQuery(container).data())){
-            formdata.append(id, val);
+            if(id !== 'paged'){
+                formdata.append(id, val);
+            }
         }
         formdata.append('paged', jQuery(button).data('paged'));
+        return formdata;
+    },
+    get_url_query_data(formdata){
+        let items = ['order','direction'];
+        let url = new URLSearchParams(window.location.search);
+        jQuery(items).each(function(id, name){
+            let val = url.get(name);
+            if(val !== null && val.length > 0){
+                formdata.append(name, val)
+            }
+        });
         return formdata;
     },
 

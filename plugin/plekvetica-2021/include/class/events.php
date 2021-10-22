@@ -178,13 +178,14 @@ class PlekEvents extends PlekEventHandler
      *
      * @return bool
      */
-    public function load_event_from_ajax(){
+    public function load_event_from_ajax()
+    {
         global $plek_ajax_handler;
         $event_id = (int) $plek_ajax_handler->get_ajax_data('event_id');
-        if($event_id === 0){
+        if ($event_id === 0) {
             return false;
         }
-        $this -> load_event($event_id);
+        $this->load_event($event_id);
         return;
     }
 
@@ -387,7 +388,7 @@ class PlekEvents extends PlekEventHandler
         return $events;
     }
 
-    public function get_events_of_band($band_id, $from = '1970-01-01 00:00:00' , $to = '9999-01-01 00:00:00', $limit = 0)
+    public function get_events_of_band($band_id, $from = '1970-01-01 00:00:00', $to = '9999-01-01 00:00:00', $limit = 0)
     {
         global $wpdb;
         $band_id = (int) $band_id;
@@ -822,21 +823,26 @@ class PlekEvents extends PlekEventHandler
      */
     public function get_pages_object($posts_per_page = null, $total_posts = 0)
     {
-        $page_obj = new stdClass();
-        if(!is_int($posts_per_page)){
-            $page_obj->posts_per_page = (int) tribe_get_option('postsPerPage');
-        }else{
-            $page_obj->posts_per_page = $posts_per_page;
+        $obj = new stdClass();
+        if (!is_int($posts_per_page)) {
+            $obj->posts_per_page = (int) tribe_get_option('postsPerPage');
+        } else {
+            $obj->posts_per_page = $posts_per_page;
         }
-        $page_obj->page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
-        $page_obj->offset =  ($page_obj->page > 1) ? ($page_obj->page - 1) * $page_obj->posts_per_page : 0;
-        $page_obj->total_pages = ($total_posts > 0)?ceil(($total_posts / $posts_per_page)):0;
-        return $page_obj;
+        $obj->page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
+        $obj->offset =  (int) ($obj->page > 1) ? ($obj->page - 1) * $obj->posts_per_page : 0;
+        $obj->total_pages = (int) ($total_posts > 0) ? ceil(($total_posts / $posts_per_page)) : 0;
+        $obj->total_posts = (int) $total_posts;
+        $obj->to_posts = (int) (($obj->offset + $obj->posts_per_page) <= $total_posts) ? ($obj->offset + $obj->posts_per_page) : $total_posts;
+        $obj->from_posts = (int) $obj -> offset + 1;
+
+        return $obj;
     }
 
     /**
      * Gets the formated pages and post count.
      * Like: Show Events 1 to 10 from 200
+     * @todo: add this to the template files. Add the to_posts to the pages_obj
      *
      * @param integer $total_posts - Number of total posts.
      * @param integer/null $number_of_posts - Number of posts.
@@ -895,6 +901,55 @@ class PlekEvents extends PlekEventHandler
             return __('Keine Verlosungen gefunden', 'pleklang');
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $posts, 'raffle_events') . $load_more;
+    }
+    
+    /**
+     * Gets all the events, the given user or the current user has on his watchlist
+     *
+     * @param int|null $user_id
+     * @param boolean $inc_past
+     * @param integer $limit
+     * @return object Fetched posts
+     */
+    public function plek_get_all_watchlisted_events_by_user($user_id = null, $inc_past = false, $limit = 10)
+    {
+        global $wpdb;
+        $page_obj = $this->get_pages_object($limit);
+        if(!$user_id){
+            $user_id = get_current_user_id();
+        }
+        $wild = '%';
+        $like = $wild . $wpdb->esc_like('"'.$user_id.'"') . $wild;
+
+        $from = ($inc_past)?'1970-01-01 00:00:00':date('Y-m-d M:i:s');
+        $to =  '9999-01-01 00:00:00';
+
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS meta.meta_value as watchlist, posts.ID, posts.post_title , startdate.meta_value as startdate
+            FROM `{$wpdb->prefix}postmeta` as meta
+            LEFT JOIN {$wpdb->prefix}posts as posts
+            ON posts.ID = meta.post_id AND posts.post_type = 'tribe_events'
+            LEFT JOIN {$wpdb->prefix}postmeta as startdate
+            ON posts.ID = startdate.post_id AND startdate.meta_key = '_EventStartDate'
+            
+            LEFT JOIN {$wpdb->prefix}postmeta as postponed
+            ON posts.ID = postponed.post_id
+            AND postponed.meta_key = 'postponed_event'
+            
+            WHERE meta.`meta_key` LIKE 'event_watchlist'
+            AND meta.`meta_value` LIKE '%s'
+            AND posts.ID IS NOT NULL
+            AND startdate.meta_value > '%s'
+            AND startdate.meta_value < '%s'
+            AND posts.post_status IN ('publish')
+
+            AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
+            
+            ORDER BY startdate.meta_value DESC
+            LIMIT %d OFFSET %d", $like, $from, $to, $limit, $page_obj->offset);
+        $posts = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        $this->total_posts['get_user_watchlist_events'] = $total_posts;
+        return $posts;
     }
 
     /**
@@ -975,10 +1030,11 @@ class PlekEvents extends PlekEventHandler
      * @param string $date_next - Next date
      * @return string Separator or empty string
      */
-    public function show_date_separator(string $date_prev, string $date_next){
+    public function show_date_separator(string $date_prev, string $date_next)
+    {
         $current_date = strtotime(date('Y-m-d H:m:s'));
-        if(!empty($date_prev) AND $current_date < strtotime($date_prev) AND $current_date > strtotime($date_next)){
-            return "<div class='plek-event-data-separator'>".__('Today','pleklang')."</div>";
+        if (!empty($date_prev) and $current_date < strtotime($date_prev) and $current_date > strtotime($date_next)) {
+            return "<div class='plek-event-data-separator'>" . __('Today', 'pleklang') . "</div>";
         }
         return "";
     }
@@ -988,22 +1044,23 @@ class PlekEvents extends PlekEventHandler
      *
      * @return bool true on success, false on error
      */
-    public function toggle_follower_from_ajax(){
+    public function toggle_follower_from_ajax()
+    {
         global $plek_ajax_handler;
         $event_id = (int) $plek_ajax_handler->get_ajax_data('event_id');
         $toggle = "add";
-        if($event_id === 0){
+        if ($event_id === 0) {
             return false;
         }
-        if($this->current_user_is_on_watchlist($event_id)){
+        if ($this->current_user_is_on_watchlist($event_id)) {
             //Remove user
-            if(!$this -> remove_from_watchlist($event_id)){
+            if (!$this->remove_from_watchlist($event_id)) {
                 return false;
             }
             $toggle = "remove";
-        }else{
+        } else {
             //Add user
-            if(!$this -> add_to_watchlist($event_id)){
+            if (!$this->add_to_watchlist($event_id)) {
                 return false;
             }
         }

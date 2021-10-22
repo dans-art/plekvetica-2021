@@ -338,11 +338,53 @@ class PlekBandHandler
      */
     public function format_band_array(array $genres)
     {
+        if(!is_array($genres)){
+            return array();
+        }
         $rarr = array();
         foreach ($genres as $garr) {
             $rarr[$garr['value']] = $garr['label'];
         }
         return $rarr;
+    }
+
+    /**
+     * Gets the nicename of a genre (slug)
+     *
+     * @param string $genre
+     * @return string|false Nicename on success, false if not found.
+     */
+    public function get_genre_nicename(string $genre){
+        $all_genres = $this->band_genres;
+        if (empty($all_genres)) {
+            $all_genres = $this -> get_all_genres();
+        }
+        foreach($all_genres as $item){
+            if(isset($item -> slug) AND $item -> slug === $genre){
+                return $item -> name;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Converts a whole array of genres to their nicenames
+     *
+     * @param array|string $genres String or array with genres. If string, $genres will be unserialized before
+     * @return array
+     */
+    public function convert_genre_to_nicename($genres){
+        $ret_arr = array();
+        if(!is_array($genres)){
+            $genres = unserialize($genres);
+        }
+        if(empty($genres)){
+            return array();
+        }
+        foreach($genres as $g){
+            $ret_arr[] = $this -> get_genre_nicename($g);
+        }
+        return $ret_arr;
     }
 
     /**
@@ -439,27 +481,110 @@ class PlekBandHandler
         global $wpdb;
         global $plek_event;
         $page_obj = $plek_event->get_pages_object($limit);
+
+
         $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS 
-        t.term_id as id, t.name, t.slug, 
-        tt.count, 
-        herkunft.meta_value as herkunft, future_count.meta_value as future_count, band_follower.meta_value as band_follower
+        t.term_id as id, t.name as name, t.slug, 
+        tt.count as count, 
+        herkunft.meta_value as herkunft, future_count.meta_value as future_count, 
+        band_genre.meta_value as genre, band_follower.meta_value as band_follower
         FROM {$wpdb->prefix}terms AS t
         INNER JOIN {$wpdb->prefix}term_taxonomy AS tt
         ON t.term_id = tt.term_id
         LEFT JOIN {$wpdb->prefix}termmeta AS herkunft
         ON t.term_id = herkunft.term_id AND herkunft.meta_key = 'herkunft'
+        LEFT JOIN {$wpdb->prefix}termmeta AS band_genre
+        ON t.term_id = band_genre.term_id AND band_genre.meta_key = 'band_genre'
         LEFT JOIN {$wpdb->prefix}termmeta AS future_count
         ON t.term_id = future_count.term_id AND future_count.meta_key = 'future_events_count'
         LEFT JOIN {$wpdb->prefix}termmeta AS band_follower
         ON t.term_id = band_follower.term_id AND band_follower.meta_key = 'band_follower'
         WHERE tt.taxonomy IN ('post_tag')
-        ORDER BY t.name ASC
+        ORDER BY ".$this -> get_band_order(). " " .$this -> get_band_sort_direction()."
         LIMIT %d OFFSET %d", $limit, $page_obj -> offset);
 
         $bands_result = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
         $this->total_posts['get_bands'] = $total_posts;
         return $bands_result;
+    }
+
+    /**
+     * Get all the Bands by followed user
+     *
+     * @param integer $limit
+     * @todo: use custom query? use offset for second page
+     * @return void
+     */
+    public function get_all_bands_followed_by_user($user_id = null, $limit = 10){
+        global $wpdb;
+        global $plek_event;
+        $page_obj = $plek_event->get_pages_object($limit);
+        if(!$user_id){
+            $user_id = get_current_user_id();
+        }
+
+        $wild = '%';
+        $like = $wild . $wpdb->esc_like('"'.$user_id.'"') . $wild;
+
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS 
+        t.term_id as id, t.name as name, t.slug, 
+        tt.count as count, 
+        herkunft.meta_value as herkunft, future_count.meta_value as future_count,
+        band_genre.meta_value as genre, band_follower.meta_value as band_follower
+        FROM {$wpdb->prefix}terms AS t
+        INNER JOIN {$wpdb->prefix}term_taxonomy AS tt
+        ON t.term_id = tt.term_id
+        LEFT JOIN {$wpdb->prefix}termmeta AS herkunft
+        ON t.term_id = herkunft.term_id AND herkunft.meta_key = 'herkunft'
+        LEFT JOIN {$wpdb->prefix}termmeta AS band_genre
+        ON t.term_id = band_genre.term_id AND band_genre.meta_key = 'band_genre'
+        LEFT JOIN {$wpdb->prefix}termmeta AS future_count
+        ON t.term_id = future_count.term_id AND future_count.meta_key = 'future_events_count'
+        LEFT JOIN {$wpdb->prefix}termmeta AS band_follower
+        ON t.term_id = band_follower.term_id AND band_follower.meta_key = 'band_follower'
+        WHERE tt.taxonomy IN ('post_tag')
+        AND band_follower.meta_value LIKE %s
+        ORDER BY name DESC
+        LIMIT %d OFFSET %d", $like, $limit, $page_obj -> offset);
+
+        $bands_result = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        $this->total_posts['get_followed_bands'] = $total_posts;
+        return $bands_result;
+    }
+
+    /**
+     * Gets the band order_by from the url query.
+     * Returns "name" if order is not found in the allowed types
+     *
+     * @return string ORDER_BY value
+     */
+    public function get_band_order(){
+        if(!empty($_REQUEST['order'])){
+            $order = $_REQUEST['order'];
+            $allowed_order = array('name','herkunft','count','future_count','band_follower');
+            if(array_search($order, $allowed_order) !== false){
+                return $order;
+            }
+        }
+        return "name";
+    }
+
+    /**
+     * Gets the band order_by from the url query.
+     * Returns "name" if sort is not found in the allowed types
+     *
+     * @return string ORDER_BY value
+     */
+    public function get_band_sort_direction(){
+        if(!empty($_REQUEST['direction'])){
+            $direction = strtoupper($_REQUEST['direction']);
+            if($direction === 'ASC' OR $direction === 'DESC'){
+                return $direction;
+            }
+        }
+        return "ASC";
     }
 
     public function get_all_bands_json()
