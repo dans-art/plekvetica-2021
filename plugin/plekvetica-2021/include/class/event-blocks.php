@@ -17,6 +17,7 @@ class PlekEventBlocks extends PlekEvents
     protected $number_of_posts = 10; //Number of posts to get
     protected $add_current_date_separator = true;
     protected $block_total_posts = null; //Number of posts last fetched
+    protected $original_paged = 0; //Original Paged, get stored after set the paged with set_block_paged()
 
     /**
      * Set the current template to use
@@ -204,16 +205,8 @@ class PlekEventBlocks extends PlekEvents
      */
     public function get_block(string $block_id, array $data = array())
     {
-        //Get Block_id from URL
-        $block_id_request = (isset($_REQUEST['block_id'])) ? $_REQUEST['block_id'] : null;
-        if ($block_id_request !== null and $block_id_request !== $block_id) {
-            //Reset the Paged if current block ist not the block from the url
-            set_query_var('paged', 1);
-        } else {
-            $paged = (isset($_REQUEST['page'])) ? $_REQUEST['page'] : 1;
-            set_query_var('paged', $paged);
-        }
 
+        $this -> set_block_paged($block_id);
         $page_obj = $this->get_pages_object($this->number_of_posts);
         $load = $this->load_block($block_id, $data);
         $total_posts = $this->block_total_posts;
@@ -238,8 +231,10 @@ class PlekEventBlocks extends PlekEvents
             $html .= PlekTemplateHandler::load_template_to_var('pagination-buttons', 'components', $total_posts, $this->number_of_posts, 'ajax-loader-button', $block_id, $posts_type);
 
             $html_data = $this->get_block_container_html_data($data, $block_id, $page_obj->page, $this->number_of_posts);
+            $this -> reset_paged();
             return PlekTemplateHandler::load_template_to_var($this->template_container, $this->template_dir, $block_id, $html_data, $html);
         }
+        $this -> reset_paged();
         return false;
     }
 
@@ -295,5 +290,39 @@ class PlekEventBlocks extends PlekEvents
 
         set_query_var('paged', $paged);
         return $this->get_block($block_id, $ajax_data);
+    }
+
+    /**
+     * Set the current Page.
+     * If the block_id is not like the given block_id, the paged will be reset to 1.
+     *
+     * @param string $block_id
+     * @return void
+     */
+    public function set_block_paged(string $block_id){
+        $this -> original_paged = get_query_var('paged');
+        //Get Block_id from URL
+        $block_id_request = (isset($_REQUEST['block_id'])) ? $_REQUEST['block_id'] : null;
+        if ($block_id_request !== null and $block_id_request !== $block_id) {
+            //Reset the Paged if current block ist not the block from the url
+            set_query_var('paged', 1);
+        } else {
+            if(!isset($_REQUEST['paged'])){
+                $paged = (isset($_REQUEST['page'])) ? $_REQUEST['page'] : 0;
+            }else{
+                $paged = (isset($_REQUEST['paged'])) ? $_REQUEST['paged'] : 0;
+            }
+            set_query_var('paged', $paged);
+        }
+    }
+
+    /**
+     * Reset the original paged. This function should always be used, after using set_block_paged()
+     *
+     * @return void
+     */
+    public function reset_paged(){
+        set_query_var('paged', $this -> original_paged);
+        return;
     }
 }

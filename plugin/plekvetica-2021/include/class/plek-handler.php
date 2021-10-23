@@ -186,4 +186,19 @@ class PlekHandler
         load_textdomain('pleklang', PLEK_PATH . 'languages/plekvetica-2021-' . determine_locale() . '.mo');
     }
 
+    /**
+     * Checks if the Site is running on the Dev System or not
+     *
+     * @return boolean
+     */
+    public function is_dev_server()
+	{
+		$url = get_site_url();
+		$pos = strpos($url, "plekvetica.dansdev");
+		if ($pos <= 8 and $pos > 2) {
+			return true;
+		}
+		return false;
+	}
+
 }

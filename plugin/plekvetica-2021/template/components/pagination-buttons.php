@@ -75,7 +75,7 @@ if ($page_obj->total_pages === 0) {
     </span>
     <span class="pagination-next">
         <?php if ($plek_event->display_more_events_button($total_posts, $posts_per_page)) : ?>
-            <a class="plek-button pagination-next <?php echo $class; ?>" data-paged="<?php echo $next_paged; ?>" data-block_id="<?php echo $block_id; ?>" <?php if (!empty($id)); ?> href="<?php echo $href_next; ?>"><?php echo __('Next', 'pleklang'); ?></a>
+        <a class="plek-button pagination-next <?php echo $class; ?>" data-paged="<?php echo $next_paged; ?>" data-block_id="<?php echo $block_id; ?>" <?php if (!empty($id)); ?> href="<?php echo $href_next; ?>"><?php echo __('Next', 'pleklang'); ?></a>
         <?php endif; ?>
     </span>
 </div>

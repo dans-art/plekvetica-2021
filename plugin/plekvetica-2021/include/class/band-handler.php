@@ -914,7 +914,7 @@ class PlekBandHandler
      */
     public function bandpage_pagination_hack($query)
     {
-        if (!is_main_query() or !is_tag())
+        if (!$query->is_main_query() or !is_tag())
             return $query;
 
         $query->set('posts_per_page', 1); //Hack to prevent 404 Page shown on Tag page > 1

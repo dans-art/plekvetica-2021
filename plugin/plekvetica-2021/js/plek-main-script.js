@@ -66,7 +66,7 @@ let plek_main = {
     },
 
     add_event_listener(){
-        jQuery('#main').on('click', '.ajax-loader-button' ,function(e){
+        jQuery('#page').on('click', '.ajax-loader-button' ,function(e){
             e.preventDefault();
             plek_main.load_block(this);
         });
@@ -166,6 +166,11 @@ let plek_main = {
         return `<span class="plek-error plek-field-error">${msg}</span>`;
     },
 
+    /**
+     * Gets the block content with a ajax request
+     * @todo: Add Function to autoload a block content.
+     * @param {object} button 
+     */
     load_block(button){
 
         let container = jQuery(button).closest('.block-container');
@@ -205,6 +210,7 @@ let plek_main = {
                     if(page){
                         window.history.pushState({},"Page", plek_main.url_add_page(page, block_id));
                         //document.title = plek_main.default_values.original_document_title + ' - Page '+page;
+                        plek_main.scroll_to_block(block_id);
                     }
                 }
                 jQuery(button).text(text);
@@ -217,6 +223,13 @@ let plek_main = {
         });
     },
 
+    /**
+     * Gets the block data from the container out of the html-data attributes.
+     * @param {object} container 
+     * @param {object} formdata 
+     * @param {object} button 
+     * @returns 
+     */
     get_block_data(container, formdata, button){
         for(const [id, val] of Object.entries(jQuery(container).data())){
             if(id !== 'paged'){
@@ -226,8 +239,14 @@ let plek_main = {
         formdata.append('paged', jQuery(button).data('paged'));
         return formdata;
     },
+
+    /**
+     * Gets the parameters out of the url.
+     * @param {object} formdata 
+     * @returns 
+     */
     get_url_query_data(formdata){
-        let items = ['order','direction','block_id'];
+        let items = ['order','direction'];
         let url = new URLSearchParams(window.location.search);
         jQuery(items).each(function(id, name){
             let val = url.get(name);
@@ -238,6 +257,12 @@ let plek_main = {
         return formdata;
     },
 
+    /**
+     * Adds the page and block id to the current url and returns the url.
+     * @param {int} page_number 
+     * @param {string} block_id 
+     * @returns The current url with page and block_id parameters
+     */
     url_add_page(page_number, block_id){
         let base = window.location.pathname;
         let new_url = '';
@@ -253,8 +278,22 @@ let plek_main = {
             new_url = new_url + '?block_id=' + block_id;
         }
         return new_url;
-    }
+    },
 
+    /**
+     * Scroll to the top of the reloaded current block.
+     * @param {string} block_id 
+     */
+    scroll_to_block(block_id){
+        try{
+            let position = jQuery('.block-'+block_id).offset().top;
+            jQuery('html').animate({
+                scrollTop: position - 110
+            }, 800);
+        }catch(e) {
+            console.log("Block: "+block_id+" not found in container");;
+        }
+    }
 
     
     

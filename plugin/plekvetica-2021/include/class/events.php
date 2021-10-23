@@ -829,6 +829,9 @@ class PlekEvents extends PlekEventHandler
         } else {
             $obj->posts_per_page = $posts_per_page;
         }
+        if($obj->posts_per_page === 0){
+            $obj->posts_per_page = 10; //Should not be 0, otherwise no posts will shown.
+        }
         $obj->page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
         $obj->offset =  (int) ($obj->page > 1) ? ($obj->page - 1) * $obj->posts_per_page : 0;
         $obj->total_pages = (int) ($total_posts > 0) ? ceil(($total_posts / $posts_per_page)) : 0;
@@ -944,7 +947,7 @@ class PlekEvents extends PlekEventHandler
 
             AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
             
-            ORDER BY startdate.meta_value DESC
+            ORDER BY startdate.meta_value ASC
             LIMIT %d OFFSET %d", $like, $from, $to, $limit, $page_obj->offset);
         $posts = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");

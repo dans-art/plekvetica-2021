@@ -24,7 +24,7 @@ $band_id_array = explode(',', $band_ids);
             ?>
         <dd>
             <a href='<?php echo $band_object->get_band_link();?>'><?php echo $band_object->get_flag_formated(); ?><span><?php echo $band_object->get_name(); ?></span></a>
-            <a href='<?php echo $band_object->get_band_link();?>?do=edit_band'>(<?php echo __('Bearbeiten','pleklang'); ?>)</a>
+            <a href='<?php echo $band_object->get_band_link();?>?do=edit_band'><i class="far fa-edit"></i></a>
         </dd>
     <?php endforeach; ?>
 </dl>

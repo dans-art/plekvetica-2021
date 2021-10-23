@@ -42,6 +42,11 @@ class PlekUserHandler
      */
     public function disable_admin()
     {
+        global $plek_handler;
+        //Do nothing if site is on dev system
+        if($plek_handler -> is_dev_server()){
+            return true;
+        }
         $user = wp_get_current_user();
         if (!current_user_can('administrator') and !current_user_can('plekmanager') and !self::user_is_in_team($user)) {
             //Disable the admin bar, if user is not admin or manager
