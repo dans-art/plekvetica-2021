@@ -8,16 +8,16 @@ $html_data = (isset($template_args[1])) ? $template_args[1] : ""; //string, html
 $html = (isset($template_args[2])) ? $template_args[2] : __('No data received', 'pleklang'); //string, html data
 
 $order_by = (!empty($_REQUEST['order'])) ? $_REQUEST['order'] : 'name';
-$direction = (!empty($_REQUEST['direction'])) ? $_REQUEST['direction'] : 'DESC';
+$direction = (!empty($_REQUEST['direction'])) ? $_REQUEST['direction'] : 'ASC';
 
 $link_base = get_permalink( );
 //$link_base = add_query_arg('direction', $direction, $link_base);
 
 $items = array('herkunft' => __('Origin', 'pleklang'),
 'name' => __('Bandname', 'pleklang'),
-'count' => __('Band Events', 'pleklang'),
+'count' => __('Events', 'pleklang'),
 'future_count' => __('Future Events', 'pleklang'),
-'band_follower' => __('Band follower', 'pleklang'));
+'band_follower' => __('Follower', 'pleklang'));
 
 ?>
 <div class='block-container block-<?php echo $block_id; ?>' <?php echo $html_data; ?>>

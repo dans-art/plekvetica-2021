@@ -20,12 +20,34 @@
       color: $color-gray-light-two;
     }
   } 
+    .band-event-count,
+    .band-future-event-count,
+    .band-follower{
+        text-align:right;
+        padding-right: 0.5em;
+        
+        &::after{
+            font-family: "FontAwesome";
+            margin-left: 0.5em;
+            color: $color-gray-light-two;
+      }
+    }
+    .band-event-count::after{
+        content: '\f073';
+    }
+    .band-future-event-count::after{
+        content: '\f271';
+    }
+    .band-follower::after{
+        content: '\f0c0';
+    }
   
-  
+    
 }
 
 /* Band List*/
 #container-head{
+
   div{
     color: $text-color;
     background-color: $color-gray-light;
@@ -43,9 +65,10 @@
       color: $text-color;
       font-weight: bold;
       text-align: center;
-      padding: 0 1em;
+      padding: 0 1.5em;
       width: 100%;
-      display: inline-block; 
+      display: inline-block;
+      font-size: 0.85em; 
     }
   }
 
@@ -53,17 +76,17 @@
   div.sort-selected.DESC::before{
     font-family: "FontAwesome";
     position: absolute;
-    margin-left: 0.5em;
+    margin-left: 0.2em;
     font-size: 1.5em;
   }
 
   div.sort-selected.ASC::before{
-    content: '\f0dd';
-    margin-top: -0.46em;
-  }
-  div.sort-selected.DESC::before{
     content: '\f0de';
     margin-top: 0.3em;
+  }
+  div.sort-selected.DESC::before{
+    content: '\f0dd';
+    margin-top: -0.46em;
   }
 
 }

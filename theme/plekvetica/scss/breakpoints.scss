@@ -336,6 +336,10 @@
     #container-head{
         flex-direction: column;
         gap: 0.5em;
+
+        .band-future_count{
+            display: none;
+        }
        
       }
       .block-container .flex-table-view {
@@ -352,6 +356,9 @@
         }
         .band-name{
             flex-basis: 79%;
+        }
+        .band-future-event-count{
+            display: none;
         }
         .band-event-count,
         .band-future-event-count,

@@ -201,8 +201,9 @@ let plek_main = {
                     jQuery(container).replaceWith(text);
                     //Set the new URL and Title
                     let page = send_data.get('paged');
+                    let block_id = send_data.get('block_id');
                     if(page){
-                        window.history.pushState({},"Page", plek_main.url_add_page(page));
+                        window.history.pushState({},"Page", plek_main.url_add_page(page, block_id));
                         //document.title = plek_main.default_values.original_document_title + ' - Page '+page;
                     }
                 }
@@ -226,7 +227,7 @@ let plek_main = {
         return formdata;
     },
     get_url_query_data(formdata){
-        let items = ['order','direction'];
+        let items = ['order','direction','block_id'];
         let url = new URLSearchParams(window.location.search);
         jQuery(items).each(function(id, name){
             let val = url.get(name);
@@ -237,7 +238,7 @@ let plek_main = {
         return formdata;
     },
 
-    url_add_page(page_number){
+    url_add_page(page_number, block_id){
         let base = window.location.pathname;
         let new_url = '';
         if(base.search('page/') > 0){
@@ -245,6 +246,11 @@ let plek_main = {
         }else{
             new_url = base + '/page/' + page_number;
             new_url = new_url.replace('//','/', base + '/page/' + page_number);
+        }
+        if(base.search('block_id=') > 0){
+            new_url = new_url.replace(/block_id=([A-z0-9_-]*)/,'block_id='+block_id);
+        }else{
+            new_url = new_url + '?block_id=' + block_id;
         }
         return new_url;
     }

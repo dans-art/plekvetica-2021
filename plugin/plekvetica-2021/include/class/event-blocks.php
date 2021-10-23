@@ -26,15 +26,16 @@ class PlekEventBlocks extends PlekEvents
      * @param string $container
      * @return void
      */
-    public function set_template(string $file = "", string $dir = "", string $container = ""){
-        if(!empty($file)){
-            $this -> set_display_type($file);
+    public function set_template(string $file = "", string $dir = "", string $container = "")
+    {
+        if (!empty($file)) {
+            $this->set_display_type($file);
         }
-        if(!empty($dir)){
-            $this -> set_template_dir($dir);
+        if (!empty($dir)) {
+            $this->set_template_dir($dir);
         }
-        if(!empty($container)){
-            $this -> set_template_container($container);
+        if (!empty($container)) {
+            $this->set_template_container($container);
         }
         return;
     }
@@ -159,19 +160,20 @@ class PlekEventBlocks extends PlekEvents
             case 'my_band_follows':
                 $band_handler = new PlekBandHandler;
                 $ret['data'] =  $band_handler->get_all_bands_followed_by_user(null, $limit);
-                $this -> block_total_posts = (isset($band_handler -> total_posts['get_followed_bands']))?$band_handler -> total_posts['get_followed_bands']:0;
+                $ret['post_type'] = 'bands';
+                $this->block_total_posts = (isset($band_handler->total_posts['get_followed_bands'])) ? $band_handler->total_posts['get_followed_bands'] : 0;
                 break;
 
             case 'my_event_watchlist':
                 $ret['template'] = 'event-item-watchlist';
                 //$band_id = (isset($data['band_id']))?$data['band_id']:0;
-                $ret['data'] =  $this->plek_get_all_watchlisted_events_by_user( null, true, $limit);
-                $this -> block_total_posts = (isset($this -> total_posts['get_user_watchlist_events']))?$this -> total_posts['get_user_watchlist_events']:0;
+                $ret['data'] =  $this->plek_get_all_watchlisted_events_by_user(null, true, $limit);
+                $this->block_total_posts = (isset($this->total_posts['get_user_watchlist_events'])) ? $this->total_posts['get_user_watchlist_events'] : 0;
                 break;
 
             case 'bands':
                 $band_handler = new PlekBandHandler;
-                $ret['data'] = $band_handler->get_bands($this -> number_of_posts);
+                $ret['data'] = $band_handler->get_bands($this->number_of_posts);
                 $ret['template'] = '';
                 $ret['template_dir'] = '';
                 $ret['post_type'] = 'bands';
@@ -202,12 +204,23 @@ class PlekEventBlocks extends PlekEvents
      */
     public function get_block(string $block_id, array $data = array())
     {
+        //Get Block_id from URL
+        $block_id_request = (isset($_REQUEST['block_id'])) ? $_REQUEST['block_id'] : null;
+        if ($block_id_request !== null and $block_id_request !== $block_id) {
+            //Reset the Paged if current block ist not the block from the url
+            set_query_var('paged', 1);
+        } else {
+            $paged = (isset($_REQUEST['page'])) ? $_REQUEST['page'] : 1;
+            set_query_var('paged', $paged);
+        }
+
         $page_obj = $this->get_pages_object($this->number_of_posts);
         $load = $this->load_block($block_id, $data);
         $total_posts = $this->block_total_posts;
         $this->block_total_posts = null; //Reset the total posts
         $last_events_date = '';
-        $posts_type = (!empty($load['post_type']))?$load['post_type']:'events';
+        $posts_type = (!empty($load['post_type'])) ? $load['post_type'] : 'events';
+
         if ($load['error'] !== false) {
             return $load['data'];
         } else {
@@ -222,11 +235,10 @@ class PlekEventBlocks extends PlekEvents
                 }
                 $html .= PlekTemplateHandler::load_template_to_var($this->display_type, $this->template_dir, $content_data, $index);
             }
-            $html .= PlekTemplateHandler::load_template_to_var('pagination-buttons', 'components', $total_posts, $this->number_of_posts, 'ajax-loader-button','_self', $posts_type);
+            $html .= PlekTemplateHandler::load_template_to_var('pagination-buttons', 'components', $total_posts, $this->number_of_posts, 'ajax-loader-button', $block_id, $posts_type);
 
             $html_data = $this->get_block_container_html_data($data, $block_id, $page_obj->page, $this->number_of_posts);
-            return PlekTemplateHandler::load_template_to_var($this -> template_container, $this->template_dir, $block_id, $html_data, $html);
-             
+            return PlekTemplateHandler::load_template_to_var($this->template_container, $this->template_dir, $block_id, $html_data, $html);
         }
         return false;
     }
@@ -248,10 +260,10 @@ class PlekEventBlocks extends PlekEvents
         if (!is_array($data)) {
             $data = array();
         }
-        $data['display_type'] = $this -> display_type;
-        $data['template_dir'] = $this -> template_dir;
-        $data['template_container'] = $this -> template_container;
-        $data['number_of_posts'] = $this -> number_of_posts;
+        $data['display_type'] = $this->display_type;
+        $data['template_dir'] = $this->template_dir;
+        $data['template_container'] = $this->template_container;
+        $data['number_of_posts'] = $this->number_of_posts;
 
         foreach ($data as $key => $value) {
             $html_data .= "data-{$key}='{$value}' ";
@@ -271,9 +283,9 @@ class PlekEventBlocks extends PlekEvents
         $posts_per_page = (int) $plek_ajax_handler->get_ajax_data('ppp');
         $paged = (int) $plek_ajax_handler->get_ajax_data('paged');
         $this->set_number_of_posts($posts_per_page);
-        $this -> set_display_type($plek_ajax_handler->get_ajax_data('display_type'));
-        $this -> set_template_dir($plek_ajax_handler->get_ajax_data('template_dir'));
-        $this -> set_template_container($plek_ajax_handler->get_ajax_data('template_container'));
+        $this->set_display_type($plek_ajax_handler->get_ajax_data('display_type'));
+        $this->set_template_dir($plek_ajax_handler->get_ajax_data('template_dir'));
+        $this->set_template_container($plek_ajax_handler->get_ajax_data('template_container'));
 
         $ajax_data = $plek_ajax_handler->get_all_ajax_data();
         //Set the correct Request URI

@@ -334,7 +334,7 @@ input[type="phone"] { color: #666666; background-color: #fafafa; border-color: #
 #add-band-video { height: 2.8em; margin: 0; }
 
 /* line 654, scss/elements.scss */
-.flex-table-view { display: flex; gap: 1em; justify-content: space-between; width: 100%; }
+.flex-table-view { display: flex; gap: 0.3em; justify-content: space-between; width: 100%; }
 /* line 660, scss/elements.scss */
 .flex-table-view div { flex-basis: 15%; text-align: center; }
 /* line 664, scss/elements.scss */
@@ -506,7 +506,7 @@ article.plek-event-item-compact { display: flex; justify-content: flex-start; ma
 /* line 345, scss/event-list.scss */
 article.plek-event-item-compact .event-icons, article.plek-event-item-compact .event-akkredi-status { width: 2em; font-size: 1.4em; }
 /* line 351, scss/event-list.scss */
-article.plek-event-item-compact .poster { margin-right: 1em; align-self: center; width: 150px; }
+article.plek-event-item-compact .poster { margin-right: 1em; align-self: center; width: 93px; }
 /* line 357, scss/event-list.scss */
 article.plek-event-item-compact .details { display: flex; flex-direction: column; justify-content: center; }
 /* line 362, scss/event-list.scss */
@@ -546,20 +546,30 @@ article.plek-event-item-compact .plek-message { font-size: 1em; padding: 0.4em; 
 .block-container .plek-band-item-compact .band-name a { color: white; font-weight: bold; }
 /* line 18, scss/band-list.scss */
 .block-container .plek-band-item-compact .band-name .band-genre { font-size: 0.8em; color: #ffffffb6; }
+/* line 23, scss/band-list.scss */
+.block-container .band-event-count, .block-container .band-future-event-count, .block-container .band-follower { text-align: right; padding-right: 0.5em; }
+/* line 29, scss/band-list.scss */
+.block-container .band-event-count::after, .block-container .band-future-event-count::after, .block-container .band-follower::after { font-family: "FontAwesome"; margin-left: 0.5em; color: #ffffffb6; }
+/* line 35, scss/band-list.scss */
+.block-container .band-event-count::after { content: '\f073'; }
+/* line 38, scss/band-list.scss */
+.block-container .band-future-event-count::after { content: '\f271'; }
+/* line 41, scss/band-list.scss */
+.block-container .band-follower::after { content: '\f0c0'; }
 
 /* Band List*/
-/* line 29, scss/band-list.scss */
+/* line 51, scss/band-list.scss */
 #container-head div { color: white; background-color: #595959; padding: 0.3em 0; text-align: left; display: flex; align-items: center; }
-/* line 37, scss/band-list.scss */
+/* line 59, scss/band-list.scss */
 #container-head div:hover { color: white; background-color: #ffffffb6; }
-/* line 42, scss/band-list.scss */
-#container-head div a { color: white; font-weight: bold; text-align: center; padding: 0 1em; width: 100%; display: inline-block; }
-/* line 52, scss/band-list.scss */
-#container-head div.sort-selected.ASC::before, #container-head div.sort-selected.DESC::before { font-family: "FontAwesome"; position: absolute; margin-left: 0.5em; font-size: 1.5em; }
-/* line 60, scss/band-list.scss */
-#container-head div.sort-selected.ASC::before { content: '\f0dd'; margin-top: -0.46em; }
 /* line 64, scss/band-list.scss */
-#container-head div.sort-selected.DESC::before { content: '\f0de'; margin-top: 0.3em; }
+#container-head div a { color: white; font-weight: bold; text-align: center; padding: 0 1.5em; width: 100%; display: inline-block; font-size: 0.85em; }
+/* line 75, scss/band-list.scss */
+#container-head div.sort-selected.ASC::before, #container-head div.sort-selected.DESC::before { font-family: "FontAwesome"; position: absolute; margin-left: 0.2em; font-size: 1.5em; }
+/* line 83, scss/band-list.scss */
+#container-head div.sort-selected.ASC::before { content: '\f0de'; margin-top: 0.3em; }
+/* line 87, scss/band-list.scss */
+#container-head div.sort-selected.DESC::before { content: '\f0dd'; margin-top: -0.46em; }
 
 /* line 5, scss/event-single.scss */
 .single-tribe_events #page { padding: 0 1em; }
@@ -1306,35 +1316,39 @@ div.plek-review-search form button, div.plek-review-search form input { width: 1
   /* Band List*/
   /* line 336, scss/breakpoints.scss */
   #container-head { flex-direction: column; gap: 0.5em; }
-  /* line 341, scss/breakpoints.scss */
+  /* line 340, scss/breakpoints.scss */
+  #container-head .band-future_count { display: none; }
+  /* line 345, scss/breakpoints.scss */
   .block-container .flex-table-view { flex-wrap: wrap; gap: 2%; margin-bottom: 1em; justify-content: flex-end; }
-  /* line 347, scss/breakpoints.scss */
+  /* line 351, scss/breakpoints.scss */
   .block-container .flex-table-view div { flex-basis: 100%; }
-  /* line 350, scss/breakpoints.scss */
+  /* line 354, scss/breakpoints.scss */
   .block-container .flex-table-view .band-country { flex-basis: 19%; }
-  /* line 353, scss/breakpoints.scss */
+  /* line 357, scss/breakpoints.scss */
   .block-container .flex-table-view .band-name { flex-basis: 79%; }
-  /* line 356, scss/breakpoints.scss */
+  /* line 360, scss/breakpoints.scss */
+  .block-container .flex-table-view .band-future-event-count { display: none; }
+  /* line 363, scss/breakpoints.scss */
   .block-container .flex-table-view .band-event-count, .block-container .flex-table-view .band-future-event-count, .block-container .flex-table-view .band-follower { padding-right: 2em; text-align: right; }
-  /* line 362, scss/breakpoints.scss */
+  /* line 369, scss/breakpoints.scss */
   .block-container .flex-table-view .band-event-count::after, .block-container .flex-table-view .band-future-event-count::after, .block-container .flex-table-view .band-follower::after { font-family: "FontAwesome"; margin-left: 0.5em; position: absolute; margin-top: -0.1em; color: #ffffffb6; min-height: 1em; }
-  /* line 371, scss/breakpoints.scss */
+  /* line 378, scss/breakpoints.scss */
   .block-container .flex-table-view .band-event-count { margin-left: 10%; }
-  /* line 374, scss/breakpoints.scss */
+  /* line 381, scss/breakpoints.scss */
   .block-container .flex-table-view .band-event-count::after { content: '\f073'; }
-  /* line 377, scss/breakpoints.scss */
+  /* line 384, scss/breakpoints.scss */
   .block-container .flex-table-view .band-future-event-count::after { content: '\f271'; }
-  /* line 380, scss/breakpoints.scss */
+  /* line 387, scss/breakpoints.scss */
   .block-container .flex-table-view .band-follower::after { content: '\f0c0'; } }
-@media (max-width: 400px) { /* line 388, scss/breakpoints.scss */
+@media (max-width: 400px) { /* line 395, scss/breakpoints.scss */
   .tribe-events-calendar-list__event, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event { flex-direction: column; }
-  /* line 392, scss/breakpoints.scss */
+  /* line 399, scss/breakpoints.scss */
   .tribe-events-calendar-list__event div, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event div { width: 100%; }
-  /* line 396, scss/breakpoints.scss */
+  /* line 403, scss/breakpoints.scss */
   .tribe-events-calendar-list__event img, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event img { width: 100%; }
-  /* line 401, scss/breakpoints.scss */
+  /* line 408, scss/breakpoints.scss */
   .banner-star-container { max-width: 100px; }
-  /* line 406, scss/breakpoints.scss */
+  /* line 413, scss/breakpoints.scss */
   .plek-posts-container .plek-post-item { flex-basis: 100%; } }
 /* line 49, scss/main-style.scss */
 #content.site-content { max-width: 1024px; margin: 0 auto; background-color: #232323; }

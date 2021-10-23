@@ -23,7 +23,7 @@ $my_events_block = $plek_event_blocks->get_block('my_events');
 $my_missing_reviews = $plek_event_blocks->get_block('my_missing_reviews');
 $my_watchlist = $plek_event_blocks->get_block('my_event_watchlist');
 
-$plek_event_blocks -> set_template('band-item-compact','band','block-band-container');
+$plek_event_blocks -> set_template('band-item-compact','band','block-band-container-nohead');
 $my_band_follows = $plek_event_blocks->get_block('my_band_follows');
 ?>
 
