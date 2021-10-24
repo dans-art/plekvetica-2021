@@ -56,7 +56,4 @@ $band_event_block = $plek_event_blocks->get_block('band_events', array('band_id'
         <?php echo $details; ?>
     </div>
 </div>
-<script type="text/javascript" defer='defer'>
-    var ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
-    var plek_plugin_dir_url = "<?php echo PLEK_PLUGIN_DIR_URL; ?>";
-</script>
+<?php PlekTemplateHandler::load_template('js-settings', 'components', null); ?>

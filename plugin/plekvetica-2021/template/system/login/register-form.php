@@ -38,7 +38,4 @@ if (is_user_logged_in()) {
 		<button type="submit" class="plek-button full-width" id="plek-submit" data-type="add-user-account"><?php echo __('Sign up', 'pleklang'); ?></button>
 	</fieldset>
 </form>
-<script type="text/javascript" defer='defer'>
-	var ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
-	var plek_plugin_dir_url = "<?php echo PLEK_PLUGIN_DIR_URL; ?>";
-</script>
+<?php PlekTemplateHandler::load_template('js-settings', 'components', null); ?>

@@ -26,13 +26,12 @@ $posts_type = (isset($template_args[4])) ? $template_args[4] : 'events'; //The T
 $is_band_page = ($posts_type === 'bands') ? true : false;
 
 $page_obj = $plek_event->get_pages_object($posts_per_page, $total_posts);
-$current_page = 1;
+$current_page = $page_obj -> page;
 
 $block_id_request = (isset($_REQUEST['block_id'])) ? $_REQUEST['block_id'] : null;
-if ($block_id_request !== null and $block_id_request === $block_id) {
+if ($block_id_request !== null and $block_id_request !== $block_id) {
     //Reset the Paged if current block ist not the block from the url
-    $paged = (isset($_REQUEST['page'])) ? $_REQUEST['page'] : 1;
-    $current_page = (int) $paged;
+    $current_page = (int) 1;
 } 
 
 $prev_paged = ($current_page - 1);
@@ -43,6 +42,7 @@ $direction = (!empty($_REQUEST['direction'])) ? $_REQUEST['direction'] : '';
 
 $href_prev = get_pagenum_link($prev_paged, false);
 $href_next = get_pagenum_link($next_paged, false);
+
 $href_prev = add_query_arg('block_id', $block_id, $href_prev);
 $href_next = add_query_arg('block_id', $block_id, $href_next);
 
@@ -79,7 +79,4 @@ if ($page_obj->total_pages === 0) {
         <?php endif; ?>
     </span>
 </div>
-<script type="text/javascript" defer='defer'>
-	var ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
-	var plek_plugin_dir_url = "<?php echo PLEK_PLUGIN_DIR_URL; ?>";
-</script>
+<?php PlekTemplateHandler::load_template('js-settings', 'components', null); ?>

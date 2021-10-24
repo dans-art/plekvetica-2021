@@ -62,8 +62,5 @@ if(PlekUserHandler::user_can_edit_band($band) !== true){
             <button id="band-form-submit" class="plek-button" type="submit"><?php echo __('Speichern', 'pleklang'); ?></button>
         </div>
     </form>
-    <script type="text/javascript" defer='defer'>
-        var ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
-        var plek_plugin_dir_url = "<?php echo PLEK_PLUGIN_DIR_URL; ?>";
-    </script>
+    <?php PlekTemplateHandler::load_template('js-settings', 'components', null); ?>
 </div>
