@@ -40,8 +40,7 @@ class PlekBandHandler
      * @return void
      */
     public function plek_band_page_shortcode(){
-        PlekTemplateHandler::load_template('band-page', 'band');
-        return;
+        return PlekTemplateHandler::load_template_to_var('band-page', 'band');
     }
 
     /**

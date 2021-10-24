@@ -231,16 +231,16 @@ class PlekAjaxHandler
                 }
 
                 //Save new user
-                $user_lock_key = $user_handler->save_new_user();
+                $new_user = $user_handler->save_new_user();
 
-                if (!$user_lock_key) {
+                if ($new_user === false) {
                     $this->set_error(__('Error while creating a new user', 'pleklang'));
                     echo $this->get_ajax_return();
                     die();
                 }
 
                 //Send Email
-                if (!$user_handler->send_email_to_new_user($user_lock_key)) {
+                if (!$user_handler->send_email_to_new_user($new_user)) {
                     $error_msg = sprintf(__('Account created but failed to send email. Please contact the IT Support: %s.', 'pleklang'), $plek_handler->get_plek_option('it_support_email'));
                     $this->set_error($error_msg);
                 }

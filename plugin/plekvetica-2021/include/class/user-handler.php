@@ -520,7 +520,7 @@ class PlekUserHandler
     /**
      * Saves a new user with the metadata to the database
      *
-     * @return bool true if no errors, false
+     * @return array|false Array with the username and user_lock_key if no errors, otherwise false
      */
     public function save_new_user()
     {
@@ -554,7 +554,7 @@ class PlekUserHandler
         //Save the Meta data
         update_user_meta($new_user, 'plek_user_lock_key', $user_lock_key);
 
-        return $user_lock_key;
+        return array('username' => $username, 'user_lock_key' => $user_lock_key);
     }
 
     /**
@@ -580,17 +580,16 @@ class PlekUserHandler
     /**
      * Sends a email to the new user to unlock the account
      *
-     * @param string $user_lock_key - The user_meta key for plek_user_lock_key
+     * @param array $new_user - The username and user_meta key for plek_user_lock_key
      * @return void
      */
-    public function send_email_to_new_user(string $user_lock_key)
+    public function send_email_to_new_user(array $new_user)
     {
         global $plek_ajax_handler;
         global $plek_ajax_errors;
         global $plek_handler;
         $request_data = $plek_ajax_handler->get_all_ajax_data();
 
-        $username = $this->get_unique_username($request_data['user-display-name']);
         $email = sanitize_email($request_data['user-email']);
 
         $subject = __('Only one step left for your account at plekvetica!', 'pleklang');
@@ -601,7 +600,7 @@ class PlekUserHandler
         $emailer->set_to($email);
         $emailer->set_subject($subject);
         $emailer->set_default();
-        $emailer->set_message_from_template("user/new-user", $subject, $username, $email, $user_lock_key, $my_plekvetica_url);
+        $emailer->set_message_from_template("user/new-user", $subject, $new_user['username'], $email, $new_user['user_lock_key'], $my_plekvetica_url);
         return $emailer->send_mail();
     }
 
