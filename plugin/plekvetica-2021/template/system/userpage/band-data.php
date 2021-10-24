@@ -3,7 +3,6 @@ extract(get_defined_vars());
 
 $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user object
 $band_ids = isset($user->meta['band_id']) ? $user->meta['band_id'] : null;
-
 if (!$band_ids OR empty($band_ids)) {
     return;
 }

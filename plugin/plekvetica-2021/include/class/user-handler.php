@@ -524,6 +524,7 @@ class PlekUserHandler
      */
     public function save_new_user()
     {
+        global $plek_handler;
         global $plek_ajax_handler;
         global $plek_ajax_errors;
         $request_data = $plek_ajax_handler->get_all_ajax_data();
@@ -550,9 +551,13 @@ class PlekUserHandler
             $plek_ajax_errors->add('save_user', sprintf(__('Failed to create new user (%s)', 'pleklang'), $error_message));
             return false;
         }
-
+        
         //Save the Meta data
-        update_user_meta($new_user, 'plek_user_lock_key', $user_lock_key);
+        if(!$plek_handler -> update_field('plek_user_lock_key',$user_lock_key,'user_'.$new_user)){
+            $plek_ajax_errors->add('save_user', __('Failed to write meta for new user', 'pleklang'));
+            return false;
+        }
+        //update_user_meta($new_user, 'plek_user_lock_key', $user_lock_key);
 
         return array('username' => $username, 'user_lock_key' => $user_lock_key);
     }

@@ -213,11 +213,17 @@ class PlekUserFormHandler extends PlekUserHandler
     {
         global $plek_ajax_handler;
         global $plek_ajax_errors;
+        global $plek_handler;
+
         $user = wp_get_current_user();
         $band_ids = $plek_ajax_handler->get_ajax_data('band-ids');
         $band_ids_imploded = implode(',', $band_ids);
 
-        update_user_meta($user->ID, 'band_id', $band_ids_imploded);
+        if(!$plek_handler -> update_field('band_id',$band_ids_imploded,'user_'.$user->ID)){
+            $plek_ajax_errors->add('save_user', __('Failed to write band meta', 'pleklang'));
+            return false;
+        }
+        //update_user_meta($user->ID, 'band_id', $band_ids_imploded);
 
         return true;
     }
