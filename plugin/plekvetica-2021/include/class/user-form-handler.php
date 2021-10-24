@@ -175,6 +175,7 @@ class PlekUserFormHandler extends PlekUserHandler
     {
         global $plek_ajax_handler;
         global $plek_ajax_errors;
+        global $plek_handler;
 
         $request_data = $plek_ajax_handler->get_all_ajax_data();
         $old_organi_id = PlekUserHandler::get_user_setting('organizer_id');
@@ -183,7 +184,10 @@ class PlekUserFormHandler extends PlekUserHandler
         //Save the organizer id
         if (empty($old_organi_id)) {
             $user = wp_get_current_user();
-            update_user_meta($user->ID, 'organizer_id', $organi_id);
+            if($plek_handler -> update_field('organizer_id',$organi_id,'user_'.$user->ID) === false){
+                $plek_ajax_errors->add('save_user', __('Failed to write organizer meta', 'pleklang'));
+                return false;
+            }
         } else {
             //Save the organizer data
             $organi_data = array();
@@ -219,11 +223,10 @@ class PlekUserFormHandler extends PlekUserHandler
         $band_ids = $plek_ajax_handler->get_ajax_data('band-ids');
         $band_ids_imploded = implode(',', $band_ids);
 
-        if(!$plek_handler -> update_field('band_id',$band_ids_imploded,'user_'.$user->ID)){
+        if($plek_handler -> update_field('band_id',$band_ids_imploded,'user_'.$user->ID) === false){
             $plek_ajax_errors->add('save_user', __('Failed to write band meta', 'pleklang'));
             return false;
         }
-        //update_user_meta($user->ID, 'band_id', $band_ids_imploded);
 
         return true;
     }

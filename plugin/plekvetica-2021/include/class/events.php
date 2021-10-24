@@ -4,6 +4,10 @@
  * Class to handle the Events
  * @todo: Use set_posts_per_page() to populate the pages_obj. Use the Page_object!
  */
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 class PlekEvents extends PlekEventHandler
 {
 

@@ -2,6 +2,10 @@
 /**
  * This class does everything related to files. Uploads, delete, transform ect.
  */
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 class PlekFileHandler
 {
 

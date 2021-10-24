@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 
 class PlekSearchHandler
 {
@@ -49,17 +52,7 @@ class PlekSearchHandler
     {
         $query = get_search_query();
         $search_result = $this->search_tribe_events($query);
-        $search_result_band = null;
-        /*if (!empty($this->found_bands)) {
-            $search_result_band = $this->search_events_with_bands_ids($this->found_bands);
-        }
-        $found_by_band = (is_array($search_result_band)) ? $search_result_band : [];
-        $found_events = (is_array($search_result)) ? $search_result : [];
 
-        $arr_merch = array_merge($found_by_band, $found_events);
-        $final_result = $arr_merch;
-        //$final_result = $this->remove_duplicates($arr_merch);
-        */
         if (!empty($search_result) and is_array($search_result)) {
             $this->found_events = $search_result;
             return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $search_result);
@@ -187,64 +180,6 @@ class PlekSearchHandler
         }
         return $db_result;
     }
-    /*public function search_tribe_events(string $query, bool $review = false)
-    {
-        global $wpdb;
-        global $plek_event;
-        $escaped_query = htmlspecialchars($query);
-        //Search in DB for the ID
-        $wild = '%';
-        $like = $wild . $wpdb->esc_like($escaped_query) . $wild;
-        $page_obj = $plek_event->get_pages_object();
-        if ($review) {
-            $db_query = $wpdb->prepare(
-                "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title
-                FROM {$wpdb->prefix}postmeta as review
-                LEFT JOIN
-                {$wpdb->prefix}posts as posts
-                ON posts.ID = review.post_id
-                LEFT JOIN {$wpdb->prefix}postmeta as postponed
-                ON (posts.ID = postponed.post_id AND postponed.meta_key = 'postponed_event')
-
-                WHERE review.meta_key = 'is_review'
-                AND review.meta_value = '1'
-                AND posts.post_type = 'tribe_events'
-                AND posts.post_status = 'publish'
-                AND (posts.post_title LIKE %s OR posts.post_content LIKE %s)
-                AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
-                LIMIT %d OFFSET %d",
-                $like,
-                $like,
-                $page_obj->posts_per_page,
-                $page_obj->offset
-            );
-        } else {
-            //Not Review
-            $db_query = $wpdb->prepare("SELECT posts.ID, posts.post_title
-                FROM {$wpdb->prefix}posts as posts
-                WHERE posts.post_type = 'tribe_events'
-                AND posts.post_status = 'publish'
-                AND (posts.post_title LIKE %s OR posts.post_content LIKE %s)", $like, $like);
-        }
-        //$query = $wpdb->prepare("SELECT `ID`, `post_title` FROM `{$wpdb->prefix}posts` WHERE `post_type` = 'tribe_events' AND (`post_title` LIKE %s OR `post_content` LIKE %s)", $like, $like);
-        $db_result = $wpdb->get_results($db_query);
-        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
-        
-        $tag_search = $this->search_events_with_bands($escaped_query);
-        
-        $this -> found_tribe_events = $db_result;
-        $plek_event->total_posts['search_tribe_events'] = (integer) $total_posts;
-
-        $final_result = $this -> merge_and_sort_array($db_result, $tag_search);
-        s($db_result);
-        s($tag_search);
-        //$final_result = $this->remove_duplicates($arr_merch);
-
-        if (count($final_result) === 0) {
-            return sprintf(__("Es wurden keine Events mit dem Suchwort &quot;%s&quot; gefunden.", "pleklang"), $query);
-        }
-        return $final_result;
-    }*/
 
     /** Get The ID's of events which have a band assigned 
      * Finds only reviews!

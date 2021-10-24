@@ -1,5 +1,7 @@
 <?php
-
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 class PlekHandler
 {
 
@@ -137,9 +139,9 @@ class PlekHandler
 	 * Updates a ACF and checks.
 	 * This function will give Null, if no change
 	 *
-	 * @param [type] $field
-	 * @param [type] $value
-	 * @param [type] $id
+	 * @param string $field - Field name / id
+	 * @param mixed $value - Value to save
+	 * @param string $id - User / Post id. Add "user_" to save user fields.
 	 * @return bool true on success, false on error, null if no changes
 	 */
 	public function update_field($field,$value,$id){

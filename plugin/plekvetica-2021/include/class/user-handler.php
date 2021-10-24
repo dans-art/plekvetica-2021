@@ -553,11 +553,10 @@ class PlekUserHandler
         }
         
         //Save the Meta data
-        if(!$plek_handler -> update_field('plek_user_lock_key',$user_lock_key,'user_'.$new_user)){
+        if($plek_handler -> update_field('plek_user_lock_key',$user_lock_key,'user_'.$new_user) === false){
             $plek_ajax_errors->add('save_user', __('Failed to write meta for new user', 'pleklang'));
             return false;
         }
-        //update_user_meta($new_user, 'plek_user_lock_key', $user_lock_key);
 
         return array('username' => $username, 'user_lock_key' => $user_lock_key);
     }
