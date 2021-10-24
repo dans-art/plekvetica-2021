@@ -347,7 +347,8 @@ class PlekEvents extends PlekEventHandler
         global $wpdb;
         $user_id = PlekUserHandler::get_user_id();
         $band_ids = PlekUserHandler::get_user_setting('band_id');
-        $band_id_arr = explode(',', $band_ids);
+        $band_id_arr = (empty($band_ids))?array('0'):explode(',', $band_ids);
+
 
         $page_obj = $this->get_pages_object($limit);
         $limit = $limit ?: $page_obj->posts_per_page;
