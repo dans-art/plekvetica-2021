@@ -4,6 +4,14 @@
  */
 let plek_lang = {
 
+    de_DE = {
+        'Photo rights - What are you allowed to do' : 'Fotorechte - Was du machen darfst',
+        'Share Page' : 'Seite teilen',
+        'Share Photo' : 'Foto teilen',
+        'Save Photo' : 'Speichere Foto',
+        'Copy link to Photo' : 'Kopiere link zum Foto',
+        'Close' : 'Schliessen',
+    },
 
     construct(){
         
@@ -15,6 +23,10 @@ let plek_lang = {
      * @returns string The translated string
      */
     trans(string){
+
+        if(typeof this.de_DE[string] !== 'undefined'){
+            return this.de_DE[string];
+        }
         return string;
     }
    

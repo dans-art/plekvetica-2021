@@ -10,8 +10,8 @@ $current_url = get_permalink($obj_id);
 $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user object
 ?>
 <div class="my-plek-header">
+    <h1><?php echo __('My Plekvetica', 'pleklang'); ?></h1>
     <div>
-        <h1><?php echo __('Mein Plekvetica', 'pleklang'); ?></h1>
         <h2><?php echo sprintf(__('Hallo %s', 'pleklang'), $user->display_name); ?></h2>
     </div>
     <div>

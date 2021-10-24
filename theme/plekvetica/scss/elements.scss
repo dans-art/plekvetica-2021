@@ -679,3 +679,25 @@ margin: 4px 0px 0px 0;
  
 
 }
+
+/*Context Menu*/
+.context-menu-icon-copy:before{
+	content: "\f0c5" !important;
+}
+.context-menu-icon-share:before{
+	content: "\f064" !important;
+}
+.context-menu-icon-save:before{
+	content: "\f0c7" !important;
+}
+.context-menu-icon-exit:before{
+	content: "\f00d" !important;
+}
+.context-menu-icon-info:before{
+	content: "\f05a" !important;
+}
+
+.context-menu-icon::before{
+	font-family: FontAwesome !important;
+	color: $color-red !important;
+}

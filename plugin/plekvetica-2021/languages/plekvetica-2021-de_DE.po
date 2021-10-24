@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Plekvetica - 2021\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2021-10-23 22:05+0000\n"
+"PO-Revision-Date: 2021-10-24 17:23+0000\n"
 "Last-Translator: Dänu\n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -38,7 +38,7 @@ msgstr "Neuer Benutzer wurde erstellt und entsperrt."
 msgid "Abbrechen"
 msgstr ""
 
-#: include/class/event-handler.php:738
+#: include/class/event-handler.php:741
 msgid "Abgelehnt"
 msgstr ""
 
@@ -59,7 +59,7 @@ msgstr "Konto aktiviert! Willkommen bei Plekvetica!"
 msgid "Account could not be activated."
 msgstr "Konto konnte nicht aktiviert werden."
 
-#: include/class/ajax-handler.php:244
+#: include/class/ajax-handler.php:247
 #, php-format
 msgid ""
 "Account created but failed to send email. Please contact the IT Support: %s."
@@ -71,7 +71,7 @@ msgstr ""
 msgid "Account is already unlocked."
 msgstr "Konto ist bereits entsperrt."
 
-#: include/class/user-form-handler.php:329
+#: include/class/user-form-handler.php:338
 msgid "Account type not selected"
 msgstr "Kein Konto-Typ gewählt"
 
@@ -83,10 +83,10 @@ msgstr ""
 msgid "Akkreditierungs Status"
 msgstr ""
 
-#: template/system/userpage/band-page.php:46
-#: template/system/userpage/community-page.php:47
-#: template/system/userpage/organizer-page.php:48
-#: template/system/userpage/team-page.php:63
+#: template/system/userpage/band-page.php:47
+#: template/system/userpage/community-page.php:43
+#: template/system/userpage/organizer-page.php:49
+#: template/system/userpage/team-page.php:64
 msgid "Alle deine Events"
 msgstr ""
 
@@ -94,7 +94,7 @@ msgstr ""
 msgid "Alpha Number"
 msgstr ""
 
-#: include/class/event-handler.php:735
+#: include/class/event-handler.php:738
 msgid "Angefragt"
 msgstr ""
 
@@ -114,7 +114,7 @@ msgstr ""
 msgid "Band Events"
 msgstr ""
 
-#: include/class/ajax-handler.php:157
+#: include/class/ajax-handler.php:160
 msgid "Band gespeichert"
 msgstr ""
 
@@ -126,7 +126,7 @@ msgstr "Bandeinstellungen"
 msgid "Band verwalten"
 msgstr ""
 
-#: include/class/band-handler.php:708
+#: include/class/band-handler.php:707
 #, php-format
 msgid "Bandlogo von %s"
 msgstr ""
@@ -158,10 +158,6 @@ msgstr "Bands zum verwalten"
 msgid "Basis Infos"
 msgstr "Basis Informationen"
 
-#: template/system/userpage/band-data.php:27
-msgid "Bearbeiten"
-msgstr ""
-
 #: template/posts/author-single.php:34
 #, php-format
 msgid "Beiträge von  %s"
@@ -174,7 +170,7 @@ msgstr ""
 msgid "Beschreibung"
 msgstr ""
 
-#: include/class/event-handler.php:731
+#: include/class/event-handler.php:734
 msgid "Bestätigt"
 msgstr ""
 
@@ -227,8 +223,8 @@ msgstr "deaktiviert, wird bereits verwaltet"
 msgid "Dein Plekvetica"
 msgstr ""
 
-#: template/system/userpage/band-page.php:28
-#: template/system/userpage/organizer-page.php:30
+#: template/system/userpage/band-page.php:29
+#: template/system/userpage/organizer-page.php:31
 msgid "Deine Daten"
 msgstr ""
 
@@ -236,10 +232,10 @@ msgstr ""
 msgid "Deine Einstellungen"
 msgstr ""
 
-#: template/system/userpage/band-page.php:20
-#: template/system/userpage/community-page.php:20
-#: template/system/userpage/organizer-page.php:22
-#: template/system/userpage/team-page.php:33
+#: template/system/userpage/band-page.php:21
+#: template/system/userpage/community-page.php:21
+#: template/system/userpage/organizer-page.php:23
+#: template/system/userpage/team-page.php:34
 msgid "Deine Woche"
 msgstr ""
 
@@ -251,17 +247,17 @@ msgstr "Beschreibung"
 msgid "Details"
 msgstr "Details"
 
-#: include/class/band-handler.php:288
+#: include/class/band-handler.php:287
 msgid "Diese Band hat keine Herkunfts informationen."
 msgstr ""
 
-#: include/class/event-handler.php:808
+#: include/class/event-handler.php:811
 msgid ""
 "Dieser Beitrag kann nicht mehr bearbeitet werden, da aktuell ein Review "
 "geschrieben wird."
 msgstr ""
 
-#: include/class/event-handler.php:805
+#: include/class/event-handler.php:808
 msgid ""
 "Dieser Beitrag kann nicht mehr bearbeitet werden, da schon ein Review "
 "existiert"
@@ -299,7 +295,7 @@ msgstr "Anzeigenamen"
 msgid "Du bist nicht berechtigt, diese Band zu bearbeiten!"
 msgstr ""
 
-#: include/class/band-handler.php:639
+#: include/class/band-handler.php:638
 msgid "Du bist nicht berechtigt, diese Band zu bearbeiten."
 msgstr ""
 
@@ -333,7 +329,7 @@ msgstr ""
 msgid "Einstellungen"
 msgstr ""
 
-#: include/class/ajax-handler.php:196
+#: include/class/ajax-handler.php:199
 msgid "Einstellungen gespeichert"
 msgstr ""
 
@@ -346,19 +342,19 @@ msgstr ""
 msgid "eMail"
 msgstr ""
 
-#: include/class/backend.php:14
+#: include/class/backend.php:17
 msgid "eMail not configured"
 msgstr "eMail ist nicht eingestellt"
 
-#: include/class/ajax-handler.php:72 include/class/ajax-handler.php:168
+#: include/class/ajax-handler.php:75 include/class/ajax-handler.php:171
 msgid "Error while changing the following status"
 msgstr "Fehler beim ändern des \"folgen\" status"
 
-#: include/class/ajax-handler.php:237
+#: include/class/ajax-handler.php:240
 msgid "Error while creating a new user"
 msgstr "Fehler während des erstellen des neuen Benutzer"
 
-#: include/class/ajax-handler.php:81
+#: include/class/ajax-handler.php:84
 msgid "Error while loading the data"
 msgstr "Fehler beim laden der Daten"
 
@@ -370,17 +366,17 @@ msgstr "Fehler: Event Objekt nicht gefunden"
 msgid "Ersetzen"
 msgstr ""
 
-#: include/class/event-handler.php:781
+#: include/class/event-handler.php:784
 msgid "Es sind keine Mitglieder registriert"
 msgstr ""
 
-#: include/class/gallery-handler.php:37
+#: include/class/gallery-handler.php:40
 msgid ""
 "Es wurde keine Gallerie gefunden. Womöglich wurde diese gelöscht oder "
 "verschoben."
 msgstr ""
 
-#: include/class/search-handler.php:186
+#: include/class/search-handler.php:179
 #, php-format
 msgid "Es wurden keine Events mit dem Suchwort &quot;%s&quot; gefunden."
 msgstr ""
@@ -415,7 +411,7 @@ msgstr ""
 msgid "Event veröffentlichen"
 msgstr ""
 
-#: include/class/ajax-handler.php:48
+#: include/class/ajax-handler.php:51
 msgid "Event wurde erfolgreich auf Facebook promoted."
 msgstr ""
 
@@ -432,14 +428,10 @@ msgstr ""
 msgid "Events"
 msgstr ""
 
-#: include/class/events.php:855 template/components/pagination-buttons.php:73
+#: include/class/events.php:863 template/components/pagination-buttons.php:73
 #, php-format
 msgid "Events %d bis %d von %d"
 msgstr ""
-
-#: template/system/userpage/community-page.php:28
-msgid "Events on your Watchlist"
-msgstr "Events auf deiner Watchlist"
 
 #: template/band/band-form.php:43
 msgid "Facebook"
@@ -449,10 +441,22 @@ msgstr ""
 msgid "Facebook URL"
 msgstr ""
 
-#: include/class/user-handler.php:545
+#: include/class/user-handler.php:551
 #, php-format
 msgid "Failed to create new user (%s)"
 msgstr "Neuer Benutzer konnte nicht angelegt werden (%s)"
+
+#: include/class/user-form-handler.php:227
+msgid "Failed to write band meta"
+msgstr ""
+
+#: include/class/user-handler.php:557
+msgid "Failed to write meta for new user"
+msgstr ""
+
+#: include/class/user-form-handler.php:188
+msgid "Failed to write organizer meta"
+msgstr ""
 
 #: include/class/form-validator.php:271
 msgid "Falsches Format."
@@ -463,7 +467,7 @@ msgstr ""
 msgid "Falsches Format. Hinweis: %s"
 msgstr ""
 
-#: template/system/userpage/team-page.php:41
+#: template/system/userpage/team-page.php:42
 msgid "Fehlende Reviews"
 msgstr ""
 
@@ -471,7 +475,7 @@ msgstr ""
 msgid "Fehler 404: Gallerie nicht gefunden"
 msgstr ""
 
-#: include/class/file-handler.php:57
+#: include/class/file-handler.php:61
 msgid "Fehler bei hinzufügen des Bildes in die Datenbank."
 msgstr ""
 
@@ -479,16 +483,16 @@ msgstr ""
 msgid "Fehler bei speichern der Kontoinformationen"
 msgstr ""
 
-#: include/class/user-form-handler.php:197
+#: include/class/user-form-handler.php:201
 msgid "Fehler bei speichern der Veranstalter Einstellungen."
 msgstr ""
 
-#: include/class/band-handler.php:723
+#: include/class/band-handler.php:722
 #, php-format
 msgid "Fehler beim Speichern der Band (%s)"
 msgstr ""
 
-#: include/class/event-handler.php:788
+#: include/class/event-handler.php:791
 msgid "Fehler beim Updaten des Akkreditierungs Feld"
 msgstr ""
 
@@ -508,7 +512,7 @@ msgstr ""
 msgid "First Name"
 msgstr "Vorname"
 
-#: include/class/band-handler.php:905 include/class/events.php:1070
+#: include/class/band-handler.php:904 include/class/events.php:1078
 #: template/band/meta/details.php:16 template/event/meta/details.php:7
 msgid "Follow"
 msgstr "Folgen"
@@ -525,10 +529,10 @@ msgstr ""
 msgid "Future Events"
 msgstr "Künftige Events"
 
-#: template/system/userpage/band-page.php:24
-#: template/system/userpage/community-page.php:24
-#: template/system/userpage/organizer-page.php:26
-#: template/system/userpage/team-page.php:37
+#: template/system/userpage/band-page.php:25
+#: template/system/userpage/community-page.php:25
+#: template/system/userpage/organizer-page.php:27
+#: template/system/userpage/team-page.php:38
 msgid "Für die nächsten 7 Tage stehen keine Events an!"
 msgstr ""
 
@@ -540,7 +544,7 @@ msgstr ""
 msgid "Für diesen Event wurden noch keine Interviews registriert."
 msgstr ""
 
-#: include/class/author-handler.php:48
+#: include/class/author-handler.php:51
 msgid "Gast Autor"
 msgstr ""
 
@@ -558,7 +562,7 @@ msgstr ""
 msgid "Genres"
 msgstr ""
 
-#: include/class/event-handler.php:471
+#: include/class/event-handler.php:474
 msgid "Gratis/Kollekte"
 msgstr ""
 
@@ -609,11 +613,11 @@ msgstr ""
 msgid "Interviews"
 msgstr ""
 
-#: include/class/author-handler.php:44
+#: include/class/author-handler.php:47
 msgid "Kein Author gefunden"
 msgstr ""
 
-#: include/class/search-handler.php:38
+#: include/class/search-handler.php:41
 msgid "Keine Bands gefunden."
 msgstr ""
 
@@ -621,43 +625,43 @@ msgstr ""
 msgid "Keine Beschreibung vorhanden."
 msgstr ""
 
-#: include/class/search-handler.php:67 include/class/search-handler.php:118
+#: include/class/search-handler.php:60 include/class/search-handler.php:111
 msgid "Keine Events gefunden."
 msgstr ""
 
-#: include/class/event-handler.php:174
+#: include/class/event-handler.php:177
 msgid "Keine Fotos für diesen Event gefunden."
 msgstr ""
 
-#: include/class/search-handler.php:82
+#: include/class/search-handler.php:75
 msgid "Keine Fotos gefunden."
 msgstr ""
 
-#: include/class/events.php:720
+#: include/class/events.php:725
 msgid "Keine Herforgehobenen Events gefunden"
 msgstr ""
 
-#: include/class/events.php:744 include/class/events.php:808
+#: include/class/events.php:749 include/class/events.php:813
 msgid "Keine Reviews gefunden"
 msgstr ""
 
-#: include/class/author-handler.php:22
+#: include/class/author-handler.php:25
 msgid "Keine Teammitglieder gefunden."
 msgstr ""
 
-#: include/class/events.php:901
+#: include/class/events.php:909
 msgid "Keine Verlosungen gefunden"
 msgstr ""
 
-#: include/class/events.php:967
+#: include/class/events.php:975
 msgid "Keine Videos gefunden"
 msgstr ""
 
-#: include/class/search-handler.php:20
+#: include/class/search-handler.php:23
 msgid "Keine Videos gefunden."
 msgstr ""
 
-#: include/class/youtube.php:249
+#: include/class/youtube.php:252
 msgid "Keine Youtube Video ID gefunden"
 msgstr ""
 
@@ -665,15 +669,15 @@ msgstr ""
 msgid "Last Name"
 msgstr "Nachname"
 
-#: include/class/event-handler.php:635
+#: include/class/event-handler.php:638
 msgid "Link zum Facebook Event"
 msgstr ""
 
-#: include/class/event-handler.php:626
+#: include/class/event-handler.php:629
 msgid "Link zur Verlosung"
 msgstr ""
 
-#: include/class/event-handler.php:635
+#: include/class/event-handler.php:638
 msgid "Link zur Website"
 msgstr ""
 
@@ -681,7 +685,7 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-#: include/class/plek-handler.php:127
+#: include/class/plek-handler.php:129
 msgid "Login"
 msgstr "Anmelden"
 
@@ -693,7 +697,7 @@ msgstr ""
 msgid "Logo"
 msgstr ""
 
-#: template/system/userpage/band-data.php:15
+#: template/system/userpage/band-data.php:14
 msgid "Managed Bands"
 msgstr "Verwaltete Bands"
 
@@ -705,11 +709,11 @@ msgstr "Verwaltet von:"
 msgid "Mehrtägiger Event"
 msgstr ""
 
-#: include/class/plek-handler.php:124 template/system/my-plekvetica-page.php:14
+#: include/class/plek-handler.php:126
 msgid "Mein Plekvetica"
 msgstr ""
 
-#: include/class/event-handler.php:785
+#: include/class/event-handler.php:788
 msgid "Mitglied ist bereits abgemeldet."
 msgstr ""
 
@@ -717,17 +721,21 @@ msgstr ""
 msgid "Modifikationen und spezielle Funktionen für die Plekvetica Seite."
 msgstr ""
 
-#: template/system/userpage/band-page.php:40
-#: template/system/userpage/community-page.php:41
-#: template/system/userpage/organizer-page.php:42
-#: template/system/userpage/team-page.php:57
+#: template/system/userpage/band-page.php:41
+#: template/system/userpage/community-page.php:37
+#: template/system/userpage/organizer-page.php:43
+#: template/system/userpage/team-page.php:58
 msgid "My followed Bands"
-msgstr "Bands denen ich folge"
+msgstr "Meine gefolgten Bands"
 
-#: template/system/userpage/band-page.php:34
-#: template/system/userpage/community-page.php:35
-#: template/system/userpage/organizer-page.php:36
-#: template/system/userpage/team-page.php:51
+#: template/system/my-plekvetica-page.php:13
+msgid "My Plekvetica"
+msgstr "Mein Plekvetica"
+
+#: template/system/userpage/band-page.php:35
+#: template/system/userpage/community-page.php:31
+#: template/system/userpage/organizer-page.php:37
+#: template/system/userpage/team-page.php:52
 msgid "My Watchlist"
 msgstr "Meine Watchlist"
 
@@ -736,7 +744,7 @@ msgstr "Meine Watchlist"
 msgid "Name"
 msgstr "Name"
 
-#: include/class/ajax-handler.php:247
+#: include/class/ajax-handler.php:250
 msgid "New account created! Check your email to complete the sign up."
 msgstr ""
 "Neues Konto erstellt. Bitte pfüfe deine E-Mails um die Anmeldung "
@@ -746,7 +754,7 @@ msgstr ""
 msgid "New Password"
 msgstr "Neues Passwort"
 
-#: include/class/user-handler.php:646
+#: include/class/user-handler.php:654
 msgid "New user account activated"
 msgstr "Neues Konto aktiviert"
 
@@ -758,11 +766,11 @@ msgstr "Neuer Benutzer entsperrt!"
 msgid "Next"
 msgstr "Weiter"
 
-#: include/class/user-form-handler.php:277
+#: include/class/user-form-handler.php:286
 msgid "No Band selected"
 msgstr "Keine Band angewählt"
 
-#: include/class/user-handler.php:320
+#: include/class/user-handler.php:325
 msgid "No Band set. Please select a band in the settings menu."
 msgstr "Keine Band gewählt. Bitte wähle eine Band im Einstellungsmenu."
 
@@ -772,7 +780,7 @@ msgstr "Keine Band gewählt. Bitte wähle eine Band im Einstellungsmenu."
 msgid "No data received"
 msgstr "Keine Daten erhalten"
 
-#: include/class/user-handler.php:317
+#: include/class/user-handler.php:322
 msgid "No organizer set. Please select a organizer in the settings menu."
 msgstr ""
 "Kein Veranstalter gesetzt. Bitte wähle einen Veranstalter im "
@@ -786,7 +794,7 @@ msgstr "Nummer"
 msgid "Number short"
 msgstr "Nummer kurz"
 
-#: include/class/user-handler.php:591
+#: include/class/user-handler.php:599
 msgid "Only one step left for your account at plekvetica!"
 msgstr "Nur noch ein Schritt für dein Konto bei Plekvetica!"
 
@@ -794,7 +802,7 @@ msgstr "Nur noch ein Schritt für dein Konto bei Plekvetica!"
 msgid "Organizer"
 msgstr "Veranstalter"
 
-#: include/class/user-form-handler.php:253
+#: include/class/user-form-handler.php:262
 msgid ""
 "Organizer already set. Please contact the site owner to change the organizer."
 msgstr ""
@@ -818,7 +826,7 @@ msgstr ""
 msgid "Password"
 msgstr "Passwort"
 
-#: include/class/user-form-handler.php:321
+#: include/class/user-form-handler.php:330
 msgid "Passwords are not matching"
 msgstr "Passwörte stimmen nicht überein"
 
@@ -877,7 +885,7 @@ msgstr "Event promoten"
 msgid "Register as..."
 msgstr "Registrieren als..."
 
-#: include/class/ajax-handler.php:58
+#: include/class/ajax-handler.php:61
 msgid "Registrierung wurde erfolgreich entfernt."
 msgstr ""
 
@@ -898,7 +906,7 @@ msgstr ""
 msgid "Review schreiben"
 msgstr ""
 
-#: include/class/user-handler.php:326
+#: include/class/user-handler.php:331
 msgid "Role not found in setup function."
 msgstr "Rolle nicht gefunden in der Einstellungsfunktion."
 
@@ -936,7 +944,7 @@ msgstr ""
 msgid "Suche nach einer Band"
 msgstr ""
 
-#: template/system/userpage/team-page.php:45
+#: template/system/userpage/team-page.php:46
 msgid "Super! Keine fehlenden Reviews."
 msgstr ""
 
@@ -961,7 +969,7 @@ msgstr "Danke, dass du ein Teil unserer Community bist!"
 msgid "This Data can only be displayed to team members"
 msgstr "Diese Daten können nur für Teammitglieder angezeigt werden"
 
-#: include/class/user-form-handler.php:335
+#: include/class/user-form-handler.php:344
 msgid "This email address is already registered"
 msgstr "Diese Email Adresse ist bereits registriert"
 
@@ -973,11 +981,11 @@ msgstr ""
 msgid "Time"
 msgstr "Zeit"
 
-#: include/class/user-form-handler.php:283
+#: include/class/user-form-handler.php:292
 msgid "To many Bands selected! Are you sure you have more than 5 Bands!?"
 msgstr "Zu viele Bands gewählt! Bist du sicher, das du mehr als 5 Bands hast!?"
 
-#: include/class/events.php:1037
+#: include/class/events.php:1045
 msgid "Today"
 msgstr "Heute"
 
@@ -985,7 +993,7 @@ msgstr "Heute"
 msgid "Uhr"
 msgstr ""
 
-#: include/class/band-handler.php:903 include/class/events.php:1068
+#: include/class/band-handler.php:902 include/class/events.php:1076
 #: template/band/meta/details.php:16 template/event/meta/details.php:7
 msgid "Unfollow"
 msgstr "Entfolgen"
@@ -1021,11 +1029,11 @@ msgstr ""
 msgid "Website"
 msgstr ""
 
-#: include/class/events.php:898 template/posts/author-single.php:52
+#: include/class/events.php:906 template/posts/author-single.php:52
 msgid "Weitere Events laden"
 msgstr ""
 
-#: include/class/events.php:805 template/event/event-review-search.php:35
+#: include/class/events.php:810 template/event/event-review-search.php:35
 msgid "Weitere Reviews laden"
 msgstr ""
 
@@ -1033,7 +1041,7 @@ msgstr ""
 msgid "Welcome to Plekvetica!"
 msgstr "Willkommen bei Plekvetica!"
 
-#: include/class/event-handler.php:727
+#: include/class/event-handler.php:730
 msgid "Wunsch"
 msgstr ""
 
@@ -1053,11 +1061,11 @@ msgstr ""
 "Sie haben bereits ein Konto. Bitte loggen Sie sich zuerst aus, bevor Sie ein "
 "neues Konto erstellen."
 
-#: include/class/ajax-handler.php:250
+#: include/class/ajax-handler.php:253
 msgid "You have to be logged in in order to save the settings."
 msgstr "Sie müssen eingeloggt sein, um die Einstellungen zu speichern."
 
-#: include/class/ajax-handler.php:102 include/class/ajax-handler.php:128
+#: include/class/ajax-handler.php:105 include/class/ajax-handler.php:131
 msgid "You have to be logged in to perform this action"
 msgstr "Du musst eingeloggt sein, um diese Aktion auszuführen"
 

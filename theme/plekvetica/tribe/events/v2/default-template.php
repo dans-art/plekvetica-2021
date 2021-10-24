@@ -11,7 +11,7 @@
  *
  * @version 5.0.0
  */
-
+global $plek_handler;
 use Tribe\Events\Views\V2\Template_Bootstrap;
 $event = (is_single())?$plek_event -> load_event(null, 'all'):false;
 $review = $plek_event -> is_review();
@@ -26,6 +26,9 @@ get_header();
     </header>
 	<?php
     if(PlekGalleryHandler::is_gallery()){
+        if(is_object($plek_handler)){
+            $plek_handler -> enqueue_context_menu();
+        }
         PlekTemplateHandler::load_template('photo-view','gallery', get_the_ID(), get_permalink(), 'Zurück zum Event');
     }
     elseif($event){

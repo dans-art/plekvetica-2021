@@ -12,6 +12,8 @@ if (!defined('ABSPATH')) {
 	exit('Direct script access denied.');
 }
 
+global $plek_handler;
+
 ?>
 <?php
 
@@ -21,6 +23,9 @@ $referer = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : null;
 $label = (PlekBandHandler::is_band_link($referer)) ? __('Zurück zur Bandseite') : null;
 
 if (PlekGalleryHandler::is_gallery()) {
+	if(is_object($plek_handler)){
+		$plek_handler -> enqueue_context_menu();
+	}
 	PlekTemplateHandler::load_template('photo-view', 'gallery', null, $referer, $label);
 }
 

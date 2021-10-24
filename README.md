@@ -13,6 +13,7 @@ Version 1.1.1
 - "Kein Bandlogo"-Bandlogo angepasst
 - Style anpassungen
 - Diverse Optimierungen und Fixes
+- Angepasstes Kontextmenu für Bilder hinzugefügt
 
 Version 1.0
 

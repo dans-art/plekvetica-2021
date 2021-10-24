@@ -266,11 +266,21 @@ ul.partner-container{
 .my-plek-header{
     display: flex;
     justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 2em;
+    
+    h1{
+        flex-basis: 100%;
+    }
+
+    h2{
+        font-size: 1.3em;
+    }
 
     div{
         flex-basis: 50%;
     }
-    div:nth-child(2){
+    div:nth-child(3){
         text-align: right;
     }
 
@@ -293,6 +303,10 @@ ul.partner-container{
         justify-content: space-between;
         flex-wrap: wrap;
   
+        .this-week-posts{
+            margin-bottom: 1em;
+        }
+
         .this-week-posts,
         .missing-reviews-posts,
         .organizer-data,

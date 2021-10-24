@@ -294,8 +294,6 @@ let plek_main = {
             console.log("Block: "+block_id+" not found in container");;
         }
     }
-
-    
     
 }
 
