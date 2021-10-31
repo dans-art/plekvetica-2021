@@ -170,8 +170,13 @@ class PlekHandler
         $plugin_meta = get_plugin_data(PLEK_PATH . 'plekvetica.php');
         $this -> version = (!empty($plugin_meta['Version'])) ? $plugin_meta['Version'] : "000";
 
-        wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js',['jquery'], $this -> version);
-        wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.min.js',['jquery'], $this -> version);
+        if($this -> is_dev_server()){
+            wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.js',['jquery'], $this -> version);
+            wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.js',['jquery'], $this -> version);
+        }else{
+            wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js',['jquery'], $this -> version);
+            wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.min.js',['jquery'], $this -> version);
+        }
         
     }
 

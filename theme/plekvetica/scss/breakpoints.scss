@@ -36,6 +36,7 @@
         flex-direction: row;
         text-align: left;
         flex-wrap: wrap;
+        padding-right: 0;
     }
 
     .has-inline-mobile-toggle .header-widget,.has-inline-mobile-toggle #site-navigation {
@@ -63,6 +64,169 @@
     .main-navigation .main-nav ul li a {
         padding: 20px 15px;
     }
+
+    .inside-header{
+        padding: 0;
+      }
+      
+      .main-navigation .main-nav ul:first-child {
+        display: flex !important;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+        @include transition(all, 300ms, ease);
+        width: 50%;
+        min-width: 0;
+        height: 100vh;
+        left: -50%;
+        top: -60px;
+        position: absolute;
+        background: $color-gray-light;
+        height: auto;
+        padding-bottom: 1em;
+      }
+      
+      .main-navigation.toggled .main-nav ul:first-child {
+        width: 50%;
+        left: 0;
+        top: -60px;
+        min-width: 250px;
+      }
+      
+      .main-navigation.toggled .main-nav ul {
+        background: $color-gray-light;
+        right: 0;
+        top: 0;
+        box-shadow: none;
+        min-height: 100%vh;
+      
+        @include transition(all, 300ms, ease);
+      
+        li ul {
+          //background-color: $color-gray-light;
+          li:hover ul li{
+            background-color: red;
+          }
+          li:hover > ul li{
+            background-color: green;
+          }
+          
+        }
+      
+        .plek-sub-menu{
+          opacity: 1;
+          visibility: visible;
+          left: 0;
+          width: 100%;
+          height: auto;
+          position: relative;
+          display: block;
+          top: unset;
+          cursor: pointer;
+        }
+      
+        .dropdown-menu-toggle{
+          display: none;
+        }
+      
+        ul li a {
+          padding: 20px 15px;
+          pointer-events: auto;
+      }
+
+      a::before{
+        font-family: "FontAwesome";
+        padding-right: 0.5em;
+      }
+
+      //Kalender
+      #menu-item-27030 a::before{
+        content: "\f073";
+      }
+
+      //Event eintragen
+      #menu-item-66890 a::before{
+        content: "\f271";
+      }
+      
+      //Reviews
+      #menu-item-78 a::before{
+        content: "\f15c";
+      }
+
+      //Berichte
+      #menu-item-16769 a::before{
+        content: "\f15c";
+      }
+      
+      //Fotos
+      #menu-item-66805 a::before{
+        content: "\f030";
+      }
+
+      //Bands
+      #menu-item-67018 a::before,
+      #menu-item-67072 a::before{
+        content: "\f2ce";
+      }
+
+      //Videos
+      #menu-item-233 a::before{
+        content: "\f008";
+      }
+
+      //Interviews
+      #menu-item-29 a::before{
+        content: "\f130";
+      }
+      
+      //Win & Partner
+      #menu-item-16672 a::before{
+          content: "\f091";
+        }
+        
+      //About
+      #menu-item-9065 li:first-child a::before{
+        content: "\f0c0";
+      }
+      
+      //Support
+      #menu-item-66825 a::before{
+        content: "\f0fa";
+      }
+
+    //Mobile Search bar
+    .plek-menu-search{      
+      display: flex;
+      flex-direction: row-reverse;
+      height: 2.4em;
+      padding: 0 0.5em;
+
+      a{
+          padding: 0;
+          width: 2.5em;
+          text-align: center;
+          align-self: center;
+          background: $color-gray-dark;
+          padding: 2px;
+      }
+
+      ul{
+          opacity: 1;
+          display: block;
+          position: unset;
+          width: 100%;
+          visibility: visible;
+          opacity: 1;
+          height: 2.4em;
+          pointer-events: auto;
+      }
+    
+    }
+      
+      
+  }
+
 
 }
 

@@ -1,5 +1,4 @@
 let plek_main = {
-
     construct(){
         jQuery(window).resize();
         jQuery(document).ready(function(){
@@ -66,10 +65,40 @@ let plek_main = {
     },
 
     add_event_listener(){
+        /** Ajax Loader button */
         jQuery('#page').on('click', '.ajax-loader-button' ,function(e){
             e.preventDefault();
             plek_main.load_block(this);
         });
+
+        /** Navi Search Button */
+        jQuery('.plek-menu-search').on('click','a', function(e){
+            e.preventDefault();
+            plek_main.redirect_to_search(this);
+        });
+        /** Navi Search on enter key press */
+        jQuery('.plek-menu-search input').keypress(function(e){
+            var keycode = (e.keyCode ? e.keyCode : e.which);
+            if(keycode === 13){
+                plek_main.redirect_to_search(this);
+            }
+        });
+    },
+
+    /**
+     * 
+     * @param {object} search - This should be the Button/A Tag or the input field 
+     * @returns 
+     */
+    redirect_to_search(search){
+        if(search.nodeName === 'INPUT'){
+            var search_for = jQuery(search).val();
+        }else{
+            var search_for = jQuery(search).parent().find('input').val();
+        }
+        let url = window.location.protocol + '//' + window.location.hostname + '?s=' + search_for;
+        window.location.replace(url);
+        return;
     },
 
     get_ajax_success_object(data){

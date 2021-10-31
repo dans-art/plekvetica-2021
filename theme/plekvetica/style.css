@@ -15,7 +15,7 @@ body { color: white; }
 .site-header { background-color: #232323; }
 
 /* The Event Calendar */
-/* line 22, scss/main-style.scss */
+/* line 29, scss/main-style.scss */
 .tribe-events-single-event-title, .tribe-events-schedule .recurringinfo, .tribe-events-schedule h2, .tribe-related-event-info .recurringinfo, .tribe-events-content, .tribe-events-meta-group .tribe-events-single-section-title, .single-tribe_events .tribe-events-single .tribe-events-event-meta, .tribe-events-back a, .tribe-events-back a:visited { color: white; }
 
 /* line 3, scss/selectors.scss */
@@ -36,9 +36,8 @@ a:hover, a:focus { color: #8C262E; }
 /* line 23, scss/header.scss */
 .main-navigation .main-nav ul li a { line-height: 38px; }
 
-/* line 27, scss/header.scss */
-.main-navigation:not(.toggled) ul li.sfHover > ul, .main-navigation:not(.toggled) ul li:hover > ul { right: 0; border-top: #232323 2px solid; }
-
+/*.main-navigation:not(.toggled) ul li.sfHover > ul, .main-navigation:not(.toggled) ul li:hover > ul{ right: 0; border-top: $color-gray-dark 2px solid;
+}*/
 /* line 33, scss/header.scss */
 #menu-item-78 .sub-menu { width: 112px; }
 
@@ -46,18 +45,27 @@ a:hover, a:focus { color: #8C262E; }
 #menu-item-27030 .sub-menu { width: 150px; right: -29px; }
 
 /* line 42, scss/header.scss */
-.main-navigation ul ul { background-color: #595959; }
+.has-inline-mobile-toggle #site-navigation.toggled { margin-top: 0; }
 
-/* line 47, scss/header.scss */
+/*.main-navigation .main-nav{ position:fixed; overflow: hidden; left: 0; height: 100%; width: 100%; top: 145px;
+}*/
+/* line 58, scss/header.scss */
 .main-navigation .main-nav ul.menu li[class*="current-menu-"] > a {   /*content: url("data:image/svg+xml;charset=UTF-8, <svg class='nav-triangle' xmlns='http://www.w3.org/2000/svg' version='1.1' height='20' width='20'><polygon points='20,0 20,20 0,20' fill='%23D9042B' /></svg>"); position: absolute;
 right: 0;
 bottom: -15px;*/ border-bottom: solid 2px #8C262E; }
 
-/* line 55, scss/header.scss */
+/* line 66, scss/header.scss */
 .main-navigation .main-nav ul[class*="sub-menu"] li[class*="current-menu-"] > a:before { bottom: -4px; }
 
-/* line 59, scss/header.scss */
+/* line 70, scss/header.scss */
 .main-navigation .main-nav ul li a { padding: 2px 15px 0px 15px; }
+
+/* line 76, scss/header.scss */
+.main-navigation .main-nav .plek-menu-search ul { position: absolute; right: 45px; top: 0; width: 10px; -webkit-transition: all 500ms ease; -moz-transition: all 500ms ease; -ms-transition: all 500ms ease; -o-transition: all 500ms ease; transition: all 500ms ease; }
+/* line 84, scss/header.scss */
+.main-navigation .main-nav .plek-menu-search input { height: 2.4em; border: none; width: 100%; }
+/* line 90, scss/header.scss */
+.main-navigation .main-nav .plek-menu-search:hover ul { width: 638px; }
 
 /* line 3, scss/footer.scss */
 .site-footer, .footer-widgets, .footer-widgets .widget-title, footer.site-info { background-color: #232323; color: white; margin-bottom: 0; }
@@ -1221,175 +1229,223 @@ div.plek-review-search form button, div.plek-review-search form input { width: 1
   /* line 30, scss/breakpoints.scss */
   .has-inline-mobile-toggle .mobile-menu-control-wrapper { display: flex; flex-wrap: wrap; }
   /* line 35, scss/breakpoints.scss */
-  .has-inline-mobile-toggle .inside-header { flex-direction: row; text-align: left; flex-wrap: wrap; }
-  /* line 41, scss/breakpoints.scss */
+  .has-inline-mobile-toggle .inside-header { flex-direction: row; text-align: left; flex-wrap: wrap; padding-right: 0; }
+  /* line 42, scss/breakpoints.scss */
   .has-inline-mobile-toggle .header-widget, .has-inline-mobile-toggle #site-navigation { flex-basis: 100%; }
-  /* line 45, scss/breakpoints.scss */
+  /* line 46, scss/breakpoints.scss */
   .nav-float-left .has-inline-mobile-toggle #site-navigation { order: 10; }
-  /* line 49, scss/breakpoints.scss */
+  /* line 50, scss/breakpoints.scss */
   #plek-search-page div { margin: 0 0.2em; }
-  /* line 53, scss/breakpoints.scss */
+  /* line 54, scss/breakpoints.scss */
   #primary-menu .sub-menu { width: 100%; }
-  /* line 56, scss/breakpoints.scss */
+  /* line 57, scss/breakpoints.scss */
   .main-navigation li a, .main-navigation .main-nav ul ul li a { font-size: 1.2em; }
-  /* line 60, scss/breakpoints.scss */
+  /* line 61, scss/breakpoints.scss */
   .main-navigation .main-nav ul ul li a { padding: 20px 45px; }
-  /* line 63, scss/breakpoints.scss */
-  .main-navigation .main-nav ul li a { padding: 20px 15px; } }
-@media (max-width: 888px) { /* line 71, scss/breakpoints.scss */
+  /* line 64, scss/breakpoints.scss */
+  .main-navigation .main-nav ul li a { padding: 20px 15px; }
+  /* line 68, scss/breakpoints.scss */
+  .inside-header { padding: 0; }
+  /* line 72, scss/breakpoints.scss */
+  .main-navigation .main-nav ul:first-child { display: flex !important; flex-direction: column; flex-wrap: nowrap; align-items: flex-start; -webkit-transition: all 300ms ease; -moz-transition: all 300ms ease; -ms-transition: all 300ms ease; -o-transition: all 300ms ease; transition: all 300ms ease; width: 50%; min-width: 0; height: 100vh; left: -50%; top: -60px; position: absolute; background: #595959; height: auto; padding-bottom: 1em; }
+  /* line 89, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul:first-child { width: 50%; left: 0; top: -60px; min-width: 250px; }
+  /* line 96, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul { background: #595959; right: 0; top: 0; box-shadow: none; min-height: 100% vh; -webkit-transition: all 300ms ease; -moz-transition: all 300ms ease; -ms-transition: all 300ms ease; -o-transition: all 300ms ease; transition: all 300ms ease; }
+  /* line 107, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul li ul li:hover ul li { background-color: red; }
+  /* line 110, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul li ul li:hover > ul li { background-color: green; }
+  /* line 116, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul .plek-sub-menu { opacity: 1; visibility: visible; left: 0; width: 100%; height: auto; position: relative; display: block; top: unset; cursor: pointer; }
+  /* line 128, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul .dropdown-menu-toggle { display: none; }
+  /* line 132, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul ul li a { padding: 20px 15px; pointer-events: auto; }
+  /* line 137, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul a::before { font-family: "FontAwesome"; padding-right: 0.5em; }
+  /* line 143, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul #menu-item-27030 a::before { content: "\f073"; }
+  /* line 148, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul #menu-item-66890 a::before { content: "\f271"; }
+  /* line 153, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul #menu-item-78 a::before { content: "\f15c"; }
+  /* line 158, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul #menu-item-16769 a::before { content: "\f15c"; }
+  /* line 163, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul #menu-item-66805 a::before { content: "\f030"; }
+  /* line 168, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul #menu-item-67018 a::before, .main-navigation.toggled .main-nav ul #menu-item-67072 a::before { content: "\f2ce"; }
+  /* line 174, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul #menu-item-233 a::before { content: "\f008"; }
+  /* line 179, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul #menu-item-29 a::before { content: "\f130"; }
+  /* line 184, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul #menu-item-16672 a::before { content: "\f091"; }
+  /* line 189, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul #menu-item-9065 li:first-child a::before { content: "\f0c0"; }
+  /* line 194, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul #menu-item-66825 a::before { content: "\f0fa"; }
+  /* line 199, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul .plek-menu-search { display: flex; flex-direction: row-reverse; height: 2.4em; padding: 0 0.5em; }
+  /* line 205, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul .plek-menu-search a { padding: 0; width: 2.5em; text-align: center; align-self: center; background: #232323; padding: 2px; }
+  /* line 214, scss/breakpoints.scss */
+  .main-navigation.toggled .main-nav ul .plek-menu-search ul { opacity: 1; display: block; position: unset; width: 100%; visibility: visible; opacity: 1; height: 2.4em; pointer-events: auto; } }
+@media (max-width: 888px) { /* line 235, scss/breakpoints.scss */
   #post-27146 .info-text-line { position: unset; }
-  /* line 74, scss/breakpoints.scss */
+  /* line 238, scss/breakpoints.scss */
   #post-27146 .info-text-line div { text-align: left; }
-  /* line 79, scss/breakpoints.scss */
+  /* line 243, scss/breakpoints.scss */
   article .tribe-events-calendar-list__event { padding-left: 0; }
-  /* line 83, scss/breakpoints.scss */
+  /* line 247, scss/breakpoints.scss */
   #post-27146 .plek-pre-button-seperator { flex-basis: 24.33% !important; }
-  /* line 87, scss/breakpoints.scss */
+  /* line 251, scss/breakpoints.scss */
   #post-27146 .wp-block-buttons > .wp-block-button.plek-start-page { width: 72%; } }
 /*Tribe Events breakpoint*/
 @media (min-width: 767px) { /* Kalender List View*/
-  /* line 97, scss/breakpoints.scss */
+  /* line 261, scss/breakpoints.scss */
   .tribe-common.tribe-events.tribe-events-view.tribe-events-view--list article.tribe-events-calendar-list__event { padding-left: 10%; }
-  /* line 103, scss/breakpoints.scss */
+  /* line 267, scss/breakpoints.scss */
   .band-single.band-container .meta-container { display: block; }
-  /* line 106, scss/breakpoints.scss */
+  /* line 270, scss/breakpoints.scss */
   .band-single.band-container .mobile-meta-con { display: none; } }
-@media (max-width: 767px) { /* line 114, scss/breakpoints.scss */
+@media (max-width: 767px) { /* line 278, scss/breakpoints.scss */
   .tribe-events-calendar-list__month-separator { width: 100%; }
-  /* line 118, scss/breakpoints.scss */
+  /* line 282, scss/breakpoints.scss */
   article .tribe-events-calendar-list__event-date-tag { display: none; }
-  /* line 121, scss/breakpoints.scss */
+  /* line 285, scss/breakpoints.scss */
   .tribe-events-calendar-list__event-date-tag-mobile { display: block; }
-  /* line 124, scss/breakpoints.scss */
+  /* line 288, scss/breakpoints.scss */
   .tribe-events-calendar-list__event-date-tag-mobile .tribe-events-calendar-list__event-date-tag-datetime { height: auto; background: none; min-width: auto; text-align: left; display: block; max-width: none; font-size: 1.2em; }
-  /* line 136, scss/breakpoints.scss */
+  /* line 300, scss/breakpoints.scss */
   .tribe-events .tribe-events-calendar-list__event-datetime-wrapper, .tribe-events .tribe-events-calendar-list__event-title { font-size: 1.2em; }
-  /* line 139, scss/breakpoints.scss */
+  /* line 303, scss/breakpoints.scss */
   #tribe-events-pg-template #event-container.single-view { flex-direction: column; }
-  /* line 142, scss/breakpoints.scss */
+  /* line 306, scss/breakpoints.scss */
   #tribe-events-pg-template #event-container.single-view #event-content, #tribe-events-pg-template #event-container.single-view #event-meta { padding: 0; width: 100%; }
-  /* line 150, scss/breakpoints.scss */
+  /* line 314, scss/breakpoints.scss */
   .band-single.band-container { flex-direction: column; padding: 1em; }
-  /* line 154, scss/breakpoints.scss */
+  /* line 318, scss/breakpoints.scss */
   .band-single.band-container .meta-container { display: none; }
-  /* line 157, scss/breakpoints.scss */
+  /* line 321, scss/breakpoints.scss */
   .band-single.band-container .mobile-meta-con { display: block; } }
-@media (max-width: 599px) { /* line 166, scss/breakpoints.scss */
+@media (max-width: 599px) { /* line 330, scss/breakpoints.scss */
   .plek-pre-button-seperator { height: 0; }
-  /* line 169, scss/breakpoints.scss */
+  /* line 333, scss/breakpoints.scss */
   #post-27146 .wp-block-buttons > .wp-block-button.plek-start-page { width: 100%; }
-  /* line 172, scss/breakpoints.scss */
+  /* line 336, scss/breakpoints.scss */
   #post-27146 article.plek-event-type-tribe_events, #post-27146 article.plek-event-type-youtube { margin-left: 0; }
-  /* line 177, scss/breakpoints.scss */
+  /* line 341, scss/breakpoints.scss */
   article.plek-event-type-youtube, article.plek-event-type-tribe_events { justify-content: space-between; flex-wrap: wrap; /*.tribe-events-calendar-list__event-date-tag-datetime{ display: none;
 }*/ }
-  /* line 186, scss/breakpoints.scss */
+  /* line 350, scss/breakpoints.scss */
   article.plek-event-type-youtube .tribe-events-calendar-list__event-date-tag-datetime-mobile, article.plek-event-type-tribe_events .tribe-events-calendar-list__event-date-tag-datetime-mobile { display: block; }
-  /* line 189, scss/breakpoints.scss */
+  /* line 353, scss/breakpoints.scss */
   article.plek-event-type-youtube .tribe-events-calendar-list__event-date-tag, article.plek-event-type-tribe_events .tribe-events-calendar-list__event-date-tag { width: 0; }
-  /* line 193, scss/breakpoints.scss */
+  /* line 357, scss/breakpoints.scss */
   article.plek-event-type-youtube .tribe-events-calendar-list__event-featured-image-wrapper, article.plek-event-type-youtube .tribe-events-calendar-list__event-image-wrapper, article.plek-event-type-youtube .tribe-events-calendar-list__event-details, article.plek-event-type-tribe_events .tribe-events-calendar-list__event-featured-image-wrapper, article.plek-event-type-tribe_events .tribe-events-calendar-list__event-image-wrapper, article.plek-event-type-tribe_events .tribe-events-calendar-list__event-details { flex: 1; }
-  /* line 199, scss/breakpoints.scss */
+  /* line 363, scss/breakpoints.scss */
   article.plek-event-review .tribe-events-calendar-list__event-attributes-tag { width: 0.5em; display: flex; position: absolute; }
   /*Footer*/
-  /* line 208, scss/breakpoints.scss */
+  /* line 372, scss/breakpoints.scss */
   .footer-widget-1 aside, .footer-widget-3 aside { text-align: center; align-self: center; }
-  /* line 214, scss/breakpoints.scss */
+  /* line 378, scss/breakpoints.scss */
   .footer-widget-2 { margin-bottom: 0; }
-  /* line 218, scss/breakpoints.scss */
+  /* line 382, scss/breakpoints.scss */
   .plek-post-type-all_reviews .info-text-bar { width: 50%; }
-  /* line 222, scss/breakpoints.scss */
+  /* line 386, scss/breakpoints.scss */
   .plek-review-search .gp-icon.icon-search { display: inline-flex; }
-  /* line 225, scss/breakpoints.scss */
+  /* line 389, scss/breakpoints.scss */
   .plek-review-search .search-button-text { display: none; }
-  /* line 230, scss/breakpoints.scss */
+  /* line 394, scss/breakpoints.scss */
   .plek-posts-container .plek-post-item { flex-basis: 45%; }
-  /* line 234, scss/breakpoints.scss */
+  /* line 398, scss/breakpoints.scss */
   #plek-search-page .plek_album_con .image_container, .plek_album_con .image_container { width: 100%; text-align: center; }
-  /* line 239, scss/breakpoints.scss */
+  /* line 403, scss/breakpoints.scss */
   #plek-search-page .plek_album_con .image_container img, .plek_album_con .image_container img { width: 100%; }
-  /* line 243, scss/breakpoints.scss */
+  /* line 407, scss/breakpoints.scss */
   #plek-search-page .plek_album_con .image_container picture, .plek_album_con .image_container picture { max-height: unset; }
-  /* line 250, scss/breakpoints.scss */
+  /* line 414, scss/breakpoints.scss */
   #plek-user-settings-form button.plek-button { width: 100%; }
-  /* line 254, scss/breakpoints.scss */
+  /* line 418, scss/breakpoints.scss */
   #plek-user-settings-form .buttons { flex-direction: column; gap: 0; } }
-@media (min-width: 599px) { /* line 262, scss/breakpoints.scss */
+@media (min-width: 599px) { /* line 426, scss/breakpoints.scss */
   .tribe-events-calendar-list__event-date-tag-datetime-mobile { display: none; }
-  /* line 265, scss/breakpoints.scss */
+  /* line 429, scss/breakpoints.scss */
   .plek-review-search .gp-icon.icon-search { display: none; } }
-@media (max-width: 479px) { /* line 271, scss/breakpoints.scss */
+@media (max-width: 479px) { /* line 435, scss/breakpoints.scss */
   #tribe-events-pg-template .single-view #event-content .plek_album_con { flex-direction: column; }
-  /* line 275, scss/breakpoints.scss */
+  /* line 439, scss/breakpoints.scss */
   #tribe-events-pg-template .single-view #event-content .plek_album_con .image_container, #tribe-events-pg-template .single-view #event-content .plek_album_con img { width: 100%; }
-  /* line 281, scss/breakpoints.scss */
+  /* line 445, scss/breakpoints.scss */
   .plek-post-type-all_reviews .info-text-bar, .info-text-bar { width: 100%; }
-  /* line 288, scss/breakpoints.scss */
+  /* line 452, scss/breakpoints.scss */
   .plek-author-container .info-text-bar { width: 100%; }
-  /* line 291, scss/breakpoints.scss */
+  /* line 455, scss/breakpoints.scss */
   .plek-author-container .plek-author-meta { flex-direction: column; justify-content: center; }
-  /* line 298, scss/breakpoints.scss */
+  /* line 462, scss/breakpoints.scss */
   .info-text-banner { width: 100%; }
-  /* line 301, scss/breakpoints.scss */
+  /* line 465, scss/breakpoints.scss */
   #tribe-events-pg-template .single-view .event-poster .info-text-banner:nth-child(3) { width: 92%; }
   /*My Plekvetica Page*/
-  /* line 308, scss/breakpoints.scss */
+  /* line 472, scss/breakpoints.scss */
   .my-plek-container .my-plek-head-container { flex-direction: column; }
-  /* line 311, scss/breakpoints.scss */
+  /* line 475, scss/breakpoints.scss */
   .my-plek-container .my-plek-head-container .this-week-posts, .my-plek-container .my-plek-head-container .missing-reviews-posts, .my-plek-container .my-plek-head-container .organizer-data, .my-plek-container .my-plek-head-container .band-data { flex-basis: 100%; }
-  /* line 322, scss/breakpoints.scss */
+  /* line 486, scss/breakpoints.scss */
   #plek-user-settings-form .buttons, #plek-band-form .buttons { flex-direction: column; }
-  /* line 326, scss/breakpoints.scss */
+  /* line 490, scss/breakpoints.scss */
   #plek-user-settings-form button.plek-button, #plek-band-form button.plek-button { width: 100%; white-space: normal; }
-  /* line 332, scss/breakpoints.scss */
+  /* line 496, scss/breakpoints.scss */
   #video_preview_con { justify-content: center; }
-  /* line 336, scss/breakpoints.scss */
+  /* line 500, scss/breakpoints.scss */
   .plek-pagination-container { flex-direction: column; }
-  /* line 339, scss/breakpoints.scss */
+  /* line 503, scss/breakpoints.scss */
   .plek-pagination-container .pagination-prev, .plek-pagination-container .pagination-next { flex-basis: 100%; }
-  /* line 344, scss/breakpoints.scss */
+  /* line 508, scss/breakpoints.scss */
   .plek-pagination-container .page-count { order: -1; }
   /* Band List*/
-  /* line 350, scss/breakpoints.scss */
+  /* line 514, scss/breakpoints.scss */
   #container-head { flex-direction: column; gap: 0.5em; }
-  /* line 354, scss/breakpoints.scss */
+  /* line 518, scss/breakpoints.scss */
   #container-head .band-future_count { display: none; }
-  /* line 359, scss/breakpoints.scss */
+  /* line 523, scss/breakpoints.scss */
   .block-container .flex-table-view { flex-wrap: wrap; gap: 2%; margin-bottom: 1em; justify-content: flex-end; }
-  /* line 365, scss/breakpoints.scss */
+  /* line 529, scss/breakpoints.scss */
   .block-container .flex-table-view div { flex-basis: 100%; }
-  /* line 368, scss/breakpoints.scss */
+  /* line 532, scss/breakpoints.scss */
   .block-container .flex-table-view .band-country { flex-basis: 19%; }
-  /* line 371, scss/breakpoints.scss */
+  /* line 535, scss/breakpoints.scss */
   .block-container .flex-table-view .band-name { flex-basis: 79%; }
-  /* line 374, scss/breakpoints.scss */
+  /* line 538, scss/breakpoints.scss */
   .block-container .flex-table-view .band-future-event-count { display: none; }
-  /* line 377, scss/breakpoints.scss */
+  /* line 541, scss/breakpoints.scss */
   .block-container .flex-table-view .band-event-count, .block-container .flex-table-view .band-future-event-count, .block-container .flex-table-view .band-follower { padding-right: 2em; text-align: right; }
-  /* line 383, scss/breakpoints.scss */
+  /* line 547, scss/breakpoints.scss */
   .block-container .flex-table-view .band-event-count::after, .block-container .flex-table-view .band-future-event-count::after, .block-container .flex-table-view .band-follower::after { font-family: "FontAwesome"; margin-left: 0.5em; position: absolute; margin-top: -0.1em; color: #ffffffb6; min-height: 1em; }
-  /* line 392, scss/breakpoints.scss */
+  /* line 556, scss/breakpoints.scss */
   .block-container .flex-table-view .band-event-count { margin-left: 10%; }
-  /* line 395, scss/breakpoints.scss */
+  /* line 559, scss/breakpoints.scss */
   .block-container .flex-table-view .band-event-count::after { content: '\f073'; }
-  /* line 398, scss/breakpoints.scss */
+  /* line 562, scss/breakpoints.scss */
   .block-container .flex-table-view .band-future-event-count::after { content: '\f271'; }
-  /* line 401, scss/breakpoints.scss */
+  /* line 565, scss/breakpoints.scss */
   .block-container .flex-table-view .band-follower::after { content: '\f0c0'; } }
-@media (max-width: 400px) { /* line 409, scss/breakpoints.scss */
+@media (max-width: 400px) { /* line 573, scss/breakpoints.scss */
   .tribe-events-calendar-list__event, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event { flex-direction: column; }
-  /* line 413, scss/breakpoints.scss */
+  /* line 577, scss/breakpoints.scss */
   .tribe-events-calendar-list__event div, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event div { width: 100%; }
-  /* line 417, scss/breakpoints.scss */
+  /* line 581, scss/breakpoints.scss */
   .tribe-events-calendar-list__event img, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event img { width: 100%; }
-  /* line 422, scss/breakpoints.scss */
+  /* line 586, scss/breakpoints.scss */
   .banner-star-container { max-width: 100px; }
-  /* line 427, scss/breakpoints.scss */
+  /* line 591, scss/breakpoints.scss */
   .plek-posts-container .plek-post-item { flex-basis: 100%; } }
-/* line 49, scss/main-style.scss */
+/* line 56, scss/main-style.scss */
 #content.site-content { max-width: 1024px; margin: 0 auto; background-color: #232323; }
 
-/* line 55, scss/main-style.scss */
+/* line 62, scss/main-style.scss */
 .separate-containers .inside-article, .separate-containers .comments-area, .separate-containers .page-header, .one-container .container, .separate-containers .paging-navigation, .inside-page-header { background-color: transparent; }
 
 /*# sourceMappingURL=style.css.map */
