@@ -81,7 +81,7 @@
         left: -50%;
         top: -60px;
         position: absolute;
-        background: $color-gray-light;
+        background: $color-gray;
         height: auto;
         padding-bottom: 1em;
       }
@@ -94,7 +94,7 @@
       }
       
       .main-navigation.toggled .main-nav ul {
-        background: $color-gray-light;
+        background: $color-gray;
         right: 0;
         top: 0;
         box-shadow: none;
@@ -201,6 +201,7 @@
       flex-direction: row-reverse;
       height: 2.4em;
       padding: 0 0.5em;
+      margin-top: 0.5em;
 
       a{
           padding: 0;
