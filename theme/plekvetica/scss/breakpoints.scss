@@ -30,13 +30,13 @@
     .has-inline-mobile-toggle .mobile-menu-control-wrapper {
         display: flex;
         flex-wrap: wrap;
+        z-index: 9999;
     }
 
     .has-inline-mobile-toggle .inside-header {
         flex-direction: row;
         text-align: left;
         flex-wrap: wrap;
-        padding-right: 0;
     }
 
     .has-inline-mobile-toggle .header-widget,.has-inline-mobile-toggle #site-navigation {
@@ -66,9 +66,14 @@
     }
 
     .inside-header{
-        padding: 0;
+        //padding: 0;
       }
       
+      /** Remove the current-menu marker */
+      .main-navigation .main-nav ul.menu li[class*="current-menu-"] > a{
+          border:0;
+      }
+
       .main-navigation .main-nav ul:first-child {
         display: flex !important;
         flex-direction: column;
@@ -76,41 +81,53 @@
         align-items: flex-start;
         @include transition(all, 300ms, ease);
         width: 50%;
+        max-width: 366px;
         min-width: 0;
         height: 100vh;
-        left: -50%;
+        left: -420px;
         top: -60px;
         position: absolute;
         background: $color-gray;
         height: auto;
         padding-bottom: 1em;
+        padding-right: 0.3em;
+        overflow: hidden;
       }
       
       .main-navigation.toggled .main-nav ul:first-child {
         width: 50%;
-        left: 0;
+        left: -40px;
         top: -60px;
         min-width: 250px;
+        overflow: unset;
       }
-      
+
+      /** Menu sidebar styling */     
+      .main-navigation .main-nav ul,
       .main-navigation.toggled .main-nav ul {
-        background: $color-gray;
-        right: 0;
-        top: 0;
-        box-shadow: none;
-        min-height: 100%vh;
-      
-        @include transition(all, 300ms, ease);
-      
-        li ul {
-          //background-color: $color-gray-light;
-          li:hover ul li{
-            background-color: red;
-          }
-          li:hover > ul li{
-            background-color: green;
-          }
+          background: $color-gray;
+          right: 0;
+          top: 0;
+          box-shadow: none;
+          //min-height: 100vh;
           
+          @include transition(all, 300ms, ease);
+          
+        /** Element is sub menu item */
+          li.current-menu-ancestor > ul > li.current-menu-item > a{
+            border-bottom: solid 2px $color-red-light;
+            background-color: $color-gray-dark;
+        }
+        /** Element is main menu item */
+        li.current-menu-item > a{
+            border-bottom: solid 2px $color-red-light;
+            background-color: $color-gray-dark;
+        }
+
+        li a:not(.icon){
+            height: 4em;
+            display: flex;
+            align-items: center;
         }
       
         .plek-sub-menu{
@@ -125,7 +142,8 @@
           cursor: pointer;
         }
       
-        .dropdown-menu-toggle{
+        .dropdown-menu-toggle,
+        li.plek-menu-mobile-hidden > a{
           display: none;
         }
       
@@ -156,7 +174,7 @@
 
       //Berichte
       #menu-item-16769 a::before{
-        content: "\f15c";
+        content: "\f51f";
       }
       
       //Fotos
@@ -186,12 +204,17 @@
         }
         
       //About
-      #menu-item-9065 li:first-child a::before{
+      #menu-item-9065 > a::before{
         content: "\f0c0";
       }
       
+      //Shop
+      .plek-sub-menu #menu-item-64461 a::before{
+        content: "\f07a";
+      }
+      
       //Support
-      #menu-item-66825 a::before{
+      .plek-sub-menu #menu-item-66825 a::before{
         content: "\f0fa";
       }
 
@@ -273,6 +296,12 @@
         }
     }
 
+}
+
+@media (max-width: 768px){
+    .main-navigation.toggled .main-nav ul:first-child {
+        left: -30px;
+      }
 }
 
 @media (max-width: 767px){

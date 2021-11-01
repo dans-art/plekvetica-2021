@@ -18,13 +18,17 @@ get_header(); ?>
 <div id="primary" <?php generate_do_element_classes('content'); ?>>
 	<main id="plek-search-page">
 		<?php
-
 		/**
 		 * generate_before_main_content hook.
 		 *
 		 * @since 0.1
 		 */
 		do_action('generate_before_main_content');
+
+		if(empty(get_search_query())){
+			echo '<h1>'. __('Search for: Rick Astley','pleklang') . '</h1>';
+			PlekTemplateHandler::load_template('rick-roll', 'components', null);
+		}else{ 
 		?>
 		<header class="page-header">
 			<h1 class="page-title">
@@ -68,6 +72,7 @@ get_header(); ?>
 
 		<?php
 
+		}//End empty(get_search_query()) else
 
 		/**
 		 * generate_after_main_content hook.
@@ -75,7 +80,6 @@ get_header(); ?>
 		 * @since 0.1
 		 */
 		do_action('generate_after_main_content');
-
 
 		?>
 	</main>
