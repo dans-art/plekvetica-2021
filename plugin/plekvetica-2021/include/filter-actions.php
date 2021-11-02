@@ -20,6 +20,7 @@ add_filter('tribe_get_event', [$plek_event,'plek_tribe_add_terms'], 10, 1);
 
 add_action('init', [$plek_handler, 'load_textdomain']); //load language 
 add_action('wp_head', [$plek_handler,'enqueue_scripts']);
+add_action('wp_head', [$plek_handler, 'enqueue_ajax_functions']);
 
 add_action('admin_menu', [$backend_class,'setup_options']);
 add_action('admin_init', [$backend_class, 'plek_register_settings']);

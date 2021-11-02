@@ -7,6 +7,7 @@ class PlekHandler
 
     protected $js_debug = array();
     public $version = "";
+    public $ajax_included = false;
 
     public function __construct()
     {
@@ -192,10 +193,28 @@ class PlekHandler
     
     public function activate_plugin(){
         PlekUserHandler::add_user_roles();
+        PlekNotificationHandler::create_database();
     }
     
     public function load_textdomain(){
         load_textdomain('pleklang', PLEK_PATH . 'languages/plekvetica-2021-' . determine_locale() . '.mo');
+    }
+
+    /**
+     * Includes some variables needed for Ajax functions
+     *
+     * @return void
+     */
+    public function enqueue_ajax_functions(){
+        if($this -> ajax_included === false){
+            //Add dynamic script to header
+                echo "<script type='text/javascript' defer='defer'>
+                var ajaxurl = '".admin_url('admin-ajax.php')."';
+                var plek_plugin_dir_url = '". PLEK_PLUGIN_DIR_URL."';
+                </script>";
+            $this -> ajax_included = true;
+        }
+        return;
     }
 
     /**

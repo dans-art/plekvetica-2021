@@ -99,10 +99,19 @@ class PlekAjaxHandler
      */
     public function plek_ajax_nopriv_event_actions()
     {
+        global $plek_event;
         $do = $this->get_ajax_do();
         switch ($do) {
             case 'toggle_watchlist':
                 $this->set_error(__('You have to be logged in to perform this action', 'pleklang'));
+                break;
+                case 'report_incorrect_event':
+                    $report = $plek_event -> report_incorrect_event();
+                    if($report === true){
+                        $this->set_success(__('Event reported_?', 'pleklang'));
+                    }else{
+                        $this->set_error($report);
+                }
                 break;
             default:
                 # code...

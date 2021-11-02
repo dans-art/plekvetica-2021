@@ -835,4 +835,18 @@ class PlekEventHandler
 
         return true;
     }
+
+    public function report_incorrect_event(){
+        global $plek_ajax_handler;
+        $event_id = $plek_ajax_handler -> get_ajax_data('event_id');
+        return $event_id;
+        //Check and verify last report send
+
+        //Send email
+        $notify = new PlekNotificationHandler;
+        $notify -> push_notification();
+        //Set check
+
+        return true; //Or Error
+    }
 }

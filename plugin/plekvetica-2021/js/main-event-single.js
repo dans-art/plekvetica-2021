@@ -155,6 +155,11 @@ let plek_single_event_main = {
             plek_single_event_main.toggle_follower(this);
         });
 
+        jQuery(document).on("click", '#plek-report-incorrect-event', function (e) {
+            e.preventDefault();
+            plek_single_event_main.report_incorrect_event(this);
+        });
+
     },
 
     do_ajax_watchlist_toggle(){
@@ -329,10 +334,46 @@ let plek_single_event_main = {
                 jQuery('.plek-follow-event-btn .label').text('Error loading data....');
             }
         });
-    }
+    },
 
+    report_incorrect_event(){
+        let event_id = jQuery('#event-container').data('event_id');
 
-    
+        plek_main.remove_field_errors();
+
+        let button = jQuery('#plek-report-incorrect-event');
+        plek_main.activate_loader_style(button);
+        var data = new FormData();
+        data.append('action', 'plek_event_actions');
+        data.append('do', 'report_incorrect_event');
+
+        data.append('event_id', event_id);
+
+        jQuery.ajax({
+            url: window.ajaxurl,
+            type: 'POST',
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function success(data) {
+                plek_main.deactivate_loader_style(button);
+                let text = plek_main.get_text_from_ajax_request(data, true);
+                let errors = plek_main.response_has_errors(data);
+
+                if (errors === true) {
+                    console.log("Contains Errors");
+                    text = plek_main.get_first_error_from_ajax_request(data);
+                }
+                jQuery('#plek-report-incorrect-event').text(text);
+
+            },
+            error: function error(data) {
+                plek_main.deactivate_loader_style(button);
+                jQuery('#plek-report-incorrect-event').text('Error loading data....');
+            }
+        });
+    }    
     
 }
 
