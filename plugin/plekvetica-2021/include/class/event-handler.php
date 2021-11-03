@@ -640,10 +640,18 @@ class PlekEventHandler
         return "<a href='$link' title='$title' target='_blank'><i class='$icon'></i></a>";
     }
 
+    /**
+     * Get the Event Ticket link
+     * It will filter out tracker and unwanted parts of the url and injects plekvetica affiliate parameters.
+     *
+     * @return void
+     */
     public function get_event_ticket_link()
     {
         global $plek_handler;
         $link = $this->get_field_value('ticket-url');
+        $link = $plek_handler -> clean_url($link);
+        $link = $this -> inject_affiliate_code($link);
         $link_icon = '<i class="fas fa-ticket-alt"></i>';
         if (strpos($link, 'starticket.ch') or strpos($link, 'seetickets.ch')) {
             $link_icon = "<img src='" . $plek_handler->get_plek_option('plek_seetickets_logo') . "' alt='Seeticket.ch'/>";
@@ -652,6 +660,41 @@ class PlekEventHandler
             $link_icon = "<img src='" . $plek_handler->get_plek_option('plek_ticketcorner_logo') . "' alt='ticketcorner.ch'/>";
         }
         return "<a href='$link' target='_blank' >$link_icon</a>";
+    }
+
+
+    /**
+     * Injects special 
+     *
+     * @param string $url
+     * @return string
+     */
+    public function inject_affiliate_code(string $url){
+        global $plek_handler;
+		$injectAttr['ticketcorner.ch'] = array("affiliate" => "PKV","utm_source" => "PKV","utm_medium"=>"dp","utm_campaign"=>"plekvetica");
+		$injectAttr['starticket.ch'] = array('PartnerID' => 151);
+
+        $url_split = parse_url(htmlspecialchars_decode($url));
+		if(empty($url_split['host'])){
+            return $url;
+        }
+		foreach($injectAttr as $site => $items_to_add){
+            //Check if Site has removable items
+			if(false !== stripos($url_split['host'],$site)){
+                parse_str($url_split['query'], $query_split);
+
+                if(is_array($query_split)){
+                    $query_split = array_merge($query_split, $items_to_add);
+                }else{
+                    $query_split = $items_to_add;
+                }
+                
+                $url_split['query'] = http_build_query($query_split);
+                return $plek_handler -> build_url($url_split);
+			}
+		}
+
+        return $url;
     }
 
     /**
@@ -841,7 +884,7 @@ class PlekEventHandler
         $event_id = $plek_ajax_handler -> get_ajax_data('event_id');
         return $event_id;
         //Check and verify last report send
-
+        
         //Send email
         $notify = new PlekNotificationHandler;
         $notify -> push_notification();

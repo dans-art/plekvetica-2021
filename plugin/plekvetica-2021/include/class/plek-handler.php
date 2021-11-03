@@ -232,4 +232,63 @@ class PlekHandler
 		return false;
 	}
 
+       /**
+     * Removes unwanted parts out of the given URL
+     * Removes fbclid, PartnerID
+     *
+     * @param string $url
+     * @return string
+     */
+    public function clean_url(string $url){
+        $removeAttr['facebook'] = array("notif_t","notif_id","ref");
+		$removeAttr['ticketcorner.ch'] = array("affiliate","utm_source","utm_medium","utm_campaign");
+		$removeAttr['starticket.ch'] = array("PartnerID");
+        
+		$url_split = parse_url(htmlspecialchars_decode($url));
+		if(empty($url_split['host']) OR empty($url_split['query'])){
+            return $url;
+        }
+        //Adds the current site as the default and removes the default fields like facebook tracker
+        $removeAttr[$url_split['host']] = array("fbclid");
+
+		foreach($removeAttr as $site => $items_to_remove){
+
+            //Check if Site has removable items
+			if(false !== stripos($url_split['host'],$site)){
+                parse_str($url_split['query'], $query_split);
+                //Remove the Item from the URL
+                foreach($query_split as $key => $value){
+                   if(array_search(strtolower($key), $items_to_remove) !== false){
+                       unset($query_split[$key]);
+                   }
+                }
+                $url_split['query'] = http_build_query($query_split);
+                return $this -> build_url($url_split);
+			}
+		}
+
+        return $url;
+
+    }
+
+    /**
+     * Builds an URL together which was separated by the parse_url function
+     *
+     * @param array $parse_url_array
+     * @return void
+     */
+    function build_url(array $parse_url_array) {
+        $e = $parse_url_array;
+        return
+            (isset($e['host']) ? (
+                (isset($e['scheme']) ? "$e[scheme]://" : '//') .
+                (isset($e['user']) ? $e['user'] . (isset($e['pass']) ? ":$e[pass]" : '') . '@' : '') .
+                $e['host'] .
+                (isset($e['port']) ? ":$e[port]" : '')
+            ) : '') .
+            (isset($e['path']) ? $e['path'] : '/') .
+            (isset($e['query']) && !empty($e['query']) ? '?' . (is_array($e['query']) ? http_build_query($e['query'], '', '&') : $e['query']) : '') .
+            (isset($e['fragment']) ? "#$e[fragment]" : '');
+    }
+
 }
