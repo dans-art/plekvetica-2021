@@ -9,11 +9,11 @@ class PlekNotificationHandler
 
     public function __construct()
     {
-
     }
 
     /**
      * Saves a notification to the Database
+     * @todo: Push notification to Mobile App
      *
      * @param [type] $user_id
      * @param [type] $type
@@ -22,12 +22,13 @@ class PlekNotificationHandler
      * @param [type] $action
      * @return int|false Id of the inserted row or false on error.
      */
-    public function push_notification($user_id = null, $type = null, $subject = null, $message = null, $action = null){
+    public function push_notification($user_id = null, $type = null, $subject = null, $message = null, $action = null)
+    {
         global $wpdb;
-        if(! is_integer($user_id)){
+        if (!is_integer($user_id)) {
             $user_id = get_current_user_id();
         }
-        $table = $wpdb->prefix.'plek_notifications';
+        $table = $wpdb->prefix . 'plek_notifications';
         $data = array();
         $data['user_id'] = $user_id;
         $data['pushed_on'] = date('Y-m-d H:i:s');
@@ -37,13 +38,12 @@ class PlekNotificationHandler
         $data['action_link'] = $action;
         $data['email_send'] = 0; //Get this from user preferences
         $data['dismissed'] = 0;
-        $format = array('%d','%s','%s', '%s','%s','%s','%d','%d');
-        if($wpdb->insert($table,$data,$format)){
+        $format = array('%d', '%s', '%s', '%s', '%s', '%s', '%d', '%d');
+        if ($wpdb->insert($table, $data, $format)) {
             return $wpdb->insert_id;
-        }else{
+        } else {
             return false;
         }
-
     }
 
     /**
@@ -52,12 +52,13 @@ class PlekNotificationHandler
      * @param int $user_id
      * @return void
      */
-    public function get_user_notifications($user_id = null){
+    public function get_user_notifications($user_id = null)
+    {
         global $wpdb;
-        if(! is_integer($user_id)){
+        if (!is_integer($user_id)) {
             $user_id = get_current_user_id();
         }
-        
+
         $like = $wpdb->esc_like($user_id);
 
         $query = $wpdb->prepare("SELECT *
@@ -69,7 +70,6 @@ class PlekNotificationHandler
             return false;
         }
         return $notifications;
-
     }
 
     /**
@@ -78,11 +78,12 @@ class PlekNotificationHandler
      *
      * @return void
      */
-    public static function create_database(){
+    public static function create_database()
+    {
         global $wpdb;
-        $table_name = $wpdb -> prefix . "plek_notifications";
+        $table_name = $wpdb->prefix . "plek_notifications";
         $charset_collate = $wpdb->get_charset_collate();
- 
+
         $sql = "CREATE TABLE IF NOT EXISTS $table_name (
           id bigint(20) NOT NULL AUTO_INCREMENT,
           user_id bigint(20) UNSIGNED NOT NULL,
@@ -100,9 +101,61 @@ class PlekNotificationHandler
         return;
     }
 
-    public function send_unsend_email_notifications(){
-
+    /**
+     * Sends the Email
+     *
+     * @return int|false Number of send emails or false on error
+     */
+    public function send_unsend_email_notifications()
+    {
+        global $wpdb;
+        $query = "SELECT *
+            FROM `{$wpdb->prefix}plek_notifications` as notify
+            WHERE notify.`email_send` = 0
+            ORDER BY notify.`id` ASC
+            LIMIT 2";
+        $notifications = $wpdb->get_results($query);
+        if (empty($notifications)) {
+            return false;
+        }
+        $emailer = new PlekEmailSender;
+        $emailer->set_default();
+        $counter = 0;
+        foreach ($notifications as $notify) {
+            $user = get_user_by('ID', $notify->user_id);
+            if (!isset($user->user_email)) {
+                continue;
+            }
+            $subject = (isset($notify->subject))?$notify -> subject:__('News from Plekvetica','pleklang');
+            $message = (isset($notify->message))?$notify -> message:'';
+            $action = (isset($notify->action_link))?$notify -> action_link:'';
+            $emailer->set_to($user->user_email);
+            $emailer->set_subject($subject);
+            $emailer->set_message_from_template('', $subject, $message, $action);
+            $emailer->send_mail();
+            $this->notification_email_sent($notify->id);
+            $counter++;
+        }
+        return ($counter === 0) ? false : $counter;
     }
 
+    public function notification_read()
+    {
+    }
 
+    /**
+     * Updates the send Email value in the Notification database.
+     *
+     * @param string $notification_id - The ID of the notification
+     * @return int|false The number of rows updated, or false on error.
+     */
+    public function notification_email_sent(string $notification_id)
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'plek_notifications';
+        $data = array('email_send' => 1);
+        $where = array('id' => $notification_id);
+        $format = array('%d');
+        return $wpdb->update($table, $data, $where, $format, $format);
+    }
 }

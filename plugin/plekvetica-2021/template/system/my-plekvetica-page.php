@@ -20,7 +20,8 @@ $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user 
         </div>
 </div>
 
-<?php PlekTemplateHandler::load_template('user-notifications', 'system/userpage'); ?>
+<?php PlekTemplateHandler::load_template('user-notifications', 'system/userpage'); 
+?>
 
 
 

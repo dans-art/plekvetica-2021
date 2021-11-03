@@ -98,7 +98,8 @@ wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-sing
         <?php PlekTemplateHandler::load_template('organizer', 'event/meta'); ?>
         <?php PlekTemplateHandler::load_template('authors', 'event/meta'); ?>
         <?php if (!$can_edit) : ?>
-            <?php PlekTemplateHandler::load_template('event-actions', 'event/meta'); ?>
+            <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Event', 'pleklang')); ?>
+            <?php PlekTemplateHandler::load_template('button', 'components', '#', 'Fehlerhaften Event melden', null, 'plek-report-incorrect-event'); ?>
         <?php endif; ?>
     </div>
 

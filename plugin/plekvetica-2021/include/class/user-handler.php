@@ -407,6 +407,18 @@ class PlekUserHandler
     }
 
     /**
+     * Get the ID of the user
+     *
+     * @param string $login_name
+     * @return void
+     */
+    public static function get_user_id_from_login_name(string $login_name)
+    {
+        $user = get_user_by('login', $login_name);
+        return (isset($user->ID)) ? $user->ID : $login_name;
+    }
+
+    /**
      * Get a ACF user setting. 
      *
      * @param string $name - Name of the ACF setting

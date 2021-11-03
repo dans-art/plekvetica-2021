@@ -130,6 +130,16 @@ class PlekEventHandler
     }
 
     /**
+     * Returns the edit Event page link
+     *
+     * @param string|int $event_id
+     * @return string The Event edit url
+     */
+    public function get_edit_event_link($event_id){
+        return get_site_url() . "/event-bearbeiten/?edit=" . $event_id;
+    }
+
+    /**
      * Get the ID of the original event, if the event got postponed.
      *
      * @return mixed false if no orig_id was found, ID on success
@@ -755,6 +765,11 @@ class PlekEventHandler
         }
     }
 
+    /**
+     * Loads the current accredited members
+     *
+     * @return array|false array with the login_names of the members or false, if not found.
+     */
     public function get_event_akkredi_crew()
     {
         $crew = get_field('akkreditiert', $this->get_ID());
@@ -879,17 +894,43 @@ class PlekEventHandler
         return true;
     }
 
+    /**
+     * Sends notification to the author and accredited crew if an user reports an event as outdated.
+     *
+     * @return true|string
+     */
     public function report_incorrect_event(){
-        global $plek_ajax_handler;
-        $event_id = $plek_ajax_handler -> get_ajax_data('event_id');
-        return $event_id;
         //Check and verify last report send
-        
-        //Send email
-        $notify = new PlekNotificationHandler;
-        $notify -> push_notification();
-        //Set check
+        //global $plek_handler;
+        $this -> load_event_from_ajax();
+        if($this -> get_ID() === null){
+            return __('ID of Event not found!','pleklang');
+        }
+        $reported_on = get_field('incorrect_event_reported_at', $this -> get_ID());
+        $reported_time = (!empty($reported_on))?strtotime($reported_on):null;
+        if($reported_time === null OR ($reported_time - time() > 259200) ){ //Allow reporting again after three days
+            //Get the users to notify
+            $users = $this -> get_event_authors();
+            $crew = $this -> get_event_akkredi_crew();
+            if(is_array($crew)){
+                foreach($crew as $member){
+                    $user_id = PlekUserHandler::get_user_id_from_login_name($member);
+                    $users[$user_id] = $member;
+                }
+            }
 
-        return true; //Or Error
+            //Send notification to the users
+            $notify = new PlekNotificationHandler;
+            $subject = __('Your Event on Plekvetica needs an update','pleklang');
+            $message = ''; //@todo: Add Message
+            $action = $this -> get_edit_event_link($this -> get_ID());
+            foreach($users as $id => $name){
+                $notify -> push_notification($id, 'event', $subject, $message, $action);
+            }
+        }
+
+        return true; //Returns true even if the event could not been reported.
     }
+
+
 }

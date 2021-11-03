@@ -84,6 +84,14 @@ class PlekAjaxHandler
                     $this->set_error(__('Error while loading the data', 'pleklang'));
                 }
                 break;
+            case 'report_incorrect_event':
+                $report = $plek_event -> report_incorrect_event();
+                if($report === true){
+                    $this->set_success(__('Event reported', 'pleklang'));
+                }else{
+                    $this->set_error($report);
+            }
+                break;
             default:
                 # code...
                 break;
@@ -108,7 +116,7 @@ class PlekAjaxHandler
                 case 'report_incorrect_event':
                     $report = $plek_event -> report_incorrect_event();
                     if($report === true){
-                        $this->set_success(__('Event reported_?', 'pleklang'));
+                        $this->set_success(__('Event reported', 'pleklang'));
                     }else{
                         $this->set_error($report);
                 }

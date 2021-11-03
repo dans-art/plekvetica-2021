@@ -64,12 +64,13 @@ class PlekEmailSender
      * Loads the template with the given arguments
      * Template has to be within the template/email folder
      *
-     * @param string $template - The Template to use. e.g. user/new-user
+     * @param string $template - The Template to use. e.g. user/new-user. If empty, the default template will be used
      * @param string $subject - Subject and title of the email
      * @param mixed ...$args - Arguments for the template 
      * @return string The created message
      */
-    public function set_message_from_template(string $template, string $subject = '', ...$args){
+    public function set_message_from_template(string $template = '', string $subject = '', ...$args){
+       $template = (empty($template))?'default-email':$template;
        $this -> message = PlekTemplateHandler::load_template_to_var($template, 'email', $subject, $args);
        return $this -> message;
     }
