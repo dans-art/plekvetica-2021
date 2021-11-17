@@ -31,6 +31,9 @@ add_filter( 'wp_get_nav_menu_items', [$plek_handler, 'wp_get_nav_menu_items_filt
 add_action( 'wp_login_failed', [$plek_login_handler, 'wp_login_failed_action'] ); 
 add_action( 'wp_authenticate', [$plek_login_handler, 'wp_authenticate_action'], 1, 2 );
 
+//Cron Jobs
+add_action('send_unsend_email_notifications', [new PlekNotificationHandler, 'send_unsend_email_notifications']);
+
 //Ajax
 add_action('wp_ajax_plek_ajax_event_form', [new PlekAjaxHandler,'plek_ajax_event_form_action']);
 add_action('wp_ajax_nopriv_plek_ajax_event_form', [new PlekAjaxHandler, 'plek_ajax_event_form_action']);
@@ -43,6 +46,9 @@ add_action('wp_ajax_nopriv_plek_user_actions',  [new PlekAjaxHandler,'plek_ajax_
 
 add_action('wp_ajax_plek_band_actions',  [new PlekAjaxHandler,'plek_ajax_band_actions']);
 add_action('wp_ajax_nopriv_plek_band_actions',  [new PlekAjaxHandler,'plek_ajax_band_nopriv_actions']);
+
+add_action('wp_ajax_plek_content_loader',  [new PlekAjaxHandler,'plek_ajax_content_loader_actions']);
+add_action('wp_ajax_nopriv_plek_content_loader',  [new PlekAjaxHandler,'plek_ajax_content_loader_nopriv_actions']);
 
 //JS Debugger
 add_action( 'plek_js_debug', [$plek_handler,'set_js_error'], 10, 1 );

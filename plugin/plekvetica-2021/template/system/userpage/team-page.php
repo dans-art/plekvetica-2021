@@ -20,7 +20,7 @@ global $plek_event_blocks;
 
 $my_week_block = $plek_event_blocks->get_block('my_week');
 $my_events_block = $plek_event_blocks->get_block('my_events');
-$my_missing_reviews = $plek_event_blocks->get_block('my_missing_reviews');
+//$my_missing_reviews = $plek_event_blocks->get_block('my_missing_reviews');
 
 $plek_event_blocks -> set_number_of_posts(5);
 $my_watchlist = $plek_event_blocks->get_block('my_event_watchlist');
@@ -40,11 +40,7 @@ $my_band_follows = $plek_event_blocks->get_block('my_band_follows');
         </div>
         <div class="missing-reviews-posts">
             <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Fehlende Reviews', 'pleklang')); ?>
-            <?php if (!empty($my_missing_reviews)) : ?>
-                <?php echo $my_missing_reviews; ?>
-            <?php else : ?>
-                <span class="plek-no-open-reviews"><?php echo __('Super! Keine fehlenden Reviews.', 'pleklang'); ?></span>
-            <?php endif; ?>
+            <div id="missing-reviews-container" class="plek-load-content" data-plek-content-loader="block_my_missing_reviews"></div>
         </div>
     </div>
     <div class="watchlist-posts">

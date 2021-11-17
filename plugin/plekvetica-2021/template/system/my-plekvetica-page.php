@@ -15,6 +15,7 @@ $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user 
         <h2><?php echo sprintf(__('Hallo %s', 'pleklang'), $user->display_name); ?></h2>
     </div>
     <div>
+        <div class="notifications-button-container"><button id="notifications-button"></button></div>
         <div class="logout-link"><a href="<?php echo $current_url; ?>?action=logout"><?php echo __('Abmelden', 'pleklang'); ?></a></div>
         <div class="settings-link"><a href="<?php echo $current_url; ?>?action=settings"><?php echo __('Einstellungen', 'pleklang'); ?></a></div>
         </div>

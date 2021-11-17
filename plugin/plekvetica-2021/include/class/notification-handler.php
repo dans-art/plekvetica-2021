@@ -6,6 +6,7 @@ if (!defined('ABSPATH')) {
 
 class PlekNotificationHandler
 {
+    protected $number_of_notifications = 0;
 
     public function __construct()
     {
@@ -61,15 +62,41 @@ class PlekNotificationHandler
 
         $like = $wpdb->esc_like($user_id);
 
-        $query = $wpdb->prepare("SELECT *
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS *
             FROM `{$wpdb->prefix}plek_notifications` as notify
             WHERE notify.`user_id` LIKE %d
-            AND notify.`dismissed` = 0", $like);
+            AND notify.`dismissed` = 0
+            ORDER BY notify.`pushed_on` DESC", $like);
         $notifications = $wpdb->get_results($query);
+        $this -> number_of_notifications = $wpdb->get_var("SELECT FOUND_ROWS()");
+
+        if ($wpdb->last_error) {
+            return $wpdb->last_error;
+        }
         if (empty($notifications)) {
-            return false;
+            return null;
         }
         return $notifications;
+    }
+
+    public function get_user_notifications_formated($user_id = null)
+    {
+        $notifications = $this->get_user_notifications($user_id);
+        if (is_string($notifications)) {
+            return sprintf(__('Error: %s ', 'pleklang'), $notifications);
+        }
+        if (!is_array($notifications) OR empty($notifications)) {
+            return __('No Notifications to show', 'pleklang');
+        }
+        $result = "";
+        foreach($notifications as $notify_arr){
+            $result .= PlekTemplateHandler::load_template_to_var('notification-item', 'components', $notify_arr);
+        }
+        return $result;
+    }
+
+    public function get_number_of_notificaions(){
+        return $this -> number_of_notifications;
     }
 
     /**
@@ -113,7 +140,7 @@ class PlekNotificationHandler
             FROM `{$wpdb->prefix}plek_notifications` as notify
             WHERE notify.`email_send` = 0
             ORDER BY notify.`id` ASC
-            LIMIT 2";
+            LIMIT 5";
         $notifications = $wpdb->get_results($query);
         if (empty($notifications)) {
             return false;
@@ -126,9 +153,9 @@ class PlekNotificationHandler
             if (!isset($user->user_email)) {
                 continue;
             }
-            $subject = (isset($notify->subject))?$notify -> subject:__('News from Plekvetica','pleklang');
-            $message = (isset($notify->message))?$notify -> message:'';
-            $action = (isset($notify->action_link))?$notify -> action_link:'';
+            $subject = (isset($notify->subject)) ? $notify->subject : __('News from Plekvetica', 'pleklang');
+            $message = (isset($notify->message)) ? $notify->message : '';
+            $action = (isset($notify->action_link)) ? $notify->action_link : '';
             $emailer->set_to($user->user_email);
             $emailer->set_subject($subject);
             $emailer->set_message_from_template('', $subject, $message, $action);

@@ -65,7 +65,7 @@ class PlekAjaxHandler
                 break;
             case 'toggle_watchlist':
                 //@todo Toggle watchlist like band follow. Rename to follow.
-                $plek_event -> load_event_from_ajax();
+                $plek_event->load_event_from_ajax();
                 $toggle = $plek_event->toggle_follower_from_ajax();
                 $counter = $plek_event->get_watchlist_count();
                 if ($toggle) {
@@ -77,7 +77,7 @@ class PlekAjaxHandler
                 break;
             case 'load_block_content':
                 global $plek_event_blocks;
-                $content = $plek_event_blocks -> get_block_from_ajax();
+                $content = $plek_event_blocks->get_block_from_ajax();
                 if ($content) {
                     $this->set_success($content);
                 } else {
@@ -85,12 +85,12 @@ class PlekAjaxHandler
                 }
                 break;
             case 'report_incorrect_event':
-                $report = $plek_event -> report_incorrect_event();
-                if($report === true){
+                $report = $plek_event->report_incorrect_event();
+                if ($report === true) {
                     $this->set_success(__('Event reported', 'pleklang'));
-                }else{
+                } else {
                     $this->set_error($report);
-            }
+                }
                 break;
             default:
                 # code...
@@ -113,12 +113,12 @@ class PlekAjaxHandler
             case 'toggle_watchlist':
                 $this->set_error(__('You have to be logged in to perform this action', 'pleklang'));
                 break;
-                case 'report_incorrect_event':
-                    $report = $plek_event -> report_incorrect_event();
-                    if($report === true){
-                        $this->set_success(__('Event reported', 'pleklang'));
-                    }else{
-                        $this->set_error($report);
+            case 'report_incorrect_event':
+                $report = $plek_event->report_incorrect_event();
+                if ($report === true) {
+                    $this->set_success(__('Event reported', 'pleklang'));
+                } else {
+                    $this->set_error($report);
                 }
                 break;
             default:
@@ -275,6 +275,37 @@ class PlekAjaxHandler
                 break;
         }
         echo $this->get_ajax_return();
+        die();
+    }
+
+    public function plek_ajax_content_loader_actions()
+    {
+        $do = $this->get_ajax_do();
+        switch ($do) {
+            case 'plek-all-notifications':
+                $return_arr = array();
+                $notify = new PlekNotificationHandler;
+                $return_arr['content'] = $notify->get_user_notifications_formated();
+                $return_arr['count'] = $notify->get_number_of_notificaions();
+                echo json_encode($return_arr);
+                break;
+            case 'block_my_missing_reviews':
+                $return_arr = array();
+                $plek_event_blocks = new PlekEventBlocks;
+                $return_arr['content'] = $plek_event_blocks->get_block('my_missing_reviews');
+                if($return_arr['content'] === false){
+                    $return_arr['content'] = "<span class='plek-no-open-reviews'>".__('Super! Keine fehlenden Reviews.', 'pleklang')."</span>";
+                }
+                $return_arr['count'] = 0;
+                echo json_encode($return_arr);
+                break;
+        }
+        die();
+    }
+
+    public function plek_ajax_content_loader_nopriv_actions()
+    {
+        echo "no no priv actions";
         die();
     }
 

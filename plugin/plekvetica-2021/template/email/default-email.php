@@ -20,9 +20,11 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
         <td id="email-content" style="color: <?php echo $text_color; ?>;">
             <h1><?php echo $subject; ?></h1>
             <div>
-                <?php echo $message; ?>
+                <p>
+                    <?php echo $message; ?>
+                </p>
                 <?php if(!empty($link)): ?>
-                    <a href="<?php echo $link; ?>"><?php echo $link; ?></a>
+                    <a href="<?php echo $link; ?>" style="color: <?php echo $link_color; ?>;" ><?php echo $link; ?></a>
                 <?php endif; ?>
             </div>
         </td>

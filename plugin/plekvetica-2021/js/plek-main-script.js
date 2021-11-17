@@ -3,6 +3,7 @@ let plek_main = {
         jQuery(window).resize();
         jQuery(document).ready(function(){
             plek_main.add_event_listener();
+            plek_main.content_loader();
         });
     },
 
@@ -64,6 +65,49 @@ let plek_main = {
         
     },
 
+    /**
+     * Loads the content via ajax call
+     * The container needs to have the class .plek-load-content and a data attribute "plek-content-loader"
+     * @todo: Send pagenumber and additional parameters with the request. 
+     */
+    content_loader(){
+        let items = jQuery('.plek-load-content');
+        if(items.length == 0){
+            return;
+        }
+        jQuery(items).each(function(index){
+            var current_item = this;
+            jQuery(current_item).text('Loading');
+            let to_load = jQuery(this).data('plek-content-loader');
+            var button_id = jQuery(this).data('counter-button-id');
+            var send_data = new FormData();
+            send_data.append('action', 'plek_content_loader');
+            send_data.append('do', to_load);
+
+            jQuery.ajax({
+                url: window.ajaxurl,
+                type: 'POST',
+                cache: false,
+                processData: false,
+                contentType: false,
+                data: send_data,
+                success: function success(data) {
+                    let encoded_data = JSON.parse(data);
+                    let content = encoded_data.content;
+                    let count = encoded_data.count;
+                    jQuery(current_item).html(content);
+                    jQuery('#'+button_id).text(count);
+    
+                },
+                error: function error(data) {
+                    jQuery(current_item).text('Error loading data....');
+                }
+            });
+
+
+        });
+    },
+
     add_event_listener(){
         /** Ajax Loader button */
         jQuery('#page').on('click', '.ajax-loader-button' ,function(e){
@@ -82,6 +126,11 @@ let plek_main = {
             if(keycode === 13){
                 plek_main.redirect_to_search(this);
             }
+        });
+
+        /** Toggle Notifications container */
+        jQuery('#main').on('click','#notifications-button', function(e){
+            plek_main.toggle_notification_container(this);
         });
     },
 
@@ -322,6 +371,18 @@ let plek_main = {
         }catch(e) {
             console.log("Block: "+block_id+" not found in container");;
         }
+    },
+
+    /**
+     * Toggles the visibility of the notification container
+     * @param {*} item 
+     */
+    toggle_notification_container(item){
+        if (jQuery('#notifications-container').is(':hidden')) {
+            jQuery('#notifications-container').show(100);
+         } else {
+            jQuery('#notifications-container').hide(100);
+         }
     }
     
 }

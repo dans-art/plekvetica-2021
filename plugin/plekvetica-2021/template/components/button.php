@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 global $plek_event;
 global $plek_handler;
 extract(get_defined_vars());

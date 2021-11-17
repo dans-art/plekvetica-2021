@@ -901,7 +901,7 @@ class PlekEventHandler
      */
     public function report_incorrect_event(){
         //Check and verify last report send
-        //global $plek_handler;
+        global $plek_handler;
         $this -> load_event_from_ajax();
         if($this -> get_ID() === null){
             return __('ID of Event not found!','pleklang');
@@ -921,12 +921,15 @@ class PlekEventHandler
 
             //Send notification to the users
             $notify = new PlekNotificationHandler;
-            $subject = __('Your Event on Plekvetica needs an update','pleklang');
-            $message = ''; //@todo: Add Message
+            $subject = sprintf(__('"%s" needs an update','pleklang'),$this -> get_name());
+            $message =  sprintf(__('Your Event "%s" has been reported as outdated. Please have a look and update the Event. Thanks!','pleklang'),$this -> get_name());
             $action = $this -> get_edit_event_link($this -> get_ID());
             foreach($users as $id => $name){
                 $notify -> push_notification($id, 'event', $subject, $message, $action);
             }
+
+            //Set reported on date
+            $plek_handler -> update_field('incorrect_event_reported_at', date('Y-m-d H:m:s'), $this -> get_ID());
         }
 
         return true; //Returns true even if the event could not been reported.
