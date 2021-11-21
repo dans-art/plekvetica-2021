@@ -92,7 +92,7 @@ class PlekNotificationHandler
             return sprintf(__('Error: %s ', 'pleklang'), $notifications);
         }
         if (!is_array($notifications) OR empty($notifications)) {
-            return __('No Notifications to show', 'pleklang');
+            return '<div class="no-notifications">'.__('No Notifications to show', 'pleklang').'</div>';
         }
         $result = "";
         foreach($notifications as $notify_arr){

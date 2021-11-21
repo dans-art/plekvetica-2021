@@ -715,6 +715,12 @@ margin: 4px 0px 0px 0;
   right: 40px;
   margin-top: -5em;
   padding-left: 0.5em;
+  box-shadow: -10px 5px 5px #0000003b;
+
+  .no-notifications{
+    text-align: center;
+    padding: 2em;
+  }
 
   .notification-item{
     display: flex;
