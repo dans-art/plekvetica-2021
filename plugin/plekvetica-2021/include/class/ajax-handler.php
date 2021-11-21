@@ -113,6 +113,15 @@ class PlekAjaxHandler
             case 'toggle_watchlist':
                 $this->set_error(__('You have to be logged in to perform this action', 'pleklang'));
                 break;
+            case 'load_block_content':
+                global $plek_event_blocks;
+                $content = $plek_event_blocks->get_block_from_ajax();
+                if ($content) {
+                    $this->set_success($content);
+                } else {
+                    $this->set_error(__('Error while loading the data', 'pleklang'));
+                }
+                break;
             case 'report_incorrect_event':
                 $report = $plek_event->report_incorrect_event();
                 if ($report === true) {
