@@ -1109,8 +1109,8 @@ msgid ""
 "Your Event \"%s\" has been reported as outdated. Please have a look and "
 "update the Event. Thanks!"
 msgstr ""
-"Deine Veranstaltung \"%s\" wurde als veraltet gemeldet. Bitte schau dir "
-"diesen Event an und bringe ihn auf den neusten Stand. Danke!"
+"Deine Veranstaltung \"%s\" wurde als veraltet gemeldet. Bitte schau dir den "
+"Event an und bringe diesen auf den neusten Stand. Danke!"
 
 #: template/event/event-list-item-youtube.php:21
 msgid "Youtube Video"

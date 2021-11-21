@@ -302,6 +302,10 @@
     .main-navigation.toggled .main-nav ul:first-child {
         left: -30px;
       }
+
+      #notifications-container{
+          width: 100%;
+      }
 }
 
 @media (max-width: 767px){
