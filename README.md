@@ -13,7 +13,9 @@ Version 1.1.1
 - "Kein Bandlogo"-Bandlogo angepasst
 - Style anpassungen
 - Diverse Optimierungen und Fixes
-- Angepasstes Kontextmenu für Bilder hinzugefügt
+- Angepasstes Kontextmenu für die Bilder hinzugefügt
+- Benachrichtigungen im My Plekvetica sichtbar
+- Einfacheres melden von veralteten Events
 
 Version 1.0
 
