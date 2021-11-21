@@ -62,13 +62,19 @@ class PlekNotificationHandler
 
         $like = $wpdb->esc_like($user_id);
 
-        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS *
+        $query_notifications = $wpdb->prepare("SELECT *
             FROM `{$wpdb->prefix}plek_notifications` as notify
             WHERE notify.`user_id` LIKE %d
-            AND notify.`dismissed` = 0
-            ORDER BY notify.`pushed_on` DESC", $like);
-        $notifications = $wpdb->get_results($query);
-        $this -> number_of_notifications = $wpdb->get_var("SELECT FOUND_ROWS()");
+            ORDER BY notify.dismissed ASC, notify.`pushed_on` DESC
+            LIMIT 20", $like);
+        $notifications = $wpdb->get_results($query_notifications);
+        
+        $query_count = $wpdb->prepare("SELECT COUNT(*)
+        FROM `{$wpdb->prefix}plek_notifications` as notify
+        WHERE notify.`user_id` LIKE %d
+        AND notify.`dismissed` = 0
+        ORDER BY notify.`pushed_on` DESC", $like);
+        $this -> number_of_notifications = (int) $wpdb->get_var($query_count);
 
         if ($wpdb->last_error) {
             return $wpdb->last_error;
@@ -130,6 +136,7 @@ class PlekNotificationHandler
 
     /**
      * Sends the Email
+     * Emails only get send, if there not already sent and only if there have not been dismissed.
      *
      * @return int|false Number of send emails or false on error
      */
@@ -139,6 +146,7 @@ class PlekNotificationHandler
         $query = "SELECT *
             FROM `{$wpdb->prefix}plek_notifications` as notify
             WHERE notify.`email_send` = 0
+            AND notify.`dismissed` = 0
             ORDER BY notify.`id` ASC
             LIMIT 5";
         $notifications = $wpdb->get_results($query);
@@ -166,8 +174,21 @@ class PlekNotificationHandler
         return ($counter === 0) ? false : $counter;
     }
 
-    public function notification_read()
+    /**
+     * Dissmisses a Notification by the notification id.
+     * Only if the User is the "owner" of this notification, it will get dismissed.
+     */
+    public function notification_dismiss()
     {
+        global $wpdb;
+        global $plek_ajax_handler;
+        $notification_id = (int) $plek_ajax_handler -> get_ajax_data('dissmiss_id');
+        $user_id = (int) get_current_user_id(); 
+        $table = $wpdb->prefix . 'plek_notifications';
+        $data = array('dismissed' => 1);
+        $where = array('id' => $notification_id, 'user_id' => $user_id);
+        $format = array('%d');
+        return $wpdb->update($table, $data, $where, $format, $format);
     }
 
     /**

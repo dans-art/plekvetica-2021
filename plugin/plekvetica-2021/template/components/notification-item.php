@@ -11,10 +11,10 @@ $pushed_on = (isset($notify_object->pushed_on)) ? strtotime($notify_object->push
 $notify_type = (isset($notify_object->notify_type)) ? $notify_object->notify_type : 'null';
 $subject = (isset($notify_object->subject)) ? $notify_object->subject : 'Null';
 $action_link = (isset($notify_object->action_link)) ? $notify_object->action_link : '';
-
+$dismissed = (isset($notify_object->dismissed) and $notify_object->dismissed === '1') ? 'dismissed' : '';
 
 ?>
-<div id="notification_<?php echo $id; ?>" class="notification-item type-<?php echo $notify_type; ?>">
+<div id="notification_<?php echo $id; ?>" class="notification-item type-<?php echo $notify_type; ?> <?php echo $dismissed; ?>">
     <?php if (!empty($action_link)) : ?>
         <a href="<?php echo $action_link; ?>">
         <?php endif; ?>
@@ -23,5 +23,10 @@ $action_link = (isset($notify_object->action_link)) ? $notify_object->action_lin
         <div></div>
         <?php if (!empty($action_link)) : ?>
         </a>
+    <?php endif; ?>
+    <?php if (empty($dismissed)) : ?>
+        <button class="dismiss_notification" data-dismiss-id="<?php echo $id; ?>"><i class="fas fa-times"></i></button>
+    <?php else: ?>
+        <span class="is_dismissed">x</span>
     <?php endif; ?>
 </div>

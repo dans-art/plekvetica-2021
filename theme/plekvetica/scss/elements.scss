@@ -97,11 +97,10 @@ button {
   text-align: center;
   color: $text-color;
   padding: 0.5em;
-  background-color: #8C262E;
   margin: 0.3em 0;
   display: block;
   color: $text-color;
-  cursor: pointer;
+  cursor: url("../plekvetica/assets/metalhand.cur"), pointer;
 
   &:visited{
     color: $text-color;
@@ -178,6 +177,11 @@ button {
     0% {width: 0%; left: 0;}
     50% {width: 100%; left: 0;}
     100% {width: 0%; left: 100%;}
+  }
+
+  @keyframes plek-spinning-item {
+    from { transform: rotate(0deg) }
+    to { transform: rotate(360deg) }
   }
 
 
@@ -700,4 +704,100 @@ margin: 4px 0px 0px 0;
 .context-menu-icon::before{
 	font-family: FontAwesome !important;
 	color: $color-red !important;
+}
+
+/* Notifications */
+
+#notifications-container{
+  background-color: $color-gray-light;
+  position: absolute;
+  width: 50%;
+  right: 40px;
+  margin-top: -5em;
+  padding-left: 0.5em;
+
+  .notification-item{
+    display: flex;
+    justify-content: space-around;
+    margin: 1em 0;
+    gap: 1em;
+  }
+
+  .notification-item::before{
+    font-family: FontAwesome;
+    font-size: 1.5em;
+    width: 1.5em;
+  }
+
+  a{
+    flex-basis: 80%;
+    color: $color-gray-light-two;
+  }
+
+  .dismissed,
+  .dismissed a{
+    color: $color-gray;
+  }
+
+  .type-event::before{
+    content: "\f783";
+  }
+  .type-band::before{
+    content: "\f500";
+  }
+  .type-important::before{
+    content: "\f071";
+  }
+
+
+
+  .dismissed button,
+  .dismissed .is_dismissed{
+    visibility: hidden;
+  }
+
+  .dismissed .is_dismissed{
+    width: 3em;
+  }
+
+  .dismiss_notification{
+    background-color: $color-gray-light;
+
+    .fa-spinner{
+      animation-name: plek-spinning-item;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+  }
+}
+
+.notifications-button-container{
+  justify-content: flex-end;
+  display: flex;
+  margin-bottom: 1em;
+
+  #notifications-button{
+    display: flex;
+    max-width: 85px;
+
+
+    i{
+      margin:0;
+      padding: 0.5em;
+      background-color: $color-red-light;
+      flex-basis: 50%;
+      text-align: center;
+    }
+
+    #notifications-button-counter{
+      padding-left: 0;
+    }
+
+    .fas{
+      padding: 0.75em 0;
+    }
+
+  }
+
 }

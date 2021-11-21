@@ -220,6 +220,16 @@ class PlekAjaxHandler
                     $plek_ajax_errors->add('save_user_validator', $validate);
                 }
                 break;
+
+            case 'dismiss_notification':
+                $notify = new PlekNotificationHandler;
+                $dismiss = $notify -> notification_dismiss();
+                if ($dismiss === 1) {
+                        $this->set_success(1);
+                } else {
+                    $plek_ajax_errors->add('dismiss_notification', $dismiss);
+                }
+            break;
             default:
                 # code...
                 break;

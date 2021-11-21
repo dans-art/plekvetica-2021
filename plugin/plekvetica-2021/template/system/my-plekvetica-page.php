@@ -15,13 +15,18 @@ $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user 
         <h2><?php echo sprintf(__('Hallo %s', 'pleklang'), $user->display_name); ?></h2>
     </div>
     <div>
-        <div class="notifications-button-container"><button id="notifications-button"></button></div>
+        <div class="notifications-button-container">
+            <div id="notifications-button">
+                <i class="fas fa-envelope-square plek-button"></i>
+                <i id="notifications-button-counter"></i>
+            </div>
+        </div>
         <div class="logout-link"><a href="<?php echo $current_url; ?>?action=logout"><?php echo __('Abmelden', 'pleklang'); ?></a></div>
         <div class="settings-link"><a href="<?php echo $current_url; ?>?action=settings"><?php echo __('Einstellungen', 'pleklang'); ?></a></div>
-        </div>
+    </div>
 </div>
 
-<?php PlekTemplateHandler::load_template('user-notifications', 'system/userpage'); 
+<?php PlekTemplateHandler::load_template('user-notifications', 'system/userpage');
 ?>
 
 
@@ -32,7 +37,7 @@ $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user 
  */
 
 $user_setup = PlekUserHandler::check_user_setup(PlekUserHandler::get_user_role());
-if($user_setup !== true){
+if ($user_setup !== true) {
     PlekTemplateHandler::load_template('user-notice', 'system', 'warning', $user_setup);
 }
 //s(wp_get_current_user());
