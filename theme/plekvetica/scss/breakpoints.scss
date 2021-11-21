@@ -14,7 +14,14 @@
 }
 
 /* Navigation mobile breakpoint*/
+@media (min-width: 1040px) {
+    .main-navigation .startpage{
+        display:none;
+    }
+}
+
 @media (max-width: 1040px) {
+
     .main-navigation .menu-toggle,.sidebar-nav-mobile:not(#sticky-placeholder) {
         display:block;
     }
@@ -157,17 +164,29 @@
         padding-right: 0.5em;
       }
 
+      //Startseite
+      .startpage a::before{
+        content: "\f015";
+      }
+      //Events
+      .menui-events a::before{
+        content: "\f073";
+      }
       //Kalender
-      #menu-item-27030 a::before{
+      #menu-item-27030 a::before,
+      .menui-kalendar a::before{
         content: "\f073";
       }
 
       //Event eintragen
-      #menu-item-66890 a::before{
+      #menu-item-66890 a::before,
+      .menui-add-event a::before{
         content: "\f271";
       }
       
       //Reviews
+      .menui-reviews-main a::before,
+      .menui-cdreviews a::before,
       #menu-item-78 a::before{
         content: "\f15c";
       }
@@ -176,34 +195,50 @@
       #menu-item-16769 a::before{
         content: "\f51f";
       }
+
+      //Konzertberichte
+      .menui-concertreviews a::before{
+        content: "\f51f";
+      }
       
       //Fotos
+      .menui-fotos a::before,
       #menu-item-66805 a::before{
         content: "\f030";
       }
 
+      //Fanpics
+      .menui-fanpic a::before{
+        content: "\f030";
+      }
+
       //Bands
+      .menui-bands a::before,
       #menu-item-67018 a::before,
       #menu-item-67072 a::before{
         content: "\f2ce";
       }
 
       //Videos
+      .menui-video a::before,
       #menu-item-233 a::before{
         content: "\f008";
       }
 
       //Interviews
+      .menui-interviews a::before,
       #menu-item-29 a::before{
         content: "\f130";
       }
       
       //Win & Partner
+      .menui-win a::before,
       #menu-item-16672 a::before{
           content: "\f091";
         }
         
       //About
+      .menui-about > a::before,
       #menu-item-9065 > a::before{
         content: "\f0c0";
       }
@@ -214,6 +249,7 @@
       }
       
       //Support
+      .plek-sub-menu .menui-support a::before,
       .plek-sub-menu #menu-item-66825 a::before{
         content: "\f0fa";
       }
