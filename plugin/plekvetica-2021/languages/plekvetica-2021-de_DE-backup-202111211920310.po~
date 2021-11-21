@@ -413,7 +413,7 @@ msgstr ""
 
 #: include/class/ajax-handler.php:90 include/class/ajax-handler.php:119
 msgid "Event reported"
-msgstr "Event gemeldet"
+msgstr "Veranstaltung gemeldet"
 
 #: template/event/event-item-compact.php:28
 #: template/event/event-item-watchlist.php:28
