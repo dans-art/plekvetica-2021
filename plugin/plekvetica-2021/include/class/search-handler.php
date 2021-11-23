@@ -79,15 +79,21 @@ class PlekSearchHandler
     public function plek_review_search_shortcode()
     {
         $display =  PlekTemplateHandler::load_template_to_var('review-search-bar', 'components');
-
         if (PlekSearchHandler::is_review_search()) {
             $search_string = $_GET['search_reviews'];
-            $post_ids = $this->search_tribe_events($search_string, true);
+            if(empty($search_string)){
+
+                return $display . PlekTemplateHandler::load_template_to_var('rick-roll', 'components', null);
+            }
+            global $plek_event_blocks;
+            $display .= PlekTemplateHandler::load_template_to_var('text-bar', 'components', $search_string);
+            $display .= $plek_event_blocks -> get_block('search_events_review');
+/*             $post_ids = $this->search_tribe_events($search_string, true);
             if (!is_array($post_ids)) {
                 $post_ids = array();
             }
             $posts = $this->load_tribe_events_from_ids($post_ids);
-            $display .=  PlekTemplateHandler::load_template_to_var('event-review-search', 'event', htmlspecialchars($search_string), $posts);
+            $display .=  PlekTemplateHandler::load_template_to_var('event-review-search', 'event', htmlspecialchars($search_string), $posts); */
         }
 
         return $display;
@@ -113,7 +119,7 @@ class PlekSearchHandler
 
     public static function is_review_search()
     {
-        if (isset($_GET['search_reviews']) and !empty($_GET['search_reviews'])) {
+        if (isset($_GET['search_reviews'])) {
             return true;
         }
         return false;
@@ -172,7 +178,6 @@ class PlekSearchHandler
         );
         $db_result = $wpdb->get_results($db_query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
-
         $plek_event->total_posts['search_tribe_events'] = (int) $total_posts;
 
         if (count($db_result) === 0) {

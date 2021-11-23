@@ -753,7 +753,7 @@ class PlekEvents extends PlekEventHandler
 
     /**
      * Shortcode Function
-     * Gets the latest four review events.
+     * Gets the latest review events.
      *
      * @return string Formated HTML
      */
@@ -763,10 +763,12 @@ class PlekEvents extends PlekEventHandler
         if (PlekSearchHandler::is_review_search()) {
             return null;
         }
-        $page_obj = $this->get_pages_object();
-        $date = date('Y-m-d H:i:s');
+
         $load_more = '';
 
+        global $plek_event_blocks;
+        $plek_event_blocks -> set_separate_by('month');
+        return $plek_event_blocks -> get_block('all_reviews');
         /*$events = tribe_get_events([
             'eventDisplay'   => 'custom',
             'end_date'     => 'now',
@@ -776,8 +778,30 @@ class PlekEvents extends PlekEventHandler
             'meta_query' => $meta_query
         ]);*/
 
+        
+        /*
+        if ($this->display_more_events_button($total_posts)) {
+            $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj->page + 1), __('Weitere Reviews laden', 'pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
+        }
+        if (empty($events)) {
+            return __('Keine Reviews gefunden', 'pleklang');
+        }
+
+        $total_posts_text = $this->get_pages_count_formated($total_posts);
+        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'all_reviews') . $total_posts_text . $load_more;
+        */
+    }
+
+    /**
+     * Loads all the published reviews
+     */
+
+    public function load_all_reviews(){
         global $wpdb;
-        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS {$wpdb->prefix}posts.*, CAST( orderby_event_date_meta.meta_value AS DATETIME ) AS event_date
+        $page_obj = $this->get_pages_object();
+        $date = date('Y-m-d H:i:s');
+        
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS {$wpdb->prefix}posts.*, CAST( orderby_event_date_meta.meta_value AS DATETIME ) AS startdate
         FROM {$wpdb->prefix}posts
         LEFT JOIN {$wpdb->prefix}postmeta
         ON ( {$wpdb->prefix}posts.ID = {$wpdb->prefix}postmeta.post_id
@@ -800,21 +824,12 @@ class PlekEvents extends PlekEventHandler
         AND {$wpdb->prefix}posts.post_status IN ('publish', 'draft')
         OR {$wpdb->prefix}posts.post_status = 'private'))
         GROUP BY {$wpdb->prefix}posts.ID
-        ORDER BY event_date DESC, {$wpdb->prefix}posts.post_date DESC
+        ORDER BY startdate DESC, {$wpdb->prefix}posts.post_date DESC
         LIMIT %d OFFSET %d", $page_obj->posts_per_page, $page_obj->offset);
 
         $events = $wpdb->get_results($query);
-        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
-
-        if ($this->display_more_events_button($total_posts)) {
-            $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj->page + 1), __('Weitere Reviews laden', 'pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
-        }
-        if (empty($events)) {
-            return __('Keine Reviews gefunden', 'pleklang');
-        }
-
-        $total_posts_text = $this->get_pages_count_formated($total_posts);
-        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'all_reviews') . $total_posts_text . $load_more;
+        $this->total_posts['all_review_events'] = $wpdb->get_var("SELECT FOUND_ROWS()");
+        return $events;
     }
 
     /**

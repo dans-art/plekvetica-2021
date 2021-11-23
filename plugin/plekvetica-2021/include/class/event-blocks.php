@@ -18,6 +18,7 @@ class PlekEventBlocks extends PlekEvents
     protected $add_current_date_separator = true;
     protected $block_total_posts = null; //Number of posts last fetched
     protected $original_paged = 0; //Original Paged, get stored after set the paged with set_block_paged()
+    protected $separate_by = null; //Choose how to set the separator. Currently only "month" is supported
 
     /**
      * Set the current template to use
@@ -105,6 +106,17 @@ class PlekEventBlocks extends PlekEvents
     }
 
     /**
+     * Sets the way, how to separate the posts.
+     *
+     * @param string $sep - Separator type
+     * @return void
+     */
+    public function set_separate_by(string $sep)
+    {
+        $this->separate_by = $sep;
+    }
+
+    /**
      * Loads the event data. Use this for getting the raw data.
      * Usually, this function is called by the get_block method. 
      *
@@ -181,6 +193,33 @@ class PlekEventBlocks extends PlekEvents
                 $this->block_total_posts = (isset($band_handler->total_posts['get_bands'])) ? $band_handler->total_posts['get_bands'] : 0;
                 break;
 
+            case 'search_events':
+                global $plek_search_handler;
+                $query = isset($_REQUEST['s'])?$_REQUEST['s']:null;
+                if (empty($query)) {
+                    $ret['data'] = "";
+                    break;
+                }
+                $ret['data'] =  $plek_search_handler->search_tribe_events($query);
+                $this->block_total_posts = (isset($plek_event->total_posts['search_tribe_events'])) ? $plek_event->total_posts['search_tribe_events'] : 0;
+                break;
+            case 'all_reviews':
+                $this -> display_type = 'event-list-item-review';
+                $ret['data'] =  $plek_event->load_all_reviews();
+                $this->block_total_posts = (isset($plek_event->total_posts['all_review_events'])) ? $plek_event->total_posts['all_review_events'] : 0;
+                break;
+    
+            case 'search_events_review':
+                $this -> display_type = 'event-list-item-review';
+                global $plek_search_handler;
+                $search_string = isset($_REQUEST['search_reviews'])?$_REQUEST['search_reviews']:null;
+                $post_ids = $plek_search_handler->search_tribe_events($search_string, true);
+                if (!is_array($post_ids)) {
+                    $ret['data'] = array();
+                }
+                $ret['data'] = $plek_search_handler->load_tribe_events_from_ids($post_ids);
+                $this->block_total_posts = (isset($plek_event->total_posts['search_tribe_events'])) ? $plek_event->total_posts['search_tribe_events'] : 0;
+                break;
             default:
                 # code...
                 break;
@@ -206,7 +245,7 @@ class PlekEventBlocks extends PlekEvents
     public function get_block(string $block_id, array $data = array())
     {
 
-        $this -> set_block_paged($block_id);
+        $this->set_block_paged($block_id);
         $page_obj = $this->get_pages_object($this->number_of_posts);
         $load = $this->load_block($block_id, $data);
         $total_posts = $this->block_total_posts;
@@ -220,21 +259,24 @@ class PlekEventBlocks extends PlekEvents
             $content = $load['data'];
         }
         $html = "";
-        if (is_array($content) and !empty($content)) {
+        if (empty($content)) {
+            return "";
+        }
+        if (is_array($content)) {
             foreach ($content as $index => $content_data) {
                 if ($block_id === 'my_events' and $this->add_current_date_separator === true) {
                     $html .= $this->show_date_separator($last_events_date, $content_data->startdate);
-                    $last_events_date = $content_data->startdate;
                 }
-                $html .= PlekTemplateHandler::load_template_to_var($this->display_type, $this->template_dir, $content_data, $index);
+                $html .= PlekTemplateHandler::load_template_to_var($this->display_type, $this->template_dir, $content_data, $index, $this->separate_by, $last_events_date);
+                $last_events_date = $content_data->startdate;
             }
-            $html .= PlekTemplateHandler::load_template_to_var('pagination-buttons', 'components', $total_posts, $this->number_of_posts, 'ajax-loader-button', $block_id, $posts_type);
+            $html .= PlekTemplateHandler::load_template_to_var('pagination-buttons', 'components', $total_posts, $this->number_of_posts, 'ajax-block-loader-button', $block_id, $posts_type);
 
             $html_data = $this->get_block_container_html_data($data, $block_id, $page_obj->page, $this->number_of_posts);
-            $this -> reset_paged();
+            $this->reset_paged();
             return PlekTemplateHandler::load_template_to_var($this->template_container, $this->template_dir, $block_id, $html_data, $html);
         }
-        $this -> reset_paged();
+        $this->reset_paged();
         return false;
     }
 
@@ -259,6 +301,7 @@ class PlekEventBlocks extends PlekEvents
         $data['template_dir'] = $this->template_dir;
         $data['template_container'] = $this->template_container;
         $data['number_of_posts'] = $this->number_of_posts;
+        $data['separate_by'] = $this->separate_by;
 
         foreach ($data as $key => $value) {
             $html_data .= "data-{$key}='{$value}' ";
@@ -281,6 +324,7 @@ class PlekEventBlocks extends PlekEvents
         $this->set_display_type($plek_ajax_handler->get_ajax_data('display_type'));
         $this->set_template_dir($plek_ajax_handler->get_ajax_data('template_dir'));
         $this->set_template_container($plek_ajax_handler->get_ajax_data('template_container'));
+        $this->set_separate_by($plek_ajax_handler->get_ajax_data('separate_by'));
 
         $ajax_data = $plek_ajax_handler->get_all_ajax_data();
         //Set the correct Request URI
@@ -299,17 +343,18 @@ class PlekEventBlocks extends PlekEvents
      * @param string $block_id
      * @return void
      */
-    public function set_block_paged(string $block_id){
-        $this -> original_paged = get_query_var('paged');
+    public function set_block_paged(string $block_id)
+    {
+        $this->original_paged = get_query_var('paged');
         //Get Block_id from URL
         $block_id_request = (isset($_REQUEST['block_id'])) ? $_REQUEST['block_id'] : null;
         if ($block_id_request !== null and $block_id_request !== $block_id) {
             //Reset the Paged if current block ist not the block from the url
             set_query_var('paged', 1);
         } else {
-            if(!isset($_REQUEST['paged'])){
+            if (!isset($_REQUEST['paged'])) {
                 $paged = (isset($_REQUEST['page'])) ? $_REQUEST['page'] : 0;
-            }else{
+            } else {
                 $paged = (isset($_REQUEST['paged'])) ? $_REQUEST['paged'] : 0;
             }
             set_query_var('paged', $paged);
@@ -321,8 +366,9 @@ class PlekEventBlocks extends PlekEvents
      *
      * @return void
      */
-    public function reset_paged(){
-        set_query_var('paged', $this -> original_paged);
+    public function reset_paged()
+    {
+        set_query_var('paged', $this->original_paged);
         return;
     }
 }

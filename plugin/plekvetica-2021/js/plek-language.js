@@ -4,7 +4,7 @@
  */
 let plek_lang = {
 
-    de_DE = {
+    de_DE : {
         'Photo rights - What are you allowed to do' : 'Fotorechte - Was du machen darfst',
         'Share Page' : 'Seite teilen',
         'Share Photo' : 'Foto teilen',

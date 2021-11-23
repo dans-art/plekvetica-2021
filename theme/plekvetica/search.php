@@ -57,16 +57,23 @@ get_header(); ?>
 		</div>
 		<div class="plek-search-events">
 			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Events', 'pleklang')); ?>
-			<?php echo $plek_search_handler -> get_events(); ?>
+			<?php //echo $plek_search_handler -> get_events(); ?>
 			<?php 
-
-			$total_posts = $plek_event->total_posts['search_tribe_events'];
-			$page_obj = $plek_event -> get_pages_object();
+			global $plek_event_blocks;
+			$events = $plek_event_blocks->get_block('search_events');
+			?>
+			<?php if (!empty($events)) : ?>
+                <?php echo $events; ?>
+            <?php else : ?>
+                <span class="plek-no-events"><?php echo __('No Events found', 'pleklang'); ?></span>
+            <?php endif; 
+			//$total_posts = $plek_event->total_posts['search_tribe_events'];
+			//$page_obj = $plek_event -> get_pages_object();
 			
-			if($plek_event -> display_more_events_button($total_posts)){
-				echo $plek_event -> get_pages_count_formated($total_posts);
-				echo PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj -> page + 1), __('Weitere Events laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
-			}			
+			//if($plek_event -> display_more_events_button($total_posts)){
+				//echo $plek_event -> get_pages_count_formated($total_posts);
+				//echo PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj -> page + 1), __('Weitere Events laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
+			//}			
 			?>
 		</div>
 

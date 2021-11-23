@@ -1,10 +1,39 @@
 <?php
 
 extract(get_defined_vars());
-$event = $template_args[0];
-//s($event);
+$event = isset($template_args[0])?$template_args[0]:null;
+$index = isset($template_args[1])?$template_args[1]:null; //Index, Nr of the loop
+$separate_by = isset($template_args[2])?$template_args[2]:null; //The timeframe to separate. Currently only "month" is supported.
+$last_date = !empty($template_args[3])?$template_args[3]:null; //The date of the last event. If this is empty, there will be no separation
+
+if(!isset($event -> ID)){
+    return;
+}
+if(!method_exists($event, 'get_field_value')){
+    $id = $event -> ID;
+    $event = new PlekEvents;
+    $event->load_event($id);
+}
+
 $startDatetime = $event->get_field_value('_EventStartDate');
 $stime = strtotime($startDatetime);
+
+//Add separator
+if($separate_by){
+    switch ($separate_by) {
+        case 'month':
+            $date_format = 'F Y';
+            default:
+            # code...
+            break;
+        
+    }
+    $last_date = date_i18n($date_format, strtotime($last_date));
+    $current_date = $event -> get_start_date($date_format);
+    if ($current_date !== $last_date) {
+        echo PlekTemplateHandler::load_template_to_var('text-bar', 'components', $current_date);
+    }
+}
 ?>
 <article class="tribe-events-calendar-list__event <?php echo $event -> get_event_classes(); ?>">
 

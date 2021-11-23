@@ -110,7 +110,7 @@ let plek_main = {
 
     add_event_listener() {
         /** Ajax Loader button */
-        jQuery('#page').on('click', '.ajax-loader-button', function (e) {
+        jQuery('#page').on('click', '.ajax-block-loader-button', function (e) {
             e.preventDefault();
             plek_main.load_block(this);
         });
@@ -291,7 +291,7 @@ let plek_main = {
                     let page = send_data.get('paged');
                     let block_id = send_data.get('block_id');
                     if (page) {
-                        window.history.pushState({}, "Page", plek_main.url_add_page(page, block_id));
+                        window.history.pushState({}, "Page", plek_main.url_add_page(page, block_id, send_data));
                         //document.title = plek_main.default_values.original_document_title + ' - Page '+page;
                         plek_main.scroll_to_block(block_id);
                     }
@@ -329,7 +329,7 @@ let plek_main = {
      * @returns 
      */
     get_url_query_data(formdata) {
-        let items = ['order', 'direction'];
+        let items = ['order', 'direction', 's', 'search_reviews'];
         let url = new URLSearchParams(window.location.search);
         jQuery(items).each(function (id, name) {
             let val = url.get(name);
@@ -344,10 +344,13 @@ let plek_main = {
      * Adds the page and block id to the current url and returns the url.
      * @param {int} page_number 
      * @param {string} block_id 
+     * @param {object} send_data - The sended data 
      * @returns The current url with page and block_id parameters
      */
-    url_add_page(page_number, block_id) {
+    url_add_page(page_number, block_id, send_data) {
+        var url_object = new URLSearchParams(window.location.search);
         let base = window.location.pathname;
+        let query = window.location.search;
         let new_url = '';
         if (base.search('page/') > 0) {
             new_url = base.replace(/(page\/[0-9]+)/, 'page/' + page_number);
@@ -355,11 +358,19 @@ let plek_main = {
             new_url = base + '/page/' + page_number;
             new_url = new_url.replace('//', '/', base + '/page/' + page_number);
         }
-        if (base.search('block_id=') > 0) {
+        new_url += query;
+        /** Add the block id */
+        if (query.search('block_id=') > 0) {
             new_url = new_url.replace(/block_id=([A-z0-9_-]*)/, 'block_id=' + block_id);
         } else {
             new_url = new_url + '?block_id=' + block_id;
         }
+
+        /** Add the search query, if not existing */
+        if (url_object.get(s) !== null && query.search('s=') === 0) {
+                new_url = new_url + '&s=' + url_object.get(s);
+        } 
+        debugger;
         return new_url;
     },
 
