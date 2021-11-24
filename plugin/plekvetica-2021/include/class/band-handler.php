@@ -620,7 +620,7 @@ class PlekBandHandler
     {
         global $plek_handler;
         $plek_handler->enqueue_select2();
-        wp_enqueue_script('plek-band-scripts', PLEK_PLUGIN_DIR_URL . 'js/manage-band.min.js', array('jquery', 'select2'));
+        wp_enqueue_script('plek-band-scripts', PLEK_PLUGIN_DIR_URL . 'js/manage-band.min.js', array('jquery', 'select2'), $plek_handler -> version);
     }
 
     /**

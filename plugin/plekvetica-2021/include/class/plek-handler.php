@@ -191,8 +191,9 @@ class PlekHandler
 
     public function enqueue_context_menu()
     {
+        global $plek_handler;
         wp_enqueue_style('plek-contextMenu-style', PLEK_PLUGIN_DIR_URL . 'css/jquery.contextMenu.min.css', array('generate-child'));
-        wp_enqueue_script('plek-contextMenu-script',  PLEK_PLUGIN_DIR_URL . 'js/components/context-menu.min.js', array('jquery', 'plek-script', 'plek-language'));
+        wp_enqueue_script('plek-contextMenu-script',  PLEK_PLUGIN_DIR_URL . 'js/components/context-menu.min.js', array('jquery', 'plek-script', 'plek-language'), $plek_handler -> version);
     }
 
     /**

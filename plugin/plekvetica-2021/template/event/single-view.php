@@ -34,7 +34,7 @@ if ($is_review) {
     $backlink_label_plural = tribe_get_event_label_plural();
 }
 //Load the main-event-single.js script
-wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-single.min.js', ['jquery']);
+wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-single.min.js', ['jquery'], $plek_handler -> version);
 ?>
 
 <?php if ($is_postponed and $plek_event->is_public($postponed_id)) : ?>

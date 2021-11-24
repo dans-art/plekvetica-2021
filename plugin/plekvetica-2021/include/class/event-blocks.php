@@ -268,7 +268,7 @@ class PlekEventBlocks extends PlekEvents
                     $html .= $this->show_date_separator($last_events_date, $content_data->startdate);
                 }
                 $html .= PlekTemplateHandler::load_template_to_var($this->display_type, $this->template_dir, $content_data, $index, $this->separate_by, $last_events_date);
-                $last_events_date = $content_data->startdate;
+                $last_events_date = (isset($content_data->startdate))?$content_data->startdate:'';
             }
             $html .= PlekTemplateHandler::load_template_to_var('pagination-buttons', 'components', $total_posts, $this->number_of_posts, 'ajax-block-loader-button', $block_id, $posts_type);
 
