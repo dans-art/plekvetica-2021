@@ -355,7 +355,7 @@ class PlekAjaxHandler
                 $return_arr = array();
                 $plek_event_blocks = new PlekEventBlocks;
                 $return_arr['content'] = $plek_event_blocks->get_block('my_missing_reviews');
-                if($return_arr['content'] === false){
+                if($return_arr['content'] === false OR empty($return_arr['content'])){
                     $return_arr['content'] = "<span class='plek-no-open-reviews'>".__('Super! Keine fehlenden Reviews.', 'pleklang')."</span>";
                 }
                 $return_arr['count'] = 0;

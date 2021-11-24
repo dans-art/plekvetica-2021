@@ -12,11 +12,9 @@
  * Domain Path: /languages
  * Textdomain: pleklang
  * @todo: 
- *       -  Change ACF "band_genre" callback to Array
  *       - Add Roles: partner 
  * - Add LazyLoading for all images
  * - check if The Event Calendar, ACF is installed
- * - Fix Search page, add Youtube, Reviews, Band, Seperate by type.
  * - Add support for Partner role.
  */
 
