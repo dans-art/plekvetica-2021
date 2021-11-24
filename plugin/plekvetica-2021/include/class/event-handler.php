@@ -691,7 +691,11 @@ class PlekEventHandler
 		foreach($injectAttr as $site => $items_to_add){
             //Check if Site has removable items
 			if(false !== stripos($url_split['host'],$site)){
-                parse_str($url_split['query'], $query_split);
+                if(isset($url_split['query'])){
+                    parse_str($url_split['query'], $query_split);
+                }else{
+                    $query_split = array();
+                }
 
                 if(is_array($query_split)){
                     $query_split = array_merge($query_split, $items_to_add);

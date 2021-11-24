@@ -277,7 +277,7 @@ class PlekFormValidator
         switch ($type) {
             case 'password':
                 if (!empty($value)) {
-                    if (preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[^\w\d\s:])([^\s])*$/m', $value) !== 1) {
+                    if (preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*\W).*$/m', $value) !== 1) {
                         $this->set_error($fieldname, __('Passwort muss einen Buchstaben, eine Zahl und ein Sonderzeichen enthalten.', 'pleklang'));
                     }
                 }

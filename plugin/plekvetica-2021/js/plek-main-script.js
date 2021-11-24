@@ -352,6 +352,7 @@ let plek_main = {
         let base = window.location.pathname;
         let query = window.location.search;
         let new_url = '';
+        var separator = (query.indexOf('?') === -1)?'?':'&';
         if (base.search('page/') > 0) {
             new_url = base.replace(/(page\/[0-9]+)/, 'page/' + page_number);
         } else {
@@ -363,14 +364,13 @@ let plek_main = {
         if (query.search('block_id=') > 0) {
             new_url = new_url.replace(/block_id=([A-z0-9_-]*)/, 'block_id=' + block_id);
         } else {
-            new_url = new_url + '?block_id=' + block_id;
+            new_url = new_url + separator + 'block_id=' + block_id;
         }
 
         /** Add the search query, if not existing */
         if (url_object.get(s) !== null && query.search('s=') === 0) {
-                new_url = new_url + '&s=' + url_object.get(s);
+                new_url = new_url + separator + 's=' + url_object.get(s);
         } 
-        debugger;
         return new_url;
     },
 

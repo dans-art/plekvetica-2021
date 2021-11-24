@@ -729,7 +729,7 @@ class PlekEvents extends PlekEventHandler
 
     /**
      * Shortcode Function
-     * Gets the latest four review events.
+     * Gets the latest four review events. For the start page
      *
      * @return string Formated HTML
      */
@@ -763,33 +763,15 @@ class PlekEvents extends PlekEventHandler
         if (PlekSearchHandler::is_review_search()) {
             return null;
         }
-
-        $load_more = '';
-
         global $plek_event_blocks;
         $plek_event_blocks -> set_separate_by('month');
-        return $plek_event_blocks -> get_block('all_reviews');
-        /*$events = tribe_get_events([
-            'eventDisplay'   => 'custom',
-            'end_date'     => 'now',
-            'posts_per_page' => $page_obj -> posts_per_page,
-            'offset' => $page_obj -> offset,
-            'order'       => 'DESC',
-            'meta_query' => $meta_query
-        ]);*/
+        $events = $plek_event_blocks -> get_block('all_reviews');
 
-        
-        /*
-        if ($this->display_more_events_button($total_posts)) {
-            $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj->page + 1), __('Weitere Reviews laden', 'pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
-        }
         if (empty($events)) {
-            return __('Keine Reviews gefunden', 'pleklang');
+            return __('No reviews found', 'pleklang');
+        }else{
+            return $events;
         }
-
-        $total_posts_text = $this->get_pages_count_formated($total_posts);
-        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'all_reviews') . $total_posts_text . $load_more;
-        */
     }
 
     /**

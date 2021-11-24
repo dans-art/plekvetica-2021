@@ -846,7 +846,7 @@ class PlekBandHandler
         global $plek_handler;
         $band_id = $this->get_id();
         $user_id = (empty($user_id)) ? get_current_user_id() : $user_id;
-        $followers =  (isset($this->band['band_follower'])) ? $this->band['band_follower'] : array();
+        $followers =  (isset($this->band['band_follower']) AND is_array($this->band['band_follower'])) ? $this->band['band_follower'] : array();
         $action = false;
 
         if (empty($band_id)) {

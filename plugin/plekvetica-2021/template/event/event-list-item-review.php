@@ -6,10 +6,12 @@ $index = isset($template_args[1])?$template_args[1]:null; //Index, Nr of the loo
 $separate_by = isset($template_args[2])?$template_args[2]:null; //The timeframe to separate. Currently only "month" is supported.
 $last_date = !empty($template_args[3])?$template_args[3]:null; //The date of the last event. If this is empty, there will be no separation
 
-if(!isset($event -> ID)){
-    return;
-}
+
 if(!method_exists($event, 'get_field_value')){
+    if(!isset($event -> ID)){
+        echo "No Event found";
+        return;
+    }
     $id = $event -> ID;
     $event = new PlekEvents;
     $event->load_event($id);
@@ -72,4 +74,3 @@ if($separate_by){
 <?php
 
 return;
-echo $event->post_title; ?>

@@ -17,7 +17,7 @@ class plekTheme{
             //Add Search Bar
             $placeholder = __('Search...','pleklang');;
             $items .= "<li class='plek-menu-search'>
-            <a class='icon' href=''><i class='fas fa-search'></i></a>
+            <a class='icon' href='#'><i class='fas fa-search'></i></a>
             <ul>
             <li class='input'><input type='text' placeholder='{$placeholder}'/></li>
             </ul>

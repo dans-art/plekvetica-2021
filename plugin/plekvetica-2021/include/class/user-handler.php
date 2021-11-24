@@ -610,7 +610,7 @@ class PlekUserHandler
 
         $subject = __('Only one step left for your account at plekvetica!', 'pleklang');
         $my_plek_id = $plek_handler->get_plek_option('my_plek_page_id');
-        $my_plekvetica_url = get_permalink($my_plek_id);
+        $my_plekvetica_url = (!empty($my_plek_id))?get_permalink($my_plek_id):"https://plekvetica.ch/my-plekvetica";
 
         $emailer = new PlekEmailSender;
         $emailer->set_to($email);
