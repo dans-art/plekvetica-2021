@@ -36,7 +36,7 @@ add_action('send_unsend_email_notifications', [new PlekNotificationHandler, 'sen
 
 //Ajax
 add_action('wp_ajax_plek_ajax_event_form', [new PlekAjaxHandler,'plek_ajax_event_form_action']);
-add_action('wp_ajax_nopriv_plek_ajax_event_form', [new PlekAjaxHandler, 'plek_ajax_event_form_action']);
+add_action('wp_ajax_nopriv_plek_ajax_event_form', [new PlekAjaxHandler, 'plek_ajax_nopriv_event_form_action']);
 
 add_action('wp_ajax_plek_event_actions',  [new PlekAjaxHandler,'plek_ajax_event_actions']);
 add_action('wp_ajax_nopriv_plek_event_actions',  [new PlekAjaxHandler,'plek_ajax_nopriv_event_actions']);

@@ -278,9 +278,9 @@ let plek_single_event_main = {
         jQuery.ajax({
             url: window.ajaxurl,
             data: {
-              'action': 'plek_ajax_event_form',
+              'action': 'plek_event_actions',
               'id': event_id,
-              'type': type,
+              'do': type,
             },
             success: function success(data) {
                 let text = plek_main.get_text_from_ajax_request(data);

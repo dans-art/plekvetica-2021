@@ -59,6 +59,28 @@ class PlekEventHandler
         }
         return false;
     }
+
+    /**
+     * Publish an Event
+     * 
+     * @param string|int $event_id
+     * 
+     * @return boolean|string - True on success, error message on error
+     */
+    public function publish_event($event_id){
+        $id = (int) $event_id;
+        $update = array(
+            'ID'           => $id,
+            'post_status' => 'publish'
+        );
+        $set = wp_update_post($update);
+        if (is_int($set) and $set > 0) {
+            return true;
+        } else {
+            return __("Changing Status was unsuccessfully", "pleklang");
+        }
+    }
+
     /**
      * Checks if the Event has photos
      *

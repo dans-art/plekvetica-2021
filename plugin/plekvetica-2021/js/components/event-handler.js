@@ -26,7 +26,7 @@ var plekevent = {
                         if (jdata.error !== '') {
                             window.plekerror.display_info('Achtung', jdata.error);
                             this.existing_event = true;
-                            console.log("Event Existiert beriets");
+                            console.log("Event Existiert bereits");
                             return true;
                         } else {
                             this.existing_event = false;

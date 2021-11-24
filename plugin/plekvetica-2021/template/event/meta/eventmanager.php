@@ -38,7 +38,7 @@ $show_edit_button = $plek_event->show_event_edit_button($plek_event);
     <?php
     //Publish Event Button
     if ($plek_event->show_publish_button()) : ?>
-        <a id="plekSetEventStatus" name="setEventStauts" class="plek-button full-width blue" data-eventid="<?php echo $event_id; ?>" data-type="publish"><?php echo __('Event veröffentlichen', 'pleklang'); ?></a>
+        <a id="plekSetEventStatus" name="setEventStauts" class="plek-button full-width blue" data-eventid="<?php echo $event_id; ?>" data-type="publish_event"><?php echo __('Event veröffentlichen', 'pleklang'); ?></a>
     <?php endif; ?>
     <?php
     //Write Review Button    

@@ -9,7 +9,36 @@ class PlekAjaxHandler
     protected $error = [];
     protected $system_error = [];
 
+    /**
+     * Event form actions for logged in users
+     */
     public function plek_ajax_event_form_action()
+    {
+        $type = $this->get_ajax_type();
+        switch ($type) {
+            case 'get_bands':
+                $band_handler = new PlekBandHandler;
+                echo $band_handler->get_all_bands_json();
+                die();
+                break;
+
+            case 'get_venues':
+                $event_handler = new PlekEventHandler;
+                echo $event_handler->get_all_venues_json();
+                die();
+                break;
+
+            default:
+                # code...
+                break;
+        }
+        return;
+    }
+    
+    /**
+     * Event form actions for logged out users
+     */
+    public function plek_ajax_nopriv_event_form_action()
     {
         $type = $this->get_ajax_type();
         switch ($type) {
@@ -90,6 +119,20 @@ class PlekAjaxHandler
                     $this->set_success(__('Event reported', 'pleklang'));
                 } else {
                     $this->set_error($report);
+                }
+                break;
+            case 'publish_event':
+                $user = new PlekUserHandler;
+                if(!$user -> user_is_in_team()){
+                    $this->set_error(__('You are not allowed to use this function', 'pleklang'));
+                    break;
+                }
+                $event_id = $this->get_ajax_data('id');
+                $publish = $plek_event -> publish_event($event_id);
+                if ($publish === true) {
+                    $this->set_success(__('Event published', 'pleklang'));
+                } else {
+                    $this->set_error($publish);
                 }
                 break;
             default:
