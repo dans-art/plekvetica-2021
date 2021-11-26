@@ -4,6 +4,10 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
+/**
+ * Class for handling the notifications
+ * @todo: Show overview of sended notifications in WP Backend (WP Options -> Notifications Tab)
+ */
 class PlekNotificationHandler
 {
     protected $number_of_notifications = 0;
@@ -16,35 +20,53 @@ class PlekNotificationHandler
      * Saves a notification to the Database
      * @todo: Push notification to Mobile App
      *
-     * @param [type] $user_id
+     * @param array $user_ids
      * @param [type] $type
      * @param [type] $subject
      * @param [type] $message
      * @param [type] $action
      * @return int|false Id of the inserted row or false on error.
      */
-    public function push_notification($user_id = null, $type = null, $subject = null, $message = null, $action = null)
+    public function push_notification($user_ids = array(), $type = null, $subject = null, $message = null, $action = null)
     {
         global $wpdb;
-        if (!is_integer($user_id)) {
-            $user_id = get_current_user_id();
+        $table_notify = $wpdb->prefix . 'plek_notifications';
+        $table_notify_messages = $wpdb->prefix . 'plek_notifications_msg';
+        $inserted = 0;
+
+        if (empty($user_ids) OR $user_ids === null) {
+            $user_ids = array(get_current_user_id());
         }
-        $table = $wpdb->prefix . 'plek_notifications';
+
+        //Insert the Message
         $data = array();
-        $data['user_id'] = $user_id;
         $data['pushed_on'] = date('Y-m-d H:i:s');
         $data['notify_type'] = $type;
         $data['subject'] = $subject;
         $data['message'] = $message;
         $data['action_link'] = $action;
-        $data['email_send'] = 0; //Get this from user preferences
-        $data['dismissed'] = 0;
-        $format = array('%d', '%s', '%s', '%s', '%s', '%s', '%d', '%d');
-        if ($wpdb->insert($table, $data, $format)) {
-            return $wpdb->insert_id;
-        } else {
+        if ($wpdb->insert($table_notify_messages, $data)) {
+            $message_id = $wpdb->insert_id;
+        }else{
             return false;
         }
+
+        //Assign the Message ID to the users
+        foreach($user_ids AS $user_id){
+            $data_user = array();
+            $data_user['user_id'] = $user_id;
+            $data_user['email_send'] = 0; //Get this from user preferences
+            $data_user['dismissed'] = 0;
+            $data_user['message_id'] = $message_id;
+            if ($wpdb->insert($table_notify, $data_user)) {
+                $inserted++;
+            }
+        }
+
+        if(count($user_ids) !== $inserted){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -62,19 +84,23 @@ class PlekNotificationHandler
 
         $like = $wpdb->esc_like($user_id);
 
-        $query_notifications = $wpdb->prepare("SELECT *
+        $query_notifications = $wpdb->prepare("SELECT notify.*, msg.*
             FROM `{$wpdb->prefix}plek_notifications` as notify
+            LEFT JOIN `{$wpdb->prefix}plek_notifications_msg` as msg
+            ON notify.message_id = msg.msg_id
             WHERE notify.`user_id` LIKE %d
-            ORDER BY notify.dismissed ASC, notify.`pushed_on` DESC
+            ORDER BY notify.dismissed ASC, msg.`pushed_on` DESC
             LIMIT 20", $like);
         $notifications = $wpdb->get_results($query_notifications);
-        
+
         $query_count = $wpdb->prepare("SELECT COUNT(*)
         FROM `{$wpdb->prefix}plek_notifications` as notify
+        LEFT JOIN `{$wpdb->prefix}plek_notifications_msg` as msg
+        ON notify.message_id = msg.msg_id
         WHERE notify.`user_id` LIKE %d
         AND notify.`dismissed` = 0
-        ORDER BY notify.`pushed_on` DESC", $like);
-        $this -> number_of_notifications = (int) $wpdb->get_var($query_count);
+        ORDER BY msg.`pushed_on` DESC", $like);
+        $this->number_of_notifications = (int) $wpdb->get_var($query_count);
 
         if ($wpdb->last_error) {
             return $wpdb->last_error;
@@ -91,18 +117,19 @@ class PlekNotificationHandler
         if (is_string($notifications)) {
             return sprintf(__('Error: %s ', 'pleklang'), $notifications);
         }
-        if (!is_array($notifications) OR empty($notifications)) {
-            return '<div class="no-notifications">'.__('No Notifications to show', 'pleklang').'</div>';
+        if (!is_array($notifications) or empty($notifications)) {
+            return '<div class="no-notifications">' . __('No Notifications to show', 'pleklang') . '</div>';
         }
         $result = "";
-        foreach($notifications as $notify_arr){
+        foreach ($notifications as $notify_arr) {
             $result .= PlekTemplateHandler::load_template_to_var('notification-item', 'components', $notify_arr);
         }
         return $result;
     }
 
-    public function get_number_of_notificaions(){
-        return $this -> number_of_notifications;
+    public function get_number_of_notificaions()
+    {
+        return $this->number_of_notifications;
     }
 
     /**
@@ -116,22 +143,125 @@ class PlekNotificationHandler
         global $wpdb;
         $table_name = $wpdb->prefix . "plek_notifications";
         $charset_collate = $wpdb->get_charset_collate();
+        $db_version = get_option('plek_db_version');
 
-        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
-          id bigint(20) NOT NULL AUTO_INCREMENT,
-          user_id bigint(20) UNSIGNED NOT NULL,
-          pushed_on datetime NOT NULL,
-          notify_type VARCHAR (255) NOT NULL,
-          subject VARCHAR (255) NOT NULL,
-          message VARCHAR (1500) NOT NULL,
-          action_link VARCHAR (255) NOT NULL,
-          email_send int (1) NOT NULL,
-          dismissed int (1) NOT NULL,
-          PRIMARY KEY id (id)
-        ) $charset_collate;";
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        dbDelta($sql);
+        //$notify_id = $wpdb -> get_var("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '{$table_name}' AND column_name = 'id'");
+        //$message_id_column = $wpdb -> get_var("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '{$table_name}' AND column_name = 'message_id'");
+        if ($db_version === null) {
+            $notifi = "CREATE TABLE IF NOT EXISTS {$table_name} (
+              id bigint(20) NOT NULL AUTO_INCREMENT,
+              user_id bigint(20) UNSIGNED NOT NULL,
+              pushed_on datetime NOT NULL,
+              notify_type VARCHAR (255) NOT NULL,
+              subject VARCHAR (255) NOT NULL,
+              message VARCHAR (1500) NOT NULL,
+              action_link VARCHAR (255) NOT NULL,
+              email_send int (1) NOT NULL,
+              dismissed int (1) NOT NULL,
+              PRIMARY KEY  id (id)
+            ) $charset_collate;";
+
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            dbDelta($notifi);
+        }
+
+        if ($db_version === null or $db_version < 1.2) {
+            self::update_database(1.2, $table_name);
+        }
+
         return;
+    }
+
+    /**
+     * Updates the Version of the Database to the given version
+     *
+     * @param int $to_version
+     * @param string $table_name
+     * @return bool
+     */
+    public static function update_database($to_version, $table_name)
+    {
+        global $wpdb;
+        $charset_collate = $wpdb->get_charset_collate();
+
+        switch ($to_version) {
+            case 1.2:
+                require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+                //Add the message_id column
+                $notifi = "CREATE TABLE {$table_name} (
+                    id bigint(20) NOT NULL AUTO_INCREMENT,
+                    user_id bigint(20) UNSIGNED NOT NULL,
+                    pushed_on datetime NOT NULL,
+                    message_id bigint(20) NOT NULL,
+                    notify_type VARCHAR (255) NOT NULL,
+                    subject VARCHAR (255) NOT NULL,
+                    message VARCHAR (1500) NOT NULL,
+                    action_link VARCHAR (255) NOT NULL,
+                    email_send int (1) NOT NULL,
+                    dismissed int (1) NOT NULL,
+                    PRIMARY KEY  id (id)
+                  ) $charset_collate;";
+                dbDelta($notifi);
+
+                //Add the notifications_msg table
+                $notifi_msg = "CREATE TABLE {$table_name}_msg (
+                    msg_id bigint(20) NOT NULL AUTO_INCREMENT,
+                    pushed_on datetime NOT NULL,
+                    notify_type VARCHAR (255) NOT NULL,
+                    subject VARCHAR (255) NOT NULL,
+                    message VARCHAR (1500) NOT NULL,
+                    action_link VARCHAR (255) NOT NULL,
+                    PRIMARY KEY  id (msg_id)
+                  ) $charset_collate;";
+                dbDelta($notifi_msg);
+                
+                //Transfer the data
+                $messages = $wpdb->get_results("SELECT * FROM {$table_name}");
+                $nr_messages = count($messages);
+                $updated = 0;
+                foreach ($messages as $msg_obj) {
+                    //Insert in Messages Table
+                    $insert = $wpdb->insert(
+                        $table_name . '_msg',
+                        array(
+                            'pushed_on' => $msg_obj->pushed_on,
+                            'notify_type' =>  $msg_obj->notify_type,
+                            'subject' =>  $msg_obj->subject,
+                            'message' =>  $msg_obj->message,
+                            'action_link' =>  $msg_obj->action_link,
+                        )
+                    );
+                    //Update notify Table
+                    $update = $wpdb->update(
+                        $table_name,
+                        array('message_id' => $wpdb->insert_id),
+                        array('id' => $msg_obj->id),
+                    );
+                    if($update){
+                        $updated++;
+                    }
+                }
+
+                if($updated === $nr_messages){
+                    //Delete the old columns
+                    echo "Delete the old columns";
+                    $wpdb -> query("ALTER TABLE {$table_name} DROP `pushed_on`;");
+                    $wpdb -> query("ALTER TABLE {$table_name} DROP `notify_type`;");
+                    $wpdb -> query("ALTER TABLE {$table_name} DROP `subject`;");
+                    $wpdb -> query("ALTER TABLE {$table_name} DROP `message`;");
+                    $wpdb -> query("ALTER TABLE {$table_name} DROP `action_link`;");
+                    update_option('plek_db_version', $to_version);
+                    return true;
+                }else{
+                    echo "Error! Not all columns are updated";
+                }
+                break;
+
+            default:
+                # code...
+                break;
+        }
+        return false;
     }
 
     /**
@@ -145,6 +275,8 @@ class PlekNotificationHandler
         global $wpdb;
         $query = "SELECT *
             FROM `{$wpdb->prefix}plek_notifications` as notify
+            LEFT JOIN `{$wpdb->prefix}plek_notifications_msg` as msg
+            ON notify.message_id = msg.msg_id
             WHERE notify.`email_send` = 0
             AND notify.`dismissed` = 0
             ORDER BY notify.`id` ASC
@@ -153,14 +285,14 @@ class PlekNotificationHandler
         if (empty($notifications)) {
             return false;
         }
-        $emailer = new PlekEmailSender;
-        $emailer->set_default();
         $counter = 0;
         foreach ($notifications as $notify) {
             $user = get_user_by('ID', $notify->user_id);
             if (!isset($user->user_email)) {
                 continue;
             }
+            $emailer = new PlekEmailSender;
+            $emailer->set_default();
             $subject = (isset($notify->subject)) ? $notify->subject : __('News from Plekvetica', 'pleklang');
             $message = (isset($notify->message)) ? $notify->message : '';
             $action = (isset($notify->action_link)) ? $notify->action_link : '';
@@ -182,8 +314,8 @@ class PlekNotificationHandler
     {
         global $wpdb;
         global $plek_ajax_handler;
-        $notification_id = (int) $plek_ajax_handler -> get_ajax_data('dissmiss_id');
-        $user_id = (int) get_current_user_id(); 
+        $notification_id = (int) $plek_ajax_handler->get_ajax_data('dissmiss_id');
+        $user_id = (int) get_current_user_id();
         $table = $wpdb->prefix . 'plek_notifications';
         $data = array('dismissed' => 1);
         $where = array('id' => $notification_id, 'user_id' => $user_id);

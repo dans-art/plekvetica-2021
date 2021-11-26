@@ -941,7 +941,7 @@ class PlekEventHandler
             if(is_array($crew)){
                 foreach($crew as $member){
                     $user_id = PlekUserHandler::get_user_id_from_login_name($member);
-                    $users[$user_id] = $member;
+                    $users[$user_id] = $user_id;
                 }
             }
 
@@ -950,9 +950,7 @@ class PlekEventHandler
             $subject = sprintf(__('"%s" needs an update','pleklang'),$this -> get_name());
             $message =  sprintf(__('Your Event "%s" has been reported as outdated. Please have a look and update the Event. Thanks!','pleklang'),$this -> get_name());
             $action = $this -> get_edit_event_link($this -> get_ID());
-            foreach($users as $id => $name){
-                $notify -> push_notification($id, 'event', $subject, $message, $action);
-            }
+            $notify -> push_notification($users, 'event', $subject, $message, $action);
 
             //Set reported on date
             $plek_handler -> update_field('incorrect_event_reported_at', date('Y-m-d H:m:s'), $this -> get_ID());

@@ -4,7 +4,7 @@
  * Plugin Name: Plekvetica - 2021
  * Plugin URI: https://www.plekvetica.ch/
  * Description: Modifikationen und spezielle Funktionen für die Plekvetica Seite.
- * Version: 1.1.1
+ * Version: 1.2
  * Date: 2021-04-07
  * Author: Daniel Spycher
  * Author URI: https://www.dev.dans-art.ch/

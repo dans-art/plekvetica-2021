@@ -8,6 +8,7 @@ extract(get_defined_vars());
 $obj_id = get_queried_object_id();
 $current_url = get_permalink($obj_id);
 $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user object
+
 ?>
 <div class="my-plek-header">
     <h1><?php echo __('My Plekvetica', 'pleklang'); ?></h1>
