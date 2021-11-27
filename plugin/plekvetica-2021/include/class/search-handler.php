@@ -223,7 +223,7 @@ class PlekSearchHandler
      * 
      *@todo This function is currently unused!
      * @param array $band_ids - array of band/tag ids
-     * @return void
+     * @return array
      */
     public function search_events_with_bands_ids(array $band_ids)
     {

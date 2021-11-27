@@ -39,7 +39,8 @@ class PlekBandHandler
      *
      * @return void
      */
-    public function plek_band_page_shortcode(){
+    public function plek_band_page_shortcode()
+    {
         return PlekTemplateHandler::load_template_to_var('band-page', 'band');
     }
 
@@ -274,7 +275,7 @@ class PlekBandHandler
      */
     public function get_flag_formated($country_code = '')
     {
-        if (empty($country_code) OR $country_code === null) {
+        if (empty($country_code) or $country_code === null) {
             $country_code = (isset($this->band['herkunft'])) ? $this->band['herkunft'] : '';
         }
         $country_code = strtolower($country_code);
@@ -337,7 +338,7 @@ class PlekBandHandler
      */
     public function format_band_array(array $genres)
     {
-        if(!is_array($genres)){
+        if (!is_array($genres)) {
             return array();
         }
         $rarr = array();
@@ -353,14 +354,15 @@ class PlekBandHandler
      * @param string $genre
      * @return string|false Nicename on success, false if not found.
      */
-    public function get_genre_nicename(string $genre){
+    public function get_genre_nicename(string $genre)
+    {
         $all_genres = $this->band_genres;
         if (empty($all_genres)) {
-            $all_genres = $this -> get_all_genres();
+            $all_genres = $this->get_all_genres();
         }
-        foreach($all_genres as $item){
-            if(isset($item -> slug) AND $item -> slug === $genre){
-                return $item -> name;
+        foreach ($all_genres as $item) {
+            if (isset($item->slug) and $item->slug === $genre) {
+                return $item->name;
             }
         }
         return false;
@@ -372,16 +374,17 @@ class PlekBandHandler
      * @param array|string $genres String or array with genres. If string, $genres will be unserialized before
      * @return array
      */
-    public function convert_genre_to_nicename($genres){
+    public function convert_genre_to_nicename($genres)
+    {
         $ret_arr = array();
-        if(!is_array($genres)){
+        if (!is_array($genres)) {
             $genres = unserialize($genres);
         }
-        if(empty($genres)){
+        if (empty($genres)) {
             return array();
         }
-        foreach($genres as $g){
-            $ret_arr[] = $this -> get_genre_nicename($g);
+        foreach ($genres as $g) {
+            $ret_arr[] = $this->get_genre_nicename($g);
         }
         return $ret_arr;
     }
@@ -476,7 +479,8 @@ class PlekBandHandler
      * @todo: use custom query? use offset for second page
      * @return void
      */
-    public function get_bands($limit = 10){
+    public function get_bands($limit = 10)
+    {
         global $wpdb;
         global $plek_event;
         $page_obj = $plek_event->get_pages_object($limit);
@@ -499,8 +503,8 @@ class PlekBandHandler
         LEFT JOIN {$wpdb->prefix}termmeta AS band_follower
         ON t.term_id = band_follower.term_id AND band_follower.meta_key = 'band_follower'
         WHERE tt.taxonomy IN ('post_tag')
-        ORDER BY ".$this -> get_band_order(). " " .$this -> get_band_sort_direction()."
-        LIMIT %d OFFSET %d", $limit, $page_obj -> offset);
+        ORDER BY " . $this->get_band_order() . " " . $this->get_band_sort_direction() . "
+        LIMIT %d OFFSET %d", $limit, $page_obj->offset);
 
         $bands_result = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
@@ -515,16 +519,17 @@ class PlekBandHandler
      * @todo: use custom query? use offset for second page
      * @return void
      */
-    public function get_all_bands_followed_by_user($user_id = null, $limit = 10){
+    public function get_all_bands_followed_by_user($user_id = null, $limit = 10)
+    {
         global $wpdb;
         global $plek_event;
         $page_obj = $plek_event->get_pages_object($limit);
-        if(!$user_id){
+        if (!$user_id) {
             $user_id = get_current_user_id();
         }
 
         $wild = '%';
-        $like = $wild . $wpdb->esc_like('"'.$user_id.'"') . $wild;
+        $like = $wild . $wpdb->esc_like('"' . $user_id . '"') . $wild;
 
         $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS 
         t.term_id as id, t.name as name, t.slug, 
@@ -545,7 +550,7 @@ class PlekBandHandler
         WHERE tt.taxonomy IN ('post_tag')
         AND band_follower.meta_value LIKE %s
         ORDER BY name DESC
-        LIMIT %d OFFSET %d", $like, $limit, $page_obj -> offset);
+        LIMIT %d OFFSET %d", $like, $limit, $page_obj->offset);
 
         $bands_result = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
@@ -559,11 +564,12 @@ class PlekBandHandler
      *
      * @return string ORDER_BY value
      */
-    public function get_band_order(){
-        if(!empty($_REQUEST['order'])){
+    public function get_band_order()
+    {
+        if (!empty($_REQUEST['order'])) {
             $order = $_REQUEST['order'];
-            $allowed_order = array('name','herkunft','count','future_count','band_follower');
-            if(array_search($order, $allowed_order) !== false){
+            $allowed_order = array('name', 'herkunft', 'count', 'future_count', 'band_follower');
+            if (array_search($order, $allowed_order) !== false) {
                 return $order;
             }
         }
@@ -576,10 +582,11 @@ class PlekBandHandler
      *
      * @return string ORDER_BY value
      */
-    public function get_band_sort_direction(){
-        if(!empty($_REQUEST['direction'])){
+    public function get_band_sort_direction()
+    {
+        if (!empty($_REQUEST['direction'])) {
             $direction = strtoupper($_REQUEST['direction']);
-            if($direction === 'ASC' OR $direction === 'DESC'){
+            if ($direction === 'ASC' or $direction === 'DESC') {
                 return $direction;
             }
         }
@@ -620,7 +627,7 @@ class PlekBandHandler
     {
         global $plek_handler;
         $plek_handler->enqueue_select2();
-        wp_enqueue_script('plek-band-scripts', PLEK_PLUGIN_DIR_URL . 'js/manage-band.min.js', array('jquery', 'select2'), $plek_handler -> version);
+        wp_enqueue_script('plek-band-scripts', PLEK_PLUGIN_DIR_URL . 'js/manage-band.min.js', array('jquery', 'select2'), $plek_handler->version);
     }
 
     /**
@@ -846,7 +853,7 @@ class PlekBandHandler
         global $plek_handler;
         $band_id = $this->get_id();
         $user_id = (empty($user_id)) ? get_current_user_id() : $user_id;
-        $followers =  (isset($this->band['band_follower']) AND is_array($this->band['band_follower'])) ? $this->band['band_follower'] : array();
+        $followers =  (isset($this->band['band_follower']) and is_array($this->band['band_follower'])) ? $this->band['band_follower'] : array();
         $action = false;
 
         if (empty($band_id)) {
@@ -919,5 +926,89 @@ class PlekBandHandler
         $query->set('posts_per_page', 1); //Hack to prevent 404 Page shown on Tag page > 1
 
         return $query;
+    }
+
+    /**
+     * Calculates the Band Score
+     *
+     * @param string $band_id
+     * @return array Band score array
+     */
+    public function update_band_score($band_id)
+    {
+        global $plek_event;
+        global $plek_handler;
+        $from = date('Y-m-d H:m:i');
+        
+        $band = $this->load_band_object_by_id($band_id);
+        $follower = $this->get_follower_count();
+        $origin = $this->get_country();
+        $future_events = $this -> update_band_future_count($band_id);
+
+        $search = new PlekSearchHandler;
+        $all_events = $search->search_events_with_bands_ids(array($band_id));
+        $all_events = count($all_events);
+
+        $total_score = $this -> calculate_band_score($follower, $origin, $future_events, $all_events);
+
+        $score = json_encode(array(
+            'follower' => $follower,
+            'origin' => $origin,
+            'future_events' => $future_events,
+            'all_events' => $all_events,
+            'total_score' => $total_score
+
+        ));
+
+        $plek_handler -> update_field('band_score', $score, 'term_' .$band_id);
+        return $score;
+
+    }
+
+    /**
+     * Calculate the Band Score.
+     * @todo: Validate the Band Score and add more country scores?
+     *
+     * @param int $follower
+     * @param string $origin
+     * @param int $future_events
+     * @param int $all_events
+     * @return int Band Score
+     */
+    public function calculate_band_score($follower, $origin, $future_events, $all_events){
+        $country_score = array(
+            'CH' => 1, 
+            'DE' => 2, 
+            'FR' => 2, 
+            'AT' => 2, 
+            'IT' => 2, 
+            'USA' => 5,
+            'default' => 4,
+        );
+        $score = ($follower * 5);
+        $score =+ ($future_events * 5);
+        $score =+ ($all_events * 4);
+        
+        $country_multiplicator = isset($country_score[$origin])?$country_score[$origin]:$country_score['default'];
+        return ($score * $country_multiplicator);
+    }
+
+    /**
+     * Updates the future event count of an event.
+     * 
+     * @param string $band_id
+     * @return int future events count
+     */
+    public function update_band_future_count($band_id)
+    {
+        global $plek_event;
+        global $plek_handler;
+
+        $from = date('Y-m-d H:m:i');
+        $future_events = $plek_event -> get_events_of_band($band_id,$from);
+        $event_count = count($future_events);
+
+        $plek_handler -> update_field('future_events_count', $event_count, 'term_' .$band_id);
+        return $event_count;
     }
 }

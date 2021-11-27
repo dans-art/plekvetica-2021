@@ -13,6 +13,8 @@ $facebook = $band_object->get_facebook_link();
 $insta = $band_object->get_instagram_link();
 $website = $band_object->get_website_link();
 
+$score = $band_class -> update_band_score($band_object -> get_id());
+
 $follow_text = (!$band_object->user_is_follower())?__('Follow','pleklang'):__('Unfollow','pleklang');
 $follower_count = $band_object -> get_follower_count();
 ?>
@@ -49,3 +51,4 @@ $follower_count = $band_object -> get_follower_count();
    
  ?>
 <?php
+s($score);
