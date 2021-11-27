@@ -2,9 +2,18 @@
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
+if(!class_exists('WP_Screen')){
+   require_once( ABSPATH . 'wp-admin/includes/class-wp-screen.php' );
+}
+if(!class_exists('WP_List_Table')){
+    require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+ }
 
-class PlekBackend
+
+class PlekBackend /*extends WP_List_Table*/
 {
+
+
 
         /**
      * Checks if all neccesary plugins and options are set.
@@ -13,8 +22,15 @@ class PlekBackend
      */
     public function check_plekvetica(){
         global $plek_handler;
+        $errors = 0;
         if(!defined('SMTP_HOST')){
             echo __('eMail not configured', 'pleklang');
+            $errors++;
+        }
+        if($errors === 0){
+            return true;
+        }else{
+            return false;
         }
     }
 

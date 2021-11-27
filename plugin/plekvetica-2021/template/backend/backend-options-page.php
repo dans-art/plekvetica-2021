@@ -3,41 +3,30 @@
 <?php
 global $backend_class;
 $backend_class -> check_plekvetica();
+$current_tab = (isset($_GET['tab']))?$_GET['tab']:null;
 ?>
-<form id='plek_options_page' action="options.php" method="post"  enctype="multipart/form-data">
-    <?php
-    //settings_fields('plek_facebook_options'); 
-    settings_fields('plek_general_options'); 
 
-    do_settings_sections('plek_general_options');
-    
-    //do_settings_sections('plek_facebook_options');
-    $options = get_option('plek_general_options');
-    //s($options);
-    if (isset($options['plek_facebook_page_id'])) {
-        $poster = new plekSocialMedia;
-        $poster->facebook_login();
-        try { ?>
-            <div>Connected with: <?php echo $poster->get_page_name(); ?></div>
-            <?php
-        } catch (\Throwable $th) {
-            echo "Error while connecting to Facebook.";
-            echo $th;
-            echo '</div>';
-        }
+<nav class="nav-tab-wrapper">
+    <a href="?page=plek-options" class="nav-tab <?php if($current_tab === null){echo 'nav-tab-active';} ?>"><?php echo __('General','pleklang'); ?></a>
+    <a href="?page=plek-options&tab=notifications" class="nav-tab <?php if($current_tab === 'notifications'){echo 'nav-tab-active';} ?>"><?php echo __('Notifications','pleklang'); ?></a>
+    <a href="?page=plek-options&tab=status" class="nav-tab <?php if($current_tab === 'status'){echo 'nav-tab-active';} ?>"><?php echo __('Status','pleklang'); ?></a>
+</nav>
+
+<div class="tab-content">
+    <?php 
+    switch ($current_tab) {
+        case 'notifications':
+            PlekTemplateHandler::load_template('backend-options-page-notifications','backend');
+            break;
+        case 'status':
+            PlekTemplateHandler::load_template('backend-options-page-status','backend');
+            break;
         
-        ?>
-        <?php
+        default:
+            PlekTemplateHandler::load_template('backend-options-page-default-options','backend');
+            break;
     }
-    submit_button(); 
     ?>
-</form>
+</div>
 
-<h2>Plevetica Status</h2>
-<?php
-    if(PlekUserHandler::check_user_roles()){
-        echo __("User roles exists.");
-    }else{
-        echo __("Not all user roles exist!");
-    }
-?>
+
