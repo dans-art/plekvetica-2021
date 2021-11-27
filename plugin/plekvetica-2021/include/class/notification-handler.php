@@ -70,6 +70,25 @@ class PlekNotificationHandler extends WP_List_Table
     }
 
     /**
+     * Pushes a notification again, so the user receives again an email. In the Notification Panel the message will be shown as un-dismissed
+     *
+     * @param int $notification_id
+     * @return bool
+     */
+    public function push_again($notification_id = null){
+        if($notification_id === null){
+            return false;
+        }
+        global $wpdb;
+        $table = $wpdb->prefix . 'plek_notifications';
+        $data = array('email_send' => 0, 'dismissed' => 0);
+        $where = array('id' => $notification_id);
+        $format = array('%d');
+        return $wpdb->update($table, $data, $where, $format, $format);
+ 
+    }
+
+    /**
      * Get the users Notifications
      *
      * @param int $user_id
@@ -241,7 +260,8 @@ class PlekNotificationHandler extends WP_List_Table
     /**
      * Processes the bulk actions
      * 
-     *@todo: Add Support for push_again, activate_email and deactivate_email
+     * @todo: Add Support for activate_email and deactivate_email
+     * @todo: Reload the page after bulk-action, add information about the change
      * @return void
      */
     public function process_bulk_action()
@@ -254,12 +274,17 @@ class PlekNotificationHandler extends WP_List_Table
                     $this -> delete_notification($item_to_process);
                 }
                 break;
+            case 'push_again':
+                foreach($items AS $item_to_process){
+                    $this -> push_again((int)$item_to_process);
+                }
+                break;
 
             default:
-                echo "No Function yet";
+                //Do nothing...
                 break;
         }
-        //wp_redirect( esc_url( add_query_arg() ) );
+       // wp_redirect( esc_url( add_query_arg() ) );
         //exit;
     }
 
@@ -312,8 +337,8 @@ class PlekNotificationHandler extends WP_List_Table
         $actions = array(
             'delete' => __('Delete', 'pleklang'),
             'push_again' => __('Push again', 'pleklang'),
-            'activate_email' => __('Activate Email', 'pleklang'),
-            'deactivate_email' => __('Deactivate Email', 'pleklang'),
+            //'activate_email' => __('Activate Email', 'pleklang'),
+            //'deactivate_email' => __('Deactivate Email', 'pleklang'),
         );
         return $actions;
     }
