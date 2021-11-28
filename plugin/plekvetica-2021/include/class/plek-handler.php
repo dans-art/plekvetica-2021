@@ -257,6 +257,11 @@ class PlekHandler
         if (!wp_next_scheduled('send_unsend_email_notifications')) {
             wp_schedule_event(time(), 'hourly', 'send_unsend_email_notifications');
         }
+        
+        //Update Bandscores
+        if (!wp_next_scheduled('update_all_band_scores')) {
+            wp_schedule_event(time(), 'hourly', 'update_all_band_scores');
+        }
     }
 
 

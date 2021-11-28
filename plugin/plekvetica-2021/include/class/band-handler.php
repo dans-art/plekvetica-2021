@@ -439,6 +439,12 @@ class PlekBandHandler
         return Tribe__Events__Main::instance()->getLink() . $cat_slug . '/' . $genre_slug;
     }
 
+    /**
+     * Get all the Bands
+     *
+     * @param boolean $meta - If the Meta should be loaded or not.
+     * @return array With WP_Term Object
+     */
     public function get_all_bands(bool $meta = true)
     {
         $args = array('hide_empty ' => false, 'get' => 'all');
@@ -450,6 +456,33 @@ class PlekBandHandler
             }
         }
         return $bands;
+    }
+
+    /**
+     * Get all the band ids. Similar to get_all_bands, but it returns only the ids.
+     * And it is faster than the wordpress get_tags function.
+     *
+     * @return array
+     */
+    public function get_all_band_ids($limit = null, $offset = null){
+        global $wpdb;
+
+        $query = "SELECT t.term_id as id
+        FROM plek_terms AS t
+        INNER JOIN plek_term_taxonomy AS tt
+        ON t.term_id = tt.term_id
+        WHERE tt.taxonomy IN ('post_tag')
+        ORDER BY id ASC";
+
+        if($limit !== null){
+            $query .= " LIMIT {$limit}";
+        }
+
+        if($offset !== null){
+            $query .= " OFFSET {$offset}";
+        }
+
+        return $wpdb -> get_results($query);
     }
 
     /**
@@ -490,7 +523,7 @@ class PlekBandHandler
         t.term_id as id, t.name as name, t.slug, 
         tt.count as count, 
         herkunft.meta_value as herkunft, future_count.meta_value as future_count, 
-        band_genre.meta_value as genre, band_follower.meta_value as band_follower
+        band_genre.meta_value as genre, band_follower.meta_value as band_follower, CAST(band_score.meta_value as int) as band_score
         FROM {$wpdb->prefix}terms AS t
         INNER JOIN {$wpdb->prefix}term_taxonomy AS tt
         ON t.term_id = tt.term_id
@@ -502,6 +535,8 @@ class PlekBandHandler
         ON t.term_id = future_count.term_id AND future_count.meta_key = 'future_events_count'
         LEFT JOIN {$wpdb->prefix}termmeta AS band_follower
         ON t.term_id = band_follower.term_id AND band_follower.meta_key = 'band_follower'
+        LEFT JOIN {$wpdb->prefix}termmeta AS band_score
+        ON t.term_id = band_score.term_id AND band_score.meta_key = 'band_score'
         WHERE tt.taxonomy IN ('post_tag')
         ORDER BY " . $this->get_band_order() . " " . $this->get_band_sort_direction() . "
         LIMIT %d OFFSET %d", $limit, $page_obj->offset);
@@ -568,7 +603,7 @@ class PlekBandHandler
     {
         if (!empty($_REQUEST['order'])) {
             $order = $_REQUEST['order'];
-            $allowed_order = array('name', 'herkunft', 'count', 'future_count', 'band_follower');
+            $allowed_order = array('name', 'herkunft', 'count', 'future_count', 'band_follower', 'band_score');
             if (array_search($order, $allowed_order) !== false) {
                 return $order;
             }
@@ -841,6 +876,25 @@ class PlekBandHandler
     }
 
     /**
+     * Loads the Bandscore
+     *
+     * @return void
+     */
+    public function get_band_score($cache = true)
+    {
+        if ($cache === true) {
+            $band_score =  (isset($this->band['band_score'])) ? $this->band['band_score'] : '';
+        } else {
+            $band_id = $this->get_id();
+            $band_score = get_field('band_score', 'term_' . $band_id);
+        }
+        if (empty($band_score)) {
+            return 0;
+        }
+        return $band_score;
+    }
+
+    /**
      * Updates the Follower list.
      * If the user is already a follower, he will be removed, otherwise added.
      * Use load_band_object() before this function
@@ -932,37 +986,53 @@ class PlekBandHandler
      * Calculates the Band Score
      *
      * @param string $band_id
-     * @return array Band score array
+     * @return array|false Band score array or false
      */
     public function update_band_score($band_id)
     {
         global $plek_event;
         global $plek_handler;
         $from = date('Y-m-d H:m:i');
-        
+
         $band = $this->load_band_object_by_id($band_id);
         $follower = $this->get_follower_count();
         $origin = $this->get_country();
-        $future_events = $this -> update_band_future_count($band_id);
+        $future_events = $this->update_band_future_count($band_id);
 
         $search = new PlekSearchHandler;
         $all_events = $search->search_events_with_bands_ids(array($band_id));
         $all_events = count($all_events);
 
-        $total_score = $this -> calculate_band_score($follower, $origin, $future_events, $all_events);
+        $total_score = (string) $this->calculate_band_score($follower, $origin, $future_events, $all_events);
 
-        $score = json_encode(array(
-            'follower' => $follower,
-            'origin' => $origin,
-            'future_events' => $future_events,
-            'all_events' => $all_events,
-            'total_score' => $total_score
+        if($plek_handler->update_field('band_score', $total_score, 'term_' . $band_id) !== false){
+            return $total_score;
+        }
+        return false;
+    }
 
-        ));
-
-        $plek_handler -> update_field('band_score', $score, 'term_' .$band_id);
-        return $score;
-
+    /**
+     * Update all the Bandscores
+     * To avoid overloading the server, not all bandscores will be updated at once.
+     * The function gets called every hour by cron job and updates only a part of the Bands.
+     * After 24h all the bands are updated once.
+     * 
+     * @return int count of updated entries.
+     */
+    public function update_all_band_scores(){
+        $updated = 0;
+        $bands = $this -> get_all_band_ids();
+        $bands_count = count($bands);
+        $limit = round($bands_count / 24);
+        $hour = (int) date("G");
+        $offset = ($hour * $limit);
+        $bands_to_update = $this -> get_all_band_ids($limit, $offset);
+        foreach($bands_to_update as $band){
+            if($this -> update_band_score($band -> id)){
+                $updated++;
+            }
+        }
+        return $updated;
     }
 
     /**
@@ -975,21 +1045,21 @@ class PlekBandHandler
      * @param int $all_events
      * @return int Band Score
      */
-    public function calculate_band_score($follower, $origin, $future_events, $all_events){
+    public function calculate_band_score($follower, $origin, $future_events, $all_events)
+    {
         $country_score = array(
-            'CH' => 1, 
-            'DE' => 2, 
-            'FR' => 2, 
-            'AT' => 2, 
-            'IT' => 2, 
+            'CH' => 1,
+            'DE' => 2,
+            'FR' => 2,
+            'AT' => 2,
+            'IT' => 2,
             'USA' => 5,
             'default' => 4,
         );
         $score = ($follower * 5);
-        $score =+ ($future_events * 5);
-        $score =+ ($all_events * 4);
-        
-        $country_multiplicator = isset($country_score[$origin])?$country_score[$origin]:$country_score['default'];
+        $score = ($future_events * 5) + $score;
+        $score = ($all_events * 4) + $score;
+        $country_multiplicator = isset($country_score[$origin]) ? $country_score[$origin] : $country_score['default'];
         return ($score * $country_multiplicator);
     }
 
@@ -1005,10 +1075,10 @@ class PlekBandHandler
         global $plek_handler;
 
         $from = date('Y-m-d H:m:i');
-        $future_events = $plek_event -> get_events_of_band($band_id,$from);
+        $future_events = $plek_event->get_events_of_band($band_id, $from);
         $event_count = count($future_events);
 
-        $plek_handler -> update_field('future_events_count', $event_count, 'term_' .$band_id);
+        $plek_handler->update_field('future_events_count', $event_count, 'term_' . $band_id);
         return $event_count;
     }
 }

@@ -33,6 +33,7 @@ add_action( 'wp_authenticate', [$plek_login_handler, 'wp_authenticate_action'], 
 
 //Cron Jobs
 add_action('send_unsend_email_notifications', [new PlekNotificationHandler, 'send_unsend_email_notifications']);
+add_action('update_all_band_scores', [new PlekBandHandler, 'update_all_band_scores']);
 
 //Ajax
 add_action('wp_ajax_plek_ajax_event_form', [new PlekAjaxHandler,'plek_ajax_event_form_action']);

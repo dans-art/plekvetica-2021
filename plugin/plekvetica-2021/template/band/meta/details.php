@@ -6,6 +6,7 @@
 extract(get_defined_vars());
 $band_object = isset($template_args[0]) ? $template_args[0] : null;
 $band_class = new PlekBandHandler;
+$user = new PlekUserHandler;
 $name = $band_object->get_name();
 $genres = $band_object->get_genres();
 $country = $band_object->get_country_name();
@@ -23,10 +24,10 @@ $follower_count = $band_object -> get_follower_count();
 <div class="meta-content">
   <dl class='event-details-container'>
     <?php if (!empty($country)) : ?>
-      <dt>Herkunft</dt>
+      <dt><?php echo __('Origin','pleklang'); ?></dt>
       <dd class="band-flag"><?php echo $band_object->get_flag_formated(); ?> <?php echo $country; ?></dd>
     <?php endif; ?>
-    <dt>Social & Links</dt>
+    <dt><?php echo __('Social & Links','pleklang'); ?></dt>
     <dd class="event-links">
       <span>
         <?php if (!empty($facebook)) : ?>
@@ -44,11 +45,11 @@ $follower_count = $band_object -> get_follower_count();
         <?php endif; ?>
       </span>
     </dd>
+    <?php if ($user -> user_is_in_team()) : ?>
+      <dt><?php echo __('Score','pleklang'); ?></dt>
+      <dd class="band-score"><?php echo $score; ?></dd>
+    <?php endif; ?>
   </dl>
   <div class="band-follow-button"><?php PlekTemplateHandler::load_template('button-counter', 'components', $follower_count, $follow_text, '' ,'plek-follow-band-btn'); ?></div>
 </div>
 <?php
-   
- ?>
-<?php
-s($score);
