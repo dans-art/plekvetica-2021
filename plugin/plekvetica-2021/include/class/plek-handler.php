@@ -250,6 +250,7 @@ class PlekHandler
 
     /**
      * Registers the cron jobs
+     * @todo: Create one function single for daily, hourly, weekly, ....
      */
     public function register_cron_jobs()
     {

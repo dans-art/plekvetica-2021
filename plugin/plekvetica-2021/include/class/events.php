@@ -974,6 +974,12 @@ class PlekEvents extends PlekEventHandler
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $vids, 'youtube');
     }
 
+    /**
+     * Shortcode for the add and edit event from.
+     * If new event, the form will be split in two parts, if edit, only one form for all the event details will be loaded.
+     *
+     * @return string The From
+     */
     public function plek_event_form_shortcode()
     {
 
@@ -985,6 +991,14 @@ class PlekEvents extends PlekEventHandler
 
         if (isset($_REQUEST['edit_event_id'])) {
             $event->load_event($_REQUEST['edit_event_id']);
+            return PlekTemplateHandler::load_template_to_var('edit-event-form', 'event/form', $event);
+        }
+
+        if(isset($_REQUEST['stage']) AND $_REQUEST['stage'] === "login"){
+            return PlekTemplateHandler::load_template_to_var('add-event-form-login', 'event/form', $event);
+        }
+        if(isset($_REQUEST['stage']) AND $_REQUEST['stage'] === "details"){
+            return PlekTemplateHandler::load_template_to_var('add-event-form-details', 'event/form', $event);
         }
 
         return PlekTemplateHandler::load_template_to_var('add-event-form-basic', 'event/form', $event);

@@ -106,7 +106,7 @@ var matrix = function matrix(seq, pattern) {
             console.log("hat assign");
       }
       //var activeCell = Object.assign({}, this.peak['cell']);
-      var activeCell = $.extend({}, this.peak['cell']);
+      var activeCell = jQuery.extend({}, this.peak['cell']);
 
       while (this.traceback[activeCell['y']][activeCell['x']] !== 0) {
         if (it > 20) break;

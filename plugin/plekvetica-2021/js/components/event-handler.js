@@ -5,8 +5,17 @@ var plekevent = {
 
     existing_event: null,
 
+    construct(){
+
+        plekevent.add_events_listener();
+    },
+
+    add_events_listener(){
+        jQuery("#event_start_date").on("change", function(){window.plekevent.check_existing_event()});
+    },
+
     check_existing_event() {
-            if (this.get_field_value('event_start_date') !== "") {
+            if (this.get_field_value('event_start_date') !== "" && jQuery('#event-band-selection .item').length > 0) {
                 //ajax call for checking
                 var datab = new FormData();
                 datab.append('action', 'plek_ajax_event_form');
@@ -25,11 +34,11 @@ var plekevent = {
                         var jdata = JSON.parse(data);
                         if (jdata.error !== '') {
                             window.plekerror.display_info('Achtung', jdata.error);
-                            this.existing_event = true;
+                            plekevent.existing_event = true;
                             console.log("Event Existiert bereits");
                             return true;
                         } else {
-                            this.existing_event = false;
+                            plekevent.existing_event = false;
                             console.log("Event existiert nicht");
                             return false;
                         }
@@ -56,6 +65,7 @@ var plekevent = {
 
         if (type === 'event_band') {
             window.plekevent.check_existing_event();
+            window.plekevent.generate_title();
         }
     },
 
@@ -77,6 +87,7 @@ var plekevent = {
         }
         //Validation was ok, send it to the server
         var datab = this.prepare_data(type);
+        debugger;
                 jQuery.ajax({
                     url: window.ajaxurl,
                     data: datab,
@@ -114,14 +125,13 @@ var plekevent = {
         datab.append('type', type);
         if(type === "save_basic_event"){
             //Fields for Event Basic
-            datab.append('name', this.get_field_value('event_name'));
+            datab.append('event_name', this.get_field_value('event_name'));
             datab.append('start_date', this.get_field_value('event_start_date'));
             if(jQuery('#is_multiday').is(':checked')){
                 datab.append('end_date', this.get_field_value('event_end_date'));
             }
             datab.append('band_ids', JSON.stringify(this.get_field_value('bands')));
             datab.append('venue', this.get_field_value('venue'));
-            datab.append('description', this.get_field_value('event_description'));
         }
 
         return datab;
@@ -153,5 +163,42 @@ var plekevent = {
             return ids[0];
         }
         return ids;
+    },
+
+    /**
+     * Creates the Events title based on the bandscore
+     */
+    generate_title(){
+        let selected_bands = jQuery("#event-band-selection .item");
+        var title_input = jQuery("#event_name");
+        var band_order = [];
+        jQuery.each(selected_bands, function(index){
+            let id = jQuery(this).data('id');
+            let band_name = bandPreloadedData[id].name;
+            let band_score = parseInt(bandPreloadedData[id].score);
+            band_order.push([band_score, band_name]);
+        });
+        band_order.sort(function(a, b){
+            var a0 = a[0];
+            var b0 = b[0];
+            if(a0 == b0) return 0;
+            return a0 < b0? 1 : -1;
+        });
+
+        var total_items = band_order.length;
+        var event_name_text = "";
+        jQuery.each(band_order, function(index){
+            if(index === 0){
+                event_name_text = this[1]; //Name of the Band
+                return;
+            }
+            if((index + 1) !== total_items ){ //Not last item
+                event_name_text += ", " + this[1]; 
+            }else{ //Last item
+                event_name_text += " & " + this[1]; 
+            }
+        });
+        jQuery(title_input).val(event_name_text);
     }
 }
+plekevent.construct();

@@ -638,6 +638,7 @@ class PlekBandHandler
             $current['name'] = $band->name;
             $current['flag'] = (isset($band->meta['herkunft'])) ? $band->meta['herkunft'] : '';
             $current['genres'] = (isset($band->meta['band_genre'])) ? $this->format_band_genres($band->meta['band_genre']) : '';
+            $current['score'] = (isset($band->meta['band_score'])) ? $band->meta['band_score'] : 0;
             $bands_formated[$band->term_id] = $current;
         }
         return json_encode($bands_formated);
