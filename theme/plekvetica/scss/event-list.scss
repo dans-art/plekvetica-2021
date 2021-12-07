@@ -62,6 +62,15 @@ article.tribe-events-calendar-list__event{
         width: 88%;
       }
     }
+    .tribe-events-calendar-list__event-title-link{
+      color: $link-color;
+      }
+      
+      .tribe-events-calendar-list__event-title-link:active, 
+      .tribe-events-calendar-list__event-title-link:visited, 
+      .tribe-events-calendar-list__event-title-link:hover{
+        color: $link-color;
+      }
 }
 
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event{
@@ -342,7 +351,7 @@ article.plek-event-item-compact{
   .poster{
     margin-right: 1em;
     align-self: center;
-    width: 150px;
+    width: 93px;
   }
 
   .details{
@@ -393,4 +402,35 @@ article.plek-event-item-compact{
     padding: 0.4em;
   }
 
+}
+
+.plek-event-data-separator{
+  border-bottom: 2px solid $color-red;
+  margin-bottom: 2em;
+  width: 100%;
+  text-transform: uppercase;
+}
+
+
+.plek-pagination-container{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+
+  .pagination-prev,
+  .pagination-next{
+    flex-basis: 25%;
+  }
+
+  .page-count{
+    padding:0 1em;
+    text-align: center;
+    display: flex;
+    align-items: center;
+
+    div{
+      width: 100%;
+    }
+  }
 }

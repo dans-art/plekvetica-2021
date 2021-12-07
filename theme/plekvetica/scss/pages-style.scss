@@ -262,15 +262,39 @@ ul.partner-container{
     }
 }
 
+/* Gallery*/
+.page.plek_is_gallery{
+
+.site-content{
+    display:flex;
+    flex-direction: column;
+}
+}
+
 //My Plekvetica
+
+#plek-login-container{
+    position: relative;
+}
+
 .my-plek-header{
     display: flex;
     justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 2em;
+    
+    h1{
+        flex-basis: 100%;
+    }
+
+    h2{
+        font-size: 1.3em;
+    }
 
     div{
         flex-basis: 50%;
     }
-    div:nth-child(2){
+    div:nth-child(3){
         text-align: right;
     }
 
@@ -292,10 +316,15 @@ ul.partner-container{
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
-    
+  
+        .this-week-posts{
+            margin-bottom: 1em;
+        }
+
         .this-week-posts,
         .missing-reviews-posts,
-        .organizer-data{
+        .organizer-data,
+        .band-data{
             flex-basis: 49%;
             flex-grow: 1;
         }
@@ -307,6 +336,32 @@ ul.partner-container{
                 color: $color-gray-light;
             }         
         }
+        .band-data{
+            text-align: right;
+            dd{
+                margin: 0.8em 0;
+
+                a:first-child{
+                    color: $text-color;
+                    padding-right: 0.8em;
+                }
+            }
+            
+            img{
+                max-height: 1.2em;
+                margin-right: 0.5em;
+                position: relative;
+                top: 0.2em;
+            }
+            
+        }
+    }
+
+    .my-plek-head-container,
+    .followed-bands,
+    .watchlist-posts,
+    .all-posts{
+        margin-bottom: 1em;
     }
     .info-text-bar{
         width: 100%;
@@ -366,6 +421,8 @@ ul.partner-container{
 
 //Search Page
 #plek-search-page{
+
+    padding: 0 1em;
 
     .info-text-bar{
         width: 100%;

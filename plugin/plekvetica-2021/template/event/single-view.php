@@ -1,4 +1,8 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 global $plek_event;
 global $plek_handler;
 
@@ -30,7 +34,7 @@ if ($is_review) {
     $backlink_label_plural = tribe_get_event_label_plural();
 }
 //Load the main-event-single.js script
-wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-single.min.js', ['jquery']);
+wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-single.min.js', ['jquery'], $plek_handler -> version);
 ?>
 
 <?php if ($is_postponed and $plek_event->is_public($postponed_id)) : ?>
@@ -42,7 +46,7 @@ wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-sing
 
 
 <?php PlekTemplateHandler::load_template('back-link', 'components', $backlink, $backlink_label, $backlink_label_plural); ?>
-<div id="event-container" class="single-view <?php echo $plek_event->get_field('ID'); ?> <?php echo $plek_event_class; ?>">
+<div id="event-container" data-event_id="<?php echo $plek_event->get_field('ID'); ?>" class="single-view <?php echo $plek_event->get_field('ID'); ?> <?php echo $plek_event_class; ?>">
     <div id="event-content">
         <div id="event-header">
             <div class="event-poster">
@@ -94,7 +98,8 @@ wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-sing
         <?php PlekTemplateHandler::load_template('organizer', 'event/meta'); ?>
         <?php PlekTemplateHandler::load_template('authors', 'event/meta'); ?>
         <?php if (!$can_edit) : ?>
-            <?php PlekTemplateHandler::load_template('event-actions', 'event/meta'); ?>
+            <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Event', 'pleklang')); ?>
+            <?php PlekTemplateHandler::load_template('button', 'components', '#', 'Fehlerhaften Event melden', null, 'plek-report-incorrect-event'); ?>
         <?php endif; ?>
     </div>
 

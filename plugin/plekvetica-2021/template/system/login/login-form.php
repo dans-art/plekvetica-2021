@@ -22,6 +22,6 @@ $current_url = get_permalink( $obj_id );
             <a href="<?php echo $current_url ;?>?action=reset_password"><?php echo __('Passwort zurücksetzen','pleklang');?></a>
         </div>
         <div class="register-link">
-            <a href="<?php echo $current_url ;?>?action=sign_up"><?php echo __('Bei Plekvetica anmelden','pleklang');?></a>
+            <a href="<?php echo $current_url ;?>?action=sign_up"><?php echo __('Sign up at Plekvetica','pleklang');?></a>
         </div>
     </div>

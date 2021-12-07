@@ -4,19 +4,23 @@
  * Plugin Name: Plekvetica - 2021
  * Plugin URI: https://www.plekvetica.ch/
  * Description: Modifikationen und spezielle Funktionen für die Plekvetica Seite.
- * Version: 1.0
+ * Version: 1.2
  * Date: 2021-04-07
  * Author: Daniel Spycher
  * Author URI: https://www.dev.dans-art.ch/
+ * 
+ * Domain Path: /languages
  * Textdomain: pleklang
  * @todo: 
- *       -  Change ACF "band_genre" callback to Array
- *       - Add Roles: communityuser / partner / band / organizer
- *  - Add LazyLoading for all images
+ *       - Add Roles: partner 
+ * - Add LazyLoading for all images
  * - check if The Event Calendar, ACF is installed
- * - Fix Search page, add Youtube, Reviews, Band, Seperate by type.
+ * - Add support for Partner role.
  */
 
+if (!defined('ABSPATH')) {
+  exit; // Exit if accessed directly
+}
 
 define('PLEK_PATH', plugin_dir_path( __FILE__ ));
 define('PLEK_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ));
@@ -50,6 +54,7 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
  $plek_gallery_handler = new PlekGalleryHandler;
  $plek_login_handler = new PlekLoginHandler;
  $plek_ajax_handler = new PlekAjaxHandler;
+ $plek_event_blocks = new PlekEventBlocks;
 
  //Error Handling
  $plek_ajax_errors = new WP_Error();

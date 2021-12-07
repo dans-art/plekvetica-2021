@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 
 class PlekTemplateHandler
 {
@@ -40,7 +43,7 @@ class PlekTemplateHandler
         if ($file) {
             return $file;
         }
-
+        
         $file = PLEK_PATH . 'template/' . $subfolder . $template_name;
         if(file_exists($file)){
             return $file;
@@ -71,7 +74,6 @@ class PlekTemplateHandler
     public static function load_template(string $template_name = '', string $subfolder = '', ...$template_args){
         $args = get_defined_vars();
         $path = PlekTemplateHandler::get_template_path($template_name, $subfolder);
-
         if($path){
             ob_start();
 

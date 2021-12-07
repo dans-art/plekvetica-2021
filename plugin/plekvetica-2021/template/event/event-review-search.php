@@ -1,4 +1,5 @@
 <?php
+//@todo: delete this file?
 
 extract(get_defined_vars());
 $search_term = isset($template_args[0]) ? $template_args[0] : null;

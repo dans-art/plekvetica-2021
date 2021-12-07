@@ -8,7 +8,8 @@ $placeholder = __('Suche nach Bands, Veranstaltungen oder Veranstalter','pleklan
 <div class="plek-review-search">
 	<form>
 		<label>
-			<input type="text" placeholder="<?php echo $placeholder;?>" name="search_reviews"/>
+			<input type="text" placeholder="<?php echo $placeholder;?>" value="<?php echo (!empty($_REQUEST['search_reviews']))?$_REQUEST['search_reviews']:'';?>" name="search_reviews"/>
+			<input type="hidden" value="1" name="paged"/>
 		</label>
 		<label>
 			<button class="tribe-common-c-btn tribe-events-c-search__button" type="submit" name="submit-review">

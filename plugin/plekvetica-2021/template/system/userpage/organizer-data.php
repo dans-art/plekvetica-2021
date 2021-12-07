@@ -42,5 +42,10 @@ if (!$organi_id) {
     </dd>
 </dl>
 <div class="setup-check">
-    <?php PlekUserHandler::check_user_setup('plek-organi'); ?>
+    <?php
+    $check = PlekUserHandler::check_user_setup('plek-organi');
+    if (is_string($check)) {
+        echo $check;
+    }
+    ?>
 </div>

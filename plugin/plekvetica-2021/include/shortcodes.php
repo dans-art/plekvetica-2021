@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 //Shortcodes
 //General
 add_shortcode('plek_text_bar', [$plek_handler, 'text_bar_from_shortcode']); 
@@ -18,6 +21,9 @@ add_shortcode('plek_get_all_reviews', [$plek_event, 'plek_get_all_reviews_shortc
 add_shortcode('plek_get_all_raffle', [$plek_event, 'plek_get_all_raffle_shortcode']); 
 add_shortcode('plek_get_videos', [$plek_event, 'plek_get_videos_shortcode']); 
 add_shortcode('plek_event_form', [$plek_event, 'plek_event_form_shortcode']);
+
+//Bands
+add_shortcode('plek_band_page', [new PlekBandHandler, 'plek_band_page_shortcode']);
 
 //Login
 add_shortcode('plek_login_page', [$plek_login_handler, 'plek_login_page_shortcode']);

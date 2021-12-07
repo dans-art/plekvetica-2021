@@ -151,13 +151,21 @@ div.plek-review-search{
   }
 }
 
+/* Register User*/
+
+#register-new-user-form .submit.plek-button{
+  width: 100%;
+  margin-left: 0;
+  }
+
 /* User Settings form, Band form*/
 .band-edit-container{
   width: 100%;
 }
 
 #plek-user-settings-form,
-#plek-band-form{
+#plek-band-form,
+#register-new-user-form{
   margin-left: 2%;
   width: 96%;
 
@@ -186,6 +194,13 @@ div.plek-review-search{
     width: 24%;
     white-space: normal;
   }
+
+  
+  button.plek-button.full-width{
+    width: 100%;
+  }
+
+
 
   #user-settings-submit{
     background-color: $color-red-light;

@@ -1,7 +1,1 @@
-#plek_options_page .logo_image td {
-  display: flex;
-  flex-direction: column; }
-#plek_options_page .logo_image img {
-  max-width: 200px; }
-
-/*# sourceMappingURL=admin-style.min.css.map */
+#plek_options_page .logo_image td{display:flex;flex-direction:column}#plek_options_page .logo_image img{max-width:200px}

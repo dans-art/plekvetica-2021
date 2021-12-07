@@ -3,7 +3,9 @@ global $plek_event;
 $event = $plek_event->get_event();
 $price_boxoffice = $plek_event->get_price_boxoffice();
 $price_vvk = $plek_event->get_price_vvk();
-$is_raffle = $plek_event -> get_raffle();
+$is_raffle = $plek_event->get_raffle();
+$watchlist_status = ($plek_event -> current_user_is_on_watchlist($plek_event -> get_ID()))?__('Unfollow','pleklang'):__('Follow','pleklang');
+$watchlist_count = ($plek_event -> get_watchlist_count());
 
 ?>
 <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Details', 'pleklang')); ?>
@@ -13,17 +15,17 @@ $is_raffle = $plek_event -> get_raffle();
       <dt>Preis</dt>
 
       <?php if ($price_boxoffice) : ?>
-        <dd><?php echo $price_boxoffice . ' ' . __('(Abendkasse)', 'pleklang') ?></dd>
+        <dd><?php echo $price_boxoffice . ' ' . __('(Boxoffice)', 'pleklang') ?></dd>
       <?php endif; ?>
 
       <?php if ($price_vvk) : ?>
-        <dd><?php echo $price_vvk . ' ' . __('(Vorverkauf)', 'pleklang') ?></dd>
+        <dd><?php echo $price_vvk . ' ' . __('(Presale)', 'pleklang') ?></dd>
       <?php endif; ?>
 
     <?php endif; ?>
   </dl>
   <dl class='event-details-links-container'>
-    <dt>Links</dt>
+    <dt><?php echo __('Links','pleklang'); ?></dt>
     <dd class="event-links">
       <span>
         <?php if ($plek_event->get_field_value('_EventURL')) {
@@ -37,9 +39,10 @@ $is_raffle = $plek_event -> get_raffle();
       </span>
       <span>
         <?php if ($is_raffle) {
-          echo $plek_event -> get_raffle_link();
+          echo $plek_event->get_raffle_link();
         } ?>
       </span>
     </dd>
   </dl>
+  <div class="band-follow-button"><?php PlekTemplateHandler::load_template('button-counter', 'components', $watchlist_count, $watchlist_status, '' ,'plek-follow-event-btn'); ?></div>
 </div>

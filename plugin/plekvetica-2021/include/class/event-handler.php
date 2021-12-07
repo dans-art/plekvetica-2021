@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 
 class PlekEventHandler
 {
@@ -56,6 +59,28 @@ class PlekEventHandler
         }
         return false;
     }
+
+    /**
+     * Publish an Event
+     * 
+     * @param string|int $event_id
+     * 
+     * @return boolean|string - True on success, error message on error
+     */
+    public function publish_event($event_id){
+        $id = (int) $event_id;
+        $update = array(
+            'ID'           => $id,
+            'post_status' => 'publish'
+        );
+        $set = wp_update_post($update);
+        if (is_int($set) and $set > 0) {
+            return true;
+        } else {
+            return __("Changing Status was unsuccessfully", "pleklang");
+        }
+    }
+
     /**
      * Checks if the Event has photos
      *
@@ -124,6 +149,16 @@ class PlekEventHandler
         } else {
             return false;
         }
+    }
+
+    /**
+     * Returns the edit Event page link
+     *
+     * @param string|int $event_id
+     * @return string The Event edit url
+     */
+    public function get_edit_event_link($event_id){
+        return get_site_url() . "/event-bearbeiten/?edit=" . $event_id;
     }
 
     /**
@@ -321,13 +356,96 @@ class PlekEventHandler
     }
 
     /**
+     * Checks if the user is on the watchlist.
+     *
+     * @param int $event_id
+     * @param int $user_id
+     * @return bool true on success, false on error
+     */
+    public function current_user_is_on_watchlist(int $event_id, $user_id = null)
+    {
+        if(!is_integer($user_id)){
+            $user = wp_get_current_user();
+            $user_id = $user -> ID;
+        }
+        $current_watchlist = get_field('event_watchlist', $event_id);
+        if(is_array($current_watchlist)){
+            $user_key = array_search($user_id, $current_watchlist);
+            if($user_key === false){
+                return false; //User is not on watchlist
+            }else{
+                return true; //User is on watchlist
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Adds a user to the watchlist of the current event.
+     *
+     * @param int $event_id
+     * @param int $user_id
+     * @return bool true on success, false on error
+     */
+    public function add_to_watchlist(int $event_id, $user_id = null)
+    {
+        global $plek_handler;
+        if(!is_integer($user_id)){
+            $user = wp_get_current_user();
+            $user_id = $user -> ID;
+        }
+        $current_watchlist = get_field('event_watchlist', $event_id);
+        if(is_array($current_watchlist)){
+            $user_key = array_search($user_id, $current_watchlist);
+        }else{
+            $user_key = false;
+        }
+        if($user_key === false){
+            //Only add if user is not already added
+            $current_watchlist[] = $user_id;
+            return $plek_handler -> update_field("event_watchlist", $current_watchlist, $event_id);
+        }else{
+            return false; //No user has been added
+        }
+    }
+
+    /**
+     * Removes a user to the watchlist of the current event.
+     *
+     * @param int $event_id
+     * @param int $user_id
+     * @return bool true on success, false on error
+     */
+    public function remove_from_watchlist(int $event_id, $user_id = null)
+    {
+        global $plek_handler;
+        if(!is_integer($user_id)){
+            $user = wp_get_current_user();
+            $user_id = $user -> ID;
+        }
+        $current_watchlist = get_field('event_watchlist', $event_id);
+        if(is_array($current_watchlist)){
+            $user_key = array_search($user_id, $current_watchlist);
+            if($user_key !== false){
+                unset($current_watchlist[$user_key]);
+                return $plek_handler -> update_field("event_watchlist", $current_watchlist, $event_id);
+            }
+        }
+        return false;
+    }
+
+    /**
      * Returns the total count of the users, which have the event on their watchlist.
      * 
-     * @return int Lenght of get_watchlist array
+     * @return int Lenght of get_watchlist array or 0 when empty
      */
     public function get_watchlist_count()
     {
-        return count($this->get_watchlist());
+        $watchlist = $this->get_watchlist();
+        if(is_array($watchlist)){
+            return (integer) count($watchlist);
+        }
+        return 0;
     }
     /**
      * Returns the startdate of the event. Default format: d m y
@@ -554,10 +672,18 @@ class PlekEventHandler
         return "<a href='$link' title='$title' target='_blank'><i class='$icon'></i></a>";
     }
 
+    /**
+     * Get the Event Ticket link
+     * It will filter out tracker and unwanted parts of the url and injects plekvetica affiliate parameters.
+     *
+     * @return void
+     */
     public function get_event_ticket_link()
     {
         global $plek_handler;
         $link = $this->get_field_value('ticket-url');
+        $link = $plek_handler -> clean_url($link);
+        $link = $this -> inject_affiliate_code($link);
         $link_icon = '<i class="fas fa-ticket-alt"></i>';
         if (strpos($link, 'starticket.ch') or strpos($link, 'seetickets.ch')) {
             $link_icon = "<img src='" . $plek_handler->get_plek_option('plek_seetickets_logo') . "' alt='Seeticket.ch'/>";
@@ -566,6 +692,45 @@ class PlekEventHandler
             $link_icon = "<img src='" . $plek_handler->get_plek_option('plek_ticketcorner_logo') . "' alt='ticketcorner.ch'/>";
         }
         return "<a href='$link' target='_blank' >$link_icon</a>";
+    }
+
+
+    /**
+     * Injects special 
+     *
+     * @param string $url
+     * @return string
+     */
+    public function inject_affiliate_code(string $url){
+        global $plek_handler;
+		$injectAttr['ticketcorner.ch'] = array("affiliate" => "PKV","utm_source" => "PKV","utm_medium"=>"dp","utm_campaign"=>"plekvetica");
+		$injectAttr['starticket.ch'] = array('PartnerID' => 151);
+
+        $url_split = parse_url(htmlspecialchars_decode($url));
+		if(empty($url_split['host'])){
+            return $url;
+        }
+		foreach($injectAttr as $site => $items_to_add){
+            //Check if Site has removable items
+			if(false !== stripos($url_split['host'],$site)){
+                if(isset($url_split['query'])){
+                    parse_str($url_split['query'], $query_split);
+                }else{
+                    $query_split = array();
+                }
+
+                if(is_array($query_split)){
+                    $query_split = array_merge($query_split, $items_to_add);
+                }else{
+                    $query_split = $items_to_add;
+                }
+                
+                $url_split['query'] = http_build_query($query_split);
+                return $plek_handler -> build_url($url_split);
+			}
+		}
+
+        return $url;
     }
 
     /**
@@ -626,6 +791,11 @@ class PlekEventHandler
         }
     }
 
+    /**
+     * Loads the current accredited members
+     *
+     * @return array|false array with the login_names of the members or false, if not found.
+     */
     public function get_event_akkredi_crew()
     {
         $crew = get_field('akkreditiert', $this->get_ID());
@@ -749,4 +919,45 @@ class PlekEventHandler
 
         return true;
     }
+
+    /**
+     * Sends notification to the author and accredited crew if an user reports an event as outdated.
+     *
+     * @return true|string
+     */
+    public function report_incorrect_event(){
+        //Check and verify last report send
+        global $plek_handler;
+        $this -> load_event_from_ajax();
+        if($this -> get_ID() === null){
+            return __('ID of Event not found!','pleklang');
+        }
+        $reported_on = get_field('incorrect_event_reported_at', $this -> get_ID());
+        $reported_time = (!empty($reported_on))?strtotime($reported_on):null;
+        if($reported_time === null OR ($reported_time - time() > 259200) ){ //Allow reporting again after three days
+            //Get the users to notify
+            $users = $this -> get_event_authors();
+            $crew = $this -> get_event_akkredi_crew();
+            if(is_array($crew)){
+                foreach($crew as $member){
+                    $user_id = PlekUserHandler::get_user_id_from_login_name($member);
+                    $users[$user_id] = $user_id;
+                }
+            }
+
+            //Send notification to the users
+            $notify = new PlekNotificationHandler;
+            $subject = sprintf(__('"%s" needs an update','pleklang'),$this -> get_name());
+            $message =  sprintf(__('Your Event "%s" has been reported as outdated. Please have a look and update the Event. Thanks!','pleklang'),$this -> get_name());
+            $action = $this -> get_edit_event_link($this -> get_ID());
+            $notify -> push_notification($users, 'event', $subject, $message, $action);
+
+            //Set reported on date
+            $plek_handler -> update_field('incorrect_event_reported_at', date('Y-m-d H:m:s'), $this -> get_ID());
+        }
+
+        return true; //Returns true even if the event could not been reported.
+    }
+
+
 }

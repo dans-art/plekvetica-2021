@@ -24,10 +24,10 @@
   line-height: 38px;
 }
 
-.main-navigation:not(.toggled) ul li.sfHover > ul, .main-navigation:not(.toggled) ul li:hover > ul{
+/*.main-navigation:not(.toggled) ul li.sfHover > ul, .main-navigation:not(.toggled) ul li:hover > ul{
   right: 0;
   border-top: $color-gray-dark 2px solid;
-}
+}*/
 
 //Review Navigation Item
 #menu-item-78 .sub-menu{
@@ -39,9 +39,20 @@
   right: -29px;
 }
 
-.main-navigation ul ul {
-  background-color: $color-gray-light;
+.has-inline-mobile-toggle #site-navigation.toggled{
+  margin-top: 0;
 }
+
+/*.main-navigation .main-nav{
+  position:fixed;
+  overflow: hidden;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  top: 145px;
+}*/
+
+
 
 
 .main-navigation .main-nav ul.menu li[class*="current-menu-"] > a{
@@ -58,4 +69,25 @@ border-bottom: $red-small-border
 
 .main-navigation .main-nav ul li a {
   padding: 2px 15px 0px 15px;
+}
+
+.main-navigation .main-nav .plek-menu-search{
+
+  ul{
+    position: absolute;
+    right: 45px;
+    top: 0;
+    width: 10px;
+    @include transition(all, 500ms, ease);
+  }
+  
+  input{
+    height: 2.4em;
+    border: none;
+    width: 100%;
+  }
+  
+  &:hover ul{
+    width: 654px;
+  }
 }

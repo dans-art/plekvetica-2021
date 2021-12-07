@@ -1,7 +1,19 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+if(!class_exists('WP_Screen')){
+   require_once( ABSPATH . 'wp-admin/includes/class-wp-screen.php' );
+}
+if(!class_exists('WP_List_Table')){
+    require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+ }
 
-class PlekBackend
+
+class PlekBackend /*extends WP_List_Table*/
 {
+
+
 
         /**
      * Checks if all neccesary plugins and options are set.
@@ -10,8 +22,15 @@ class PlekBackend
      */
     public function check_plekvetica(){
         global $plek_handler;
+        $errors = 0;
         if(!defined('SMTP_HOST')){
             echo __('eMail not configured', 'pleklang');
+            $errors++;
+        }
+        if($errors === 0){
+            return true;
+        }else{
+            return false;
         }
     }
 
@@ -58,6 +77,10 @@ class PlekBackend
         add_settings_field('guest_author_id', 'ID das Gastautors', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'guest_author_id', 'type' => 'input'));
         add_settings_field('add_event_page_id', 'ID der "Event eintragen" Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'add_event_page_id', 'type' => 'input'));
         add_settings_field('edit_event_page_id', 'ID der "Event bearbeiten" Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'edit_event_page_id', 'type' => 'input'));
+        add_settings_field('my_plek_page_id', 'ID der "My Plekvetica" Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'my_plek_page_id', 'type' => 'input'));
+        
+        add_settings_field('admin_email', 'Email vom Seiten Admin', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'admin_email', 'type' => 'input'));
+        add_settings_field('it_support_email', 'Email vom IT Support', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'it_support_email', 'type' => 'input'));
         
         add_settings_field('plek_facebook_enable_autopost', 'Enable Facebook Autopost', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_enable_autopost', 'type' => 'checkbox'));
         add_settings_field('plek_facebook_page_id', 'Page ID', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_page_id', 'type' => 'input'));

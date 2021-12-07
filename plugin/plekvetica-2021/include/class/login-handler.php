@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 
 class PlekLoginHandler
 {
@@ -104,6 +107,7 @@ class PlekLoginHandler
     }
 
     public static function enqueue_scripts(){
-        wp_enqueue_script('plek-manage-user-script', PLEK_PLUGIN_DIR_URL . 'js/manage-user.min.js',['jquery']);
+        global $plek_handler;
+        wp_enqueue_script('plek-manage-user-script', PLEK_PLUGIN_DIR_URL . 'js/manage-user.min.js',['jquery'], $plek_handler -> version);
     }
 }

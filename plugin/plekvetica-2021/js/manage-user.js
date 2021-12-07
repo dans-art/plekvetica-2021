@@ -24,7 +24,16 @@ let plek_user = {
             e.preventDefault();
             //Check if cancel button
             if(e.currentTarget.id === 'user-settings-cancel'){
-                history.back();
+                var prev_url = document.referrer;
+                //Try to remove the activation key of the url.
+                //@todo: Remove the unlock parameter as well. For some reason, this does not work...
+                if (typeof URLSearchParams !== 'undefined' &&  prev_url.includes('?')) {
+                    var params = new URLSearchParams(prev_url)
+                    params.delete('key');
+                    params.delete('unlock'); //Not working??
+                    prev_url = unescape(params.toString());
+                }
+                location.href = prev_url;
                 return;
             }
             var data = jQuery('#plek-user-settings-form').serialize();
@@ -36,7 +45,6 @@ let plek_user = {
         switch (type) {
             case "add-user-account":
                 this.add_user_account();
-                return;
                 break;
 
             default:
@@ -46,17 +54,17 @@ let plek_user = {
     },
 
     add_user_account() {
+        let button = jQuery('#plek-submit');
+        let button_cta = button.text();
+
         plek_main.activate_button_loader('#plek-submit', 'Erstelle Konto...');
         plek_main.remove_field_errors();
+        
+        let data = jQuery('#register-new-user-form').serialize();
+        
+        data += '&action=plek_user_actions',
+        data += '&do=add_user_account',
 
-        let button = jQuery('#plek-submit');
-        let data = {
-            'action': 'plek_user_actions',
-            'do': 'add_user_account',
-        }
-        data.user_display_name = jQuery('#user_display_name').val();
-        data.user_name = jQuery('#user_name').val();
-        data.user_email = jQuery('#user_email').val();
         jQuery.ajax({
             url: window.ajaxurl,
             type: 'POST',
@@ -64,9 +72,10 @@ let plek_user = {
             data: data,
             success: function success(data) {
                 let text = plek_main.get_text_from_ajax_request(data, true);
-                let errors = plek_main.show_field_errors(data);
+                let errors = plek_main.show_field_errors(data, '#register-new-user-form');
                 if(errors === true){
                     text = "Das Formular enthält Fehler, bitte korrigieren";
+                    plek_user.reset_button_text_after_input_focus(button, button_cta);
                 }else{
                     plek_main.deactivate_button(button);
                     jQuery('#register-new-user input[type!="submit"]').val(''); //Reset Fields
@@ -83,6 +92,7 @@ let plek_user = {
     },
 
     //User Settings form functions
+    //@todo: Do not disable the Button on save. 
     save_user_settings(data){
         plek_main.activate_button_loader('#user-settings-submit', 'Speichere Einstellungen...');
         plek_main.remove_field_errors();
@@ -98,7 +108,7 @@ let plek_user = {
             data: data,
             success: function success(data) {
                 let text = plek_main.get_text_from_ajax_request(data, true);
-                let errors = plek_main.show_field_errors(data);
+                let errors = plek_main.show_field_errors(data, '#plek-user-settings-form');
                 if(errors === true){
                     console.log("Contains Errors");
                     text = "Das Formular enthält Fehler, bitte korrigieren";
@@ -117,6 +127,12 @@ let plek_user = {
 
             }
           });
+    },
+
+    reset_button_text_after_input_focus(button, text){
+        jQuery('input').focus(function(){
+            jQuery(button).text(text);
+        });
     }
 
 }

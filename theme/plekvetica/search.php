@@ -18,13 +18,17 @@ get_header(); ?>
 <div id="primary" <?php generate_do_element_classes('content'); ?>>
 	<main id="plek-search-page">
 		<?php
-
 		/**
 		 * generate_before_main_content hook.
 		 *
 		 * @since 0.1
 		 */
 		do_action('generate_before_main_content');
+
+		if(empty(get_search_query())){
+			echo '<h1>'. __('Search for: Rick Astley','pleklang') . '</h1>';
+			PlekTemplateHandler::load_template('rick-roll', 'components', null);
+		}else{ 
 		?>
 		<header class="page-header">
 			<h1 class="page-title">
@@ -53,21 +57,21 @@ get_header(); ?>
 		</div>
 		<div class="plek-search-events">
 			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Events', 'pleklang')); ?>
-			<?php echo $plek_search_handler -> get_events(); ?>
+			<?php //echo $plek_search_handler -> get_events(); ?>
 			<?php 
-
-			$total_posts = $plek_event->total_posts['search_tribe_events'];
-			$page_obj = $plek_event -> get_pages_object();
-			
-			if($plek_event -> display_more_events_button($total_posts)){
-				echo $plek_event -> get_pages_count_formated($total_posts);
-				echo PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj -> page + 1), __('Weitere Events laden','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
-			}			
+			global $plek_event_blocks;
+			$events = $plek_event_blocks->get_block('search_events');
 			?>
+			<?php if (!empty($events)) : ?>
+                <?php echo $events; ?>
+            <?php else : ?>
+                <span class="plek-no-events"><?php echo __('No Events found', 'pleklang'); ?></span>
+            <?php endif; ?>
 		</div>
 
 		<?php
 
+		}//End empty(get_search_query()) else
 
 		/**
 		 * generate_after_main_content hook.
@@ -75,7 +79,6 @@ get_header(); ?>
 		 * @since 0.1
 		 */
 		do_action('generate_after_main_content');
-
 
 		?>
 	</main>

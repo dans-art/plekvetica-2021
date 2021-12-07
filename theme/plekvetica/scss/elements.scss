@@ -31,6 +31,45 @@
 
 }
 
+/* User Notices*/
+
+.plek-notice{
+  width: 100%;
+  padding: 0.4em;
+  margin: 0.2em;
+
+  &::before{
+    font-family: "FontAwesome";
+    margin-left: 0.5em;
+  }
+
+}
+
+.plek-notice-info{
+  background-color: $color-blue;
+
+  &::before{
+    content: '\f129';
+    margin-right: 0.5em;
+  }
+}
+
+.plek-notice-warning{
+  background-color: $color-yellow;
+
+  &::before{
+    content: '\f071';
+  }
+}
+
+.plek-notice-error{
+  background-color: $color-red;
+
+  &::before{
+    content: '\f00d';
+  }
+}
+
 /* Buttons */
 button {
 
@@ -58,11 +97,10 @@ button {
   text-align: center;
   color: $text-color;
   padding: 0.5em;
-  background-color: #8C262E;
   margin: 0.3em 0;
   display: block;
   color: $text-color;
-  cursor: pointer;
+  cursor: url("../plekvetica/assets/metalhand.cur"), pointer;
 
   &:visited{
     color: $text-color;
@@ -89,6 +127,23 @@ button {
     &:hover{
       color: unset;
     }
+  }
+
+}
+
+.plek-counter-button{
+  padding: 0;
+  display: flex;
+  .counter{
+    padding: 0.5em 1em;
+    background-color: #752026;
+  }
+  &:hover > .counter{
+    color: $text-color;
+  }
+  .label{
+    padding: 0.5em;
+    width: 100%;
   }
 
 }
@@ -122,6 +177,11 @@ button {
     0% {width: 0%; left: 0;}
     50% {width: 100%; left: 0;}
     100% {width: 0%; left: 100%;}
+  }
+
+  @keyframes plek-spinning-item {
+    from { transform: rotate(0deg) }
+    to { transform: rotate(360deg) }
   }
 
 
@@ -593,4 +653,157 @@ margin: 4px 0px 0px 0;
 #add-band-video{
   height: 2.8em;
   margin: 0;
+}
+
+.flex-table-view{
+  display: flex;
+  gap: 0.3em;
+  justify-content: space-between;
+  width: 100%;
+
+    div{
+      flex-basis: 15%;
+      text-align: center;
+    }
+    div.band-country{
+      flex-basis: 15%;
+      min-width: 1.5em;
+
+      img{
+        max-width: 1.5em;
+        width: 100%;
+      }
+    }
+    div.band-name{
+      flex-basis: 40%;
+      text-align: left;
+    }
+
+
+ 
+
+}
+
+/*Context Menu*/
+.context-menu-icon-copy:before{
+	content: "\f0c5" !important;
+}
+.context-menu-icon-share:before{
+	content: "\f064" !important;
+}
+.context-menu-icon-save:before{
+	content: "\f0c7" !important;
+}
+.context-menu-icon-exit:before{
+	content: "\f00d" !important;
+}
+.context-menu-icon-info:before{
+	content: "\f05a" !important;
+}
+
+.context-menu-icon::before{
+	font-family: FontAwesome !important;
+	color: $color-red !important;
+}
+
+/* Notifications */
+
+#notifications-container{
+  background-color: $color-gray-light;
+  position: absolute;
+  width: 70%;
+  right: 0px;
+  margin-top: -5em;
+  padding-left: 0.5em;
+  box-shadow: -10px 5px 5px #0000003b;
+
+  .no-notifications{
+    text-align: center;
+    padding: 2em;
+  }
+
+  .notification-item{
+    display: flex;
+    justify-content: space-around;
+    margin: 1em 0;
+    gap: 1em;
+  }
+
+  .notification-item::before{
+    font-family: FontAwesome;
+    font-size: 1.5em;
+    width: 1.5em;
+  }
+
+  a{
+    flex-basis: 80%;
+    color: $color-gray-light-two;
+  }
+
+  .dismissed,
+  .dismissed a{
+    color: $color-gray;
+  }
+
+  .type-event::before{
+    content: "\f783";
+  }
+  .type-band::before{
+    content: "\f500";
+  }
+  .type-important::before{
+    content: "\f071";
+  }
+
+
+
+  .dismissed button,
+  .dismissed .is_dismissed{
+    visibility: hidden;
+  }
+
+  .dismissed .is_dismissed{
+    width: 3em;
+  }
+
+  .dismiss_notification{
+    background-color: $color-gray-light;
+
+    .fa-spinner{
+      animation-name: plek-spinning-item;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+  }
+}
+
+.notifications-button-container{
+  justify-content: flex-end;
+  display: flex;
+  margin-bottom: 1em;
+
+  #notifications-button{
+    display: flex;
+    max-width: 85px;
+
+
+    i{
+      margin:0;
+      padding: 0.5em;
+      background-color: $color-red-light;
+      flex-basis: 50%;
+      text-align: center;
+    }
+
+    #notifications-button-counter{
+      padding-left: 0;
+    }
+
+    .fas{
+      padding: 0.75em 0;
+    }
+
+  }
+
 }

@@ -35,12 +35,15 @@
     .tribe-common.tribe-events.tribe-events-view.tribe-events-view--list article.tribe-events-calendar-list__event{
       padding-left: 0;
     }
-    .plek-button.ajax-loader-button{
+    .plek-button.ajax-loader-button,
+    .plek-button.ajax-block-loader-button{
       color: white;
       clear:both;
     }
     .plek-button.ajax-loader-button:hover,
-    .plek-button.ajax-loader-button:focus{
+    .plek-button.ajax-loader-button:focus,
+    .plek-button.ajax-block-loader-button:hover,
+    .plek-button.ajax-block-loader-button:focus{
       color: black;
     }
 

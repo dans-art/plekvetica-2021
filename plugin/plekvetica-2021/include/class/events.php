@@ -2,8 +2,12 @@
 
 /**
  * Class to handle the Events
- * 
+ * @todo: Use set_posts_per_page() to populate the pages_obj. Use the Page_object!
  */
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 class PlekEvents extends PlekEventHandler
 {
 
@@ -171,14 +175,23 @@ class PlekEvents extends PlekEventHandler
         $this->event['data'] = $yt['data'];
         return;
     }
-    /**
-     * Undocumented function
-     *
-     * @param integer $event_id
-     * @return void
-     * @todo: Delete this function, old.
-     */
 
+    /**
+     * Loads a single event to the event class from ajax.
+     * Send $_REQUEST['event_id'] to use this function
+     *
+     * @return bool
+     */
+    public function load_event_from_ajax()
+    {
+        global $plek_ajax_handler;
+        $event_id = (int) $plek_ajax_handler->get_ajax_data('event_id');
+        if ($event_id === 0) {
+            return false;
+        }
+        $this->load_event($event_id);
+        return;
+    }
 
     /**
      * Loads the Tribe Event Meta.
@@ -195,19 +208,19 @@ class PlekEvents extends PlekEventHandler
     /**
      * Get all events with a akkreditations status of a certain user
      *
-     * @param string $user_login
      * @param string $from - date('Y-m-d H:i:s')
      * @param string $to - date('Y-m-d H:i:s')
      * @return object Result form the database. 
      */
-    public function get_user_akkredi_event(string $user_login, string $from = null, string $to = null)
+    public function get_user_akkredi_event(string $from = null, string $to = null,  $limit = 0)
     {
         global $wpdb;
-        $user = htmlspecialchars($user_login);
-        $page_obj = $this->get_pages_object();
+        $user = PlekUserHandler::get_user_login_name();
+        $page_obj = $this->get_pages_object($limit);
+        //$limit = $limit ?: $page_obj->posts_per_page;
 
         $wild = '%';
-        $like = $wild . $wpdb->esc_like($user_login) . $wild;
+        $like = $wild . $wpdb->esc_like($user) . $wild;
 
         $from = $from ?: '1970-01-01 00:00:00';
         $to = $to ?: '9999-01-01 00:00:00';
@@ -235,7 +248,7 @@ class PlekEvents extends PlekEventHandler
             AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
             
             ORDER BY startdate.meta_value DESC
-            LIMIT %d OFFSET %d", $like, $from, $to, $page_obj->posts_per_page, $page_obj->offset);
+            LIMIT %d OFFSET %d", $like, $from, $to, $limit, $page_obj->offset);
         $posts = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
         $this->total_posts['get_user_akkredi_event'] = $total_posts;
@@ -263,6 +276,15 @@ class PlekEvents extends PlekEventHandler
                 return $this->get_events_of_band_user($from, $to, $limit);
                 break;
 
+            case 'plek-community':
+                return $this->get_events_of_community_user($from, $to, $limit);
+                break;
+
+            case 'administrator':
+                //Add photographer, Reviewer, interviewer....
+                return $this->get_events_of_community_user($from, $to, $limit);
+                break;
+
             default:
                 return null;
                 break;
@@ -284,13 +306,13 @@ class PlekEvents extends PlekEventHandler
         global $wpdb;
         $user_id = PlekUserHandler::get_user_id();
         $organizer_id = (int) PlekUserHandler::get_user_setting('organizer_id');
-        $page_obj = $this->get_pages_object();
+        $page_obj = $this->get_pages_object($limit);
         $limit = $limit ?: $page_obj->posts_per_page;
         $from = $from ?: '1970-01-01 00:00:00';
         $to = $to ?: '9999-01-01 00:00:00';
 
         $query = $wpdb->prepare(
-            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME), rolemeta.meta_value
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME) as startdate, rolemeta.meta_value
         FROM `{$wpdb->prefix}posts` as posts 
         LEFT JOIN {$wpdb->prefix}postmeta as date
         ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
@@ -320,7 +342,7 @@ class PlekEvents extends PlekEventHandler
         );
         $events = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
-        $this->total_posts['get_events_of_role_' . $role_tribe_meta_name] = $total_posts;
+        $this->total_posts['get_user_events'] = $total_posts;
         return $events;
     }
 
@@ -328,14 +350,17 @@ class PlekEvents extends PlekEventHandler
     {
         global $wpdb;
         $user_id = PlekUserHandler::get_user_id();
-        $band_id = (int) PlekUserHandler::get_user_setting('band_id');
-        $page_obj = $this->get_pages_object();
+        $band_ids = PlekUserHandler::get_user_setting('band_id');
+        $band_id_arr = (empty($band_ids))?array('0'):explode(',', $band_ids);
+
+
+        $page_obj = $this->get_pages_object($limit);
         $limit = $limit ?: $page_obj->posts_per_page;
         $from = $from ?: '1970-01-01 00:00:00';
         $to = $to ?: '9999-01-01 00:00:00';
 
         $query = $wpdb->prepare(
-            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)  as startdate
         FROM `{$wpdb->prefix}posts` as posts 
         LEFT JOIN {$wpdb->prefix}postmeta as date
         ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
@@ -343,11 +368,11 @@ class PlekEvents extends PlekEventHandler
         LEFT JOIN {$wpdb->prefix}postmeta as postponed
         ON (posts.ID = postponed.post_id AND postponed.meta_key = 'postponed_event')
 
-        LEFT JOIN {$wpdb->prefix}term_relationships AS tax_rel
-        ON (posts.ID = tax_rel.object_id)
+        LEFT JOIN {$wpdb->prefix}term_relationships AS band_term
+        ON (posts.ID = band_term.object_id)
 
         WHERE 
-        (post_author = %d OR tax_rel.term_taxonomy_id = '%d') 
+        (post_author = %d OR band_term.term_taxonomy_id IN (" . implode(',', $band_id_arr) . ")) 
         AND post_type = 'tribe_events'
         AND posts.post_status IN ('publish', 'draft')
         AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
@@ -357,6 +382,48 @@ class PlekEvents extends PlekEventHandler
         ORDER BY date.meta_value DESC
         LIMIT %d OFFSET %d",
             $user_id,
+            $from,
+            $to,
+            $limit,
+            $page_obj->offset
+        );
+        $events = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        $this->total_posts['get_user_events'] = $total_posts;
+        return $events;
+    }
+
+    public function get_events_of_band($band_id, $from = '1970-01-01 00:00:00', $to = '9999-01-01 00:00:00', $limit = 0)
+    {
+        global $wpdb;
+        $band_id = (int) $band_id;
+        $page_obj = $this->get_pages_object($limit);
+        $limit = $limit ?: $page_obj->posts_per_page;
+        $from = $from ?: '1970-01-01 00:00:00';
+        $to = $to ?: '9999-01-01 00:00:00';
+
+        $query = $wpdb->prepare(
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)  as startdate
+        FROM `{$wpdb->prefix}posts` as posts 
+        LEFT JOIN {$wpdb->prefix}postmeta as date
+        ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
+
+        LEFT JOIN {$wpdb->prefix}postmeta as postponed
+        ON (posts.ID = postponed.post_id AND postponed.meta_key = 'postponed_event')
+
+        LEFT JOIN {$wpdb->prefix}term_relationships AS band_term
+        ON (posts.ID = band_term.object_id)
+
+        WHERE 
+        (band_term.term_taxonomy_id IN (%d)) 
+        AND post_type = 'tribe_events'
+        AND posts.post_status IN ('publish')
+        AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
+        AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
+
+        GROUP BY posts.ID
+        ORDER BY date.meta_value DESC
+        LIMIT %d OFFSET %d",
             $band_id,
             $from,
             $to,
@@ -365,7 +432,53 @@ class PlekEvents extends PlekEventHandler
         );
         $events = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
-        $this->total_posts['get_events_of_band_user'] = $total_posts;
+        $this->total_posts['get_band_events'] = $total_posts;
+        return $events;
+    }
+
+    public function get_events_of_community_user($from, $to, $limit = 0)
+    {
+        global $wpdb;
+        $user_id = PlekUserHandler::get_user_id();
+        $band_ids = PlekUserHandler::get_user_setting('band_id');
+        $band_id_arr = explode(',', $band_ids);
+
+        $page_obj = $this->get_pages_object($limit);
+        $limit = $limit ?: $page_obj->posts_per_page;
+        $from = $from ?: '1970-01-01 00:00:00';
+        $to = $to ?: '9999-01-01 00:00:00';
+
+        $query = $wpdb->prepare(
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)  as startdate
+        FROM `{$wpdb->prefix}posts` as posts 
+        LEFT JOIN {$wpdb->prefix}postmeta as date
+        ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
+
+        LEFT JOIN {$wpdb->prefix}postmeta as postponed
+        ON (posts.ID = postponed.post_id AND postponed.meta_key = 'postponed_event')
+
+        LEFT JOIN {$wpdb->prefix}term_relationships AS band_term
+        ON (posts.ID = band_term.object_id)
+
+        WHERE 
+        post_author = %d
+        AND post_type = 'tribe_events'
+        AND posts.post_status IN ('publish', 'draft')
+        AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
+        AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
+
+        GROUP BY posts.ID
+        ORDER BY date.meta_value DESC
+        LIMIT %d OFFSET %d",
+            $user_id,
+            $from,
+            $to,
+            $limit,
+            $page_obj->offset
+        );
+        $events = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        $this->total_posts['get_user_events'] = $total_posts;
         return $events;
     }
 
@@ -384,13 +497,13 @@ class PlekEvents extends PlekEventHandler
         global $wpdb;
         $user_id = (int) $user_id ?: PlekUserHandler::get_user_id();
         $like_user = '% ' . $wpdb->esc_like($user_id) . ' %'; //Add spaces to make sure, only this user id is found.
-        $page_obj = $this->get_pages_object();
+        $page_obj = $this->get_pages_object($limit);
         $limit = $limit ?: $page_obj->posts_per_page;
         $from = $from ?: '1970-01-01 00:00:00';
         $to = $to ?: '9999-01-01 00:00:00';
 
         $query = $wpdb->prepare(
-            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)  as startdate
         FROM `{$wpdb->prefix}posts` as posts 
         LEFT JOIN {$wpdb->prefix}postmeta as date
         ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
@@ -424,13 +537,13 @@ class PlekEvents extends PlekEventHandler
         return $events;
     }
 
-    public function get_user_missing_review_events(string $user_login)
+    public function get_user_missing_review_events(string $user_login = "")
     {
         global $wpdb;
         $user = htmlspecialchars($user_login);
-
+        $user = (!empty($user)) ? $user : PlekUserHandler::get_user_login_name();
         $wild = '%';
-        $like = $wild . $wpdb->esc_like($user_login) . $wild;
+        $like = $wild . $wpdb->esc_like($user) . $wild;
         $today = date('Y-m-d 00:00:00');
 
         $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS user.meta_value as akk_team, posts.ID, posts.post_title , 
@@ -616,7 +729,7 @@ class PlekEvents extends PlekEventHandler
 
     /**
      * Shortcode Function
-     * Gets the latest four review events.
+     * Gets the latest four review events. For the start page
      *
      * @return string Formated HTML
      */
@@ -640,7 +753,7 @@ class PlekEvents extends PlekEventHandler
 
     /**
      * Shortcode Function
-     * Gets the latest four review events.
+     * Gets the latest review events.
      *
      * @return string Formated HTML
      */
@@ -650,21 +763,27 @@ class PlekEvents extends PlekEventHandler
         if (PlekSearchHandler::is_review_search()) {
             return null;
         }
+        global $plek_event_blocks;
+        $plek_event_blocks -> set_separate_by('month');
+        $events = $plek_event_blocks -> get_block('all_reviews');
+
+        if (empty($events)) {
+            return __('No reviews found', 'pleklang');
+        }else{
+            return $events;
+        }
+    }
+
+    /**
+     * Loads all the published reviews
+     */
+
+    public function load_all_reviews(){
+        global $wpdb;
         $page_obj = $this->get_pages_object();
         $date = date('Y-m-d H:i:s');
-        $load_more = '';
-
-        /*$events = tribe_get_events([
-            'eventDisplay'   => 'custom',
-            'end_date'     => 'now',
-            'posts_per_page' => $page_obj -> posts_per_page,
-            'offset' => $page_obj -> offset,
-            'order'       => 'DESC',
-            'meta_query' => $meta_query
-        ]);*/
-
-        global $wpdb;
-        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS {$wpdb->prefix}posts.*, CAST( orderby_event_date_meta.meta_value AS DATETIME ) AS event_date
+        
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS {$wpdb->prefix}posts.*, CAST( orderby_event_date_meta.meta_value AS DATETIME ) AS startdate
         FROM {$wpdb->prefix}posts
         LEFT JOIN {$wpdb->prefix}postmeta
         ON ( {$wpdb->prefix}posts.ID = {$wpdb->prefix}postmeta.post_id
@@ -687,21 +806,12 @@ class PlekEvents extends PlekEventHandler
         AND {$wpdb->prefix}posts.post_status IN ('publish', 'draft')
         OR {$wpdb->prefix}posts.post_status = 'private'))
         GROUP BY {$wpdb->prefix}posts.ID
-        ORDER BY event_date DESC, {$wpdb->prefix}posts.post_date DESC
+        ORDER BY startdate DESC, {$wpdb->prefix}posts.post_date DESC
         LIMIT %d OFFSET %d", $page_obj->posts_per_page, $page_obj->offset);
 
         $events = $wpdb->get_results($query);
-        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
-
-        if ($this->display_more_events_button($total_posts)) {
-            $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj->page + 1), __('Weitere Reviews laden', 'pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
-        }
-        if (empty($events)) {
-            return __('Keine Reviews gefunden', 'pleklang');
-        }
-
-        $total_posts_text = $this->get_pages_count_formated($total_posts);
-        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'all_reviews') . $total_posts_text . $load_more;
+        $this->total_posts['all_review_events'] = $wpdb->get_var("SELECT FOUND_ROWS()");
+        return $events;
     }
 
     /**
@@ -710,27 +820,42 @@ class PlekEvents extends PlekEventHandler
      * -> page - the current page as set in the query
      * -> offset - the offset for the sql request
      *
+     * @param integer $posts_per_page - Number of posts per page.
      * @return object - Pages object
      */
-    public function get_pages_object()
+    public function get_pages_object($posts_per_page = null, $total_posts = 0)
     {
-        $page_obj = new stdClass();
-        $page_obj->posts_per_page = (int) tribe_get_option('postsPerPage');
-        $page_obj->page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
-        $page_obj->offset =  ($page_obj->page > 1) ? ($page_obj->page - 1) * $page_obj->posts_per_page : 0;
-        return $page_obj;
+        $obj = new stdClass();
+        if (!is_int($posts_per_page)) {
+            $obj->posts_per_page = (int) tribe_get_option('postsPerPage');
+        } else {
+            $obj->posts_per_page = $posts_per_page;
+        }
+        if($obj->posts_per_page === 0){
+            $obj->posts_per_page = 10; //Should not be 0, otherwise no posts will shown.
+        }
+        $obj->page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
+        $obj->offset =  (int) ($obj->page > 1) ? ($obj->page - 1) * $obj->posts_per_page : 0;
+        $obj->total_pages = (int) ($total_posts > 0) ? ceil(($total_posts / $posts_per_page)) : 0;
+        $obj->total_posts = (int) $total_posts;
+        $obj->to_posts = (int) (($obj->offset + $obj->posts_per_page) <= $total_posts) ? ($obj->offset + $obj->posts_per_page) : $total_posts;
+        $obj->from_posts = (int) $obj -> offset + 1;
+
+        return $obj;
     }
 
     /**
      * Gets the formated pages and post count.
      * Like: Show Events 1 to 10 from 200
+     * @todo: add this to the template files. Add the to_posts to the pages_obj
      *
      * @param integer $total_posts - Number of total posts.
+     * @param integer/null $number_of_posts - Number of posts.
      * @return string - Formated string
      */
-    public function get_pages_count_formated(int $total_posts)
+    public function get_pages_count_formated(int $total_posts, $number_of_posts = null)
     {
-        $page_obj = $this->get_pages_object();
+        $page_obj = $this->get_pages_object($number_of_posts);
         $to_posts = (($page_obj->offset + $page_obj->posts_per_page) <= $total_posts) ? ($page_obj->offset + $page_obj->posts_per_page) : $total_posts;
         return '<div class="total_posts">' . sprintf(__('Events %d bis %d von %d', 'pleklang'), $page_obj->offset + 1, $to_posts, $total_posts) . '</div>';
     }
@@ -782,6 +907,55 @@ class PlekEvents extends PlekEventHandler
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $posts, 'raffle_events') . $load_more;
     }
+    
+    /**
+     * Gets all the events, the given user or the current user has on his watchlist
+     *
+     * @param int|null $user_id
+     * @param boolean $inc_past
+     * @param integer $limit
+     * @return object Fetched posts
+     */
+    public function plek_get_all_watchlisted_events_by_user($user_id = null, $inc_past = false, $limit = 10)
+    {
+        global $wpdb;
+        $page_obj = $this->get_pages_object($limit);
+        if(!$user_id){
+            $user_id = get_current_user_id();
+        }
+        $wild = '%';
+        $like = $wild . $wpdb->esc_like('"'.$user_id.'"') . $wild;
+
+        $from = ($inc_past)?'1970-01-01 00:00:00':date('Y-m-d M:i:s');
+        $to =  '9999-01-01 00:00:00';
+
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS meta.meta_value as watchlist, posts.ID, posts.post_title , startdate.meta_value as startdate
+            FROM `{$wpdb->prefix}postmeta` as meta
+            LEFT JOIN {$wpdb->prefix}posts as posts
+            ON posts.ID = meta.post_id AND posts.post_type = 'tribe_events'
+            LEFT JOIN {$wpdb->prefix}postmeta as startdate
+            ON posts.ID = startdate.post_id AND startdate.meta_key = '_EventStartDate'
+            
+            LEFT JOIN {$wpdb->prefix}postmeta as postponed
+            ON posts.ID = postponed.post_id
+            AND postponed.meta_key = 'postponed_event'
+            
+            WHERE meta.`meta_key` LIKE 'event_watchlist'
+            AND meta.`meta_value` LIKE '%s'
+            AND posts.ID IS NOT NULL
+            AND startdate.meta_value > '%s'
+            AND startdate.meta_value < '%s'
+            AND posts.post_status IN ('publish')
+
+            AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
+            
+            ORDER BY startdate.meta_value ASC
+            LIMIT %d OFFSET %d", $like, $from, $to, $limit, $page_obj->offset);
+        $posts = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        $this->total_posts['get_user_watchlist_events'] = $total_posts;
+        return $posts;
+    }
 
     /**
      * Shortcode Function
@@ -800,6 +974,12 @@ class PlekEvents extends PlekEventHandler
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $vids, 'youtube');
     }
 
+    /**
+     * Shortcode for the add and edit event from.
+     * If new event, the form will be split in two parts, if edit, only one form for all the event details will be loaded.
+     *
+     * @return string The From
+     */
     public function plek_event_form_shortcode()
     {
 
@@ -811,6 +991,14 @@ class PlekEvents extends PlekEventHandler
 
         if (isset($_REQUEST['edit_event_id'])) {
             $event->load_event($_REQUEST['edit_event_id']);
+            return PlekTemplateHandler::load_template_to_var('edit-event-form', 'event/form', $event);
+        }
+
+        if(isset($_REQUEST['stage']) AND $_REQUEST['stage'] === "login"){
+            return PlekTemplateHandler::load_template_to_var('add-event-form-login', 'event/form', $event);
+        }
+        if(isset($_REQUEST['stage']) AND $_REQUEST['stage'] === "details"){
+            return PlekTemplateHandler::load_template_to_var('add-event-form-details', 'event/form', $event);
         }
 
         return PlekTemplateHandler::load_template_to_var('add-event-form-basic', 'event/form', $event);
@@ -838,16 +1026,67 @@ class PlekEvents extends PlekEventHandler
      * Checks if there are more pages to show or not.
      *
      * @param integer/string $total_posts - Total amount of posts
+     * @param integer/null $posts_per_page - Number of Posts
      * @return bool True, if there are more pages to shown, otherwise false.
      */
-    public function display_more_events_button($total_posts = 0)
+    public function display_more_events_button($total_posts = 0, $posts_per_page = null)
     {
         $total_posts = (int) $total_posts;
+        $page_obj = $this->get_pages_object($posts_per_page);
 
-        $page_obj = $this->get_pages_object();
         $total_pages = ($total_posts / $page_obj->posts_per_page);
         if ($total_posts > $page_obj->posts_per_page and $page_obj->page < $total_pages) {
             return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the current date is between the previous and next date
+     * If so, a div with the plek-event-data-separator will be returned.
+     *
+     * @param string $date_prev - Date previous
+     * @param string $date_next - Next date
+     * @return string Separator or empty string
+     */
+    public function show_date_separator(string $date_prev, string $date_next)
+    {
+        $current_date = strtotime(date('Y-m-d H:m:s'));
+        if (!empty($date_prev) and $current_date < strtotime($date_prev) and $current_date > strtotime($date_next)) {
+            return "<div class='plek-event-data-separator'>" . __('Today', 'pleklang') . "</div>";
+        }
+        return "";
+    }
+
+    /**
+     * Adds or removes a user from the events watchlist / follower list
+     *
+     * @return bool true on success, false on error
+     */
+    public function toggle_follower_from_ajax()
+    {
+        global $plek_ajax_handler;
+        $event_id = (int) $plek_ajax_handler->get_ajax_data('event_id');
+        $toggle = "add";
+        if ($event_id === 0) {
+            return false;
+        }
+        if ($this->current_user_is_on_watchlist($event_id)) {
+            //Remove user
+            if (!$this->remove_from_watchlist($event_id)) {
+                return false;
+            }
+            $toggle = "remove";
+        } else {
+            //Add user
+            if (!$this->add_to_watchlist($event_id)) {
+                return false;
+            }
+        }
+        if ($toggle === 'add') {
+            return __('Unfollow', 'pleklang');
+        } else {
+            return __('Follow', 'pleklang');
         }
         return false;
     }
