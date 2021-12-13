@@ -16,7 +16,7 @@ Version 1.1.1
 - Angepasstes Kontextmenu für die Bilder hinzugefügt
 - Benachrichtigungen im My Plekvetica sichtbar
 - Einfacheres melden von veralteten Events
-
+ 
 Version 1.0
 
 - Diverse Bugfixes
@@ -26,4 +26,5 @@ Version 1.0
 - Rollen für Bands, Veranstalter, Community & Partner hinzugefügt.
 - Band bearbeiten Formular
 - Benutzereinstellungen Formular (Passwort und Namen ändern)
-- Ticketverlosung eingebaut 
+- Ticketverlosung eingebaut
+
