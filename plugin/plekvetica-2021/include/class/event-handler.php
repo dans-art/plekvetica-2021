@@ -206,7 +206,7 @@ class PlekEventHandler
     {
         $album_id = $this->get_field_value('gallery_id');
         if (empty($album_id)) {
-            return __('Keine Fotos für diesen Event gefunden.', 'pleklang');
+            return __('No photos found for this event.', 'pleklang');
         }
         return   $album_id;
     }
@@ -503,7 +503,7 @@ class PlekEventHandler
     public function get_price_formated(string $cost)
     {
         if($cost === "0000"){
-            return __('Gratis/Kollekte','pleklang');
+            return __('Free','pleklang');
         }
         $currency = (!empty($this->get_field_value('_EventCurrencySymbol'))) ? $this->get_field_value('_EventCurrencySymbol') : $this->default_event_currency;
         $cost_nr = preg_replace("/[^a-zA-Z0-9 -\.]/", "", $cost);
@@ -658,7 +658,7 @@ class PlekEventHandler
     public function get_raffle_link()
     {
         $link = $this->get_field_value('win_url');
-        $title =  __('Link zur Verlosung', 'pleklang');
+        $title =  __('Link to the raffle', 'pleklang');
         $icon = 'fas fa-trophy';
         return "<a href='$link' title='$title' target='_blank'><i class='$icon'></i></a>";
     }
@@ -667,7 +667,7 @@ class PlekEventHandler
     {
         $link = $this->get_field_value('_EventURL');
         $fb = (strpos($link, 'facebook.com')) ? true : false;
-        $title = ($fb) ? __('Link zum Facebook Event', 'pleklang') : __('Link zur Website', 'pleklang');
+        $title = ($fb) ? __('Link to the Facebook event', 'pleklang') : __('Link to the website', 'pleklang');
         $icon = ($fb) ? 'fab fa-facebook-square' : 'fas fa-globe';
         return "<a href='$link' title='$title' target='_blank'><i class='$icon'></i></a>";
     }
@@ -811,18 +811,18 @@ class PlekEventHandler
         switch ($status_code) {
             case 'aw':
             case 'iq':
-                return __('Wunsch', 'pleklang');
+                return __('Wish', 'pleklang');
                 break;
             case 'ab':
             case 'ib':
-                return __('Bestätigt', 'pleklang');
+                return __('Confirmed', 'pleklang');
                 break;
             case 'aa':
             case 'ia':
-                return __('Angefragt', 'pleklang');
+                return __('Requested', 'pleklang');
                 break;
             case 'no':
-                return __('Abgelehnt', 'pleklang');
+                return __('Declined', 'pleklang');
                 break;
             default:
                 return false;
@@ -865,14 +865,14 @@ class PlekEventHandler
     {
         $current = get_field('akkreditiert', $event_id);
         if (empty($current)) {
-            return __('Es sind keine Mitglieder registriert', 'pleklang');
+            return __('There are no registered Members', 'pleklang');
         }
         $find = array_search($user_login, $current);
         if ($find === false) {
-            return __('Mitglied ist bereits abgemeldet.', 'pleklang');
+            return __('Member is already removed', 'pleklang');
         }
         unset($current[$find]);
-        return (update_field('akkreditiert', $current, $event_id)) ? true : __('Fehler beim Updaten des Akkreditierungs Feld', 'pleklang');
+        return (update_field('akkreditiert', $current, $event_id)) ? true : __('Error while updating the accreditation field', 'pleklang');
     }
 
     /**
@@ -889,10 +889,10 @@ class PlekEventHandler
             return false;
         }
         if($plek_event->is_review()){
-            return __('Dieser Beitrag kann nicht mehr bearbeitet werden, da schon ein Review existiert', 'pleklang');
+            return __('This post can no longer be edited because a review already exists', 'pleklang');
         }
         if($akk_status !== null and $plek_event -> is_past_event()){
-            return __('Dieser Beitrag kann nicht mehr bearbeitet werden, da aktuell ein Review geschrieben wird.', 'pleklang');
+            return __('This post can no longer be edited because a review is currently being written.', 'pleklang');
         }
         return true;
     }

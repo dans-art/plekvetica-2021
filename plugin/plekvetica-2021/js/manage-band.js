@@ -33,7 +33,7 @@ let plek_band = {
 
         jQuery("input#band-logo").change(function () {
             let btn = jQuery('.plek-upload-button-container .plek-button');
-            plek_band.change_file_upload_button(btn, plek_lang.trans('Datei gewählt'));
+            plek_band.change_file_upload_button(btn, __('File selected', "pleklang"));
         });
 
         default_button_texts.submit = jQuery('#band-form-submit').text();
@@ -111,7 +111,7 @@ let plek_band = {
         data.append('action', 'plek_band_actions');
         data.append('do', 'get_youtube_video');
         data.append('video_id', video_id);
-        let loading = '<div class="loading-youtube">' + plek_lang.trans('Lade Video') + '</div>';
+        let loading = '<div class="loading-youtube">' + __('Loading Video', 'pleklang') + '</div>';
         jQuery('#video_preview_con').append('<div class="video_preview_item" id="video_' + item_id + '" data-videoid="' + video_id + '">' + loading + '</div>');
 
 
@@ -195,14 +195,14 @@ let plek_band = {
                     text = plek_main.get_text_from_ajax_request(data, true);
                 }
                 plek_main.deactivate_button_loader(button, text);
-                jQuery('#band-form-cancel').text(plek_lang.trans('Zurück'));
+                jQuery('#band-form-cancel').text(__('Back','pleklang'));
                 setTimeout(() => {
                     jQuery('#band-form-submit').text(plek_band.default_button_texts.submit);
                 }, 5000);
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, "Error loading data.... ");
+                plek_main.deactivate_button_loader(button, __("Error loading data.... ","pleklang"));
 
             }
         });

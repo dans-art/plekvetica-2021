@@ -31,17 +31,17 @@ $follower_count = $band_object -> get_follower_count();
     <dd class="event-links">
       <span>
         <?php if (!empty($facebook)) : ?>
-          <a href="<?php echo $facebook; ?>" target="_blank" title="<?php echo sprintf(__('Zur Facebook Seite von %s', 'pleklang'), $name); ?>"><i class='fab fa-facebook-square'></i></a>
+          <a href="<?php echo $facebook; ?>" target="_blank" title="<?php echo sprintf(__('To the Facebook page of %s', 'pleklang'), $name); ?>"><i class='fab fa-facebook-square'></i></a>
         <?php endif; ?>
       </span>
       <span>
         <?php if (!empty($insta)) : ?>
-          <a href="<?php echo $insta; ?>" target="_blank" title="<?php echo sprintf(__('Zur Instagram Seite von %s', 'pleklang'), $name); ?>"><i class="fab fa-instagram"></i></a>
+          <a href="<?php echo $insta; ?>" target="_blank" title="<?php echo sprintf(__('To the Instagram page of %s', 'pleklang'), $name); ?>"><i class="fab fa-instagram"></i></a>
         <?php endif; ?>
       </span>
       <span>
         <?php if (!empty($website)) : ?>
-          <a href="<?php echo $website; ?>" target="_blank" title="<?php echo sprintf(__('Zur Website von %s', 'pleklang'), $name); ?>"><i class='fas fa-globe'></i></a>
+          <a href="<?php echo $website; ?>" target="_blank" title="<?php echo sprintf(__('To the Website of %s', 'pleklang'), $name); ?>"><i class='fas fa-globe'></i></a>
         <?php endif; ?>
       </span>
     </dd>

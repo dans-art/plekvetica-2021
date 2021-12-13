@@ -22,7 +22,7 @@ class PlekAuthorHandler
         $authors = $wpdb->get_results($query);
 
         if(empty($authors)){
-            return __('Keine Teammitglieder gefunden.','pleklang');
+            return __('No Team members found.','pleklang');
         }
         
         foreach($authors as $user){
@@ -44,11 +44,11 @@ class PlekAuthorHandler
     public function get_event_guest_author(int $event_id = null){
         $guest_author = get_field('guest_author', $event_id);
         if(empty($guest_author)){
-            return __('Kein Author gefunden','pleklang');
+            return __('No Author found','pleklang');
         }
         $guest_object = json_decode($guest_author);
         if(isset($guest_object -> name)){
-            return $guest_object -> name . ' - ' . __('Gast Autor','pleklang'); ;
+            return $guest_object -> name . ' - ' . __('Guest Author','pleklang'); ;
         }
         return false;
     }

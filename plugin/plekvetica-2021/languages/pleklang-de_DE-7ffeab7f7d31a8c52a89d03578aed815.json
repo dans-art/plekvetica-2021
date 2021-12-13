@@ -1,0 +1,27 @@
+{
+    "translation-revision-date": "2021-12-13 20:06+0000",
+    "generator": "Loco https://localise.biz/",
+    "source": "js/components/validator-handler.js",
+    "domain": "pleklang",
+    "locale_data": {
+        "pleklang": {
+            "": {
+                "domain": "pleklang",
+                "lang": "de_DE",
+                "plural-forms": "nplurals=2; plural=n != 1;"
+            },
+            "Cannot save because of errors. Please check the fields again.": [
+                "Kann aufgrund von Fehlern nicht gespeichert werden. Bitte \u00fcberpr\u00fcfen Sie die Felder erneut."
+            ],
+            "Field cannot be empty": [
+                "Feld darf nicht leer sein"
+            ],
+            "Input is not a Number": [
+                "Eingabe ist keine Zahl"
+            ],
+            "No fields set": [
+                "Keine Felder festgelegt"
+            ]
+        }
+    }
+}

@@ -15,7 +15,7 @@ $posts = (isset($template_args[0])) ? $template_args[0] : array(); //Array with 
 <div class="plek-posts-container">
     <?php foreach ($posts as $user) : ?>
         <div class="plek-post-item">
-            <a href="<?php echo $user->author_url; ?>" title="<?php echo sprintf(__('Zum Author: %s', 'pleklang'), $user->post_title); ?>">
+            <a href="<?php echo $user->author_url; ?>" title="<?php echo sprintf(__('To the author: %s', 'pleklang'), $user->post_title); ?>">
                 <div class="plek-post-image">
                     <img src="<?php echo isset($user->image['sizes']['medium']) ? $user->image['sizes']['medium'] : ''; ?>" />
                 </div>

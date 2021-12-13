@@ -10,13 +10,13 @@ $image = (isset($template_args[1])) ? $template_args[1] : ''; //Existing image
     <div class="plek-image-upload-container">
         <img src="<?php echo $image; ?>" />
         <div class="plek-upload-button-container">
-            <span class="plek-button"><?php echo __('Ersetzen','pleklang'); ?></span>
+            <span class="plek-button"><?php echo __('Replace','pleklang'); ?></span>
             <input id="band-logo" name="band-logo" type="file"></input>
         </div>
     </div>
 <?php else : ?>
     <div class="plek-upload-button-container no-img">
         <input id="band-logo" name="band-logo" type="file"></input>
-        <span class="plek-button"><?php echo __('Hochladen','pleklang'); ?></span>
+        <span class="plek-button"><?php echo __('Upload','pleklang'); ?></span>
     </div>
 <?php endif; ?>

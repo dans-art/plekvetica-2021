@@ -232,7 +232,7 @@ class PlekNotificationHandler extends WP_List_Table
             case 'dismissed':
             case 'email_send':
                 $light = ($item->$column === '1') ? 'green' : 'red';
-                $status = ($item->$column === '1') ? __('Yes', 'pleklang') : __('No', 'pleklang');;
+                $status = ($item->$column === '1') ? __('Yes', 'pleklang') : __('No', 'pleklang');
                 return "<span class='plek-light {$light}'>{$status}</span>";
                 break;
             case 'cb':

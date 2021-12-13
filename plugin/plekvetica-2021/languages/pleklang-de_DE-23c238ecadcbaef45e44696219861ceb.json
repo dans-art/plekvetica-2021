@@ -1,0 +1,27 @@
+{
+    "translation-revision-date": "2021-12-13 20:06+0000",
+    "generator": "Loco https://localise.biz/",
+    "source": "js/manage-band.min.js",
+    "domain": "pleklang",
+    "locale_data": {
+        "pleklang": {
+            "": {
+                "domain": "pleklang",
+                "lang": "de_DE",
+                "plural-forms": "nplurals=2; plural=n != 1;"
+            },
+            "Back": [
+                "Zur\u00fcck"
+            ],
+            "Error loading data.... ": [
+                "Fehler beim Laden der Daten...."
+            ],
+            "File selected": [
+                "Datei ausgew\u00e4hlt"
+            ],
+            "Loading Video": [
+                "Lade Video"
+            ]
+        }
+    }
+}

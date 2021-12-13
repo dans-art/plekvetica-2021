@@ -392,6 +392,14 @@
             display: block;
         }
     }
+
+    //Add/Edit Event form
+
+.event-basic-container .event-date-picker{
+
+    flex-direction: column;
+  
+  }
     
 }
 
@@ -635,6 +643,11 @@
         .band-follower::after{
             content: '\f0c0';
         }
+    }
+
+    .plek-event-form-container,
+    .submit.plek-button{
+        margin-left: 0;
     }
 
 }

@@ -27,12 +27,15 @@ class PlekAjaxHandler
                 echo $event_handler->get_all_venues_json();
                 die();
                 break;
-
+            case 'save_basic_event':
+                    $this -> set_success("Saved event??");
+                    break;
             default:
                 # code...
                 break;
         }
-        return;
+        echo $this->get_ajax_return();
+        die();
     }
     
     /**
@@ -54,11 +57,17 @@ class PlekAjaxHandler
                 die();
                 break;
 
+            case 'save_basic_event':
+                $this -> set_success("Saved event??");
+                break;
+            
+
             default:
                 # code...
                 break;
         }
-        return;
+        echo $this->get_ajax_return();
+        die();
     }
     /**
      * Event Actions called by ajax.
@@ -77,7 +86,7 @@ class PlekAjaxHandler
                 $plek_event->load_event($event_id);
                 $promote = $plek_event->promote_on_facebook();
                 if ($promote === true) {
-                    $this->set_success(__('Event wurde erfolgreich auf Facebook promoted.', 'pleklang'));
+                    $this->set_success(__('Event has been successfully published on facebook', 'pleklang'));
                 } else {
                     $this->set_error($promote);  //Error Message from Facebook SDK
                 }
@@ -87,7 +96,7 @@ class PlekAjaxHandler
                 $user = $this->get_ajax_data('user');
                 $remove = $plek_event->remove_akkredi_member($user, $event_id);
                 if ($remove === true) {
-                    $this->set_success(__('Registrierung wurde erfolgreich entfernt.', 'pleklang'));
+                    $this->set_success(__('Accreditation request removed', 'pleklang'));
                 } else {
                     $this->set_error($remove); //Error Message from funciton
                 }
@@ -226,7 +235,7 @@ class PlekAjaxHandler
             case 'save_band':
                 $plek_band = new PlekBandHandler;
                 if ($plek_band->save_band()) {
-                    $this->set_success(__('Band gespeichert', 'pleklang'));
+                    $this->set_success(__('Band saved', 'pleklang'));
                 }
                 break;
             case 'follow_band_toggle':
@@ -265,7 +274,7 @@ class PlekAjaxHandler
                 if ($validate === true) {
                     $save = $user_form_handler->save_user_settings();
                     if ($save === true) {
-                        $this->set_success(__('Einstellungen gespeichert', 'pleklang'));
+                        $this->set_success(__('Settings saved', 'pleklang'));
                     }
                 } else {
                     //$this->set_error_array($validate);
@@ -356,7 +365,7 @@ class PlekAjaxHandler
                 $plek_event_blocks = new PlekEventBlocks;
                 $return_arr['content'] = $plek_event_blocks->get_block('my_missing_reviews');
                 if($return_arr['content'] === false OR empty($return_arr['content'])){
-                    $return_arr['content'] = "<span class='plek-no-open-reviews'>".__('Super! Keine fehlenden Reviews.', 'pleklang')."</span>";
+                    $return_arr['content'] = "<span class='plek-no-open-reviews'>".__('Super! No missing Reviews.', 'pleklang')."</span>";
                 }
                 $return_arr['count'] = 0;
                 echo json_encode($return_arr);

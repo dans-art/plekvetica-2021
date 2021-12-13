@@ -6,5 +6,5 @@ $gallery_class = new PlekGalleryHandler;
 
 ?>
 
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Event Fotos', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Event Photos', 'pleklang')); ?>
 <?php echo $gallery_class -> display_album($album_id); ?>

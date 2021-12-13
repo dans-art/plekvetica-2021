@@ -10,7 +10,7 @@ $website = tribe_get_venue_website_url();
 $phone = tribe_get_phone();
 ?>
 
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Ort', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Location', 'pleklang')); ?>
 
 <div class="meta-content">
     <div id="venue-container">
@@ -19,7 +19,7 @@ $phone = tribe_get_phone();
             <div class='address-line-street'><?php echo tribe_get_address( $venue_id ); ?></div>
             <div class='address-line-city'><?php echo tribe_get_zip( $venue_id ); ?><span class="plek-space-delimiter"><?php echo tribe_get_city( $venue_id ); ?></div>
             <div class='address-line-country'>
-           <?php if ( tribe_get_country( $venue_id ) AND tribe_get_country( $venue_id ) !== __('Schweiz', 'pleklang') ) : ?>
+           <?php if ( tribe_get_country( $venue_id ) AND tribe_get_country( $venue_id ) !== __('Switzerland', 'pleklang') ) : ?>
             	<?php echo tribe_get_country( $venue_id ); ?>
             <?php endif; ?>
             </div>

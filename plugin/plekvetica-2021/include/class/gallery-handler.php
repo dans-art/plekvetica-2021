@@ -37,7 +37,7 @@ class PlekGalleryHandler
         }
 
         if (!isset($db_result) or empty($db_result[0])) {
-            return __("Es wurde keine Gallerie gefunden. Womöglich wurde diese gelöscht oder verschoben.", "pleklang");
+            return __("No gallery was found. It may have been deleted or moved.", "pleklang");
         }
 
         return $db_result[0];
@@ -54,10 +54,10 @@ class PlekGalleryHandler
         }
         $album = $nggdb->find_album($id);
         if (!$album) {
-            return sprintf(__('Keine Album mit der ID %s gefunden.'), $id);
+            return sprintf(__('No album found with ID: %s.'), $id);
         }
         if (empty($album->gallery_ids)) {
-            return sprintf(__('Keine Gallerien in dem Album mit der ID: %s'), $id);
+            return sprintf(__('No gallery found with ID: %s'), $id);
         }
         $galleries = $this->get_galleries($album->gallery_ids);
         
@@ -101,7 +101,7 @@ class PlekGalleryHandler
 
         $gallery =  $nggdb->find_gallery($gallery_id);
         if (!$gallery) {
-            return sprintf(__('Keine Gallerie mit der ID %s gefunden.'), $gallery_id);
+            return sprintf(__('No gallery found with ID: %s'), $gallery_id);
         }
         return $gallery;
     }

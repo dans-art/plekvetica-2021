@@ -58,7 +58,7 @@ class PlekFileHandler
         ), $uploaded_file);
 
         if(!$attachment_id){
-            $plek_ajax_errors -> add('upload_file', __('Fehler bei hinzufügen des Bildes in die Datenbank.','pleklang'));
+            $plek_ajax_errors -> add('upload_file', __('Error adding the image to the database.','pleklang'));
         }
 
         //Resize the file

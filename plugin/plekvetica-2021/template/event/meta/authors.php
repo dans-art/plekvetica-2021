@@ -10,7 +10,7 @@ if (!$authors) {
   return;
 }
 ?>
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Autoren', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Authors', 'pleklang')); ?>
 <div class="meta-content">
   <div class='event-author-container'>
     <?php foreach ($authors as $id => $name) : ?>
@@ -22,7 +22,7 @@ if (!$authors) {
           <?php if($guest_author_id === $id): ?>
             <?php echo $name; ?>
           <?php else: ?>
-            <a href="<?php echo get_author_posts_url($id); ?>" title="<?php echo sprintf(__('Mehr über den Autor &quot;%s&quot;'), $name); ?>" target="_self"><?php echo $name; ?></a>
+            <a href="<?php echo get_author_posts_url($id); ?>" title="<?php echo sprintf(__('More about the author &quot;%s&quot;'), $name); ?>" target="_self"><?php echo $name; ?></a>
           <?php endif; ?>
         </span>
       </div>

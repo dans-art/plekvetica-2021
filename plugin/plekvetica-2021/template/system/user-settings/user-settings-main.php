@@ -3,11 +3,11 @@ extract(get_defined_vars());
 
 $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user object
 ?>
-<h1><?php echo __('Deine Einstellungen','pleklang'); ?></h1>
+<h1><?php echo __('Your Settings','pleklang'); ?></h1>
 <?php 
 $user = PlekUserHandler::get_all_user_settings();
 if(!isset($user -> meta['nickname'])){
-    echo __('Fehler: User Objekt konnte nicht geladen werden.','pleklang');
+    echo __('Error: User object could not be loaded.','pleklang');
     return false;
 }
 
@@ -45,8 +45,8 @@ if(!isset($user -> meta['nickname'])){
     
     ?>
     <div class="buttons">
-        <button id="user-settings-cancel" class="plek-button plek-button-cancel" type="button"><?php echo __('Abbrechen','pleklang'); ?></button>
-        <button id="user-settings-submit" class="plek-button" type="submit"><?php echo __('Speichern','pleklang'); ?></button>
+        <button id="user-settings-cancel" class="plek-button plek-button-cancel" type="button"><?php echo __('Cancel','pleklang'); ?></button>
+        <button id="user-settings-submit" class="plek-button" type="submit"><?php echo __('Save settings','pleklang'); ?></button>
     </div>
 </form>
 <?php PlekTemplateHandler::load_template('js-settings', 'components', null); ?>

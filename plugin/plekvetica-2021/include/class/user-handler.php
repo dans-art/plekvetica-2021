@@ -489,7 +489,7 @@ class PlekUserHandler
             }
         }
         if (!self::check_user_roles('plek-organi')) {
-            if (add_role('plek-organi', __('Veranstalter', 'plek'), array('edit_tribe_organizers' => true, 'edit_tribe_events' => true))) {
+            if (add_role('plek-organi', __('Organizer', 'plek'), array('edit_tribe_organizers' => true, 'edit_tribe_events' => true))) {
                 $added_role[] = "Veranstalter";
             }
         }

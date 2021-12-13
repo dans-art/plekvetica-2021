@@ -84,7 +84,7 @@ let plek_user = {
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, "Error loading data.... ");
+                plek_main.deactivate_button_loader(button, __("Error loading data.... ","pleklang"));
 
             }
           });
@@ -116,14 +116,14 @@ let plek_user = {
                     text = plek_main.get_text_from_ajax_request(data, true);
                 }
                 plek_main.deactivate_button_loader(button, text);
-                jQuery('#user-settings-cancel').text(plek_lang.trans('Zurück'));
+                jQuery('#user-settings-cancel').text(__('Back','pleklang'));
                 setTimeout(() => {
                     jQuery('#user-settings-submit').text(plek_user.default_button_texts.submit);
                 }, 5000);
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, "Error loading data.... ");
+                plek_main.deactivate_button_loader(button, __("Error loading data.... ","pleklang"));
 
             }
           });

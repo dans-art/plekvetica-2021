@@ -19,7 +19,7 @@ $event_add_page_id = $plek_handler -> get_plek_option('add_event_page_id');
 $public_views['add'] = new stdClass;
 $public_views['add'] -> view_class = 'Tribe\Events\Views\V2\Views\List_View';
 $public_views['add'] -> view_url = get_permalink( $event_add_page_id );
-$public_views['add'] -> view_label = __('Event hinzufügen','pleklang');
+$public_views['add'] -> view_label = __('Add event','pleklang');
 
 ?>
 <div

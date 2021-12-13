@@ -722,7 +722,7 @@ class PlekEvents extends PlekEventHandler
         ]);
 
         if (empty($events)) {
-            return __('Keine Herforgehobenen Events gefunden', 'pleklang');
+            return __('No Featured Events found', 'pleklang');
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'featured');
     }
@@ -746,7 +746,7 @@ class PlekEvents extends PlekEventHandler
             'meta_query' => $meta_query
         ]);
         if (empty($events)) {
-            return __('Keine Reviews gefunden', 'pleklang');
+            return __('No reviews found', 'pleklang');
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'reviews');
     }
@@ -857,7 +857,7 @@ class PlekEvents extends PlekEventHandler
     {
         $page_obj = $this->get_pages_object($number_of_posts);
         $to_posts = (($page_obj->offset + $page_obj->posts_per_page) <= $total_posts) ? ($page_obj->offset + $page_obj->posts_per_page) : $total_posts;
-        return '<div class="total_posts">' . sprintf(__('Events %d bis %d von %d', 'pleklang'), $page_obj->offset + 1, $to_posts, $total_posts) . '</div>';
+        return '<div class="total_posts">' . sprintf(__('Events %d to %d of %d', 'pleklang'), $page_obj->offset + 1, $to_posts, $total_posts) . '</div>';
     }
 
     /**
@@ -900,10 +900,10 @@ class PlekEvents extends PlekEventHandler
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
 
         if ($this->display_more_events_button($total_posts)) {
-            $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page + 1), __('Weitere Events laden', 'pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
+            $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page + 1), __('Load more events', 'pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
         }
         if (empty($posts)) {
-            return __('Keine Verlosungen gefunden', 'pleklang');
+            return __('No raffles found', 'pleklang');
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $posts, 'raffle_events') . $load_more;
     }
@@ -969,7 +969,7 @@ class PlekEvents extends PlekEventHandler
         $yt = new plekYoutube;
         $vids = $yt->get_youtube_videos_from_channel(4);
         if (empty($vids)) {
-            return __('Keine Videos gefunden', 'pleklang');
+            return __('No videos found.', 'pleklang');
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $vids, 'youtube');
     }
@@ -1010,11 +1010,27 @@ class PlekEvents extends PlekEventHandler
     }
     public function enqueue_event_form_scripts()
     {
+        global $plek_handler;
+        $min = ($plek_handler -> is_dev_server())?'':'.min';
+
         wp_enqueue_script('flatpickr-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9.js');
         wp_enqueue_script('flatpickr-de-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9-de.js');
-    }
+        wp_enqueue_script('manage-plek-events', PLEK_PLUGIN_DIR_URL . "js/manage-event{$min}.js", ['jquery','plek-language']);
+        
+        //Load handler
+        $handler = array('event','error','validator','search','template');
+        $dependencies = array('jquery','plek-language', 'manage-plek-events');
 
+        foreach($handler as $handler_name){
+            wp_enqueue_script("plek-{$handler_name}-handler", PLEK_PLUGIN_DIR_URL . "js/components/{$handler_name}-handler{$min}.js", $dependencies);
+            wp_set_script_translations( "plek-{$handler_name}-handler", 'pleklang', PLEK_PATH . "/languages");
+        }
+
+        wp_enqueue_script('plek-compare-algorithm', PLEK_PLUGIN_DIR_URL . "js/components/compare-algorithm{$min}.js", ['jquery','plek-language', 'manage-plek-events']);
+        wp_set_script_translations( 'plek-compare-algorithm', 'pleklang', PLEK_PATH . "/languages");
+    }
     public function promote_on_facebook()
+
     {
         $social = new plekSocialMedia();
         $message = $this->get_event_promo_text();

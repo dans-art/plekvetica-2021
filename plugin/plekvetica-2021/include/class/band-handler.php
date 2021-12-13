@@ -264,7 +264,7 @@ class PlekBandHandler
     public function get_logo_formated()
     {
         $img =  (!empty($this->band['bandlogo'])) ? $this->band['bandlogo'] : $this->bandpic_placeholder;
-        return "<img src='$img' alt='" . sprintf(__('Bandlogo von &quot;%s&quot;'), $this->get_name()) . "'/>";
+        return "<img src='$img' alt='" . sprintf(__('Bandlogo of &quot;%s&quot;'), $this->get_name()) . "'/>";
     }
 
     /**
@@ -285,7 +285,7 @@ class PlekBandHandler
         }
         if (file_exists(PLEK_PATH . 'images/flags/no-flag.png')) {
             $flag = PLEK_PLUGIN_DIR_URL  . 'images/flags/no-flag.png';
-            return "<img src='$flag' alt='" .  __('Diese Band hat keine Herkunfts informationen.', 'pleklang') . "'/>";
+            return "<img src='$flag' alt='" .  __('This Band has no origin information', 'pleklang') . "'/>";
         }
         return strtoupper($country_code);
     }
@@ -663,7 +663,7 @@ class PlekBandHandler
     {
         global $plek_handler;
         $plek_handler->enqueue_select2();
-        wp_enqueue_script('plek-band-scripts', PLEK_PLUGIN_DIR_URL . 'js/manage-band.min.js', array('jquery', 'select2'), $plek_handler->version);
+        wp_enqueue_script('plek-band-scripts', PLEK_PLUGIN_DIR_URL . 'js/manage-band.min.js', array('jquery', 'select2', 'plek-language'), $plek_handler->version);
     }
 
     /**
@@ -678,7 +678,7 @@ class PlekBandHandler
         $band_id = $plek_ajax_handler->get_ajax_data('band-id');
         $this->load_band_object_by_id($band_id);
         if (PlekUserHandler::user_can_edit_band($this) !== true) {
-            $plek_ajax_errors->add('save_band', __('Du bist nicht berechtigt, diese Band zu bearbeiten.', 'pleklang'));
+            $plek_ajax_errors->add('save_band', __('You are not allowed to edit this band!', 'pleklang'));
             return false;
         }
         $validate = $this->validate_band_data();
@@ -747,7 +747,7 @@ class PlekBandHandler
         //Upload Logo
         if (!empty($plek_ajax_handler->get_ajax_files_data('band-logo'))) {
             //Save resized File
-            $title = sprintf(__('Bandlogo von %s', 'pleklang'), $name);
+            $title = sprintf(__('Bandlogo of %s', 'pleklang'), $name);
             $fh = new PlekFileHandler;
             $fh->set_image_options(680, 680, 'jpeg', 70);
 
@@ -762,7 +762,7 @@ class PlekBandHandler
         $update_term = wp_update_term($id, 'post_tag', $term_args);
         if (is_wp_error($update_term)) {
             $ut_error = $update_term->get_error_message();
-            $plek_ajax_errors->add('save_band', sprintf(__('Fehler beim Speichern der Band (%s)', 'pleklang'), $ut_error));
+            $plek_ajax_errors->add('save_band', sprintf(__('Error saving Band (%s)', 'pleklang'), $ut_error));
         }
         //update the acf / term meta
         foreach ($acf as $afc_name => $value) {

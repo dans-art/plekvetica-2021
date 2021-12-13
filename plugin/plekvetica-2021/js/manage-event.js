@@ -1,15 +1,14 @@
 "use strict";
 
-// @koala-append "components/plek-language.js"
-// @koala-append "components/event-handler.js"
-// @koala-append "components/error-handler.js"
-// @koala-append "components/validator-handler.js"
-// @koala-append "components/compare-algorithm.js"
-// @koala-append "components/search-handler.js"
-// @koala-append "components/template-handler.js"
-
 //Global Options
-var flatpickr_options = { "locale": "de", enableTime: true, dateFormat: "d-m-Y H:i:S", altInput: true, altFormat: "j. F Y - H:i" };
+var flatpickr_options = { 
+    "locale": "de", 
+    enableTime: true, 
+    dateFormat: "d-m-Y H:i:S", 
+    altInput: true, 
+    altFormat: "j. F Y - H:i", 
+    onChange: function(selectedDates, dateStr, instance){plekerror.clear_field_error(jQuery(instance.input).attr("id"));} 
+};
 
 jQuery(document).ready(function () {
     console.log("Ready!");
@@ -36,8 +35,10 @@ jQuery(document).ready(function () {
     jQuery('#no_band').click(function () {
         if (jQuery(this).is(':checked')) {
             disable_band_input();
-            plekevent.remove_all_items('event-band-selection');
+            jQuery('#event-band-selection').hide();
+            //plekevent.remove_all_items('event-band-selection');
         } else {
+            jQuery('#event-band-selection').show();
             enable_band_input();
         }
     });
@@ -70,6 +71,11 @@ jQuery(document).ready(function () {
         }
         pleksearch.fire_search(this);
     });
+
+    //Clear the errors
+    jQuery('input').on('keyup', function(){
+        plekerror.clear_field_error(jQuery(this).attr("id"));
+    });
 });
 
 
@@ -87,7 +93,7 @@ function ajaxPreloader(type) {
         contentType: false,
         success: function success(data) {
             if (data.length < 2) {
-                toastr["error"](pleklang.loaderror + ': ' + type, "Error");
+                toastr["error"](__("Error loading data", "pleklang") + ': ' + type, "Error");
                 return false;
             } else {
                 var jdata = JSON.parse(data);
@@ -105,7 +111,7 @@ function ajaxPreloader(type) {
             }
         },
         error: function error(data) {
-            window.plekerror.display_info(window.pleklang.loaderror + ': ' + data, "Error");
+            window.plekerror.display_info(__("Error loading data", "pleklang") + ': ' + data, "Error");
             return false;
         }
     });

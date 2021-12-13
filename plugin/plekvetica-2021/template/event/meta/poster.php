@@ -2,7 +2,7 @@
 global $plek_event;
 extract(get_defined_vars());
 $size = (!empty($template_args[0])) ? $template_args[0] : $plek_event->poster_size;
-$alt = __('Poster von der Veranstaltung', 'pleklang');
+$alt = __('Poster from the event', 'pleklang');
 $poster = $plek_event->get_poster($alt, $size);
 ?>
 

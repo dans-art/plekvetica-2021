@@ -20,7 +20,7 @@ global $plek_handler;
 get_header();
 
 $referer = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : null;
-$label = (PlekBandHandler::is_band_link($referer)) ? __('Zurück zur Bandseite') : null;
+$label = (PlekBandHandler::is_band_link($referer)) ? __('Back to Bandpage') : null;
 
 if (PlekGalleryHandler::is_gallery()) {
 	if(is_object($plek_handler)){

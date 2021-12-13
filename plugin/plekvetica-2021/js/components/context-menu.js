@@ -9,9 +9,9 @@ jQuery(document).ready(function() {
                  cb_contextMenu(key,options);	
              },
              items: {
-                 "/about-plekvetica": {name: plek_lang.trans("Photo rights - What are you allowed to do"), icon: "info"},
+                 "/about-plekvetica": {name: __("Photo rights - What are you allowed to do", 'pleklang'), icon: "info"},
                  "sep1": "---------",
-                 "quit": {name: plek_lang.trans("Close"), icon: "exit"}
+                 "quit": {name: __("Close",'pleklang'), icon: "exit"}
              }
          });
  
@@ -26,14 +26,14 @@ jQuery(document).ready(function() {
                  cb_contextMenu(key,options,this);
              },
              items: {
-                 "/about-plekvetica": {name: plek_lang.trans("Photo rights - What are you allowed to do"), icon: "info"},
+                 "/about-plekvetica": {name: __("Photo rights - What are you allowed to do",'pleklang'), icon: "info"},
                  "sep1": "---------",
-                 "sharesite": {name: plek_lang.trans("Share Page"), icon: "share"},
-                 "share": {name: plek_lang.trans("Share Photo"), icon: "share"},
-                 "save": {name: plek_lang.trans("Save Photo"), icon: "save"},
-                 "copylink": {name: plek_lang.trans("Copy link to Photo"), icon: "copy"},
+                 "sharesite": {name: __("Share Page",'pleklang'), icon: "share"},
+                 "share": {name: __("Share Photo",'pleklang'), icon: "share"},
+                 "save": {name: __("Save Photo",'pleklang'), icon: "save"},
+                 "copylink": {name: __("Copy link to Photo",'pleklang'), icon: "copy"},
                  "sep2": "---------",
-                 "quit": {name: plek_lang.trans("Close"), icon: "exit"}
+                 "quit": {name: __("Close",'pleklang'), icon: "exit"}
              }
          });
  

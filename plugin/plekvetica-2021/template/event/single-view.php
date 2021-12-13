@@ -26,7 +26,7 @@ $plek_event_class = $plek_event->get_event_classes();
 
 if ($is_review) {
     $backlink = site_url() . '/' . $plek_handler->get_plek_option('review_page');
-    $backlink_label = __('Alle Reviews');
+    $backlink_label = __('All Reviews');
     $backlink_label_plural = $backlink_label;
 } else {
     $backlink = tribe_get_events_link();
@@ -34,13 +34,13 @@ if ($is_review) {
     $backlink_label_plural = tribe_get_event_label_plural();
 }
 //Load the main-event-single.js script
-wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-single.min.js', ['jquery'], $plek_handler -> version);
+wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-single.min.js', ['jquery', 'plek-language'], $plek_handler -> version);
 ?>
 
 <?php if ($is_postponed and $plek_event->is_public($postponed_id)) : ?>
     <h1><?php echo $plek_event->get_field('post_title'); ?></h1>
-    <div><?php echo __('Dieser Event wurde verschoben.', 'pleklang'); ?></div>
-    <a href="<?php echo get_permalink($postponed_id); ?>"><?php echo __('Zum neuen Event.', 'pleklang'); ?></a>
+    <div><?php echo __('This event has been postponed', 'pleklang'); ?></div>
+    <a href="<?php echo get_permalink($postponed_id); ?>"><?php echo __('To the new event', 'pleklang'); ?></a>
     <?php return; ?>
 <?php endif; ?>
 
@@ -55,13 +55,13 @@ wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-sing
                     PlekTemplateHandler::load_template('image-banner', 'components', __('Review', 'pleklang'));
                 } ?>
                 <?php if ($is_canceled) {
-                    PlekTemplateHandler::load_template('image-banner', 'components', __('Abgesagt', 'pleklang'));
+                    PlekTemplateHandler::load_template('image-banner', 'components', __('Canceled', 'pleklang'));
                 } ?>
                 <?php if (!$is_review AND $is_featured) {
-                    PlekTemplateHandler::load_template('image-banner', 'components', __('Von uns empfohlen', 'pleklang'));
+                    PlekTemplateHandler::load_template('image-banner', 'components', __('Recommended by us', 'pleklang'));
                 } ?>
                 <?php if ($event_raffle) {
-                    PlekTemplateHandler::load_template('image-banner', 'components', __('Ticketverlosung', 'pleklang'), $event_raffle ,array('plek-raffle') );
+                    PlekTemplateHandler::load_template('image-banner', 'components', __('Ticket raffle', 'pleklang'), $event_raffle ,array('plek-raffle') );
                 } ?>
             </div>
             <div class="event-title-container">
@@ -71,10 +71,10 @@ wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-sing
                 <div class="event-venue"><?php echo $plek_event->get_field('venue_short'); ?></div>
             </div>
             <?php if ($is_canceled) : ?>
-                <div class="plek-message red"><?php echo __('Dieser Event wurde abgesagt.', 'pleklang'); ?></div>
+                <div class="plek-message red"><?php echo __('This event has been canceled', 'pleklang'); ?></div>
             <?php endif; ?>
             <?php if ($is_postponed_new) : ?>
-                <div class="plek-message"><?php echo sprintf(__('Dieser Event wurde vom %s auf den %s verschoben.', 'pleklang'),$postponed_event_old_date, $plek_event -> get_start_date('d. F Y')); ?></div>
+                <div class="plek-message"><?php echo sprintf(__('This event was moved from %s to %s.', 'pleklang'),$postponed_event_old_date, $plek_event -> get_start_date('d. F Y')); ?></div>
             <?php endif; ?>
         </div>
         <?php

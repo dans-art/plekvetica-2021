@@ -45,6 +45,13 @@ div.plek-review-search{
 .submit.plek-button{
   margin-left: 20%;
   }
+
+ .plek-event-form-container{
+  .plek-field-error{
+    padding: 0.5em 0;
+  }
+ }
+
 .event-basic-container {
 
   .event-name-container{
@@ -82,7 +89,7 @@ div.plek-review-search{
 
 .event-search-bar-container{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: nowrap;
     justify-content: space-between;
 
@@ -137,7 +144,7 @@ div.plek-review-search{
 
 .item.plek-select-item .title{
   display: flex;
-
+  
   img{
     max-height: 1em;
     margin-right: 1em;
@@ -150,6 +157,13 @@ div.plek-review-search{
     font-size: 1.2em;
   }
 }
+.item.plek-add-item .subtitle,
+.item.plek-select-item .subtitle{
+  .country{
+    display: block;
+  }
+}
+
 
 /* Register User*/
 
@@ -269,4 +283,25 @@ div.plek-review-search{
 .plek-upload-button-container.no-img{
   margin-top: 0;
 
+}
+
+
+//Add/Edit Event form
+
+.event-basic-container .event-date-picker .date-input-container{
+
+  flex-basis: 100%;
+
+  input{
+    text-align: center;
+  }
+}
+
+.event-band-none-checkbox,
+.event-date-multi-check-container{
+  padding-top: 0.7em;
+}
+
+.item.plek-select-item {
+	padding: 0.7em 0;
 }

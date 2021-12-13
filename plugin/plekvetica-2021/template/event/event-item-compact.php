@@ -56,7 +56,7 @@ if($separate_by){
         <?php endif; ?>
     </div>
     <div class="poster">
-        <a href="<?php echo $permalink; ?>" title="<?php echo __('Gehe zum Event', 'pleklang'); ?>">
+        <a href="<?php echo $permalink; ?>" title="<?php echo __('See the Event details', 'pleklang'); ?>">
             <?php echo $poster; ?>
             <?php if (empty($poster)) : ?>
                 <img src="<?php echo $currrent_event->poster_placeholder; ?>" />
@@ -66,15 +66,15 @@ if($separate_by){
     <div class="details">
         <div class="date"><?php echo $currrent_event->get_start_date('d. F Y'); ?></div>
         <div class="title">
-            <a href="<?php echo $permalink; ?>" title="<?php echo __('Gehe zum Event', 'pleklang'); ?>">
+            <a href="<?php echo $permalink; ?>" title="<?php echo __('See the Event details', 'pleklang'); ?>">
                 <?php echo $event->post_title; ?>
             </a>
         </div>
         <?php if ($is_canceled) : ?>
-            <div class="plek-message red"><?php echo __('Dieser Event wurde abgesagt.', 'pleklang'); ?></div>
+            <div class="plek-message red"><?php echo __('This event has been canceled', 'pleklang'); ?></div>
         <?php endif; ?>
         <?php if ($is_postponed) : ?>
-            <div class="plek-message"><?php echo __('Event wurde verschoben.', 'pleklang'); ?></div>
+            <div class="plek-message"><?php echo __('This event has been postponed', 'pleklang'); ?></div>
         <?php endif; ?>
     </div>
 </article>

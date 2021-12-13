@@ -95,7 +95,7 @@ class PlekUserFormHandler extends PlekUserHandler
 
             //Check if password matches
             if ($pass !== $pass_rep) {
-                $validator->set_error('new-password-repeat', __('Passwörter stimmen nicht überein', 'pleklang'));
+                $validator->set_error('new-password-repeat', __('Passwords do not match', 'pleklang'));
             }
         } else {
             $validator->set_min_length('new-password', 0);
@@ -103,7 +103,7 @@ class PlekUserFormHandler extends PlekUserHandler
         }
 
         if ((int)$plek_ajax_handler->get_ajax_data('user-id') !== (int) $user_id) {
-            $validator->set_system_error(__('Du bist nicht berechtigt, diesen Benutzer zu bearbeiten!', 'pleklang'));
+            $validator->set_system_error(__('You are not authorized to edit this user!', 'pleklang'));
         }
         return $validator;
     }
@@ -160,7 +160,7 @@ class PlekUserFormHandler extends PlekUserHandler
         }
         $save = wp_update_user($userdata);
         if (is_object($save)) {
-            $plek_ajax_errors->add('save_user_settings', __('Fehler bei speichern der Kontoinformationen', 'pleklang'), $save);
+            $plek_ajax_errors->add('save_user_settings', __('Error saving account information', 'pleklang'), $save);
             return false;
         }
         return true;
@@ -198,7 +198,7 @@ class PlekUserFormHandler extends PlekUserHandler
             $organi_data['Website'] = htmlspecialchars($request_data['organizer-web']);
             $organi_data['Description'] = htmlspecialchars($request_data['organizer-description']);
             if (tribe_update_organizer($organi_data['ID'], $organi_data) === false) {
-                $plek_ajax_errors->add('save_user_settings', __('Fehler bei speichern der Veranstalter Einstellungen.', 'pleklang'));
+                $plek_ajax_errors->add('save_user_settings', __('Error while saving the organizer settings.', 'pleklang'));
                 return false;
             }
         }
@@ -327,7 +327,7 @@ class PlekUserFormHandler extends PlekUserHandler
         $pass_rep = $plek_ajax_handler->get_ajax_data('user-pass-repeat');
 
         if ($pass !== $pass_rep) {
-            $validator->set_error('user-pass-repeat', __('Passwords are not matching', 'pleklang'));
+            $validator->set_error('user-pass-repeat', __('Passwords do not match', 'pleklang'));
         }
 
         //Check if the account type is valid

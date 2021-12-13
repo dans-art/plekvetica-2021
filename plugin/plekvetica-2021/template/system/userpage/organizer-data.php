@@ -11,19 +11,19 @@ if (!$organi_id) {
 
 <dl>
     <dt>
-        <?php echo __('Veranstalter', 'pleklang'); ?>
+        <?php echo __('Organizer', 'pleklang'); ?>
     </dt>
     <dd>
         <?php echo tribe_get_organizer($organi_id); ?>
     </dd>
     <dt>
-        <?php echo __('eMail', 'pleklang'); ?>
+        <?php echo __('Email', 'pleklang'); ?>
     </dt>
     <dd>
         <?php echo tribe_get_organizer_email($organi_id, false); ?>
     </dd>
     <dt>
-        <?php echo __('Telefon', 'pleklang'); ?>
+        <?php echo __('Phone Number', 'pleklang'); ?>
     </dt>
     <dd>
         <?php echo tribe_get_organizer_phone($organi_id); ?>
@@ -35,7 +35,7 @@ if (!$organi_id) {
         <?php echo tribe_get_organizer_website_url($organi_id); ?>
     </dd>
     <dt>
-        <?php echo __('Beschreibung', 'pleklang'); ?>
+        <?php echo __('Description', 'pleklang'); ?>
     </dt>
     <dd>
         <?php echo get_the_content(null, false, $organi_id); ?>

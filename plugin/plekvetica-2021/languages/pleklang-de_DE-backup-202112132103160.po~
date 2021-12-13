@@ -1,0 +1,1203 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Plekvetica - 2021\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: Dänu\n"
+"Language-Team: Deutsch\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-10-10 10:15+0000\n"
+"PO-Revision-Date: 2021-12-13 20:06+0000\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.5.5; wp-5.8.2\n"
+"X-Domain: plekvetica-2021\n"
+
+#: include/class/event-handler.php:950
+#, php-format
+msgid "\"%s\" needs an update"
+msgstr "\"%s\" braucht eine Überarbeitung"
+
+#: template/event/meta/details.php:18
+msgid "(Boxoffice)"
+msgstr "(Abendkasse)"
+
+#: template/event/meta/details.php:22
+msgid "(Presale)"
+msgstr "(Vorverkauf)"
+
+#: template/email/user/new-user-admin-info.php:26
+msgid "A new user has been created and unlocked."
+msgstr "Neuer Benutzer wurde erstellt und entsperrt."
+
+#: template/posts/author-single.php:25
+msgid "About"
+msgstr "Über"
+
+#: template/system/login.php:32
+msgid "Account activated! Welcome to Plekvetica!"
+msgstr "Konto aktiviert! Willkommen bei Plekvetica!"
+
+#: template/system/login.php:41
+msgid "Account could not be activated."
+msgstr "Konto konnte nicht aktiviert werden."
+
+#: include/class/ajax-handler.php:326
+#, php-format
+msgid "Account created but failed to send email. Please contact the IT Support: %s."
+msgstr "Konto erstellt, aber es konnte keine Bestätigungs-Email gesendet werden. Bitte kontaktiere dazu den IT Support: %s."
+
+#: template/system/login.php:35
+msgid "Account is already unlocked."
+msgstr "Konto ist bereits entsperrt."
+
+#: include/class/user-form-handler.php:338
+msgid "Account type not selected"
+msgstr "Kein Konto-Typ gewählt"
+
+#: include/class/ajax-handler.php:90
+msgid "Accreditation request removed"
+msgstr "Akkreditierungsanfrage entfernt"
+
+#: template/event/meta/eventmanager.php:70
+msgid "Accreditation status"
+msgstr "Akkreditierungsstatus"
+
+#: template/event/meta/eventmanager.php:80
+msgid "Accredited members"
+msgstr "Akkreditierte Mitglieder"
+
+#: template/band/band-form.php:55
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: template/event/form/add-band-form.php:12
+msgid "Add Band"
+msgstr "Band hinzufügen"
+
+#: template/system/userpage/band-page.php:47
+#: template/system/userpage/community-page.php:43
+#: template/system/userpage/organizer-page.php:49
+#: template/system/userpage/team-page.php:60
+msgid "All your events"
+msgstr "Alle deine Veranstaltungen"
+
+#: include/class/form-validator.php:400
+msgid "Alpha Number"
+msgstr "Buchstabe & Zahl"
+
+#: template/event/meta/authors.php:13
+msgid "Authors"
+msgstr "Autoren"
+
+#: include/class/user-handler.php:17
+msgid "Band"
+msgstr "Band"
+
+#: template/band/meta/events.php:7
+msgid "Band Events"
+msgstr "Band-Events"
+
+#: include/class/ajax-handler.php:229
+msgid "Band saved"
+msgstr "Band gespeichert"
+
+#: template/system/user-settings/band-settings-form.php:11
+msgid "Band settings"
+msgstr "Band Einstellungen"
+
+#: include/class/band-handler.php:750
+#, php-format
+msgid "Bandlogo of %s"
+msgstr "Bandlogo von %s"
+
+#: template/band/block-band-container.php:18
+msgid "Bandname"
+msgstr "Band-Name"
+
+#: template/band/band-list-item.php:20
+#, php-format
+msgid "Bandpage of &quot;%s&quot;"
+msgstr "Bandseite von &quot;%s&quot;"
+
+#: template/event/form/add-event-form-basic.php:12
+#: template/event/meta/bands.php:10
+msgid "Bands"
+msgstr "Bands"
+
+#: template/components/pagination-buttons.php:71
+#, php-format
+msgid "Bands %d to %d of %d"
+msgstr "Bands %d bis %d von %d"
+
+#: template/system/user-settings/band-settings-form.php:13
+msgid "Bands to manage"
+msgstr "Bands zum verwalten"
+
+#: template/band/block-band-container.php:24
+msgid "Bandscore"
+msgstr "Bandscore"
+
+#: include/class/form-validator.php:411
+msgid "Can only contain numbers, periods and minus"
+msgstr "Darf nur Zahlen, Punkte und Minus enthalten"
+
+#: template/band/band-form.php:61
+#: template/system/user-settings/user-settings-main.php:48
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: template/event/single-view.php:58
+msgid "Canceled"
+msgstr "Abgesagt"
+
+#: include/class/event-handler.php:80
+msgid "Changing Status was unsuccessfully"
+msgstr "Konnte den Status nicht ändern"
+
+#: include/class/user-handler.php:16
+msgid "Community / Fan"
+msgstr "Community / Fan"
+
+#: include/class/event-handler.php:818
+msgid "Confirmed"
+msgstr "Bestätigt"
+
+#: include/class/notification-handler.php:301
+msgid "Created"
+msgstr "Erstellt"
+
+#. Author of the plugin
+msgid "Daniel Spycher"
+msgstr "Daniel Spycher"
+
+#: include/class/form-validator.php:407
+#: template/event/form/add-event-form-basic.php:9
+#: template/event/meta/datetime.php:12
+msgid "Date"
+msgstr "Datum"
+
+#: template/event/meta/datetime.php:9
+msgid "Date & Time"
+msgstr "Datum & Zeit"
+
+#: template/system/user-settings/band-settings-form.php:18
+msgid "deactivated, is already managed"
+msgstr "deaktiviert, wird bereits verwaltet"
+
+#: include/class/event-handler.php:825
+msgid "Declined"
+msgstr "Abgelehnt"
+
+#: include/class/notification-handler.php:338
+msgid "Delete"
+msgstr "Löschen"
+
+#: template/band/band-form.php:27
+#: template/system/user-settings/organizer-settings-form.php:49
+#: template/system/user-settings/user-settings-main.php:27
+#: template/system/userpage/organizer-data.php:38
+msgid "Description"
+msgstr "Beschreibung"
+
+#: template/band/meta/details.php:23
+#: template/event/meta/details.php:11
+msgid "Details"
+msgstr "Details"
+
+#: include/class/notification-handler.php:305
+msgid "Dismissed"
+msgstr "Gelesen"
+
+#: template/system/login/register-form.php:16
+#: template/system/user-settings/user-settings-main.php:24
+msgid "Displayname"
+msgstr "Anzeigenamen"
+
+#: template/band/band-form.php:19
+msgid "Edit Band"
+msgstr "Band bearbeiten"
+
+#: template/event/meta/eventmanager.php:22
+msgid "Edit Event"
+msgstr "Veranstaltung bearbeiten"
+
+#: template/event/meta/eventmanager.php:6
+msgid "Edit review"
+msgstr "Rezension bearbeiten"
+
+#: include/class/form-validator.php:403
+#: template/system/login/register-form.php:19
+#: template/system/user-settings/organizer-settings-form.php:40
+#: template/system/userpage/organizer-data.php:20
+msgid "Email"
+msgstr "Email"
+
+#: include/class/backend.php:27
+msgid "eMail not configured"
+msgstr "eMail ist nicht eingestellt"
+
+#: include/class/notification-handler.php:306
+msgid "Email send"
+msgstr "E-Mail senden"
+
+#: include/class/form-validator.php:261
+#, php-format
+msgid "Entry is %d characters too long."
+msgstr "Eintrag ist %d Zeichen zu lang."
+
+#: template/band/photo-view.php:9
+#: template/gallery/photo-view.php:12
+msgid "Error 404: Gallery not found"
+msgstr "Fehler 404: Galerie nicht gefunden"
+
+#: include/class/file-handler.php:61
+msgid "Error adding the image to the database."
+msgstr "Fehler beim Hinzufügen des Bildes zur Datenbank."
+
+#: include/class/user-form-handler.php:163
+msgid "Error saving account information"
+msgstr "Fehler beim Speichern der Kontoinformationen"
+
+#: include/class/band-handler.php:765
+#, php-format
+msgid "Error saving Band (%s)"
+msgstr "Fehler beim Speichern der Band (%s)"
+
+#: include/class/ajax-handler.php:104
+#: include/class/ajax-handler.php:240
+msgid "Error while changing the following status"
+msgstr "Fehler beim ändern des \"folgen\" status"
+
+#: include/class/ajax-handler.php:319
+msgid "Error while creating a new user"
+msgstr "Fehler während des erstellen des neuen Benutzer"
+
+#: include/class/ajax-handler.php:113
+#: include/class/ajax-handler.php:165
+msgid "Error while loading the data"
+msgstr "Fehler beim laden der Daten"
+
+#: include/class/user-form-handler.php:201
+msgid "Error while saving the organizer settings."
+msgstr "Fehler beim Speichern der Veranstalter-Einstellungen."
+
+#: include/class/event-handler.php:875
+msgid "Error while updating the accreditation field"
+msgstr "Fehler beim Aktualisieren des Akkreditierungsfelds"
+
+#: include/class/notification-handler.php:358
+#, php-format
+msgid "Error: %s "
+msgstr "Fehler: %s "
+
+#: template/event/single-view.php:10
+msgid "Error: Event Object not found"
+msgstr "Fehler: Event Objekt nicht gefunden"
+
+#: template/components/dropdown.php:12
+msgid "Error: No options found!"
+msgstr "Fehler: Keine Optionen gefunden!"
+
+#: template/system/user-settings/user-settings-main.php:10
+msgid "Error: User object could not be loaded."
+msgstr "Fehler: Benutzerobjekt konnte nicht geladen werden."
+
+#: template/event/single-view.php:101
+#: template/event/meta/event-actions.php:4
+msgid "Event"
+msgstr "Veranstaltung"
+
+#: include/class/ajax-handler.php:80
+msgid "Event has been successfully published on facebook"
+msgstr "Veranstaltung wurde erfolgreich auf Facebook veröffentlicht"
+
+#: template/event/meta/eventmanager.php:76
+msgid "Event has not yet been accredited by any team member."
+msgstr "Die Veranstaltung wurde noch von keinem Teammitglied akkreditiert."
+
+#: template/event/meta/eventmanager.php:16
+msgid "Event Manager"
+msgstr "Event Manager"
+
+#: template/gallery/album-event-review.php:9
+msgid "Event Photos"
+msgstr "Veranstaltungsfotos"
+
+#: include/class/ajax-handler.php:133
+msgid "Event published"
+msgstr "Event veröffentlicht"
+
+#: include/class/ajax-handler.php:119
+#: include/class/ajax-handler.php:171
+msgid "Event reported"
+msgstr "Event gemeldet"
+
+#: template/event/event-item-compact.php:47
+#: template/event/event-item-watchlist.php:28
+#, php-format
+msgid "Event Status: %s"
+msgstr "Event Status: %s"
+
+#: template/band/block-band-container.php:19
+msgid "Events"
+msgstr "Veranstaltungen"
+
+#: include/class/events.php:860
+#: template/components/pagination-buttons.php:73
+#, php-format
+msgid "Events %d to %d of %d"
+msgstr "Events %d bis %d von %d"
+
+#: template/band/band-form.php:43
+msgid "Facebook"
+msgstr "Facebook"
+
+#: include/class/form-validator.php:409
+msgid "Facebook URL"
+msgstr "Facebook URL"
+
+#: include/class/user-handler.php:563
+#, php-format
+msgid "Failed to create new user (%s)"
+msgstr "Neuer Benutzer konnte nicht angelegt werden (%s)"
+
+#: include/class/user-form-handler.php:227
+msgid "Failed to write band meta"
+msgstr "Fehler bei speichern der Band Daten"
+
+#: include/class/user-handler.php:569
+msgid "Failed to write meta for new user"
+msgstr "Fehler bei speichern der Nutzerdaten für den neuen Nutzer"
+
+#: include/class/user-form-handler.php:188
+msgid "Failed to write organizer meta"
+msgstr "Fehler beim speichern der Veranstalterdaten"
+
+#: include/class/form-validator.php:357
+#, php-format
+msgid "File is too big (Max %d MB)"
+msgstr "Datei ist zu groß (max. %d MB)"
+
+#: include/class/notification-handler.php:210
+#: template/components/review-search-bar.php:16
+msgid "Find"
+msgstr "Finden"
+
+#: template/system/user-settings/user-settings-main.php:18
+msgid "First Name"
+msgstr "Vorname"
+
+#: include/class/band-handler.php:966
+#: include/class/events.php:1092
+#: template/band/meta/details.php:19
+#: template/event/meta/details.php:7
+msgid "Follow"
+msgstr "Folgen"
+
+#: template/band/block-band-container.php:21
+msgid "Follower"
+msgstr "Follower"
+
+#: include/class/event-handler.php:506
+msgid "Free"
+msgstr "Kostenlos/Kollekte"
+
+#: template/band/block-band-container.php:20
+msgid "Future Events"
+msgstr "Künftige Events"
+
+#: template/backend/backend-options-page.php:10
+msgid "General"
+msgstr "Allgemein"
+
+#: template/band/band-form.php:35
+msgid "Genre"
+msgstr "Genre"
+
+#: template/band/meta/genres.php:7
+#: template/event/meta/genres.php:12
+msgid "Genres"
+msgstr "Genres"
+
+#: include/class/author-handler.php:51
+msgid "Guest Author"
+msgstr "Gastautor"
+
+#: template/system/my-plekvetica-page.php:16
+#: template/system/userpage/partner-page.php:7
+#, php-format
+msgid "Hello %s"
+msgstr "Hallo %s"
+
+#: template/email/user/new-user.php:27
+#, php-format
+msgid "Hello, %s"
+msgstr "Hallo, %s"
+
+#. Author URI of the plugin
+msgid "https://www.dev.dans-art.ch/"
+msgstr "https://www.dev.dans-art.ch/"
+
+#. URI of the plugin
+msgid "https://www.plekvetica.ch/"
+msgstr "https://www.plekvetica.ch/"
+
+#: include/class/event-handler.php:933
+msgid "ID of Event not found!"
+msgstr "ID der Veranstaltung nicht gefuden."
+
+#: include/class/form-validator.php:413
+msgid "Image"
+msgstr "Bild"
+
+#: include/class/form-validator.php:254
+#, php-format
+msgid "Input is %d characters too short."
+msgstr "Eingabe ist %d Zeichen zu kurz."
+
+#: template/band/band-form.php:46
+msgid "Instagram"
+msgstr "Instagram"
+
+#: template/event/meta/eventmanager.php:86
+msgid "Interviews"
+msgstr "Interviews"
+
+#: template/posts/author-single.php:23
+msgid "Involved since:"
+msgstr "Dabei seit:"
+
+#: template/system/user-settings/user-settings-main.php:21
+msgid "Last Name"
+msgstr "Nachname"
+
+#: include/class/notification-handler.php:304
+msgid "Link"
+msgstr "Link"
+
+#: include/class/event-handler.php:670
+msgid "Link to the Facebook event"
+msgstr "Link zum Facebook-Event"
+
+#: include/class/event-handler.php:661
+msgid "Link to the raffle"
+msgstr "Link zum Gewinnspiel"
+
+#: include/class/event-handler.php:670
+msgid "Link to the website"
+msgstr "Link zur Webseite"
+
+#: template/event/meta/details.php:28
+msgid "Links"
+msgstr "Links"
+
+#: include/class/events.php:903
+#: template/posts/author-single.php:52
+msgid "Load more events"
+msgstr "Weitere Events laden"
+
+#: template/event/event-review-search.php:36
+msgid "Load more reviews"
+msgstr "Weitere Reviews laden"
+
+#: template/event/form/add-event-form-basic.php:15
+#: template/event/meta/venue.php:13
+msgid "Location"
+msgstr "Ort"
+
+#: include/class/plek-handler.php:129
+msgid "Login"
+msgstr "Anmelden"
+
+#: template/system/login/login-form.php:13
+msgid "Login failed. Please check your login details."
+msgstr "Login fehlgeschlagen. Bitte überprüfen Sie Ihre Zugangsdaten."
+
+#: template/band/band-form.php:30
+msgid "Logo"
+msgstr "Logo"
+
+#: template/system/login.php:24
+#: template/system/my-plekvetica-page.php:25
+#: template/system/userpage/partner-page.php:12
+msgid "Logout"
+msgstr "Ausloggen"
+
+#: template/band/meta/band-manager.php:14
+msgid "Manage Band"
+msgstr "Band verwalten"
+
+#: template/system/userpage/band-data.php:14
+msgid "Managed Bands"
+msgstr "Verwaltete Bands"
+
+#: template/band/meta/band-manager.php:33
+msgid "Managed by:"
+msgstr "Verwaltet von:"
+
+#: include/class/event-handler.php:872
+msgid "Member is already removed"
+msgstr "Mitglied ist bereits entfernt"
+
+#: template/system/userpage/team-page.php:42
+msgid "Missing Reviews"
+msgstr "Fehlende Reviews"
+
+#. Description of the plugin
+msgid "Modifikationen und spezielle Funktionen für die Plekvetica Seite."
+msgstr "Modifikationen und spezielle Funktionen für die Plekvetica-Seite."
+
+#: template/event/form/components/date.php:21
+msgid "Multi-day event"
+msgstr "Mehrtägige Veranstaltung"
+
+#: include/class/form-validator.php:248
+msgid "Must not be empty."
+msgstr "Darf nicht leer sein."
+
+#: template/system/userpage/band-page.php:41
+#: template/system/userpage/community-page.php:37
+#: template/system/userpage/organizer-page.php:43
+#: template/system/userpage/team-page.php:54
+msgid "My followed Bands"
+msgstr "Meine gefolgten Bands"
+
+#: include/class/plek-handler.php:126
+#: template/system/my-plekvetica-page.php:14
+msgid "My Plekvetica"
+msgstr "Mein Plekvetica"
+
+#: template/system/userpage/band-page.php:35
+#: template/system/userpage/community-page.php:31
+#: template/system/userpage/organizer-page.php:37
+#: template/system/userpage/team-page.php:48
+msgid "My Watchlist"
+msgstr "Meine Watchlist"
+
+#: template/band/band-form.php:24
+#: template/system/user-settings/organizer-settings-form.php:37
+msgid "Name"
+msgstr "Name"
+
+#: include/class/ajax-handler.php:329
+msgid "New account created! Check your email to complete the sign up."
+msgstr "Neues Konto erstellt. Bitte pfüfe deine E-Mails um die Anmeldung abzuschliessen."
+
+#: template/system/user-settings/user-settings-main.php:30
+msgid "New Password"
+msgstr "Neues Passwort"
+
+#: include/class/user-handler.php:666
+msgid "New user account activated"
+msgstr "Neues Konto aktiviert"
+
+#: template/email/user/new-user-admin-info.php:24
+msgid "New user unlocked!"
+msgstr "Neuer Benutzer entsperrt!"
+
+#: include/class/notification-handler.php:541
+msgid "News from Plekvetica"
+msgstr "Neuigkeiten von Plekvetica"
+
+#: template/components/pagination-buttons.php:78
+msgid "Next"
+msgstr "Weiter"
+
+#: include/class/notification-handler.php:235
+msgid "No"
+msgstr "Nein"
+
+#: include/class/author-handler.php:47
+msgid "No Author found"
+msgstr "Kein Autor gefunden"
+
+#: include/class/user-form-handler.php:286
+msgid "No Band selected"
+msgstr "Keine Band angewählt"
+
+#: include/class/user-handler.php:325
+msgid "No Band set. Please select a band in the settings menu."
+msgstr "Keine Band gewählt. Bitte wähle eine Band im Einstellungsmenu."
+
+#: template/event/form/components/bands.php:14
+msgid "No bands are known for this event yet."
+msgstr "Für diese Veranstaltung sind noch keine Bands bekannt."
+
+#: include/class/search-handler.php:41
+msgid "No bands found."
+msgstr "Keine Bands gefunden."
+
+#: template/band/block-band-container-nohead.php:8
+#: template/band/block-band-container.php:9
+#: template/event/block-container.php:8
+msgid "No data received"
+msgstr "Keine Daten erhalten"
+
+#: include/class/search-handler.php:60
+#: include/class/search-handler.php:117
+msgid "No events found."
+msgstr "Keine Veranstaltungen gefunden."
+
+#: include/class/search-handler.php:184
+#, php-format
+msgid "No events were found with the search term &quot;%s&quot; found."
+msgstr "Es wurden keine Events mit dem Suchbegriff &quot;%s&quot; gefunden."
+
+#: include/class/events.php:725
+msgid "No Featured Events found"
+msgstr "Keine hervorgehobenen Veranstaltungen gefunden"
+
+#: include/class/search-handler.php:75
+msgid "No fotos found."
+msgstr "Keine Fotos gefunden."
+
+#: include/class/gallery-handler.php:40
+msgid "No gallery was found. It may have been deleted or moved."
+msgstr "Es wurde keine Galerie gefunden. Möglicherweise wurde diese gelöscht oder verschoben."
+
+#: template/event/meta/eventmanager.php:98
+msgid "No interviews have yet been registered for this event."
+msgstr "Für diese Veranstaltung sind noch keine Interviews registriert."
+
+#: include/class/notification-handler.php:361
+msgid "No Notifications to show"
+msgstr "Keine Benachrichtigungen zum anzeigen"
+
+#: include/class/user-handler.php:322
+msgid "No organizer set. Please select a organizer in the settings menu."
+msgstr "Kein Veranstalter gesetzt. Bitte wähle einen Veranstalter im Einstellungsmenu."
+
+#: include/class/event-handler.php:209
+msgid "No photos found for this event."
+msgstr "Für diese Veranstaltung wurden keine Fotos gefunden."
+
+#: include/class/events.php:906
+msgid "No raffles found"
+msgstr "Keine Verlosungen gefunden"
+
+#: include/class/events.php:749
+#: include/class/events.php:771
+msgid "No reviews found"
+msgstr "Keine Reviews gefunden"
+
+#: include/class/author-handler.php:25
+msgid "No Team members found."
+msgstr "Keine Teammitglieder gefunden."
+
+#: include/class/events.php:972
+#: include/class/search-handler.php:23
+msgid "No videos found."
+msgstr "Keine Videos gefunden."
+
+#: include/class/youtube.php:252
+msgid "No Youtube Video ID found"
+msgstr "Keine Youtube-Video-ID gefunden"
+
+#: template/backend/backend-options-page-status.php:16
+msgid "Not all user roles exist!"
+msgstr "Es sind nicht alle Benutzerrollen vorhanden!"
+
+#: template/backend/backend-options-page.php:11
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+#: include/class/form-validator.php:401
+msgid "Number"
+msgstr "Nummer"
+
+#: include/class/user-handler.php:611
+msgid "Only one step left for your account at plekvetica!"
+msgstr "Nur noch ein Schritt für dein Konto bei Plekvetica!"
+
+#: include/class/user-handler.php:18
+#: template/event/meta/organizer.php:12
+#: template/system/userpage/organizer-data.php:14
+msgid "Organizer"
+msgstr "Veranstalter"
+
+#: include/class/user-form-handler.php:262
+msgid "Organizer already set. Please contact the site owner to change the organizer."
+msgstr "Veranstalter bereits gesetzt. Bitte Kontaktiere den Administrator um den Veranstalter zu ändern."
+
+#: template/system/user-settings/organizer-settings-form.php:8
+msgid "Organizer Settings"
+msgstr "Veranstalter Einstellungen"
+
+#: template/band/band-form.php:38
+#: template/band/block-band-container.php:17
+#: template/band/meta/details.php:27
+msgid "Origin"
+msgstr "Herkunft"
+
+#: include/class/user-handler.php:19
+msgid "Partner"
+msgstr "Partner"
+
+#: include/class/form-validator.php:412
+#: template/system/login/register-form.php:22
+msgid "Password"
+msgstr "Passwort"
+
+#: include/class/form-validator.php:281
+msgid "Password must contain a letter, a number and a special character."
+msgstr "Das Passwort muss einen Buchstaben, eine Zahl und ein Sonderzeichen enthalten."
+
+#: include/class/user-form-handler.php:98
+#: include/class/user-form-handler.php:330
+msgid "Passwords do not match"
+msgstr "Passwörte stimmen nicht überein"
+
+#: include/class/form-validator.php:402
+#: template/system/user-settings/organizer-settings-form.php:43
+#: template/system/userpage/organizer-data.php:26
+msgid "Phone Number"
+msgstr "Telefonnummer"
+
+#: template/band/meta/photos.php:14
+msgid "Photos"
+msgstr "Fotos"
+
+#: template/system/login/register-form.php:30
+#: template/system/user-settings/organizer-settings-form.php:16
+msgid "Please select..."
+msgstr "Bitte wählen..."
+
+#. Name of the plugin
+msgid "Plekvetica - 2021"
+msgstr "Plekvetica - 2021"
+
+#: template/event/meta/poster.php:5
+msgid "Poster from the event"
+msgstr "Poster von der Veranstaltung"
+
+#: template/event/meta/poster.php:12
+msgid "Poster placeholder"
+msgstr "Poster platzhalter"
+
+#: template/posts/author-single.php:34
+#, php-format
+msgid "Posts of  %s"
+msgstr "Beiträge von %s"
+
+#: template/components/pagination-buttons.php:66
+msgid "Previous"
+msgstr "Zurück"
+
+#: include/class/form-validator.php:411
+msgid "Price"
+msgstr "Preis"
+
+#: template/event/meta/eventmanager.php:51
+msgid "Promote Event"
+msgstr "Event promoten"
+
+#: template/event/meta/eventmanager.php:41
+msgid "Publish Event"
+msgstr "Veranstaltung veröffentlichen"
+
+#: include/class/notification-handler.php:339
+msgid "Push again"
+msgstr "Nochmal senden"
+
+#: template/event/single-view.php:61
+msgid "Recommended by us"
+msgstr "Von uns empfohlen"
+
+#: template/system/login/register-form.php:28
+msgid "Register as..."
+msgstr "Registrieren als..."
+
+#: template/system/login/register-form.php:25
+#: template/system/user-settings/user-settings-main.php:33
+msgid "Repeat Password"
+msgstr "Passwort wiederholen"
+
+#: template/components/image-upload-button.php:13
+msgid "Replace"
+msgstr "Ersetzen"
+
+#: template/system/login/reset-password-form.php:15
+msgid "Request new password"
+msgstr "Fordere ein neues Passwort an"
+
+#: include/class/event-handler.php:822
+msgid "Requested"
+msgstr "Angefragt"
+
+#: template/system/login/login-form.php:22
+#: template/system/login/reset-password-form.php:6
+msgid "Reset password"
+msgstr "Passwort zurücksetzen"
+
+#: template/event/single-view.php:55
+msgid "Review"
+msgstr "Review"
+
+#: include/class/user-handler.php:331
+msgid "Role not found in setup function."
+msgstr "Rolle nicht gefunden in der Einstellungsfunktion."
+
+#: template/band/band-form.php:62
+msgid "Save"
+msgstr "Speichern"
+
+#: template/event/form/add-event-form-basic.php:22
+msgid "Save event"
+msgstr "Veranstaltung speichern"
+
+#: template/system/user-settings/user-settings-main.php:49
+msgid "Save settings"
+msgstr "Einstellungen speichern"
+
+#: template/band/meta/details.php:49
+msgid "Score"
+msgstr "Score"
+
+#: template/event/form/components/bands.php:9
+msgid "Search a band"
+msgstr "Suche eine Band"
+
+#: template/event/form/components/venue.php:9
+msgid "Search a location"
+msgstr "Einen Ort suchen"
+
+#: template/components/review-search-bar.php:5
+msgid "Search for bands, events or organizer"
+msgstr "Suche nach Bands, Events oder Veranstalter"
+
+#: template/event/event-item-compact.php:59
+#: template/event/event-item-compact.php:69
+#: template/event/event-item-watchlist.php:42
+msgid "See the Event details"
+msgstr "Siehe die Veranstaltungsdetails"
+
+#: template/system/user-settings/organizer-settings-form.php:14
+msgid "Select Organizer"
+msgstr "Wähle Veranstalter"
+
+#: template/system/my-plekvetica-page.php:26
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: template/backend/backend-options-page-status.php:8
+msgid "Settings check passed"
+msgstr "Einstellungen sind ok"
+
+#: include/class/ajax-handler.php:268
+msgid "Settings saved"
+msgstr "Einstellungen gespeichert"
+
+#: include/class/form-validator.php:410
+msgid "Short number"
+msgstr "Kurze Nummer"
+
+#: template/event/meta/eventmanager.php:62
+msgid "Show revision"
+msgstr "Überarbeitung anzeigen"
+
+#: template/system/login/register-form.php:38
+msgid "Sign up"
+msgstr "Registrieren"
+
+#: template/system/login/login-form.php:25
+#: template/system/login/register-form.php:12
+msgid "Sign up at Plekvetica"
+msgstr "Registrieren bei Plekvetica"
+
+#: template/band/meta/details.php:30
+msgid "Social & Links"
+msgstr "Social & Links"
+
+#: template/backend/backend-options-page.php:12
+msgid "Status"
+msgstr "Status"
+
+#: include/class/notification-handler.php:303
+msgid "Subject and Message"
+msgstr "Betreff und Nachricht"
+
+#: include/class/ajax-handler.php:359
+msgid "Super! No missing Reviews."
+msgstr "Super! Keine fehlenden Reviews."
+
+#: template/event/meta/venue.php:22
+msgid "Switzerland"
+msgstr "Schweiz"
+
+#: include/class/form-validator.php:396
+#: include/class/form-validator.php:397
+#: include/class/form-validator.php:404
+#: include/class/form-validator.php:405
+msgid "Text"
+msgstr "Text"
+
+#: template/email/user/new-user.php:34
+msgid "Thanks for being a part of our Community!"
+msgstr "Danke, dass du ein Teil unserer Community bist!"
+
+#: template/system/userpage/band-page.php:25
+#: template/system/userpage/community-page.php:25
+#: template/system/userpage/organizer-page.php:27
+#: template/system/userpage/team-page.php:38
+msgid "There are no events for the next 7 days!"
+msgstr "Für die nächsten 7 Tage gibt es keine Veranstaltungen!"
+
+#: include/class/event-handler.php:868
+msgid "There are no registered Members"
+msgstr "Es gibt keine registrierten Mitglieder"
+
+#: template/posts/author-single.php:26
+msgid "This Author has no description."
+msgstr "Dieser Autor hat keine Beschreibung."
+
+#: include/class/band-handler.php:288
+msgid "This Band has no origin information"
+msgstr "Diese Band hat keine Herkunftsinformationen"
+
+#: include/class/event-blocks.php:162
+msgid "This Data can only be displayed to team members"
+msgstr "Diese Daten können nur für Teammitglieder angezeigt werden"
+
+#: include/class/user-form-handler.php:344
+msgid "This email address is already registered"
+msgstr "Diese Email Adresse ist bereits registriert"
+
+#: template/event/meta/eventmanager.php:98
+msgid "This event did not have any interviews."
+msgstr "Bei dieser Veranstaltung gab es keine Interviews."
+
+#: template/event/event-item-compact.php:74
+#: template/event/event-item-watchlist.php:47
+#: template/event/single-view.php:74
+msgid "This event has been canceled"
+msgstr "Diese Veranstaltung wurde abgesagt"
+
+#: template/event/event-item-compact.php:77
+#: template/event/event-item-watchlist.php:50
+#: template/event/single-view.php:42
+msgid "This event has been postponed"
+msgstr "Diese Veranstaltung wurde verschoben"
+
+#: template/event/single-view.php:77
+#, php-format
+msgid "This event was moved from %s to %s."
+msgstr "Diese Veranstaltung wurde vom %s auf den %s verschoben."
+
+#: include/class/form-validator.php:361
+#, php-format
+msgid "This file type is not allowed. (Only %s)"
+msgstr "Dieser Dateityp ist nicht zulässig. (Nur %s)"
+
+#: include/class/event-handler.php:892
+msgid "This post can no longer be edited because a review already exists"
+msgstr "Dieser Beitrag kann nicht mehr bearbeitet werden, da bereits ein Review vorhanden ist"
+
+#: include/class/event-handler.php:895
+msgid "This post can no longer be edited because a review is currently being written."
+msgstr "Dieser Beitrag kann nicht mehr bearbeitet werden, da gerade ein Review geschrieben wird."
+
+#: template/event/single-view.php:64
+msgid "Ticket raffle"
+msgstr "Ticketverlosung"
+
+#: include/class/form-validator.php:406
+#: template/event/meta/datetime.php:20
+msgid "Time"
+msgstr "Zeit"
+
+#: template/event/form/add-event-form-basic.php:18
+msgid "Title"
+msgstr "Titel"
+
+#: template/event/meta/datetime.php:16
+#: template/event/form/components/date.php:13
+msgid "to"
+msgstr "bis"
+
+#: include/class/user-form-handler.php:292
+msgid "To many Bands selected! Are you sure you have more than 5 Bands!?"
+msgstr "Zu viele Bands gewählt! Bist du sicher, das du mehr als 5 Bands hast!?"
+
+#: template/posts/author-post-items.php:18
+#, php-format
+msgid "To the author: %s"
+msgstr "Zum Autor: %s"
+
+#: template/band/meta/details.php:34
+#, php-format
+msgid "To the Facebook page of %s"
+msgstr "Zur Facebook-Seite von %s"
+
+#: template/gallery/album-item.php:25
+#, php-format
+msgid "To the gallery: %s"
+msgstr "Zur Galerie: %s"
+
+#: template/band/meta/details.php:39
+#, php-format
+msgid "To the Instagram page of %s"
+msgstr "Zur Instagram-Seite von %s"
+
+#: template/event/single-view.php:43
+msgid "To the new event"
+msgstr "Zur neuen Veranstaltung"
+
+#: template/band/meta/details.php:44
+#, php-format
+msgid "To the Website of %s"
+msgstr "Zur Website von %s"
+
+#: include/class/events.php:1059
+msgid "Today"
+msgstr "Heute"
+
+#: include/class/notification-handler.php:302
+msgid "Type"
+msgstr "Typ"
+
+#: include/class/band-handler.php:964
+#: include/class/events.php:1090
+#: template/band/meta/details.php:19
+#: template/event/meta/details.php:7
+msgid "Unfollow"
+msgstr "Entfolgen"
+
+#: template/components/image-upload-button.php:20
+msgid "Upload"
+msgstr "Hochladen"
+
+#: include/class/form-validator.php:343
+msgid "Uploaded file not found"
+msgstr "Hochgeladene Datei nicht gefunden"
+
+#: include/class/form-validator.php:408
+msgid "URL"
+msgstr "URL"
+
+#: include/class/notification-handler.php:300
+msgid "User"
+msgstr "Nutzer"
+
+#: template/backend/backend-options-page-status.php:14
+msgid "User roles exists."
+msgstr "Benutzerrollen vorhanden."
+
+#: template/band/band-form.php:52
+#: template/band/meta/videos.php:9
+msgid "Videos"
+msgstr "Videos"
+
+#: template/event/meta/videos.php:8
+msgid "Videos & Interviews"
+msgstr "Videos & Interviews"
+
+#: template/event/event-list-item-youtube.php:19
+#: template/event/event-list-item-youtube.php:30
+#, php-format
+msgid "Watch %s on Youtube."
+msgstr "Sieh dir %s auf Youtube an."
+
+#: template/band/band-form.php:49
+#: template/system/user-settings/organizer-settings-form.php:46
+#: template/system/userpage/organizer-data.php:32
+msgid "Website"
+msgstr "Webseite"
+
+#: template/email/user/new-user.php:25
+msgid "Welcome to Plekvetica!"
+msgstr "Willkommen bei Plekvetica!"
+
+#: include/class/event-handler.php:814
+msgid "Wish"
+msgstr "Wunsch"
+
+#: template/event/meta/eventmanager.php:6
+msgid "Write Review"
+msgstr "Review schreiben"
+
+#: include/class/form-validator.php:271
+msgid "Wrong Format."
+msgstr "Falsches Format."
+
+#: include/class/form-validator.php:269
+#, php-format
+msgid "Wrong Format. Notice: %s"
+msgstr "Falsches Format. Hinweis: %s"
+
+#: include/class/notification-handler.php:235
+msgid "Yes"
+msgstr "Ja"
+
+#: template/system/login.php:21
+msgid "You account is currently locked. Please check your mail for unlock instructions"
+msgstr "Dein Konto ist aktuell gesperrt. Bitte pfüfe deine E-Mails für die Entsperrung"
+
+#: include/class/band-handler.php:681
+#: template/band/band-form.php:9
+msgid "You are not allowed to edit this band!"
+msgstr "Du darfst dieses Band nicht bearbeiten!"
+
+#: include/class/ajax-handler.php:127
+msgid "You are not allowed to use this function"
+msgstr "Du bist nicht berechtigt diese Funktion zu nutzen."
+
+#: template/event/meta/eventmanager.php:26
+msgid "You are not authorized to edit this post."
+msgstr "Du bist nicht berechtigt, diesen Beitrag zu bearbeiten."
+
+#: include/class/user-form-handler.php:106
+msgid "You are not authorized to edit this user!"
+msgstr "Du bist nicht berechtigt, diesen Benutzer zu bearbeiten!"
+
+#: template/system/login/register-form.php:8
+msgid "You have already an account. Please logout first before creating a new account."
+msgstr "Du hast bereits ein Konto. Bitte logge dich zuerst aus, bevor du ein neues Konto erstellst."
+
+#: include/class/ajax-handler.php:332
+msgid "You have to be logged in in order to save the settings."
+msgstr "Du musst eingeloggt sein, um die Einstellungen zu speichern."
+
+#: include/class/ajax-handler.php:157
+#: include/class/ajax-handler.php:200
+msgid "You have to be logged in to perform this action"
+msgstr "Du musst eingeloggt sein, um diese Aktion auszuführen"
+
+#: template/email/user/new-user.php:29
+msgid "Your account has been successfully created. Please confirm your registration with the link below."
+msgstr "Dein Konto wurde erfolgreich erstellt. Bitte bestätige deine Anmeldung mit dem untenstehenden Link."
+
+#: template/system/userpage/band-page.php:29
+#: template/system/userpage/organizer-page.php:31
+msgid "Your data"
+msgstr "Deine Daten"
+
+#: include/class/event-handler.php:951
+#, php-format
+msgid "Your Event \"%s\" has been reported as outdated. Please have a look and update the Event. Thanks!"
+msgstr "Deine Veranstaltung \"%s\" wurde als veraltet gemeldet. Bitte schau dir diesen Event an und bringe ihn auf den neusten Stand. Danke!"
+
+#: template/system/userpage/partner-page.php:6
+msgid "Your Plekvetica"
+msgstr "Dein Plekvetica"
+
+#: template/system/user-settings/user-settings-main.php:6
+msgid "Your Settings"
+msgstr "Deine Einstellungen"
+
+#: template/system/userpage/band-page.php:21
+#: template/system/userpage/community-page.php:21
+#: template/system/userpage/organizer-page.php:23
+#: template/system/userpage/team-page.php:34
+msgid "Your Week"
+msgstr "Deine Woche"
+
+#: template/event/event-list-item-youtube.php:21
+msgid "Youtube Video"
+msgstr "Youtube-Video"
+
+#: include/class/form-validator.php:398
+msgid "Youtube Videos"
+msgstr "Youtube Videos"

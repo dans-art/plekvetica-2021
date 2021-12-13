@@ -20,7 +20,7 @@ class PlekSearchHandler
         if (!empty($search_result)) {
             return $search_result;
         } else {
-            return __('Keine Videos gefunden.', 'pleklang');
+            return __('No videos found.', 'pleklang');
         }
     }
 
@@ -38,7 +38,7 @@ class PlekSearchHandler
             }
             return $result;
         } else {
-            return __('Keine Bands gefunden.', 'pleklang');
+            return __('No bands found.', 'pleklang');
         }
         return "Band";
     }
@@ -57,7 +57,7 @@ class PlekSearchHandler
             $this->found_events = $search_result;
             return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $search_result);
         } else {
-            return __('Keine Events gefunden.', 'pleklang');
+            return __('No events found.', 'pleklang');
         }
     }
 
@@ -72,7 +72,7 @@ class PlekSearchHandler
             $page_id = $plek_handler->get_plek_option('concert_photos_page_id');
             return PlekTemplateHandler::load_template_to_var('album-container', 'gallery', $search_result, $page_id, ['shorten_title' => false]);
         } else {
-            return __('Keine Fotos gefunden.', 'pleklang');
+            return __('No fotos found.', 'pleklang');
         }
     }
 
@@ -114,7 +114,7 @@ class PlekSearchHandler
             }
             return $event_array;
         }
-        return __('Keine Events gefunden.', 'pleklang');
+        return __('No events found.', 'pleklang');
     }
 
     public static function is_review_search()
@@ -181,7 +181,7 @@ class PlekSearchHandler
         $plek_event->total_posts['search_tribe_events'] = (int) $total_posts;
 
         if (count($db_result) === 0) {
-            return sprintf(__("Es wurden keine Events mit dem Suchwort &quot;%s&quot; gefunden.", "pleklang"), $query);
+            return sprintf(__("No events were found with the search term &quot;%s&quot; found.", "pleklang"), $query);
         }
         return $db_result;
     }

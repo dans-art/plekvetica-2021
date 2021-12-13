@@ -123,7 +123,7 @@ class PlekHandler
             foreach ($items as $index => $nav) {
                 if ($nav->post_name === 'login-logout') {
                     if (is_user_logged_in()) {
-                        $items[$index]->title = __('Mein Plekvetica', 'pleklang');
+                        $items[$index]->title = __('My Plekvetica', 'pleklang');
                         $items[$index]->classes[] = 'member-area-nav';
                     } else {
                         $items[$index]->title = __('Login', 'pleklang');
@@ -173,14 +173,15 @@ class PlekHandler
     {
         $plugin_meta = get_plugin_data(PLEK_PATH . 'plekvetica.php');
         $this->version = (!empty($plugin_meta['Version'])) ? $plugin_meta['Version'] : "000";
-
+        
         if ($this->is_dev_server()) {
             wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.js', ['jquery'], $this->version);
-            wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.js', ['jquery'], $this->version);
+            wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.js', ['jquery','wp-i18n'], $this->version);
         } else {
-            wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js', ['jquery'], $this->version);
-            wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.min.js', ['jquery'], $this->version);
+            wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.min.js', ['jquery', 'wp-i18n'], $this->version);
+            wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js', ['jquery', 'plek-language'], $this->version);
         }
+        wp_set_script_translations( 'plek-language', 'pleklang', PLEK_PATH . "/languages");
     }
 
     public function enqueue_select2()
@@ -208,7 +209,7 @@ class PlekHandler
 
     public function load_textdomain()
     {
-        load_textdomain('pleklang', PLEK_PATH . 'languages/plekvetica-2021-' . determine_locale() . '.mo');
+        load_textdomain('pleklang', PLEK_PATH . 'languages/pleklang-' . determine_locale() . '.mo');
     }
 
     /**

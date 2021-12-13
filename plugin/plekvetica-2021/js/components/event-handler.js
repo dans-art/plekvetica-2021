@@ -6,7 +6,6 @@ var plekevent = {
     existing_event: null,
 
     construct(){
-
         plekevent.add_events_listener();
     },
 
@@ -58,7 +57,9 @@ var plekevent = {
         var item_id = jQuery(element).data('id');
         var html = jQuery(element).html();
         var data = { id: item_id, name: html }
-        jQuery('#' + item_for).append(plektemplate.get_item_to_add(data));
+        if(jQuery(`.plek-select-item[data-id='${item_id}']`).length === 0){//Only add if not already added
+            jQuery('#' + item_for).append(plektemplate.get_item_to_add(data));
+        }
         plektemplate.hide_overlay();
         jQuery('#' + type).val("");
         plekevent.add_remove_item_eventlistener();
@@ -81,13 +82,14 @@ var plekevent = {
     save_event(type) {
         console.log("save"+type);
 
-        if (!plekvalidator.validate_data()) {
+        var datab = this.prepare_data(type);
+        if (plekvalidator.validate_form_data(datab) !== true) {
             jQuery('#plek-submit').prop("disabled", false); //Enable the button again.
+            plekvalidator.display_errors();
+            //plekerror.display_error();
             return false;
         }
         //Validation was ok, send it to the server
-        var datab = this.prepare_data(type);
-        debugger;
                 jQuery.ajax({
                     url: window.ajaxurl,
                     data: datab,
@@ -126,12 +128,24 @@ var plekevent = {
         if(type === "save_basic_event"){
             //Fields for Event Basic
             datab.append('event_name', this.get_field_value('event_name'));
-            datab.append('start_date', this.get_field_value('event_start_date'));
-            if(jQuery('#is_multiday').is(':checked')){
-                datab.append('end_date', this.get_field_value('event_end_date'));
+            datab.append('event_start_date', this.get_field_value('event_start_date'));
+            if(jQuery('#is_multiday').is(':checked') === true){
+                datab.append('event_end_date', this.get_field_value('event_end_date'));
+                plekvalidator.add_field('event_end_date', 'date');
             }
-            datab.append('band_ids', JSON.stringify(this.get_field_value('bands')));
-            datab.append('venue', this.get_field_value('venue'));
+            if(jQuery('#no_band').is(':checked') === true){
+                datab.append('no_bands_known', "true");
+                plekvalidator.add_field('event_band', 'int', true);
+            }else{
+                plekvalidator.add_field('event_band', 'int');
+            }
+            datab.append('event_band', this.get_field_value('bands'));
+            datab.append('event_venue', this.get_field_value('venue'));
+
+            //Add the fields to the validator
+            plekvalidator.add_field('event_name', 'text');
+            plekvalidator.add_field('event_start_date', 'date');
+            plekvalidator.add_field('event_venue', 'int');
         }
 
         return datab;
@@ -159,10 +173,10 @@ var plekevent = {
             var id = jQuery(val).data('id');
             ids.push(id);
         });
-        if(ids.length === 1){
-            return ids[0];
+        if(Object.keys(ids).length === 0){
+            return "";
         }
-        return ids;
+        return JSON.stringify(ids); //Convert to a json string
     },
 
     /**
