@@ -10,6 +10,7 @@ var flatpickr_options = {
     onChange: function(selectedDates, dateStr, instance){plekerror.clear_field_error(jQuery(instance.input).attr("id"));} 
 };
 
+
 jQuery(document).ready(function () {
     console.log("Ready!");
 
@@ -56,6 +57,13 @@ jQuery(document).ready(function () {
         var type = jQuery(this).data( "type");
         window.plekevent.save_event(type);
     });
+    
+    jQuery('#main').on('click',"#plek-add-login-submit",function(event){
+        event.preventDefault();
+        jQuery(this).prop( "disabled", true );
+        var type = jQuery(this).data( "type");
+        window.plekevent.save_event_login(type);
+    });
 
     /** Display and posistion the Output container */
     jQuery('.plek-search-input').focus(function(element){
@@ -75,6 +83,14 @@ jQuery(document).ready(function () {
     //Clear the errors
     jQuery('input').on('keyup', function(){
         plekerror.clear_field_error(jQuery(this).attr("id"));
+    });
+
+    //Add Login Stage Event listener
+    jQuery('#main').on('click', '#add_as_guest', function(){
+        plek_add_event_functions.show_guest_login();
+    });
+    jQuery('#main').on('click', '#add_login', function(){
+        plek_add_event_functions.show_login_form();
     });
 });
 
@@ -140,3 +156,29 @@ function enable_band_input(){
     jQuery('.event-band-selection').show();
 }
 
+let plek_add_event_functions = {
+
+    show_guest_login(){
+        this.hide_login_containers();
+        jQuery('#plek-event-guest-login-form-container').show(200);
+        jQuery('#submit-add-event-login-from').show(); //Submit Button
+        jQuery('#add_as_guest').addClass('selected');
+        
+    },
+    
+    show_login_form(){
+        this.hide_login_containers();
+        jQuery('#plek-event-member-login-form-container').show(200);
+        jQuery('#submit-add-event-login-from').show(); //Submit Button
+        jQuery('#add_login').addClass('selected');
+    },
+    
+    hide_login_containers(){
+        jQuery("#submit-add-event-login-from, #plek-event-member-login-form-container, #plek-event-guest-login-form-container").hide();
+        jQuery('#add_login, #add_as_guest').removeClass('selected');
+    }
+
+}
+
+//Hide the containers
+plek_add_event_functions.hide_login_containers();

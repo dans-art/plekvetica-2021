@@ -121,6 +121,49 @@ var plekevent = {
                 });
         
     },
+    save_event_login(type) {
+        console.log("savelogin"+type);
+
+        var datab = this.prepare_data(type);
+        debugger;
+        if (plekvalidator.validate_form_data(datab) !== true) {
+            jQuery('#plek-submit').prop("disabled", false); //Enable the button again.
+            plekvalidator.display_errors();
+            //plekerror.display_error();
+            return false;
+        }
+        //Validation was ok, send it to the server
+                jQuery.ajax({
+                    url: window.ajaxurl,
+                    data: datab,
+                    type: 'POST',
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function success(data) {
+
+                        //Only for testing, move on production to error handling part
+                        jQuery('#plek-submit').prop("disabled", false); //Enable the button again.
+                        
+                        var jdata = JSON.parse(data);
+                        if (jdata.error !== '') {
+                            window.plekerror.display_info('Achtung', jdata.error);
+                            this.existing_event = true;
+                            console.log("Event Existiert beriets");
+                            return true;
+                        } else {
+                            this.existing_event = false;
+                            console.log("Event existiert nicht");
+                            return false;
+                        }
+                    },
+                    error: function error(data) {
+                        window.plekerror.display_info(window.pleklang.loaderror + ': ' + data, "Error");
+                        return false;
+                    }
+                });
+        
+    },
     prepare_data(type){
         var datab = new FormData();
         datab.append('action', 'plek_ajax_event_form');
@@ -146,6 +189,13 @@ var plekevent = {
             plekvalidator.add_field('event_name', 'text');
             plekvalidator.add_field('event_start_date', 'date');
             plekvalidator.add_field('event_venue', 'int');
+        }
+        if(type === "save_add_event_login"){
+            datab.append('guest_name', this.get_field_value('guest_name'));
+            datab.append('guest_email', this.get_field_value('guest_email'));
+            datab.append('user_login', this.get_field_value('user_login'));
+            datab.append('user_pass', this.get_field_value('user_pass'));
+            datab.append('rememberme', this.get_field_value('rememberme'));
         }
 
         return datab;

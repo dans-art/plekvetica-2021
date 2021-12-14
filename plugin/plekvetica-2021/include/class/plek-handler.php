@@ -183,18 +183,19 @@ class PlekHandler
         }
         wp_set_script_translations( 'plek-language', 'pleklang', PLEK_PATH . "/languages");
     }
-
+    
     public function enqueue_select2()
     {
         wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css');
         wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array('jquery'));
     }
-
+    
     public function enqueue_context_menu()
     {
         global $plek_handler;
         wp_enqueue_style('plek-contextMenu-style', PLEK_PLUGIN_DIR_URL . 'css/jquery.contextMenu.min.css', array('generate-child'));
         wp_enqueue_script('plek-contextMenu-script',  PLEK_PLUGIN_DIR_URL . 'js/components/context-menu.min.js', array('jquery', 'plek-script', 'plek-language'), $plek_handler -> version);
+        wp_set_script_translations( 'plek-contextMenu-script', 'pleklang', PLEK_PATH . "/languages");
     }
 
     /**

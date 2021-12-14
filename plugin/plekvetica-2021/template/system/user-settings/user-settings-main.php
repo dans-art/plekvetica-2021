@@ -12,7 +12,7 @@ if(!isset($user -> meta['nickname'])){
 }
 
 ?>
-<form id='plek-user-settings-form'>
+<form id='plek-user-settings-form' class="plek-form">
     <input id="user-id" name="user-id" type="text" class='plek-hidden' value="<?php echo $user -> ID; ?>"></input>
 
     <label for="first-name"><?php echo __('First Name','pleklang'); ?></label>

@@ -989,6 +989,12 @@ class PlekEvents extends PlekEventHandler
         $this->enqueue_event_form_styles();
         $plek_handler->enqueue_toastr();
 
+        if(empty($_REQUEST['stage']) AND !empty($_REQUEST['action'])){
+            if($_REQUEST['action'] === "sign_up" OR $_REQUEST['action'] === "reset_password"){
+                $_REQUEST['stage'] = 'login';
+            }
+        }
+
         if (isset($_REQUEST['edit_event_id'])) {
             $event->load_event($_REQUEST['edit_event_id']);
             return PlekTemplateHandler::load_template_to_var('edit-event-form', 'event/form', $event);
