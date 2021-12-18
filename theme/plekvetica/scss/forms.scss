@@ -107,7 +107,10 @@ div.plek-review-search{
   width: 72%;
   max-width: 755px;
   z-index: 9999;
-  
+}
+
+#event-organizer-proposal,
+.plek-search-overlay{
   .item{
     padding: 1em;
 
@@ -133,6 +136,30 @@ div.plek-review-search{
   }
 
 }
+
+#event-organizer-proposal{
+
+  .event-organizer-proposal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: $featured-color;
+
+    .title::before{
+      font-family: "FontAwesome";
+      content: "\f0e8";
+      padding-right: 0.5em;
+    }
+  }
+
+}
+
+#event-organizer-selection{
+  .organi-apply-proposal-btn{
+    display: none;
+  }
+}
+
 .overlay_background{
   position: absolute;
   top: 0;
@@ -339,3 +366,20 @@ div.plek-review-search{
 .item.plek-select-item {
 	padding: 0.7em 0;
 }
+
+.event-price-container {
+	display: flex;
+	gap: 1em;
+
+  .price-box{
+    display: flex;
+
+    select{
+      flex-basis: 60%;
+      text-align: center;
+    }
+  }
+
+
+}
+

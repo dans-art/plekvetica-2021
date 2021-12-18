@@ -325,4 +325,21 @@ class PlekHandler
             (isset($e['query']) && !empty($e['query']) ? '?' . (is_array($e['query']) ? http_build_query($e['query'], '', '&') : $e['query']) : '') .
             (isset($e['fragment']) ? "#$e[fragment]" : '');
     }
+
+    /**
+     * Gets a post content with stripped tags and shorten to length
+     *
+     * @param [type] $post_id
+     * @param [type] $max_len
+     * @return string The shorten content
+     */
+    public function get_the_content_stripped($post_id, $max_len)
+    {
+        $text = get_the_content(null, false, $post_id);
+        if (strlen($text) > $max_len) {
+            $text = substr($text, 0, $max_len) . "...";
+        }
+        return strip_tags($text);
+    }
+    
 }

@@ -67,7 +67,8 @@ class PlekEventHandler
      * 
      * @return boolean|string - True on success, error message on error
      */
-    public function publish_event($event_id){
+    public function publish_event($event_id)
+    {
         $id = (int) $event_id;
         $update = array(
             'ID'           => $id,
@@ -93,7 +94,7 @@ class PlekEventHandler
             return true;
         }
         $content = $this->get_field_value('post_content');
-        if(empty($content)){
+        if (empty($content)) {
             return false;
         }
         if (strpos('plek_album_con', $content) > 0) {
@@ -157,7 +158,8 @@ class PlekEventHandler
      * @param string|int $event_id
      * @return string The Event edit url
      */
-    public function get_edit_event_link($event_id){
+    public function get_edit_event_link($event_id)
+    {
         return get_site_url() . "/event-bearbeiten/?edit=" . $event_id;
     }
 
@@ -270,8 +272,9 @@ class PlekEventHandler
         return get_permalink($this->get_ID());
     }
 
-    public function get_guid(){
-        return $this -> get_field_value('guid');
+    public function get_guid()
+    {
+        return $this->get_field_value('guid');
     }
 
     public function get_venue_name()
@@ -364,16 +367,16 @@ class PlekEventHandler
      */
     public function current_user_is_on_watchlist(int $event_id, $user_id = null)
     {
-        if(!is_integer($user_id)){
+        if (!is_integer($user_id)) {
             $user = wp_get_current_user();
-            $user_id = $user -> ID;
+            $user_id = $user->ID;
         }
         $current_watchlist = get_field('event_watchlist', $event_id);
-        if(is_array($current_watchlist)){
+        if (is_array($current_watchlist)) {
             $user_key = array_search($user_id, $current_watchlist);
-            if($user_key === false){
+            if ($user_key === false) {
                 return false; //User is not on watchlist
-            }else{
+            } else {
                 return true; //User is on watchlist
             }
         }
@@ -390,21 +393,21 @@ class PlekEventHandler
     public function add_to_watchlist(int $event_id, $user_id = null)
     {
         global $plek_handler;
-        if(!is_integer($user_id)){
+        if (!is_integer($user_id)) {
             $user = wp_get_current_user();
-            $user_id = $user -> ID;
+            $user_id = $user->ID;
         }
         $current_watchlist = get_field('event_watchlist', $event_id);
-        if(is_array($current_watchlist)){
+        if (is_array($current_watchlist)) {
             $user_key = array_search($user_id, $current_watchlist);
-        }else{
+        } else {
             $user_key = false;
         }
-        if($user_key === false){
+        if ($user_key === false) {
             //Only add if user is not already added
             $current_watchlist[] = $user_id;
-            return $plek_handler -> update_field("event_watchlist", $current_watchlist, $event_id);
-        }else{
+            return $plek_handler->update_field("event_watchlist", $current_watchlist, $event_id);
+        } else {
             return false; //No user has been added
         }
     }
@@ -419,16 +422,16 @@ class PlekEventHandler
     public function remove_from_watchlist(int $event_id, $user_id = null)
     {
         global $plek_handler;
-        if(!is_integer($user_id)){
+        if (!is_integer($user_id)) {
             $user = wp_get_current_user();
-            $user_id = $user -> ID;
+            $user_id = $user->ID;
         }
         $current_watchlist = get_field('event_watchlist', $event_id);
-        if(is_array($current_watchlist)){
+        if (is_array($current_watchlist)) {
             $user_key = array_search($user_id, $current_watchlist);
-            if($user_key !== false){
+            if ($user_key !== false) {
                 unset($current_watchlist[$user_key]);
-                return $plek_handler -> update_field("event_watchlist", $current_watchlist, $event_id);
+                return $plek_handler->update_field("event_watchlist", $current_watchlist, $event_id);
             }
         }
         return false;
@@ -442,8 +445,8 @@ class PlekEventHandler
     public function get_watchlist_count()
     {
         $watchlist = $this->get_watchlist();
-        if(is_array($watchlist)){
-            return (integer) count($watchlist);
+        if (is_array($watchlist)) {
+            return (int) count($watchlist);
         }
         return 0;
     }
@@ -502,8 +505,8 @@ class PlekEventHandler
 
     public function get_price_formated(string $cost)
     {
-        if($cost === "0000"){
-            return __('Free','pleklang');
+        if ($cost === "0000") {
+            return __('Free', 'pleklang');
         }
         $currency = (!empty($this->get_field_value('_EventCurrencySymbol'))) ? $this->get_field_value('_EventCurrencySymbol') : $this->default_event_currency;
         $cost_nr = preg_replace("/[^a-zA-Z0-9 -\.]/", "", $cost);
@@ -581,11 +584,14 @@ class PlekEventHandler
 
     /**
      * Gets all the Organizers which are connected with the venue ID
+     * If the current user is an organizer, this data will be added as well
      *
      * @param integer $venue_id
+     * @param bool $add_current_user_organi
      * @return array - Empty array if not organizers are found
      */
-    public function get_organizers_of_venue(int $venue_id){
+    public function get_organizers_of_venue(int $venue_id, $add_current_user_organi = true)
+    {
         global $wpdb;
         $venue = $wpdb->esc_like($venue_id);
 
@@ -602,7 +608,27 @@ class PlekEventHandler
         GROUP BY organi.meta_value
         ORDER BY ocount DESC
         LIMIT 4;", $venue);
-        return $wpdb->get_results($query);
+        $result =  $wpdb->get_results($query);
+        if (!$add_current_user_organi) {
+            return $result;
+        }
+
+        $user_organizer_id = PlekUserHandler::get_user_setting('organizer_id');
+        if (!empty($user_organizer_id)) {
+            //Check if organizer is already set. If so, return the array.
+            foreach ($result as $organi_obj) {
+                if ($organi_obj->organi_id === $user_organizer_id) {
+                    return $result;
+                }
+            }
+            //Users Organizer does not exist, add it at the start
+            $user_organi = new stdClass();
+            $user_organi->organi_id = $user_organizer_id;
+            $user_organi->ocount = 1;
+            $user_organi->post_title = tribe_get_organizer($user_organizer_id);
+            array_unshift($result, $user_organi);
+        }
+        return $result;
     }
 
     public function get_all_venues_json()
@@ -626,21 +652,19 @@ class PlekEventHandler
      *
      * @return string - JSON encoded string
      */
-    public function get_all_organizers_json(){
+    public function get_all_organizers_json()
+    {
+        global $plek_handler;
         $organizers = tribe_get_organizers();
         $organi_formated = array();
         $max_description_length = 170;
-        if(is_array($organizers)){
-            foreach($organizers as $organi){
-                $oid = $organi -> ID;
+        if (is_array($organizers)) {
+            foreach ($organizers as $organi) {
+                $oid = $organi->ID;
                 $organi_formated[$oid]['id'] = $oid;
-                $organi_formated[$oid]['name'] = $organi -> post_title;
-                $organi_formated[$oid]['web'] = tribe_get_organizer_website_url($organi -> ID);
-                $description = get_the_content(null, false, $organi -> ID);
-                if(strlen($description) > $max_description_length){
-                    $description = substr($description, 0, $max_description_length) . "...";
-                }
-                $organi_formated[$oid]['description'] = strip_tags($description);
+                $organi_formated[$oid]['name'] = $organi->post_title;
+                $organi_formated[$oid]['web'] = tribe_get_organizer_website_url($organi->ID);
+                $organi_formated[$oid]['description'] = $plek_handler -> get_the_content_stripped($organi -> ID, $max_description_length);
             }
         }
         return json_encode($organi_formated);
@@ -668,7 +692,7 @@ class PlekEventHandler
             return $this->event['data']->$name;
         }
         if (isset($this->event['meta'][$name][0])) {
-            if($return_all){
+            if ($return_all) {
                 return $this->event['meta'][$name]; //Returns all items of this Array
             }
             return $this->event['meta'][$name][0]; //Returns only the first item
@@ -734,8 +758,8 @@ class PlekEventHandler
     {
         global $plek_handler;
         $link = $this->get_field_value('ticket-url');
-        $link = $plek_handler -> clean_url($link);
-        $link = $this -> inject_affiliate_code($link);
+        $link = $plek_handler->clean_url($link);
+        $link = $this->inject_affiliate_code($link);
         $link_icon = '<i class="fas fa-ticket-alt"></i>';
         if (strpos($link, 'starticket.ch') or strpos($link, 'seetickets.ch')) {
             $link_icon = "<img src='" . $plek_handler->get_plek_option('plek_seetickets_logo') . "' alt='Seeticket.ch'/>";
@@ -753,34 +777,35 @@ class PlekEventHandler
      * @param string $url
      * @return string
      */
-    public function inject_affiliate_code(string $url){
+    public function inject_affiliate_code(string $url)
+    {
         global $plek_handler;
-		$injectAttr['ticketcorner.ch'] = array("affiliate" => "PKV","utm_source" => "PKV","utm_medium"=>"dp","utm_campaign"=>"plekvetica");
-		$injectAttr['starticket.ch'] = array('PartnerID' => 151);
+        $injectAttr['ticketcorner.ch'] = array("affiliate" => "PKV", "utm_source" => "PKV", "utm_medium" => "dp", "utm_campaign" => "plekvetica");
+        $injectAttr['starticket.ch'] = array('PartnerID' => 151);
 
         $url_split = parse_url(htmlspecialchars_decode($url));
-		if(empty($url_split['host'])){
+        if (empty($url_split['host'])) {
             return $url;
         }
-		foreach($injectAttr as $site => $items_to_add){
+        foreach ($injectAttr as $site => $items_to_add) {
             //Check if Site has removable items
-			if(false !== stripos($url_split['host'],$site)){
-                if(isset($url_split['query'])){
+            if (false !== stripos($url_split['host'], $site)) {
+                if (isset($url_split['query'])) {
                     parse_str($url_split['query'], $query_split);
-                }else{
+                } else {
                     $query_split = array();
                 }
 
-                if(is_array($query_split)){
+                if (is_array($query_split)) {
                     $query_split = array_merge($query_split, $items_to_add);
-                }else{
+                } else {
                     $query_split = $items_to_add;
                 }
-                
+
                 $url_split['query'] = http_build_query($query_split);
-                return $plek_handler -> build_url($url_split);
-			}
-		}
+                return $plek_handler->build_url($url_split);
+            }
+        }
 
         return $url;
     }
@@ -802,8 +827,8 @@ class PlekEventHandler
         foreach ($int_arr as $key => $band) {
             $item = explode(':', $band);
             $ret_arr[$key]['status'] = (count($item) > 1) ? $item[0] : '';
-            unset($item[0]);//Remove the Status
-            $ret_arr[$key]['name'] = (count($item) > 1) ? preg_replace('/^[A-Za-z]{0,5}:{1} {0,}/','', $int_arr[$key]) :  implode('', $item);
+            unset($item[0]); //Remove the Status
+            $ret_arr[$key]['name'] = (count($item) > 1) ? preg_replace('/^[A-Za-z]{0,5}:{1} {0,}/', '', $int_arr[$key]) :  implode('', $item);
         }
         return $ret_arr;
     }
@@ -888,22 +913,22 @@ class PlekEventHandler
      *
      * @return mixed Url if exists, else false.
      */
-    public function get_raffle(){
-        if($this->is_canceled()){
+    public function get_raffle()
+    {
+        if ($this->is_canceled()) {
             return false;
         }
         //Check if event is set in the future.
-        if($this -> get_end_date('YmdHi') > date('YmdHi')){
+        if ($this->get_end_date('YmdHi') > date('YmdHi')) {
             $raffle_url = $this->get_field_value('win_url');
-            if(!empty($raffle_url)){
+            if (!empty($raffle_url)) {
                 return $raffle_url;
-            }
-            else{
+            } else {
                 return false;
             }
         }
         return false; //No Raffle or past event
-        
+
     }
 
     public function prepare_status_code(string $status_code)
@@ -933,17 +958,18 @@ class PlekEventHandler
      * @param object $plek_event - Plek Event object
      * @return mixed true or string with error message. False if not allowed.
      */
-    public function show_event_edit_button($plek_event){
-        $event_id = $plek_event -> get_ID();
+    public function show_event_edit_button($plek_event)
+    {
+        $event_id = $plek_event->get_ID();
         $akk_status = $plek_event->get_field_value('akk_status');
 
-        if(!PlekUserHandler::current_user_can_edit($plek_event)){
+        if (!PlekUserHandler::current_user_can_edit($plek_event)) {
             return false;
         }
-        if($plek_event->is_review()){
+        if ($plek_event->is_review()) {
             return __('This post can no longer be edited because a review already exists', 'pleklang');
         }
-        if($akk_status !== null and $plek_event -> is_past_event()){
+        if ($akk_status !== null and $plek_event->is_past_event()) {
             return __('This post can no longer be edited because a review is currently being written.', 'pleklang');
         }
         return true;
@@ -955,17 +981,18 @@ class PlekEventHandler
      * @param object $plek_event - Plek Event object
      * @return bool true if allowed, otherwise false
      */
-    public function show_event_edit_review_button($plek_event){
+    public function show_event_edit_review_button($plek_event)
+    {
         //$event_id = $plek_event -> get_ID();
         //$akk_status = $plek_event->get_field_value('akk_status');
 
-        if(!PlekUserHandler::current_user_can_edit($plek_event)){
+        if (!PlekUserHandler::current_user_can_edit($plek_event)) {
             return false;
         }
-        if(!$plek_event -> is_past_event()){
+        if (!$plek_event->is_past_event()) {
             return false;
         }
-        if(!PlekUserHandler::user_is_in_team()){
+        if (!PlekUserHandler::user_is_in_team()) {
             return false;
         }
 
@@ -977,21 +1004,22 @@ class PlekEventHandler
      *
      * @return true|string
      */
-    public function report_incorrect_event(){
+    public function report_incorrect_event()
+    {
         //Check and verify last report send
         global $plek_handler;
-        $this -> load_event_from_ajax();
-        if($this -> get_ID() === null){
-            return __('ID of Event not found!','pleklang');
+        $this->load_event_from_ajax();
+        if ($this->get_ID() === null) {
+            return __('ID of Event not found!', 'pleklang');
         }
-        $reported_on = get_field('incorrect_event_reported_at', $this -> get_ID());
-        $reported_time = (!empty($reported_on))?strtotime($reported_on):null;
-        if($reported_time === null OR ($reported_time - time() > 259200) ){ //Allow reporting again after three days
+        $reported_on = get_field('incorrect_event_reported_at', $this->get_ID());
+        $reported_time = (!empty($reported_on)) ? strtotime($reported_on) : null;
+        if ($reported_time === null or ($reported_time - time() > 259200)) { //Allow reporting again after three days
             //Get the users to notify
-            $users = $this -> get_event_authors();
-            $crew = $this -> get_event_akkredi_crew();
-            if(is_array($crew)){
-                foreach($crew as $member){
+            $users = $this->get_event_authors();
+            $crew = $this->get_event_akkredi_crew();
+            if (is_array($crew)) {
+                foreach ($crew as $member) {
                     $user_id = PlekUserHandler::get_user_id_from_login_name($member);
                     $users[$user_id] = $user_id;
                 }
@@ -999,17 +1027,39 @@ class PlekEventHandler
 
             //Send notification to the users
             $notify = new PlekNotificationHandler;
-            $subject = sprintf(__('"%s" needs an update','pleklang'),$this -> get_name());
-            $message =  sprintf(__('Your Event "%s" has been reported as outdated. Please have a look and update the Event. Thanks!','pleklang'),$this -> get_name());
-            $action = $this -> get_edit_event_link($this -> get_ID());
-            $notify -> push_notification($users, 'event', $subject, $message, $action);
+            $subject = sprintf(__('"%s" needs an update', 'pleklang'), $this->get_name());
+            $message =  sprintf(__('Your Event "%s" has been reported as outdated. Please have a look and update the Event. Thanks!', 'pleklang'), $this->get_name());
+            $action = $this->get_edit_event_link($this->get_ID());
+            $notify->push_notification($users, 'event', $subject, $message, $action);
 
             //Set reported on date
-            $plek_handler -> update_field('incorrect_event_reported_at', date('Y-m-d H:m:s'), $this -> get_ID());
+            $plek_handler->update_field('incorrect_event_reported_at', date('Y-m-d H:m:s'), $this->get_ID());
         }
 
         return true; //Returns true even if the event could not been reported.
     }
 
-
+    /**
+     * Returns all the accepted currencies.
+     * 
+     *
+     * @param boolean $formated_option - If true, the function will return a HTML Select option string
+     * @return array|string - Array if $formated_option is false, otherwise string
+     */
+    public function get_currencies($formated_option = false){
+        $currencies = array(
+            'chf' => 'CHF',
+            'eur' => 'EUR €',
+            'usd' => 'USD $',
+            'gbp' => 'GBP £',
+        );
+        if($formated_option){
+            $formated = "";
+            foreach($currencies as $key => $name){
+                $formated .= "<option value='{$key}'>{$name}</option>";
+            }
+            $currencies = $formated;
+        }
+        return $currencies;
+    }
 }

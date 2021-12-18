@@ -81,6 +81,10 @@ jQuery(document).ready(function () {
         pleksearch.fire_search(this);
     });
 
+    jQuery('.event-organizer-proposal-item').click(function(element){
+        window.plekevent.add_item_to_selection(this);
+    });
+
     //Clear the errors
     jQuery('input').on('keyup', function(){
         plekerror.clear_field_error(jQuery(this).attr("id"));
