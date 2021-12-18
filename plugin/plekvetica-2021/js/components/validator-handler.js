@@ -139,7 +139,8 @@ var plekvalidator = {
 
         switch (type) {
             case 'int':
-                if (typeof value !== 'number') {
+                const reg_int = new RegExp('^[0-9]+$');
+                if (reg_int.test(value) === false) {
                     plekvalidator.add_error(field_id, error_msg.invalid_type);
                     return false;
                 }

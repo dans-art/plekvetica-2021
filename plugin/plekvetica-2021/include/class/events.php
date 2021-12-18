@@ -989,6 +989,8 @@ class PlekEvents extends PlekEventHandler
         $this->enqueue_event_form_styles();
         $plek_handler->enqueue_toastr();
 
+        $event_id = (!empty($_REQUEST['event_id'])) ? htmlspecialchars($_REQUEST['event_id']) : "";
+
         if(empty($_REQUEST['stage']) AND !empty($_REQUEST['action'])){
             //Hack to allow for password reset
             if($_REQUEST['action'] === "sign_up" OR $_REQUEST['action'] === "reset_password"){
@@ -997,15 +999,15 @@ class PlekEvents extends PlekEventHandler
         }
 
         if (isset($_REQUEST['edit_event_id'])) {
-            $event->load_event($_REQUEST['edit_event_id']);
+            $event->load_event((int) $_REQUEST['edit_event_id']);
             return PlekTemplateHandler::load_template_to_var('edit-event-form', 'event/form', $event);
         }
 
         if(isset($_REQUEST['stage']) AND $_REQUEST['stage'] === "login"){
-            return PlekTemplateHandler::load_template_to_var('add-event-form-login', 'event/form', $event);
+            return PlekTemplateHandler::load_template_to_var('add-event-form-login', 'event/form', $event, $event_id);
         }
         if(isset($_REQUEST['stage']) AND $_REQUEST['stage'] === "details"){
-            return PlekTemplateHandler::load_template_to_var('add-event-form-details', 'event/form', $event);
+            return PlekTemplateHandler::load_template_to_var('add-event-form-details', 'event/form', $event, $event_id);
         }
 
         return PlekTemplateHandler::load_template_to_var('add-event-form-basic', 'event/form', $event);

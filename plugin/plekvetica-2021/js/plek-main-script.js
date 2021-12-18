@@ -118,9 +118,9 @@ let plek_main = {
         /** Navi Search Button */
         jQuery('.plek-menu-search').on('click', 'a', function (e) {
             e.preventDefault();
-            if(jQuery(".plek-menu-search input").val().length > 0){
+            if (jQuery(".plek-menu-search input").val().length > 0) {
                 plek_main.redirect_to_search(this);
-            }else{
+            } else {
                 jQuery(".plek-menu-search input").focus();
             }
         });
@@ -141,6 +141,30 @@ let plek_main = {
         jQuery('#notifications-container').on('click', '.dismiss_notification', function (e) {
             plek_main.dismiss_notification(this);
         });
+
+        /** Change Upload Button Text and show Image */
+        jQuery("input[type='file']").change(function () {
+            plek_main.image_upload_button_change(this);
+        });
+    },
+
+    image_upload_button_change(item) {
+        let text = __('File selected', "pleklang");
+        var upload = jQuery(item).prop("files")[0];
+        var id = jQuery(item).attr("id");
+        if (typeof upload === "object") {
+            //File has been uploaded
+            if (upload.type.search("image/") === 0) {
+                //File is type image
+                //Display the Image on screen
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    jQuery('#'+id+'-image img').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(upload);
+            }
+            jQuery(item).next(".plek-button").text(text); //Change the Button Text
+        }
     },
 
     /**
@@ -161,7 +185,7 @@ let plek_main = {
 
     get_ajax_success_object(data) {
         try {
-            let encoded_data = (typeof data === "object")?data:JSON.parse(data);
+            let encoded_data = (typeof data === "object") ? data : JSON.parse(data);
             if (encoded_data.success.length > 0) {
                 return encoded_data.success;
             }
@@ -173,7 +197,7 @@ let plek_main = {
 
     get_first_error_from_ajax_request(data) {
         try {
-            let encoded_data = (typeof data === "object")?data:JSON.parse(data);
+            let encoded_data = (typeof data === "object") ? data : JSON.parse(data);
             let text = "";
             if (encoded_data.error.length > 0) {
                 text += encoded_data.error[0];
@@ -356,7 +380,7 @@ let plek_main = {
         let base = window.location.pathname;
         let query = window.location.search;
         let new_url = '';
-        var separator = (query.indexOf('?') === -1)?'?':'&';
+        var separator = (query.indexOf('?') === -1) ? '?' : '&';
         if (base.search('page/') > 0) {
             new_url = base.replace(/(page\/[0-9]+)/, 'page/' + page_number);
         } else {
@@ -373,8 +397,8 @@ let plek_main = {
 
         /** Add the search query, if not existing */
         if (url_object.get(s) !== null && query.search('s=') === 0) {
-                new_url = new_url + separator + 's=' + url_object.get(s);
-        } 
+            new_url = new_url + separator + 's=' + url_object.get(s);
+        }
         return new_url;
     },
 
@@ -384,13 +408,13 @@ let plek_main = {
      * @param {*} value - The value of the parameter
      * @returns 
      */
-    url_replace_param(param, value){
+    url_replace_param(param, value) {
         let query = window.location.search;
-        let regex = new RegExp(param + "=([A-z0-9_-]*)" );
-        let new_query = query.replace(regex, param+'=' + value);
-        if(query === new_query){
+        let regex = new RegExp(param + "=([A-z0-9_-]*)");
+        let new_query = query.replace(regex, param + '=' + value);
+        if (query === new_query) {
             //Could not replace the param, try to add
-            let separator = (query.indexOf('?') === -1)?'?':'&';
+            let separator = (query.indexOf('?') === -1) ? '?' : '&';
             new_query = query + separator + param + "=" + value;
         }
         return window.location.origin + window.location.pathname + new_query;
@@ -417,10 +441,10 @@ let plek_main = {
      */
     toggle_notification_container(item) {
         if (jQuery('#notifications-container').is(':hidden')) {
-            jQuery('#notifications-container').show(100, function(){
+            jQuery('#notifications-container').show(100, function () {
                 //Check for click event outside of the container. if detected, close the container.
-                jQuery('body').on('click',function(event){
-                    if(!jQuery(event.target).closest('#notifications-container').length){
+                jQuery('body').on('click', function (event) {
+                    if (!jQuery(event.target).closest('#notifications-container').length) {
                         jQuery('#notifications-container').hide(100);
                         jQuery('body').off('click');
                     }
@@ -434,7 +458,7 @@ let plek_main = {
      * Dismisses a Notification
      * @param {*} item 
      */
-     dismiss_notification(item) {
+    dismiss_notification(item) {
         var dismiss_id = jQuery(item).data('dismiss-id');
 
         jQuery(item).find('i').removeClass('fa-times');
@@ -455,7 +479,7 @@ let plek_main = {
             success: function success(data) {
                 let errors = plek_main.response_has_errors(data);
                 if (errors === true) {
-                    console.log("Contains Errors: "+ plek_main.get_first_error_from_ajax_request(data));
+                    console.log("Contains Errors: " + plek_main.get_first_error_from_ajax_request(data));
                 } else {
                     jQuery('#notification_' + dismiss_id).addClass('dismissed');
                 }

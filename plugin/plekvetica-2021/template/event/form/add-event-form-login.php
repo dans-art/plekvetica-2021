@@ -2,7 +2,7 @@
 global $plek_handler;
 extract(get_defined_vars());
 $event_class = $template_args[0]; //Plek_events_form Object
-$event_id = $event_class -> get_ID();
+$event_id = (!empty($template_args[1]))?$template_args[1]:""; //Event ID
 
 ?>
 <div class="plek-add-event-login plek-form">

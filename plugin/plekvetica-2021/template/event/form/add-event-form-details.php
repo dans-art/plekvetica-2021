@@ -4,6 +4,7 @@
  */
 extract(get_defined_vars());
 $event_class = $template_args[0]; //Plek_events_form Object
+$event_id = (!empty($template_args[1]))?$template_args[1]:""; //Event ID
 
 ?>
 <div class="plek-add-event add-details plek-form">
@@ -19,6 +20,10 @@ $event_class = $template_args[0]; //Plek_events_form Object
 		
 		<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Price', 'pleklang')); ?>
 		<?php PlekTemplateHandler::load_template('price', 'event/form/components', $event_class); ?>
+
+		<div id="event-id-field">
+            <input type="hidden" id="event_id" name="event_id" value="<?php echo $event_id; ?>"/>
+        </div>
 
 		<div class="submit-event-details-from">
 			<input type="submit" name="plek-submit" id="plek-submit" class='plek-button' data-type = "save_event_details" value="<?php echo __('Save event details','pleklang');?>">

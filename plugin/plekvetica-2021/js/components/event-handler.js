@@ -193,6 +193,36 @@ var plekevent = {
             plekvalidator.add_field('event_start_date', 'date');
             plekvalidator.add_field('event_venue', 'int');
         }
+        if(type === "save_event_details"){
+            //Fields for Event Basic
+            datab.append('event_description', this.get_field_value('event_description'));
+            datab.append('event_organizer', this.get_field_value('event_organizer'));
+
+            datab.append('event_poster', this.get_field_value('event_poster'));
+            datab.append('event_fb_link', this.get_field_value('event_fb_link'));
+            
+            datab.append('event_price_boxoffice', this.get_field_value('event_price_boxoffice'));
+            datab.append('event_price_boxoffice_currency', this.get_field_value('event_price_boxoffice_currency'));            
+            datab.append('event_price_presale', this.get_field_value('event_price_presale'));
+            datab.append('event_price_presale_currency', this.get_field_value('event_price_presale_currency'));
+            datab.append('event_price_link', this.get_field_value('event_price_link'));
+
+            datab.append('event_id', this.get_field_value('event_id'));
+
+            //Add the fields to the validator
+            //@todo: All Event details fields should be optional
+            plekvalidator.add_field('event_description', 'text');
+            plekvalidator.add_field('event_organizer', 'int');
+            plekvalidator.add_field('event_poster', 'file');
+            plekvalidator.add_field('event_fb_link', 'url');
+            plekvalidator.add_field('event_price_boxoffice', 'price');
+            plekvalidator.add_field('event_price_boxoffice_currency', 'simpletext');
+            plekvalidator.add_field('event_price_presale', 'price');
+            plekvalidator.add_field('event_price_presale_currency', 'simpletext');
+            plekvalidator.add_field('event_price_link', 'url');
+            plekvalidator.add_field('event_id', 'int');
+            plekvalidator.add_error_messages('event_id',__("Missing Event ID","pleklang"));
+        }
         if(type === "save_add_event_login"){
             let selected_btn = jQuery("#select-login-type a.selected").attr("id");
             if(selected_btn === 'add_login'){
@@ -227,6 +257,11 @@ var plekevent = {
                 }
                 break;
         
+            case 'file':
+                let file_data = jQuery('#'+name).prop('files')[0];
+                return file_data;
+                break;
+        
             default:
                 break;
         }
@@ -237,6 +272,9 @@ var plekevent = {
                 break;
             case 'venue':
                 return this.get_selector_ids('event-venue-selection');
+                break;
+            case 'event_organizer':
+                return this.get_selector_ids('event-organizer-selection');
                 break;
 
             default:

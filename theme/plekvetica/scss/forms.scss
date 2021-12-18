@@ -150,6 +150,10 @@ div.plek-review-search{
       content: "\f0e8";
       padding-right: 0.5em;
     }
+
+    .subtitle{
+      display: none;
+    }
   }
 
 }
@@ -323,31 +327,45 @@ div.plek-review-search{
 }
 
 //File Upload Button
-.plek-upload-button-container{
-  position: relative;
-  overflow: hidden;
-  width: 200px;
-  margin-top: -3em;
+.plek-image-upload-container{
+  display: flex;
+  gap: 1em;
+
+  .upload-button{
+    margin-top: 2em;
+    position: relative;
+  }
+
+  .plek-button{
+    margin-top: -2em !important;
+  }
+
+  .upload-image{
+    max-width: 200px;
+    max-height: 300px;
+    overflow: hidden;
+  }
 
   input{
     position: absolute;
     top: 0;
     left: 0;
     padding: 0.5em 0;
-    margin: 0;
+    margin-top: -2em;
     opacity: 0;
     filter: alpha(opacity=0);
     cursor: pointer;
   }
 }
 
-.plek-upload-button-container.no-img{
-  margin-top: 0;
-
-}
-
 
 //Add/Edit Event form
+
+.plek-form{
+  .wp-editor-container{
+    border: 0px;
+  }
+}
 
 .event-basic-container .event-date-picker .date-input-container{
 
@@ -373,10 +391,19 @@ div.plek-review-search{
 
   .price-box{
     display: flex;
+    flex-wrap: wrap;
 
     select{
       flex-basis: 60%;
       text-align: center;
+      flex: 1 0 0;
+    }
+    input{
+      flex: 1 0 50%;
+    }
+
+    .plek-field-error{
+      flex-basis: 100%;
     }
   }
 

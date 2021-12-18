@@ -40,6 +40,9 @@ class PlekAjaxHandler
                 $this->set_success("Logged in");
                 $this->set_error("Not logged in");
                 break;
+            case 'save_event_details':
+                $this->set_error("Are you allowed to save??");
+                break;
             default:
                 # code...
                 break;
@@ -77,6 +80,9 @@ class PlekAjaxHandler
 
             case 'save_add_event_login':
                 $this->set_success("Logged in");
+                break;
+            case 'save_event_details':
+                $this->set_error("Are you allowed to save??");
                 break;
             default:
                 # code...

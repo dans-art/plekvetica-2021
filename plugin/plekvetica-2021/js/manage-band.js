@@ -31,11 +31,6 @@ let plek_band = {
         }
         );
 
-        jQuery("input#band-logo").change(function () {
-            let btn = jQuery('.plek-upload-button-container .plek-button');
-            plek_band.change_file_upload_button(btn, __('File selected', "pleklang"));
-        });
-
         default_button_texts.submit = jQuery('#band-form-submit').text();
 
 
@@ -69,10 +64,6 @@ let plek_band = {
                 plek_band.on_enter(e);
             }
         });
-    },
-
-    change_file_upload_button(btn, text) {
-        jQuery(btn).text(text);
     },
 
     on_enter(e) {
