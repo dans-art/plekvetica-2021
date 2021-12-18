@@ -82,11 +82,14 @@ class PlekBackend /*extends WP_List_Table*/
         add_settings_field('admin_email', 'Email vom Seiten Admin', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'admin_email', 'type' => 'input'));
         add_settings_field('it_support_email', 'Email vom IT Support', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'it_support_email', 'type' => 'input'));
         
+        add_settings_field('plek_member_perks', 'Member Perks', [$this, 'get_settings_option'], 'plek_general_options', 'plek_general_options', array('label_for' => 'plek_member_perks', 'type' => 'textarea'));
+
         add_settings_field('plek_facebook_enable_autopost', 'Enable Facebook Autopost', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_enable_autopost', 'type' => 'checkbox'));
         add_settings_field('plek_facebook_page_id', 'Page ID', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_page_id', 'type' => 'input'));
         add_settings_field('plek_facebook_app_id', 'App ID', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_app_id', 'type' => 'input'));
         add_settings_field('plek_facebook_app_secret', 'App Secret', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_app_secret', 'type' => 'input'));
         add_settings_field('plek_facebook_page_token', 'Page Token', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_page_token', 'type' => 'input'));
+        
 
     }
 
@@ -129,6 +132,9 @@ class PlekBackend /*extends WP_List_Table*/
         switch ($type) {
             case 'input':
                 echo "<input id='$label_for' name='plek_general_options[$label_for]' type='text' value='$options_val'/>";
+                break;
+            case 'textarea':
+                echo "<textarea id='$label_for' name='plek_general_options[$label_for]' type='text'>{$options_val}</textarea>";
                 break;
             case 'checkbox':
                 $checked = ($options_val === 'yes') ? 'checked' : '';

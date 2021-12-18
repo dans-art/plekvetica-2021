@@ -118,7 +118,11 @@ let plek_main = {
         /** Navi Search Button */
         jQuery('.plek-menu-search').on('click', 'a', function (e) {
             e.preventDefault();
-            plek_main.redirect_to_search(this);
+            if(jQuery(".plek-menu-search input").val().length > 0){
+                plek_main.redirect_to_search(this);
+            }else{
+                jQuery(".plek-menu-search input").focus();
+            }
         });
         /** Navi Search on enter key press */
         jQuery('.plek-menu-search input').keypress(function (e) {
@@ -157,7 +161,7 @@ let plek_main = {
 
     get_ajax_success_object(data) {
         try {
-            let encoded_data = JSON.parse(data);
+            let encoded_data = (typeof data === "object")?data:JSON.parse(data);
             if (encoded_data.success.length > 0) {
                 return encoded_data.success;
             }
@@ -169,7 +173,7 @@ let plek_main = {
 
     get_first_error_from_ajax_request(data) {
         try {
-            let encoded_data = JSON.parse(data);
+            let encoded_data = (typeof data === "object")?data:JSON.parse(data);
             let text = "";
             if (encoded_data.error.length > 0) {
                 text += encoded_data.error[0];
@@ -372,6 +376,24 @@ let plek_main = {
                 new_url = new_url + separator + 's=' + url_object.get(s);
         } 
         return new_url;
+    },
+
+    /**
+     * 
+     * @param {*} param - Name of the Parameter to replace or add
+     * @param {*} value - The value of the parameter
+     * @returns 
+     */
+    url_replace_param(param, value){
+        let query = window.location.search;
+        let regex = new RegExp(param + "=([A-z0-9_-]*)" );
+        let new_query = query.replace(regex, param+'=' + value);
+        if(query === new_query){
+            //Could not replace the param, try to add
+            let separator = (query.indexOf('?') === -1)?'?':'&';
+            new_query = query + separator + param + "=" + value;
+        }
+        return window.location.origin + window.location.pathname + new_query;
     },
 
     /**

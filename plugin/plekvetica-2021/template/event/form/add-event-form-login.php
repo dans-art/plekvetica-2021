@@ -1,12 +1,13 @@
 <?php
-
+global $plek_handler;
 extract(get_defined_vars());
 $event_class = $template_args[0]; //Plek_events_form Object
+$event_id = $event_class -> get_ID();
 
 ?>
 <div class="plek-add-event-login plek-form">
-    <div>
-        perks as member
+    <div id="plek-memeber-perks">
+        <?php echo $plek_handler -> get_plek_option('plek_member_perks'); ?>
     </div>
     <form name="add_event_login" id="add_event_login" action="" method="post">
         <div id="select-login-type">
@@ -18,6 +19,9 @@ $event_class = $template_args[0]; //Plek_events_form Object
 		<?php PlekTemplateHandler::load_template('guest-login', 'event/form/components', $event_class); ?>
 		<?php PlekTemplateHandler::load_template('login', 'event/form/components', $event_class); ?>
         
+        <div id="event-id-field">
+            <input type="hidden" id="event_id" name="event_id" value="<?php echo $event_id; ?>"/>
+        </div>
 
 		<div id="submit-add-event-login-from">
 			<input type="submit" name="plek-submit" id="plek-add-login-submit" class='plek-button' data-type = "save_add_event_login" value="<?php echo __('Next','pleklang');?>">

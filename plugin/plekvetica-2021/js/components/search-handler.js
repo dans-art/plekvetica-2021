@@ -12,7 +12,6 @@ var pleksearch = {
     var type = jQuery('#' + search_field_id).attr('name');
     var result_con = jQuery('#'+type+'_overlay');
     this.set_type_settings(type);
-
     if (result_con.length == 0) {
       plekerror.display_error('No Result Container found.');
       return;
@@ -38,6 +37,9 @@ var pleksearch = {
       case 'event_band':
         window.pleksearch.threshhold = 60;
         break;
+      case 'event_organizer':
+        window.pleksearch.threshhold = 60;
+        break;
 
       default:
         break;
@@ -57,6 +59,10 @@ var pleksearch = {
           break;
         case 'event_venue':
           result += plektemplate.load_venue_item_template(value.data);
+          break;
+        case 'event_organizer':
+          console.log(plektemplate.load_organizer_item_template(value.data));
+          result += plektemplate.load_organizer_item_template(value.data);
           break;
         default:
           break;
@@ -144,6 +150,8 @@ var pleksearch = {
       var data = window.bandPreloadedData;
     } else if (type === 'event_venue') {
       var data = window.venuePreloadedData;
+    } else if (type === 'event_organizer') {
+      var data = window.organizerPreloadedData;
     } else {
     }
     return data;

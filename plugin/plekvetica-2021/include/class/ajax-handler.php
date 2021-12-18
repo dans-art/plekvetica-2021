@@ -27,9 +27,19 @@ class PlekAjaxHandler
                 echo $event_handler->get_all_venues_json();
                 die();
                 break;
+
+            case 'get_organizers':
+                $event_handler = new PlekEventHandler;
+                echo $event_handler->get_all_organizers_json();
+                die();
+                break;
             case 'save_basic_event':
-                    $this -> set_success("Saved event??");
-                    break;
+                $this->set_success("Saved event??");
+                break;
+            case 'save_add_event_login':
+                $this->set_success("Logged in");
+                $this->set_error("Not logged in");
+                break;
             default:
                 # code...
                 break;
@@ -37,7 +47,7 @@ class PlekAjaxHandler
         echo $this->get_ajax_return();
         die();
     }
-    
+
     /**
      * Event form actions for logged out users
      */
@@ -56,12 +66,18 @@ class PlekAjaxHandler
                 echo $event_handler->get_all_venues_json();
                 die();
                 break;
-
-            case 'save_basic_event':
-                $this -> set_success("Saved event??");
+            case 'get_organizers':
+                $event_handler = new PlekEventHandler;
+                echo $event_handler->get_all_organizers_json();
+                die();
                 break;
-            
+            case 'save_basic_event':
+                $this->set_success("Saved event??");
+                break;
 
+            case 'save_add_event_login':
+                $this->set_success("Logged in");
+                break;
             default:
                 # code...
                 break;
@@ -132,12 +148,12 @@ class PlekAjaxHandler
                 break;
             case 'publish_event':
                 $user = new PlekUserHandler;
-                if(!$user -> user_is_in_team()){
+                if (!$user->user_is_in_team()) {
                     $this->set_error(__('You are not allowed to use this function', 'pleklang'));
                     break;
                 }
                 $event_id = $this->get_ajax_data('id');
-                $publish = $plek_event -> publish_event($event_id);
+                $publish = $plek_event->publish_event($event_id);
                 if ($publish === true) {
                     $this->set_success(__('Event published', 'pleklang'));
                 } else {
@@ -284,13 +300,13 @@ class PlekAjaxHandler
 
             case 'dismiss_notification':
                 $notify = new PlekNotificationHandler;
-                $dismiss = $notify -> notification_dismiss();
+                $dismiss = $notify->notification_dismiss();
                 if ($dismiss === 1) {
-                        $this->set_success(1);
+                    $this->set_success(1);
                 } else {
                     $plek_ajax_errors->add('dismiss_notification', $dismiss);
                 }
-            break;
+                break;
             default:
                 # code...
                 break;
@@ -364,8 +380,8 @@ class PlekAjaxHandler
                 $return_arr = array();
                 $plek_event_blocks = new PlekEventBlocks;
                 $return_arr['content'] = $plek_event_blocks->get_block('my_missing_reviews');
-                if($return_arr['content'] === false OR empty($return_arr['content'])){
-                    $return_arr['content'] = "<span class='plek-no-open-reviews'>".__('Super! No missing Reviews.', 'pleklang')."</span>";
+                if ($return_arr['content'] === false or empty($return_arr['content'])) {
+                    $return_arr['content'] = "<span class='plek-no-open-reviews'>" . __('Super! No missing Reviews.', 'pleklang') . "</span>";
                 }
                 $return_arr['count'] = 0;
                 echo json_encode($return_arr);

@@ -543,6 +543,7 @@ class PlekEventHandler
      * Get the Venues and there organizers in a array
      * array[venue_id][organizer_id] = *Usage Count*
      * @todo Optimize Query. Is the post_title needed?? -> no only for testing...
+     * @todo: Unused? Delete?
      *
      * @return void
      */
@@ -550,7 +551,7 @@ class PlekEventHandler
     {
         global $wpdb;
 
-        $query = "  SELECT ov.meta_value as organizer_id, lj.meta_value as venue_id, posts.post_title as venue_title, posts_orgi.post_title as organi_title
+        $query = "SELECT ov.meta_value as organizer_id, lj.meta_value as venue_id, posts.post_title as venue_title, posts_orgi.post_title as organi_title
             FROM " . $wpdb->prefix . "postmeta` AS ov 
             LEFT JOIN " . $wpdb->prefix . "postmeta as lj ON ov.post_id = lj.post_id AND lj.meta_key = '_EventVenueID'  
             LEFT JOIN " . $wpdb->prefix . "posts as posts ON lj.meta_value = posts.ID
@@ -578,6 +579,32 @@ class PlekEventHandler
         return $venue_arr;
     }
 
+    /**
+     * Gets all the Organizers which are connected with the venue ID
+     *
+     * @param integer $venue_id
+     * @return array - Empty array if not organizers are found
+     */
+    public function get_organizers_of_venue(int $venue_id){
+        global $wpdb;
+        $venue = $wpdb->esc_like($venue_id);
+
+        $query = $wpdb->prepare("SELECT organi.meta_value as organi_id, COUNT(organi.meta_value) as ocount, organi_name.post_title
+        FROM " . $wpdb->prefix . "posts as posts
+        LEFT JOIN " . $wpdb->prefix . "postmeta as venue
+        ON venue.post_id = posts.ID AND venue.meta_key = '_EventVenueID'
+        LEFT JOIN " . $wpdb->prefix . "postmeta as organi
+        ON organi.post_id = posts.ID AND organi.meta_key = '_EventOrganizerID'
+        LEFT JOIN " . $wpdb->prefix . "posts as organi_name
+        ON organi_name.ID = organi.meta_value
+        WHERE posts.post_type = 'tribe_events'
+        AND venue.meta_value = '%s'
+        GROUP BY organi.meta_value
+        ORDER BY ocount DESC
+        LIMIT 4;", $venue);
+        return $wpdb->get_results($query);
+    }
+
     public function get_all_venues_json()
     {
         $venues = $this->get_all_venues();
@@ -592,6 +619,31 @@ class PlekEventHandler
             $venues_formated[$vid]['country'] = tribe_get_country($vid);
         }
         return json_encode($venues_formated);
+    }
+
+    /**
+     * Gets a JSON formated string of all the organizers with their website link and description
+     *
+     * @return string - JSON encoded string
+     */
+    public function get_all_organizers_json(){
+        $organizers = tribe_get_organizers();
+        $organi_formated = array();
+        $max_description_length = 170;
+        if(is_array($organizers)){
+            foreach($organizers as $organi){
+                $oid = $organi -> ID;
+                $organi_formated[$oid]['id'] = $oid;
+                $organi_formated[$oid]['name'] = $organi -> post_title;
+                $organi_formated[$oid]['web'] = tribe_get_organizer_website_url($organi -> ID);
+                $description = get_the_content(null, false, $organi -> ID);
+                if(strlen($description) > $max_description_length){
+                    $description = substr($description, 0, $max_description_length) . "...";
+                }
+                $organi_formated[$oid]['description'] = strip_tags($description);
+            }
+        }
+        return json_encode($organi_formated);
     }
 
     public function get_all_venues()

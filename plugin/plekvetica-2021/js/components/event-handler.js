@@ -125,9 +125,8 @@ var plekevent = {
         console.log("savelogin"+type);
 
         var datab = this.prepare_data(type);
-        debugger;
         if (plekvalidator.validate_form_data(datab) !== true) {
-            jQuery('#plek-submit').prop("disabled", false); //Enable the button again.
+            jQuery('#plek-add-login-submit').prop("disabled", false); //Enable the button again.
             plekvalidator.display_errors();
             //plekerror.display_error();
             return false;
@@ -143,18 +142,22 @@ var plekevent = {
                     success: function success(data) {
 
                         //Only for testing, move on production to error handling part
-                        jQuery('#plek-submit').prop("disabled", false); //Enable the button again.
+                        jQuery('#plek-add-login-submit').prop("disabled", false); //Enable the button again.
                         
                         var jdata = JSON.parse(data);
-                        if (jdata.error !== '') {
-                            window.plekerror.display_info('Achtung', jdata.error);
-                            this.existing_event = true;
-                            console.log("Event Existiert beriets");
-                            return true;
-                        } else {
-                            this.existing_event = false;
-                            console.log("Event existiert nicht");
+                        debugger;
+                        if (jdata.error.length !== 0) {
+                            window.plekerror.display_error(plek_main.get_first_error_from_ajax_request(jdata), __("Error", "pleklang"));
                             return false;
+                        } else {
+                            //No errors, replace the content
+                            let content = plek_main.get_ajax_success_object(jdata);
+                            jQuery(".plek-form").parent().html(content);
+                            //Change the URL
+                            let url = plek_main.url_replace_param("stage", "details");
+                            window.history.pushState({}, "Add Event details", url);
+                            document.title = __("Add Event details","pleklang") + " - Plekvetica";
+                            return true;
                         }
                     },
                     error: function error(data) {
@@ -191,17 +194,43 @@ var plekevent = {
             plekvalidator.add_field('event_venue', 'int');
         }
         if(type === "save_add_event_login"){
-            datab.append('guest_name', this.get_field_value('guest_name'));
-            datab.append('guest_email', this.get_field_value('guest_email'));
-            datab.append('user_login', this.get_field_value('user_login'));
-            datab.append('user_pass', this.get_field_value('user_pass'));
-            datab.append('rememberme', this.get_field_value('rememberme'));
+            let selected_btn = jQuery("#select-login-type a.selected").attr("id");
+            if(selected_btn === 'add_login'){
+                datab.append('user_login', this.get_field_value('user_login'));
+                datab.append('user_pass', this.get_field_value('user_pass'));
+                datab.append('rememberme', this.get_field_value('rememberme'));
+                plekvalidator.add_field('user_login', 'text');
+                plekvalidator.add_field('user_pass', 'password');
+                plekvalidator.add_field('rememberme', 'text', true);
+            }else{
+                datab.append('guest_name', this.get_field_value('guest_name'));
+                datab.append('guest_email', this.get_field_value('guest_email'));
+                plekvalidator.add_field('guest_name', 'text');
+                plekvalidator.add_field('guest_email', 'email');
+            }
+            datab.append('event_id', this.get_field_value('event_id'));
+            plekvalidator.add_field('event_id', 'int');
+            plekvalidator.add_error_messages('event_id',__("Missing Event ID","pleklang"));
         }
 
         return datab;
     },
 
     get_field_value(name) {
+        let type = jQuery("#" + name).attr("type");
+        switch (type) {
+            case 'checkbox':
+                if(jQuery("#" + name + ":checked").length > 0){
+                    return jQuery('#' + name).val();
+                }else{
+                    return "";
+                }
+                break;
+        
+            default:
+                break;
+        }
+
         switch (name) {
             case 'bands':
                 return this.get_selector_ids('event-band-selection');

@@ -1,10 +1,9 @@
 <?php
 
 extract(get_defined_vars());
-$event_object = $template_args[0]; //Plek_events object
+$plek_event = (isset($template_args[0])) ? $template_args[0] : new PlekEvents; //Plek_events object
 
 $action = (!empty($_REQUEST['action'])) ? $_REQUEST['action'] : 'login';
-
 ?>
 <div id="plek-event-member-login-form-container" class="plek-member-login-action-<?php echo htmlspecialchars($action); ?>">
     <?php if ($action === 'reset_password') : ?>

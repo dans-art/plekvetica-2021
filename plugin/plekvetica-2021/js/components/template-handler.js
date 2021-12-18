@@ -27,6 +27,17 @@ var plektemplate = {
         <div class='subtitle'>${data.address}, ${data.zip} ${data.city}<span class='country'>${data.country}</span></div>
         </div>`;
     },
+    load_organizer_item_template(data) {
+        return `<div class='item plek-add-item' data-for='event-organizer-selection' data-type='event_organizer' data-id='${data.id}'>
+        <div class='title'>
+        <span class='item-title'>${data.name}</span>
+        </div>
+        <div class='subtitle'>
+        <div class='web'>${data.web}</div>
+        <div class='description'>${data.description}</div>
+        </div>
+        </div>`;
+    },
     load_search_overlay_header(count) {
         return `<div class="overlay-header">Einträge gefunden: ${count}</div>`;
     },

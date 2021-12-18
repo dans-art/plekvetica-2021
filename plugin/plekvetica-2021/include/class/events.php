@@ -990,6 +990,7 @@ class PlekEvents extends PlekEventHandler
         $plek_handler->enqueue_toastr();
 
         if(empty($_REQUEST['stage']) AND !empty($_REQUEST['action'])){
+            //Hack to allow for password reset
             if($_REQUEST['action'] === "sign_up" OR $_REQUEST['action'] === "reset_password"){
                 $_REQUEST['stage'] = 'login';
             }

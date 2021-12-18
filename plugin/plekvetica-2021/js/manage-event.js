@@ -17,6 +17,7 @@ jQuery(document).ready(function () {
     
         ajaxPreloader('bands');
         ajaxPreloader('venues');
+        ajaxPreloader('organizers');
     
 
     //Load the Flatpicker
@@ -65,7 +66,7 @@ jQuery(document).ready(function () {
         window.plekevent.save_event_login(type);
     });
 
-    /** Display and posistion the Output container */
+    /** Display and position the Output container */
     jQuery('.plek-search-input').focus(function(element){
         plektemplate.hide_overlay();
         plektemplate.show_overlay(this);
@@ -119,6 +120,9 @@ function ajaxPreloader(type) {
                     return;
                 }else if(type === 'venues'){
                     window.venuePreloadedData = jdata;
+                    return;
+                }else if(type === 'organizers'){
+                    window.organizerPreloadedData = jdata;
                     return;
                 }
                 else{
