@@ -66,9 +66,37 @@ class PlekNotificationHandler extends WP_List_Table
         if (count($user_ids) !== $inserted) {
             return false;
         }
+
         return true;
     }
 
+    /**
+     * Sends a notification to all the accredited Members of an Event
+     *
+     * @param string|integer $event_id
+     * @param [type] $type
+     * @param [type] $subject
+     * @param [type] $message
+     * @param [type] $action
+     * @return int|false Id of the inserted row or false on error.
+     */
+    public function push_accredi_members(string|int $event_id, $type = null, $subject = null, $message = null, $action = null ){
+
+        $users = get_field("akkreditiert", $event_id);
+        $user_arr = array();
+        if(is_array($users)){
+            foreach($users as $login_name){
+                $user = get_user_by( 'login', $login_name );
+                if(!empty($user -> ID)){
+                    $user_arr[] = $user -> ID;
+                }
+            }
+            if(!empty($user_arr)){
+                return $this->push_notification($user_arr, $type, $subject, $message, $action);
+            }
+        }
+        return false;
+    }
     /**
      * Pushes a notification again, so the user receives again an email. In the Notification Panel the message will be shown as un-dismissed
      *
@@ -139,7 +167,7 @@ class PlekNotificationHandler extends WP_List_Table
     {
         global $wpdb;
         $limit = 20;
-        $order = (!empty($_GET['order'])) ? htmlspecialchars($_GET['order']) : 'ASC';
+        $order = (!empty($_GET['order'])) ? htmlspecialchars($_GET['order']) : 'DESC';
         $order_by = (!empty($_GET['orderby'])) ? htmlspecialchars($_GET['orderby']) : 'pushed_on';
         $paged = (int) (isset($_GET['paged']) and $_GET['paged'] > 0) ? htmlspecialchars($_GET['paged']) : 0;
         $offset = ($paged > 1) ? (($paged - 1) * $limit) : 0;
@@ -184,8 +212,9 @@ class PlekNotificationHandler extends WP_List_Table
     {
         global $_wp_column_headers;
         $screen = get_current_screen();
-
+        
         $this->screen = $screen;
+
         $columns = $this->get_columns();
         $_wp_column_headers[$screen->id] = $columns;
 
@@ -297,8 +326,8 @@ class PlekNotificationHandler extends WP_List_Table
     {
         $columns = array(
             'cb' => '<input type="checkbox"/>',
-            'user_id' => __('User', 'pleklang'),
             'pushed_on' => __('Created', 'pleklang'),
+            'user_id' => __('User', 'pleklang'),
             'notify_type' => __('Type', 'pleklang'),
             'subject' => __('Subject and Message', 'pleklang'),
             'action_link' => __('Link', 'pleklang'),
@@ -316,8 +345,8 @@ class PlekNotificationHandler extends WP_List_Table
     public function get_sortable_columns()
     {
         $columns = array(
-            'user_id' => array('user_id', false),
             'pushed_on' => array('pushed_on', false),
+            'user_id' => array('user_id', false),
             'notify_type' => array('notify_type', false),
             'subject' => array('subject', false),
             'action_link' => array('action_link', false),

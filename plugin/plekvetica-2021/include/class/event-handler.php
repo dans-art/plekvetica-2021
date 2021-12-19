@@ -664,7 +664,7 @@ class PlekEventHandler
                 $organi_formated[$oid]['id'] = $oid;
                 $organi_formated[$oid]['name'] = $organi->post_title;
                 $organi_formated[$oid]['web'] = tribe_get_organizer_website_url($organi->ID);
-                $organi_formated[$oid]['description'] = $plek_handler -> get_the_content_stripped($organi -> ID, $max_description_length);
+                $organi_formated[$oid]['description'] = $plek_handler->get_the_content_stripped($organi->ID, $max_description_length);
             }
         }
         return json_encode($organi_formated);
@@ -938,9 +938,60 @@ class PlekEventHandler
         return $status_code;
     }
 
+    /**
+     * Adds the current user to an Event and sets the status to wish
+     *
+     * @param string $user_login
+     * @param integer $event_id
+     * @return void
+     */
+    public function add_akkredi_member(string $user_login, int $event_id)
+    {
+        global $plek_handler;
+
+        if (!PlekUserHandler::user_is_in_team()) {
+            die(__("You are not allowed to access this function!", "pleklang"));
+        }
+
+        $current = get_field('akkreditiert', $event_id);
+        $event_title = get_the_title($event_id);
+
+        $find = array_search($user_login, $current);
+        if ($find === true) {
+            return __('Member is already set', 'pleklang');
+        }
+        $current[] = $user_login;
+
+        $update_akkredi = ($plek_handler->update_field('akkreditiert', $current, $event_id) !== false) ? true : __('Error while updating the accreditation field', 'pleklang');
+        $update_status = $this->set_akkredi_status($event_id, 'aw');
+
+        if ($update_akkredi === true and $update_status === true) {
+            apply_filters(
+                'simple_history_log',
+                "Accreditation: User {$user_login} added to Event \"{$event_title}\"",
+                ['event_id' => $event_id, 'event_title' => $event_title, 'user' => $user_login]
+            );
+            return true;
+        } else {
+            $errors = ($update_akkredi !== true) ? $update_akkredi : "";
+            $errors .= ($update_status !== true) ? ' - ' . $update_status : "";
+            return $errors;
+        }
+    }
+
+    /**
+     * Removes an accreditation request from the Event
+     * Adds a Log to the simple History Logger
+     * 
+     * @param string $user_login - User name as user_login
+     * @param integer $event_id - Id of the Event
+     * @return bool|string true on success, string on error
+     */
     public function remove_akkredi_member(string $user_login, int $event_id)
     {
+        global $plek_handler;
         $current = get_field('akkreditiert', $event_id);
+        $event_title = get_the_title($event_id);
         if (empty($current)) {
             return __('There are no registered Members', 'pleklang');
         }
@@ -949,7 +1000,50 @@ class PlekEventHandler
             return __('Member is already removed', 'pleklang');
         }
         unset($current[$find]);
-        return (update_field('akkreditiert', $current, $event_id)) ? true : __('Error while updating the accreditation field', 'pleklang');
+        $update = ($plek_handler->update_field('akkreditiert', $current, $event_id) !== false) ? true : __('Error while updating the accreditation field', 'pleklang');
+        apply_filters(
+            'simple_history_log',
+            "Accreditation: User {$user_login} removed from Event \"{$event_title}\"",
+            ['event_id' => $event_id, 'event_title' => $event_title, 'user' => $user_login]
+        );
+        return $update;
+    }
+
+    /**
+     * Sets the akkredi status of an event
+     *
+     * @param integer $event_id
+     * @param string $status_code - Allowed: 'aw','ab','aa','no'
+     * @return true|string true on success, string on error
+     */
+    public function set_akkredi_status(int $event_id, string $status_code)
+    {
+        global $plek_handler;
+        $allowed_codes = array('aw', 'ab', 'aa', 'no');
+        if (array_search($status_code, $allowed_codes) === false) {
+            return __('Error: Status code not allowed', 'pleklang');
+        }
+        $status_code = $this->prepare_status_code($status_code);
+        $update = $plek_handler->update_field('akk_status', $status_code, $event_id);
+
+        //Send notification to all users
+        if ($update === true) {
+            $notify = new PlekNotificationHandler;
+            $subject = sprintf(
+                __('Accreditation status of "%s" changed to "%s"', 'pleklang'),
+                get_the_title($event_id),
+                $this->get_event_status_text($status_code)
+            );
+            $message =  sprintf(
+                __('The accreditation status or the Event "%s" has been changed to "%s"', 'pleklang'),
+                get_the_title($event_id),
+                $this->get_event_status_text($status_code)
+            );
+            $action = get_permalink($event_id);
+            $notify->push_accredi_members($event_id, 'event', $subject, $message, $action);
+        }
+
+        return ($update !== false) ? true : __('Error while updating the accreditation status', 'pleklang');
     }
 
     /**
@@ -1042,16 +1136,17 @@ class PlekEventHandler
      * @param boolean $formated_option - If true, the function will return a HTML Select option string
      * @return array|string - Array if $formated_option is false, otherwise string
      */
-    public function get_currencies($formated_option = false){
+    public function get_currencies($formated_option = false)
+    {
         $currencies = array(
             'chf' => 'CHF',
             'eur' => 'EUR €',
             'usd' => 'USD $',
             'gbp' => 'GBP £',
         );
-        if($formated_option){
+        if ($formated_option) {
             $formated = "";
-            foreach($currencies as $key => $name){
+            foreach ($currencies as $key => $name) {
                 $formated .= "<option value='{$key}'>{$name}</option>";
             }
             $currencies = $formated;

@@ -125,9 +125,31 @@ class PlekAjaxHandler
                 if ($remove === true) {
                     $this->set_success(__('Accreditation request removed', 'pleklang'));
                 } else {
-                    $this->set_error($remove); //Error Message from funciton
+                    $this->set_error($remove); //Error Message from function
                 }
                 break;
+            case 'add_akkredi_member':
+                $event_id = (int) $this->get_ajax_data('id');
+                $user = $this->get_ajax_data('user');
+                $add = $plek_event->add_akkredi_member($user, $event_id);
+                if ($add === true) {
+                    $this->set_success(__('Accreditation request added', 'pleklang'));
+                } else {
+                    $this->set_error($add); //Error Message from function
+                }
+                break;
+
+            case 'change_akkredi_code':
+                $event_id = (int) $this->get_ajax_data('event_id');
+                $code = $this->get_ajax_data('status_code');
+                $change = $plek_event-> set_akkredi_status($event_id, $code);
+                if ($change === true) {
+                    $this->set_success(__('Status updated', 'pleklang'));
+                } else {
+                    $this->set_error($change); //Error Message from function
+                }
+                break;
+
             case 'toggle_watchlist':
                 //@todo Toggle watchlist like band follow. Rename to follow.
                 $plek_event->load_event_from_ajax();
@@ -173,6 +195,7 @@ class PlekAjaxHandler
                 break;
             default:
                 # code...
+                $this->set_error(__('You are not allowed to use this function','pleklang'));
                 break;
         }
         echo $this->get_ajax_return();
@@ -209,8 +232,9 @@ class PlekAjaxHandler
                     $this->set_error($report);
                 }
                 break;
-            default:
+                default:
                 # code...
+                $this->set_error(__('You are not allowed to use this function','pleklang'));
                 break;
         }
         echo $this->get_ajax_return();

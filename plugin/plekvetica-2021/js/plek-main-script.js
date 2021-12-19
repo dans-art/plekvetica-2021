@@ -4,7 +4,24 @@ let plek_main = {
         jQuery(document).ready(function () {
             plek_main.add_event_listener();
             plek_main.content_loader();
+
+            //Config and run the Topbar function
+            plek_main.config_topbar();
+            topbar.show();
         });
+    },
+
+    config_topbar(){
+        topbar.config({
+            autoRun      : true,
+            barThickness : 3,
+            barColors    : {
+                '0'      : '#8C262E',
+                '1.0'    : '#8C262E'
+            },
+            shadowBlur   : 10,
+            shadowColor  : 'rgba(0,   0,   0,   .6)'
+          })
     },
 
     activate_button_loader(element, text) {

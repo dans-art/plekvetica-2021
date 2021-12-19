@@ -221,10 +221,10 @@ let plek_single_event_main = {
         jQuery.ajax({
             url: window.ajaxurl,
             data: {
-              'action': 'plek_set_Accredi_status',
+              'action': 'plek_event_actions',
+              'do': 'add_akkredi_member',
               'user': user,
               'id': event_id,
-              'type': type
             },
             success: function success(data) {
                 let text = plek_main.get_text_from_ajax_request(data);

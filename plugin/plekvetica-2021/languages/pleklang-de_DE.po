@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2021-12-19 11:03+0000\n"
+"PO-Revision-Date: 2021-12-19 22:44+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -243,7 +243,7 @@ msgstr "eMail ist nicht eingestellt"
 
 #: include/class/notification-handler.php:306
 msgid "Email send"
-msgstr "E-Mail senden"
+msgstr "E-Mail gesendet"
 
 #: include/class/form-validator.php:261
 #, php-format
