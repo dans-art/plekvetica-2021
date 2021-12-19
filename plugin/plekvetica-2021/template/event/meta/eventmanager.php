@@ -20,7 +20,7 @@ $show_edit_button = $plek_event->show_event_edit_button($plek_event);
     //Edit Event Button
     if ($show_edit_button === true) : ?>
         <a name="editEvent" class="plek-button" href="<?php echo get_permalink($event_edit_page_id); ?>?edit=<?php echo $event_id; ?>"><?php echo __('Edit Event', 'pleklang'); ?></a>
-    <?php elseif (is_string($show_edit_button) and !PlekUserHandler::user_is_in_team()) : ?>
+    <?php elseif (is_string($show_edit_button) and PlekUserHandler::user_is_in_team()) : ?>
         <?php echo $show_edit_button; ?>
     <?php else : ?>
         <?php echo (PlekUserHandler::user_is_in_team()) ? "" : __('You are not authorized to edit this post.', 'pleklang'); ?>

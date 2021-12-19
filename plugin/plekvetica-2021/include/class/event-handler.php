@@ -962,15 +962,11 @@ class PlekEventHandler
     {
         $event_id = $plek_event->get_ID();
         $akk_status = $plek_event->get_field_value('akk_status');
-
         if (!PlekUserHandler::current_user_can_edit($plek_event)) {
             return false;
         }
         if ($plek_event->is_review()) {
             return __('This post can no longer be edited because a review already exists', 'pleklang');
-        }
-        if ($akk_status !== null and $plek_event->is_past_event()) {
-            return __('This post can no longer be edited because a review is currently being written.', 'pleklang');
         }
         return true;
     }

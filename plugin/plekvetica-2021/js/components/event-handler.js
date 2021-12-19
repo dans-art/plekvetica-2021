@@ -187,6 +187,7 @@ var plekevent = {
             }
             datab.append('event_band', this.get_field_value('bands'));
             datab.append('event_venue', this.get_field_value('venue'));
+            datab.append('honeypot_field', this.get_field_value('hp-password'));
 
             //Add the fields to the validator
             plekvalidator.add_field('event_name', 'text');

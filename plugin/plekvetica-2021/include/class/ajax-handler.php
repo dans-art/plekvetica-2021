@@ -43,6 +43,11 @@ class PlekAjaxHandler
             case 'save_event_details':
                 $this->set_error("Are you allowed to save??");
                 break;
+            case 'editEvent':
+                //@todo:Old Plekvetica Event function. Replace with new!
+                echo plekEvent();
+                die();
+                break;
             default:
                 # code...
                 break;

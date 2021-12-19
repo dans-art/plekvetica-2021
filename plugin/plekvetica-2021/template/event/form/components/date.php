@@ -18,6 +18,6 @@ $event_object = $template_args[0]; //Plek_events_form Object
 	</div>
 	<div class="event-date-multi-check-container">
 		<input type="checkbox" name="is_multiday" id="is_multiday" class="input" value="<?php echo ($event_object->is_multiday()) ? '1' : ''; ?>" />
-		<label for="is_multiday"><?php echo __('Multi-day event', 'pleklang'); ?></label>
+		<label class="checkbox-label" for="is_multiday"><?php echo __('Multi-day event', 'pleklang'); ?></label>
 	</div>
 </div>

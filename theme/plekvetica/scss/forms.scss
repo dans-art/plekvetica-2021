@@ -47,6 +47,9 @@ div.plek-review-search{
   }
 
  .plek-event-form-container{
+
+  margin-bottom: 2em;
+
   .plek-field-error{
     padding: 0.5em 0;
   }
@@ -265,6 +268,11 @@ div.plek-review-search{
     padding-top: 0.5em;
   }
 
+  label.checkbox-label{
+    width: auto;
+    display: inline;
+  }
+
   button.plek-button{
     width: 24%;
     white-space: normal;
@@ -334,6 +342,8 @@ div.plek-review-search{
   .upload-button{
     margin-top: 2em;
     position: relative;
+    display: flex;
+    align-self: center;
   }
 
   .plek-button{
