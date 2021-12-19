@@ -57,13 +57,19 @@ var plekevent = {
         var item_id = jQuery(element).data('id');
         var html = jQuery(element).html();
         var data = { id: item_id, name: html }
+
+        //Remove Existing Venues
+        if(type === 'event_venue'){
+            this.remove_all_items('event-venue-selection');
+        }
+
         if(jQuery(`.plek-select-item[data-id='${item_id}']`).length === 0){//Only add if not already added
             jQuery('#' + item_for).append(plektemplate.get_item_to_add(data));
         }
         plektemplate.hide_overlay();
         jQuery('#' + type).val("");
         plekevent.add_remove_item_eventlistener();
-
+        
         if (type === 'event_band') {
             window.plekevent.check_existing_event();
             window.plekevent.generate_title();
@@ -249,8 +255,21 @@ var plekevent = {
 
     get_field_value(name) {
         let type = jQuery("#" + name).attr("type");
+        if(typeof type === "undefined"){
+            type = jQuery('#'+name).prop('type');
+        }
         switch (type) {
             case 'checkbox':
+                if(jQuery("#" + name + ":checked").length > 0){
+                    return jQuery('#' + name).val();
+                }else{
+                    return "";
+                }
+                break;
+            case 'textarea':
+                if(typeof tinymce.editors[name] !== "undefined"){
+                    return tinymce.editors[name].getContent();
+                }
                 if(jQuery("#" + name + ":checked").length > 0){
                     return jQuery('#' + name).val();
                 }else{

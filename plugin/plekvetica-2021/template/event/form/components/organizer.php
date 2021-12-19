@@ -29,7 +29,7 @@ $propose_organi = $plek_event->get_organizers_of_venue(29234);
         <?php endforeach; ?>
     </div>
     <div id="organizer-search-bar-container" class="event-search-bar-container">
-        <input type="text" name="event_organizer" id="event_organizer" class="input plek-search-input" placeholder="<?php echo __('Search a Organizer', 'pleklang'); ?>" />
+        <input type="text" name="event_organizer" id="event_organizer" class="input plek-search-input" autocomplete="off" placeholder="<?php echo __('Search a Organizer', 'pleklang'); ?>" />
     </div>
     <?php PlekTemplateHandler::load_template('search-overlay', 'event/form/components', 'event_organizer_overlay'); ?>
 

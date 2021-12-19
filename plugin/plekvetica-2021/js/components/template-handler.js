@@ -3,6 +3,8 @@
  * 
  */
 var plektemplate = {
+
+    
     load_template(template, val_object) {
         var output = template;
         con(`${template}`);
@@ -13,22 +15,22 @@ var plektemplate = {
     },
     load_band_item_template(data) {
         var flag = this.get_flag_image(data.flag);
-        return `<div class='item plek-add-item' data-for='event-band-selection' data-type='event_band' data-id='${data.id}'>
+        return `<button type='button' class='item plek-add-item' data-for='event-band-selection' data-type='event_band' data-id='${data.id}'>
         <div class='title'>
         <img src="${flag}"/>
         <span class='item-title'>${data.name}</span></div>
         <div class='subtitle'>${data.genres}</div>
-        </div>`;
+        </button>`;
     },
     load_venue_item_template(data) {
-        return `<div class='item plek-add-item' data-for='event-venue-selection' data-type='event_venue' data-id='${data.id}'>
+        return `<button type='button' class='item plek-add-item' data-for='event-venue-selection' data-type='event_venue' data-id='${data.id}'>
         <div class='title'>
         <span class='item-title'>${data.name}</span></div>
         <div class='subtitle'>${data.address}, ${data.zip} ${data.city}<span class='country'>${data.country}</span></div>
-        </div>`;
+        </button>`;
     },
     load_organizer_item_template(data) {
-        return `<div class='item plek-add-item' data-for='event-organizer-selection' data-type='event_organizer' data-id='${data.id}'>
+        return `<button type='button' class='item plek-add-item' data-for='event-organizer-selection' data-type='event_organizer' data-id='${data.id}'>
         <div class='title'>
         <span class='item-title'>${data.name}</span>
         </div>
@@ -36,35 +38,68 @@ var plektemplate = {
         <div class='web'>${data.web}</div>
         <div class='description'>${data.description}</div>
         </div>
-        </div>`;
+        </button>`;
     },
-    load_search_overlay_header(count) {
-        return `<div class="overlay-header">Einträge gefunden: ${count}</div>`;
+    load_search_overlay_header(count, content = "") {
+        var found = __('Items found:','pleklang');
+        return `<div class="overlay-header">
+        ${content}
+        <span class="count">${found} ${count}</span>
+        </div>`;
     },
     get_template(selector) {
         return jQuery(selector).get(0).outerHTML;
     },
     show_overlay(input) {
+        console.log("Show:");
+        console.log(input);
         var id_name = jQuery(input).attr('name');
-        jQuery('#'+id_name+'_overlay').show();
+        if (typeof id_name === 'undefined') {
+            id_name = input;
+        }
+        console.log(id_name);
+        jQuery('#' + id_name + '_overlay').show();
+        //Reposition of the content, if overlay_content exists
+        jQuery('#' + id_name + '_overlay .overlay_content').css('margin-top', jQuery(document).scrollTop() + 50);
+
         window.plektemplate.activate_overlay_background(input);
 
     },
-    hide_overlay() {
+    hide_overlay(overlay_id = false) {
         console.log("Hide Overlay");
+        if (overlay_id !== false) {
+            jQuery('#' + overlay_id + '_overlay').hide();
+            window.plektemplate.deactivate_overlay_background(overlay_id);
+            return;
+        }
         jQuery('.plek-search-overlay').hide();
+        jQuery('.plek-overlay-container').hide();
         window.plektemplate.deactivate_overlay_background();
     },
 
-    activate_overlay_background(input){
+    activate_overlay_background(input) {
         var doc_height = jQuery(document).height();
-        jQuery(input).css('z-index', 20);
-        jQuery('.overlay_background').height(doc_height);
-        jQuery('.overlay_background').click(function(){
-            window.plektemplate.hide_overlay();
-        });
+        if (typeof input === 'object') {
+            jQuery(input).css('z-index', 20);
+            jQuery('.overlay_background').height(doc_height);
+            jQuery('.overlay_background').click(function () {
+                window.plektemplate.hide_overlay();
+            });
+        } else {
+            //Input is string / ID of object
+            jQuery('#'+input+'_overlay .overlay_background').height(doc_height);
+            jQuery('#'+input+'_overlay .overlay_background').click(function () {
+                window.plektemplate.hide_overlay(input);
+            });
+        }
+        console.log("Activated Overlay");
+        console.log(input);
     },
-    deactivate_overlay_background(){
+    deactivate_overlay_background(overlay_id = false) {
+        if (overlay_id !== false) {
+            jQuery('#' + overlay_id + '_overlay .overlay_background').height(0);
+            jQuery('#' + overlay_id + '_overlay .overlay_background').off('click');
+        }
         jQuery('.overlay_background').height(0);
         jQuery('.overlay_background').off('click');
     },
@@ -93,6 +128,17 @@ var plektemplate = {
             <span class='item-title'>${data.name}</span>
             </div>
         </div>`;
+    },
+
+    add_overlay(overlay_id, content = "") {
+        let overlay = `<div id='${overlay_id}_overlay' class='plek-overlay-container' style='display:none;'>
+        <div class='overlay_content'>
+        ${content}
+        </div>
+        <div class='overlay_background'>
+        </div>
+        </div>`;
+        jQuery('body').append(overlay);
     }
 
 

@@ -39,7 +39,15 @@ let plek_band = {
             e.preventDefault();
             //Check if cancel button
             if (e.currentTarget.id === 'band-form-cancel') {
-                history.back();
+                if(jQuery('#band-form-cancel').closest(".overlay_content").length === 0){
+                    //Not in overlay, go back to previous site and reload
+                    window.location=document.referrer;
+                }else{
+                    //Form is in a overlay, close overlay
+                    let overlay_id = jQuery('#band-form-cancel').closest(".overlay_content").parent().prop("id");
+                    overlay_id = overlay_id.replace("_overlay","");
+                    plektemplate.hide_overlay(overlay_id);
+                }
                 return;
             }
             //Check if submit button
@@ -156,19 +164,12 @@ let plek_band = {
 
 
     save_band(data) {
-        plek_main.activate_button_loader('#band-form-submit', 'Speichere Einstellungen...');
+        plek_main.activate_button_loader('#band-form-submit', __('Save Band...','pleklang'));
         plek_main.remove_field_errors();
 
         let button = jQuery('#band-form-submit');
         let form = document.getElementById('plek-band-form');
-        var data = new FormData(form);
-        data.append('action', 'plek_band_actions');
-        data.append('do', 'save_band');
-        var file_data = jQuery('#band-logo').prop('files')[0];
-        data.append('band-description', tinymce.editors['band-description'].getContent());
-        data.append('band-logo-data', file_data);
-        data.append('band-logo', '666'); //This is just a placeholder for the validator to validate.
-
+        var data = this.prepare_band_data(form);
         jQuery.ajax({
             url: window.ajaxurl,
             type: 'POST',
@@ -197,6 +198,17 @@ let plek_band = {
 
             }
         });
+    },
+
+    prepare_band_data(form){
+        var data = new FormData(form);
+        data.append('action', 'plek_band_actions');
+        data.append('do', 'save_band');
+        var file_data = jQuery('#band-logo').prop('files')[0];
+        data.append('band-description', tinymce.editors['band-description'].getContent());
+        data.append('band-logo-data', file_data);
+        data.append('band-logo', '666'); //This is just a placeholder for the validator to validate.
+        return data;
     },
 
     toggle_follower() {

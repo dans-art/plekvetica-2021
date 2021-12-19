@@ -1,12 +1,14 @@
 <?php
 $band = new PlekBandHandler();
-$band -> enqueue_form_scripts();
+$band->enqueue_form_scripts();
 $band->load_band_object(); //Loads the current band object. If not on Band page, this returns false
-$type = (isset($template_args[0]) and $template_args[0] === 'edit') ? 'edit' : 'new';
+$type = (isset($template_args[0]) and $template_args[0] === 'edit') ? 'edit' : 'add';
 $editor_options = array('media_buttons' => false, 'textarea_rows' => 10);
 
-if(PlekUserHandler::user_can_edit_band($band) !== true){
-    echo __('You are not allowed to edit this band!','pleklang');
+$country = $band->get_country()?:'NULL';
+
+if ($type === 'edit' AND PlekUserHandler::user_can_edit_band($band) !== true) {
+    echo __('You are not allowed to edit this band!', 'pleklang');
     return;
 }
 /**
@@ -15,8 +17,8 @@ if(PlekUserHandler::user_can_edit_band($band) !== true){
 
 ?>
 
-<div id='band-<?php echo $type; ?>-<?php echo $band->get_id(); ?>' class='band-<?php echo $type; ?> band-<?php echo $type; ?>-container'>
-    <h1><?php echo __('Edit Band','pleklang'); ?></h1>
+<div id='band-<?php echo $type; ?>-<?php echo $band->get_id()?:'new'; ?>' class='band-<?php echo $type; ?> band-<?php echo $type; ?>-container'>
+    <h1><?php echo ($type === 'add') ? __('Add Band', 'pleklang') : __('Edit Band', 'pleklang'); ?></h1>
     <form id='plek-band-form' class="plek-form">
         <!-- Name, Description and image-->
         <fieldset id="band-basic-infos">
@@ -25,10 +27,10 @@ if(PlekUserHandler::user_can_edit_band($band) !== true){
             <input id="band-name" name="band-name" type="text" value="<?php echo $band->get_name(); ?>"></input>
 
             <label for="band-description"><?php echo __('Description', 'pleklang'); ?></label>
-            <?php wp_editor( wpautop($band->get_description()), 'band-description', $editor_options ); ?>
+            <?php wp_editor(wpautop($band->get_description()), 'band-description', $editor_options); ?>
 
             <label for="band-logo"><?php echo __('Logo', 'pleklang'); ?></label>
-            <?php PlekTemplateHandler::load_template('image-upload-button', 'components', 'band-logo', $band->get_logo() ); ?>
+            <?php PlekTemplateHandler::load_template('image-upload-button', 'components', 'band-logo', $band->get_logo()); ?>
         </fieldset>
         <!-- Genre and Origin -->
         <fieldset id="band-secondary-infos">
@@ -36,7 +38,7 @@ if(PlekUserHandler::user_can_edit_band($band) !== true){
             <?php PlekTemplateHandler::load_template('dropdown', 'components', 'band-genre', $band->get_all_genres(), $band->get_genres(), true); ?>
 
             <label for="band-origin"><?php echo __('Origin', 'pleklang'); ?></label>
-            <?php PlekTemplateHandler::load_template('dropdown', 'components', 'band-origin', $band->get_all_countries(), array($band->get_country() => '')); ?>
+            <?php PlekTemplateHandler::load_template('dropdown', 'components', 'band-origin', $band->get_all_countries(), array($country => '')); ?>
         </fieldset>
         <!-- Facebook, Insta and Web links and Videos -->
         <fieldset id="band-social">
@@ -48,7 +50,7 @@ if(PlekUserHandler::user_can_edit_band($band) !== true){
 
             <label for="band-link-web"><?php echo __('Website', 'pleklang'); ?></label>
             <input id="band-link-web" name="band-link-web" type="text" value="<?php echo $band->get_website_link(); ?>"></input>
-            
+
             <label for="band-videos"><?php echo __('Videos', 'pleklang'); ?></label>
             <div id="band-genre-loader">
                 <input id="add-band-video-input" type="text" value=""></input>

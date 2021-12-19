@@ -26,3 +26,4 @@ $event_class = $template_args[0]; //Plek_events_form Object
 </div>
 
 <?php PlekTemplateHandler::load_template('js-settings', 'components','manage_event_buttons'); ?>
+<?php PlekTemplateHandler::load_template('overlay', 'components','add_band', PlekTemplateHandler::load_template_to_var('band-form','band','add')); ?>

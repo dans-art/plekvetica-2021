@@ -6,9 +6,8 @@ $event_id = (!empty($template_args[1]))?$template_args[1]:""; //Event ID
 
 ?>
 <div class="plek-add-event-login plek-form">
-    <div id="plek-memeber-perks">
-        <?php echo $plek_handler -> get_plek_option('plek_member_perks'); ?>
-    </div>
+    <?php PlekTemplateHandler::load_template('member-perks', 'event/form/components', ''); ?>
+
     <form name="add_event_login" id="add_event_login" action="" method="post">
         <div id="select-login-type">
             <?php PlekTemplateHandler::load_template('button', 'components', '', __('Add as guest', 'pleklang'), '','add_as_guest'); ?>

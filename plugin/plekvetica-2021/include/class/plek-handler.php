@@ -79,10 +79,10 @@ class PlekHandler
      *
      * @param string $field_name
      * @param string $type - type of field to get. Leave empty if data from a normal post gets fetched
-     * @param integer $page_id
+     * @param integer|string $page_id
      * @return array|false Array on success, false if field is not found.
      */
-    public function get_acf_choices(string $field_name, string $type, int $page_id)
+    public function get_acf_choices(string $field_name, string $type, $page_id)
     {
         switch ($type) {
             case 'term':

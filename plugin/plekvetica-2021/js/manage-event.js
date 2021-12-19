@@ -97,6 +97,25 @@ jQuery(document).ready(function () {
     jQuery('#main').on('click', '#add_login', function(){
         plek_add_event_functions.show_login_form();
     });
+    
+    jQuery('#event_band_overlay').on('click', '#add-new-band', function(){
+        plek_add_event_functions.show_add_band_form();
+    });
+
+    /** Avoid Reload on enter button press */
+    /**
+     * @todo: make the submit button work on select band / organi / venue item
+     */
+    jQuery(document).keypress(function (e) {
+        var keycode = (e.keyCode ? e.keyCode : e.which);
+        if (keycode === 13) {
+            if(jQuery(e.target).prop("id") !== "plek-submit"){
+                //e.preventDefault();
+                console.log(e.target);
+                console.log("Not submit");
+            }
+        }
+    });
 });
 
 
@@ -184,6 +203,11 @@ let plek_add_event_functions = {
     hide_login_containers(){
         jQuery("#submit-add-event-login-from, #plek-event-member-login-form-container, #plek-event-guest-login-form-container").hide();
         jQuery('#add_login, #add_as_guest').removeClass('selected');
+    },
+
+    show_add_band_form(){
+        plektemplate.hide_overlay();
+        plektemplate.show_overlay("add_band");
     }
 
 }

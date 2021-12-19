@@ -23,6 +23,7 @@ var pleksearch = {
       window.pleksearch.search(search_field_id).then(function (findings) {
         result_con.html(pleksearch.display_results(findings));
         window.pleksearch.add_item_Eventlistener();
+        plektemplate.show_overlay(search_field_id);
       });
     }, 500);
   },
@@ -50,14 +51,17 @@ var pleksearch = {
   display_results(result_object) {
     var result = '';
     var total = Object.keys(result_object).length;
-    result = plektemplate.load_search_overlay_header(total);
+    var type = window.pleksearch.current_type;
+    header = plektemplate.load_search_overlay_header(total);
+
     jQuery.each(result_object, function (key, value) {
-      var type = window.pleksearch.current_type;
       switch (type) {
         case 'event_band':
           result += plektemplate.load_band_item_template(value.data);
+          var add_band_btn = "<span><button type='button' id='add-new-band' class='plek-button'>"+__('Add new Band','pleklang')+"</button></span>";
+          header = plektemplate.load_search_overlay_header(total,add_band_btn);
           break;
-        case 'event_venue':
+          case 'event_venue':
           result += plektemplate.load_venue_item_template(value.data);
           break;
         case 'event_organizer':
@@ -68,11 +72,12 @@ var pleksearch = {
           break;
       }
     });
-    return result;
+    return header + result;
   },
 
   add_item_Eventlistener(){
       jQuery('.plek-add-item').click(function(element){
+        element.preventDefault();
         window.plekevent.add_item_to_selection(this);
     });
   },
