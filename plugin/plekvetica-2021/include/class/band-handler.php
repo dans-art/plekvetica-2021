@@ -24,8 +24,9 @@ class PlekBandHandler
      *
      * @var [Array]
      */
-    public $band = null;
+    public $band = null; //Plek_Band object
     protected $band_genres = null; //All the Band Genres / Tribe Events Categories
+    public $last_updated_id = null; //The last updated band ID
 
     protected $bandpic_placeholder = PLEK_PLUGIN_DIR_URL . "images/placeholder/band_logo.jpg";
     public $total_posts = array();
@@ -80,6 +81,13 @@ class PlekBandHandler
         return $this->band;
     }
 
+    /**
+     * Loads the Band by ID
+     * The Band get loaded as the current band ($this -> band)
+     *
+     * @param string $id
+     * @return object|bool Plek_Band object or false if not found
+     */
     public function load_band_object_by_id(string $id = '')
     {
         $term = get_term_by('id', $id, 'post_tag');
@@ -89,6 +97,12 @@ class PlekBandHandler
         return $this->term_to_band_object($term);
     }
 
+    /**
+     * Loads all the meta of an band to the Band object.
+     *
+     * @param object $term - WP_Term object
+     * @return object The Plek_band object
+     */
     public function term_to_band_object(object $term)
     {
         $cFields = get_fields($term);
@@ -290,6 +304,11 @@ class PlekBandHandler
         return strtoupper($country_code);
     }
 
+    /**
+     * Get the country Name. If not found, it will return the country code
+     *
+     * @return string Country name or country code
+     */
     public function get_country_name()
     {
         $country_code = $this->get_country();
@@ -303,7 +322,7 @@ class PlekBandHandler
     /**
      * Get all the available countries for a band
      *
-     * @return void
+     * @return array countries ("CODE" => "Name")
      */
     public function get_all_countries()
     {
@@ -464,7 +483,8 @@ class PlekBandHandler
      *
      * @return array
      */
-    public function get_all_band_ids($limit = null, $offset = null){
+    public function get_all_band_ids($limit = null, $offset = null)
+    {
         global $wpdb;
 
         $query = "SELECT t.term_id as id
@@ -474,15 +494,15 @@ class PlekBandHandler
         WHERE tt.taxonomy IN ('post_tag')
         ORDER BY id ASC";
 
-        if($limit !== null){
+        if ($limit !== null) {
             $query .= " LIMIT {$limit}";
         }
 
-        if($offset !== null){
+        if ($offset !== null) {
             $query .= " OFFSET {$offset}";
         }
 
-        return $wpdb -> get_results($query);
+        return $wpdb->get_results($query);
     }
 
     /**
@@ -628,6 +648,11 @@ class PlekBandHandler
         return "ASC";
     }
 
+    /**
+     * Loads all the bands for the ajax preloader
+     *
+     * @return void
+     */
     public function get_all_bands_json()
     {
         $bands = $this->get_all_bands();
@@ -669,6 +694,8 @@ class PlekBandHandler
     /**
      * validates and saves the data for the band
      *
+     * @param bool  $return_all_bands - If true, the function will return an JSON string with all Bands for the bandpreloader
+     * 
      * @return bool True if saved, false on error
      */
     public function save_band()
@@ -676,6 +703,9 @@ class PlekBandHandler
         global $plek_ajax_handler;
         global $plek_ajax_errors;
         $band_id = $plek_ajax_handler->get_ajax_data('band-id');
+        if (empty($band_id)) {
+            return $this->add_new_band();
+        }
         $this->load_band_object_by_id($band_id);
         if (PlekUserHandler::user_can_edit_band($this) !== true) {
             $plek_ajax_errors->add('save_band', __('You are not allowed to edit this band!', 'pleklang'));
@@ -691,15 +721,55 @@ class PlekBandHandler
     }
 
     /**
+     * Saves a new Band
+     * After creation, the site admin gets a notification
+     * 
+     * @return true|string True on success, string on error
+     */
+    public function add_new_band()
+    {
+        global $plek_ajax_errors;
+        global $plek_ajax_handler;
+
+        $validate = $this->validate_band_data(false);
+        if ($validate !== true) {
+            $plek_ajax_errors->add('save_band_validator', $validate);
+            return false;
+        }
+
+        //Update the Term
+        $name = $plek_ajax_handler->get_ajax_data_esc('band-name');
+        $origin = $plek_ajax_handler->get_ajax_data_esc('band-origin');
+        $slug = $this->get_unique_band_slug($name, $origin);
+
+        $term_args = array('slug' => $slug);
+        $add_term = wp_insert_term($name, 'post_tag', $term_args);
+        if (is_array($add_term) and isset($add_term['term_id'])) {
+            //Send Notification to admin
+            $message = sprintf(__('A new Band "%s" has been added.','pleklang'), htmlspecialchars($name));
+            $action = get_term_link( (int) $add_term['term_id'] );
+            PlekNotificationHandler::push_to_admin(__('New Band added','pleklang'), $message, $action);
+            return $this->update_band($add_term['term_id'], true);
+        }
+
+        //Insert failed
+        $error = $add_term->get_error_message();
+        $plek_ajax_errors->add('save_band', $error);
+        apply_filters('simple_history_log', $error);
+        return false;
+    }
+
+    /**
      * Validates all Band data
+     * @param bool $require_id If the ID is required. Set this to false to save a new Band.
      *
      * @return bool|array true on success, error array on failure.
      */
-    public function validate_band_data()
+    public function validate_band_data($require_id = true)
     {
         $validator = new PlekFormValidator;
 
-        $validator->set('band-id', true, 'int');
+        $validator->set('band-id', $require_id, 'int');
         $validator->set('band-name', true, 'textshort');
         $validator->set('band-logo', false, 'image');
         $validator->set('band-description', false, 'text');
@@ -719,15 +789,17 @@ class PlekBandHandler
 
     /**
      * Saves the Data to the database and acf.
+     * @param int $id The term ID to update
+     * @param bool $return_all_bands Returns all Bands after update ($this -> get_all_bands_json())
      *
-     * @return bool true on success, false on error.
+     * @return object|bool PlekBandHandler Object on success, false on error.
      */
-    public function update_band()
+    public function update_band($id = null, $return_all_bands = false)
     {
         global $plek_ajax_handler;
         global $plek_ajax_errors;
 
-        $id = (int) $plek_ajax_handler->get_ajax_data_esc('band-id');
+        $id = (int) (!is_int($id)) ? $plek_ajax_handler->get_ajax_data_esc('band-id') : $id;
         $name = $plek_ajax_handler->get_ajax_data_esc('band-name');
         $description = $plek_ajax_handler->get_ajax_data('band-description');
         $genre = $plek_ajax_handler->get_ajax_data_esc('band-genre');
@@ -768,11 +840,16 @@ class PlekBandHandler
         foreach ($acf as $afc_name => $value) {
             update_field($afc_name, $value, 'term_' . $id);
         }
-
+        
         if ($plek_ajax_errors->has_errors()) {
             return false;
         }
-        return true;
+        //All good, band saved
+        $this -> last_updated_id = $id;
+        if($return_all_bands === true){
+            return $this -> get_all_bands_json();
+        }
+        return $this -> load_band_object_by_id($id);
     }
 
     /**
@@ -1006,7 +1083,7 @@ class PlekBandHandler
 
         $total_score = (string) $this->calculate_band_score($follower, $origin, $future_events, $all_events);
 
-        if($plek_handler->update_field('band_score', $total_score, 'term_' . $band_id) !== false){
+        if ($plek_handler->update_field('band_score', $total_score, 'term_' . $band_id) !== false) {
             return $total_score;
         }
         return false;
@@ -1020,16 +1097,17 @@ class PlekBandHandler
      * 
      * @return int count of updated entries.
      */
-    public function update_all_band_scores(){
+    public function update_all_band_scores()
+    {
         $updated = 0;
-        $bands = $this -> get_all_band_ids();
+        $bands = $this->get_all_band_ids();
         $bands_count = count($bands);
         $limit = round($bands_count / 24);
         $hour = (int) date("G");
         $offset = ($hour * $limit);
-        $bands_to_update = $this -> get_all_band_ids($limit, $offset);
-        foreach($bands_to_update as $band){
-            if($this -> update_band_score($band -> id)){
+        $bands_to_update = $this->get_all_band_ids($limit, $offset);
+        foreach ($bands_to_update as $band) {
+            if ($this->update_band_score($band->id)) {
                 $updated++;
             }
         }
@@ -1081,5 +1159,30 @@ class PlekBandHandler
 
         $plek_handler->update_field('future_events_count', $event_count, 'term_' . $band_id);
         return $event_count;
+    }
+
+    /**
+     * Returns an unique term slug for the Band
+     *
+     * @param string $name
+     * @param string $origin
+     * @return void
+     */
+    public function get_unique_band_slug(string $name, string $origin)
+    {
+        $slug = sanitize_title($origin . '_' . $name); //ch_bandname
+        $existing = get_term_by('slug', $slug, 'post_tag');
+        if ($existing === false) {
+            return $slug;
+        }
+        preg_match('/[0-9]+$/', $slug, $matches);
+        if (!empty($matches[0])) {
+            $number = (int) $matches[0];
+            $number++;
+            $name = preg_replace('/[0-9]+$/', $number, $name);
+            return $this->get_unique_band_slug($name, $origin);
+        }
+        //No matches found, add one
+        return $this->get_unique_band_slug($name . '_1', $origin);;
     }
 }

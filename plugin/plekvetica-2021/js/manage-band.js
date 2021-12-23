@@ -178,13 +178,19 @@ let plek_band = {
             contentType: false,
             data: data,
             success: function success(data) {
-                let text = plek_main.get_text_from_ajax_request(data, true);
+                let text = '';
                 let errors = plek_main.show_field_errors(data, form);
                 if (errors === true) {
                     console.log("Contains Errors");
                     text = "Das Formular enthält Fehler, bitte korrigieren";
                 } else {
-                    text = plek_main.get_text_from_ajax_request(data, true);
+                    text = plek_main.get_first_success_from_ajax_request(data);
+                    let band_obj = plek_main.get_ajax_success_object(data);
+                    if(typeof band_obj[1] !== 'undefined' && typeof band_obj[2] !== 'undefined'){
+                        if(typeof plekevent !== 'undefined'){
+                            plekevent.add_new_band_to_selection(band_obj[1], band_obj[2]);
+                        }
+                    }
                 }
                 plek_main.deactivate_button_loader(button, text);
                 jQuery('#band-form-cancel').text(__('Back','pleklang'));

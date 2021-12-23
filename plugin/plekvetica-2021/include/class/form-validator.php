@@ -248,6 +248,12 @@ class PlekFormValidator
             $this->set_error($fieldname, __('Must not be empty.', 'pleklang'));
             return false;
         }
+
+        //Check if field is not required but empty. If so, end the validator
+        if((!isset($this->require[$fieldname]) OR $this->require[$fieldname] === false) AND empty($value)){
+            return true;
+        }
+
         //Check for min_length
         if ($this->min_length[$fieldname] !== 0 and !empty($value) and $this->min_length[$fieldname] > strlen($value)) {
             $calc_length = (int)($this->min_length[$fieldname] - strlen($value));

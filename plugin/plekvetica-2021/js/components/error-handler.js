@@ -15,10 +15,10 @@
             toastr.error(field,message);
         }
     },
-    display_info(field, message){
-        console.log(field);
+    display_info(title, message){
+        console.log(title);
         console.log(message);
-        toastr.info(field,message);
+        toastr.info(message, title);
     },
 
     add_error_to_field(field, message){

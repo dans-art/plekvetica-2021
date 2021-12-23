@@ -212,12 +212,36 @@ let plek_main = {
         }
     },
 
+    /**
+     * Gets the first error of the ajax response
+     * @param {object} data 
+     * @returns 
+     */
     get_first_error_from_ajax_request(data) {
         try {
             let encoded_data = (typeof data === "object") ? data : JSON.parse(data);
             let text = "";
             if (encoded_data.error.length > 0) {
                 text += encoded_data.error[0];
+            }
+            return text;
+        } catch (e) {
+            return data;
+        }
+
+    },
+
+    /**
+     * Gets the first error of the ajax response
+     * @param {object} data 
+     * @returns 
+     */
+    get_first_success_from_ajax_request(data) {
+        try {
+            let encoded_data = (typeof data === "object") ? data : JSON.parse(data);
+            let text = "";
+            if (encoded_data.success.length > 0) {
+                text += encoded_data.success[0];
             }
             return text;
         } catch (e) {

@@ -780,7 +780,9 @@ class PlekEventHandler
     public function inject_affiliate_code(string $url)
     {
         global $plek_handler;
-        $injectAttr['ticketcorner.ch'] = array("affiliate" => "PKV", "utm_source" => "PKV", "utm_medium" => "dp", "utm_campaign" => "plekvetica");
+        $injectAttr['ticketcorner.ch'] = array(
+            "affiliate" => "PKV", "utm_source" => "PKV", "utm_medium" => "dp", "utm_campaign" => "plekvetica", "referer_info" => "GPA-plekvetica"
+        );
         $injectAttr['starticket.ch'] = array('PartnerID' => 151);
 
         $url_split = parse_url(htmlspecialchars_decode($url));

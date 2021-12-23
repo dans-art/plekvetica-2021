@@ -98,6 +98,28 @@ class PlekNotificationHandler extends WP_List_Table
         return false;
     }
     /**
+     * Sends a notification to the admin
+     *
+     * @param string|integer $event_id
+     * @param [type] $subject
+     * @param [type] $message
+     * @param [type] $action
+     * @param [type] $type
+     * @return int|false Id of the inserted row or false on error.
+     */
+    public static function push_to_admin( $subject = null, $message = null, $action = null, $type = 'admin_info' ){
+        global $plek_handler;
+
+        $admin = get_user_by( 'email', $plek_handler->get_plek_option('admin_email') );
+        if(!isset($admin -> ID)){
+            return false;
+        }
+        $notify = new PlekNotificationHandler;
+        return $notify -> push_notification(array($admin -> ID), $type, $subject, $message, $action);
+    }
+
+
+    /**
      * Pushes a notification again, so the user receives again an email. In the Notification Panel the message will be shown as un-dismissed
      *
      * @param int $notification_id

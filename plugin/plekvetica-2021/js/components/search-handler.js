@@ -58,8 +58,6 @@ var pleksearch = {
       switch (type) {
         case 'event_band':
           result += plektemplate.load_band_item_template(value.data);
-          var add_band_btn = "<span><button type='button' id='add-new-band' class='plek-button'>"+__('Add new Band','pleklang')+"</button></span>";
-          header = plektemplate.load_search_overlay_header(total,add_band_btn);
           break;
           case 'event_venue':
           result += plektemplate.load_venue_item_template(value.data);
@@ -72,6 +70,10 @@ var pleksearch = {
           break;
       }
     });
+    if(type === 'event_band'){
+      var add_band_btn = "<span><button type='button' id='add-new-band' class='plek-button'>"+__('Add new Band','pleklang')+"</button></span>";
+      header = plektemplate.load_search_overlay_header(total,add_band_btn);
+    }
     return header + result;
   },
 

@@ -3,6 +3,8 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
+//$plek_ajax_errors = new WP_Error;
+
 class PlekAjaxHandler
 {
     protected $success = [];
@@ -142,7 +144,7 @@ class PlekAjaxHandler
             case 'change_akkredi_code':
                 $event_id = (int) $this->get_ajax_data('event_id');
                 $code = $this->get_ajax_data('status_code');
-                $change = $plek_event-> set_akkredi_status($event_id, $code);
+                $change = $plek_event->set_akkredi_status($event_id, $code);
                 if ($change === true) {
                     $this->set_success(__('Status updated', 'pleklang'));
                 } else {
@@ -195,7 +197,7 @@ class PlekAjaxHandler
                 break;
             default:
                 # code...
-                $this->set_error(__('You are not allowed to use this function','pleklang'));
+                $this->set_error(__('You are not allowed to use this function', 'pleklang'));
                 break;
         }
         echo $this->get_ajax_return();
@@ -232,9 +234,9 @@ class PlekAjaxHandler
                     $this->set_error($report);
                 }
                 break;
-                default:
+            default:
                 # code...
-                $this->set_error(__('You are not allowed to use this function','pleklang'));
+                $this->set_error(__('You are not allowed to use this function', 'pleklang'));
                 break;
         }
         echo $this->get_ajax_return();
@@ -258,6 +260,15 @@ class PlekAjaxHandler
                 break;
             case 'follow_band_toggle':
                 $this->set_error(__('You have to be logged in to perform this action', 'pleklang'));
+                break;
+            case 'save_band':
+                $plek_band = new PlekBandHandler;
+                $saved = $plek_band->save_band();
+                if ($saved) {
+                    $this->set_success(__('Band saved', 'pleklang'));
+                    $this->set_success($plek_band -> last_updated_id);
+                    $this->set_success($saved);
+                }
                 break;
             default:
                 # code...
@@ -285,8 +296,11 @@ class PlekAjaxHandler
 
             case 'save_band':
                 $plek_band = new PlekBandHandler;
-                if ($plek_band->save_band()) {
+                $saved = $plek_band->save_band();
+                if ($saved) {
                     $this->set_success(__('Band saved', 'pleklang'));
+                    $this->set_success($plek_band -> last_updated_id);
+                    $this->set_success($saved);
                 }
                 break;
             case 'follow_band_toggle':
@@ -488,7 +502,7 @@ class PlekAjaxHandler
         return $data;
     }
 
-    protected function set_error(string $message, string $field = "")
+    public function set_error(string $message, string $field = "")
     {
         if (!empty($field)) {
             $this->error[$field][] = $message;
@@ -498,7 +512,7 @@ class PlekAjaxHandler
         return;
     }
 
-    protected function set_error_array(array $errors)
+    public function set_error_array(array $errors)
     {
         if (empty($this->error)) {
             $this->error = $errors;
@@ -508,12 +522,18 @@ class PlekAjaxHandler
         return;
     }
 
-    protected function set_system_error(string $message)
+    public function set_system_error(string $message)
     {
         $this->system_error[] = $message;
         return;
     }
-    protected function set_success(string $message)
+    /**
+     * Sets an Success message
+     *
+     * @param mixed $message
+     * @return void
+     */
+    public function set_success(mixed $message)
     {
         $this->success[] = $message;
         return;
