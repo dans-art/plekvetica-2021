@@ -48,6 +48,9 @@ add_action('wp_ajax_nopriv_plek_user_actions',  [new PlekAjaxHandler,'plek_ajax_
 add_action('wp_ajax_plek_band_actions',  [new PlekAjaxHandler,'plek_ajax_band_actions']);
 add_action('wp_ajax_nopriv_plek_band_actions',  [new PlekAjaxHandler,'plek_ajax_band_nopriv_actions']);
 
+add_action('wp_ajax_plek_venue_actions',  [new PlekAjaxHandler,'plek_ajax_venue_actions']);
+add_action('wp_ajax_nopriv_plek_venue_actions',  [new PlekAjaxHandler,'plek_ajax_venue_nopriv_actions']);
+
 add_action('wp_ajax_plek_content_loader',  [new PlekAjaxHandler,'plek_ajax_content_loader_actions']);
 add_action('wp_ajax_nopriv_plek_content_loader',  [new PlekAjaxHandler,'plek_ajax_content_loader_nopriv_actions']);
 

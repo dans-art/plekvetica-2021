@@ -43,14 +43,13 @@ class PlekTemplateHandler
         if ($file) {
             return $file;
         }
-        
+
         $file = PLEK_PATH . 'template/' . $subfolder . $template_name;
-        if(file_exists($file)){
+        if (file_exists($file)) {
             return $file;
         }
 
-        return false; 
-
+        return false;
     }
 
     /**
@@ -71,10 +70,11 @@ class PlekTemplateHandler
      * - components/text-bar
      * -- text
      */
-    public static function load_template(string $template_name = '', string $subfolder = '', ...$template_args){
+    public static function load_template(string $template_name = '', string $subfolder = '', ...$template_args)
+    {
         $args = get_defined_vars();
         $path = PlekTemplateHandler::get_template_path($template_name, $subfolder);
-        if($path){
+        if ($path) {
             ob_start();
 
             /*if ( is_array( $data ) ) {
@@ -89,14 +89,15 @@ class PlekTemplateHandler
             return;
         }
 
-        echo sprintf(__('Template "%s" not found!', 'plek'),$template_name);
+        echo sprintf(__('Template "%s" not found!', 'plek'), $template_name);
         return;
     }
-    public static function load_template_to_var(string $template_name = '', string $subfolder = '', ...$template_args){
+    public static function load_template_to_var(string $template_name = '', string $subfolder = '', ...$template_args)
+    {
         $args = get_defined_vars();
         $path = PlekTemplateHandler::get_template_path($template_name, $subfolder);
 
-        if($path){
+        if ($path) {
             ob_start();
             include($path);
             $output_string = ob_get_contents();
@@ -105,6 +106,27 @@ class PlekTemplateHandler
             return $output_string;
         }
 
-        return sprintf(__('Template "%s" not found!', 'plek'),$template_name);
+        return sprintf(__('Template "%s" not found!', 'plek'), $template_name);
+    }
+
+    /**
+     * Get the dropdown options for all the countries
+     *
+     * @param string $current_country- Country as name or country-code. E.g: CH
+     * @return string|false HTML Options on success, false on error
+     */
+    public static function get_countries_dropdown_options($current_country = null)
+    {
+        global $plek_handler;
+        $countries = $plek_handler->get_all_countries();
+        if (!is_array($countries)) {
+            return false;
+        }
+        $return_options = "<option value='null' >".__('Select Country','pleklang')."</option>";
+        foreach ($countries as $code => $name) {
+            $selected = ($current_country === $code OR $current_country === $name) ? 'selected' : '';
+            $return_options .= "<option value='{$code}' {$selected}>{$name}</option>";
+        }
+        return $return_options;
     }
 }

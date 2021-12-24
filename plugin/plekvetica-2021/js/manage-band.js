@@ -162,7 +162,11 @@ let plek_band = {
 
     },
 
-
+    /**
+     * Sends the band data to save via ajax
+     * @todo: On add band, check if band does not exist (while the form is getting filled out)
+     * @param {*} data 
+     */
     save_band(data) {
         plek_main.activate_button_loader('#band-form-submit', __('Save Band...','pleklang'));
         plek_main.remove_field_errors();

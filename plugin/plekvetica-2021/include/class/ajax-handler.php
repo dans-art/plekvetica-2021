@@ -321,6 +321,61 @@ class PlekAjaxHandler
         echo $this->get_ajax_return();
         die();
     }
+    /**
+     * Venue Actions called by ajax.
+     * This functions are available for all users
+     *
+     * @return void
+     */
+    public function plek_ajax_venue_nopriv_actions()
+    {
+        $do = $this->get_ajax_do();
+        switch ($do) {
+            
+            case 'save_venue':
+                $plek_venue = new PlekVenueHandler;
+                $saved = $plek_venue->save_venue();
+                if ($saved) {
+                    $this->set_success(__('Venue saved', 'pleklang'));
+                    $this->set_success($plek_venue -> last_updated_id);
+                    $this->set_success($saved);
+                }
+                break;
+            default:
+                # code...
+                break;
+        }
+        echo $this->get_ajax_return();
+        die();
+    }
+
+    /**
+     * Venue Actions called by ajax.
+     * This functions require a logged in user!
+     *
+     * @return void
+     */
+    public function plek_ajax_venue_actions()
+    {
+        global $plek_ajax_errors;
+        $do = $this->get_ajax_do();
+        switch ($do) {
+            case 'save_venue':
+                $plek_venue = new PlekVenueHandler;
+                $saved = $plek_venue->save_venue();
+                if ($saved) {
+                    $this->set_success(__('Venue saved', 'pleklang'));
+                    $this->set_success($plek_venue -> last_updated_id);
+                    $this->set_success($saved);
+                }
+                break;
+            default:
+                # code...
+                break;
+        }
+        echo $this->get_ajax_return();
+        die();
+    }
 
     /**
      * Ajax User actions

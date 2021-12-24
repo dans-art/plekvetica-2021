@@ -349,5 +349,19 @@ class PlekHandler
         }
         return strip_tags($text);
     }
-    
+
+    /**
+     * Get all the countries from teh tribe locations
+     * in order to work, the tribe events plugin has to be installed
+     *
+     * @return array|false Array with CODE => Countryname or false on error
+     */
+    public function get_all_countries(){
+        if(!class_exists('Tribe__Languages__Locations')){
+            return false;
+        }
+        $tribe_locations = new Tribe__Languages__Locations;
+        return $tribe_locations -> get_countries();
+    }
+
 }
