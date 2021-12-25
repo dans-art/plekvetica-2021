@@ -1017,10 +1017,18 @@ class PlekEvents extends PlekEventHandler
     {
         wp_enqueue_style('flatpickr-style', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr.min.css');
     }
+
+    /**
+     * Enqueues all the scripts needed for form interactions
+     * Loads; flatpickr, manage-event, error-handler, event-handler,validator-handler, search-handler, template-handler 
+     *
+     * @return void
+     */
     public function enqueue_event_form_scripts()
     {
         global $plek_handler;
         $min = ($plek_handler -> is_dev_server())?'':'.min';
+        $plek_handler->enqueue_toastr();
 
         wp_enqueue_script('flatpickr-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9.js');
         wp_enqueue_script('flatpickr-de-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9-de.js');
@@ -1038,6 +1046,7 @@ class PlekEvents extends PlekEventHandler
         wp_enqueue_script('plek-compare-algorithm', PLEK_PLUGIN_DIR_URL . "js/components/compare-algorithm{$min}.js", ['jquery','plek-language', 'manage-plek-events']);
         wp_set_script_translations( 'plek-compare-algorithm', 'pleklang', PLEK_PATH . "/languages");
     }
+
     public function promote_on_facebook()
 
     {

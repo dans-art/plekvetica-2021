@@ -54,15 +54,38 @@ var plekevent = {
     /**
      * Adds a new saved band to the selection and resets the band object
      * 
+     * @param {string}  id The type 
      * @param {int}  id The band_id 
      * @param {object}  data The band preloadDataobject 
      */
-    add_new_band_to_selection(band_id, data) {
-        window.bandPreloadedData = JSON.parse(data);
-        let band = window.bandPreloadedData[band_id];
-        let ele = plektemplate.load_band_item_template(band);
-        this.add_item_to_selection(ele);
-        plekerror.display_info(__('Add Band','pleklang'), __('The Band has been added to the Database','pleklang'));
+    add_new_vob_to_selection(type, vob_id, data) {
+        switch (type) {
+            case 'band-form-submit':
+                window.bandPreloadedData = JSON.parse(data);
+                let band = window.bandPreloadedData[vob_id];
+                let ele_b = plektemplate.load_band_item_template(band);
+                this.add_item_to_selection(ele_b);
+                plekerror.display_info(__('Add Band', 'pleklang'), __('The Band has been added to the Database', 'pleklang'));
+                break;
+            case 'venue-form-submit':
+                window.venuePreloadedData = JSON.parse(data);
+                let venue = window.bandPreloadedData[vob_id];
+                let ele_v = plektemplate.load_band_item_template(venue);
+                this.add_item_to_selection(ele_v);
+                plekerror.display_info(__('Add Veneu', 'pleklang'), __('The Venue has been added to the Database', 'pleklang'));
+                break;
+            case 'orgnaizer-form-submit':
+                window.organizerPreloadedData = JSON.parse(data);
+                let organizer = window.bandPreloadedData[vob_id];
+                let ele_o = plektemplate.load_band_item_template(organizer);
+                this.add_item_to_selection(ele_o);
+                plekerror.display_info(__('Add Organizer', 'pleklang'), __('The Organizer has been added to the Database', 'pleklang'));
+                break;
+            default:
+                return false;
+                break;
+        }
+        return true;
     },
 
     /**
@@ -246,7 +269,7 @@ var plekevent = {
             plekvalidator.add_field('event_price_presale_currency', 'simpletext');
             plekvalidator.add_field('event_price_link', 'url');
             plekvalidator.add_field('event_id', 'int');
-            plekvalidator.add_error_messages('event_id', __("Missing Event ID", "pleklang"));
+            plekvalidator.add_error_messages('event_id', 'default', __("Missing Event ID", "pleklang"));
         }
         if (type === "save_add_event_login") {
             let selected_btn = jQuery("#select-login-type a.selected").attr("id");
@@ -265,7 +288,7 @@ var plekevent = {
             }
             datab.append('event_id', this.get_field_value('event_id'));
             plekvalidator.add_field('event_id', 'int');
-            plekvalidator.add_error_messages('event_id', __("Missing Event ID", "pleklang"));
+            plekvalidator.add_error_messages('event_id', 'default', __("Missing Event ID", "pleklang"));
         }
 
         return datab;

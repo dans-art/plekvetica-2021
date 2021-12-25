@@ -25,6 +25,8 @@ class PlekVenueHandler
 
     public function __construct()
     {
+        global $plek_event;
+        $plek_event -> enqueue_event_form_scripts();
     }
 
     /**

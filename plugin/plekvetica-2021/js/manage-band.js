@@ -35,7 +35,7 @@ let plek_band = {
 
 
         //on Band submit input click
-        jQuery('#plek-band-form button').click(function (e) {
+        /*jQuery('#plek-band-form button').click(function (e) {
             e.preventDefault();
             //Check if cancel button
             if (e.currentTarget.id === 'band-form-cancel') {
@@ -56,7 +56,7 @@ let plek_band = {
                 plek_band.save_band(data);
                 return;
             }
-        });
+        });*/
 
         jQuery(document).on("click", '.remove_video', function () {
             plek_band.remove_band_video(this);
@@ -167,7 +167,7 @@ let plek_band = {
      * @todo: On add band, check if band does not exist (while the form is getting filled out)
      * @param {*} data 
      */
-    save_band(data) {
+    /*save_band(data) {
         plek_main.activate_button_loader('#band-form-submit', __('Save Band...','pleklang'));
         plek_main.remove_field_errors();
 
@@ -208,8 +208,8 @@ let plek_band = {
 
             }
         });
-    },
-
+    },*/
+/*
     prepare_band_data(form){
         var data = new FormData(form);
         data.append('action', 'plek_band_actions');
@@ -220,7 +220,7 @@ let plek_band = {
         data.append('band-logo', '666'); //This is just a placeholder for the validator to validate.
         return data;
     },
-
+*/
     toggle_follower() {
         let band_id = jQuery('.band-single').data('band_id');
 

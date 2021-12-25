@@ -12,8 +12,43 @@ var plekvalidator = {
         this.error_messages = this.default_error_messages();
     },
 
-    add_field(input_id, validator_type, allow_empty = false) {
-        this.fields[input_id] = { id: input_id, type: validator_type, allow_empty: allow_empty };
+    /**
+     * Adds a single field to the validator.
+     * 
+     * @param {string|array} input_id The IDs of the input field. Accept single id or array with ids
+     * @param {string} validator_type Type to validate
+     * @param {bool} allow_empty If the value is allowed to be empty
+     * @param {string} form The ID of the form. Use this to avoid name conflicts using multiple forms on one page
+     * @returns void
+     */
+    add_field(input_id, validator_type, allow_empty = false, form = 'default') {
+        if (typeof input_id === 'object') {
+            jQuery.each(input_id, function (index, value) {
+                plekvalidator.add_field(value, validator_type, allow_empty, form);
+            });
+            return;
+        }
+        if (typeof this.fields[form] === 'undefined') {
+            this.fields[form] = {};
+        }
+        this.fields[form][input_id] = { id: input_id, type: validator_type, allow_empty: allow_empty };
+        return;
+    },
+
+
+    /**
+     * 
+     * @param {string} input_id ID of input field
+     * @param {object} values Invalid values
+     * @param {string} form The ID of the form. Use this to avoid name conflicts using multiple forms on one page 
+     * @returns 
+     */
+    add_invalid_field_values(input_id, values, form = 'default') {
+        if (typeof this.fields[form][input_id] !== 'undefined') {
+            this.fields[form][input_id].invalid_value = values;
+        } else {
+            console.log("Could not add invalid value to field. Field not found: " + input_id);
+        }
         return;
     },
 
@@ -25,14 +60,15 @@ var plekvalidator = {
      * @param {*} to_long  - Error Message if string is to long
      * @param {*} to_short  - Error Message if string is to short
      */
-    add_error_messages(input_id, empty = null, invalid_type = null, not_a_number = null, to_long = null, to_short = null) {
+    add_error_messages(input_id, form = 'default', empty = null, invalid_type = null, not_a_number = null, to_long = null, to_short = null, not_allowed = null) {
         let vali = plekvalidator.error_messages;
-        this.fields[input_id].error_messages = {
+        this.fields[form][input_id].error_messages = {
             'empty': (empty === null) ? vali.empty : empty,
             'invalid_type': (invalid_type === null) ? vali.invalid_type : invalid_type,
             'nan': (not_a_number === null) ? vali.not_a_number : not_a_number,
             'to_long': (to_long === null) ? vali.to_long : to_long,
             'to_short': (to_short === null) ? vali.to_short : to_short,
+            'not_allowed': (not_allowed === null) ? vali.not_allowed : not_allowed,
 
         }
     },
@@ -43,24 +79,37 @@ var plekvalidator = {
             'invalid_type': __('Input is not the correct type', 'pleklang'),
             'nan': __('Input is not a Number', 'pleklang'),
             'to_long': __('Input is to long', 'pleklang'),
-            'to_short': __('Input is to short', 'pleklang')
+            'to_short': __('Input is to short', 'pleklang'),
+            'not_allowed': __('The provided value is not allowed, please change', 'pleklang')
         }
     },
 
-    add_error(input_id, message) {
-        try {
-            this.errors[input_id].push(message);
-        } catch (error) {
-            this.errors[input_id] = [message];
+    /**
+     * 
+     * @param {string} input_id ID of the input field
+     * @param {string} message Error message
+     * @param {string} form The Form to validate. Make sure to use the form parameter in add_field as well
+     * @returns 
+     */
+    add_error(input_id, message, form = 'default') {
+        if (typeof this.errors[form] === 'undefined') {
+            this.errors[form] = {};
         }
+        (typeof this.errors[form][input_id] === 'object') ? this.errors[form][input_id].push(message) : this.errors[form][input_id] = [message];
         return;
     },
 
-    display_errors() {
-        if (Object.keys(this.errors).length === 0) {
+    /**
+     * Shows the errors in the form or as an toastr message
+     * @param {string} form The Form to validate. Make sure to use the form parameter in add_field as well
+     * @returns 
+     */
+    display_errors(form = 'default') {
+        let errors = this.errors[form];
+        if (Object.keys(errors).length === 0) {
             return null;
         }
-        jQuery.each(this.errors, function (key, val) {
+        jQuery.each(errors, function (key, val) {
             if (typeof val !== 'object') {
                 return;
             }
@@ -81,8 +130,13 @@ var plekvalidator = {
         plekerror.display_error('Validator', 'Nicht validiert!');
         return true;
     },
-
-    validate_form_data(data) {
+    /**
+     * 
+     * @param {object} data The Data to validate
+     * @param {string} form The Form to validate. Make sure to use the form parameter in add_field as well
+     * @returns {bool} True if the fields are valid, false otherwise.
+     */
+    validate_form_data(data, form = 'default') {
         //Remove all errors
         this.errors = {};
         plekerror.clear_field_errors();
@@ -93,9 +147,14 @@ var plekvalidator = {
         }
 
         for (var dataset of data.entries()) {
-            if (typeof this.fields[dataset[0]] !== 'undefined') {
-                var type = this.fields[dataset[0]].type;
-                this.validate_field(dataset[0], type, dataset[1])
+            let val_fields = this.fields[form];
+            console.log('Check: ' + dataset[0]);
+            console.log(dataset[1]);
+            if (typeof val_fields[dataset[0]] !== 'undefined') {
+                var type = val_fields[dataset[0]].type;
+                this.validate_field(dataset[0], type, dataset[1], form)
+            }else{
+                console.log('Check failed for: ' + dataset[0]);
             }
         }
         if (Object.keys(this.errors).length > 0) {
@@ -105,22 +164,32 @@ var plekvalidator = {
         return true;
     },
 
-    validate_field(field_id, type, value) {
-        if (typeof value === "undefined") {
-            value = "";
-        }
+    /**
+     * 
+     * @param {string} field_id ID of the field to validate
+     * @param {string} type Type to validate
+     * @param {mixed} value Value to validate. Objects will be converted to string before validating
+     * @param {string} form The Form to validate. Make sure to use the form parameter in add_field as well 
+     * @returns {bool} True if field is valid, false otherwise
+     */
+    validate_field(field_id, type, value = '', form = 'default') {
+
         //Try to convert to array, but only if value is not a number
         if (typeof value !== 'number') {
             try {
                 var nv = JSON.parse(value);
-                if (typeof nv === 'object') {
+                console.log("Validate_field try json");
+                console.log(nv);
+                if (nv !== null && typeof nv === 'object') {
                     jQuery.each(nv, function (key, val) {
                         plekvalidator.validate_field(field_id, type, val);
                     });
+                    console.log("skip validate");
                     return; //Make sure to end the function on success
                 }
             } catch (error) {
                 //Do noting if no error
+                console.log(error);
             }
         }
 
@@ -128,12 +197,21 @@ var plekvalidator = {
         console.log("Validator for: " + field_id);
         console.log(type);
         console.log(value);
-        let error_msg = (typeof this.fields[field_id].error_messages !== 'undefined') ? this.fields[field_id].error_messages : this.default_error_messages();
+        let val_fields = this.fields[form];
+        let error_msg = (typeof val_fields[field_id].error_messages !== 'undefined') ? val_fields[field_id].error_messages : this.default_error_messages();
+        if (typeof val_fields[field_id].invalid_value === 'object' || typeof val_fields[field_id].invalid_value === 'array') {
+            jQuery.each(val_fields[field_id].invalid_value, function (index, val_invalid) {
+                if (val_invalid === value) {
+                    plekvalidator.add_error(field_id, error_msg.not_allowed, form);
+                    return false;
+                }
+            });
+        }
         if (value.length === 0) {
-            if (plekvalidator.fields[field_id].allow_empty === true) {
+            if (val_fields[field_id].allow_empty === true) {
                 return true;
             }
-            plekvalidator.add_error(field_id, error_msg.empty);
+            plekvalidator.add_error(field_id, error_msg.empty, form);
             return false;
         }
 
@@ -141,7 +219,7 @@ var plekvalidator = {
             case 'int':
                 const reg_int = new RegExp('^[0-9]+$');
                 if (reg_int.test(value) === false) {
-                    plekvalidator.add_error(field_id, error_msg.invalid_type);
+                    plekvalidator.add_error(field_id, error_msg.invalid_type, form);
                     return false;
                 }
                 break;
