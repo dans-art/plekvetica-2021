@@ -32,6 +32,6 @@ $organi_id = PlekUserHandler::get_user_setting('organizer_id', $user->ID)
             });
         </script>
     <?php else : ?>
-        <?php PlekTemplateHandler::load_template('organizer-form', 'event/organizer', $organi_id); ?>
+        <?php PlekTemplateHandler::load_template('organizer-form', 'event/organizer', $organi_id, 'edit_organi_user_settings', 'edit', true); ?>
     <?php endif; ?>
 </div>

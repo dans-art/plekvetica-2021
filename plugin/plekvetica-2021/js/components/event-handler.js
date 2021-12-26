@@ -59,25 +59,26 @@ var plekevent = {
      * @param {object}  data The band preloadDataobject 
      */
     add_new_vob_to_selection(type, vob_id, data) {
+        debugger;
         switch (type) {
             case 'band-form-submit':
-                window.bandPreloadedData = JSON.parse(data);
+                window.bandPreloadedData = data;
                 let band = window.bandPreloadedData[vob_id];
                 let ele_b = plektemplate.load_band_item_template(band);
                 this.add_item_to_selection(ele_b);
                 plekerror.display_info(__('Add Band', 'pleklang'), __('The Band has been added to the Database', 'pleklang'));
                 break;
             case 'venue-form-submit':
-                window.venuePreloadedData = JSON.parse(data);
-                let venue = window.bandPreloadedData[vob_id];
-                let ele_v = plektemplate.load_band_item_template(venue);
+                window.venuePreloadedData = data;
+                let venue = window.venuePreloadedData[vob_id];
+                let ele_v = plektemplate.load_venue_item_template(venue);
                 this.add_item_to_selection(ele_v);
                 plekerror.display_info(__('Add Veneu', 'pleklang'), __('The Venue has been added to the Database', 'pleklang'));
                 break;
             case 'orgnaizer-form-submit':
-                window.organizerPreloadedData = JSON.parse(data);
-                let organizer = window.bandPreloadedData[vob_id];
-                let ele_o = plektemplate.load_band_item_template(organizer);
+                window.organizerPreloadedData = data;
+                let organizer = window.organizerPreloadedData[vob_id];
+                let ele_o = plektemplate.load_organizer_item_template(organizer);
                 this.add_item_to_selection(ele_o);
                 plekerror.display_info(__('Add Organizer', 'pleklang'), __('The Organizer has been added to the Database', 'pleklang'));
                 break;

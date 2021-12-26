@@ -93,7 +93,6 @@ var plektemplate = {
             });
         }
         console.log("Activated Overlay");
-        console.log(input);
     },
     deactivate_overlay_background(overlay_id = false) {
         if (overlay_id !== false) {

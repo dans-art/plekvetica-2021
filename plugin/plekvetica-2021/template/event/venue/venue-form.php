@@ -1,21 +1,22 @@
 <?php
 
-//$band->enqueue_form_scripts();
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 global $plek_handler;
 
-$venue_id = (isset($template_args[0])) ? $template_args[0] : null; //venue Id, if edit venue
+$venue_id = (isset($template_args[0])) ? (int) $template_args[0] : null; //venue Id, if edit venue
 $form_id = (isset($template_args[1])) ?  $template_args[1] : null; //If id is set, the fields will be wrapped into a form field
-$type = (isset($template_args[3]) and $template_args[3] === 'edit') ? 'edit' : 'add';
-
+$type = ((isset($template_args[3]) and $template_args[3] === 'edit') or is_int($venue_id)) ? 'edit' : 'add';
 $venue_class = new PlekVenueHandler;
 $venue_class->load_venue($venue_id);
 
-if ($type === 'edit' and PlekUserHandler::user_is_in_team() !== true) {
+if ($type === 'edit' and PlekUserHandler::user_can_edit_venue($venue_id) !== true) {
     echo __('You are not allowed to edit this venue!', 'pleklang');
     return;
 }
 ?>
-
 
 <div id='venue-<?php echo $type; ?>-<?php echo $venue_id ?: 'new'; ?>' class='venue-<?php echo $type; ?> venue-<?php echo $type; ?>-container'>
     <h1><?php echo ($type === 'add') ? __('Add Venue', 'pleklang') : __('Edit Venue', 'pleklang'); ?></h1>

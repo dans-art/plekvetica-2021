@@ -10,7 +10,7 @@ var pleksearch = {
   fire_search(element) {
     var search_field_id = jQuery(element).attr('id');
     var type = jQuery('#' + search_field_id).attr('name');
-    var result_con = jQuery('#'+type+'_overlay');
+    var result_con = jQuery('#' + type + '_overlay');
     this.set_type_settings(type);
     if (result_con.length == 0) {
       plekerror.display_error('No Result Container found.');
@@ -59,7 +59,7 @@ var pleksearch = {
         case 'event_band':
           result += plektemplate.load_band_item_template(value.data);
           break;
-          case 'event_venue':
+        case 'event_venue':
           result += plektemplate.load_venue_item_template(value.data);
           break;
         case 'event_organizer':
@@ -70,17 +70,26 @@ var pleksearch = {
           break;
       }
     });
-    if(type === 'event_band'){
-      var add_band_btn = "<span><button type='button' id='add-new-band' class='plek-button'>"+__('Add new Band','pleklang')+"</button></span>";
-      header = plektemplate.load_search_overlay_header(total,add_band_btn);
+    var add_button = false;
+    if (type === 'event_band') {
+      add_button = "<span><button type='button' id='add-new-band' class='plek-button add-new-vob-button'>" + __('Add new Band', 'pleklang') + "</button></span>";
+    }
+    if (type === 'event_venue') {
+      add_button = "<span><button type='button' id='add-new-venue' class='plek-button add-new-vob-button'>" + __('Add new Venue', 'pleklang') + "</button></span>";
+    }
+    if (type === 'event_organizer') {
+      add_button = "<span><button type='button' id='add-new-organizer' class='plek-button add-new-vob-button'>" + __('Add new Organizer', 'pleklang') + "</button></span>";
+    }
+    if (add_button !== false) {
+      header = plektemplate.load_search_overlay_header(total, add_button);
     }
     return header + result;
   },
 
-  add_item_Eventlistener(){
-      jQuery('.plek-add-item').click(function(element){
-        element.preventDefault();
-        window.plekevent.add_item_to_selection(this);
+  add_item_Eventlistener() {
+    jQuery('.plek-add-item').click(function (element) {
+      element.preventDefault();
+      window.plekevent.add_item_to_selection(this);
     });
   },
 

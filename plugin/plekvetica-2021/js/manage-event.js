@@ -14,94 +14,10 @@ var flatpickr_options = {
 jQuery(document).ready(function () {
     console.log("Ready!");
 
-
-    ajaxPreloader('bands');
-    ajaxPreloader('venues');
-    ajaxPreloader('organizers');
-
-
-    //Load the Flatpicker
-    flatpickr("#event_start_date", flatpickr_options);
-    flatpickr("#event_end_date", flatpickr_options);
-
-    //Event Listener
-    //Date-Time
-    jQuery('#is_multiday').click(function () {
-        if (jQuery(this).is(':checked')) {
-            show_end_date();
-        } else {
-            hide_end_date();
-        }
+    //Load the Select2
+    jQuery('select').select2({
+        theme: "plek"
     });
-
-    jQuery('#no_band').click(function () {
-        if (jQuery(this).is(':checked')) {
-            disable_band_input();
-            jQuery('#event-band-selection').hide();
-            //plekevent.remove_all_items('event-band-selection');
-        } else {
-            jQuery('#event-band-selection').show();
-            enable_band_input();
-        }
-    });
-
-    jQuery('#event_start_date').change(function () {
-        var start_date = jQuery('#event_start_date').val();
-        var end_options = flatpickr_options;
-        end_options['minDate'] = start_date;
-        flatpickr("#event_end_date", end_options);
-    });
-
-    jQuery('#plek-submit').click(function (event) {
-        event.preventDefault();
-        jQuery(this).prop("disabled", true);
-        var type = jQuery(this).data("type");
-        window.plekevent.save_event(type);
-    });
-
-    jQuery('#main').on('click', "#plek-add-login-submit", function (event) {
-        event.preventDefault();
-        jQuery(this).prop("disabled", true);
-        var type = jQuery(this).data("type");
-        window.plekevent.save_event_login(type);
-    });
-
-    /** Display and position the Output container */
-    jQuery('.plek-search-input').focus(function (element) {
-        plektemplate.hide_overlay();
-        plektemplate.show_overlay(this);
-    });
-
-    jQuery('.plek-search-input').keyup(function (element) {
-        var input_length = jQuery(this).val().length;
-        if (input_length === 0) {
-            window.plektemplate.hide_overlay();
-            return;
-        }
-        pleksearch.fire_search(this);
-    });
-
-    jQuery('.event-organizer-proposal-item').click(function (element) {
-        window.plekevent.add_item_to_selection(this);
-    });
-
-    //Clear the errors
-    jQuery('input').on('keyup', function () {
-        plekerror.clear_field_error(jQuery(this).attr("id"));
-    });
-
-    //Add Login Stage Event listener
-    jQuery('#main').on('click', '#add_as_guest', function () {
-        plek_add_event_functions.show_guest_login();
-    });
-    jQuery('#main').on('click', '#add_login', function () {
-        plek_add_event_functions.show_login_form();
-    });
-
-    jQuery('#event_band_overlay').on('click', '#add-new-band', function () {
-        plek_add_event_functions.show_add_band_form();
-    });
-
 
     /** Avoid Reload on enter button press */
     /**
@@ -123,6 +39,15 @@ jQuery(document).ready(function () {
 let plek_manage_event = {
     __construct() {
         this.add_event_listeners();
+        ajaxPreloader('bands');
+        ajaxPreloader('venues');
+        ajaxPreloader('organizers');
+
+
+        //Load the Flatpicker
+        flatpickr("#event_start_date", flatpickr_options);
+        flatpickr("#event_end_date", flatpickr_options);
+
     },
 
     add_event_listeners() {
@@ -137,7 +62,83 @@ let plek_manage_event = {
             e.preventDefault();
             plek_manage_event.vob_form_cancel(button_id);
         });
+        //Event Listener
+        //Date-Time
+        jQuery('#is_multiday').click(function () {
+            if (jQuery(this).is(':checked')) {
+                show_end_date();
+            } else {
+                hide_end_date();
+            }
+        });
 
+        jQuery('#no_band').click(function () {
+            if (jQuery(this).is(':checked')) {
+                disable_band_input();
+                jQuery('#event-band-selection').hide();
+                //plekevent.remove_all_items('event-band-selection');
+            } else {
+                jQuery('#event-band-selection').show();
+                enable_band_input();
+            }
+        });
+
+        jQuery('#event_start_date').change(function () {
+            var start_date = jQuery('#event_start_date').val();
+            var end_options = flatpickr_options;
+            end_options['minDate'] = start_date;
+            flatpickr("#event_end_date", end_options);
+        });
+
+        jQuery('#plek-submit').click(function (event) {
+            event.preventDefault();
+            jQuery(this).prop("disabled", true);
+            var type = jQuery(this).data("type");
+            window.plekevent.save_event(type);
+        });
+
+        jQuery('#main').on('click', "#plek-add-login-submit", function (event) {
+            event.preventDefault();
+            jQuery(this).prop("disabled", true);
+            var type = jQuery(this).data("type");
+            window.plekevent.save_event_login(type);
+        });
+
+        /** Display and position the Output container */
+        jQuery('.plek-search-input').focus(function (element) {
+            plektemplate.hide_overlay();
+            plektemplate.show_overlay(this);
+        });
+
+        jQuery('.plek-search-input').keyup(function (element) {
+            var input_length = jQuery(this).val().length;
+            if (input_length === 0) {
+                window.plektemplate.hide_overlay();
+                return;
+            }
+            pleksearch.fire_search(this);
+        });
+
+        jQuery('.event-organizer-proposal-item').click(function (element) {
+            window.plekevent.add_item_to_selection(this);
+        });
+
+        //Clear the errors
+        jQuery('input').on('keyup', function () {
+            plekerror.clear_field_error(jQuery(this).attr("id"));
+        });
+
+        //Add Login Stage Event listener
+        jQuery('#main').on('click', '#add_as_guest', function () {
+            plek_add_event_functions.show_guest_login();
+        });
+        jQuery('#main').on('click', '#add_login', function () {
+            plek_add_event_functions.show_login_form();
+        });
+
+        jQuery('.plek-search-overlay').on('click', '.add-new-vob-button', function (e) {
+            plek_add_event_functions.show_vob_form(e.currentTarget.id);
+        });
     },
 
     /**
@@ -146,7 +147,6 @@ let plek_manage_event = {
      * @param {string} type - Type to send 
      */
     send_vob_form(type = null) {
-        debugger;
         let default_submit_btn_text = jQuery('#' + type).text();
         var data = jQuery('#' + type).serialize();
         if (typeof data === 'undefined') {
@@ -161,10 +161,11 @@ let plek_manage_event = {
             case 'venue-form-submit':
                 vob_form_name = 'venue';
                 break;
-            case 'orgnaizer-form-submit':
+            case 'organizer-form-submit':
                 vob_form_name = 'organizer';
                 break;
             default:
+                console.log('type not supported:' + type);
                 return false;
                 break;
         }
@@ -203,11 +204,19 @@ let plek_manage_event = {
                     if (typeof return_obj === 'undefined') {
                         plekerror.display_error(null, __('Oops, something went wrong.... sorry!', 'pleklang'), __('Invalid Response', 'pleklang'));
                     } else {
+                        /**
+                         * return_obj[0] = success text
+                         * return_obj[1] = added id
+                         * return_obj[2] = preloader data
+                         */
+                        debugger;
+                        let preloader_data = (typeof return_obj[2] === 'string') ? JSON.parse(return_obj[2]) : {};
                         if (typeof return_obj[1] !== 'undefined' && typeof return_obj[2] !== 'undefined') {
-                            debugger;
-                            if (typeof plekevent !== 'undefined' && typeof return_obj[2][return_obj[1]] !== 'undefined') {
+                            if (typeof plekevent !== 'undefined' && typeof preloader_data[return_obj[1]] !== 'undefined') {
                                 //Only add to selection, if the return object is the data for the preloader
-                                plekevent.add_new_vob_to_selection(type, return_obj[1], return_obj[2]);
+                                plekevent.add_new_vob_to_selection(type, return_obj[1], preloader_data);
+                                //New Band, Venue or Organizer added
+                                plek_manage_event.vob_add_to_session(return_obj[1]);
                             }
                         }
                     }
@@ -249,7 +258,15 @@ let plek_manage_event = {
 
                 //Add the fields to the validator
                 plekvalidator.add_field('band-id', 'int', true, 'add_band');
-                plekvalidator.add_field(['band-name'], 'text', false, 'add_band');
+                plekvalidator.add_field('band-name', 'text', false, 'add_band');
+                plekvalidator.add_field('band-description', 'text', true, 'add_band');
+                plekvalidator.add_field('band-logo-data', 'data', true, 'add_band');
+                plekvalidator.add_field('band-genre', 'int', false, 'add_band');
+                plekvalidator.add_field('band-origin', 'text', false, 'add_band');
+                plekvalidator.add_field('band-videos', 'text', true, 'add_band');
+                plekvalidator.add_field(['band-link-insta', 'band-link-fb', 'band-link-web'], 'url', true, 'add_band');
+                plekvalidator.add_invalid_field_values('band-origin', ['null'], 'add_band');
+                plekvalidator.add_error_messages('band-origin', 'add_band', null, null, null, null, null, __('Please select a country', 'pleklang'));
 
                 break;
             case 'venue-form-submit':
@@ -263,6 +280,16 @@ let plek_manage_event = {
                 plekvalidator.add_field('venue-web', 'url', true, 'add_venue');
                 plekvalidator.add_invalid_field_values('venue-country', ['null'], 'add_venue');
                 plekvalidator.add_error_messages('venue-country', 'add_venue', null, null, null, null, null, __('Please select a country', 'pleklang'));
+                break;
+
+            case 'organizer-form-submit':
+                data.append('action', 'plek_organizer_actions');
+                data.append('do', 'save_organizer');
+                plekvalidator.add_field('venue-id', 'int', true, 'add_organizer');
+                plekvalidator.add_field('venue-name', 'text', false, 'add_organizer');
+                plekvalidator.add_field('venue-email', 'email', true, 'add_organizer');
+                plekvalidator.add_field('venue-phone', 'phone', true, 'add_organizer');
+                plekvalidator.add_field('venue-web', 'url', true, 'add_organizer');
                 break;
             default:
                 break;
@@ -287,10 +314,18 @@ let plek_manage_event = {
             plektemplate.hide_overlay(overlay_id);
         }
         return;
-    }
+    },
+    /**
+     * Add the newly created vob to the browser storage. If the user creates an account, the newly created vob will be assigned to them
+     * @param {int} vob_id The Id of the Band, Venue or Organizer added
+     */
+    vob_add_to_session(vob_id) {
+        let existing = localStorage.getItem('plek_vob_added');
+        let added = (typeof existing === 'string') ? existing + ',' + vob_id.toString() : vob_id.toString();
+        debugger;
+        localStorage.setItem('plek_vob_added', added);
+    },
 }
-
-plek_manage_event.__construct();
 
 
 function ajaxPreloader(type) {
@@ -378,9 +413,14 @@ let plek_add_event_functions = {
         jQuery('#add_login, #add_as_guest').removeClass('selected');
     },
 
-    show_add_band_form() {
+    /**
+     * Shows the overlay for adding a new vob
+     * @param {string} type Type to display
+     */
+    show_vob_form(type) {
+        debugger;
         plektemplate.hide_overlay();
-        plektemplate.show_overlay("add_band");
+        plektemplate.show_overlay(type);
     }
 
 }

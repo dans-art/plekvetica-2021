@@ -25,14 +25,14 @@ class PlekAjaxHandler
                 break;
 
             case 'get_venues':
-                $event_handler = new PlekEventHandler;
-                echo $event_handler->get_all_venues_json();
+                $venue_handler = new PlekVenueHandler;
+                echo $venue_handler->get_all_venues_json();
                 die();
                 break;
 
             case 'get_organizers':
-                $event_handler = new PlekEventHandler;
-                echo $event_handler->get_all_organizers_json();
+                $organi_handler = new PlekOrganizerHandler;
+                echo $organi_handler->get_all_organizers_json();
                 die();
                 break;
             case 'save_basic_event':
@@ -72,13 +72,13 @@ class PlekAjaxHandler
                 break;
 
             case 'get_venues':
-                $event_handler = new PlekEventHandler;
-                echo $event_handler->get_all_venues_json();
+                $venue_handler = new PlekVenueHandler;
+                echo $venue_handler->get_all_venues_json();
                 die();
                 break;
             case 'get_organizers':
-                $event_handler = new PlekEventHandler;
-                echo $event_handler->get_all_organizers_json();
+                $organi_handler = new PlekOrganizerHandler;
+                echo $organi_handler->get_all_organizers_json();
                 die();
                 break;
             case 'save_basic_event':
@@ -366,6 +366,61 @@ class PlekAjaxHandler
                 if ($saved) {
                     $this->set_success(__('Venue saved', 'pleklang'));
                     $this->set_success($plek_venue -> last_updated_id);
+                    $this->set_success($saved);
+                }
+                break;
+            default:
+                # code...
+                break;
+        }
+        echo $this->get_ajax_return();
+        die();
+    }
+    /**
+     * Organizer Actions called by ajax.
+     * This functions are available for all users
+     *
+     * @return void
+     */
+    public function plek_ajax_organizer_nopriv_actions()
+    {
+        $do = $this->get_ajax_do();
+        switch ($do) {
+            
+            case 'save_organizer':
+                $plek_organizer = new PlekOrganizerHandler;
+                $saved = $plek_organizer->save_organizer();
+                if ($saved) {
+                    $this->set_success(__('Organizer saved', 'pleklang'));
+                    $this->set_success($plek_organizer -> last_updated_id);
+                    $this->set_success($saved);
+                }
+                break;
+            default:
+                # code...
+                break;
+        }
+        echo $this->get_ajax_return();
+        die();
+    }
+
+    /**
+     * Organizer Actions called by ajax.
+     * This functions require a logged in user!
+     *
+     * @return void
+     */
+    public function plek_ajax_organizer_actions()
+    {
+        global $plek_ajax_errors;
+        $do = $this->get_ajax_do();
+        switch ($do) {
+            case 'save_organizer':
+                $plek_organizer = new PlekOrganizerHandler;
+                $saved = $plek_organizer->save_organizer();
+                if ($saved) {
+                    $this->set_success(__('Organizer saved', 'pleklang'));
+                    $this->set_success($plek_organizer -> last_updated_id);
                     $this->set_success($saved);
                 }
                 break;

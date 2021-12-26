@@ -651,7 +651,7 @@ class PlekBandHandler
     /**
      * Loads all the bands for the ajax preloader
      *
-     * @return void
+     * @return string JSON Array
      */
     public function get_all_bands_json()
     {
@@ -723,6 +723,8 @@ class PlekBandHandler
     /**
      * Saves a new Band
      * After creation, the site admin gets a notification
+     * @todo: On Add Event, assign the venue to the new user, in case he creates an account.
+     * @todo: Assign band to guest author if user is not logged in.
      * 
      * @return true|string True on success, string on error
      */
@@ -737,7 +739,7 @@ class PlekBandHandler
             return false;
         }
 
-        //Update the Term
+        //Insert the Term
         $name = $plek_ajax_handler->get_ajax_data_esc('band-name');
         $origin = $plek_ajax_handler->get_ajax_data_esc('band-origin');
         $slug = $this->get_unique_band_slug($name, $origin);
@@ -746,7 +748,7 @@ class PlekBandHandler
         $add_term = wp_insert_term($name, 'post_tag', $term_args);
         if (is_array($add_term) and isset($add_term['term_id'])) {
             //Send Notification to admin
-            $message = sprintf(__('A new Band "%s" has been added.','pleklang'), htmlspecialchars($name));
+            $message = sprintf(__('A new Band "%s" has been added.','pleklang'), $name);
             $action = get_term_link( (int) $add_term['term_id'] );
             PlekNotificationHandler::push_to_admin(__('New Band added','pleklang'), $message, $action);
             return $this->update_band($add_term['term_id'], true);

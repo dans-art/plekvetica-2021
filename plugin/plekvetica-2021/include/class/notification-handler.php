@@ -27,7 +27,7 @@ class PlekNotificationHandler extends WP_List_Table
      * @param [type] $action
      * @return int|false Id of the inserted row or false on error.
      */
-    public function push_notification($user_ids = array(), $type = null, $subject = null, $message = null, $action = null)
+    public function push_notification($user_ids = array(), $type = '', $subject = '', $message = '', $action = '')
     {
         global $wpdb;
         $table_notify = $wpdb->prefix . 'plek_notifications';
@@ -41,10 +41,10 @@ class PlekNotificationHandler extends WP_List_Table
         //Insert the Message
         $data = array();
         $data['pushed_on'] = date('Y-m-d H:i:s');
-        $data['notify_type'] = $type;
-        $data['subject'] = $subject;
-        $data['message'] = $message;
-        $data['action_link'] = $action;
+        $data['notify_type'] = ($type !== null) ? $type : '';
+        $data['subject'] = ($subject !== null) ? $subject : '';
+        $data['message'] = ($message !== null) ? $message : '';
+        $data['action_link'] = ($action !== null) ? $action : '';
         if ($wpdb->insert($table_notify_messages, $data)) {
             $message_id = $wpdb->insert_id;
         } else {
@@ -80,18 +80,19 @@ class PlekNotificationHandler extends WP_List_Table
      * @param [type] $action
      * @return int|false Id of the inserted row or false on error.
      */
-    public function push_accredi_members(string|int $event_id, $type = null, $subject = null, $message = null, $action = null ){
+    public function push_accredi_members(string|int $event_id, $type = null, $subject = null, $message = null, $action = null)
+    {
 
         $users = get_field("akkreditiert", $event_id);
         $user_arr = array();
-        if(is_array($users)){
-            foreach($users as $login_name){
-                $user = get_user_by( 'login', $login_name );
-                if(!empty($user -> ID)){
-                    $user_arr[] = $user -> ID;
+        if (is_array($users)) {
+            foreach ($users as $login_name) {
+                $user = get_user_by('login', $login_name);
+                if (!empty($user->ID)) {
+                    $user_arr[] = $user->ID;
                 }
             }
-            if(!empty($user_arr)){
+            if (!empty($user_arr)) {
                 return $this->push_notification($user_arr, $type, $subject, $message, $action);
             }
         }
@@ -107,15 +108,16 @@ class PlekNotificationHandler extends WP_List_Table
      * @param [type] $type
      * @return int|false Id of the inserted row or false on error.
      */
-    public static function push_to_admin( $subject = null, $message = null, $action = null, $type = 'admin_info' ){
+    public static function push_to_admin($subject = null, $message = null, $action = null, $type = 'admin_info')
+    {
         global $plek_handler;
 
-        $admin = get_user_by( 'email', $plek_handler->get_plek_option('admin_email') );
-        if(!isset($admin -> ID)){
+        $admin = get_user_by('email', $plek_handler->get_plek_option('admin_email'));
+        if (!isset($admin->ID)) {
             return false;
         }
         $notify = new PlekNotificationHandler;
-        return $notify -> push_notification(array($admin -> ID), $type, $subject, $message, $action);
+        return $notify->push_notification(array($admin->ID), $type, $subject, $message, $action);
     }
 
 
@@ -125,8 +127,9 @@ class PlekNotificationHandler extends WP_List_Table
      * @param int $notification_id
      * @return bool
      */
-    public function push_again($notification_id = null){
-        if($notification_id === null){
+    public function push_again($notification_id = null)
+    {
+        if ($notification_id === null) {
             return false;
         }
         global $wpdb;
@@ -135,7 +138,6 @@ class PlekNotificationHandler extends WP_List_Table
         $where = array('id' => $notification_id);
         $format = array('%d');
         return $wpdb->update($table, $data, $where, $format, $format);
- 
     }
 
     /**
@@ -194,7 +196,7 @@ class PlekNotificationHandler extends WP_List_Table
         $paged = (int) (isset($_GET['paged']) and $_GET['paged'] > 0) ? htmlspecialchars($_GET['paged']) : 0;
         $offset = ($paged > 1) ? (($paged - 1) * $limit) : 0;
 
-        if(empty($_POST['s'])){
+        if (empty($_POST['s'])) {
             $query_notifications = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS
             notify.*, msg.*
             FROM `{$wpdb->prefix}plek_notifications` as notify
@@ -202,10 +204,10 @@ class PlekNotificationHandler extends WP_List_Table
             ON notify.message_id = msg.msg_id
             ORDER BY {$order_by} {$order}
             LIMIT %d,%d", $offset, $limit);
-        }else{
+        } else {
             //Query is search query
             $search = sanitize_text_field($_POST['s']);
-            $like = '%'.$wpdb -> esc_like($search).'%';
+            $like = '%' . $wpdb->esc_like($search) . '%';
             $query_notifications = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS
             notify.*, msg.*
             FROM `{$wpdb->prefix}plek_notifications` as notify
@@ -234,7 +236,7 @@ class PlekNotificationHandler extends WP_List_Table
     {
         global $_wp_column_headers;
         $screen = get_current_screen();
-        
+
         $this->screen = $screen;
 
         $columns = $this->get_columns();
@@ -258,7 +260,7 @@ class PlekNotificationHandler extends WP_List_Table
 
         $this->process_bulk_action();
 
-        $this -> search_box(__('Find','pleklang'),'search_id');
+        $this->search_box(__('Find', 'pleklang'), 'search_id');
     }
 
     /**
@@ -321,13 +323,13 @@ class PlekNotificationHandler extends WP_List_Table
         $items = (!empty($_POST['bulk-actions'])) ? $_POST['bulk-actions'] : array();
         switch ($action) {
             case 'delete':
-                foreach($items AS $item_to_process){
-                    $this -> delete_notification($item_to_process);
+                foreach ($items as $item_to_process) {
+                    $this->delete_notification($item_to_process);
                 }
                 break;
             case 'push_again':
-                foreach($items AS $item_to_process){
-                    $this -> push_again((int)$item_to_process);
+                foreach ($items as $item_to_process) {
+                    $this->push_again((int)$item_to_process);
                 }
                 break;
 
@@ -335,7 +337,7 @@ class PlekNotificationHandler extends WP_List_Table
                 //Do nothing...
                 break;
         }
-       // wp_redirect( esc_url( add_query_arg() ) );
+        // wp_redirect( esc_url( add_query_arg() ) );
         //exit;
     }
 
@@ -634,7 +636,7 @@ class PlekNotificationHandler extends WP_List_Table
         $format = array('%d');
         return $wpdb->update($table, $data, $where, $format, $format);
     }
-    
+
     /**
      * Deletes a notification
      *

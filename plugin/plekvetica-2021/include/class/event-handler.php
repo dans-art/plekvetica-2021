@@ -631,53 +631,6 @@ class PlekEventHandler
         return $result;
     }
 
-    public function get_all_venues_json()
-    {
-        $venues = $this->get_all_venues();
-        $venues_formated = array();
-        foreach ($venues as $venue) {
-            $vid = $venue->ID;
-            $venues_formated[$vid]['id'] = $vid;
-            $venues_formated[$vid]['name'] = $venue->post_title;
-            $venues_formated[$vid]['address'] = tribe_get_address($vid);
-            $venues_formated[$vid]['zip'] = tribe_get_zip($vid);
-            $venues_formated[$vid]['city'] = tribe_get_city($vid);
-            $venues_formated[$vid]['country'] = tribe_get_country($vid);
-        }
-        return json_encode($venues_formated);
-    }
-
-    /**
-     * Gets a JSON formated string of all the organizers with their website link and description
-     *
-     * @return string - JSON encoded string
-     */
-    public function get_all_organizers_json()
-    {
-        global $plek_handler;
-        $organizers = tribe_get_organizers();
-        $organi_formated = array();
-        $max_description_length = 170;
-        if (is_array($organizers)) {
-            foreach ($organizers as $organi) {
-                $oid = $organi->ID;
-                $organi_formated[$oid]['id'] = $oid;
-                $organi_formated[$oid]['name'] = $organi->post_title;
-                $organi_formated[$oid]['web'] = tribe_get_organizer_website_url($organi->ID);
-                $organi_formated[$oid]['description'] = $plek_handler->get_the_content_stripped($organi->ID, $max_description_length);
-            }
-        }
-        return json_encode($organi_formated);
-    }
-
-    public function get_all_venues()
-    {
-        $venues = tribe_get_venues();
-        if ($venues) {
-            return $venues;
-        }
-        return [];
-    }
 
     /**
      * Get any Field from a Event.

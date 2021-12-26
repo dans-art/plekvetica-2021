@@ -1029,6 +1029,7 @@ class PlekEvents extends PlekEventHandler
         global $plek_handler;
         $min = ($plek_handler -> is_dev_server())?'':'.min';
         $plek_handler->enqueue_toastr();
+        $plek_handler->enqueue_select2();
 
         wp_enqueue_script('flatpickr-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9.js');
         wp_enqueue_script('flatpickr-de-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9-de.js');

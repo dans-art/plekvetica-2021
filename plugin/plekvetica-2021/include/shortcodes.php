@@ -28,6 +28,9 @@ add_shortcode('plek_band_page', [new PlekBandHandler, 'plek_band_page_shortcode'
 //Venue
 add_shortcode('plek_venue_edit_page', [new PlekVenueHandler, 'plek_venue_edit_page_shortcode']);
 
+//Organizer
+add_shortcode('plek_organizer_edit_page', [new PlekOrganizerHandler, 'plek_organizer_edit_page_shortcode']);
+
 //Login
 add_shortcode('plek_login_page', [$plek_login_handler, 'plek_login_page_shortcode']);
 
