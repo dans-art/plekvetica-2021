@@ -10,6 +10,32 @@ var plekvalidator = {
 
     construct() {
         this.error_messages = this.default_error_messages();
+        console.log('validator loaded');
+    },
+
+    /**
+     * Monitor the fields for changes and validates the fields.
+     * Make sure to set the validator fields with add_field.
+     */
+    monitor_fields(){
+        jQuery('input').on('change', (e) => {
+            var field_id = e.currentTarget.id;
+            var form = jQuery('#'+field_id).closest('form').attr('id');
+            var value = e.currentTarget.value;
+            if(typeof plekvalidator.fields[form] !== "undefined" && typeof plekvalidator.fields[form][field_id] !== "undefined"){
+                let field_obj = plekvalidator.fields[form][field_id];
+                //Remove the errors for the field
+                if(typeof plekvalidator.errors[form] === "object" && typeof plekvalidator.errors[form][field_id] !== "undefined"){
+                    delete plekvalidator.errors[form][field_id];
+                }
+                //Validate the field
+                if(plekvalidator.validate_field(field_id,field_obj.type, value, form) !== true){
+                    plekvalidator.display_errors(form);
+                }
+            }
+            debugger;
+            return;
+        });
     },
 
     /**
@@ -106,7 +132,7 @@ var plekvalidator = {
      */
     display_errors(form = 'default') {
         let errors = this.errors[form];
-        if (Object.keys(errors).length === 0) {
+        if (typeof errors !== 'object' || Object.keys(errors).length === 0) {
             return null;
         }
         jQuery.each(errors, function (key, val) {

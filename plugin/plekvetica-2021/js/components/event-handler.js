@@ -236,11 +236,6 @@ var plekevent = {
             datab.append('event_band', this.get_field_value('bands'));
             datab.append('event_venue', this.get_field_value('venue'));
             datab.append('honeypot_field', this.get_field_value('hp-password'));
-
-            //Add the fields to the validator
-            plekvalidator.add_field('event_name', 'text');
-            plekvalidator.add_field('event_start_date', 'date');
-            plekvalidator.add_field('event_venue', 'int');
         }
         if (type === "save_event_details") {
             //Fields for Event Basic
@@ -258,19 +253,6 @@ var plekevent = {
 
             datab.append('event_id', this.get_field_value('event_id'));
 
-            //Add the fields to the validator
-            //@todo: All Event details fields should be optional
-            plekvalidator.add_field('event_description', 'text');
-            plekvalidator.add_field('event_organizer', 'int');
-            plekvalidator.add_field('event_poster', 'file');
-            plekvalidator.add_field('event_fb_link', 'url');
-            plekvalidator.add_field('event_price_boxoffice', 'price');
-            plekvalidator.add_field('event_price_boxoffice_currency', 'simpletext');
-            plekvalidator.add_field('event_price_presale', 'price');
-            plekvalidator.add_field('event_price_presale_currency', 'simpletext');
-            plekvalidator.add_field('event_price_link', 'url');
-            plekvalidator.add_field('event_id', 'int');
-            plekvalidator.add_error_messages('event_id', 'default', __("Missing Event ID", "pleklang"));
         }
         if (type === "save_add_event_login") {
             let selected_btn = jQuery("#select-login-type a.selected").attr("id");
@@ -278,18 +260,12 @@ var plekevent = {
                 datab.append('user_login', this.get_field_value('user_login'));
                 datab.append('user_pass', this.get_field_value('user_pass'));
                 datab.append('rememberme', this.get_field_value('rememberme'));
-                plekvalidator.add_field('user_login', 'text');
-                plekvalidator.add_field('user_pass', 'password');
-                plekvalidator.add_field('rememberme', 'text', true);
             } else {
                 datab.append('guest_name', this.get_field_value('guest_name'));
                 datab.append('guest_email', this.get_field_value('guest_email'));
-                plekvalidator.add_field('guest_name', 'text');
-                plekvalidator.add_field('guest_email', 'email');
+
             }
             datab.append('event_id', this.get_field_value('event_id'));
-            plekvalidator.add_field('event_id', 'int');
-            plekvalidator.add_error_messages('event_id', 'default', __("Missing Event ID", "pleklang"));
         }
 
         return datab;

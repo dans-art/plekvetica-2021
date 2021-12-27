@@ -8,9 +8,11 @@ class PlekHandler
     protected $js_debug = array();
     public $version = "";
     public $ajax_included = false;
+    public $placeholder_image = '';
 
     public function __construct()
     {
+        $this -> placeholder_image = PLEK_PLUGIN_DIR_URL . 'images/placeholder/default_placeholder.jpg';
     }
 
     public function set_js_error($msg)

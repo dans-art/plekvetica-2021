@@ -37,12 +37,25 @@ jQuery(document).ready(function () {
 
 
 let plek_manage_event = {
+   
+    constructed : false,
+
     __construct() {
+        if(this.constructed === true){
+            return;
+        }
+        this.constructed = true;
+
         this.add_event_listeners();
         ajaxPreloader('bands');
         ajaxPreloader('venues');
         ajaxPreloader('organizers');
-
+        
+        //On Ready
+        jQuery(document).ready(function () {
+            plek_manage_event.prepare_validator_fields();
+            plekvalidator.monitor_fields();
+        });
 
         //Load the Flatpicker
         flatpickr("#event_start_date", flatpickr_options);
@@ -255,8 +268,32 @@ let plek_manage_event = {
                 data.append('band-description', tinymce.editors['band-description'].getContent());
                 data.append('band-logo-data', file_data);
                 data.append('band-logo', '666'); //This is just a placeholder for the validator to validate.
+                break;
+            case 'venue-form-submit':
+                data.append('action', 'plek_venue_actions');
+                data.append('do', 'save_venue');
+                break;
 
-                //Add the fields to the validator
+            case 'organizer-form-submit':
+                data.append('action', 'plek_organizer_actions');
+                data.append('do', 'save_organizer');
+                break;
+            default:
+                break;
+        }
+        return data;
+    },
+
+    /**
+     * 
+     */
+    prepare_validator_fields() {
+
+        var form = '';
+        jQuery('form').each((index, value) => {
+            form = jQuery(value).attr('id');
+            //Add New Band Form
+            if (form === 'plek-band-form') {
                 plekvalidator.add_field('band-id', 'int', true, 'add_band');
                 plekvalidator.add_field('band-name', 'text', false, 'add_band');
                 plekvalidator.add_field('band-description', 'text', true, 'add_band');
@@ -267,11 +304,18 @@ let plek_manage_event = {
                 plekvalidator.add_field(['band-link-insta', 'band-link-fb', 'band-link-web'], 'url', true, 'add_band');
                 plekvalidator.add_invalid_field_values('band-origin', ['null'], 'add_band');
                 plekvalidator.add_error_messages('band-origin', 'add_band', null, null, null, null, null, __('Please select a country', 'pleklang'));
+            }
+            //Add Organizer form
+            if (form === 'plek-organizer-form') {
+                plekvalidator.add_field('organizer-id', 'int', true, 'add_organizer');
+                plekvalidator.add_field('organizer-name', 'text', false, 'add_organizer');
+                plekvalidator.add_field('organizer-email', 'email', true, 'add_organizer');
+                plekvalidator.add_field('organizer-phone', 'phone', true, 'add_organizer');
+                plekvalidator.add_field('organizer-web', 'url', true, 'add_organizer');
+            }
 
-                break;
-            case 'venue-form-submit':
-                data.append('action', 'plek_venue_actions');
-                data.append('do', 'save_venue');
+            //Venue form
+            if (form === 'plek-venue-form') {
                 plekvalidator.add_field('venue-id', 'int', true, 'add_venue');
                 plekvalidator.add_field(['venue-name', 'venue-street', 'venue-city', 'venue-country'], 'text', false, 'add_venue');
                 plekvalidator.add_field(['venue-province'], 'text', true, 'add_venue');
@@ -280,21 +324,45 @@ let plek_manage_event = {
                 plekvalidator.add_field('venue-web', 'url', true, 'add_venue');
                 plekvalidator.add_invalid_field_values('venue-country', ['null'], 'add_venue');
                 plekvalidator.add_error_messages('venue-country', 'add_venue', null, null, null, null, null, __('Please select a country', 'pleklang'));
-                break;
+            }
 
-            case 'organizer-form-submit':
-                data.append('action', 'plek_organizer_actions');
-                data.append('do', 'save_organizer');
-                plekvalidator.add_field('venue-id', 'int', true, 'add_organizer');
-                plekvalidator.add_field('venue-name', 'text', false, 'add_organizer');
-                plekvalidator.add_field('venue-email', 'email', true, 'add_organizer');
-                plekvalidator.add_field('venue-phone', 'phone', true, 'add_organizer');
-                plekvalidator.add_field('venue-web', 'url', true, 'add_organizer');
-                break;
-            default:
-                break;
-        }
-        return data;
+            //Event
+            //@toto: add the form id
+            if (form === 'add_event_basic') {
+                plekvalidator.add_field('event_name', 'text', false, form);
+                plekvalidator.add_field('event_start_date', 'date', false, form);
+                plekvalidator.add_field('event_venue', 'int', false, form);
+            }
+
+            //Add the fields to the validator
+            //@todo: All Event details fields should be optional
+            if (form === 'add_event_details') {
+                plekvalidator.add_field('event_description', 'text', true, form);
+                plekvalidator.add_field('event_organizer', 'int', true, form);
+                plekvalidator.add_field('event_poster', 'file', true, form);
+                plekvalidator.add_field('event_fb_link', 'url', true, form);
+                plekvalidator.add_field('event_price_boxoffice', 'price', true, form);
+                plekvalidator.add_field('event_price_boxoffice_currency', 'simpletext', false, form);
+                plekvalidator.add_field('event_price_presale', 'price', true, form);
+                plekvalidator.add_field('event_price_presale_currency', 'simpletext', false, form);
+                plekvalidator.add_field('event_price_link', 'url', true, form);
+                plekvalidator.add_field('event_id', 'int', false, form);
+                plekvalidator.add_error_messages('event_id', 'default', __("Missing Event ID", "pleklang"));
+            }
+
+            plekvalidator.add_field('user_login', 'text');
+            plekvalidator.add_field('user_pass', 'password');
+            plekvalidator.add_field('rememberme', 'text', true);
+
+            plekvalidator.add_field('guest_name', 'text');
+            plekvalidator.add_field('guest_email', 'email');
+
+            plekvalidator.add_field('event_id', 'int');
+            plekvalidator.add_error_messages('event_id', 'default', __("Missing Event ID", "pleklang"));
+        });
+
+
+        console.log("Added validator fields");
     },
 
     /**
