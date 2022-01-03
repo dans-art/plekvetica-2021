@@ -1,7 +1,64 @@
 /**
  * Error Handling Object
  */
- var plekerror = {
+var plekerror = {
+
+    /**
+     * Resets the toastr to the default settings
+     */
+    reset_toastr() {
+        try {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "4000",
+                "extendedTimeOut": "0",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    /**
+     * 
+     * @param {int} timeOut The duration the notification should be shown. 0 = infinite
+     * @param {bool} closeButton If the close button should be shown
+     * @param {string} positionClass The position class. Options: https://codeseven.github.io/toastr/demo.html
+     */
+    set_toastr(timeOut = 4000, closeButton = true, positionClass = 'toast-top-right') {
+        try {
+            toastr.options = {
+                "closeButton": closeButton,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": positionClass,
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": timeOut,
+                "extendedTimeOut": "0",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    },
 
     /**
      * Displays the error message to a field or shows a toastr error message
@@ -10,14 +67,14 @@
      * @param {string} message The Error to display
      * @param {string} title The title of the message. This will only be shown, if not field is present with the given id
      */
-    display_error(field, message, title = ''){
+    display_error(field, message, title = '') {
         console.log(field);
         console.log(message);
-        
-        if(jQuery('#' + field).length > 0){
+
+        if (jQuery('#' + field).length > 0) {
             //Error is field error
             this.add_error_to_field(field, message);
-        } else{
+        } else {
             //Show error as toastr if no field found
             toastr.error(message, title);
         }
@@ -29,19 +86,19 @@
      * @param {string} title The title to display
      * @param {string} message The message to show
      */
-    display_info(title, message){
+    display_info(title, message) {
         console.log(title);
         console.log(message);
         toastr.info(message, title);
     },
 
-    add_error_to_field(field, message){
+    add_error_to_field(field, message) {
         jQuery('#' + field).parent().append(`<div id='plek-field-error-${field}' class='plek-field-error'>
         ${message}
         </div>`);
     },
 
-    clear_field_errors(){
+    clear_field_errors() {
         jQuery('.plek-field-error').remove();
     },
 
@@ -49,9 +106,9 @@
      * Removes a field error of an input. Expects the ID of the Input field.
      * @param {string} field 
      */
-    clear_field_error(field){
-        if(jQuery("#plek-field-error-"+field).length === 1){
-            jQuery("#plek-field-error-"+field).remove();
+    clear_field_error(field) {
+        if (jQuery("#plek-field-error-" + field).length === 1) {
+            jQuery("#plek-field-error-" + field).remove();
         }
     }
 }

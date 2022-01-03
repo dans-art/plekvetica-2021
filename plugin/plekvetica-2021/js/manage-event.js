@@ -37,11 +37,12 @@ jQuery(document).ready(function () {
 
 
 let plek_manage_event = {
-   
-    constructed : false,
+
+    constructed: false,
 
     __construct() {
-        if(this.constructed === true){
+        if (this.constructed === true) {
+            console.log("Manage Event already constructed");
             return;
         }
         this.constructed = true;
@@ -50,7 +51,7 @@ let plek_manage_event = {
         ajaxPreloader('bands');
         ajaxPreloader('venues');
         ajaxPreloader('organizers');
-        
+
         //On Ready
         jQuery(document).ready(function () {
             plek_manage_event.prepare_validator_fields();
@@ -64,6 +65,7 @@ let plek_manage_event = {
     },
 
     add_event_listeners() {
+        console.log("Add event eventlistener");
         //On Save Band / Organizer / Venue
         jQuery('.plek-form').on('click', '.plek-button', function (e) {
             let button_id = e.currentTarget.id;
@@ -107,7 +109,15 @@ let plek_manage_event = {
             event.preventDefault();
             jQuery(this).prop("disabled", true);
             var type = jQuery(this).data("type");
-            window.plekevent.save_event(type);
+            var form = jQuery(this).closest("form").attr("id");
+            switch (type) {
+                case 'save_basic_event':
+                    window.plekevent.save_event(type, form);
+                    break;
+            
+                default:
+                    break;
+            }
         });
 
         jQuery('#main').on('click', "#plek-add-login-submit", function (event) {
@@ -134,6 +144,11 @@ let plek_manage_event = {
 
         jQuery('.event-organizer-proposal-item').click(function (element) {
             window.plekevent.add_item_to_selection(this);
+        });
+
+        jQuery('.event-band-container').on('click', '#no_band', function (element) {
+            var checked = jQuery(this).is(':checked');
+            plekvalidator.add_field('event_band', 'int', checked, 'add_event_basic'); //Toggles the requirement of the band field
         });
 
         //Clear the errors
@@ -331,7 +346,9 @@ let plek_manage_event = {
             if (form === 'add_event_basic') {
                 plekvalidator.add_field('event_name', 'text', false, form);
                 plekvalidator.add_field('event_start_date', 'date', false, form);
+                plekvalidator.add_field('event_band', 'int', false, form);
                 plekvalidator.add_field('event_venue', 'int', false, form);
+                plekvalidator.add_field('hp-password', 'honeypot', true, form);
             }
 
             //Add the fields to the validator
@@ -350,17 +367,25 @@ let plek_manage_event = {
                 plekvalidator.add_error_messages('event_id', 'default', __("Missing Event ID", "pleklang"));
             }
 
-            plekvalidator.add_field('user_login', 'text');
-            plekvalidator.add_field('user_pass', 'password');
-            plekvalidator.add_field('rememberme', 'text', true);
+            //Add the fields to the validator
+            //@todo: All Event details fields should be optional
+            if (form === 'add_event_login') {
 
-            plekvalidator.add_field('guest_name', 'text');
-            plekvalidator.add_field('guest_email', 'email');
+                //Get the selected login type (Login / Guest)
+                let required_login = false;
+                let required_guest = true;
+                plekvalidator.add_field('user_login', 'text', form);
+                plekvalidator.add_field('user_pass', 'password', required_login, form);
+                plekvalidator.add_field('rememberme', 'text', true, form);
 
-            plekvalidator.add_field('event_id', 'int');
-            plekvalidator.add_error_messages('event_id', 'default', __("Missing Event ID", "pleklang"));
+                plekvalidator.add_field('guest_name', 'text', required_guest, form);
+                plekvalidator.add_field('guest_email', 'email', required_guest, form);
+
+                plekvalidator.add_field('event_id', 'int', false, form);
+                plekvalidator.add_error_messages('event_id', 'default', __("Missing Event ID", "pleklang"));
+            }
+
         });
-
 
         console.log("Added validator fields");
     },

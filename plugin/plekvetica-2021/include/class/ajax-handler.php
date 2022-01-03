@@ -91,6 +91,15 @@ class PlekAjaxHandler
             case 'save_event_details':
                 $this->set_error("Are you allowed to save??");
                 break;
+            case 'check_event_duplicate':
+                $plek_event = new PlekEvents;
+                $existing = $plek_event -> event_extsts();
+                if($existing){
+                    $this->set_error($existing);
+                }else{
+                    $this -> set_success('Event does not exist');
+                }
+                break;
             default:
                 # code...
                 break;

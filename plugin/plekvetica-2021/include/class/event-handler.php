@@ -1108,4 +1108,45 @@ class PlekEventHandler
         }
         return $currencies;
     }
+
+    /**
+     * Checks if a event with the given bands exists at a date
+     * If one or more Bands are found at a given start date the function returns
+     * a string with the link to the event <a href='event_link'>event_name</a>
+     * If no parameters set, the function will try to get the ajax data for start_date & band_ids
+     *
+     * @param string $date The Date to check
+     * @param array|string|int $bands The Bands as a array, json-string or by single band-id
+     * @return string|bool Name and link to the event if event exists, false otherwise
+     */
+    public function event_extsts($date = null, $bands = null){
+        global $plek_ajax_handler;
+        $date = (!is_string($date))?$plek_ajax_handler -> get_ajax_data_esc('start_date'):$date;
+        $bands = ($bands === null)?$plek_ajax_handler -> get_ajax_data('band_ids'):$bands;
+
+        $start_date = date('Y-m-d', strtotime($date));
+
+        if(is_integer($bands)){
+            $bands = array($bands);
+        }
+        if(!is_array($bands)){
+            $bands = json_decode($bands);
+        }
+        
+        $result =  tribe_get_events(
+            [
+                'start_date' => $start_date,
+                'tag' => $bands
+            ]
+        );
+        if(empty($result)){
+            return false; //Event not found
+        }
+
+        $output = '';
+        foreach($result as $post_obj){
+            $output .= "<a href='{$post_obj -> guid}' target='_blank'>{$post_obj -> post_title}</a><br/>";
+        }
+        return $output;
+    }
 }

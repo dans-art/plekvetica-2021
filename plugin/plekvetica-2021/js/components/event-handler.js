@@ -13,6 +13,10 @@ var plekevent = {
         jQuery("#event_start_date").on("change", function () { window.plekevent.check_existing_event() });
     },
 
+    /**
+     * Checks if there is a event at the same date with the same bands.
+     * @returns bool true if event exists, otherwise false
+     */
     check_existing_event() {
         if (this.get_field_value('event_start_date') !== "" && jQuery('#event-band-selection .item').length > 0) {
             //ajax call for checking
@@ -20,7 +24,7 @@ var plekevent = {
             datab.append('action', 'plek_ajax_event_form');
             datab.append('type', 'check_event_duplicate');
             datab.append('start_date', this.get_field_value('event_start_date'));
-            datab.append('band_ids', JSON.stringify(this.get_field_value('bands')));
+            datab.append('band_ids', this.get_field_value('event_band'));
             console.log(datab);
             jQuery.ajax({
                 url: window.ajaxurl,
@@ -31,8 +35,10 @@ var plekevent = {
                 contentType: false,
                 success: function success(data) {
                     var jdata = JSON.parse(data);
-                    if (jdata.error !== '') {
-                        window.plekerror.display_info('Achtung', jdata.error);
+                    if (jdata.error.length > 0) {
+                        window.plekerror.set_toastr(0,true,'toast-bottom-full-width');
+                        window.plekerror.display_info(__('Event already exists','pleklang'), jdata.error);
+                        window.plekerror.reset_toastr();
                         plekevent.existing_event = true;
                         console.log("Event Existiert bereits");
                         return true;
@@ -127,13 +133,13 @@ var plekevent = {
         jQuery('#' + selector + ' .item').remove();
     },
 
-    save_event(type) {
+    save_event(type, form) {
         console.log("save" + type);
 
         var datab = this.prepare_data(type);
-        if (plekvalidator.validate_form_data(datab) !== true) {
+        if (plekvalidator.validate_form_data(datab, form) !== true) {
             jQuery('#plek-submit').prop("disabled", false); //Enable the button again.
-            plekvalidator.display_errors();
+            plekvalidator.display_errors(form);
             //plekerror.display_error();
             return false;
         }
@@ -235,7 +241,7 @@ var plekevent = {
             }
             datab.append('event_band', this.get_field_value('bands'));
             datab.append('event_venue', this.get_field_value('venue'));
-            datab.append('honeypot_field', this.get_field_value('hp-password'));
+            datab.append('hp-password', this.get_field_value('hp-password'));
         }
         if (type === "save_event_details") {
             //Fields for Event Basic
@@ -305,10 +311,10 @@ var plekevent = {
         }
 
         switch (name) {
-            case 'bands':
+            case 'event_band':
                 return this.get_selector_ids('event-band-selection');
                 break;
-            case 'venue':
+            case 'event_venue':
                 return this.get_selector_ids('event-venue-selection');
                 break;
             case 'event_organizer':

@@ -22,7 +22,7 @@ $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings.
 <?php if ($type === 'manage_band') : ?>
 	<script type="text/javascript" defer='defer'>
 		jQuery(document).ready(function(){
-			plek_manage_event.add_event_listeners();
+			plek_manage_event.__construct();
 		});
 	</script>
 <?php endif; ?>
