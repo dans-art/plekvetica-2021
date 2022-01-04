@@ -64,6 +64,7 @@ class PlekEventHandler
      * Publish an Event
      * 
      * @param string|int $event_id
+     * @todo: Send Info to Band followers
      * 
      * @return boolean|string - True on success, error message on error
      */
@@ -76,6 +77,7 @@ class PlekEventHandler
         );
         $set = wp_update_post($update);
         if (is_int($set) and $set > 0) {
+            //Info to Band followers
             return true;
         } else {
             return __("Changing Status was unsuccessfully", "pleklang");
@@ -1119,34 +1121,190 @@ class PlekEventHandler
      * @param array|string|int $bands The Bands as a array, json-string or by single band-id
      * @return string|bool Name and link to the event if event exists, false otherwise
      */
-    public function event_extsts($date = null, $bands = null){
+    public function event_extsts($date = null, $bands = null)
+    {
         global $plek_ajax_handler;
-        $date = (!is_string($date))?$plek_ajax_handler -> get_ajax_data_esc('start_date'):$date;
-        $bands = ($bands === null)?$plek_ajax_handler -> get_ajax_data('band_ids'):$bands;
+        $date = (!is_string($date)) ? $plek_ajax_handler->get_ajax_data_esc('start_date') : $date;
+        $bands = ($bands === null) ? $plek_ajax_handler->get_ajax_data('band_ids') : $bands;
 
         $start_date = date('Y-m-d', strtotime($date));
 
-        if(is_integer($bands)){
+        if (is_integer($bands)) {
             $bands = array($bands);
         }
-        if(!is_array($bands)){
+        if (!is_array($bands)) {
             $bands = json_decode($bands);
         }
-        
+
         $result =  tribe_get_events(
             [
                 'start_date' => $start_date,
                 'tag' => $bands
             ]
         );
-        if(empty($result)){
+        if (empty($result)) {
             return false; //Event not found
         }
 
         $output = '';
-        foreach($result as $post_obj){
-            $output .= "<a href='{$post_obj -> guid}' target='_blank'>{$post_obj -> post_title}</a><br/>";
+        foreach ($result as $post_obj) {
+            $output .= "<a href='{$post_obj->guid}' target='_blank'>{$post_obj->post_title}</a><br/>";
         }
         return $output;
+    }
+
+    /**
+     * Saves the basic event data
+     *
+     * @return mixed The Login or Event Details form, PlekFormValidator errors on errors
+     */
+    public function save_event_basic()
+    {
+        global $plek_ajax_handler;
+
+        //Validate the Data
+        $validator = $this->validate_event_basic();
+        if ($validator->all_fields_are_valid() !== true) {
+            return $validator->get_errors();
+        }
+
+        //Save Event
+        $args = $this->get_event_basic_data();
+        $is_event_edit = (empty($plek_ajax_handler->get_ajax_data('event_id'))) ? false : true;
+        s($args);
+        if ($is_event_edit) {
+            $eid = (int) $plek_ajax_handler->get_ajax_data('event_id');
+            $event_id = tribe_update_event($eid, $args);
+        } else {
+            $event_id = tribe_create_event($args);
+        }
+
+        if(!is_int($event_id)){
+            $validator->set_system_error(__('Failed to save Event', 'pleklang'));
+            return $validator->get_errors();
+        }
+
+        //Update the Event genres / categories
+        $this -> update_event_genres($event_id);
+
+        if (PlekUserHandler::user_is_logged_in()) {
+            //Info to Band follower
+
+            return PlekTemplateHandler::load_template_to_var('add-event-form-details', 'event/form', $this, $event_id);
+        } else {
+            //Info to Admin for unlocking
+            $this -> send_unlock_event_request($event_id);
+            return PlekTemplateHandler::load_template_to_var('add-event-form-login', 'event/form', $this, $event_id);
+        }
+    }
+
+    /**
+     * Saves the Event details / Event Meta.
+     * 
+     *
+     * @return bool true on success, false on error
+     */
+    public function save_event_details()
+    {
+    }
+
+    /**
+     * Validates the Basic Event form.
+     * Checks the fields: event_id (if edit), event_name, event_band, event_venue, hp-password (honeypot)
+     *
+     * @return object PlekFormValidator object
+     */
+    public function validate_event_basic()
+    {
+        global $plek_ajax_handler;
+
+        $validator = new PlekFormValidator;
+
+        $validator->set_ignore('type');
+        $validator->set_type('event_name', 'text');
+        $validator->set_type('event_start_date', 'datetime');
+
+        $validator->set_type('event_band', 'int');
+        $validator->set_array('event_band');
+
+        $validator->set_type('event_venue', 'int');
+        $validator->set_array('event_venue');
+
+        $validator->set_type('hp-password', 'honeypot');
+
+        $event_id = $plek_ajax_handler->get_ajax_data('event_id');
+
+        if (!empty($event_id)) {
+            //If event_id is empty or not set, it is probably a new event to be added
+            $validator->set_required('event_id');
+            $validator->set_type('event_id', 'int');
+            if (!PlekUserHandler::current_user_can_edit($event_id)) {
+                $validator->set_system_error(__('You are not authorized to edit this event!', 'pleklang'));
+            }
+        }
+        return $validator;
+    }
+
+    /**
+     * Gets all the data for the basic event to save
+     * Make sure to validate the data before using this function!
+     *
+     * @return void
+     */
+    public function get_event_basic_data()
+    {
+        global $plek_ajax_handler;
+        $args = array();
+        $args['post_name'] = sanitize_text_field($plek_ajax_handler->get_ajax_data('event_name'));
+
+        
+        $args['EventStartDate'] = $plek_ajax_handler->get_ajax_data('event_start_date');
+        $args['EventEndDate'] = $plek_ajax_handler->get_ajax_data('event_start_date'); //Add End Date!
+
+
+        //$args['post_category'] = array_filter($plek_ajax_handler->get_ajax_data_as_array('event_band', true));
+        $venue_arr = $plek_ajax_handler->get_ajax_data_as_array('event_venue', true);
+        if (!empty($venue_arr[0])) {
+            $args['eventVenue'] = array('VenueID' => $venue_arr[0]);
+        }
+        //$args['tax_input'][Tribe__Events__Main::TAXONOMY] = array("697");
+        $args['EventShowMap'] = true;
+        $args['EventShowMapLink'] = true;
+        $args['post_status'] = 'publish';
+
+        if (!PlekUserHandler::user_is_logged_in()) {
+            $authors_handler = new PlekAuthorHandler;
+            $args['post_author'] = $authors_handler->get_guest_author_id();
+            $args['post_status'] = 'draft';
+        }
+        return $args;
+    }
+
+    /**
+     * Sends an Email to the admin for unlocking / publishing an Event.
+     *
+     * @return int|bool Id of the inserted notification row or false on error
+     */
+    public function send_unlock_event_request(int $event_id)
+    {
+        $notify = new PlekNotificationHandler;
+        $post = get_post($event_id);
+        $title = (isset($post->post_title)) ? $post->post_title : 'NULL';
+        $subject = __('New Event added, please publish', 'pleklang');
+        $message = sprintf(__('The Event "%s" has been added to the Event Calendar. Please check and publish the Event.', 'pleklang'), $title);
+        $action = the_permalink($event_id);
+
+        return $notify->push_to_role('eventmanager', $subject, $message, $action);
+    }
+
+    /**
+     * Updates the events genres by the genres of the bands / tags
+     *
+     * @param integer $event_id
+     * @return bool true on success, false on error
+     */
+    public function update_event_genres(int $event_id){
+        //Get all the bands
+        //set the event post_category
     }
 }

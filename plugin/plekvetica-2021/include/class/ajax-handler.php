@@ -16,6 +16,8 @@ class PlekAjaxHandler
      */
     public function plek_ajax_event_form_action()
     {
+        global $plek_ajax_errors;
+
         $type = $this->get_ajax_type();
         switch ($type) {
             case 'get_bands':
@@ -35,8 +37,15 @@ class PlekAjaxHandler
                 echo $organi_handler->get_all_organizers_json();
                 die();
                 break;
+
             case 'save_basic_event':
-                $this->set_success("Saved event??");
+                $plek_event = new PlekEvents;
+                $save = $plek_event->save_event_basic();
+                if (is_int($save)) {
+                    $this->set_success($save); //Event ID of the Event saved
+                } else {
+                    $plek_ajax_errors->add('save_basic_event', $save); //PlekEventValidator Errors
+                }
                 break;
             case 'save_add_event_login':
                 $this->set_success("Logged in");
@@ -49,6 +58,15 @@ class PlekAjaxHandler
                 //@todo:Old Plekvetica Event function. Replace with new!
                 echo plekEvent();
                 die();
+                break;
+            case 'check_event_duplicate':
+                $plek_event = new PlekEvents;
+                $existing = $plek_event->event_extsts();
+                if ($existing) {
+                    $this->set_error($existing);
+                } else {
+                    $this->set_success('Event does not exist');
+                }
                 break;
             default:
                 # code...
@@ -63,6 +81,8 @@ class PlekAjaxHandler
      */
     public function plek_ajax_nopriv_event_form_action()
     {
+        global $plek_ajax_errors;
+
         $type = $this->get_ajax_type();
         switch ($type) {
             case 'get_bands':
@@ -81,8 +101,15 @@ class PlekAjaxHandler
                 echo $organi_handler->get_all_organizers_json();
                 die();
                 break;
+
             case 'save_basic_event':
-                $this->set_success("Saved event??");
+                $plek_event = new PlekEvents;
+                $save = $plek_event->save_event_basic();
+                if (is_string($save)) {
+                    $this->set_success($save); //The Event Details form or Login form
+                } else {
+                    $plek_ajax_errors->add('save_basic_event', $save); //PlekEventValidator Errors
+                }
                 break;
 
             case 'save_add_event_login':
@@ -93,11 +120,11 @@ class PlekAjaxHandler
                 break;
             case 'check_event_duplicate':
                 $plek_event = new PlekEvents;
-                $existing = $plek_event -> event_extsts();
-                if($existing){
+                $existing = $plek_event->event_extsts();
+                if ($existing) {
                     $this->set_error($existing);
-                }else{
-                    $this -> set_success('Event does not exist');
+                } else {
+                    $this->set_success('Event does not exist');
                 }
                 break;
             default:
@@ -275,7 +302,7 @@ class PlekAjaxHandler
                 $saved = $plek_band->save_band();
                 if ($saved) {
                     $this->set_success(__('Band saved', 'pleklang'));
-                    $this->set_success($plek_band -> last_updated_id);
+                    $this->set_success($plek_band->last_updated_id);
                     $this->set_success($saved);
                 }
                 break;
@@ -308,7 +335,7 @@ class PlekAjaxHandler
                 $saved = $plek_band->save_band();
                 if ($saved) {
                     $this->set_success(__('Band saved', 'pleklang'));
-                    $this->set_success($plek_band -> last_updated_id);
+                    $this->set_success($plek_band->last_updated_id);
                     $this->set_success($saved);
                 }
                 break;
@@ -340,13 +367,13 @@ class PlekAjaxHandler
     {
         $do = $this->get_ajax_do();
         switch ($do) {
-            
+
             case 'save_venue':
                 $plek_venue = new PlekVenueHandler;
                 $saved = $plek_venue->save_venue();
                 if ($saved) {
                     $this->set_success(__('Venue saved', 'pleklang'));
-                    $this->set_success($plek_venue -> last_updated_id);
+                    $this->set_success($plek_venue->last_updated_id);
                     $this->set_success($saved);
                 }
                 break;
@@ -374,7 +401,7 @@ class PlekAjaxHandler
                 $saved = $plek_venue->save_venue();
                 if ($saved) {
                     $this->set_success(__('Venue saved', 'pleklang'));
-                    $this->set_success($plek_venue -> last_updated_id);
+                    $this->set_success($plek_venue->last_updated_id);
                     $this->set_success($saved);
                 }
                 break;
@@ -395,13 +422,13 @@ class PlekAjaxHandler
     {
         $do = $this->get_ajax_do();
         switch ($do) {
-            
+
             case 'save_organizer':
                 $plek_organizer = new PlekOrganizerHandler;
                 $saved = $plek_organizer->save_organizer();
                 if ($saved) {
                     $this->set_success(__('Organizer saved', 'pleklang'));
-                    $this->set_success($plek_organizer -> last_updated_id);
+                    $this->set_success($plek_organizer->last_updated_id);
                     $this->set_success($saved);
                 }
                 break;
@@ -429,7 +456,7 @@ class PlekAjaxHandler
                 $saved = $plek_organizer->save_organizer();
                 if ($saved) {
                     $this->set_success(__('Organizer saved', 'pleklang'));
-                    $this->set_success($plek_organizer -> last_updated_id);
+                    $this->set_success($plek_organizer->last_updated_id);
                     $this->set_success($saved);
                 }
                 break;
@@ -582,6 +609,26 @@ class PlekAjaxHandler
     public function get_ajax_files_data(string $field = '')
     {
         return (isset($_FILES[$field]['name']) and !empty($_FILES[$field]['name'])) ? $_FILES[$field] : "";
+    }
+
+    /**
+     * Returns the field value as an array.
+     * Make sure that the value is a valid json string
+     *
+     * @param string $field - The fieldname
+     * @return array The array
+     */
+    public function get_ajax_data_as_array(string $field = '', bool $escape = false)
+    {
+        $value = (isset($_REQUEST[$field])) ? $_REQUEST[$field] : "";
+        $val_arr = json_decode($value);
+        if($escape){
+            //Escape all the data
+            foreach($val_arr as $index => $val){
+                $val_arr[$index] = htmlspecialchars($val);
+            }
+        }
+        return $val_arr;
     }
 
 

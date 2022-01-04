@@ -133,16 +133,25 @@ var plekevent = {
         jQuery('#' + selector + ' .item').remove();
     },
 
+    /**
+     * Sends an ajax request to save the event.
+     * 
+     * @param {string} type Type of the form (only save_basic_event is supported atm.)
+     * @param {string} form ID of the Form 
+     * @returns 
+     */
     save_event(type, form) {
-        console.log("save" + type);
+        console.log("save " + type);
 
         var datab = this.prepare_data(type);
         if (plekvalidator.validate_form_data(datab, form) !== true) {
-            jQuery('#plek-submit').prop("disabled", false); //Enable the button again.
+            jQuery('#plek-submit-basic-event').prop("disabled", false); //Enable the button again.
             plekvalidator.display_errors(form);
             //plekerror.display_error();
             return false;
         }
+        let button = jQuery('#plek-submit-basic-event');
+
         //Validation was ok, send it to the server
         jQuery.ajax({
             url: window.ajaxurl,
@@ -152,25 +161,23 @@ var plekevent = {
             processData: false,
             contentType: false,
             success: function success(data) {
-
-                //Only for testing, move on production to error handling part
-                jQuery('#plek-submit').prop("disabled", false); //Enable the button again.
-
-                var jdata = JSON.parse(data);
-                if (jdata.error !== '') {
-                    window.plekerror.display_info('Achtung', jdata.error);
-                    this.existing_event = true;
-                    console.log("Event Existiert beriets");
-                    return true;
-                } else {
-                    this.existing_event = false;
-                    console.log("Event existiert nicht");
-                    return false;
+                let text = plek_main.get_text_from_ajax_request(data, true);
+                let errors = plek_main.show_field_errors(data, '#add_event_basic');
+                if(errors === true){
+                    console.log("Contains Errors");
+                    text = "Das Formular enthält Fehler, bitte korrigieren";
+                }else{
+                    text = plek_main.get_text_from_ajax_request(data, true);
+                    console.log(text);
+                    plekerror.display_info('Event Saved!');
+                    return;
                 }
+                plek_main.deactivate_button_loader(button, text);
+                jQuery('#plek-submit-basic-event').prop("disabled", false); //Enable the button again.
             },
             error: function error(data) {
-                window.plekerror.display_info(window.pleklang.loaderror + ': ' + data, "Error");
-                return false;
+                plek_main.deactivate_button_loader(button, __("Error loading data.... ","pleklang"));
+
             }
         });
 
@@ -239,8 +246,8 @@ var plekevent = {
             } else {
                 plekvalidator.add_field('event_band', 'int');
             }
-            datab.append('event_band', this.get_field_value('bands'));
-            datab.append('event_venue', this.get_field_value('venue'));
+            datab.append('event_band', this.get_field_value('event_band'));
+            datab.append('event_venue', this.get_field_value('event_venue'));
             datab.append('hp-password', this.get_field_value('hp-password'));
         }
         if (type === "save_event_details") {

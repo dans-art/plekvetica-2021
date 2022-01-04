@@ -21,10 +21,10 @@ class PlekNotificationHandler extends WP_List_Table
      * @todo: Push notification to Mobile App
      *
      * @param array $user_ids
-     * @param [type] $type
-     * @param [type] $subject
-     * @param [type] $message
-     * @param [type] $action
+     * @param string $subject - Subject of the message / Title
+     * @param string $message - THe Message to show
+     * @param string $action - The link to click. Should be a valid html link
+     * @param string $type - The type of the notification
      * @return int|false Id of the inserted row or false on error.
      */
     public function push_notification($user_ids = array(), $type = '', $subject = '', $message = '', $action = '')
@@ -74,10 +74,10 @@ class PlekNotificationHandler extends WP_List_Table
      * Sends a notification to all the accredited Members of an Event
      *
      * @param string|integer $event_id
-     * @param [type] $type
-     * @param [type] $subject
-     * @param [type] $message
-     * @param [type] $action
+     * @param string $subject - Subject of the message / Title
+     * @param string $message - THe Message to show
+     * @param string $action - The link to click. Should be a valid html link
+     * @param string $type - The type of the notification
      * @return int|false Id of the inserted row or false on error.
      */
     public function push_accredi_members(string|int $event_id, $type = null, $subject = null, $message = null, $action = null)
@@ -102,10 +102,10 @@ class PlekNotificationHandler extends WP_List_Table
      * Sends a notification to the admin
      *
      * @param string|integer $event_id
-     * @param [type] $subject
-     * @param [type] $message
-     * @param [type] $action
-     * @param [type] $type
+     * @param string $subject - Subject of the message / Title
+     * @param string $message - THe Message to show
+     * @param string $action - The link to click. Should be a valid html link
+     * @param string $type - The type of the notification
      * @return int|false Id of the inserted row or false on error.
      */
     public static function push_to_admin($subject = null, $message = null, $action = null, $type = 'admin_info')
@@ -118,6 +118,34 @@ class PlekNotificationHandler extends WP_List_Table
         }
         $notify = new PlekNotificationHandler;
         return $notify->push_notification(array($admin->ID), $type, $subject, $message, $action);
+    }
+
+    /**
+     * Sends an Notification to a certain role.
+     * Currently, all the messages go to the admin. This is a placeholder for later.
+     *
+     * @param string $role - The role to send the message to.
+     * @param string $subject - Subject of the message / Title
+     * @param string $message - THe Message to show
+     * @param string $action - The link to click. Should be a valid html link
+     * @param string $type - The type of the notification
+     * @return void
+     */
+    public static function push_to_role($role = null, $subject = null, $message = null, $action = null, $type = 'admin_info')
+    {
+        switch ($role) {
+            case 'admin':
+                return self::push_to_admin($subject, $message, $action, $type);
+                break;
+            case 'eventmanager':
+                //@todo: Replace with own function to send it to the eventmanager.
+                return self::push_to_admin($subject, $message, $action, $type);
+                break;
+
+            default:
+                return false;
+                break;
+        }
     }
 
 

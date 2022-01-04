@@ -23,12 +23,16 @@ class PlekUserHandler
     /**
      * Checks if the current unser is allowed to edit this post.
      *
-     * @param object $plek_event - The Plek Event Object
+     * @param object $plek_event - The Plek Event Object or the event_id
      * @return void
      */
-    public static function current_user_can_edit(object $plek_event)
+    public static function current_user_can_edit(object|int $plek_event)
     {
-        $post_id = (!$plek_event->get_ID()) ? get_the_ID() : $plek_event->get_ID();
+        if(!is_int($plek_event)){
+            $post_id = (!$plek_event->get_ID()) ? get_the_ID() : $plek_event->get_ID();
+            $plek_event = new PlekEvents;
+            $plek_event -> load_event($post_id);
+        }
         if (get_post_status($post_id) !== 'publish') {
             return false;
         }

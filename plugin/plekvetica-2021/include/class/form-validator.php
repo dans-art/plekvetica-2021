@@ -15,6 +15,7 @@ class PlekFormValidator
     protected $max_length = array(); //Max length of the value
     protected $min_length = array(); //Min length of the value
     protected $hint = array(); //When validation fails, this hint will be displayed to help the user
+    protected $value_in_array = array(); // If set, the validator loops the array and checks for the array values
 
     protected $allowed_file_types = array();
 
@@ -172,6 +173,19 @@ class PlekFormValidator
     }
 
     /**
+     * Sets the fields as an array value
+     * The validator will check every item in the array if valid
+     *
+     * @param string $fieldname
+     * @return void
+     */
+    public function set_array(string $fieldname)
+    {
+        $this->value_in_array[$fieldname] = true;
+        return;
+    }
+
+    /**
      * Sets the allowed file types of a field
      *
      * @param string $fieldname
@@ -236,10 +250,30 @@ class PlekFormValidator
         return $this->errors;
     }
 
-    public function field_is_valid(string $fieldname, $value)
+    /**
+     * Checks if a field is valid.
+     *
+     * @param string $fieldname - Name of the field to check
+     * @param mixed $value - The value to check
+     * @return bool true if valid, false on error
+     */
+    public function field_is_valid(string $fieldname, $value, $is_array = false)
     {
+        if(!$is_array AND isset($this->value_in_array[$fieldname])){
+            //Field is an array. Loop array and check
+            $values = (is_array($value))?$value:json_decode($value);
+            foreach($values as $val){
+                $this -> field_is_valid($fieldname, $val, true);
+            }
+            if(empty($this -> errors[$fieldname])){
+                return true;
+            }else{
+                return false;
+            }
+        }
         //Sets the default values
         $this->setup_field($fieldname);
+
         $type = isset($this->type[$fieldname]) ? $this->type[$fieldname] : null;
         //Check if field should be ignored
         if (isset($this->ignore[$fieldname])) {
@@ -252,7 +286,7 @@ class PlekFormValidator
         }
 
         //Check if field is not required but empty. If so, end the validator
-        if((!isset($this->require[$fieldname]) OR $this->require[$fieldname] === false) AND empty($value)){
+        if ((!isset($this->require[$fieldname]) or $this->require[$fieldname] === false) and empty($value)) {
             return true;
         }
 
@@ -274,7 +308,7 @@ class PlekFormValidator
         if ($this->pattern[$fieldname] !== false) {
             if (preg_match($this->pattern[$fieldname], $value, $out) !== 1) {
                 if (!empty($this->hint[$fieldname])) {
-                        $this->set_error($fieldname, sprintf(__('Wrong Format. Notice: %s', 'pleklang'), $this->hint[$fieldname]));
+                    $this->set_error($fieldname, sprintf(__('Wrong Format. Notice: %s', 'pleklang'), $this->hint[$fieldname]));
                 } else {
                     $this->set_error($fieldname, __('Wrong Format.', 'pleklang'));
                 }
@@ -293,6 +327,13 @@ class PlekFormValidator
             case 'file':
             case 'image':
                 return $this->file_upload_is_valid($fieldname);
+                break;
+
+            case 'honeypot':
+                //This field has to be empty!
+                if (!empty($value)) {
+                    $this->set_error($fieldname, __('Nice try! No Robots allowed here!', 'pleklang'));
+                }
                 break;
 
             default:
@@ -327,7 +368,7 @@ class PlekFormValidator
                 $fvalue = array($fvalue);
             }
             foreach ($fvalue as $value) {
-               $this->field_is_valid($fkey, $value);
+                $this->field_is_valid($fkey, $value);
             }
         }
         if (count($this->errors) !== 0) {
@@ -345,12 +386,12 @@ class PlekFormValidator
      */
     public function file_upload_is_valid($fieldname)
     {
-        if (!isset($_FILES[$fieldname]['tmp_name']) OR empty($_FILES[$fieldname]['tmp_name'])) {
+        if (!isset($_FILES[$fieldname]['tmp_name']) or empty($_FILES[$fieldname]['tmp_name'])) {
             //Check if is required
-            if(isset($this->require[$fieldname]) and $this->require[$fieldname] === true){
+            if (isset($this->require[$fieldname]) and $this->require[$fieldname] === true) {
                 $this->set_error($fieldname, __('Uploaded file not found', 'pleklang'));
                 return false;
-            }else{
+            } else {
                 return true; //Is empty and not required
             }
         }
@@ -419,6 +460,7 @@ class PlekFormValidator
         $defaults['price'] = array("name" => __("Price", "pleklang"), "min_length" => 1, "max_length" => 20, "pattern" => '/^[0-9.\- ]+$/', "hint" =>  __('Can only contain numbers, periods and minus', 'pleklang'));
         $defaults['password'] = array("name" => __("Password", "pleklang"), "min_length" => 10, "max_length" => 0, "pattern" => false);
         $defaults['image'] = array("name" => __("Image", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => false, 'allowed_file_types' =>  array('image/gif' => 'GIF', 'image/png' => 'PNG', 'image/jpeg' => 'JPG', 'image/webp' => 'WEBP'));
+        $defaults['datetime'] = array("name" => __("Date & Time", "pleklang"), "min_length" => 17, "max_length" => 19, "pattern" => '/^[0-9]{4}-[0-9]{2}-[0-9]{2} {0,}[0-9]{2}:[0-9]{2}:[0-9]{2}$/');
 
         if (!isset($defaults[$type])) {
             //$this -> set_error($fieldname, __('Fieldtype not find in default validator','pleklang') );

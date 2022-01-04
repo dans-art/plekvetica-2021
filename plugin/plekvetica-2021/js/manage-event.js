@@ -4,7 +4,7 @@
 var flatpickr_options = {
     "locale": "de",
     enableTime: true,
-    dateFormat: "d-m-Y H:i:S",
+    dateFormat: "Y-m-d H:i:S",
     altInput: true,
     altFormat: "j. F Y - H:i",
     onChange: function (selectedDates, dateStr, instance) { plekerror.clear_field_error(jQuery(instance.input).attr("id")); }
@@ -26,7 +26,7 @@ jQuery(document).ready(function () {
     jQuery(document).keypress(function (e) {
         var keycode = (e.keyCode ? e.keyCode : e.which);
         if (keycode === 13) {
-            if (jQuery(e.target).prop("id") !== "plek-submit") {
+            if (jQuery(e.target).hasClass("plek-submit") === false) {
                 //e.preventDefault();
                 console.log(e.target);
                 console.log("Not submit");
@@ -105,19 +105,12 @@ let plek_manage_event = {
             flatpickr("#event_end_date", end_options);
         });
 
-        jQuery('#plek-submit').click(function (event) {
+        jQuery('#plek-submit-basic-event').click(function (event) {
             event.preventDefault();
             jQuery(this).prop("disabled", true);
             var type = jQuery(this).data("type");
-            var form = jQuery(this).closest("form").attr("id");
-            switch (type) {
-                case 'save_basic_event':
-                    window.plekevent.save_event(type, form);
-                    break;
-            
-                default:
-                    break;
-            }
+            var form = 'add_event_basic';
+            window.plekevent.save_event(type, form);
         });
 
         jQuery('#main').on('click', "#plek-add-login-submit", function (event) {
