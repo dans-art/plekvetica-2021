@@ -7,7 +7,9 @@ var flatpickr_options = {
     dateFormat: "Y-m-d H:i:S",
     altInput: true,
     altFormat: "j. F Y - H:i",
-    onChange: function (selectedDates, dateStr, instance) { plekerror.clear_field_error(jQuery(instance.input).attr("id")); }
+    onChange: function (selectedDates, dateStr, instance) { 
+        plekerror.clear_field_error(jQuery(instance.input).attr("id")); 
+    }
 };
 
 

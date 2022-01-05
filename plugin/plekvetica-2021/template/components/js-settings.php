@@ -13,15 +13,35 @@ $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings.
 		var bandPreloadedData = null;
 		var venuePreloadedData = null;
 		var organizerPreloadedData = null;
-		jQuery(document).ready(function(){
+		jQuery(document).ready(function() {
 			plek_manage_event.__construct();
+		});
+	</script>
+<?php endif; ?>
+
+<?php if ($type === 'add_event_details') : ?>
+	<script type="text/javascript" defer='defer'>
+		jQuery(document).ready(function() {
+			let url = plek_main.url_replace_param('stage', 'details');
+			let title = __("Add Event Details", "pleklang") + " - Plekvetica";
+			plek_main.update_browser_url(url, title);
+		});
+	</script>
+<?php endif; ?>
+
+<?php if ($type === 'add_event_login') : ?>
+	<script type="text/javascript" defer='defer'>
+		jQuery(document).ready(function() {
+			let url = plek_main.url_replace_param('stage', 'login');
+			let title = __("Login", "pleklang") + " - Plekvetica";
+			plek_main.update_browser_url(url, title);
 		});
 	</script>
 <?php endif; ?>
 
 <?php if ($type === 'manage_band') : ?>
 	<script type="text/javascript" defer='defer'>
-		jQuery(document).ready(function(){
+		jQuery(document).ready(function() {
 			plek_manage_event.__construct();
 		});
 	</script>

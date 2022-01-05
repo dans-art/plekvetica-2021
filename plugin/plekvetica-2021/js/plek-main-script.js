@@ -208,6 +208,7 @@ let plek_main = {
             }
 
         } catch (e) {
+            console.warn("Data could not converted into JSON data at get_ajax_success_object()");
             return data;
         }
     },
@@ -451,6 +452,10 @@ let plek_main = {
      */
     url_replace_param(param, value) {
         let query = window.location.search;
+        if(query.indexOf(param+'='+value) > 0){
+            //This parameter is already set with the same value.
+            return window.location.origin + window.location.pathname + query;
+        }
         let regex = new RegExp(param + "=([A-z0-9_-]*)");
         let new_query = query.replace(regex, param + '=' + value);
         if (query === new_query) {
@@ -461,6 +466,20 @@ let plek_main = {
         return window.location.origin + window.location.pathname + new_query;
     },
 
+    /**
+     * Sets the browser url and title
+     * 
+     * @param {string} url The new URL
+     * @param {string} title The Title of the document
+     * @returns 
+     */
+    update_browser_url(url, title){
+        //Change the URL
+        window.history.pushState({}, title, url);
+        //Update the title
+        document.title = title;
+        return;
+    },
     /**
      * Scroll to the top of the reloaded current block.
      * @param {string} block_id 

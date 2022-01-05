@@ -1161,7 +1161,6 @@ class PlekEventHandler
     public function save_event_basic()
     {
         global $plek_ajax_handler;
-
         //Validate the Data
         $validator = $this->validate_event_basic();
         if ($validator->all_fields_are_valid() !== true) {
@@ -1171,7 +1170,7 @@ class PlekEventHandler
         //Save Event
         $args = $this->get_event_basic_data();
         $is_event_edit = (empty($plek_ajax_handler->get_ajax_data('event_id'))) ? false : true;
-        s($args);
+
         if ($is_event_edit) {
             $eid = (int) $plek_ajax_handler->get_ajax_data('event_id');
             $event_id = tribe_update_event($eid, $args);
@@ -1179,22 +1178,21 @@ class PlekEventHandler
             $event_id = tribe_create_event($args);
         }
 
-        if(!is_int($event_id)){
+        if (!is_int($event_id)) {
             $validator->set_system_error(__('Failed to save Event', 'pleklang'));
             return $validator->get_errors();
         }
 
         //Update the Event genres / categories
-        $this -> update_event_genres($event_id);
+        $this->update_event_genres($event_id);
 
         if (PlekUserHandler::user_is_logged_in()) {
             //Info to Band follower
-
-            return PlekTemplateHandler::load_template_to_var('add-event-form-details', 'event/form', $this, $event_id);
+            return $event_id;
         } else {
             //Info to Admin for unlocking
-            $this -> send_unlock_event_request($event_id);
-            return PlekTemplateHandler::load_template_to_var('add-event-form-login', 'event/form', $this, $event_id);
+            $this->send_unlock_event_request($event_id);
+            return $event_id;
         }
     }
 
@@ -1249,28 +1247,38 @@ class PlekEventHandler
      * Gets all the data for the basic event to save
      * Make sure to validate the data before using this function!
      *
-     * @return void
+     * @return string The Args for the tribe_insert_event / tribe_update_event
      */
     public function get_event_basic_data()
     {
         global $plek_ajax_handler;
         $args = array();
-        $args['post_name'] = sanitize_text_field($plek_ajax_handler->get_ajax_data('event_name'));
-
-        
-        $args['EventStartDate'] = $plek_ajax_handler->get_ajax_data('event_start_date');
-        $args['EventEndDate'] = $plek_ajax_handler->get_ajax_data('event_start_date'); //Add End Date!
-
-
-        //$args['post_category'] = array_filter($plek_ajax_handler->get_ajax_data_as_array('event_band', true));
-        $venue_arr = $plek_ajax_handler->get_ajax_data_as_array('event_venue', true);
-        if (!empty($venue_arr[0])) {
-            $args['eventVenue'] = array('VenueID' => $venue_arr[0]);
-        }
-        //$args['tax_input'][Tribe__Events__Main::TAXONOMY] = array("697");
+        $args['post_title'] = $plek_ajax_handler->get_ajax_data('event_name');
         $args['EventShowMap'] = true;
         $args['EventShowMapLink'] = true;
         $args['post_status'] = 'publish';
+
+        $start_time = strtotime($plek_ajax_handler->get_ajax_data('event_start_date'));
+        $end_time = $this -> filter_end_date($plek_ajax_handler->get_ajax_data('event_end_date')); //This will set the enddate to the startdate at 24:00
+
+        $args['EventStartDate'] = date('Y-m-d', $start_time);
+        $args['EventStartHour'] = date('H', $start_time);
+        $args['EventStartMinute'] = date('i', $start_time);
+
+        $args['EventEndDate'] = date('Y-m-d', $end_time);
+        $args['EventEndHour'] = date('H', $end_time);
+        $args['EventEndMinute'] = date('i', $end_time);
+
+
+        $venue_arr = $plek_ajax_handler->get_ajax_data_as_array('event_venue', true);
+        if (!empty($venue_arr[0])) {
+            $args['Venue'] = array('VenueID' => $venue_arr[0]);
+        }
+        $band_arr = $plek_ajax_handler->get_ajax_data_as_array('event_band', true);
+        if (is_array($band_arr) AND !empty($band_arr)) {
+            $args['tags_input'] = $this -> filter_band_array($band_arr);
+        }
+
 
         if (!PlekUserHandler::user_is_logged_in()) {
             $authors_handler = new PlekAuthorHandler;
@@ -1292,7 +1300,7 @@ class PlekEventHandler
         $title = (isset($post->post_title)) ? $post->post_title : 'NULL';
         $subject = __('New Event added, please publish', 'pleklang');
         $message = sprintf(__('The Event "%s" has been added to the Event Calendar. Please check and publish the Event.', 'pleklang'), $title);
-        $action = the_permalink($event_id);
+        $action = get_permalink($event_id);
 
         return $notify->push_to_role('eventmanager', $subject, $message, $action);
     }
@@ -1303,8 +1311,38 @@ class PlekEventHandler
      * @param integer $event_id
      * @return bool true on success, false on error
      */
-    public function update_event_genres(int $event_id){
+    public function update_event_genres(int $event_id)
+    {
         //Get all the bands
         //set the event post_category
+    }
+
+    /**
+     * This checks for the enddate and set it to the startdate at 24:00, if empty
+     * 
+     * @param string $end_date The End Date
+     * @return int The End Date as a timestamp in ms
+     */
+    public function filter_end_date(string $end_date){
+        global $plek_ajax_handler;
+        if(!empty($end_time)){
+            return $end_time;
+        }
+        $start_time = strtotime($plek_ajax_handler->get_ajax_data('event_start_date'));
+        $start_date = date('Y-m-d', $start_time);
+        return strtotime($start_date. ' 23:59:00');
+    }
+
+    /**
+     * Filters the Band array and converts string into int
+     *
+     * @param array $bands - Array with band ids (array("666","747"))
+     * @return array The Bands array with all the bands as type int
+     */
+    public function filter_band_array(array $bands){
+        foreach($bands as $index => $b){
+            $bands[$index] = (int) $b;
+        }
+        return $bands;
     }
 }

@@ -42,7 +42,9 @@ class PlekAjaxHandler
                 $plek_event = new PlekEvents;
                 $save = $plek_event->save_event_basic();
                 if (is_int($save)) {
-                    $this->set_success($save); //Event ID of the Event saved
+                    $this->set_success($save); //The Event ID
+                    //The Event Login Form
+                    $this->set_success(PlekTemplateHandler::load_template_to_var('add-event-form-details', 'event/form', $plek_event, $save));
                 } else {
                     $plek_ajax_errors->add('save_basic_event', $save); //PlekEventValidator Errors
                 }
@@ -105,8 +107,10 @@ class PlekAjaxHandler
             case 'save_basic_event':
                 $plek_event = new PlekEvents;
                 $save = $plek_event->save_event_basic();
-                if (is_string($save)) {
-                    $this->set_success($save); //The Event Details form or Login form
+                if (is_int($save)) {
+                    $this->set_success($save); //The Event ID
+                    //The Login form
+                    $this->set_success(PlekTemplateHandler::load_template_to_var('add-event-form-login', 'event/form', $plek_event, $save));
                 } else {
                     $plek_ajax_errors->add('save_basic_event', $save); //PlekEventValidator Errors
                 }
@@ -622,9 +626,9 @@ class PlekAjaxHandler
     {
         $value = (isset($_REQUEST[$field])) ? $_REQUEST[$field] : "";
         $val_arr = json_decode($value);
-        if($escape){
+        if ($escape) {
             //Escape all the data
-            foreach($val_arr as $index => $val){
+            foreach ($val_arr as $index => $val) {
                 $val_arr[$index] = htmlspecialchars($val);
             }
         }

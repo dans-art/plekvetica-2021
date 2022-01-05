@@ -32,3 +32,4 @@ $event_id = (!empty($template_args[1]))?$template_args[1]:""; //Event ID
 </div>
 
 <?php PlekTemplateHandler::load_template('js-settings', 'components','manage_event_buttons'); ?>
+<?php PlekTemplateHandler::load_template('js-settings', 'components','add_event_details'); ?>

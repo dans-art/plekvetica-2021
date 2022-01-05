@@ -36,8 +36,8 @@ var plekevent = {
                 success: function success(data) {
                     var jdata = JSON.parse(data);
                     if (jdata.error.length > 0) {
-                        window.plekerror.set_toastr(0,true,'toast-bottom-full-width');
-                        window.plekerror.display_info(__('Event already exists','pleklang'), jdata.error);
+                        window.plekerror.set_toastr(0, true, 'toast-bottom-full-width');
+                        window.plekerror.display_info(__('Event already exists', 'pleklang'), jdata.error);
                         window.plekerror.reset_toastr();
                         plekevent.existing_event = true;
                         console.log("Event Existiert bereits");
@@ -163,20 +163,29 @@ var plekevent = {
             success: function success(data) {
                 let text = plek_main.get_text_from_ajax_request(data, true);
                 let errors = plek_main.show_field_errors(data, '#add_event_basic');
-                if(errors === true){
+                if (errors === true) {
                     console.log("Contains Errors");
                     text = "Das Formular enthält Fehler, bitte korrigieren";
-                }else{
-                    text = plek_main.get_text_from_ajax_request(data, true);
-                    console.log(text);
-                    plekerror.display_info('Event Saved!');
+                } else {
+                    let success_obj = plek_main.get_ajax_success_object(data);
+                    let event_id = (typeof success_obj[0] !== 'undefined') ? success_obj[0] : '000';
+                    let html_content = (typeof success_obj[1] !== 'undefined') ? success_obj[1] : __('Error, not content found', 'pleklang');
+                    debugger;
+                    //Replace the content with the details or login form
+                    jQuery('#' + form).closest('.entry-content').html(html_content);
+                    //Add the event_id to the url
+                    let url = plek_main.url_replace_param('event_id', event_id);
+                    let title = __("Add Event Page 2", "pleklang") + " - Plekvetica";
+                    plek_main.update_browser_url(url, title);
+                    //Show success message
+                    plekerror.display_info(__('Event saved!', 'pleklang'));
                     return;
                 }
                 plek_main.deactivate_button_loader(button, text);
                 jQuery('#plek-submit-basic-event').prop("disabled", false); //Enable the button again.
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data.... ","pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data.... ", "pleklang"));
 
             }
         });
@@ -237,9 +246,10 @@ var plekevent = {
             datab.append('event_name', this.get_field_value('event_name'));
             datab.append('event_start_date', this.get_field_value('event_start_date'));
             if (jQuery('#is_multiday').is(':checked') === true) {
-                datab.append('event_end_date', this.get_field_value('event_end_date'));
-                plekvalidator.add_field('event_end_date', 'date');
+                plekvalidator.add_field('event_end_date', 'date', true);
             }
+            datab.append('event_end_date', this.get_field_value('event_end_date'));
+
             if (jQuery('#no_band').is(':checked') === true) {
                 datab.append('no_bands_known', "true");
                 plekvalidator.add_field('event_band', 'int', true);
@@ -381,6 +391,6 @@ var plekevent = {
             }
         });
         jQuery(title_input).val(event_name_text);
-    }
+    },
 }
 plekevent.construct();
