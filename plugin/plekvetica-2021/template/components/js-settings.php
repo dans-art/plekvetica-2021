@@ -25,6 +25,7 @@ $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings.
 			let url = plek_main.url_replace_param('stage', 'details');
 			let title = __("Add Event Details", "pleklang") + " - Plekvetica";
 			plek_main.update_browser_url(url, title);
+			plek_manage_event.__construct();
 		});
 	</script>
 <?php endif; ?>
@@ -35,6 +36,7 @@ $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings.
 			let url = plek_main.url_replace_param('stage', 'login');
 			let title = __("Login", "pleklang") + " - Plekvetica";
 			plek_main.update_browser_url(url, title);
+			plek_manage_event.add_event_listeners();
 		});
 	</script>
 <?php endif; ?>
