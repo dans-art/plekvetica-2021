@@ -26,7 +26,7 @@ $event_id = (!empty($template_args[1]))?$template_args[1]:""; //Event ID
         </div>
 
 		<div class="submit-event-details-from">
-			<input type="submit" name="plek-submit" id="plek-submit" class='plek-button' data-type = "save_event_details" value="<?php echo __('Save event details','pleklang');?>">
+			<input type="submit" name="plek-submit" id="plek-submit-event-details" class='plek-button' data-type = "save_event_details" value="<?php echo __('Save event details','pleklang');?>">
 		</div>
 	</form>
 </div>

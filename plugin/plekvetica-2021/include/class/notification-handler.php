@@ -80,7 +80,7 @@ class PlekNotificationHandler extends WP_List_Table
      * @param string $type - The type of the notification
      * @return int|false Id of the inserted row or false on error.
      */
-    public function push_accredi_members(string|int $event_id, $type = null, $subject = null, $message = null, $action = null)
+    public function push_accredi_members(mixed $event_id, $type = null, $subject = null, $message = null, $action = null)
     {
 
         $users = get_field("akkreditiert", $event_id);

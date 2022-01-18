@@ -1197,6 +1197,83 @@ class PlekEventHandler
     }
 
     /**
+     * Tries to login the user and assign the event to the user
+     *
+     * @return bool|string True on success, Error message on failure.
+     */
+    public function add_event_login()
+    {
+        global $plek_ajax_handler;
+        global $plek_handler;
+        //Validate the Data
+        $validator = $this->validate_event_login();
+        if ($validator->all_fields_are_valid() !== true) {
+            return $validator->get_errors();
+        }
+
+        //Add user to Event
+        $is_guest = filter_var($plek_ajax_handler->get_ajax_data('is_guest'), FILTER_VALIDATE_BOOLEAN);
+        $event_id = (int) $plek_ajax_handler->get_ajax_data('event_id');
+
+        if ($is_guest) {
+            //Add the Guest Autors name
+            $guest_name = $plek_ajax_handler->get_ajax_data('guest_name');
+            $guest_email = $plek_ajax_handler->get_ajax_data('guest_email');
+            $guest_author = array('name' => $guest_name, 'email' => $guest_email);
+            if (!$plek_handler->update_field('guest_author', json_encode($guest_author), $event_id)) {
+                return __('Error: Could not update the guest Author!', 'pleklang');
+            }
+            //Set the guest author ID
+            $login = (int) $plek_handler->get_plek_option('guest_author_id');
+            
+        } else {
+            //Try to login the user
+            $user_name = $plek_ajax_handler->get_ajax_data('user_login');
+            $user_pass = $plek_ajax_handler->get_ajax_data('user_pass');
+            $remember = $plek_ajax_handler->get_ajax_data('rememberme');
+            $login = PlekLoginHandler::login_user($user_name, $user_pass, $remember);
+            if (!is_int($login)) {
+                return $login; //The Error message
+            }
+        }
+
+
+        //Replace the author
+        $update_author = $this->replace_event_author($event_id, $login);
+        if (is_wp_error($update_author)) {
+            return $update_author->get_error_message();
+        }
+        return true;
+    }
+
+    /**
+     * Replaces the Author of the given Event
+     *
+     * @param int $event_id - The Id of the Event
+     * @param int $user_id - The Id of the User
+     * @param bool $delete_all_others - Set to true to delete all the other authors, set by the coautors plugin.
+     * @return int|object Event ID on success, WP_Error on failure.
+     */
+    public function replace_event_author($event_id, $user_id, $delete_all_others = true)
+    {
+        $args = array(
+            'ID' => $event_id,
+            'post_author' => $user_id,
+        );
+
+        if($delete_all_others){
+            //Delete all the co-authors
+            $author = wp_get_post_terms($event_id, 'author');
+            foreach($author as $aut_obj){
+                $term_id = $aut_obj -> term_id;
+                wp_delete_term($term_id, 'author');
+
+            }
+        }
+        return wp_update_post($args, true);
+    }
+
+    /**
      * Saves the Event details / Event Meta.
      * 
      *
@@ -1244,6 +1321,40 @@ class PlekEventHandler
     }
 
     /**
+     * Validates the Event Login form.
+     * Checks the fields: event_id (if edit), guest_name, guest_email, user_login, user_pass, rememberme
+     *
+     * @return object PlekFormValidator object
+     */
+    public function validate_event_login()
+    {
+        global $plek_ajax_handler;
+
+        $validator = new PlekFormValidator;
+
+        $validator->set_ignore('type');
+        $validator->set_type('is_guest', 'bool');
+        $validator->set_type('guest_name', 'text');
+        $validator->set_type('guest_email', 'email');
+
+        $validator->set_type('user_login', 'text');
+        $validator->set_type('user_pass', 'password');
+
+        $is_guest = $plek_ajax_handler->get_ajax_data('is_guest');
+        if ($is_guest) {
+            $validator->set_required('guest_name');
+            $validator->set_required('guest_email');
+        } else {
+            $validator->set_required('user_login');
+            $validator->set_required('user_pass');
+        }
+        $validator->set_required('event_id');
+        $validator->set_type('event_id', 'int');
+
+        return $validator;
+    }
+
+    /**
      * Gets all the data for the basic event to save
      * Make sure to validate the data before using this function!
      *
@@ -1259,7 +1370,7 @@ class PlekEventHandler
         $args['post_status'] = 'publish';
 
         $start_time = strtotime($plek_ajax_handler->get_ajax_data('event_start_date'));
-        $end_time = $this -> filter_end_date($plek_ajax_handler->get_ajax_data('event_end_date')); //This will set the enddate to the startdate at 24:00
+        $end_time = $this->filter_end_date($plek_ajax_handler->get_ajax_data('event_end_date')); //This will set the enddate to the startdate at 24:00
 
         $args['EventStartDate'] = date('Y-m-d', $start_time);
         $args['EventStartHour'] = date('H', $start_time);
@@ -1275,8 +1386,8 @@ class PlekEventHandler
             $args['Venue'] = array('VenueID' => $venue_arr[0]);
         }
         $band_arr = $plek_ajax_handler->get_ajax_data_as_array('event_band', true);
-        if (is_array($band_arr) AND !empty($band_arr)) {
-            $args['tags_input'] = $this -> filter_band_array($band_arr);
+        if (is_array($band_arr) and !empty($band_arr)) {
+            $args['tags_input'] = $this->filter_band_array($band_arr);
         }
 
 
@@ -1323,14 +1434,15 @@ class PlekEventHandler
      * @param string $end_date The End Date
      * @return int The End Date as a timestamp in ms
      */
-    public function filter_end_date(string $end_date){
+    public function filter_end_date(string $end_date)
+    {
         global $plek_ajax_handler;
-        if(!empty($end_time)){
+        if (!empty($end_time)) {
             return $end_time;
         }
         $start_time = strtotime($plek_ajax_handler->get_ajax_data('event_start_date'));
         $start_date = date('Y-m-d', $start_time);
-        return strtotime($start_date. ' 23:59:00');
+        return strtotime($start_date . ' 23:59:00');
     }
 
     /**
@@ -1339,8 +1451,9 @@ class PlekEventHandler
      * @param array $bands - Array with band ids (array("666","747"))
      * @return array The Bands array with all the bands as type int
      */
-    public function filter_band_array(array $bands){
-        foreach($bands as $index => $b){
+    public function filter_band_array(array $bands)
+    {
+        foreach ($bands as $index => $b) {
             $bands[$index] = (int) $b;
         }
         return $bands;

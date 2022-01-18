@@ -43,14 +43,13 @@ class PlekAjaxHandler
                 $save = $plek_event->save_event_basic();
                 if (is_int($save)) {
                     $this->set_success($save); //The Event ID
-                    //The Event Login Form
-                    $this->set_success(PlekTemplateHandler::load_template_to_var('add-event-form-details', 'event/form', $plek_event, $save));
+                    $this->set_success(PlekUserHandler::get_user_id()); //User ID. 0 If not logged in
                 } else {
                     $plek_ajax_errors->add('save_basic_event', $save); //PlekEventValidator Errors
                 }
                 break;
             case 'save_add_event_login':
-                $this->set_success("Logged in");
+                //$this->set_success("Logged in");
                 $this->set_error("Not logged in");
                 break;
             case 'save_event_details':
@@ -109,15 +108,24 @@ class PlekAjaxHandler
                 $save = $plek_event->save_event_basic();
                 if (is_int($save)) {
                     $this->set_success($save); //The Event ID
-                    //The Login form
-                    $this->set_success(PlekTemplateHandler::load_template_to_var('add-event-form-login', 'event/form', $plek_event, $save));
+                    $this->set_success(PlekUserHandler::get_user_id()); //User ID. 0 If not logged in
                 } else {
                     $plek_ajax_errors->add('save_basic_event', $save); //PlekEventValidator Errors
                 }
                 break;
 
             case 'save_add_event_login':
-                $this->set_success("Logged in");
+                global $plek_ajax_handler;
+                $plek_event = new PlekEvents;
+                $login = $plek_event -> add_event_login();
+                $event_id = $event_id = $plek_ajax_handler->get_ajax_data('event_id');
+                if ($login === true) {
+                    $this->set_success($event_id); //The Event ID
+                    $this->set_success(PlekUserHandler::get_user_id(true)); //User ID. Guest user id if no user is logged in.
+                } else {
+                    $plek_ajax_errors->add('save_add_event_login', $login); //PlekEventValidator Errors
+                }
+
                 break;
             case 'save_event_details':
                 $this->set_error("Are you allowed to save??");

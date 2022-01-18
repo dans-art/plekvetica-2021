@@ -267,7 +267,15 @@ let plek_main = {
         }
     },
 
-    show_field_errors(data, form = 'form') {
+    /**
+     * Displays the form field errors
+     * 
+     * @param {string|object} data The Error Object or Json String
+     * @param {string} form The Form ID
+     * @param {bool} display_unassigned_as_toastr Set to true if the unassigned errors should be displayed as a toastr message.
+     * @returns 
+     */
+    show_field_errors(data, form = 'form', display_unassigned_as_toastr = true) {
         let error_count = 0;
         try {
             var encoded_data = data;
@@ -290,8 +298,13 @@ let plek_main = {
                     }
                 }
                 if (typeof value == "string") {
-                    //Error not assigned to field 
-                    jQuery(form).after(plek_main.format_error_message(value));
+                    //Error not assigned to field
+                    if(display_unassigned_as_toastr){
+                        plekerror.display_error(false, value, __('Error','pleklang'));
+                    }else{
+                        //Attach after form end
+                        jQuery(form).after(plek_main.format_error_message(value));
+                    }
                     console.log("not assigned");
                     console.log(form);
                 }
@@ -304,10 +317,10 @@ let plek_main = {
             if (error_count === 0) {
                 return false;
             }
-            return true;
+            return true; //Has Errors
         } catch (e) {
             console.log(e);
-            return false;
+            return true;
         }
     },
 
@@ -446,11 +459,12 @@ let plek_main = {
 
     /**
      * 
-     * @param {*} param - Name of the Parameter to replace or add
-     * @param {*} value - The value of the parameter
+     * @param {string} param - Name of the Parameter to replace or add
+     * @param {string} value - The value of the parameter
+     * @param {bool} update_ur - If the Function updates the current url or not
      * @returns 
      */
-    url_replace_param(param, value) {
+    url_replace_param(param, value, update_url = true) {
         let query = window.location.search;
         if(query.indexOf(param+'='+value) > 0){
             //This parameter is already set with the same value.
@@ -463,7 +477,11 @@ let plek_main = {
             let separator = (query.indexOf('?') === -1) ? '?' : '&';
             new_query = query + separator + param + "=" + value;
         }
-        return window.location.origin + window.location.pathname + new_query;
+        let new_url = window.location.origin + window.location.pathname + new_query;
+        if(update_url){
+            this.update_browser_url(new_url, document.title);
+        }
+        return new_url;
     },
 
     /**

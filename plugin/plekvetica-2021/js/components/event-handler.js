@@ -167,18 +167,29 @@ var plekevent = {
                     console.log("Contains Errors");
                     text = "Das Formular enthält Fehler, bitte korrigieren";
                 } else {
+                    /**
+                     * Success Object keys:
+                     * 0 = event_id
+                     * 1 = user_id. If ID is 0, the user is a guest / not logged in
+                     */
                     let success_obj = plek_main.get_ajax_success_object(data);
                     let event_id = (typeof success_obj[0] !== 'undefined') ? success_obj[0] : '000';
-                    let html_content = (typeof success_obj[1] !== 'undefined') ? success_obj[1] : __('Error, not content found', 'pleklang');
+                    let user_id = (typeof success_obj[1] !== 'undefined') ? success_obj[1] : 0;
                     debugger;
-                    //Replace the content with the details or login form
-                    jQuery('#' + form).closest('.entry-content').html(html_content);
-                    //Add the event_id to the url
-                    let url = plek_main.url_replace_param('event_id', event_id);
-                    let title = __("Add Event Page 2", "pleklang") + " - Plekvetica";
-                    plek_main.update_browser_url(url, title);
+                    //Redirect to next stage
+                    plek_main.url_replace_param('event_id', event_id);
+                    var stage = 'login'; //Default is login
+                    if (type === 'save_basic_event' && user_id > 0) {
+                        //User is logged in and type is basic event
+                        stage = 'details';
+                    }
+                    let url = plek_main.url_replace_param('stage', stage);
+
                     //Show success message
                     plekerror.display_info(__('Event saved!', 'pleklang'));
+                    setTimeout(() => {
+                        window.location = url;
+                    }, 500);
                     return;
                 }
                 plek_main.deactivate_button_loader(button, text);
@@ -192,12 +203,12 @@ var plekevent = {
 
     },
     save_event_login(type) {
-        console.log("savelogin" + type);
-
+        console.log("savelogin " + type);
+        var form = 'add_event_login';
         var datab = this.prepare_data(type);
-        if (plekvalidator.validate_form_data(datab) !== true) {
+        if (plekvalidator.validate_form_data(datab, form) !== true) {
             jQuery('#plek-add-login-submit').prop("disabled", false); //Enable the button again.
-            plekvalidator.display_errors();
+            plekvalidator.display_errors(form);
             //plekerror.display_error();
             return false;
         }
@@ -212,22 +223,29 @@ var plekevent = {
             success: function success(data) {
 
                 //Only for testing, move on production to error handling part
+                //@todo: Disable on production
                 jQuery('#plek-add-login-submit').prop("disabled", false); //Enable the button again.
 
-                var jdata = JSON.parse(data);
-                debugger;
-                if (jdata.error.length !== 0) {
-                    window.plekerror.display_error(plek_main.get_first_error_from_ajax_request(jdata), __("Error", "pleklang"));
-                    return false;
+                let errors = plek_main.show_field_errors(data, '#add_event_login');
+                if (errors === true) {
+                    console.log("Contains Errors");
+                    text = "Das Formular enthält Fehler, bitte korrigieren";
                 } else {
-                    //No errors, replace the content
-                    let content = plek_main.get_ajax_success_object(jdata);
-                    jQuery(".plek-form").parent().html(content);
-                    //Change the URL
-                    let url = plek_main.url_replace_param("stage", "details");
-                    window.history.pushState({}, "Add Event details", url);
-                    document.title = __("Add Event details", "pleklang") + " - Plekvetica";
-                    return true;
+                    /**
+                     * Success Object keys:
+                     * 0 = event_id
+                     * 1 = user_id. If ID is 0, the user is a guest / not logged in. 
+                     */
+                    let success_obj = plek_main.get_ajax_success_object(data);
+                    let event_id = (typeof success_obj[0] !== 'undefined') ? success_obj[0] : '000';
+                    let user_id = (typeof success_obj[1] !== 'undefined') ? success_obj[1] : 0;
+
+                    //Redirect to next stage
+                    plek_main.url_replace_param('event_id', event_id);
+                    let url = plek_main.url_replace_param('stage', 'details');
+
+                    window.location = url; //Redirect to the details page
+                    return;
                 }
             },
             error: function error(data) {
@@ -237,6 +255,14 @@ var plekevent = {
         });
 
     },
+
+    /**
+     * Prepares the Form Data and Validator.
+     * This functions adds the required fields to the validator for checking the values and adds the form data elements.
+     * 
+     * @param {string} type The type to prepare
+     * @returns {object} FormData
+     */
     prepare_data(type) {
         var datab = new FormData();
         datab.append('action', 'plek_ajax_event_form');
@@ -278,6 +304,7 @@ var plekevent = {
 
         }
         if (type === "save_add_event_login") {
+            plek_manage_event.prepare_validator_fields(); //Reload the Validator Fields to set the required fields
             let selected_btn = jQuery("#select-login-type a.selected").attr("id");
             if (selected_btn === 'add_login') {
                 datab.append('user_login', this.get_field_value('user_login'));
@@ -289,8 +316,11 @@ var plekevent = {
 
             }
             datab.append('event_id', this.get_field_value('event_id'));
+            let is_guest = (selected_btn === 'add_as_guest' ? true : false);
+            datab.append('is_guest', is_guest);
         }
 
+        console.log("Added Validator fields for: " + type);
         return datab;
     },
 

@@ -115,6 +115,14 @@ let plek_manage_event = {
             window.plekevent.save_event(type, form);
         });
 
+        jQuery('#plek-submit-event-details').click(function (event) {
+            event.preventDefault();
+            jQuery(this).prop("disabled", true);
+            var type = jQuery(this).data("type");
+            var form = 'add_event_details';
+            window.plekevent.save_event(type, form);
+        });
+
         jQuery('#main').on('click', "#plek-add-login-submit", function (event) {
             event.preventDefault();
             jQuery(this).prop("disabled", true);
@@ -368,16 +376,18 @@ let plek_manage_event = {
 
                 //Get the selected login type (Login / Guest)
                 let required_login = false;
-                let required_guest = true;
-                plekvalidator.add_field('user_login', 'text', form);
-                plekvalidator.add_field('user_pass', 'password', required_login, form);
+                let allow_empty_login = (jQuery('#plek-event-member-login-form-container').css("display") === 'none') ? true : false;
+                let allow_empty_guest = (jQuery('#plek-event-guest-login-form-container').css("display") === 'none') ? true : false;
+   
+                plekvalidator.add_field('user_login', 'text', allow_empty_login, form);
+                plekvalidator.add_field('user_pass', 'password', allow_empty_login, form);
                 plekvalidator.add_field('rememberme', 'text', true, form);
 
-                plekvalidator.add_field('guest_name', 'text', required_guest, form);
-                plekvalidator.add_field('guest_email', 'email', required_guest, form);
+                plekvalidator.add_field('guest_name', 'text', allow_empty_guest, form);
+                plekvalidator.add_field('guest_email', 'email', allow_empty_guest, form);
 
                 plekvalidator.add_field('event_id', 'int', false, form);
-                plekvalidator.add_error_messages('event_id', 'default', __("Missing Event ID", "pleklang"));
+                plekvalidator.add_error_messages('event_id', form, __("Missing Event ID", "pleklang"));
             }
 
         });

@@ -70,7 +70,7 @@ var plekerror = {
     display_error(field, message, title = '') {
         console.log(field);
         console.log(message);
-
+        
         if (jQuery('#' + field).length > 0) {
             //Error is field error
             this.add_error_to_field(field, message);

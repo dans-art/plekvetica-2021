@@ -37,6 +37,9 @@ $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings.
 			let title = __("Login", "pleklang") + " - Plekvetica";
 			plek_main.update_browser_url(url, title);
 			plek_manage_event.add_event_listeners();
+			//Add the validator fields
+            plek_manage_event.prepare_validator_fields();
+            plekvalidator.monitor_fields();
 		});
 	</script>
 <?php endif; ?>
