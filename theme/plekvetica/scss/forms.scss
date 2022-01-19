@@ -138,6 +138,108 @@ div.plek-review-search{
     padding-left: 2em;
   }
 
+  //Hide items
+  .button-container,
+  .remove-item{
+    display: none;
+  }
+
+}
+
+#event_band_overlay .plek-add-item{
+  .title-container{
+    display: flex;
+    align-content: center;
+    align-items: center;
+    text-align: left;
+  }
+  
+  .title-group{
+    padding-left: 1em;
+  }
+
+  .item-title{
+    font-weight: bold;
+  }
+  .subtitle{
+    padding-left: 0;
+  }
+}
+
+#event-band-selection{
+
+  color: black;
+
+  .plek-select-item{
+    padding:0;
+    background: $text-color;
+    margin: 0.2em 0;
+  }
+
+  .remove-item:first-child{
+    display: none; //Hide the first item, only used for the organizer and location
+  }
+
+  .item-title{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .button-container {
+    display: flex;
+    gap: 0.5em;
+    margin: 0.5em;
+  }
+
+  .title-container{
+    display: flex;
+    align-items: center;
+    padding: 0 0.5em;
+
+    .item-title{
+      font-weight: bold;
+    }
+  }
+
+  .sort-button,
+  .sort-button i{
+    cursor: n-resize;
+  }
+
+  .sort-button,
+  .band-time,
+  .remove-item {
+    text-align: center;
+    align-self: center;
+    padding: 1em;
+    margin: 0;
+    min-width: 3.5em;
+    max-width: 3.5em;
+    min-height: 3.5em;
+    max-height: 3.5em;
+    word-wrap: normal;
+  }
+
+  .band-time{
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0;
+
+    .time-label{
+      width: 100%;
+    }
+
+    input{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+    }
+  }
 }
 
 #event-organizer-proposal{

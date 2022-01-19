@@ -7,8 +7,8 @@ var flatpickr_options = {
     dateFormat: "Y-m-d H:i:S",
     altInput: true,
     altFormat: "j. F Y - H:i",
-    onChange: function (selectedDates, dateStr, instance) { 
-        plekerror.clear_field_error(jQuery(instance.input).attr("id")); 
+    onChange: function (selectedDates, dateStr, instance) {
+        plekerror.clear_field_error(jQuery(instance.input).attr("id"));
     }
 };
 
@@ -41,6 +41,17 @@ jQuery(document).ready(function () {
 let plek_manage_event = {
 
     constructed: false,
+    //Options for the Band Items
+    flatpickr_band_options: {
+        "locale": "de",
+        enableTime: true,
+        dateFormat: "Y-m-d H:i:S",
+        altInput: true,
+        altFormat: "j.m H:i",
+        onChange: function (selectedDates, dateStr, instance) {
+            plek_manage_event.set_button_time(instance);
+        }
+    },
 
     __construct() {
         if (this.constructed === true) {
@@ -64,6 +75,25 @@ let plek_manage_event = {
         flatpickr("#event_start_date", flatpickr_options);
         flatpickr("#event_end_date", flatpickr_options);
 
+
+    },
+
+    /**
+     * The Instance from flatpickr
+     * This function should run as a callback on flatpickr Change
+     * @param {*} flatpickr_instance 
+     */
+    set_button_time(flatpickr_instance) {
+        let date = jQuery(flatpickr_instance.element).next().val();
+        if (date.length === 0) {
+            return false;
+        }
+        if (typeof plek_manage_event.flatpickr_band_options.enable[0] !== 'undefined' && plek_manage_event.flatpickr_band_options.enable[0].from === plek_manage_event.flatpickr_band_options.enable[0].to) {
+            //Is Single day. Only display the time
+            date = (typeof date.split(' ')[1] !== 'undefined') ? date.split(' ')[1] : date;
+        }
+        jQuery(flatpickr_instance.element).parent().find('.time-label').text(date);
+        return;
     },
 
     add_event_listeners() {
@@ -240,7 +270,6 @@ let plek_manage_event = {
                          * return_obj[1] = added id
                          * return_obj[2] = preloader data
                          */
-                        debugger;
                         let preloader_data = (typeof return_obj[2] === 'string') ? JSON.parse(return_obj[2]) : {};
                         if (typeof return_obj[1] !== 'undefined' && typeof return_obj[2] !== 'undefined') {
                             if (typeof plekevent !== 'undefined' && typeof preloader_data[return_obj[1]] !== 'undefined') {
@@ -378,7 +407,7 @@ let plek_manage_event = {
                 let required_login = false;
                 let allow_empty_login = (jQuery('#plek-event-member-login-form-container').css("display") === 'none') ? true : false;
                 let allow_empty_guest = (jQuery('#plek-event-guest-login-form-container').css("display") === 'none') ? true : false;
-   
+
                 plekvalidator.add_field('user_login', 'text', allow_empty_login, form);
                 plekvalidator.add_field('user_pass', 'password', allow_empty_login, form);
                 plekvalidator.add_field('rememberme', 'text', true, form);
@@ -420,7 +449,6 @@ let plek_manage_event = {
     vob_add_to_session(vob_id) {
         let existing = localStorage.getItem('plek_vob_added');
         let added = (typeof existing === 'string') ? existing + ',' + vob_id.toString() : vob_id.toString();
-        debugger;
         localStorage.setItem('plek_vob_added', added);
     },
 }
@@ -516,7 +544,6 @@ let plek_add_event_functions = {
      * @param {string} type Type to display
      */
     show_vob_form(type) {
-        debugger;
         plektemplate.hide_overlay();
         plektemplate.show_overlay(type);
     }

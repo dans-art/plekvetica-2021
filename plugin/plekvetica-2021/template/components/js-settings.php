@@ -15,6 +15,7 @@ $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings.
 		var organizerPreloadedData = null;
 		jQuery(document).ready(function() {
 			plek_manage_event.__construct();
+			jQuery('#event-band-selection').sortable(); //Make the Band list sortable
 		});
 	</script>
 <?php endif; ?>

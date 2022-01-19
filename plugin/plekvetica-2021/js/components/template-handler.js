@@ -4,7 +4,7 @@
  */
 var plektemplate = {
 
-    
+
     load_template(template, val_object) {
         var output = template;
         con(`${template}`);
@@ -16,10 +16,23 @@ var plektemplate = {
     load_band_item_template(data) {
         var flag = this.get_flag_image(data.flag);
         return `<button type='button' class='item plek-add-item' data-for='event-band-selection' data-type='event_band' data-id='${data.id}'>
-        <div class='title'>
-        <img src="${flag}"/>
-        <span class='item-title'>${data.name}</span></div>
-        <div class='subtitle'>${data.genres}</div>
+        <div class='title-container'>
+            <div class='flag'>
+                <img src="${flag}"/>
+            </div>
+            <div class='title-group'>
+                <span class='item-title'>${data.name}</span>
+                <div class='subtitle'>${data.genres}</div>
+            </div>
+        </div>
+        <div class='button-container'>
+            <div class='sort-button plek-button'><i class="fas fa-arrows-alt-v"></i></div>
+            <div class='band-time plek-button'>
+                <span class='time-label'><i class="far fa-clock"></i></span>
+                <input class='band-time-input' type='datetime' name='band-time-${data.id}' id='band-time-${data.id}'value=''/>
+            </div>
+            <div class='remove-item plek-button'><i class="fas fa-times"></i></div>
+        </div>
         </button>`;
     },
     load_venue_item_template(data) {
@@ -41,7 +54,7 @@ var plektemplate = {
         </button>`;
     },
     load_search_overlay_header(count, content = "") {
-        var found = __('Items found:','pleklang');
+        var found = __('Items found:', 'pleklang');
         return `<div class="overlay-header">
         ${content}
         <span class="count">${found} ${count}</span>
@@ -87,8 +100,8 @@ var plektemplate = {
             });
         } else {
             //Input is string / ID of object
-            jQuery('#'+input+'_overlay .overlay_background').height(doc_height);
-            jQuery('#'+input+'_overlay .overlay_background').click(function () {
+            jQuery('#' + input + '_overlay .overlay_background').height(doc_height);
+            jQuery('#' + input + '_overlay .overlay_background').click(function () {
                 window.plektemplate.hide_overlay(input);
             });
         }

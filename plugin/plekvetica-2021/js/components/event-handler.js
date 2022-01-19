@@ -121,7 +121,31 @@ var plekevent = {
         if (type === 'event_band') {
             window.plekevent.check_existing_event();
             window.plekevent.generate_title();
+            this.set_band_time_flatpickr();
+
         }
+    },
+
+    /**
+     * Sets the flatpicker_band options and ensures that the date can only be set on the date of the event
+     */
+    set_band_time_flatpickr() {
+        //Set available dates
+        let defaultStartDate = '2020-01-01';
+        let defaultEndDate = '9020-01-01';
+        let startDate = jQuery('#event_start_date').val().split(' '); //Array [ "2022-01-20", "12:00:00" ] 
+        startDate = (typeof startDate[0] !== 'undefined' && startDate[0].length > 0) ? startDate[0] : defaultStartDate;
+
+        let endDate = jQuery('#event_end_date').val().split(' ');
+        endDate = (typeof endDate[0] !== 'undefined' && endDate[0].length > 0) ? endDate[0] : startDate;
+        endDate = (endDate === defaultStartDate) ? defaultEndDate : endDate; //Set the enddate if startdate and enddate set
+        //Set the Options
+        plek_manage_event.flatpickr_band_options.enable = [{
+            from: startDate,
+            to: endDate
+        }];
+        //Restart the flatpickr for the time inputs
+        flatpickr(".band-time-input", plek_manage_event.flatpickr_band_options); //Load the Flatpickr
     },
 
     add_remove_item_eventlistener() {
@@ -285,6 +309,9 @@ var plekevent = {
             datab.append('event_band', this.get_field_value('event_band'));
             datab.append('event_venue', this.get_field_value('event_venue'));
             datab.append('hp-password', this.get_field_value('hp-password'));
+
+            let band_order_time = this.get_band_order_time();
+            datab.append('band_order_time', band_order_time);
         }
         if (type === "save_event_details") {
             //Fields for Event Basic
@@ -322,6 +349,23 @@ var plekevent = {
 
         console.log("Added Validator fields for: " + type);
         return datab;
+    },
+
+    /**
+     * Gets the Order of the Band items
+     * 
+     * @returns {string} JSON String with the order Data: "{\"666\":{\"order\":1,\"datetime\":\"2022.02.03 13:30:00\"}}"
+     * 
+     */
+    get_band_order_time() {
+        let order_obj = {};
+        jQuery('#event-band-selection .plek-select-item').each((index, item) => {
+            let band_id = jQuery(item).data('id');
+            let datetime = jQuery(item).find('.band-time-input').first().val();
+            order_obj[band_id] = { order: index, datetime: datetime };
+        });
+
+        return JSON.stringify(order_obj);
     },
 
     get_field_value(name) {
