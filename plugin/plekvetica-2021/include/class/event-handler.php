@@ -49,7 +49,7 @@ class PlekEventHandler
         if ($end_date === 0) {
             return false;
         }
-        $calc = $end_date -$start_date;
+        $calc = $end_date - $start_date;
         $sixteen = (16 * 60 * 60); //16 Hours
         if ($sixteen > $calc) {
             return true;
@@ -88,7 +88,7 @@ class PlekEventHandler
         );
         $set = wp_update_post($update);
         if (is_int($set) and $set > 0) {
-            //Info to Band followers
+            //@todo: Info to Band followers
             return true;
         } else {
             return __("Changing Status was unsuccessfully", "pleklang");
@@ -262,20 +262,20 @@ class PlekEventHandler
         return $this->get_field_value('post_content');
     }
 
-/**
- * Returns all the Bands for the current event.
- *
- * @param boolean $sort_by_order - Returns the Bands sorted according to the band_order_time ACF
- * @return array The Bands
- */
+    /**
+     * Returns all the Bands for the current event.
+     *
+     * @param boolean $sort_by_order - Returns the Bands sorted according to the band_order_time ACF
+     * @return array The Bands
+     */
     public function get_bands($sort_by_order = true)
     {
         if (empty($this->event['bands'])) {
             return array();
         }
-        if($sort_by_order){
-            $bands = $this -> event['bands'];
-            return $this -> sort_bands($bands);
+        if ($sort_by_order) {
+            $bands = $this->event['bands'];
+            return $this->sort_bands($bands);
         }
         return $this->event['bands'];
     }
@@ -1195,7 +1195,7 @@ class PlekEventHandler
     /**
      * Saves the basic event data
      *
-     * @return mixed The Login or Event Details form, PlekFormValidator errors on errors
+     * @return mixed Event ID on sucess, error message on error.
      */
     public function save_event_basic()
     {
@@ -1231,12 +1231,43 @@ class PlekEventHandler
 
         if (PlekUserHandler::user_is_logged_in()) {
             //Info to Band follower
+            //@todo: Send Info to Band followers.
             return $event_id;
         } else {
             //Info to Admin for unlocking
             $this->send_unlock_event_request($event_id);
             return $event_id;
         }
+    }
+
+        /**
+     * Saves the details of the event
+     *
+     * @return mixed Event ID on sucess, error message on error.
+     */
+    public function save_event_details()
+    {
+        global $plek_ajax_handler;
+        global $plek_handler;
+        //Validate the Data
+        $validator = $this->validate_event_details();
+        if ($validator->all_fields_are_valid() !== true) {
+            return $validator->get_errors();
+        }
+        $event_id = intval($plek_ajax_handler->get_ajax_data('event_id'));
+        //Check if Event exists and user is allowed to edit
+        if(!PlekUserHandler::user_can_edit_post($event_id) ){
+            return "Sorry, you are not allowed to edit this Event!";
+        }
+        //Save Event
+        $args = $this->get_event_details_data();
+
+        $event_id = tribe_update_event($event_id, $args);
+
+        //Save the rest of the Data
+        $this -> save_event_meta($event_id);
+        
+        return $event_id;
     }
 
     /**
@@ -1315,16 +1346,6 @@ class PlekEventHandler
     }
 
     /**
-     * Saves the Event details / Event Meta.
-     * 
-     *
-     * @return bool true on success, false on error
-     */
-    public function save_event_details()
-    {
-    }
-
-    /**
      * Validates the Basic Event form.
      * Checks the fields: event_id (if edit), event_name, event_band, event_venue, hp-password (honeypot)
      *
@@ -1366,6 +1387,37 @@ class PlekEventHandler
                 $validator->set_system_error(__('You are not authorized to edit this event!', 'pleklang'));
             }
         }
+        return $validator;
+    }
+    /**
+     * Validates the Basic Event form.
+     * Checks the fields: event_id (if edit), event_name, event_band, event_venue, hp-password (honeypot)
+     *
+     * @return object PlekFormValidator object
+     */
+    public function validate_event_details()
+    {
+
+        $validator = new PlekFormValidator;
+
+        $validator->set_ignore('type');
+        $validator->set_type('event_organizer', 'int');
+        $validator->set_array('event_organizer');
+        
+        $validator->set_type('event_description', 'textlong');
+        $validator->set_type('event_poster', 'image');
+        $validator->set_type('event_fb_link', 'url');
+        $validator->set_type('event_price_link', 'url');
+
+        $validator->set_type('event_price_boxoffice', 'price');
+        $validator->set_type('event_price_boxoffice_currency', 'textshort');
+        $validator->set_type('event_price_presale', 'price');
+        $validator->set_type('event_price_presale_currency', 'textshort');
+
+
+        $validator->set_type('event_id', 'int');
+        $validator->set_required('event_id');
+
         return $validator;
     }
 
@@ -1449,6 +1501,56 @@ class PlekEventHandler
     }
 
     /**
+     * Gets all the data for the event details to save
+     * Make sure to validate the data before using this function!
+     *
+     * @return string The Args for the tribe_update_event function
+     */
+    public function get_event_details_data(){
+        global $plek_ajax_handler;
+        $args = array();
+        //Add URL
+        //Add Poster
+
+        $args['post_content'] = $plek_ajax_handler->get_ajax_data('event_description');
+        $args['EventCost'] = $plek_ajax_handler->get_ajax_data('event_price_boxoffice');
+        $args['EventURL'] = $plek_ajax_handler->get_ajax_data('event_fb_link');
+        $args['Organizer'] = $plek_ajax_handler->get_ajax_data_as_array('event_organizer', true);
+        return $args;
+    }
+
+    /**
+     * Saves the AFC Event Meta
+     *
+     * @param [type] $event_id
+     * @return mixed True on success, array with the failed fields on error
+     */
+    public function save_event_meta($event_id){
+        global $plek_ajax_handler;
+        global $plek_handler;
+
+        //ACF ID => fieldname
+        $acf = array(
+            'vorverkauf-preis' => 'event_price_presale',
+            'ticket-url' => 'event_price_link',
+            //'win_url' => '',
+            //'promote_event' => '',
+            //'cancel_event' => ''
+        );
+        $failed = array();
+        foreach($acf as $afc_name => $form_name){
+            $value = $plek_ajax_handler->get_ajax_data($form_name);
+            if(!$plek_handler -> update_field($afc_name, $value, $event_id)){
+                $failed[] = $afc_name;
+            }
+        }
+        if(!empty($failed)){
+            return $failed;
+        }
+        return true;
+    }
+
+    /**
      * Sends an Email to the admin for unlocking / publishing an Event.
      *
      * @return int|bool Id of the inserted notification row or false on error
@@ -1521,10 +1623,10 @@ class PlekEventHandler
         }
         $count = count($this->event['band_sort']);
         $sorted = array();
-        foreach($bands AS $band_id => $item){
+        foreach ($bands as $band_id => $item) {
             $band_id = strval($band_id);
-            $index = array_search($band_id, $this -> event['band_sort']);
-            if($index === false){
+            $index = array_search($band_id, $this->event['band_sort']);
+            if ($index === false) {
                 $index = $count + 5;
             }
             $sorted[$index] = $item;
@@ -1550,7 +1652,7 @@ class PlekEventHandler
             return $this->event['timetable'];
         }
 
-        $is_multiday = $this -> is_multiday();
+        $is_multiday = $this->is_multiday();
         $band_handler = new PlekBandHandler;
         $formated = array();
         foreach ($this->event['bands'] as $band_id => $item) {
@@ -1559,12 +1661,12 @@ class PlekEventHandler
             $band_origin_formated = $band_handler->get_flag_formated($band_origin);
 
             //$timestamp = array_search($band_id, $this->event['timetable']); //Timestamp or false
-            $timestamp = (!empty($this -> event['timetable'][$band_id]['timestamp']))?$this -> event['timetable'][$band_id]['timestamp']:0;
+            $timestamp = (!empty($this->event['timetable'][$band_id]['timestamp'])) ? $this->event['timetable'][$band_id]['timestamp'] : 0;
 
-            $playtime = (isset($this->event['timetable'][$band_id]['playtime_formated']))?$this->event['timetable'][$band_id]['playtime_formated']:'tbd';
+            $playtime = (isset($this->event['timetable'][$band_id]['playtime_formated'])) ? $this->event['timetable'][$band_id]['playtime_formated'] : 'tbd';
 
-            $day = ($is_multiday AND $timestamp > 0)?date('d. F', $timestamp):__('No Time defined','pleklang');
-            if(!isset($formated[$day])){
+            $day = ($is_multiday and $timestamp > 0) ? date('d. F', $timestamp) : __('No Time defined', 'pleklang');
+            if (!isset($formated[$day])) {
                 $formated[$day] = '';
             }
             $formated[$day] .= "<div class='timetable_row'>
@@ -1574,11 +1676,11 @@ class PlekEventHandler
             </div>";
         }
 
-        if(!$is_multiday){
-            $formated = implode('',$formated[0]);
-        }else{
+        if (!$is_multiday) {
+            $formated = implode('', $formated[0]);
+        } else {
             $days = '';
-            foreach($formated as $date => $playtimes){
+            foreach ($formated as $date => $playtimes) {
                 $days .= "<div class='timetable_day'><div class='date'>{$date}</div>{$playtimes}</div>";
             }
             $formated = $days;

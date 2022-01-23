@@ -79,6 +79,10 @@ button {
   a.button,
   a.wp-block-button__link:not(.has-background){
     background-color: $color-red-light;
+
+    &:hover{
+      background-color: transparent;
+    }
   }
 }
 
@@ -91,7 +95,9 @@ button {
   }
 }
 
-.plek-button{
+.plek-button,
+#page input .plek-button,
+input[type="submit"]{
   width: 100%;
   background-color: $color-red-light;
   text-align: center;
@@ -150,7 +156,8 @@ button {
 
 /* Button Animation*/
 /* Loader */
-.plek-button.loader {
+.plek-button.loader,
+.input_loader {
     position: relative;
     //overflow:hidden;
     //transition: .3s;
@@ -184,6 +191,11 @@ button {
     to { transform: rotate(360deg) }
   }
 
+  .input_loader{
+    top: -9px;
+    padding: 0;
+  }
+
 
 
 /* Title */
@@ -195,6 +207,7 @@ button {
   border-bottom: $red-small-border;
   font-size: 1.8em;
   width: 27%;
+  word-wrap: normal;
 
   .bar-front{
     /*padding-left: 5%;*/

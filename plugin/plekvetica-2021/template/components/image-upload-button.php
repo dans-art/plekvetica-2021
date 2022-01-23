@@ -24,4 +24,5 @@ if (strlen($image) < 3 or !is_string($image)) {
         <input id="<?php echo $id; ?>" name="<?php echo $id; ?>" type="file"></input>
         <span class="plek-button"><?php echo __('Upload', 'pleklang'); ?></span>
     </div>
+    <input id="<?php echo $id; ?>_preloaded_id" class="image_preloaded_id" name="<?php echo $id; ?>_preloaded_id" type="text"/>
 </div>

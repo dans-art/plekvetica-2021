@@ -97,11 +97,12 @@ var plekvalidator = {
 
     /**
      * Allows to add custom error Messages
-     * @param {} input_id - The ID of the input field
-     * @param {*} empty - Error Message on empty field
-     * @param {*} invalid_type  - Error Message on invalid type
-     * @param {*} to_long  - Error Message if string is to long
-     * @param {*} to_short  - Error Message if string is to short
+     * @param {string} input_id - The ID of the input field
+     * @param {string} form - The ID of the input field
+     * @param {string} empty - Error Message on empty field
+     * @param {string} invalid_type  - Error Message on invalid type
+     * @param {string} to_long  - Error Message if string is to long
+     * @param {string} to_short  - Error Message if string is to short
      */
     add_error_messages(input_id, form = 'default', empty = null, invalid_type = null, not_a_number = null, to_long = null, to_short = null, not_allowed = null) {
         let vali = plekvalidator.error_messages;
@@ -116,6 +117,10 @@ var plekvalidator = {
         }
     },
 
+    /**
+     * The default errors messages for field errors
+     * @returns Object - The default error messages.
+     */
     default_error_messages() {
         return {
             'empty': __('Field cannot be empty', 'pleklang'),

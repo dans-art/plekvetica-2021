@@ -105,7 +105,7 @@ class PlekEvents extends PlekEventHandler
      * Gets the Event terms (Bands & Genres) and Event meta (Postmeta).
      *
      * @param integer $event_id - Id of the Event
-     * @param string $status - Post status. Default = publish
+     * @param string $status - Post status. "All" to get all the posts. Default = publish
      * @return bool true on success, false on error
      */
     public function load_event(int $event_id = null, string $status = 'publish')
@@ -122,7 +122,9 @@ class PlekEvents extends PlekEventHandler
         `posts`.`ID`, 
         `posts`.`post_author`,
         `posts`.`post_title`,
-        `posts`.`post_content`
+        `posts`.`post_content`,
+        `posts`.`post_status`,
+        `posts`.`post_date`
         FROM `" . $wpdb->prefix . "posts` `posts`
         WHERE `posts`.ID = '$event_id' AND `posts`.`post_type` = 'tribe_events' 
         $status_query
@@ -1042,6 +1044,9 @@ class PlekEvents extends PlekEventHandler
 
         if (isset($_REQUEST['stage']) and $_REQUEST['stage'] === "login") {
             return PlekTemplateHandler::load_template_to_var('add-event-form-login', 'event/form', $event, $event_id);
+        }
+        if (isset($_REQUEST['stage']) and $_REQUEST['stage'] === "details" AND !PlekUserHandler::user_can_edit_post($event_id)) {
+            return __('Sorry, you are not allowed to edit this post anymore','pleklang');
         }
         if (isset($_REQUEST['stage']) and $_REQUEST['stage'] === "details") {
             return PlekTemplateHandler::load_template_to_var('add-event-form-details', 'event/form', $event, $event_id);

@@ -53,7 +53,15 @@ class PlekAjaxHandler
                 $this->set_error("Not logged in");
                 break;
             case 'save_event_details':
-                $this->set_error("Are you allowed to save??");
+                $plek_event = new PlekEvents;
+                $save = $plek_event->save_event_details();
+                if (is_int($save)) {
+                    $this->set_success($save); //The Event ID
+                    $this->set_success(PlekUserHandler::get_user_id()); //User ID. 0 If not logged in
+                    $this->set_success(get_permalink($save)); //The Event URL
+                } else {
+                    $plek_ajax_errors->add('save_event_details', $save); //PlekEventValidator Errors
+                }
                 break;
             case 'editEvent':
                 //@todo:Old Plekvetica Event function. Replace with new!
@@ -128,7 +136,14 @@ class PlekAjaxHandler
 
                 break;
             case 'save_event_details':
-                $this->set_error("Are you allowed to save??");
+                $plek_event = new PlekEvents;
+                $save = $plek_event->save_event_details();
+                if (is_int($save)) {
+                    $this->set_success($save); //The Event ID
+                    $this->set_success(PlekUserHandler::get_user_id()); //User ID. 0 If not logged in
+                } else {
+                    $plek_ajax_errors->add('save_event_details', $save); //PlekEventValidator Errors
+                }
                 break;
             case 'check_event_duplicate':
                 $plek_event = new PlekEvents;
@@ -634,7 +649,7 @@ class PlekAjaxHandler
     {
         $value = (isset($_REQUEST[$field])) ? $_REQUEST[$field] : "";
         $val_arr = json_decode($value);
-        if ($escape) {
+        if ($escape AND is_array($val_arr)) {
             //Escape all the data
             foreach ($val_arr as $index => $val) {
                 $val_arr[$index] = htmlspecialchars($val);

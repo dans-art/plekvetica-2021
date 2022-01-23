@@ -20,7 +20,7 @@ $event_class = $template_args[0]; //Plek_events_form Object
 
 		<input type="text" name="hp-password" id="hp-password" style="display: none;" tabindex="-1" autocomplete="false"/>
 		<div class="submit-basic-from">
-			<input type="submit" name="plek-submit-basic-event" id="plek-submit-basic-event" class='plek-button plek-submit' data-type = "save_basic_event" value="<?php echo __('Save event','pleklang');?>">
+			<input type="submit" name="plek-submit-basic-event" id="plek-submit-basic-event" class='plek-button plek-submit plek-main-submit-button' data-type = "save_basic_event" value="<?php echo __('Save event','pleklang');?>">
 		</div>
 	</form>
 </div>

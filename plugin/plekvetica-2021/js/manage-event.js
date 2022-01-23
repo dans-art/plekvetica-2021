@@ -399,7 +399,7 @@ let plek_manage_event = {
                 plekvalidator.add_field('event_price_presale_currency', 'simpletext', false, form);
                 plekvalidator.add_field('event_price_link', 'url', true, form);
                 plekvalidator.add_field('event_id', 'int', false, form);
-                plekvalidator.add_error_messages('event_id', 'default', __("Missing Event ID", "pleklang"));
+                plekvalidator.add_error_messages('event_id', form, __("Missing Event ID", "pleklang"));
             }
 
             //Add the fields to the validator

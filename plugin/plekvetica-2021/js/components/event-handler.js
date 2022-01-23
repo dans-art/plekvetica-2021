@@ -177,12 +177,14 @@ var plekevent = {
 
         var datab = this.prepare_data(type);
         if (plekvalidator.validate_form_data(datab, form) !== true) {
-            jQuery('#plek-submit-basic-event').prop("disabled", false); //Enable the button again.
+            jQuery('#'+form).prop("disabled", false); //Enable the button again.
             plekvalidator.display_errors(form);
             //plekerror.display_error();
             return false;
         }
-        let button = jQuery('#plek-submit-basic-event');
+        let button = jQuery('#'+form+' .plek-main-submit-button');
+        let orig_btn_text = button.val();
+        plek_main.activate_loader_style(button);
 
         //Validation was ok, send it to the server
         jQuery.ajax({
@@ -207,6 +209,7 @@ var plekevent = {
                     let success_obj = plek_main.get_ajax_success_object(data);
                     let event_id = (typeof success_obj[0] !== 'undefined') ? success_obj[0] : '000';
                     let user_id = (typeof success_obj[1] !== 'undefined') ? success_obj[1] : 0;
+                    let event_url = (typeof success_obj[2] !== 'undefined') ? success_obj[2] : '';
 
                     //Redirect to next stage
                     plek_main.url_replace_param('event_id', event_id);
@@ -216,17 +219,26 @@ var plekevent = {
                         stage = 'details';
                     }
                     let url = plek_main.url_replace_param('stage', stage);
-
-                    //Show success message
-                    plekerror.display_info(__('Event saved!', 'pleklang'));
-                    setTimeout(() => {
-                        debugger;
-                        window.location = url;
-                    }, 500);
+                    if(type === 'save_event_details'){
+                        if(user_id === 0){
+                            plekerror.display_info(__('Event saved, thanks a lot!<br/>Our Eventmanager will check and publish the Event', 'pleklang'));
+                        }else{
+                            let event_url_label = __('To my Event','pleklang')
+                            let event_url_html = `<a href='${event_url}'>${event_url_label}</a>`; 
+                            plekerror.display_info(__('Event saved! Check it out here: '+ event_url_html, 'pleklang'));
+                        }
+                    }else{
+                        //Show success message
+                        plekerror.display_info(__('Event saved!', 'pleklang'));
+                        setTimeout(() => {
+                            debugger;
+                            window.location = url;
+                        }, 500);
+                    }
                     return;
                 }
-                plek_main.deactivate_button_loader(button, text);
-                jQuery('#plek-submit-basic-event').prop("disabled", false); //Enable the button again.
+                plek_main.deactivate_button_loader(button, orig_btn_text);
+                jQuery(button).prop("disabled", false); //Enable the button again.
             },
             error: function error(data) {
                 plek_main.deactivate_button_loader(button, __("Error loading data.... ", "pleklang"));

@@ -109,7 +109,7 @@ div.plek-review-search{
   background-color: $color-gray-light;
   width: 72%;
   max-width: 755px;
-  z-index: 9999;
+  z-index: 10000;
 }
 
 #event-organizer-proposal,
@@ -476,6 +476,17 @@ div.plek-review-search{
     position: relative;
     display: flex;
     align-self: center;
+
+    input{
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 0.5em 0;
+      margin-top: -2em;
+      opacity: 0;
+      filter: alpha(opacity=0);
+      cursor: pointer;
+    }
   }
 
   .plek-button{
@@ -488,16 +499,10 @@ div.plek-review-search{
     overflow: hidden;
   }
 
-  input{
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 0.5em 0;
-    margin-top: -2em;
-    opacity: 0;
-    filter: alpha(opacity=0);
-    cursor: pointer;
+  .image_preloaded_id{
+    display: none;
   }
+
 }
 
 

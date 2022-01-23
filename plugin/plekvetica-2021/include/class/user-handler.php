@@ -233,7 +233,13 @@ class PlekUserHandler
         return self::search_role('plek-partner', $user);
     }
 
-    public static function user_can_edit_post(object $plek_event)
+    /**
+     * Undocumented function
+     *
+     * @param mixed $event PlekEvent Object or event id
+     * @return void
+     */
+    public static function user_can_edit_post(mixed $event)
     {
         if (self::current_user_is_locked()) {
             return false;
@@ -241,15 +247,33 @@ class PlekUserHandler
         if (current_user_can('edit_posts')) {
             return true;
         }
+        if(!is_object($event)){
+            $plek_events = new PlekEvents;
+            $plek_events -> load_event($event,'all');
+            $event = $plek_events;
+        }
+
+        if(!is_object($event)){
+            return false; //Event not found
+        }
         $user_id = self::get_user_id();
-        $post_authors = $plek_event->get_event_authors();
+        $post_authors = $event->get_event_authors();
         if (isset($post_authors[$user_id])) {
             return true;
         }
+
+        //Check if the post is published. If not, it is possible to edit this post by anyone within 24h
+        $status = $event->get_field_value('post_status', false);
+        $created = strtotime($event->get_field_value('post_date', false));
+
+        if($status === 'draft' AND (time() - $created) < (24 * 60 * 60)){ //Check if the post is a draft and not created later than 1 day ago
+            return true;
+        }
+
         $user_role = self::get_user_role();
         switch ($user_role) {
             case 'plek-organi':
-                $event_organi = $plek_event->get_field_value('_EventOrganizerID', true);
+                $event_organi = $event->get_field_value('_EventOrganizerID', true);
                 $user_organi_id = (string) PlekUserHandler::get_user_setting('$oid_id');
                 if (!is_array($event_organi)) {
                     return false;
@@ -262,7 +286,7 @@ class PlekUserHandler
             case 'plek-band':
                 $managing_bands = PlekUserHandler::get_user_meta('band_id');
                 $managing_bands = explode(',', $managing_bands);
-                $event_bands = $plek_event->get_bands();
+                $event_bands = $event->get_bands();
                 if (!empty($managing_bands)) {
                     foreach ($managing_bands as $band_id) {
                         if (isset($event_bands[$band_id])) {

@@ -51,10 +51,21 @@ let plek_main = {
 
     activate_loader_style(element) {
         jQuery(element).addClass('loader');
+        if(jQuery(element).is("input")){
+            //Loader does not work on input fields. Add loader after button
+            let btn_id = jQuery(element).attr('id');
+            jQuery(element).after(`<div id='input_loader_${btn_id}' class='input_loader'></div>`);
+        }
     },
 
     deactivate_loader_style(element) {
         jQuery(element).removeClass('loader');
+        if(jQuery(element).is("input")){
+            //Loader does not work on input fields. Add loader after button
+            let btn_id = jQuery(element).attr('id');
+            jQuery('#input_loader_'+btn_id).remove();
+
+        }
     },
 
     get_text_from_ajax_request(data, only_success = false) {
