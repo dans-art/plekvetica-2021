@@ -65,7 +65,6 @@ var plekevent = {
      * @param {object}  data The band preloadDataobject 
      */
     add_new_vob_to_selection(type, vob_id, data) {
-        debugger;
         switch (type) {
             case 'band-form-submit':
                 window.bandPreloadedData = data;
@@ -133,19 +132,28 @@ var plekevent = {
         //Set available dates
         let defaultStartDate = '2020-01-01';
         let defaultEndDate = '9020-01-01';
-        let startDate = jQuery('#event_start_date').val().split(' '); //Array [ "2022-01-20", "12:00:00" ] 
-        startDate = (typeof startDate[0] !== 'undefined' && startDate[0].length > 0) ? startDate[0] : defaultStartDate;
 
-        let endDate = jQuery('#event_end_date').val().split(' ');
-        endDate = (typeof endDate[0] !== 'undefined' && endDate[0].length > 0) ? endDate[0] : startDate;
-        endDate = (endDate === defaultStartDate) ? defaultEndDate : endDate; //Set the enddate if startdate and enddate set
-        //Set the Options
-        plek_manage_event.flatpickr_band_options.enable = [{
-            from: startDate,
-            to: endDate
-        }];
+        //Set the Options for single day
+        if (this.event_is_single_day()) {
+            plek_manage_event.flatpickr_band_options.time_24hr = true;
+            plek_manage_event.flatpickr_band_options.dateFormat = 'H:i';
+            plek_manage_event.flatpickr_band_options.altFormat = 'H:i';
+            plek_manage_event.flatpickr_band_options.defaultDate = '20:00';
+            plek_manage_event.flatpickr_band_options.noCalendar = true;
+        } else {
+            //Event is multy day
+            let startDate = this.get_event_date('event_start_date', 'date');
+            let endDate = this.get_event_date('event_end_date', 'date');
+            startDate = (startDate.length === 0) ? defaultStartDate : startDate;
+            endDate = (endDate.length === 0) ? defaultEndDate : endDate;
+            plek_manage_event.flatpickr_band_options.enable = [{
+                from: startDate,
+                to: endDate
+            }];
+        }
+
         //Restart the flatpickr for the time inputs
-        flatpickr(".band-time-input", plek_manage_event.flatpickr_band_options); //Load the Flatpickr
+        flatpickr("#event-band-selection .band-time-input", plek_manage_event.flatpickr_band_options); //Load the Flatpickr
     },
 
     add_remove_item_eventlistener() {
@@ -199,7 +207,7 @@ var plekevent = {
                     let success_obj = plek_main.get_ajax_success_object(data);
                     let event_id = (typeof success_obj[0] !== 'undefined') ? success_obj[0] : '000';
                     let user_id = (typeof success_obj[1] !== 'undefined') ? success_obj[1] : 0;
-                    debugger;
+
                     //Redirect to next stage
                     plek_main.url_replace_param('event_id', event_id);
                     var stage = 'login'; //Default is login
@@ -212,6 +220,7 @@ var plekevent = {
                     //Show success message
                     plekerror.display_info(__('Event saved!', 'pleklang'));
                     setTimeout(() => {
+                        debugger;
                         window.location = url;
                     }, 500);
                     return;
@@ -296,8 +305,10 @@ var plekevent = {
             datab.append('event_name', this.get_field_value('event_name'));
             datab.append('event_start_date', this.get_field_value('event_start_date'));
             if (jQuery('#is_multiday').is(':checked') === true) {
+                plekvalidator.add_field('is_multiday', 'int', true);
                 plekvalidator.add_field('event_end_date', 'date', true);
             }
+            datab.append('is_multiday', (jQuery('#is_multiday').is(':checked') === true) ? '1' : '0');
             datab.append('event_end_date', this.get_field_value('event_end_date'));
 
             if (jQuery('#no_band').is(':checked') === true) {
@@ -359,14 +370,74 @@ var plekevent = {
      */
     get_band_order_time() {
         let order_obj = {};
+        let is_single_day_event = this.event_is_single_day();
+
         jQuery('#event-band-selection .plek-select-item').each((index, item) => {
             let band_id = jQuery(item).data('id');
             let datetime = jQuery(item).find('.band-time-input').first().val();
+            //On Single day, band-time-input is only the time (H:i). Add the startdate as well
+            if (is_single_day_event || datetime.length < 6) {
+                //Add Date of single day of if datetime only contains the time
+                let startDate = this.get_event_date('event_start_date', 'date');
+                datetime = startDate + ' ' + datetime;
+            }
             order_obj[band_id] = { order: index, datetime: datetime };
         });
 
         return JSON.stringify(order_obj);
     },
+
+    /**
+     * Checks if the start- and enddates are matching, or if there is no enddate
+     * @returns {bool} True if it is a single day event, false otherwise 
+     */
+    event_is_single_day() {
+        let startDate = jQuery('#event_start_date').val();
+        let startDateArr = startDate.split(' ');//Array [ "2022-01-20", "12:00:00" ] 
+
+        let endDate = jQuery('#event_end_date').val();
+        let endDateArr = endDate.split(' '); //Array [ "2022-01-20", "12:00:00" ] 
+        if (endDate.length === 0) {
+            return true;
+        }
+
+        if (startDateArr[0] === endDateArr[0]) {
+            return true;
+        }
+
+        let startDD = new Date(startDate);
+        let endDD = new Date(endDate);
+        let nextDay = startDD.setTime(startDD.getTime() + (16 * 60 * 60 * 1000)); //Add 16h to the startdate
+        if (new Date(nextDay) > endDD) { //Event is not longer than 16h, therefore it is a single day.
+            return true;
+        }
+        return false;
+    },
+    /**
+     * 
+     * @param {string} id ID of the Input field to get the date from
+     * @param {string} output Accepts both (Array date | time), date (String Y-m-d) & time (String H:i:s)
+     * @returns {string} The formated date 
+     */
+    get_event_date(id = null, output = 'both') {
+        let dateVal = jQuery('#' + id).val();
+        if (typeof dateVal === 'undefined') {
+            return '';
+        }
+        let dateSplit = dateVal.split(" ");
+        switch (output) {
+            case "date":
+                return dateSplit[0];
+                break;
+            case "time":
+                return (typeof dateSplit[1] !== 'undefined') ? dateSplit[1] : '';
+                break;
+            default:
+                return dateSplit;
+                break;
+        }
+    },
+
 
     get_field_value(name) {
         let type = jQuery("#" + name).attr("type");

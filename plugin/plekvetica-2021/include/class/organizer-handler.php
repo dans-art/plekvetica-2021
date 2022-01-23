@@ -21,16 +21,18 @@ class PlekOrganizerHandler
     public function __construct()
     {
         global $plek_event;
-        $plek_event->enqueue_event_form_scripts();
+        if(is_object($plek_event)){
+            $plek_event->enqueue_event_form_scripts();
+        }
     }
 
     /**
      * Loads the organizer by id
      *
-     * @param integer $organizer_id
+     * @param int|string $organizer_id
      * @return void
      */
-    public function load_organizer(int|null $organizer_id)
+    public function load_organizer(mixed $organizer_id)
     {
         $organizer_object = tribe_get_organizer_object($organizer_id, 'OBJECT', null);
         if ($organizer_object === null or $organizer_object->post_type !== 'tribe_organizer') {

@@ -395,11 +395,18 @@
 
     //Add/Edit Event form
 
-.event-basic-container .event-date-picker{
+    .event-basic-container .event-date-picker{
+        flex-direction: column;
+      }
+  /* Timetable */
 
-    flex-direction: column;
-  
-  }
+  #event-container .timetable-container{
+
+        .timetable_content{
+          flex-direction: column;
+        }
+      
+      }
     
 }
 

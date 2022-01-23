@@ -88,9 +88,12 @@ let plek_manage_event = {
         if (date.length === 0) {
             return false;
         }
-        if (typeof plek_manage_event.flatpickr_band_options.enable[0] !== 'undefined' && plek_manage_event.flatpickr_band_options.enable[0].from === plek_manage_event.flatpickr_band_options.enable[0].to) {
-            //Is Single day. Only display the time
-            date = (typeof date.split(' ')[1] !== 'undefined') ? date.split(' ')[1] : date;
+        if(!plekevent.event_is_single_day()){
+            //Event is multiday
+            if (typeof plek_manage_event.flatpickr_band_options.enable[0] !== 'undefined' && plek_manage_event.flatpickr_band_options.enable[0].from === plek_manage_event.flatpickr_band_options.enable[0].to) {
+                //Is Single day. Only display the time
+                date = (typeof date.split(' ')[1] !== 'undefined') ? date.split(' ')[1] : date;
+            }
         }
         jQuery(flatpickr_instance.element).parent().find('.time-label').text(date);
         return;

@@ -676,44 +676,56 @@ article.plek-event-item-compact .plek-message { font-size: 1em; padding: 0.4em; 
 /* line 83, scss/event-single.scss */
 .event-author-container .author span:first-child { padding-right: 0.8em; }
 
-/*Revision Container*/
-/* line 89, scss/event-single.scss */
-#revloader { position: absolute; width: 100%; z-index: 101; background-color: #232323; }
-/* line 96, scss/event-single.scss */
-#revloader .container { background-color: #595959; margin: 2em auto; width: 90%; max-width: 888px; }
+/* Timetable */
+/* line 92, scss/event-single.scss */
+.timetable-container .date { font-weight: bold; font-size: 1.2rem; }
+/* line 97, scss/event-single.scss */
+.timetable-container .timetable_content { display: flex; justify-content: space-between; flex-wrap: wrap; }
 /* line 103, scss/event-single.scss */
+.timetable-container .timetable_day { margin-bottom: 1rem; min-width: 333px; }
+/* line 107, scss/event-single.scss */
+.timetable-container .timetable_row { margin-left: 5%; width: 95%; }
+/* line 111, scss/event-single.scss */
+.timetable-container .band_origin img { max-height: 1.4rem; padding: 0 0.5rem; }
+
+/*Revision Container*/
+/* line 120, scss/event-single.scss */
+#revloader { position: absolute; width: 100%; z-index: 101; background-color: #232323; }
+/* line 127, scss/event-single.scss */
+#revloader .container { background-color: #595959; margin: 2em auto; width: 90%; max-width: 888px; }
+/* line 134, scss/event-single.scss */
 #revloader #revloader_title, #revloader #revloader_close { margin: 0.5em; font-size: 1.4em; }
-/* line 110, scss/event-single.scss */
+/* line 141, scss/event-single.scss */
 #revloader .bandDetails { display: none; }
-/* line 114, scss/event-single.scss */
+/* line 145, scss/event-single.scss */
 #revloader .content_header { display: flex; justify-content: space-between; flex-wrap: nowrap; }
-/* line 119, scss/event-single.scss */
+/* line 150, scss/event-single.scss */
 #revloader #revloader_close { width: 1.5em; height: 1.5em; cursor: pointer; }
-/* line 124, scss/event-single.scss */
+/* line 155, scss/event-single.scss */
 #revloader #revloader_close::before { font-family: "FontAwesome"; content: '\f00d'; }
-/* line 132, scss/event-single.scss */
+/* line 163, scss/event-single.scss */
 #revloader table tr td:first-child { writing-mode: sideways-lr; }
-/* line 136, scss/event-single.scss */
+/* line 167, scss/event-single.scss */
 #revloader table td { word-break: break-word; max-width: 46%; }
-/* line 139, scss/event-single.scss */
+/* line 170, scss/event-single.scss */
 #revloader table td:nth-child(2) { width: 46%; }
-/* line 144, scss/event-single.scss */
-#revloader table td a { color: #FAAD2B; }
-/* line 147, scss/event-single.scss */
-#revloader table td a.apply_all_changes { color: white; }
-/* line 153, scss/event-single.scss */
-#revloader .plek_overlay_btn { position: absolute; min-width: 100px; max-width: 250px; width: 20%; }
-/* line 159, scss/event-single.scss */
-#revloader .plek_overlay_btn div { float: left; text-align: center; cursor: pointer; font-size: 1em; font-family: "FontAwesome"; }
-/* line 166, scss/event-single.scss */
-#revloader .plek_overlay_btn #change_ok:before, #revloader .plek_overlay_btn #change_ignore:before { padding: 0.5em; width: 2em; height: 2em; color: white; }
 /* line 175, scss/event-single.scss */
+#revloader table td a { color: #FAAD2B; }
+/* line 178, scss/event-single.scss */
+#revloader table td a.apply_all_changes { color: white; }
+/* line 184, scss/event-single.scss */
+#revloader .plek_overlay_btn { position: absolute; min-width: 100px; max-width: 250px; width: 20%; }
+/* line 190, scss/event-single.scss */
+#revloader .plek_overlay_btn div { float: left; text-align: center; cursor: pointer; font-size: 1em; font-family: "FontAwesome"; }
+/* line 197, scss/event-single.scss */
+#revloader .plek_overlay_btn #change_ok:before, #revloader .plek_overlay_btn #change_ignore:before { padding: 0.5em; width: 2em; height: 2em; color: white; }
+/* line 206, scss/event-single.scss */
 #revloader .plek_overlay_btn #change_ok:before { content: "\f00c"; background-color: #54770f; border: 1px solid #00571a; }
-/* line 180, scss/event-single.scss */
+/* line 211, scss/event-single.scss */
 #revloader .plek_overlay_btn #change_ignore:before { content: "\f00d"; background-color: red; border: 1px solid #840000; padding: 0.5em 0.7em; }
-/* line 189, scss/event-single.scss */
+/* line 220, scss/event-single.scss */
 #revloader #field-categories dt { display: none; }
-/* line 192, scss/event-single.scss */
+/* line 223, scss/event-single.scss */
 #revloader #field-categories dd { margin: 0; }
 
 /* Gallery Styles*/
@@ -1523,120 +1535,123 @@ div.plek-review-search form button, div.plek-review-search form input { width: 1
   /* line 391, scss/breakpoints.scss */
   .band-single.band-container .mobile-meta-con { display: block; }
   /* line 398, scss/breakpoints.scss */
-  .event-basic-container .event-date-picker { flex-direction: column; } }
-@media (max-width: 599px) { /* line 408, scss/breakpoints.scss */
+  .event-basic-container .event-date-picker { flex-direction: column; }
+  /* Timetable */
+  /* line 405, scss/breakpoints.scss */
+  #event-container .timetable-container .timetable_content { flex-direction: column; } }
+@media (max-width: 599px) { /* line 415, scss/breakpoints.scss */
   .plek-pre-button-seperator { height: 0; }
-  /* line 411, scss/breakpoints.scss */
+  /* line 418, scss/breakpoints.scss */
   #post-27146 .wp-block-buttons > .wp-block-button.plek-start-page { width: 100%; }
-  /* line 414, scss/breakpoints.scss */
+  /* line 421, scss/breakpoints.scss */
   #post-27146 article.plek-event-type-tribe_events, #post-27146 article.plek-event-type-youtube { margin-left: 0; }
-  /* line 419, scss/breakpoints.scss */
+  /* line 426, scss/breakpoints.scss */
   article.plek-event-type-youtube, article.plek-event-type-tribe_events { justify-content: space-between; flex-wrap: wrap; /*.tribe-events-calendar-list__event-date-tag-datetime{ display: none;
 }*/ }
-  /* line 428, scss/breakpoints.scss */
-  article.plek-event-type-youtube .tribe-events-calendar-list__event-date-tag-datetime-mobile, article.plek-event-type-tribe_events .tribe-events-calendar-list__event-date-tag-datetime-mobile { display: block; }
-  /* line 431, scss/breakpoints.scss */
-  article.plek-event-type-youtube .tribe-events-calendar-list__event-date-tag, article.plek-event-type-tribe_events .tribe-events-calendar-list__event-date-tag { width: 0; }
   /* line 435, scss/breakpoints.scss */
+  article.plek-event-type-youtube .tribe-events-calendar-list__event-date-tag-datetime-mobile, article.plek-event-type-tribe_events .tribe-events-calendar-list__event-date-tag-datetime-mobile { display: block; }
+  /* line 438, scss/breakpoints.scss */
+  article.plek-event-type-youtube .tribe-events-calendar-list__event-date-tag, article.plek-event-type-tribe_events .tribe-events-calendar-list__event-date-tag { width: 0; }
+  /* line 442, scss/breakpoints.scss */
   article.plek-event-type-youtube .tribe-events-calendar-list__event-featured-image-wrapper, article.plek-event-type-youtube .tribe-events-calendar-list__event-image-wrapper, article.plek-event-type-youtube .tribe-events-calendar-list__event-details, article.plek-event-type-tribe_events .tribe-events-calendar-list__event-featured-image-wrapper, article.plek-event-type-tribe_events .tribe-events-calendar-list__event-image-wrapper, article.plek-event-type-tribe_events .tribe-events-calendar-list__event-details { flex: 1; }
-  /* line 441, scss/breakpoints.scss */
+  /* line 448, scss/breakpoints.scss */
   article.plek-event-review .tribe-events-calendar-list__event-attributes-tag { width: 0.5em; display: flex; position: absolute; }
   /*Footer*/
-  /* line 450, scss/breakpoints.scss */
+  /* line 457, scss/breakpoints.scss */
   .footer-widget-1 aside, .footer-widget-3 aside { text-align: center; align-self: center; }
-  /* line 456, scss/breakpoints.scss */
+  /* line 463, scss/breakpoints.scss */
   .footer-widget-2 { margin-bottom: 0; }
-  /* line 460, scss/breakpoints.scss */
-  .plek-post-type-all_reviews .info-text-bar { width: 50%; }
-  /* line 464, scss/breakpoints.scss */
-  .plek-review-search .gp-icon.icon-search { display: inline-flex; }
   /* line 467, scss/breakpoints.scss */
+  .plek-post-type-all_reviews .info-text-bar { width: 50%; }
+  /* line 471, scss/breakpoints.scss */
+  .plek-review-search .gp-icon.icon-search { display: inline-flex; }
+  /* line 474, scss/breakpoints.scss */
   .plek-review-search .search-button-text { display: none; }
-  /* line 472, scss/breakpoints.scss */
+  /* line 479, scss/breakpoints.scss */
   .plek-posts-container .plek-post-item { flex-basis: 45%; }
-  /* line 476, scss/breakpoints.scss */
+  /* line 483, scss/breakpoints.scss */
   #plek-search-page .plek_album_con .image_container, .plek_album_con .image_container { width: 100%; text-align: center; }
-  /* line 481, scss/breakpoints.scss */
+  /* line 488, scss/breakpoints.scss */
   #plek-search-page .plek_album_con .image_container img, .plek_album_con .image_container img { width: 100%; }
-  /* line 485, scss/breakpoints.scss */
-  #plek-search-page .plek_album_con .image_container picture, .plek_album_con .image_container picture { max-height: unset; }
   /* line 492, scss/breakpoints.scss */
+  #plek-search-page .plek_album_con .image_container picture, .plek_album_con .image_container picture { max-height: unset; }
+  /* line 499, scss/breakpoints.scss */
   #plek-user-settings-form button.plek-button { width: 100%; }
-  /* line 496, scss/breakpoints.scss */
+  /* line 503, scss/breakpoints.scss */
   #plek-user-settings-form .buttons { flex-direction: column; gap: 0; } }
-@media (min-width: 599px) { /* line 504, scss/breakpoints.scss */
+@media (min-width: 599px) { /* line 511, scss/breakpoints.scss */
   .tribe-events-calendar-list__event-date-tag-datetime-mobile { display: none; }
-  /* line 507, scss/breakpoints.scss */
+  /* line 514, scss/breakpoints.scss */
   .plek-review-search .gp-icon.icon-search { display: none; } }
-@media (max-width: 479px) { /* line 513, scss/breakpoints.scss */
+@media (max-width: 479px) { /* line 520, scss/breakpoints.scss */
   #tribe-events-pg-template .single-view #event-content .plek_album_con { flex-direction: column; }
-  /* line 517, scss/breakpoints.scss */
+  /* line 524, scss/breakpoints.scss */
   #tribe-events-pg-template .single-view #event-content .plek_album_con .image_container, #tribe-events-pg-template .single-view #event-content .plek_album_con img { width: 100%; }
-  /* line 523, scss/breakpoints.scss */
-  .plek-post-type-all_reviews .info-text-bar, .info-text-bar { width: 100%; }
   /* line 530, scss/breakpoints.scss */
+  .plek-post-type-all_reviews .info-text-bar, .info-text-bar { width: 100%; }
+  /* line 537, scss/breakpoints.scss */
   .plek-author-container .info-text-bar { width: 100%; }
-  /* line 533, scss/breakpoints.scss */
-  .plek-author-container .plek-author-meta { flex-direction: column; justify-content: center; }
   /* line 540, scss/breakpoints.scss */
+  .plek-author-container .plek-author-meta { flex-direction: column; justify-content: center; }
+  /* line 547, scss/breakpoints.scss */
   .info-text-banner { width: 100%; }
-  /* line 543, scss/breakpoints.scss */
+  /* line 550, scss/breakpoints.scss */
   #tribe-events-pg-template .single-view .event-poster .info-text-banner:nth-child(3) { width: 92%; }
   /*My Plekvetica Page*/
-  /* line 550, scss/breakpoints.scss */
+  /* line 557, scss/breakpoints.scss */
   .my-plek-container .my-plek-head-container { flex-direction: column; }
-  /* line 553, scss/breakpoints.scss */
+  /* line 560, scss/breakpoints.scss */
   .my-plek-container .my-plek-head-container .this-week-posts, .my-plek-container .my-plek-head-container .missing-reviews-posts, .my-plek-container .my-plek-head-container .organizer-data, .my-plek-container .my-plek-head-container .band-data { flex-basis: 100%; }
-  /* line 564, scss/breakpoints.scss */
+  /* line 571, scss/breakpoints.scss */
   #plek-user-settings-form .buttons, #plek-band-form .buttons { flex-direction: column; }
-  /* line 568, scss/breakpoints.scss */
+  /* line 575, scss/breakpoints.scss */
   #plek-user-settings-form button.plek-button, #plek-band-form button.plek-button { width: 100%; white-space: normal; }
-  /* line 574, scss/breakpoints.scss */
-  #video_preview_con { justify-content: center; }
-  /* line 578, scss/breakpoints.scss */
-  .plek-pagination-container { flex-direction: column; }
   /* line 581, scss/breakpoints.scss */
+  #video_preview_con { justify-content: center; }
+  /* line 585, scss/breakpoints.scss */
+  .plek-pagination-container { flex-direction: column; }
+  /* line 588, scss/breakpoints.scss */
   .plek-pagination-container .pagination-prev, .plek-pagination-container .pagination-next { flex-basis: 100%; }
-  /* line 586, scss/breakpoints.scss */
+  /* line 593, scss/breakpoints.scss */
   .plek-pagination-container .page-count { order: -1; }
   /* Band List*/
-  /* line 592, scss/breakpoints.scss */
+  /* line 599, scss/breakpoints.scss */
   #container-head { flex-direction: column; gap: 0.5em; }
-  /* line 596, scss/breakpoints.scss */
+  /* line 603, scss/breakpoints.scss */
   #container-head .band-future_count { display: none; }
-  /* line 601, scss/breakpoints.scss */
+  /* line 608, scss/breakpoints.scss */
   .block-container .flex-table-view { flex-wrap: wrap; gap: 2%; margin-bottom: 1em; justify-content: flex-end; }
-  /* line 607, scss/breakpoints.scss */
+  /* line 614, scss/breakpoints.scss */
   .block-container .flex-table-view div { flex-basis: 100%; }
-  /* line 610, scss/breakpoints.scss */
+  /* line 617, scss/breakpoints.scss */
   .block-container .flex-table-view .band-country { flex-basis: 19%; }
-  /* line 613, scss/breakpoints.scss */
+  /* line 620, scss/breakpoints.scss */
   .block-container .flex-table-view .band-name { flex-basis: 79%; }
-  /* line 616, scss/breakpoints.scss */
+  /* line 623, scss/breakpoints.scss */
   .block-container .flex-table-view .band-future-event-count { display: none; }
-  /* line 619, scss/breakpoints.scss */
+  /* line 626, scss/breakpoints.scss */
   .block-container .flex-table-view .band-event-count, .block-container .flex-table-view .band-future-event-count, .block-container .flex-table-view .band-follower { padding-right: 2em; text-align: right; }
-  /* line 625, scss/breakpoints.scss */
+  /* line 632, scss/breakpoints.scss */
   .block-container .flex-table-view .band-event-count::after, .block-container .flex-table-view .band-future-event-count::after, .block-container .flex-table-view .band-follower::after { font-family: "FontAwesome"; margin-left: 0.5em; position: absolute; margin-top: -0.1em; color: #ffffffb6; min-height: 1em; }
-  /* line 634, scss/breakpoints.scss */
+  /* line 641, scss/breakpoints.scss */
   .block-container .flex-table-view .band-event-count { margin-left: 10%; }
-  /* line 637, scss/breakpoints.scss */
+  /* line 644, scss/breakpoints.scss */
   .block-container .flex-table-view .band-event-count::after { content: '\f073'; }
-  /* line 640, scss/breakpoints.scss */
+  /* line 647, scss/breakpoints.scss */
   .block-container .flex-table-view .band-future-event-count::after { content: '\f271'; }
-  /* line 643, scss/breakpoints.scss */
+  /* line 650, scss/breakpoints.scss */
   .block-container .flex-table-view .band-follower::after { content: '\f0c0'; }
-  /* line 648, scss/breakpoints.scss */
+  /* line 655, scss/breakpoints.scss */
   .plek-event-form-container, .submit.plek-button { margin-left: 0; } }
-@media (max-width: 400px) { /* line 656, scss/breakpoints.scss */
+@media (max-width: 400px) { /* line 663, scss/breakpoints.scss */
   .tribe-events-calendar-list__event, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event { flex-direction: column; }
-  /* line 660, scss/breakpoints.scss */
+  /* line 667, scss/breakpoints.scss */
   .tribe-events-calendar-list__event div, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event div { width: 100%; }
-  /* line 664, scss/breakpoints.scss */
+  /* line 671, scss/breakpoints.scss */
   .tribe-events-calendar-list__event img, .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event img { width: 100%; }
-  /* line 669, scss/breakpoints.scss */
+  /* line 676, scss/breakpoints.scss */
   .banner-star-container { max-width: 100px; }
-  /* line 674, scss/breakpoints.scss */
+  /* line 681, scss/breakpoints.scss */
   .plek-posts-container .plek-post-item { flex-basis: 100%; } }
 /* line 56, scss/main-style.scss */
 #content.site-content { max-width: 1024px; margin: 0 auto; background-color: #232323; }

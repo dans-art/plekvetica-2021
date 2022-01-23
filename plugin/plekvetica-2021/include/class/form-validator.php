@@ -148,8 +148,11 @@ class PlekFormValidator
     /**
      * Sets the type of the field
      *
+     * Allowed types:
+     * default, text, ytvideos, alpha_number, int, phone, email, textshort, textlong, time, date, datetime, url, facebookurl, numbershort, price, password, image, bool
+     *
      * @param string $fieldname
-     * @param string $type - Displayname of the field
+     * @param string $type - Type to validate.
      * @return void
      */
     public function set_type(string $fieldname, string $type)
@@ -259,15 +262,15 @@ class PlekFormValidator
      */
     public function field_is_valid(string $fieldname, $value, $is_array = false)
     {
-        if(!$is_array AND isset($this->value_in_array[$fieldname])){
+        if (!$is_array and isset($this->value_in_array[$fieldname])) {
             //Field is an array. Loop array and check
-            $values = (is_array($value))?$value:json_decode($value);
-            foreach($values as $val){
-                $this -> field_is_valid($fieldname, $val, true);
+            $values = (is_array($value)) ? $value : json_decode($value);
+            foreach ($values as $val) {
+                $this->field_is_valid($fieldname, $val, true);
             }
-            if(empty($this -> errors[$fieldname])){
+            if (empty($this->errors[$fieldname])) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
@@ -333,6 +336,12 @@ class PlekFormValidator
                 //This field has to be empty!
                 if (!empty($value)) {
                     $this->set_error($fieldname, __('Nice try! No Robots allowed here!', 'pleklang'));
+                }
+                break;
+
+            case 'bool':
+                if (($value !== 'false') AND ($value !== 'true') AND ($value !== '1') AND ($value !== '0') AND ($value !== false) AND ($value !== true)) {
+                    $this->set_error($fieldname, __('Value is not boolean', 'pleklang'));
                 }
                 break;
 
@@ -461,6 +470,7 @@ class PlekFormValidator
         $defaults['password'] = array("name" => __("Password", "pleklang"), "min_length" => 10, "max_length" => 0, "pattern" => false);
         $defaults['image'] = array("name" => __("Image", "pleklang"), "min_length" => 1, "max_length" => 0, "pattern" => false, 'allowed_file_types' =>  array('image/gif' => 'GIF', 'image/png' => 'PNG', 'image/jpeg' => 'JPG', 'image/webp' => 'WEBP'));
         $defaults['datetime'] = array("name" => __("Date & Time", "pleklang"), "min_length" => 17, "max_length" => 19, "pattern" => '/^[0-9]{4}-[0-9]{2}-[0-9]{2} {0,}[0-9]{2}:[0-9]{2}:[0-9]{2}$/');
+        $defaults['bool'] = array("name" => __("Boolean Value", "pleklang"), "min_length" => 1, "max_length" => 5, "pattern" => false);
 
         if (!isset($defaults[$type])) {
             //$this -> set_error($fieldname, __('Fieldtype not find in default validator','pleklang') );

@@ -28,16 +28,18 @@ class PlekVenueHandler
     public function __construct()
     {
         global $plek_event;
-        $plek_event->enqueue_event_form_scripts();
+        if(is_object($plek_event)){
+            $plek_event->enqueue_event_form_scripts();
+        }
     }
 
     /**
      * Loads the venue by id
      *
-     * @param integer $venue_id
+     * @param int|string $venue_id 
      * @return void
      */
-    public function load_venue(int|null $venue_id)
+    public function load_venue(mixed $venue_id)
     {
         $venue_object = tribe_get_venue_object($venue_id, 'OBJECT', null);
         if ($venue_object === null or $venue_object->post_type !== 'tribe_venue') {
@@ -157,6 +159,13 @@ class PlekVenueHandler
         return $this->update_venue($create, true);
     }
 
+    /**
+     * Updates an Existing Venue
+     *
+     * @param integer $venue_id
+     * @param boolean $return_all_venues
+     * @return void
+     */
     public function update_venue(int $venue_id, $return_all_venues = false)
     {
         global $plek_ajax_errors;

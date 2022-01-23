@@ -85,6 +85,37 @@
   }
 }
 
+/* Timetable */
+
+.timetable-container{
+
+  .date{
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  .timetable_content{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .timetable_day{
+    margin-bottom: 1rem;
+    min-width: 333px;
+  }
+  .timetable_row{
+    margin-left: 5%;
+    width: 95%;
+  }
+  .band_origin img{
+    max-height: 1.4rem;
+    padding: 0 0.5rem;
+  }
+
+}
+
+
 /*Revision Container*/
 #revloader{
 

@@ -36,11 +36,22 @@ class PlekEventHandler
         return ($status === 'publish') ? true : false;
     }
 
+    /**
+     * Determines if a event is a multiday event or not.
+     *
+     * @return boolean
+     */
     public function is_multiday()
     {
-        $start_date = $this->get_start_date();
-        $end_date = $this->get_end_date();
-        if ($start_date !== $end_date) {
+        $start_date = intval($this->get_start_date('', true));
+        $end_date = intval($this->get_end_date('', true));
+
+        if ($end_date === 0) {
+            return false;
+        }
+        $calc = $end_date -$start_date;
+        $sixteen = (16 * 60 * 60); //16 Hours
+        if ($sixteen > $calc) {
             return true;
         }
         return false;
@@ -251,12 +262,22 @@ class PlekEventHandler
         return $this->get_field_value('post_content');
     }
 
-    public function get_bands()
+/**
+ * Returns all the Bands for the current event.
+ *
+ * @param boolean $sort_by_order - Returns the Bands sorted according to the band_order_time ACF
+ * @return array The Bands
+ */
+    public function get_bands($sort_by_order = true)
     {
-        if (!empty($this->event['bands'])) {
-            return $this->event['bands'];
+        if (empty($this->event['bands'])) {
+            return array();
         }
-        return array();
+        if($sort_by_order){
+            $bands = $this -> event['bands'];
+            return $this -> sort_bands($bands);
+        }
+        return $this->event['bands'];
     }
 
     public function get_bands_string(string $seperator = ', ')
@@ -456,11 +477,15 @@ class PlekEventHandler
      * Returns the startdate of the event. Default format: d m y
      *
      * @param string $format - PHP Date() format
+     * @param bool $return_sec - Returns the timestamp
      * @return string Formated date
      */
-    public function get_start_date(string $format = 'd m Y')
+    public function get_start_date(string $format = 'd m Y', $return_sec = false)
     {
         $seconds = strtotime($this->get_field_value('_EventStartDate'));
+        if ($return_sec) {
+            return $seconds;
+        }
         return date_i18n($format, $seconds);
     }
 
@@ -468,11 +493,15 @@ class PlekEventHandler
      * Returns the enddate of the event. Default format: d m y
      *
      * @param string $format - PHP Date() format
+     * @param bool $return_sec - Returns the timestamp
      * @return string Formated date
      */
-    public function get_end_date(string $format = 'd m Y')
+    public function get_end_date(string $format = 'd m Y',  $return_sec = false)
     {
         $seconds = strtotime($this->get_field_value('_EventEndDate'));
+        if ($return_sec) {
+            return $seconds;
+        }
         return date_i18n($format, $seconds);
     }
 
@@ -527,6 +556,16 @@ class PlekEventHandler
             }
         }
         return false;
+    }
+
+    /**
+     * Checks if there is a timetable for the current event.
+     *
+     * @return bool True if timetable exists, false otherwise.
+     */
+    public function event_has_timetable()
+    {
+        return (!empty($this->event['timetable'])) ? true : false;
     }
 
     public function format_bands(array $bands)
@@ -1161,6 +1200,7 @@ class PlekEventHandler
     public function save_event_basic()
     {
         global $plek_ajax_handler;
+        global $plek_handler;
         //Validate the Data
         $validator = $this->validate_event_basic();
         if ($validator->all_fields_are_valid() !== true) {
@@ -1182,6 +1222,9 @@ class PlekEventHandler
             $validator->set_system_error(__('Failed to save Event', 'pleklang'));
             return $validator->get_errors();
         }
+
+        //Update the Band order / times
+        $plek_handler->update_field('band_order_time', $plek_ajax_handler->get_ajax_data('band_order_time'), $event_id);
 
         //Update the Event genres / categories
         $this->update_event_genres($event_id);
@@ -1225,7 +1268,6 @@ class PlekEventHandler
             }
             //Set the guest author ID
             $login = (int) $plek_handler->get_plek_option('guest_author_id');
-            
         } else {
             //Try to login the user
             $user_name = $plek_ajax_handler->get_ajax_data('user_login');
@@ -1261,13 +1303,12 @@ class PlekEventHandler
             'post_author' => $user_id,
         );
 
-        if($delete_all_others){
+        if ($delete_all_others) {
             //Delete all the co-authors
             $author = wp_get_post_terms($event_id, 'author');
-            foreach($author as $aut_obj){
-                $term_id = $aut_obj -> term_id;
+            foreach ($author as $aut_obj) {
+                $term_id = $aut_obj->term_id;
                 wp_delete_term($term_id, 'author');
-
             }
         }
         return wp_update_post($args, true);
@@ -1299,6 +1340,12 @@ class PlekEventHandler
         $validator->set_type('event_name', 'text');
         $validator->set_type('event_start_date', 'datetime');
 
+        $validator->set_type('event_end_date', 'datetime');
+        if ($plek_ajax_handler->get_ajax_data('is_multiday') === '1') {
+            $validator->set_required('event_end_date');
+        }
+        $validator->set_type('is_multiday', 'bool');
+
         $validator->set_type('event_band', 'int');
         $validator->set_array('event_band');
 
@@ -1306,6 +1353,8 @@ class PlekEventHandler
         $validator->set_array('event_venue');
 
         $validator->set_type('hp-password', 'honeypot');
+
+        $validator->set_type('band_order_time', 'default');
 
         $event_id = $plek_ajax_handler->get_ajax_data('event_id');
 
@@ -1457,5 +1506,83 @@ class PlekEventHandler
             $bands[$index] = (int) $b;
         }
         return $bands;
+    }
+
+    /**
+     * Sorts the $plek_event -> bands array according to the order set in band_order_time ACF
+     *
+     * @param array $bands The Bands array
+     * @return array Bands The sorted Bands array or the original, if not sort data is found.
+     */
+    public function sort_bands($bands)
+    {
+        if (empty($this->event['band_sort'])) {
+            return $bands;
+        }
+        $count = count($this->event['band_sort']);
+        $sorted = array();
+        foreach($bands AS $band_id => $item){
+            $band_id = strval($band_id);
+            $index = array_search($band_id, $this -> event['band_sort']);
+            if($index === false){
+                $index = $count + 5;
+            }
+            $sorted[$index] = $item;
+        }
+        ksort($sorted);
+        return $sorted;
+    }
+
+    /**
+     * Loads the Timetable for the current Event.
+     * 
+     *
+     * @param boolean $formated - If the timetalbe should be returned as an array or formated string
+     * @return string|array The timetable
+     */
+    public function get_timetable($formated = true)
+    {
+        if (empty($this->event['timetable'])) {
+            return null;
+        }
+
+        if (!$formated) {
+            return $this->event['timetable'];
+        }
+
+        $is_multiday = $this -> is_multiday();
+        $band_handler = new PlekBandHandler;
+        $formated = array();
+        foreach ($this->event['bands'] as $band_id => $item) {
+            $band_name = $item['name'];
+            $band_origin = $item['herkunft'];
+            $band_origin_formated = $band_handler->get_flag_formated($band_origin);
+
+            //$timestamp = array_search($band_id, $this->event['timetable']); //Timestamp or false
+            $timestamp = (!empty($this -> event['timetable'][$band_id]['timestamp']))?$this -> event['timetable'][$band_id]['timestamp']:0;
+
+            $playtime = (isset($this->event['timetable'][$band_id]['playtime_formated']))?$this->event['timetable'][$band_id]['playtime_formated']:'tbd';
+
+            $day = ($is_multiday AND $timestamp > 0)?date('d. F', $timestamp):__('No Time defined','pleklang');
+            if(!isset($formated[$day])){
+                $formated[$day] = '';
+            }
+            $formated[$day] .= "<div class='timetable_row'>
+            <span class='playtime'>{$playtime}</span>
+            <span class='band_origin'>{$band_origin_formated}</span>
+            <span class='band_name'>{$band_name}</span>
+            </div>";
+        }
+
+        if(!$is_multiday){
+            $formated = implode('',$formated[0]);
+        }else{
+            $days = '';
+            foreach($formated as $date => $playtimes){
+                $days .= "<div class='timetable_day'><div class='date'>{$date}</div>{$playtimes}</div>";
+            }
+            $formated = $days;
+        }
+        return "<div class='timetable_content'>{$formated}</div>";
     }
 }
