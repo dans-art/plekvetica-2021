@@ -818,6 +818,7 @@ class PlekBandHandler
         $acf['herkunft'] = $origin;
         $acf['videos'] = $videos;
         $acf['band_genre'] = $genre;
+        
         //Upload Logo
         if (!empty($plek_ajax_handler->get_ajax_files_data('band-logo'))) {
             //Save resized File

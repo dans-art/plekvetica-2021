@@ -177,12 +177,12 @@ var plekevent = {
 
         var datab = this.prepare_data(type);
         if (plekvalidator.validate_form_data(datab, form) !== true) {
-            jQuery('#'+form).prop("disabled", false); //Enable the button again.
+            jQuery('#' + form).prop("disabled", false); //Enable the button again.
             plekvalidator.display_errors(form);
             //plekerror.display_error();
             return false;
         }
-        let button = jQuery('#'+form+' .plek-main-submit-button');
+        let button = jQuery('#' + form + ' .plek-main-submit-button');
         let orig_btn_text = button.val();
         plek_main.activate_loader_style(button);
 
@@ -213,21 +213,22 @@ var plekevent = {
 
                     //Redirect to next stage
                     plek_main.url_replace_param('event_id', event_id);
-                    var stage = 'login'; //Default is login
-                    if (type === 'save_basic_event' && user_id > 0) {
-                        //User is logged in and type is basic event
-                        stage = 'details';
+                    var stage = 'details'; //Default is details
+                    if (type === 'save_basic_event' && user_id === 0) {
+                        //User is not logged in and type is basic event
+                        stage = 'login';
                     }
+
                     let url = plek_main.url_replace_param('stage', stage);
-                    if(type === 'save_event_details'){
-                        if(user_id === 0){
+                    if (type === 'save_event_details') {
+                        if (user_id === 0) {
                             plekerror.display_info(__('Event saved, thanks a lot!<br/>Our Eventmanager will check and publish the Event', 'pleklang'));
-                        }else{
-                            let event_url_label = __('To my Event','pleklang')
-                            let event_url_html = `<a href='${event_url}'>${event_url_label}</a>`; 
-                            plekerror.display_info(__('Event saved! Check it out here: '+ event_url_html, 'pleklang'));
+                        } else {
+                            let event_url_label = __('To my Event', 'pleklang')
+                            let event_url_html = `<a href='${event_url}'>${event_url_label}</a>`;
+                            plekerror.display_info(__('Event saved! Check it out here: ' + event_url_html, 'pleklang'));
                         }
-                    }else{
+                    } else {
                         //Show success message
                         plekerror.display_info(__('Event saved!', 'pleklang'));
                         setTimeout(() => {
@@ -235,10 +236,10 @@ var plekevent = {
                             window.location = url;
                         }, 500);
                     }
+                    plek_main.deactivate_button_loader(button, orig_btn_text);
+                    jQuery(button).prop("disabled", false); //Enable the button again.
                     return;
                 }
-                plek_main.deactivate_button_loader(button, orig_btn_text);
-                jQuery(button).prop("disabled", false); //Enable the button again.
             },
             error: function error(data) {
                 plek_main.deactivate_button_loader(button, __("Error loading data.... ", "pleklang"));
@@ -345,9 +346,8 @@ var plekevent = {
             datab.append('event_fb_link', this.get_field_value('event_fb_link'));
 
             datab.append('event_price_boxoffice', this.get_field_value('event_price_boxoffice'));
-            datab.append('event_price_boxoffice_currency', this.get_field_value('event_price_boxoffice_currency'));
+            datab.append('event_currency', this.get_field_value('event_currency'));
             datab.append('event_price_presale', this.get_field_value('event_price_presale'));
-            datab.append('event_price_presale_currency', this.get_field_value('event_price_presale_currency'));
             datab.append('event_price_link', this.get_field_value('event_price_link'));
 
             datab.append('event_id', this.get_field_value('event_id'));
@@ -387,12 +387,19 @@ var plekevent = {
         jQuery('#event-band-selection .plek-select-item').each((index, item) => {
             let band_id = jQuery(item).data('id');
             let datetime = jQuery(item).find('.band-time-input').first().val();
+
             //On Single day, band-time-input is only the time (H:i). Add the startdate as well
             if (is_single_day_event || datetime.length < 6) {
                 //Add Date of single day of if datetime only contains the time
                 let startDate = this.get_event_date('event_start_date', 'date');
                 datetime = startDate + ' ' + datetime;
             }
+
+            //If the time-label has not been replaced with the playtime, the datetime has to be set on 0 
+            if (jQuery(item).find('.time-label').html().indexOf('clock') > 0) {
+                datetime = 0;
+            }
+            
             order_obj[band_id] = { order: index, datetime: datetime };
         });
 

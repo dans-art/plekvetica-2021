@@ -43,6 +43,7 @@ class PlekAuthorHandler
 
     public function get_event_guest_author(int $event_id = null){
         $guest_author = get_field('guest_author', $event_id);
+        
         if(empty($guest_author)){
             return __('No Author found','pleklang');
         }

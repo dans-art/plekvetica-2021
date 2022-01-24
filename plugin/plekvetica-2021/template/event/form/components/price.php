@@ -9,16 +9,18 @@ $currencies_options = $event_object->get_currencies(true);
 			<label for="event_price_boxoffice"><?php echo __('Boxoffice', 'pleklang'); ?></label>
 			<div class="price-box">
 				<input type="text" name="event_price_boxoffice" id="event_price_boxoffice" class="input" value="" />
-				<select id="event_price_boxoffice_currency">
-					<?php echo $currencies_options; ?>
-				</select>
 			</div>
 		</div>
 		<div class="event_price_presale_container">
 			<label for="event_price_presale"><?php echo __('Presale', 'pleklang'); ?></label>
 			<div class="price-box">
 				<input type="text" name="event_price_presale" id="event_price_presale" class="input" value="" />
-				<select id="event_price_presale_currency">
+			</div>
+		</div>
+		<div class="event_price_currency_container">
+			<label for="event_currency"><?php echo __('Currency', 'pleklang'); ?></label>
+			<div class="price-box">
+				<select id="event_currency">
 					<?php echo $currencies_options; ?>
 				</select>
 			</div>

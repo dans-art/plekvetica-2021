@@ -43,6 +43,12 @@ class PlekEventHandler
      */
     public function is_multiday()
     {
+        $start_day = $this->get_start_date('d');
+        $end_day = $this->get_start_date('d');
+        if ($start_day === $end_day) {
+            return false;
+        }
+
         $start_date = intval($this->get_start_date('', true));
         $end_date = intval($this->get_end_date('', true));
 
@@ -51,6 +57,7 @@ class PlekEventHandler
         }
         $calc = $end_date - $start_date;
         $sixteen = (16 * 60 * 60); //16 Hours
+
         if ($sixteen > $calc) {
             return true;
         }
@@ -540,8 +547,38 @@ class PlekEventHandler
             return __('Free', 'pleklang');
         }
         $currency = (!empty($this->get_field_value('_EventCurrencySymbol'))) ? $this->get_field_value('_EventCurrencySymbol') : $this->default_event_currency;
+        $currency = $this->format_currency_to_symbol($currency);
         $cost_nr = preg_replace("/[^a-zA-Z0-9 -\.]/", "", $cost);
         return trim($cost_nr) . ' ' .  $currency;
+    }
+
+    /**
+     * Formats the currency form the name (eur) to the symbol (€)
+     * Supports: eur, usd, gbp
+     *
+     * @param string $currency_name - The Name of the currency
+     * @return string The currency symbol
+     */
+    public function format_currency_to_symbol($currency_name)
+    {
+        $currency_name = strtolower($currency_name);
+        switch ($currency_name) {
+            case 'eur':
+                return '€';
+                break;
+
+            case 'usd':
+                return '$';
+                break;
+
+            case 'gbp':
+                return '£';
+                break;
+
+            default:
+                $currency_name;
+                break;
+        }
     }
 
     public function event_has_band_videos()
@@ -1240,7 +1277,7 @@ class PlekEventHandler
         }
     }
 
-        /**
+    /**
      * Saves the details of the event
      *
      * @return mixed Event ID on sucess, error message on error.
@@ -1256,7 +1293,7 @@ class PlekEventHandler
         }
         $event_id = intval($plek_ajax_handler->get_ajax_data('event_id'));
         //Check if Event exists and user is allowed to edit
-        if(!PlekUserHandler::user_can_edit_post($event_id) ){
+        if (!PlekUserHandler::user_can_edit_post($event_id)) {
             return "Sorry, you are not allowed to edit this Event!";
         }
         //Save Event
@@ -1265,9 +1302,43 @@ class PlekEventHandler
         $event_id = tribe_update_event($event_id, $args);
 
         //Save the rest of the Data
-        $this -> save_event_meta($event_id);
-        
+        $save_meta = $this->save_event_meta($event_id);
+        if ($save_meta !== true) {
+            $errors = implode(', ', $save_meta);
+            return sprintf(__('Failed to save meta data for: %s', 'pleklang'), $errors);
+        }
+
         return $event_id;
+    }
+
+    /**
+     * Uploads the Poster of the Event.
+     *
+     * @param int|string $event_id - The Id of the Event
+     * @param string $field_id - The Name of the form field
+     * @return bool|int Attachment ID on success, false on error.
+     */
+    public function upload_event_image($event_id, $field_id = 'event_poster')
+    {
+        global $plek_ajax_handler;
+
+        $name = get_post_field('post_title', $event_id);
+        if (empty($name) or empty($event_id)) {
+            return false;
+        }
+
+        if (!empty($plek_ajax_handler->get_ajax_files_data($field_id))) {
+            //Save resized File
+            $title = sprintf(__('Event poster of %s', 'pleklang'), $name);
+            $fh = new PlekFileHandler;
+            $fh->set_image_options(999, 999, 'jpeg', 70);
+
+            $attachment_id = $fh->resize_uploaded_image($field_id, $title);
+            if (is_int($attachment_id)) {
+                return intval($attachment_id);
+            }
+        }
+        return false;
     }
 
     /**
@@ -1403,16 +1474,15 @@ class PlekEventHandler
         $validator->set_ignore('type');
         $validator->set_type('event_organizer', 'int');
         $validator->set_array('event_organizer');
-        
+
         $validator->set_type('event_description', 'textlong');
         $validator->set_type('event_poster', 'image');
         $validator->set_type('event_fb_link', 'url');
         $validator->set_type('event_price_link', 'url');
 
         $validator->set_type('event_price_boxoffice', 'price');
-        $validator->set_type('event_price_boxoffice_currency', 'textshort');
         $validator->set_type('event_price_presale', 'price');
-        $validator->set_type('event_price_presale_currency', 'textshort');
+        $validator->set_type('event_currency', 'textshort');
 
 
         $validator->set_type('event_id', 'int');
@@ -1506,16 +1576,17 @@ class PlekEventHandler
      *
      * @return string The Args for the tribe_update_event function
      */
-    public function get_event_details_data(){
+    public function get_event_details_data()
+    {
         global $plek_ajax_handler;
         $args = array();
         //Add URL
         //Add Poster
 
-        $args['post_content'] = $plek_ajax_handler->get_ajax_data('event_description');
-        $args['EventCost'] = $plek_ajax_handler->get_ajax_data('event_price_boxoffice');
-        $args['EventURL'] = $plek_ajax_handler->get_ajax_data('event_fb_link');
-        $args['Organizer'] = $plek_ajax_handler->get_ajax_data_as_array('event_organizer', true);
+        $args['post_content'] = $this->get_event_form_value('event_description');
+        $args['EventCost'] = $this->get_event_form_value('event_price_boxoffice');
+        $args['EventURL'] = $this->get_event_form_value('event_fb_link');
+        $args['Organizer'] = $this->get_event_form_value('event_organizer');
         return $args;
     }
 
@@ -1525,8 +1596,8 @@ class PlekEventHandler
      * @param [type] $event_id
      * @return mixed True on success, array with the failed fields on error
      */
-    public function save_event_meta($event_id){
-        global $plek_ajax_handler;
+    public function save_event_meta($event_id)
+    {
         global $plek_handler;
 
         //ACF ID => fieldname
@@ -1537,17 +1608,75 @@ class PlekEventHandler
             //'promote_event' => '',
             //'cancel_event' => ''
         );
+        $meta = array(
+            '_thumbnail_id' => 'event_poster',
+            '_EventCurrencySymbol' => 'event_currency'
+        );
+
         $failed = array();
-        foreach($acf as $afc_name => $form_name){
-            $value = $plek_ajax_handler->get_ajax_data($form_name);
-            if(!$plek_handler -> update_field($afc_name, $value, $event_id)){
+
+        //Save all the ACF Values
+        foreach ($acf as $afc_name => $form_field_name) {
+            $value = $this->get_event_form_value($form_field_name);
+
+            if ($plek_handler->update_field($afc_name, $value, $event_id) === false) {
                 $failed[] = $afc_name;
             }
         }
-        if(!empty($failed)){
+
+        //Save the Meta Fields
+        foreach ($meta as $meta_name => $form_field_name) {
+            $value = $this->get_event_form_value($form_field_name);
+            $prev_value = get_metadata('post', $event_id, $meta_name, true);
+            if ($value === $prev_value) {
+                //Avoid the update_metadata(), if values are the same.
+                //Since the function returns false if the values are the same, it is not possible to find out, if there was an error 
+                continue;
+            }
+            if (!update_metadata('post', $event_id, $meta_name, $value)) {
+                $failed[] = $meta_name;
+            }
+        }
+
+        if (!empty($failed)) {
             return $failed;
         }
         return true;
+    }
+
+    /**
+     * Gets the value from the form field.
+     * This function is used to filter special cases like event_poster
+     *
+     * @param string $form_field_name
+     * @return string The Value of the field.
+     */
+    public function get_event_form_value($form_field_name)
+    {
+        global $plek_ajax_handler;
+        $event_id = intval($plek_ajax_handler->get_ajax_data('event_id'));
+
+        switch ($form_field_name) {
+            case 'event_organizer':
+                $organi = $plek_ajax_handler->get_ajax_data_as_array('event_organizer', true);
+                return (empty($organi)) ? '' : array('OrganizerID' => $organi);
+                break;
+            case 'event_poster':
+                if (empty($event_id)) {
+                    return false;
+                }
+                if (empty($plek_ajax_handler->get_ajax_files_data($form_field_name))) {
+                    //Check if a poster exists, if no new poster is uploaded.
+                    return get_metadata('post', $event_id, '_thumbnail_id', true);
+                }
+                return $this->upload_event_image($event_id, $form_field_name);
+                break;
+
+            default:
+                return  $plek_ajax_handler->get_ajax_data($form_field_name);
+                break;
+        }
+        return false;
     }
 
     /**
@@ -1663,28 +1792,34 @@ class PlekEventHandler
             //$timestamp = array_search($band_id, $this->event['timetable']); //Timestamp or false
             $timestamp = (!empty($this->event['timetable'][$band_id]['timestamp'])) ? $this->event['timetable'][$band_id]['timestamp'] : 0;
 
-            $playtime = (isset($this->event['timetable'][$band_id]['playtime_formated'])) ? $this->event['timetable'][$band_id]['playtime_formated'] : 'tbd';
+            $playtime = (isset($this->event['timetable'][$band_id]['playtime_formated'])) ? $this->event['timetable'][$band_id]['playtime_formated'] : '';
+            $playtime = (!empty($playtime)) ? $playtime : 'tbd';
 
             $day = ($is_multiday and $timestamp > 0) ? date('d. F', $timestamp) : __('No Time defined', 'pleklang');
-            if (!isset($formated[$day])) {
-                $formated[$day] = '';
+            if (!isset($formated[$day][$timestamp])) {
+                $formated[$day][$timestamp] = '';
             }
-            $formated[$day] .= "<div class='timetable_row'>
+            $formated[$day][$timestamp] .= "<div class='timetable_row'>
             <span class='playtime'>{$playtime}</span>
             <span class='band_origin'>{$band_origin_formated}</span>
             <span class='band_name'>{$band_name}</span>
             </div>";
         }
 
+        foreach($formated as $day_index => $day_items){
+           ksort($formated[$day_index]);
+        }
+
         if (!$is_multiday) {
-            $formated = implode('', $formated[0]);
+            $formated_final = is_array($formated[$day]) ? implode('', $formated[$day]) : $formated[$day];
         } else {
             $days = '';
-            foreach ($formated as $date => $playtimes) {
+            foreach ($formated as $date => $times) {
+                $playtimes = is_array($times) ? implode('', $times) : $times;
                 $days .= "<div class='timetable_day'><div class='date'>{$date}</div>{$playtimes}</div>";
             }
-            $formated = $days;
+            $formated_final = $days;
         }
-        return "<div class='timetable_content'>{$formated}</div>";
+        return "<div class='timetable_content'>{$formated_final}</div>";
     }
 }

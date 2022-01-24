@@ -394,9 +394,8 @@ let plek_manage_event = {
                 plekvalidator.add_field('event_poster', 'file', true, form);
                 plekvalidator.add_field('event_fb_link', 'url', true, form);
                 plekvalidator.add_field('event_price_boxoffice', 'price', true, form);
-                plekvalidator.add_field('event_price_boxoffice_currency', 'simpletext', false, form);
                 plekvalidator.add_field('event_price_presale', 'price', true, form);
-                plekvalidator.add_field('event_price_presale_currency', 'simpletext', false, form);
+                plekvalidator.add_field('event_currency', 'simpletext', false, form);
                 plekvalidator.add_field('event_price_link', 'url', true, form);
                 plekvalidator.add_field('event_id', 'int', false, form);
                 plekvalidator.add_error_messages('event_id', form, __("Missing Event ID", "pleklang"));

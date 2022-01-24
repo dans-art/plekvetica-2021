@@ -229,7 +229,7 @@ class PlekEvents extends PlekEventHandler
             if (isset($item -> order)) {
                 $band_sort[$item -> order] = $band_id;
             }
-            if (isset($item -> datetime)) {
+            if (isset($item -> datetime) AND $item -> datetime !== '0') {
                 $time = strtotime($item -> datetime);
                 $timetable[$band_id] = array(
                     'timestamp' => $time,
