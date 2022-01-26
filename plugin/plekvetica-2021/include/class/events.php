@@ -1038,7 +1038,7 @@ class PlekEvents extends PlekEventHandler
         }
 
         if (isset($_REQUEST['edit_event_id'])) {
-            $event->load_event((int) $_REQUEST['edit_event_id']);
+            $event->load_event(intval($_REQUEST['edit_event_id']));
             return PlekTemplateHandler::load_template_to_var('edit-event-form', 'event/form', $event);
         }
 

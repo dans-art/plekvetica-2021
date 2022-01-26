@@ -26,6 +26,16 @@ class PlekEventHandler
         return ($this->get_field_value('promote_event') === '1') ? true : false;
     }
 
+    /**
+     * Checks if the Event has be postponed or not.
+     * The "postponed_event" can have a JSON string or "1"
+     *
+     * @return boolean
+     */
+    public function is_postponed(){
+        return (!empty($this->get_field_value('postponed_event'))) ? true : false;
+    }
+
     public function is_public(string $event_id = null)
     {
         if (!$event_id) {
@@ -335,6 +345,12 @@ class PlekEventHandler
         return null;
     }
 
+    /**
+     * Loads the image / attachment of the current event.
+     *
+     * @param string $size - Size of the image. Default: medium
+     * @return mixed URL to image or false, if no event is loaded or no image is set.
+     */
     public function get_poster_url($size = 'medium')
     {
         $poster_arr = wp_get_attachment_image_src($this->get_field_value('_thumbnail_id'), $size);
@@ -866,11 +882,16 @@ class PlekEventHandler
         return $ret_arr;
     }
 
+    /**
+     * Loads all the Event authors.
+     *
+     * @return array The Authors (user_id => display_name, ...)
+     */
     public function get_event_authors()
     {
         $authors_handler = new PlekAuthorHandler;
         $guest_author = $authors_handler->get_guest_author_id();
-        $page_id = $this->event['data']->ID;
+        $page_id = (isset($this->event['data']) AND is_object($this->event['data'])) ? $this->event['data']->ID : 0;
         if (function_exists('get_coauthors')) {
             $post_authors = get_coauthors($page_id);
         } else {
@@ -1294,7 +1315,7 @@ class PlekEventHandler
         $event_id = intval($plek_ajax_handler->get_ajax_data('event_id'));
         //Check if Event exists and user is allowed to edit
         if (!PlekUserHandler::user_can_edit_post($event_id)) {
-            return "Sorry, you are not allowed to edit this Event!";
+            return __('Sorry, you are not allowed to edit this Event!', 'pleklang');
         }
         //Save Event
         $args = $this->get_event_details_data();
@@ -1706,6 +1727,32 @@ class PlekEventHandler
     {
         //Get all the bands
         //set the event post_category
+        if (!$this->load_event($event_id)) {
+            return false;
+        }
+        $bands = $this->get_bands();
+
+        if (empty($bands)) {
+            return false;
+        }
+
+        $genre_ids = array();
+        foreach ($bands as $band) {
+            $genres = (isset($band['band_genre'])) ? $band['band_genre'] : '';
+            if (empty($genres)) {
+                continue;
+            }
+            foreach ($genres as $slug => $name) {
+                $term = get_term_by('slug', $slug, Tribe__Events__Main::TAXONOMY);
+                if (isset($term->term_id) and !array_search($term->term_id, $genre_ids)) {
+                    $genre_ids[] = $term->term_id;
+                }
+            }
+        }
+
+        $args = array('tax_input' => null);
+        $args['tax_input'][Tribe__Events__Main::TAXONOMY] = $genre_ids;
+        return tribe_update_event($event_id, $args);
     }
 
     /**
@@ -1806,8 +1853,8 @@ class PlekEventHandler
             </div>";
         }
 
-        foreach($formated as $day_index => $day_items){
-           ksort($formated[$day_index]);
+        foreach ($formated as $day_index => $day_items) {
+            ksort($formated[$day_index]);
         }
 
         if (!$is_multiday) {
