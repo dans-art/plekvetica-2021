@@ -137,8 +137,8 @@ class PlekEvents extends PlekEventHandler
         }
 
         $this->event['data'] = $db_result[0];
-        $this->load_event_terms($event_id);
         $this->load_event_meta($event_id);
+        $this->load_event_terms($event_id);
         $this->load_band_order_and_timetable();
 
         return true;
@@ -226,20 +226,26 @@ class PlekEvents extends PlekEventHandler
         $band_sort = array();
         $time_format = 'H:i';
         foreach ($sort_obj as $band_id => $item) {
-            if (isset($item -> order)) {
-                $band_sort[$item -> order] = $band_id;
+            if (isset($item->order)) {
+                $band_sort[$item->order] = $band_id;
             }
-            if (isset($item -> datetime) AND $item -> datetime !== '0') {
-                $time = strtotime($item -> datetime);
+            if (isset($item->datetime) and $item->datetime !== '0') {
+                $time = strtotime($item->datetime);
                 $timetable[$band_id] = array(
                     'timestamp' => $time,
-                    'playtime' => $item -> datetime,
+                    'playtime' => $item->datetime,
                     'playtime_formated' => date($time_format, $time)
                 );
             }
+
+            //Add the playtime and sort to the bands
+            if (isset($this->event['bands'][$band_id])) {
+                $this->event['bands'][$band_id]['playtime'] = (isset($item->datetime)) ? $item->datetime : null;
+                $this->event['bands'][$band_id]['band_sort'] = (isset($item->order)) ? $item->order : null;
+            }
         }
-        $this -> event['timetable'] = $timetable;
-        $this -> event['band_sort'] = $band_sort;
+        $this->event['timetable'] = $timetable;
+        $this->event['band_sort'] = $band_sort;
         return true;
     }
 
@@ -687,6 +693,8 @@ class PlekEvents extends PlekEventHandler
                     $band['flag'] = $band_class->get_flag_formated('');
                     $band['videos'] = null;
                     $band['band_genre'] = null;
+                    $band['band_sort'] = null;
+                    $band['playtime'] = null;
 
                     $cFields = get_fields($line); //Get all the ACF Fields
                     if (!empty($cFields)) {
@@ -1045,8 +1053,8 @@ class PlekEvents extends PlekEventHandler
         if (isset($_REQUEST['stage']) and $_REQUEST['stage'] === "login") {
             return PlekTemplateHandler::load_template_to_var('add-event-form-login', 'event/form', $event, $event_id);
         }
-        if (isset($_REQUEST['stage']) and $_REQUEST['stage'] === "details" AND !PlekUserHandler::user_can_edit_post($event_id)) {
-            return __('Sorry, you are not allowed to edit this post anymore','pleklang');
+        if (isset($_REQUEST['stage']) and $_REQUEST['stage'] === "details" and !PlekUserHandler::user_can_edit_post($event_id)) {
+            return __('Sorry, you are not allowed to edit this post anymore', 'pleklang');
         }
         if (isset($_REQUEST['stage']) and $_REQUEST['stage'] === "details") {
             return PlekTemplateHandler::load_template_to_var('add-event-form-details', 'event/form', $event, $event_id);

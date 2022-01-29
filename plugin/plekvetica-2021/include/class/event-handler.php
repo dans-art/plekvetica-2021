@@ -32,7 +32,8 @@ class PlekEventHandler
      *
      * @return boolean
      */
-    public function is_postponed(){
+    public function is_postponed()
+    {
         return (!empty($this->get_field_value('postponed_event'))) ? true : false;
     }
 
@@ -295,6 +296,23 @@ class PlekEventHandler
             return $this->sort_bands($bands);
         }
         return $this->event['bands'];
+    }
+
+    /**
+     * Returns all the Bands for the current event.
+     *
+     * @return array The event Bands ids
+     */
+    public function get_bands_ids()
+    {
+        $ret_arr = array();
+        if (empty($this->event['bands'])) {
+            return array();
+        }
+        foreach ($this->event['bands'] as $id => $band) {
+            $ret_arr[] = $id;
+        }
+        return $ret_arr;
     }
 
     public function get_bands_string(string $seperator = ', ')
@@ -891,7 +909,7 @@ class PlekEventHandler
     {
         $authors_handler = new PlekAuthorHandler;
         $guest_author = $authors_handler->get_guest_author_id();
-        $page_id = (isset($this->event['data']) AND is_object($this->event['data'])) ? $this->event['data']->ID : 0;
+        $page_id = (isset($this->event['data']) and is_object($this->event['data'])) ? $this->event['data']->ID : 0;
         if (function_exists('get_coauthors')) {
             $post_authors = get_coauthors($page_id);
         } else {
@@ -1868,5 +1886,28 @@ class PlekEventHandler
             $formated_final = $days;
         }
         return "<div class='timetable_content'>{$formated_final}</div>";
+    }
+
+    /**
+     * HOOK: This adds the timetable and order to the Band.
+     *
+     * @param array $item Band Item
+     * @return array The filtered band item
+     */
+    public function insert_band_timetable($item)
+    {
+        $current_event = $this->event;
+        if (!empty($current_event)) {
+            $band_id = $item['id'];
+            $time = (isset($current_event['timetable'][$band_id]))?$current_event['timetable'][$band_id]:array();
+            $sort = null;
+            $band_sort = (is_array($current_event['band_sort']))?array_search($band_id, $current_event['band_sort']):false;
+            if($band_sort > -1){
+                $sort = $current_event['band_sort'][$band_sort];
+            }
+            $item['timetable'] = $time;
+            $item['band_sort'] = $sort;
+        }
+        return $item;
     }
 }

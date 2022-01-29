@@ -58,4 +58,9 @@ if(empty($event_class -> get_event())){
 			<input type="submit" name="plek-submit" id="plek-submit-event-edit" class='plek-button plek-main-submit-button' data-type = "save_edit_event" value="<?php echo __('Save event','pleklang');?>">
 		</div>
 	</form>
+
+<?php PlekTemplateHandler::load_template('js-settings', 'components','edit_event'); ?>
+<?php PlekTemplateHandler::load_template('overlay', 'components','add-new-band', PlekTemplateHandler::load_template_to_var('band-form','band','add')); ?>
+<?php PlekTemplateHandler::load_template('overlay', 'components','add-new-venue', PlekTemplateHandler::load_template_to_var('venue-form','event/venue', null, 'add_venue')); ?>
+
     <?php s($event_class -> get_event()); ?>

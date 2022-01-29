@@ -478,6 +478,26 @@ class PlekBandHandler
     }
 
     /**
+     * Loads the bands by ID
+     *
+     * @param array $ids - The term_taxonomy_id of the band to get.
+     * @param boolean $meta - If the Meta should be loaded as well or not
+     * @return array The bands found or empty array
+     */
+    public function get_bands_by_ids($ids = array(), bool $meta = true)
+    {
+        $args = array('hide_empty ' => false, 'get' => 'all', 'term_taxonomy_id' => $ids);
+        $bands = get_tags($args);
+        if ($meta) {
+            foreach ($bands as $i => $term) {
+                $band_meta = get_fields($term);
+                $bands[$i]->meta = $band_meta;
+            }
+        }
+        return $bands;
+    }
+
+    /**
      * Get all the band ids. Similar to get_all_bands, but it returns only the ids.
      * And it is faster than the wordpress get_tags function.
      *
@@ -653,9 +673,9 @@ class PlekBandHandler
      *
      * @return string JSON Array
      */
-    public function get_all_bands_json()
+    public function get_all_bands_json($bands = array())
     {
-        $bands = $this->get_all_bands();
+        $bands = (!empty($bands)) ? $bands : $this->get_all_bands();
         $bands_formated = array();
         foreach ($bands as $band) {
             $current = array();
@@ -664,6 +684,9 @@ class PlekBandHandler
             $current['flag'] = (isset($band->meta['herkunft'])) ? $band->meta['herkunft'] : '';
             $current['genres'] = (isset($band->meta['band_genre'])) ? $this->format_band_genres($band->meta['band_genre']) : '';
             $current['score'] = (isset($band->meta['band_score'])) ? $band->meta['band_score'] : 0;
+
+            $current = apply_filters('insert_band_timetable', $current);
+
             $bands_formated[$band->term_id] = $current;
         }
         return json_encode($bands_formated);
@@ -748,9 +771,9 @@ class PlekBandHandler
         $add_term = wp_insert_term($name, 'post_tag', $term_args);
         if (is_array($add_term) and isset($add_term['term_id'])) {
             //Send Notification to admin
-            $message = sprintf(__('A new Band "%s" has been added.','pleklang'), $name);
-            $action = get_term_link( (int) $add_term['term_id'] );
-            PlekNotificationHandler::push_to_admin(__('New Band added','pleklang'), $message, $action);
+            $message = sprintf(__('A new Band "%s" has been added.', 'pleklang'), $name);
+            $action = get_term_link((int) $add_term['term_id']);
+            PlekNotificationHandler::push_to_admin(__('New Band added', 'pleklang'), $message, $action);
             return $this->update_band($add_term['term_id'], true);
         }
 
@@ -818,7 +841,7 @@ class PlekBandHandler
         $acf['herkunft'] = $origin;
         $acf['videos'] = $videos;
         $acf['band_genre'] = $genre;
-        
+
         //Upload Logo
         if (!empty($plek_ajax_handler->get_ajax_files_data('band-logo'))) {
             //Save resized File
@@ -843,16 +866,16 @@ class PlekBandHandler
         foreach ($acf as $afc_name => $value) {
             update_field($afc_name, $value, 'term_' . $id);
         }
-        
+
         if ($plek_ajax_errors->has_errors()) {
             return false;
         }
         //All good, band saved
-        $this -> last_updated_id = $id;
-        if($return_all_bands === true){
-            return $this -> get_all_bands_json();
+        $this->last_updated_id = $id;
+        if ($return_all_bands === true) {
+            return $this->get_all_bands_json();
         }
-        return $this -> load_band_object_by_id($id);
+        return $this->load_band_object_by_id($id);
     }
 
     /**

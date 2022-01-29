@@ -52,6 +52,7 @@ let plek_manage_event = {
             plek_manage_event.set_button_time(instance);
         }
     },
+    existing_vob_data : {},
 
     __construct() {
         if (this.constructed === true) {
@@ -446,12 +447,34 @@ let plek_manage_event = {
     },
     /**
      * Add the newly created vob to the browser storage. If the user creates an account, the newly created vob will be assigned to them
+     * @todo: Assign the VOB to the user
      * @param {int} vob_id The Id of the Band, Venue or Organizer added
      */
     vob_add_to_session(vob_id) {
         let existing = localStorage.getItem('plek_vob_added');
         let added = (typeof existing === 'string') ? existing + ',' + vob_id.toString() : vob_id.toString();
         localStorage.setItem('plek_vob_added', added);
+    },
+
+    /**
+     * Adds the data to the selection of the form. Used on the edit Event form.
+     * @param {string} json_data Json Data as a string 
+     */
+    add_vob_to_current_selection(type){
+        if (type === 'bands') {
+            let jdata = (typeof plek_manage_event.existing_vob_data["bands"] === 'object')?plek_manage_event.existing_vob_data["bands"]:{};
+            jQuery(jdata).each(function(index, item){
+                console.log(item.name);
+            });
+            debugger;
+            return;
+        } else if (type === 'venues') {
+            
+            return;
+        } else if (type === 'organizers') {
+            
+            return;
+        }
     },
 }
 
@@ -476,12 +499,15 @@ function ajaxPreloader(type) {
                 console.log(type + "-Data loaded (" + Object.keys(jdata).length + ")");
                 if (type === 'bands') {
                     window.bandPreloadedData = jdata;
+                    plek_manage_event.add_vob_to_current_selection('bands');
                     return;
                 } else if (type === 'venues') {
                     window.venuePreloadedData = jdata;
+                    plek_manage_event.add_vob_to_current_selection('venues');
                     return;
                 } else if (type === 'organizers') {
                     window.organizerPreloadedData = jdata;
+                    plek_manage_event.add_vob_to_current_selection('organizers');
                     return;
                 }
                 else {

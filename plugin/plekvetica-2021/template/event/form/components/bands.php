@@ -2,7 +2,13 @@
 
 extract(get_defined_vars());
 $event_object = $template_args[0]; //Plek_events object
+$event_bands = $event_object->get_bands_ids();
+add_filter('insert_band_timetable', [$event_object, 'insert_band_timetable'], 10, 1 );
+$band_handler = new PlekBandHandler;
+$event_bands_arr = $band_handler -> get_bands_by_ids($event_bands);
+$event_bands_js = $band_handler -> get_all_bands_json($event_bands_arr);
 
+s($event_bands_js);
 ?>
 <div class="event-band-container plek-event-form-container">
     <div id="band-search-bar-container" class="event-search-bar-container">
@@ -16,3 +22,10 @@ $event_object = $template_args[0]; //Plek_events object
     <div id="event-band-selection">
     </div>
 </div>
+
+<script>
+    jQuery(document).ready(function(){
+        //Load the Bands to the form
+        plek_manage_event.existing_vob_data.bands = <?php echo $event_bands_js; ?>;
+    });
+</script>
