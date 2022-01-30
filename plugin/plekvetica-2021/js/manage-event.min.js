@@ -463,9 +463,12 @@ let plek_manage_event = {
     add_vob_to_current_selection(type){
         if (type === 'bands') {
             let jdata = (typeof plek_manage_event.existing_vob_data["bands"] === 'object')?plek_manage_event.existing_vob_data["bands"]:{};
-            jQuery(jdata).each(function(index, item){
-                console.log(item.name);
-            });
+            if(jdata.length === 0){
+                return false;
+            }
+            for (const [band_id, item] of Object.entries(jdata)) {
+                console.log(`${band_id}: ${item.name}`);
+              }
             debugger;
             return;
         } else if (type === 'venues') {

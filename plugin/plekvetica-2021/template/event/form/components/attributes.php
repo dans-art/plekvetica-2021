@@ -3,19 +3,21 @@
 extract(get_defined_vars());
 $event_object = $template_args[0]; //Plek_events object
 $featured = ($event_object->is_featured()) ? 'checked' : '';
-$canceled = ($event_object->is_canceled()) ? 'checked' : '';
-$postponed = ($event_object->is_postponed()) ? 'checked' : '';
 $promoted = ($event_object->is_promoted()) ? 'checked' : '';
+
+$canceled = ($event_object->is_canceled()) ? 'selected' : '';
+$postponed = ($event_object->is_postponed()) ? 'selected' : '';
 ?>
 <div class="event-attribute-container plek-event-form-container">
 	<div class="event-attribute-container">
-		<input type="checkbox" name="event_canceled" id="event_canceled" class="input" value="1"  <?php echo $canceled; ?>/>
-		<label for="event_canceled"><?php echo __('Event has been canceled', 'pleklang'); ?></label>
+		<label for="event_status"><?php echo __('Event status', 'pleklang'); ?></label>
+		<select type="checkbox" name="event_status" id="event_status" class="input">
+			<option value="null"><?php echo __('Event will happen as scheduled','pleklang') ?></option>
+			<option value="event_postponed"><?php echo __('Event has been postponed','pleklang') ?> <?php echo $postponed; ?></option>
+			<option value="event_canceled"><?php echo __('Event has been canceled','pleklang') ?> <?php echo $canceled; ?></option>
+		</select>
 	</div>
-	<div class="event-attribute-container">
-		<input type="checkbox" name="event_postponed" id="event_postponed" class="input" value="1"  <?php echo $postponed; ?>/>
-		<label for="event_postponed"><?php echo __('Event has been postponed', 'pleklang'); ?></label>
-	</div>
+
 	<div class="event-attribute-container">
 		<input type="checkbox" name="event_featured" id="event_featured" class="input" value="1" <?php echo $featured; ?> />
 		<label for="event_featured"><?php echo __('Feature event', 'pleklang'); ?></label>

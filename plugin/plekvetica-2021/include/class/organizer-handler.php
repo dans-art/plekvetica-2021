@@ -233,6 +233,40 @@ class PlekOrganizerHandler
     }
 
     /**
+     * Loads the organizers as a json array
+     * @param int|array $organi_ids The organizer ids
+     *
+     * @return string JSON Array
+     */
+    public function get_organizer_json($organi_ids)
+    {
+        global $plek_handler;
+        if (empty($organi_ids)) {
+            return false;
+        }
+        if (!is_array($organi_ids)) {
+            $organi_ids = [$organi_ids];
+        }
+        /**
+         * For some reason this does not work. therefore use the venue_ids instead
+         */
+        //$organizers = tribe_get_organizers(false, -1, true, ['event' => [$event_id]]);
+        if (empty($organi_ids)) {
+            return null;
+        }
+        $organi_formated = array();
+        $max_description_length = 170;
+        foreach ($organi_ids as $oid) {
+            $organi_formated[$oid]['id'] = $oid;
+            $organi_formated[$oid]['name'] = get_post_field('post_title', $oid);
+            $organi_formated[$oid]['web'] = tribe_get_organizer_website_url($oid);
+            $organi_formated[$oid]['description'] = $plek_handler->get_the_content_stripped($oid, $max_description_length);
+        }
+
+        return json_encode($organi_formated);
+    }
+
+    /**
      * Loads all the organizers
      *
      * @return array Array with the organizers as objects

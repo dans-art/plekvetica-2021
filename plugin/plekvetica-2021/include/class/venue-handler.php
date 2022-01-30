@@ -28,7 +28,7 @@ class PlekVenueHandler
     public function __construct()
     {
         global $plek_event;
-        if(is_object($plek_event)){
+        if (is_object($plek_event)) {
             $plek_event->enqueue_event_form_scripts();
         }
     }
@@ -255,8 +255,35 @@ class PlekVenueHandler
             $venues_formated[$vid]['address'] = tribe_get_address($vid);
             $venues_formated[$vid]['zip'] = tribe_get_zip($vid);
             $venues_formated[$vid]['city'] = tribe_get_city($vid);
-            $venues_formated[$vid]['country'] = $this -> get_venue_country($vid);
+            $venues_formated[$vid]['country'] = $this->get_venue_country($vid);
         }
+        return json_encode($venues_formated);
+    }
+
+    /**
+     * Loads a single venue as a json string
+     *
+     * @return string JSON Array
+     */
+    public function get_venue_json($event_id)
+    {
+        if (empty($event_id)) {
+            return false;
+        }
+        $event_id = intval($event_id);
+        $venue = tribe_get_venues(false, 1, true, ['event' => $event_id]);
+        if (empty($venue[0])) {
+            return false;
+        }
+        $venue = $venue[0];
+        $venues_formated = array();
+        $vid = (int) $venue->ID;
+        $venues_formated[$vid]['id'] = $vid;
+        $venues_formated[$vid]['name'] = $venue->post_title;
+        $venues_formated[$vid]['address'] = tribe_get_address($vid);
+        $venues_formated[$vid]['zip'] = tribe_get_zip($vid);
+        $venues_formated[$vid]['city'] = tribe_get_city($vid);
+        $venues_formated[$vid]['country'] = $this->get_venue_country($vid);
         return json_encode($venues_formated);
     }
 

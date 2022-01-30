@@ -2,7 +2,9 @@
 
 extract(get_defined_vars());
 $event_object = $template_args[0]; //Plek_events object
-
+$venue_handler = new PlekVenueHandler;
+$event_venue_json = $venue_handler->get_venue_json($event_object->get_ID());
+s($event_venue_json);
 ?>
 <div class="event-venue-container plek-event-form-container">
     <div  id="venue-search-bar-container" class="event-search-bar-container">
@@ -12,3 +14,9 @@ $event_object = $template_args[0]; //Plek_events object
     <div id="event-venue-selection">
     </div>
 </div>
+<script>
+    jQuery(document).ready(function(){
+        //Load the venue to the form
+        plek_manage_event.existing_vob_data.venue = <?php echo $event_venue_json; ?>;
+    });
+</script>

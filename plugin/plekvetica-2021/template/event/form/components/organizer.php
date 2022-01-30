@@ -3,8 +3,13 @@ global $plek_event;
 global $plek_handler;
 extract(get_defined_vars());
 $event_object = $template_args[0]; //Plek_events object
-$propose_organi = $plek_event->get_organizers_of_venue(29234);
+$venue_id = intval($event_object->get_field_value('_EventVenueID'));
 
+/**Only on add Event? */
+$propose_organi = $plek_event->get_organizers_of_venue($venue_id);
+$organi_handler = new PlekOrganizerHandler;
+$event_organi_json = $organi_handler->get_organizer_json($venue_id);
+s($event_organi_json);
 ?>
 <div class="event-organizer-container plek-event-form-container">
     <div id="event-organizer-proposal">
@@ -36,3 +41,9 @@ $propose_organi = $plek_event->get_organizers_of_venue(29234);
     <div id="event-organizer-selection">
     </div>
 </div>
+<script>
+    jQuery(document).ready(function(){
+        //Load the Organizers to the form
+        plek_manage_event.existing_vob_data.organizers = <?php echo $event_organi_json; ?>;
+    });
+</script>

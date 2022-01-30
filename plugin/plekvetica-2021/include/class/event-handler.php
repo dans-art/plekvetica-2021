@@ -1203,12 +1203,12 @@ class PlekEventHandler
 
     /**
      * Returns all the accepted currencies.
-     * 
-     *
      * @param boolean $formated_option - If true, the function will return a HTML Select option string
+     * @param string $current_option - Sets the select attribute for the current option.
+     * 
      * @return array|string - Array if $formated_option is false, otherwise string
      */
-    public function get_currencies($formated_option = false)
+    public function get_currencies($formated_option = false, $current_option = '')
     {
         $currencies = array(
             'chf' => 'CHF',
@@ -1216,10 +1216,14 @@ class PlekEventHandler
             'usd' => 'USD $',
             'gbp' => 'GBP £',
         );
+        if (empty($current_option)) {
+            $current_option = 'chf';
+        }
         if ($formated_option) {
             $formated = "";
             foreach ($currencies as $key => $name) {
-                $formated .= "<option value='{$key}'>{$name}</option>";
+                $selected = ($key === $current_option) ? 'selected' : '';
+                $formated .= "<option value='{$key}' {$selected}>{$name}</option>";
             }
             $currencies = $formated;
         }
@@ -1289,6 +1293,7 @@ class PlekEventHandler
 
         if ($is_event_edit) {
             $eid = (int) $plek_ajax_handler->get_ajax_data('event_id');
+            $this->save_event_postponed($eid);
             $event_id = tribe_update_event($eid, $args);
         } else {
             $event_id = tribe_create_event($args);
@@ -1317,8 +1322,25 @@ class PlekEventHandler
     }
 
     /**
+     * Checks if the Event status is postponed. If so, the acf postponed_event gets filled out.
+     * @param int|string $event_id - The Id of the Event
+     * 
+     * @return bool True on success, false on error, null if the field has not be changed
+     */
+    public function save_event_postponed($event_id)
+    {
+        global $plek_ajax_handler;
+        global $plek_handler;
+        $postponed = $plek_ajax_handler->get_ajax_data('event_status');
+        if ($postponed !== 'event_postponed' or empty($event_id)) {
+            return false;
+        }
+        $old_event_startdate = tribe_get_start_date($event_id);
+        return $plek_handler->update_field('postponed_event', $old_event_startdate, $event_id);
+    }
+    /**
      * Saves the details of the event
-     *
+     * 
      * @return mixed Event ID on sucess, error message on error.
      */
     public function save_event_details()
@@ -1899,10 +1921,10 @@ class PlekEventHandler
         $current_event = $this->event;
         if (!empty($current_event)) {
             $band_id = $item['id'];
-            $time = (isset($current_event['timetable'][$band_id]))?$current_event['timetable'][$band_id]:array();
+            $time = (isset($current_event['timetable'][$band_id])) ? $current_event['timetable'][$band_id] : array();
             $sort = null;
-            $band_sort = (is_array($current_event['band_sort']))?array_search($band_id, $current_event['band_sort']):false;
-            if($band_sort > -1){
+            $band_sort = (is_array($current_event['band_sort'])) ? array_search($band_id, $current_event['band_sort']) : false;
+            if ($band_sort > -1) {
                 $sort = $current_event['band_sort'][$band_sort];
             }
             $item['timetable'] = $time;
