@@ -49,7 +49,7 @@ if(empty($event_class -> get_event())){
         <?php PlekTemplateHandler::load_template('attributes', 'event/form/components', $event_class); ?>
         
 		<div id="event-id-field">
-            <input type="hidden" id="event_id" name="event_id" value="<?php echo $event_id; ?>"/>
+            <input type="hidden" id="event_id" name="event_id" value="<?php echo $event_class -> get_id(); ?>"/>
         </div>
         
 		<input type="text" name="hp-password" id="hp-password" style="display: none;" tabindex="-1" autocomplete="false"/>
@@ -62,5 +62,3 @@ if(empty($event_class -> get_event())){
 <?php PlekTemplateHandler::load_template('js-settings', 'components','edit_event'); ?>
 <?php PlekTemplateHandler::load_template('overlay', 'components','add-new-band', PlekTemplateHandler::load_template_to_var('band-form','band','add')); ?>
 <?php PlekTemplateHandler::load_template('overlay', 'components','add-new-venue', PlekTemplateHandler::load_template_to_var('venue-form','event/venue', null, 'add_venue')); ?>
-
-    <?php s($event_class -> get_event()); ?>

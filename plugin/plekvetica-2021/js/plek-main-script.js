@@ -318,8 +318,9 @@ let plek_main = {
                     }
                     console.log("not assigned");
                     console.log(form);
+                    error_count++;
                 }
-                //Set the error message
+                //Set the error message, but only if array / object
                 jQuery(value).each(function (i) {
                     jQuery('#' + id).after(plek_main.format_error_message(value[i]));
                     error_count++;

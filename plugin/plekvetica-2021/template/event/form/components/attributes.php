@@ -11,7 +11,7 @@ $postponed = ($event_object->is_postponed()) ? 'selected' : '';
 <div class="event-attribute-container plek-event-form-container">
 	<div class="event-attribute-container">
 		<label for="event_status"><?php echo __('Event status', 'pleklang'); ?></label>
-		<select type="checkbox" name="event_status" id="event_status" class="input">
+		<select name="event_status" id="event_status" class="input">
 			<option value="null"><?php echo __('Event will happen as scheduled','pleklang') ?></option>
 			<option value="event_postponed"><?php echo __('Event has been postponed','pleklang') ?> <?php echo $postponed; ?></option>
 			<option value="event_canceled"><?php echo __('Event has been canceled','pleklang') ?> <?php echo $canceled; ?></option>

@@ -13,9 +13,18 @@ var plektemplate = {
         });
         return output;
     },
+    /**
+     * Formats the band item for the band selection list.
+     * @param {object} data The band preloader data
+     * @returns 
+     */
     load_band_item_template(data) {
         var flag = this.get_flag_image(data.flag);
-        return `<button type='button' class='item plek-add-item' data-for='event-band-selection' data-type='event_band' data-id='${data.id}'>
+        let band_playtime = (typeof data.timetable === 'object' && typeof data.timetable.playtime !== 'undefined') ? data.timetable.playtime : 0;
+        let timestamp = (typeof data.timetable === 'object' && typeof data.timetable.timestamp !== 'undefined') ? data.timetable.timestamp : 0;
+        return `<button type='button' class='item plek-add-item' 
+        data-for='event-band-selection' data-type='event_band' data-id='${data.id}' 
+        data-sort='${data.band_sort}' data-playtime='${band_playtime}' data-timestamp='${timestamp}'>
         <div class='title-container'>
             <div class='flag'>
                 <img src="${flag}"/>
@@ -134,10 +143,10 @@ var plektemplate = {
     },
 
     get_item_to_add(data) {
-        return `<div class='item plek-select-item' data-id='${data.id}'>
+        return `<div class='item plek-select-item' data-id='${data.id}' data-timestamp='${data.timestamp}' data-sort='${data.sort}'>
             <div class='title'>
             <span class='remove-item'><i class="fas fa-times"></i></span>
-            <span class='item-title'>${data.name}</span>
+            <span class='item-title'>${data.html}</span>
             </div>
         </div>`;
     },

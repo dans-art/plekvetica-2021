@@ -52,7 +52,7 @@ let plek_manage_event = {
             plek_manage_event.set_button_time(instance);
         }
     },
-    existing_vob_data : {},
+    existing_vob_data: {},
 
     __construct() {
         if (this.constructed === true) {
@@ -76,6 +76,10 @@ let plek_manage_event = {
         flatpickr("#event_start_date", flatpickr_options);
         flatpickr("#event_end_date", flatpickr_options);
 
+        //Populate the existing vob data
+        plek_manage_event.add_vob_to_current_selection('bands');
+        plek_manage_event.add_vob_to_current_selection('venue');
+        plek_manage_event.add_vob_to_current_selection('organizers');
 
     },
 
@@ -89,7 +93,7 @@ let plek_manage_event = {
         if (date.length === 0) {
             return false;
         }
-        if(!plekevent.event_is_single_day()){
+        if (!plekevent.event_is_single_day()) {
             //Event is multiday
             if (typeof plek_manage_event.flatpickr_band_options.enable[0] !== 'undefined' && plek_manage_event.flatpickr_band_options.enable[0].from === plek_manage_event.flatpickr_band_options.enable[0].to) {
                 //Is Single day. Only display the time
@@ -154,6 +158,14 @@ let plek_manage_event = {
             jQuery(this).prop("disabled", true);
             var type = jQuery(this).data("type");
             var form = 'add_event_details';
+            window.plekevent.save_event(type, form);
+        });
+        
+        jQuery('#plek-submit-event-edit').click(function (event) {
+            event.preventDefault();
+            jQuery(this).prop("disabled", true);
+            var type = jQuery(this).data("type");
+            var form = 'edit_event_form';
             window.plekevent.save_event(type, form);
         });
 
@@ -379,7 +391,14 @@ let plek_manage_event = {
 
             //Event
             //@toto: add the form id
-            if (form === 'add_event_basic') {
+            if (form === 'edit_event_form') {
+                plekvalidator.add_field('event_ticket_raffle', 'url', true, form);
+                plekvalidator.add_field('event_status', 'text', false, form);
+                plekvalidator.add_field('event_featured', 'bool', true, form);
+                plekvalidator.add_field('event_promote', 'bool', true, form);
+            }
+
+            if (form === 'add_event_basic' || form === 'edit_event_form') {
                 plekvalidator.add_field('event_name', 'text', false, form);
                 plekvalidator.add_field('event_start_date', 'date', false, form);
                 plekvalidator.add_field('event_band', 'int', false, form);
@@ -389,7 +408,7 @@ let plek_manage_event = {
 
             //Add the fields to the validator
             //@todo: All Event details fields should be optional
-            if (form === 'add_event_details') {
+            if (form === 'add_event_details' || form === 'edit_event_form') {
                 plekvalidator.add_field('event_description', 'text', true, form);
                 plekvalidator.add_field('event_organizer', 'int', true, form);
                 plekvalidator.add_field('event_poster', 'file', true, form);
@@ -460,24 +479,29 @@ let plek_manage_event = {
      * Adds the data to the selection of the form. Used on the edit Event form.
      * @param {string} json_data Json Data as a string 
      */
-    add_vob_to_current_selection(type){
-        if (type === 'bands') {
-            let jdata = (typeof plek_manage_event.existing_vob_data["bands"] === 'object')?plek_manage_event.existing_vob_data["bands"]:{};
-            if(jdata.length === 0){
-                return false;
+    add_vob_to_current_selection(type) {
+        let jdata = (typeof plek_manage_event.existing_vob_data[type] === 'object') ? plek_manage_event.existing_vob_data[type] : {};
+
+        for (const [vob_id, item] of Object.entries(jdata)) {
+            switch (type) {
+                case 'bands':
+                    let band_item = plektemplate.load_band_item_template(item);
+                    plekevent.add_item_to_selection(band_item);
+                    break;
+                case 'venue':
+                    let venue_item = plektemplate.load_venue_item_template(item);
+                    plekevent.add_item_to_selection(venue_item);
+                    break;
+                case 'organizers':
+                    let organizer_item = plektemplate.load_organizer_item_template(item);
+                    plekevent.add_item_to_selection(organizer_item);
+                    break;
+
+                default:
+                    break;
             }
-            for (const [band_id, item] of Object.entries(jdata)) {
-                console.log(`${band_id}: ${item.name}`);
-              }
-            debugger;
-            return;
-        } else if (type === 'venues') {
-            
-            return;
-        } else if (type === 'organizers') {
-            
-            return;
         }
+        return;
     },
 }
 
@@ -502,15 +526,12 @@ function ajaxPreloader(type) {
                 console.log(type + "-Data loaded (" + Object.keys(jdata).length + ")");
                 if (type === 'bands') {
                     window.bandPreloadedData = jdata;
-                    plek_manage_event.add_vob_to_current_selection('bands');
                     return;
                 } else if (type === 'venues') {
                     window.venuePreloadedData = jdata;
-                    plek_manage_event.add_vob_to_current_selection('venues');
                     return;
                 } else if (type === 'organizers') {
                     window.organizerPreloadedData = jdata;
-                    plek_manage_event.add_vob_to_current_selection('organizers');
                     return;
                 }
                 else {

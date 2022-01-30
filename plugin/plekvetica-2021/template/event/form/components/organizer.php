@@ -4,11 +4,12 @@ global $plek_handler;
 extract(get_defined_vars());
 $event_object = $template_args[0]; //Plek_events object
 $venue_id = intval($event_object->get_field_value('_EventVenueID'));
+$organi_id = intval($event_object->get_field_value('_EventOrganizerID'));
 
 /**Only on add Event? */
 $propose_organi = $plek_event->get_organizers_of_venue($venue_id);
 $organi_handler = new PlekOrganizerHandler;
-$event_organi_json = $organi_handler->get_organizer_json($venue_id);
+$event_organi_json = $organi_handler->get_organizer_json($organi_id);
 s($event_organi_json);
 ?>
 <div class="event-organizer-container plek-event-form-container">

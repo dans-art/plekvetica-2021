@@ -63,6 +63,19 @@ class PlekAjaxHandler
                     $plek_ajax_errors->add('save_event_details', $save); //PlekEventValidator Errors
                 }
                 break;
+            case 'save_edit_event':
+                $plek_event = new PlekEvents;
+                $save_basic = $plek_event->save_event_basic();
+                $save_details = $plek_event->save_event_details();
+                if (is_int($save_basic) AND is_int($save_details)) {
+                    $this->set_success($save_basic); //The Event ID
+                    $this->set_success(PlekUserHandler::get_user_id()); //User ID. 0 If not logged in
+                    $this->set_success(get_permalink($save_basic)); //The Event URL
+                } else {
+                    $plek_ajax_errors->add('save_event_details', $save_basic); //PlekEventValidator Errors
+                    $plek_ajax_errors->add('save_event_details', $save_details); //PlekEventValidator Errors
+                }
+                break;
             case 'editEvent':
                 //@todo:Old Plekvetica Event function. Replace with new!
                 echo plekEvent();
@@ -125,7 +138,7 @@ class PlekAjaxHandler
             case 'save_add_event_login':
                 global $plek_ajax_handler;
                 $plek_event = new PlekEvents;
-                $login = $plek_event -> add_event_login();
+                $login = $plek_event->add_event_login();
                 $event_id = $event_id = $plek_ajax_handler->get_ajax_data('event_id');
                 if ($login === true) {
                     $this->set_success($event_id); //The Event ID
@@ -144,6 +157,10 @@ class PlekAjaxHandler
                 } else {
                     $plek_ajax_errors->add('save_event_details', $save); //PlekEventValidator Errors
                 }
+                break;
+            case 'save_edit_event':
+                //Users have to be logged it in order to edit events
+                $this->set_error(__('Sorry, you are not allowed to edit this Event!', 'pleklang'));
                 break;
             case 'check_event_duplicate':
                 $plek_event = new PlekEvents;
@@ -649,7 +666,7 @@ class PlekAjaxHandler
     {
         $value = (isset($_REQUEST[$field])) ? $_REQUEST[$field] : "";
         $val_arr = json_decode($value);
-        if ($escape AND is_array($val_arr)) {
+        if ($escape and is_array($val_arr)) {
             //Escape all the data
             foreach ($val_arr as $index => $val) {
                 $val_arr[$index] = htmlspecialchars($val);

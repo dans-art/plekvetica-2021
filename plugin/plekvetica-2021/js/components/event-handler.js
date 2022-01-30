@@ -18,6 +18,9 @@ var plekevent = {
      * @returns bool true if event exists, otherwise false
      */
     check_existing_event() {
+        if (this.is_edit_event()) {
+            return null; //Is edit event, disable this function
+        }
         if (this.get_field_value('event_start_date') !== "" && jQuery('#event-band-selection .item').length > 0) {
             //ajax call for checking
             var datab = new FormData();
@@ -103,26 +106,100 @@ var plekevent = {
         var type = jQuery(element).data('type');
         var item_id = jQuery(element).data('id');
         var html = jQuery(element).html();
-        var data = { id: item_id, name: html }
+        let vob_timestamp = jQuery(element).data('timestamp');
+        let vob_sort = jQuery(element).data('sort');
+
+        var data = { id: item_id, html: html, timestamp: vob_timestamp, sort: vob_sort }
+        var data_to_insert = plektemplate.get_item_to_add(data);
 
         //Remove Existing Venues
         if (type === 'event_venue') {
             this.remove_all_items('event-venue-selection');
         }
 
-        if (jQuery(`.plek-select-item[data-id='${item_id}']`).length === 0) {//Only add if not already added
-            jQuery('#' + item_for).append(plektemplate.get_item_to_add(data));
+        if (jQuery(`#${item_for} .plek-select-item[data-id='${item_id}']`).length === 0) {//Only add if not already added
+            if (typeof vob_timestamp !== 'undefined' && vob_timestamp !== 0) {
+                this.vob_insert_with_timestamp(item_id, item_for, data_to_insert, vob_timestamp);
+            } else if (typeof vob_sort !== 'undefined') {
+                this.vob_insert_with_sort(item_id, item_for, data_to_insert, vob_sort);
+            } else {
+                //Add it at the end
+                console.log("Add item without timestamp or sort: " + item_for);
+                jQuery('#' + item_for).append(data_to_insert);
+            }
+        } else {
+            console.log(item_id + ' already added (VOB)');
         }
         plektemplate.hide_overlay();
         jQuery('#' + type).val("");
         plekevent.add_remove_item_eventlistener();
 
         if (type === 'event_band') {
-            window.plekevent.check_existing_event();
-            window.plekevent.generate_title();
+            if (!this.is_edit_event()) {
+                window.plekevent.check_existing_event();
+                window.plekevent.generate_title();
+            }
             this.set_band_time_flatpickr();
-
         }
+    },
+
+    /**
+     * Insert a plek-select-item according to the existing items timestamps.
+     * @param {*} item_for 
+     * @param {*} data_to_insert 
+     * @param {*} vob_timestamp 
+     */
+    vob_insert_with_timestamp(item_id, item_for, data_to_insert, vob_timestamp) {
+        console.log('insert with timestamp: ' + vob_timestamp);
+        console.log(data_to_insert);
+
+        //Search for other timestamps
+        if (jQuery('#' + item_for + ' .plek-select-item').length === 0) {
+            //no items added so far. Add.
+            jQuery('#' + item_for).append(data_to_insert);
+            return;
+        } else {
+            //check for position to add
+            jQuery('#' + item_for + ' .plek-select-item').each(function (i, e) {
+                let ts = jQuery(e).data('timestamp');
+                if (ts > vob_timestamp) {
+                    //Item found thats bigger, add before
+                    jQuery(data_to_insert).insertBefore(e);
+                    return;
+                }
+                console.log(ts);
+            });
+        }
+        //If insert by timestamp failed, insert it at the end
+        if (jQuery(`.plek-select-item[data-id='${item_id}']`).length === 0) {
+            jQuery('#' + item_for).append(data_to_insert);
+        }
+        return;
+    },
+
+    vob_insert_with_sort(item_id, item_for, data_to_insert, vob_sort) {
+        console.log('insert with sort: ' + vob_sort);
+        console.log(data_to_insert);
+        if (jQuery('#' + item_for + ' .plek-select-item').length === 0) {
+            //no items added so far. Add.
+            jQuery('#' + item_for).append(data_to_insert);
+            return;
+        } else {
+            //check for position to add
+            jQuery('#' + item_for + ' .plek-select-item').each(function (i, e) {
+                let sort_index = jQuery(e).data('sort');
+                if (sort_index > vob_sort) {
+                    //Item found thats bigger, add before
+                    jQuery(data_to_insert).insertBefore(e);
+                    return;
+                }
+            });
+        }
+        //If insert by sort failed, insert it at the end
+        if (jQuery(`.plek-select-item[data-id='${item_id}']`).length === 0) {
+            jQuery('#' + item_for).append(data_to_insert);
+        }
+        return;
     },
 
     /**
@@ -166,6 +243,15 @@ var plekevent = {
     },
 
     /**
+     * Checks if the edit_id field is set. If so, then it is edit event
+     * @returns bool true if edit event, false otherwise
+     * 
+     */
+    is_edit_event() {
+        return (this.get_field_value('event_id').length > 0) ? true : false;
+    },
+
+    /**
      * Sends an ajax request to save the event.
      * 
      * @param {string} type Type of the form (only save_basic_event is supported atm.)
@@ -175,7 +261,7 @@ var plekevent = {
     save_event(type, form) {
         console.log("save " + type);
 
-        var datab = this.prepare_data(type);
+        var datab = this.prepare_data(type, form);
         if (plekvalidator.validate_form_data(datab, form) !== true) {
             jQuery('#' + form).prop("disabled", false); //Enable the button again.
             plekvalidator.display_errors(form);
@@ -196,10 +282,12 @@ var plekevent = {
             contentType: false,
             success: function success(data) {
                 let text = plek_main.get_text_from_ajax_request(data, true);
-                let errors = plek_main.show_field_errors(data, '#add_event_basic');
+                let errors = plek_main.show_field_errors(data, form);
                 if (errors === true) {
                     console.log("Contains Errors");
                     text = "Das Formular enthält Fehler, bitte korrigieren";
+                    plek_main.deactivate_button_loader(button, orig_btn_text);
+                    jQuery(button).prop("disabled", false); //Enable the button again.
                 } else {
                     /**
                      * Success Object keys:
@@ -220,7 +308,7 @@ var plekevent = {
                     }
 
                     let url = plek_main.url_replace_param('stage', stage);
-                    if (type === 'save_event_details') {
+                    if (type === 'save_event_details' || type === 'save_edit_event') {
                         if (user_id === 0) {
                             plekerror.display_info(__('Event saved, thanks a lot!<br/>Our Eventmanager will check and publish the Event', 'pleklang'));
                         } else {
@@ -251,7 +339,7 @@ var plekevent = {
     save_event_login(type) {
         console.log("savelogin " + type);
         var form = 'add_event_login';
-        var datab = this.prepare_data(type);
+        var datab = this.prepare_data(type, form);
         if (plekvalidator.validate_form_data(datab, form) !== true) {
             jQuery('#plek-add-login-submit').prop("disabled", false); //Enable the button again.
             plekvalidator.display_errors(form);
@@ -309,26 +397,26 @@ var plekevent = {
      * @param {string} type The type to prepare
      * @returns {object} FormData
      */
-    prepare_data(type) {
+    prepare_data(type, form) {
         var datab = new FormData();
         datab.append('action', 'plek_ajax_event_form');
         datab.append('type', type);
-        if (type === "save_basic_event") {
+        if (type === "save_basic_event" || type === 'save_edit_event') {
             //Fields for Event Basic
             datab.append('event_name', this.get_field_value('event_name'));
             datab.append('event_start_date', this.get_field_value('event_start_date'));
             if (jQuery('#is_multiday').is(':checked') === true) {
-                plekvalidator.add_field('is_multiday', 'int', true);
-                plekvalidator.add_field('event_end_date', 'date', true);
+                plekvalidator.add_field('is_multiday', 'int', true, form);
+                plekvalidator.add_field('event_end_date', 'date', true, form);
             }
             datab.append('is_multiday', (jQuery('#is_multiday').is(':checked') === true) ? '1' : '0');
             datab.append('event_end_date', this.get_field_value('event_end_date'));
 
             if (jQuery('#no_band').is(':checked') === true) {
                 datab.append('no_bands_known', "true");
-                plekvalidator.add_field('event_band', 'int', true);
+                plekvalidator.add_field('event_band', 'int', true, form);
             } else {
-                plekvalidator.add_field('event_band', 'int');
+                plekvalidator.add_field('event_band', 'int', false, form);
             }
             datab.append('event_band', this.get_field_value('event_band'));
             datab.append('event_venue', this.get_field_value('event_venue'));
@@ -337,7 +425,7 @@ var plekevent = {
             let band_order_time = this.get_band_order_time();
             datab.append('band_order_time', band_order_time);
         }
-        if (type === "save_event_details") {
+        if (type === "save_event_details" || type === 'save_edit_event') {
             //Fields for Event Basic
             datab.append('event_description', this.get_field_value('event_description'));
             datab.append('event_organizer', this.get_field_value('event_organizer'));
@@ -369,6 +457,12 @@ var plekevent = {
             let is_guest = (selected_btn === 'add_as_guest' ? true : false);
             datab.append('is_guest', is_guest);
         }
+        if(type === 'save_edit_event'){
+            datab.append('event_ticket_raffle', this.get_field_value('event_ticket_raffle'));
+            datab.append('event_status', this.get_field_value('event_status'));
+            datab.append('event_featured', this.get_field_value('event_featured'));
+            datab.append('event_promote', this.get_field_value('event_promote'));
+        }
 
         console.log("Added Validator fields for: " + type);
         return datab;
@@ -399,7 +493,7 @@ var plekevent = {
             if (jQuery(item).find('.time-label').html().indexOf('clock') > 0) {
                 datetime = 0;
             }
-            
+
             order_obj[band_id] = { order: index, datetime: datetime };
         });
 

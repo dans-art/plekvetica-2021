@@ -1283,7 +1283,7 @@ class PlekEventHandler
         global $plek_handler;
         //Validate the Data
         $validator = $this->validate_event_basic();
-        if ($validator->all_fields_are_valid() !== true) {
+        if ($validator->all_fields_are_valid(null, true) !== true) {
             return $validator->get_errors();
         }
 
@@ -1324,6 +1324,7 @@ class PlekEventHandler
     /**
      * Checks if the Event status is postponed. If so, the acf postponed_event gets filled out.
      * @param int|string $event_id - The Id of the Event
+     * @todo: Test this function!
      * 
      * @return bool True on success, false on error, null if the field has not be changed
      */
@@ -1336,7 +1337,14 @@ class PlekEventHandler
             return false;
         }
         $old_event_startdate = tribe_get_start_date($event_id);
-        return $plek_handler->update_field('postponed_event', $old_event_startdate, $event_id);
+        $prev_postponed_dates_json = get_field('postponed_event_dates', $event_id);
+        $prev_postponed_dates = json_decode($prev_postponed_dates_json);
+        if (empty($prev_postponed_dates) or !is_array($prev_postponed_dates)) {
+            $prev_postponed_dates = [];
+        }
+        $today = time();
+        $prev_postponed_dates[$today] = $old_event_startdate;
+        return $plek_handler->update_field('postponed_event_dates', json_encode($prev_postponed_dates), $event_id);
     }
     /**
      * Saves the details of the event
@@ -1349,7 +1357,7 @@ class PlekEventHandler
         global $plek_handler;
         //Validate the Data
         $validator = $this->validate_event_details();
-        if ($validator->all_fields_are_valid() !== true) {
+        if ($validator->all_fields_are_valid(null, true) !== true) {
             return $validator->get_errors();
         }
         $event_id = intval($plek_ajax_handler->get_ajax_data('event_id'));
@@ -1549,6 +1557,15 @@ class PlekEventHandler
         $validator->set_type('event_id', 'int');
         $validator->set_required('event_id');
 
+        $type = $this->get_event_form_value('type');
+
+        if ($type === 'save_edit_event') {
+            $validator->set_type('event_status', 'textshort');
+            $validator->set_type('event_featured', 'bool');
+            $validator->set_type('event_promote', 'bool');
+            $validator->set_type('event_ticket_raffle', 'url');
+        }
+
         return $validator;
     }
 
@@ -1661,6 +1678,8 @@ class PlekEventHandler
     {
         global $plek_handler;
 
+        $type = $this->get_event_form_value('type');
+
         //ACF ID => fieldname
         $acf = array(
             'vorverkauf-preis' => 'event_price_presale',
@@ -1674,12 +1693,19 @@ class PlekEventHandler
             '_EventCurrencySymbol' => 'event_currency'
         );
 
+        if ($type === 'save_edit_event') {
+            $acf['is_win'] = 'is_win';
+            $acf['win_url'] = 'event_ticket_raffle';
+            $acf['promote_event'] = 'event_promote';
+            $acf['cancel_event'] = 'cancel_event';
+            //$acf['postponed_event'] = 'postpone_event'; //This is saved by the save_event_postponed() function
+            $meta['_tribe_featured'] = 'event_featured';
+        }
         $failed = array();
 
         //Save all the ACF Values
         foreach ($acf as $afc_name => $form_field_name) {
             $value = $this->get_event_form_value($form_field_name);
-
             if ($plek_handler->update_field($afc_name, $value, $event_id) === false) {
                 $failed[] = $afc_name;
             }
@@ -1718,6 +1744,18 @@ class PlekEventHandler
         $event_id = intval($plek_ajax_handler->get_ajax_data('event_id'));
 
         switch ($form_field_name) {
+            case 'cancel_event':
+                $status = $plek_ajax_handler->get_ajax_data('event_status', true);
+                return ($status === 'event_canceled') ? true : false;
+                break;
+            case 'event_promote':
+                $promote_event = $plek_ajax_handler->get_ajax_data('event_promote', true);
+                return boolval($promote_event);
+                break;
+            case 'is_win':
+                $win_url = $plek_ajax_handler->get_ajax_data('event_ticket_raffle', true);
+                return (!empty($win_url)) ? true : false;
+                break;
             case 'event_organizer':
                 $organi = $plek_ajax_handler->get_ajax_data_as_array('event_organizer', true);
                 return (empty($organi)) ? '' : array('OrganizerID' => $organi);
@@ -1923,9 +1961,9 @@ class PlekEventHandler
             $band_id = $item['id'];
             $time = (isset($current_event['timetable'][$band_id])) ? $current_event['timetable'][$band_id] : array();
             $sort = null;
-            $band_sort = (is_array($current_event['band_sort'])) ? array_search($band_id, $current_event['band_sort']) : false;
+            $band_sort = (isset($current_event['band_sort']) and is_array($current_event['band_sort'])) ? array_search($band_id, $current_event['band_sort']) : false;
             if ($band_sort > -1) {
-                $sort = $current_event['band_sort'][$band_sort];
+                $sort = $band_sort;
             }
             $item['timetable'] = $time;
             $item['band_sort'] = $sort;

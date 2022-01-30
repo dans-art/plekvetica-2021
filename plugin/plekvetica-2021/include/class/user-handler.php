@@ -23,15 +23,18 @@ class PlekUserHandler
     /**
      * Checks if the current unser is allowed to edit this post.
      *
-     * @param object $plek_event - The Plek Event Object or the event_id
+     * @param object|int $plek_event - The Plek Event Object or the event_id
      * @return void
      */
-    public static function current_user_can_edit(object|int $plek_event)
+    public static function current_user_can_edit(mixed $plek_event)
     {
-        if(!is_int($plek_event)){
+        if (is_string($plek_event) or is_int($plek_event)) {
+            $post_id = intval($plek_event);
+        } else {
+
             $post_id = (!$plek_event->get_ID()) ? get_the_ID() : $plek_event->get_ID();
             $plek_event = new PlekEvents;
-            $plek_event -> load_event($post_id);
+            $plek_event->load_event($post_id);
         }
         if (get_post_status($post_id) !== 'publish') {
             return false;
@@ -247,13 +250,13 @@ class PlekUserHandler
         if (current_user_can('edit_posts')) {
             return true;
         }
-        if(!is_object($event)){
+        if (!is_object($event)) {
             $plek_events = new PlekEvents;
-            $plek_events -> load_event($event,'all');
+            $plek_events->load_event($event, 'all');
             $event = $plek_events;
         }
 
-        if(!is_object($event)){
+        if (!is_object($event)) {
             return false; //Event not found
         }
         $user_id = self::get_user_id();
@@ -266,7 +269,7 @@ class PlekUserHandler
         $status = $event->get_field_value('post_status', false);
         $created = strtotime($event->get_field_value('post_date', false));
 
-        if($status === 'draft' AND (time() - $created) < (24 * 60 * 60)){ //Check if the post is a draft and not created later than 1 day ago
+        if ($status === 'draft' and (time() - $created) < (24 * 60 * 60)) { //Check if the post is a draft and not created later than 1 day ago
             return true;
         }
 

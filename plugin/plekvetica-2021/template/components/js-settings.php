@@ -47,8 +47,12 @@ $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings.
 
 <?php if ($type === 'edit_event') : ?>
 	<script type="text/javascript" defer='defer'>
+		var bandPreloadedData = null;
+		var venuePreloadedData = null;
+		var organizerPreloadedData = null;
 		jQuery(document).ready(function() {
 			plek_manage_event.__construct();
+			jQuery('#event-band-selection').sortable(); //Make the Band list sortable
 		});
 	</script>
 <?php endif; ?>

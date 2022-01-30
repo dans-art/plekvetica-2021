@@ -278,6 +278,7 @@ class PlekFormValidator
         $this->setup_field($fieldname);
 
         $type = isset($this->type[$fieldname]) ? $this->type[$fieldname] : null;
+
         //Check if field should be ignored
         if (isset($this->ignore[$fieldname])) {
             return true;
@@ -363,16 +364,22 @@ class PlekFormValidator
      * If no input is given, all the items from the $_REQUEST will be used.
      *
      * @param array $input - Array to check
+     * @param bool $ignore_unset_fields - If unset fields should be ignored. If set to true, only fields with set type will be validated.
      * @return bool true on success, false on error
      */
-    public function all_fields_are_valid(array $input = null)
+    public function all_fields_are_valid(array $input = null, $ignore_unset_fields = false)
     {
         $input = ($input === null) ? $_REQUEST : $input;
         if (!is_array($input)) {
             $this->set_system_error('all_fields_are_valid() - Input has to be array');
             return false;
         }
+
+        
         foreach ($input as $fkey => $fvalue) {
+            if($ignore_unset_fields AND !isset($this -> type[$fkey])){
+                continue;
+            }
             if (!is_array($fvalue)) {
                 $fvalue = array($fvalue);
             }
@@ -383,7 +390,7 @@ class PlekFormValidator
         if (count($this->errors) !== 0) {
             return false;
         }
-        //Field passed all the tests. Field is valid.
+        //Fields passed all the tests. Fields are valid.
         return true;
     }
 
