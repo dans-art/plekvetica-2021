@@ -45,6 +45,6 @@ s($event_organi_json);
 <script>
     jQuery(document).ready(function(){
         //Load the Organizers to the form
-        plek_manage_event.existing_vob_data.organizers = <?php echo $event_organi_json; ?>;
+        plek_manage_event.existing_vob_data.organizers = <?php echo (!empty($event_organi_json))?$event_organi_json:'{}' ?>;
     });
 </script>

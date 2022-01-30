@@ -107,7 +107,7 @@ let plek_manage_event = {
     add_event_listeners() {
         console.log("Add event eventlistener");
         //On Save Band / Organizer / Venue
-        jQuery('.plek-form').on('click', '.plek-button', function (e) {
+        jQuery('.overlay_content .plek-form').on('click', '.plek-button', function (e) {
             let button_id = e.currentTarget.id;
             e.preventDefault();
             plek_manage_event.send_vob_form(button_id);

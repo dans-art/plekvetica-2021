@@ -21,6 +21,7 @@ var plektemplate = {
     load_band_item_template(data) {
         var flag = this.get_flag_image(data.flag);
         let band_playtime = (typeof data.timetable === 'object' && typeof data.timetable.playtime !== 'undefined') ? data.timetable.playtime : 0;
+        let playtime_formated = (typeof data.timetable === 'object' && typeof data.timetable.playtime_formated !== 'undefined') ? data.timetable.playtime_formated : '0';
         let timestamp = (typeof data.timetable === 'object' && typeof data.timetable.timestamp !== 'undefined') ? data.timetable.timestamp : 0;
         return `<button type='button' class='item plek-add-item' 
         data-for='event-band-selection' data-type='event_band' data-id='${data.id}' 
@@ -38,7 +39,7 @@ var plektemplate = {
             <div class='sort-button plek-button'><i class="fas fa-arrows-alt-v"></i></div>
             <div class='band-time plek-button'>
                 <span class='time-label'><i class="far fa-clock"></i></span>
-                <input class='band-time-input' type='datetime' name='band-time-${data.id}' id='band-time-${data.id}'value=''/>
+                <input class='band-time-input' type='datetime' name='band-time-${data.id}' id='band-time-${data.id}'value='${playtime_formated}'/>
             </div>
             <div class='remove-item plek-button'><i class="fas fa-times"></i></div>
         </div>

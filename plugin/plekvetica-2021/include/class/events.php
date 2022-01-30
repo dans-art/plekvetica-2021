@@ -1065,9 +1065,7 @@ class PlekEvents extends PlekEventHandler
 
     public function enqueue_event_form_styles()
     {
-        add_action('wp_enqueue_styles', function () {
-            wp_enqueue_style('flatpickr-style', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr.min.css');
-        });
+        wp_enqueue_style('flatpickr-style', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr.min.css');
     }
 
     /**
@@ -1079,7 +1077,7 @@ class PlekEvents extends PlekEventHandler
     public function enqueue_event_form_scripts()
     {
         global $plek_handler;
-        
+
         add_action('wp_enqueue_scripts', function () {
             global $plek_handler;
             $plek_handler->enqueue_toastr();

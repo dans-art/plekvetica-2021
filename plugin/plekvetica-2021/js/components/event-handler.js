@@ -153,9 +153,9 @@ var plekevent = {
         console.log('insert with timestamp: ' + vob_timestamp);
         console.log(data_to_insert);
 
-        //Search for other timestamps
+        //Search for items
         if (jQuery('#' + item_for + ' .plek-select-item').length === 0) {
-            //no items added so far. Add.
+            //no items added so far. Add it.
             jQuery('#' + item_for).append(data_to_insert);
             return;
         } else {
@@ -164,10 +164,10 @@ var plekevent = {
                 let ts = jQuery(e).data('timestamp');
                 if (ts > vob_timestamp) {
                     //Item found thats bigger, add before
+                    console.log("insert: "+item_for+' on index'+i);
                     jQuery(data_to_insert).insertBefore(e);
-                    return;
+                    return false; //break the loop
                 }
-                console.log(ts);
             });
         }
         //If insert by timestamp failed, insert it at the end
@@ -215,7 +215,7 @@ var plekevent = {
             plek_manage_event.flatpickr_band_options.time_24hr = true;
             plek_manage_event.flatpickr_band_options.dateFormat = 'H:i';
             plek_manage_event.flatpickr_band_options.altFormat = 'H:i';
-            plek_manage_event.flatpickr_band_options.defaultDate = '20:00';
+            //plek_manage_event.flatpickr_band_options.defaultDate = '20:00';
             plek_manage_event.flatpickr_band_options.noCalendar = true;
         } else {
             //Event is multy day
@@ -231,11 +231,25 @@ var plekevent = {
 
         //Restart the flatpickr for the time inputs
         flatpickr("#event-band-selection .band-time-input", plek_manage_event.flatpickr_band_options); //Load the Flatpickr
+
+        //Add the time to the label if set in the input
+        jQuery('.band-time-input').each(function(index, item){
+            let val = jQuery(item).val();
+            if(!val.length !== 0){
+                jQuery(item).parent().find('.time-label').text(val);
+            }
+
+        });
+
+
     },
 
+    /**
+     * Removes the Item on .remove-item click
+     */
     add_remove_item_eventlistener() {
         jQuery('.remove-item').click(function () {
-            jQuery(this).parent().parent().remove();
+            jQuery(this).closest('.plek-select-item').remove();
         });
     },
     remove_all_items(selector) {
@@ -248,7 +262,8 @@ var plekevent = {
      * 
      */
     is_edit_event() {
-        return (this.get_field_value('event_id').length > 0) ? true : false;
+        let id = this.get_field_value('event_id');
+        return (typeof id !== 'undefined' && id.length > 0) ? true : false;
     },
 
     /**
