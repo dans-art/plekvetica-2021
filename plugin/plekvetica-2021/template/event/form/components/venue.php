@@ -4,7 +4,7 @@ extract(get_defined_vars());
 $event_object = $template_args[0]; //Plek_events object
 $venue_handler = new PlekVenueHandler;
 $event_venue_json = $venue_handler->get_venue_json($event_object->get_ID());
-s($event_venue_json);
+//s($event_venue_json);
 ?>
 <div class="event-venue-container plek-event-form-container">
     <div id="venue-search-bar-container" class="event-search-bar-container">

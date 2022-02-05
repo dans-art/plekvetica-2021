@@ -107,5 +107,7 @@ wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-sing
 
 <?php
 //s($plek_event -> get_event());
-
+if($plek_handler->is_dev_server()){
+    s($plek_event->get_event());
+}
 ?>

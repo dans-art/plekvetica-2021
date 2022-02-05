@@ -84,7 +84,7 @@ let plek_user = {
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data.... ","pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
 
             }
           });
@@ -123,7 +123,7 @@ let plek_user = {
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data.... ","pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
 
             }
           });

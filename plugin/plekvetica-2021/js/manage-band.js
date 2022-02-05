@@ -204,7 +204,7 @@ let plek_band = {
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data.... ","pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
 
             }
         });
@@ -259,7 +259,7 @@ let plek_band = {
             },
             error: function error(data) {
                 plek_main.deactivate_loader_style(button);
-                jQuery('.plek-follow-band-btn .label').text('Error loading data....');
+                jQuery('.plek-follow-band-btn .label').text('Error loading data.');
             }
         });
     }

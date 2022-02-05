@@ -81,7 +81,7 @@ var plekevent = {
                 let venue = window.venuePreloadedData[vob_id];
                 let ele_v = plektemplate.load_venue_item_template(venue);
                 this.add_item_to_selection(ele_v);
-                plekerror.display_info(__('Add Veneu', 'pleklang'), __('The Venue has been added to the Database', 'pleklang'));
+                plekerror.display_info(__('Add Venue', 'pleklang'), __('The Venue has been added to the Database', 'pleklang'));
                 break;
             case 'orgnaizer-form-submit':
                 window.organizerPreloadedData = data;
@@ -215,7 +215,7 @@ var plekevent = {
             plek_manage_event.flatpickr_band_options.time_24hr = true;
             plek_manage_event.flatpickr_band_options.dateFormat = 'H:i';
             plek_manage_event.flatpickr_band_options.altFormat = 'H:i';
-            //plek_manage_event.flatpickr_band_options.defaultDate = '20:00';
+            //plek_manage_event.flatpickr_band_options.defaultDate = '01:01';
             plek_manage_event.flatpickr_band_options.noCalendar = true;
         } else {
             //Event is multy day
@@ -228,14 +228,19 @@ var plekevent = {
                 to: endDate
             }];
         }
-
+        let last_item = jQuery('.band-time-input').last().val();
+        
         //Restart the flatpickr for the time inputs
         flatpickr("#event-band-selection .band-time-input", plek_manage_event.flatpickr_band_options); //Load the Flatpickr
-
+        
+        if( last_item === '0'){
+            return; //End the function, if the last added item has no time set.
+        }
+        
         //Add the time to the label if set in the input
         jQuery('.band-time-input').each(function(index, item){
             let val = jQuery(item).val();
-            if(!val.length !== 0){
+            if(!val.length !== 0 && val !== '0'){
                 jQuery(item).parent().find('.time-label').text(val);
             }
 
@@ -345,7 +350,7 @@ var plekevent = {
                 }
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data.... ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
 
             }
         });

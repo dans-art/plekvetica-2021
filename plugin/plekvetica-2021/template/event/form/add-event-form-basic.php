@@ -27,4 +27,4 @@ $event_class = $template_args[0]; //Plek_events_form Object
 
 <?php PlekTemplateHandler::load_template('js-settings', 'components','manage_event_buttons'); ?>
 <?php PlekTemplateHandler::load_template('overlay', 'components','add-new-band', PlekTemplateHandler::load_template_to_var('band-form','band','add')); ?>
-<?php PlekTemplateHandler::load_template('overlay', 'components','add-new-venue', PlekTemplateHandler::load_template_to_var('venue-form','event/venue', null, 'add_venue')); ?>
+<?php PlekTemplateHandler::load_template('overlay', 'components','add-new-venue', PlekTemplateHandler::load_template_to_var('venue-form','event/venue', null, 'add')); ?>

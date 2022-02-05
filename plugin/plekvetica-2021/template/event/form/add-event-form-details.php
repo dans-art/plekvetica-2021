@@ -5,7 +5,7 @@
 extract(get_defined_vars());
 $event_class = $template_args[0]; //Plek_events_form Object
 $event_id = (!empty($template_args[1]))?$template_args[1]:""; //Event ID
-
+$event_class->load_event($event_id);
 ?>
 <div class="plek-add-event add-details plek-form">
 	<form name="add_event_details" id="add_event_details" action="" method="post">
@@ -32,5 +32,7 @@ $event_id = (!empty($template_args[1]))?$template_args[1]:""; //Event ID
 	</form>
 </div>
 
+<?php PlekTemplateHandler::load_template('overlay', 'components','add-new-organizer', PlekTemplateHandler::load_template_to_var('organizer-form','event/organizer', null, 'add')); ?>
 <?php PlekTemplateHandler::load_template('js-settings', 'components','manage_event_buttons'); ?>
 <?php PlekTemplateHandler::load_template('js-settings', 'components','add_event_details'); ?>
+

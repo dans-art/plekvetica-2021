@@ -110,7 +110,6 @@ var pleksearch = {
         });
         var exact_hit = pleksearch.is_exact_hit(search_for_prep, compare_prep);
         if (sm_compare.peak.value >= window.pleksearch.threshhold || exact_hit > 0 || exact_hit === true) {
-          console.log('compare: ' + compare_prep + ' :: ' + search_for_prep + ' - ' + sm_compare.peak.value + '%');
           var item = {};
           item.type = type;
           item.data = value;

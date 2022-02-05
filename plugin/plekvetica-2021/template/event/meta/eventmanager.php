@@ -8,6 +8,7 @@ $akk_status = $plek_event->get_field_value('akk_status');
 $interviews = $plek_event->get_event_interviews();
 $akk_crew = $plek_event->get_event_akkredi_crew();
 $event_edit_page_id = $plek_handler->get_plek_option('edit_event_page_id');
+$event_edit_review_id = $plek_handler->get_plek_option('edit_event_review_page_id');
 $is_canceled = $plek_event->is_canceled();
 $show_edit_button = $plek_event->show_event_edit_button($plek_event);
 
@@ -43,7 +44,7 @@ $show_edit_button = $plek_event->show_event_edit_button($plek_event);
     <?php
     //Write Review Button    
     if ($plek_event->show_event_edit_review_button($plek_event)) : ?>
-        <a name="reviewEvent" class="plek-button full-width green" href='<?php echo get_permalink($event_edit_page_id) . '?review=true&edit=' . $event_id; ?>'><?php echo $review_titel; ?></a>
+        <a name="reviewEvent" class="plek-button full-width green" href='<?php echo get_permalink($event_edit_review_id) . '?edit=' . $event_id; ?>'><?php echo $review_titel; ?></a>
     <?php endif; ?>
     <?php
     //Promote on Facebook Button    

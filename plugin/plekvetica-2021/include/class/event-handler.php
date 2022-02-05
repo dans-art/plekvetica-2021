@@ -6,21 +6,49 @@ if (!defined('ABSPATH')) {
 class PlekEventHandler
 {
 
+    /**
+     * Checks if a event is loaded
+     *
+     * @return boolean
+     */
+    public function is_event_loaded()
+    {
+        return (empty($this->event)) ? false : true;
+    }
+    /**
+     * Checks if the loaded event is a review
+     *
+     * @return boolean
+     */
     public function is_review()
     {
         return ($this->get_field_value('is_review') === '1') ? true : false;
     }
-
+    /**
+     * Checks if the loaded event has been canceled
+     *
+     * @return boolean
+     */
     public function is_canceled()
     {
         return ($this->get_field_value('cancel_event') === '1') ? true : false;
     }
 
+    /**
+     * Checks if the loaded event is a featured event
+     *
+     * @return boolean
+     */
     public function is_featured()
     {
         return ($this->get_field_value('_tribe_featured') === '1') ? true : false;
     }
 
+    /**
+     * Checks if the loaded event is a promoted event
+     *
+     * @return boolean
+     */
     public function is_promoted()
     {
         return ($this->get_field_value('promote_event') === '1') ? true : false;
@@ -37,6 +65,11 @@ class PlekEventHandler
         return (!empty($this->get_field_value('postponed_event'))) ? true : false;
     }
 
+    /**
+     * Checks if the loaded event is a public / published
+     *
+     * @return boolean
+     */
     public function is_public(string $event_id = null)
     {
         if (!$event_id) {
@@ -558,31 +591,56 @@ class PlekEventHandler
         return ($return_string) ? implode(' ', $classes) : $classes;
     }
 
-    public function get_price_boxoffice()
+    /**
+     * Returns the loaded event boxoffice price
+     *
+     * @param boolean $with_currency - If the currency should be added or not
+     * @return void
+     */
+    public function get_price_boxoffice($with_currency = true)
     {
         $cost = $this->get_field_value('_EventCost');
         if (empty($cost)) {
             return '';
         }
-        return $this->get_price_formated($cost);
+        return $this->get_price_formated($cost, $with_currency);
     }
-    public function get_price_vvk()
+
+    /**
+     * Returns the loaded event presale price
+     *
+     * @param boolean $with_currency - If the currency should be added or not
+     * @return void
+     */
+    public function get_price_vvk($with_currency = true)
     {
         $cost = $this->get_field_value('vorverkauf-preis');
         if (empty($cost)) {
             return '';
         }
-        return $this->get_price_formated($cost);
+        return $this->get_price_formated($cost, $with_currency);
     }
 
-    public function get_price_formated(string $cost)
+    /**
+     * Formats the price and adds the currency to it.
+     *
+     * @param string $cost
+     * @param boolean $with_currency
+     * @return string The formated price
+     */
+    public function get_price_formated(string $cost, $with_currency = true)
     {
         if ($cost === "0000") {
             return __('Free', 'pleklang');
         }
-        $currency = (!empty($this->get_field_value('_EventCurrencySymbol'))) ? $this->get_field_value('_EventCurrencySymbol') : $this->default_event_currency;
-        $currency = $this->format_currency_to_symbol($currency);
+        if($with_currency){
+            $currency = (!empty($this->get_field_value('_EventCurrencySymbol'))) ? $this->get_field_value('_EventCurrencySymbol') : $this->default_event_currency;
+            $currency = $this->format_currency_to_symbol($currency);
+        }else{
+            $currency = "";
+        }
         $cost_nr = preg_replace("/[^a-zA-Z0-9 -\.]/", "", $cost);
+
         return trim($cost_nr) . ' ' .  $currency;
     }
 
@@ -595,22 +653,22 @@ class PlekEventHandler
      */
     public function format_currency_to_symbol($currency_name)
     {
-        $currency_name = strtolower($currency_name);
+        $currency_name = strtoupper($currency_name);
         switch ($currency_name) {
-            case 'eur':
+            case 'EUR':
                 return '€';
                 break;
 
-            case 'usd':
+            case 'USD':
                 return '$';
                 break;
 
-            case 'gbp':
+            case 'GBP':
                 return '£';
                 break;
 
             default:
-                $currency_name;
+                return $currency_name;
                 break;
         }
     }
@@ -1131,9 +1189,9 @@ class PlekEventHandler
         if (!PlekUserHandler::current_user_can_edit($plek_event)) {
             return false;
         }
-        if ($plek_event->is_review()) {
+        /*  if ($plek_event->is_review()) {
             return __('This post can no longer be edited because a review already exists', 'pleklang');
-        }
+        } */
         return true;
     }
 

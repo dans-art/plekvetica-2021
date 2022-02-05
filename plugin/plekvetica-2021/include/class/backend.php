@@ -77,6 +77,7 @@ class PlekBackend /*extends WP_List_Table*/
         add_settings_field('guest_author_id', 'ID das Gastautors', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'guest_author_id', 'type' => 'input'));
         add_settings_field('add_event_page_id', 'ID der "Event eintragen" Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'add_event_page_id', 'type' => 'input'));
         add_settings_field('edit_event_page_id', 'ID der "Event bearbeiten" Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'edit_event_page_id', 'type' => 'input'));
+        add_settings_field('edit_event_review_page_id', 'ID der "Event review" Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'edit_event_review_page_id', 'type' => 'input'));
         add_settings_field('my_plek_page_id', 'ID der "My Plekvetica" Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'my_plek_page_id', 'type' => 'input'));
         
         add_settings_field('admin_email', 'Email vom Seiten Admin', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'admin_email', 'type' => 'input'));

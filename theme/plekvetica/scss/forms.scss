@@ -55,6 +55,29 @@ div.plek-review-search{
   }
  }
 
+ .event-default-container{
+  display: flex;
+  flex-direction: column;
+  margin-top: 1em;
+}
+
+.event-price-container{
+  justify-content: space-between;
+  flex-grow: 1;
+
+  div{
+    width: 100%;
+  }  
+}
+
+
+input[type=checkbox]{
+  margin: 1rem 0 0 0;
+  height: 1.5rem;
+  width: 1.5rem;
+  filter: hue-rotate(143deg);
+}
+
 .event-basic-container {
 
   .event-name-container{
@@ -285,8 +308,8 @@ div.plek-review-search{
   right: 0;
 
   .overlay_background{
-    background-color: rgba(255, 0, 0, 0.24);
-    z-index: 999;
+    background-color: rgba(24, 2, 2, 0.93);
+    z-index: 9999;
   }
 
   .overlay_content{
@@ -294,7 +317,7 @@ div.plek-review-search{
     margin: 10%;
     background-color: $color-gray;
     padding: 1em;
-    z-index: 9999;
+    z-index: 10000;
     position: absolute;
     left: 0;
     top: 0;

@@ -305,7 +305,7 @@ let plek_manage_event = {
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data.... ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
 
             }
         });

@@ -128,7 +128,7 @@ let plek_main = {
 
                 },
                 error: function error(data) {
-                    jQuery(current_item).text('Error loading data....');
+                    jQuery(current_item).text('Error loading data.');
                 }
             });
 
@@ -396,7 +396,7 @@ let plek_main = {
             },
             error: function error(data) {
                 plek_main.deactivate_loader_style(button);
-                jQuery(button).text('Error loading data....');
+                jQuery(button).text('Error loading data.');
             }
         });
     },
@@ -575,7 +575,7 @@ let plek_main = {
                 }
             },
             error: function error(data) {
-                //jQuery(current_item).text('Error loading data....');
+                //jQuery(current_item).text('Error loading data.');
             }
         });
     },

@@ -11,8 +11,8 @@ $event_url = $event_object->get_field_value('_EventURL');
 		<label for="event_poster"><?php echo __('Event Poster', 'pleklang'); ?></label>
 		<?php PlekTemplateHandler::load_template('image-upload-button', 'components', 'event_poster', $poster_url); ?>
 	</div>
-	<div class="event-fb-link-container">
-		<label for="event_fb_link"><?php echo __('Link to Facebook Event', 'pleklang'); ?></label>
+	<div class="event-fb-link-container event-default-container">
+		<label for="event_fb_link"><?php echo __('Link to Facebook event or organizers page', 'pleklang'); ?></label>
 		<input type="url" name="event_fb_link" id="event_fb_link" class="input" value="<?php echo $event_url; ?>" />
 	</div>
 </div>

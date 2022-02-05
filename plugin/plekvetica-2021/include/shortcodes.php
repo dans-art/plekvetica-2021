@@ -21,6 +21,7 @@ add_shortcode('plek_get_all_reviews', [$plek_event, 'plek_get_all_reviews_shortc
 add_shortcode('plek_get_all_raffle', [$plek_event, 'plek_get_all_raffle_shortcode']); 
 add_shortcode('plek_get_videos', [$plek_event, 'plek_get_videos_shortcode']); 
 add_shortcode('plek_event_form', [$plek_event, 'plek_event_form_shortcode']);
+add_shortcode('plek_event_review_form', [$plek_event, 'plek_event_review_form_shortcode']);
 
 //Bands
 add_shortcode('plek_band_page', [new PlekBandHandler, 'plek_band_page_shortcode']);

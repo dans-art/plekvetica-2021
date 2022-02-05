@@ -33,7 +33,7 @@ $currencies_options = $event_object->get_currencies(true, $event_currency);
 			</div>
 		</div>
 	</div>
-	<div class="event-price-link-container">
+	<div class="event-price-link-container event-default-container">
 		<label for="event_price_link"><?php echo __('Ticket Link', 'pleklang'); ?></label>
 		<input type="url" name="event_price_link" id="event_price_link" class="input" value="<?php echo $event_price_ticket_url; ?>" />
 	</div>

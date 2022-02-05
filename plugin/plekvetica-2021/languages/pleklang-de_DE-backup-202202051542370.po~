@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2022-02-05 15:42+0000\n"
+"PO-Revision-Date: 2022-02-05 15:35+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -608,7 +608,7 @@ msgstr "Event hervorheben"
 
 #: js/components/validator-handler.js:126
 msgid "Field cannot be empty"
-msgstr "Feld darf nicht leer sein"
+msgstr ""
 
 #: include/class/form-validator.php:422
 #, php-format
@@ -617,7 +617,7 @@ msgstr "Datei ist zu groß (max. %d MB)"
 
 #: js/plek-main-script.js:180
 msgid "File selected"
-msgstr "Datei gewählt"
+msgstr ""
 
 #: include/class/notification-handler.php:291
 #: template/components/review-search-bar.php:16
@@ -699,19 +699,19 @@ msgstr "Eingabe ist %d Zeichen zu kurz."
 
 #: js/components/validator-handler.js:128
 msgid "Input is not a Number"
-msgstr "Eingabe ist keine Nummer"
+msgstr ""
 
 #: js/components/validator-handler.js:127
 msgid "Input is not the correct type"
-msgstr "Eingabe ist von falschem Typ"
+msgstr ""
 
 #: js/components/validator-handler.js:129
 msgid "Input is to long"
-msgstr "Eingabe ist zu lang"
+msgstr ""
 
 #: js/components/validator-handler.js:130
 msgid "Input is to short"
-msgstr "Eingabe ist zu kurz"
+msgstr ""
 
 #: include/class/organizer-handler.php:128
 #, php-format
@@ -733,7 +733,7 @@ msgstr "Interviews"
 
 #: js/manage-event.js:282
 msgid "Invalid Response"
-msgstr "Ungültige Antwort"
+msgstr ""
 
 #: template/posts/author-single.php:23
 msgid "Involved since:"
@@ -741,7 +741,7 @@ msgstr "Dabei seit:"
 
 #: js/components/template-handler.js:67
 msgid "Items found:"
-msgstr "Einträge gefunden:"
+msgstr ""
 
 #: template/system/user-settings/user-settings-main.php:21
 msgid "Last Name"
@@ -785,7 +785,7 @@ msgstr "Weitere Reviews laden"
 
 #: js/manage-band.js:113
 msgid "Loading Video"
-msgstr "Lade Video"
+msgstr ""
 
 #: template/event/meta/venue.php:13
 msgid "Location"
@@ -834,7 +834,7 @@ msgstr "Mitglied ist bereits eingetragen"
 
 #: js/manage-event.js:421 js/manage-event.js:441
 msgid "Missing Event ID"
-msgstr "Event ID fehlt"
+msgstr ""
 
 #: template/system/userpage/team-page.php:42
 msgid "Missing Reviews"
@@ -968,7 +968,7 @@ msgstr "Keine hervorgehobenen Events gefunden"
 
 #: js/components/validator-handler.js:189
 msgid "No fields set"
-msgstr "Keine Felder definiert"
+msgstr ""
 
 #: include/class/search-handler.php:75
 msgid "No fotos found."
@@ -1047,7 +1047,7 @@ msgstr "Nur noch ein Schritt für dein Konto bei Plekvetica!"
 
 #: js/manage-event.js:282
 msgid "Oops, something went wrong.... sorry!"
-msgstr "Hoppala, irgendwas hat nicht geklappt. Sorry!"
+msgstr ""
 
 #: include/class/user-handler.php:18
 #: template/event/form/add-event-form-details.php:18
@@ -1122,7 +1122,7 @@ msgstr "Telefonnummer"
 
 #: js/components/context-menu.js:12 js/components/context-menu.js:29
 msgid "Photo rights - What are you allowed to do"
-msgstr "Fotorechte - Was du machen darfst"
+msgstr ""
 
 #: template/band/meta/photos.php:14
 msgid "Photos"
@@ -1130,7 +1130,7 @@ msgstr "Fotos"
 
 #: js/manage-event.js:369 js/manage-event.js:389
 msgid "Please select a country"
-msgstr "Bitte wähle ein Land"
+msgstr ""
 
 #: template/system/login/register-form.php:30
 #: template/system/user-settings/organizer-settings-form.php:16
@@ -1252,7 +1252,7 @@ msgstr "Eventdetails speichern"
 
 #: js/components/context-menu.js:33
 msgid "Save Photo"
-msgstr "Speichere Foto"
+msgstr ""
 
 #: template/system/user-settings/user-settings-main.php:49
 msgid "Save settings"
@@ -1260,7 +1260,7 @@ msgstr "Einstellungen speichern"
 
 #: js/manage-event.js:249
 msgid "Save..."
-msgstr "Speichern..."
+msgstr ""
 
 #: template/band/meta/details.php:49
 msgid "Score"
@@ -1310,11 +1310,11 @@ msgstr "Einstellungen gespeichert"
 
 #: js/components/context-menu.js:31
 msgid "Share Page"
-msgstr "Teile Seite"
+msgstr ""
 
 #: js/components/context-menu.js:32
 msgid "Share Photo"
-msgstr "Teile Foto"
+msgstr ""
 
 #: include/class/form-validator.php:475
 msgid "Short number"
@@ -1386,7 +1386,7 @@ msgstr "Der Akkreditierungsstatus von Event \"%s\" wurde geändert nach \"%s\""
 
 #: js/components/event-handler.js:77
 msgid "The Band has been added to the Database"
-msgstr "Die Band wurde zur Datenbank hinzugefügt"
+msgstr ""
 
 #: include/class/event-handler.php:1825
 #, php-format
@@ -1399,15 +1399,15 @@ msgstr ""
 
 #: js/components/event-handler.js:91
 msgid "The Organizer has been added to the Database"
-msgstr "Der Veranstalter wurde zur Datenbank hinzugefügt"
+msgstr ""
 
 #: js/components/validator-handler.js:131
 msgid "The provided value is not allowed, please change"
-msgstr "Der angegebene Wert ist nicht erlaubt, bitte ändern"
+msgstr ""
 
 #: js/components/event-handler.js:84
 msgid "The Venue has been added to the Database"
-msgstr "Der Ort wurde zur Datenbank hinzugefügt"
+msgstr ""
 
 #: template/system/userpage/band-page.php:25
 #: template/system/userpage/community-page.php:25
@@ -1498,7 +1498,7 @@ msgstr "Zu viele Bands gewählt! Bist du sicher, das du mehr als 5 Bands hast!?"
 
 #: js/components/event-handler.js:335
 msgid "To my Event"
-msgstr "Zu meinem Event"
+msgstr ""
 
 #: template/posts/author-post-items.php:18
 #, php-format

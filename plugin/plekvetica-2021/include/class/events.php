@@ -1045,8 +1045,8 @@ class PlekEvents extends PlekEventHandler
             }
         }
 
-        if (isset($_REQUEST['edit_event_id'])) {
-            $event->load_event(intval($_REQUEST['edit_event_id']));
+        if (isset($_REQUEST['edit'])) {
+            $event->load_event(intval($_REQUEST['edit']));
             return PlekTemplateHandler::load_template_to_var('edit-event-form', 'event/form', $event);
         }
 
@@ -1061,6 +1061,25 @@ class PlekEvents extends PlekEventHandler
         }
 
         return PlekTemplateHandler::load_template_to_var('add-event-form-basic', 'event/form', $event);
+    }
+
+    /**
+     * Shortcode for the edit review from.
+     *
+     * @return string The Form
+     */
+    public function plek_event_review_form_shortcode()
+    {
+        $event = new PlekEvents;
+        if (isset($_REQUEST['edit'])) {
+            $event->load_event(intval($_REQUEST['edit']));
+            return PlekTemplateHandler::load_template_to_var('edit-event-review-form', 'event/form', $event);
+        }else{
+            return __('No Event ID found','pleklang');
+        }
+        
+        $this->enqueue_event_form_scripts();
+        $this->enqueue_event_form_styles();
     }
 
     public function enqueue_event_form_styles()
