@@ -1211,4 +1211,25 @@ class PlekBandHandler
         //No matches found, add one
         return $this->get_unique_band_slug($name . '_1', $origin);;
     }
+
+    /**
+     * Updates the band_galleries acf
+     * Make sure to load the band before using this function!
+     *
+     * @param int $gallery_id
+     * @return bool|null True on success, false on error, null if nothing changed.
+     */
+    public function update_band_galleries($gallery_id){
+        global $plek_handler;
+
+        if(empty($this -> band)){
+            return false;
+        }
+        $existing = $this -> get_photos();
+        if(array_search($gallery_id, $existing)){
+            return null; //No need for update, if already exists.
+        }
+        $existing[] = $gallery_id;
+        return $plek_handler -> update_field('band_galleries', implode(',',$existing), 'term_'.$this->get_id());
+    }
 }

@@ -1070,16 +1070,18 @@ class PlekEvents extends PlekEventHandler
      */
     public function plek_event_review_form_shortcode()
     {
+        $this->enqueue_review_from_scripts();
+        $this->enqueue_event_form_scripts();
+        $this->enqueue_event_form_styles();
+
         $event = new PlekEvents;
         if (isset($_REQUEST['edit'])) {
             $event->load_event(intval($_REQUEST['edit']));
             return PlekTemplateHandler::load_template_to_var('edit-event-review-form', 'event/form', $event);
-        }else{
-            return __('No Event ID found','pleklang');
+        } else {
+            return __('No Event ID found', 'pleklang');
         }
-        
-        $this->enqueue_event_form_scripts();
-        $this->enqueue_event_form_styles();
+
     }
 
     public function enqueue_event_form_styles()
@@ -1120,6 +1122,24 @@ class PlekEvents extends PlekEventHandler
 
             wp_enqueue_script('plek-compare-algorithm', PLEK_PLUGIN_DIR_URL . "js/components/compare-algorithm{$min}.js", ['jquery', 'plek-language', 'manage-plek-events']);
             wp_set_script_translations('plek-compare-algorithm', 'pleklang', PLEK_PATH . "/languages");
+            wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler.js', ['jquery', 'plek-language'], $plek_handler->version);
+
+        });
+    }
+
+    /**
+     * Enqueues the event review form scripts
+     * @todo: Does not work. But why??
+     * @return void
+     */
+    public function enqueue_review_from_scripts()
+    {
+        add_action('wp_enqueue_scripts', function () {
+            global $plek_handler;
+            $plek_handler->enqueue_select2();
+
+            $min = ($plek_handler->is_dev_server()) ? '' : '.min';
+            wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler.js', ['jquery', 'plek-language'], $this->version);
         });
     }
 

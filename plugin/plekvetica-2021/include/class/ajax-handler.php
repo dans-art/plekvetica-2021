@@ -67,7 +67,7 @@ class PlekAjaxHandler
                 $plek_event = new PlekEvents;
                 $save_basic = $plek_event->save_event_basic();
                 $save_details = $plek_event->save_event_details();
-                if (is_int($save_basic) AND is_int($save_details)) {
+                if (is_int($save_basic) and is_int($save_details)) {
                     $this->set_success($save_basic); //The Event ID
                     $this->set_success(PlekUserHandler::get_user_id()); //User ID. 0 If not logged in
                     $this->set_success(get_permalink($save_basic)); //The Event URL
@@ -632,6 +632,88 @@ class PlekAjaxHandler
     public function plek_ajax_content_loader_nopriv_actions()
     {
         echo "no no priv actions";
+        die();
+    }
+
+    /**
+     * Ajax actions for gallery operations.
+     * Currently, this functions are only accessible for logged in users.
+     *
+     * @return string A JSON String
+     */
+    public function plek_ajax_gallery_actions()
+    {
+        global $plek_ajax_errors;
+        $do = $this->get_ajax_do();
+        switch ($do) {
+            case 'add_album':
+                $gallery_handler = new PlekGalleryHandler;
+                $event_handler = new PlekEvents;
+                $event_id = $this->get_ajax_data('event_id');
+                $band_id = $this->get_ajax_data('band_id');
+                $album_name = $event_handler->generate_album_title($event_id, $band_id);
+                $new_album = $gallery_handler->create_album($album_name);
+                if (is_int($new_album)) {
+                    //Add the album to the event gallery relationship
+                    if (!$event_handler->add_album_to_event($event_id, $new_album)) {
+                        $this->set_error(__('Failed to add the album to the event', 'pleklang'));
+                    }
+                    $this->set_success($new_album);
+                    $this->set_success($album_name);
+                } else {
+                    $this->set_error($new_album);
+                }
+                break;
+
+            case 'add_gallery':
+                $gallery_handler = new PlekGalleryHandler;
+                $event_handler = new PlekEvents;
+                $band_handler = new PlekBandHandler;
+
+                $event_id = $this->get_ajax_data('event_id');
+                $band_id = $this->get_ajax_data('band_id');
+                $album_id = $this->get_ajax_data('album_id');
+
+                $gallery_name = $event_handler->generate_gallery_title($event_id, $band_id);
+                $new_gallery = $gallery_handler->create_gallery($gallery_name);
+                $band_handler -> load_band_object_by_id($band_id);
+                if (is_int($new_gallery)) {
+                    //Add Gallery to album
+                    $add_to_album = $gallery_handler->add_gallery_to_album($album_id, array($new_gallery));
+                    if ($add_to_album !== true) {
+                        $this->set_error($add_to_album);
+                    }
+                    //Add the gallery to the event gallery relationship
+                    if (!$event_handler->add_band_gallery_to_event($event_id, $band_id, $new_gallery, $album_id)) {
+                        $this->set_error(__('Failed to add the gallery to the event', 'pleklang'));
+                    }
+                    //Add the gallery to the band
+                    if (!$band_handler->update_band_galleries($new_gallery)) {
+                        $this->set_error(__('Failed to add the gallery to the band', 'pleklang'));
+                    }
+                    $this->set_success($new_gallery);
+                    $this->set_success($gallery_name);
+                } else {
+                    $this->set_error($new_gallery);
+                }
+                break;
+
+            case 'add_image':
+                $gallery_handler = new PlekGalleryHandler;
+                $event_handler = new PlekEvents;
+
+                $image = $gallery_handler->upload_image();
+                if (is_int($image)) {
+                    $this->set_success($image);
+                } else {
+                    $this->set_error($image);
+                }
+                break;
+            default:
+                # code...
+                break;
+        }
+        echo $this->get_ajax_return();
         die();
     }
 

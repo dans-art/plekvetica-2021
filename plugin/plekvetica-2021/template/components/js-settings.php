@@ -64,3 +64,11 @@ $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings.
 		});
 	</script>
 <?php endif; ?>
+
+<?php if ($type === 'manage_event_review') : ?>
+	<script type="text/javascript" defer='defer'>
+		jQuery(document).ready(function() {
+			plek_gallery_handler.nonce = "<?php echo M_Security::create_nonce('nextgen_upload_image'); ?>";
+		});
+	</script>
+<?php endif; ?>

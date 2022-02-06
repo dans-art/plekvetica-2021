@@ -583,3 +583,18 @@ let plek_main = {
 }
 
 plek_main.construct();
+
+/**
+ * Some functions to make live easier
+ * 
+ */
+
+function empty(value){
+    if(typeof value === 'undefined'){
+        return true;
+    }
+    if(value.length === 0){
+        return true;
+    }
+    return false;
+}

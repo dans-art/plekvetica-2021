@@ -88,21 +88,21 @@ class PlekEventHandler
     public function is_multiday()
     {
         $start_day = $this->get_start_date('d');
-        $end_day = $this->get_start_date('d');
+        $end_day = $this->get_end_date('d');
+
         if ($start_day === $end_day) {
             return false;
         }
 
         $start_date = intval($this->get_start_date('', true));
         $end_date = intval($this->get_end_date('', true));
-
         if ($end_date === 0) {
             return false;
         }
         $calc = $end_date - $start_date;
         $sixteen = (16 * 60 * 60); //16 Hours
 
-        if ($sixteen > $calc) {
+        if ($calc > $sixteen) {
             return true;
         }
         return false;
@@ -154,7 +154,7 @@ class PlekEventHandler
      */
     public function has_photos()
     {
-        if (!empty($this->get_field_value('gallery_id'))) {
+        if (!empty($this->get_field_value('album_ids')) or !empty($this->get_field_value('gallery_id')) or !empty($this->get_field_value_decoded('band_gallery_relationship'))) {
             return true;
         }
         $content = $this->get_field_value('post_content');
@@ -633,10 +633,10 @@ class PlekEventHandler
         if ($cost === "0000") {
             return __('Free', 'pleklang');
         }
-        if($with_currency){
+        if ($with_currency) {
             $currency = (!empty($this->get_field_value('_EventCurrencySymbol'))) ? $this->get_field_value('_EventCurrencySymbol') : $this->default_event_currency;
             $currency = $this->format_currency_to_symbol($currency);
-        }else{
+        } else {
             $currency = "";
         }
         $cost_nr = preg_replace("/[^a-zA-Z0-9 -\.]/", "", $cost);
@@ -821,6 +821,19 @@ class PlekEventHandler
             return $this->event['meta'][$name][0]; //Returns only the first item
         }
         return null;
+    }
+
+    /**
+     * Get any field from a event and decodes it as json.
+     * Make sure that the field you like to get returns a valid json string
+     *
+     * @param string $name - Name of the field
+     * @return array The decoded values
+     */
+    public function get_field_value_decoded($name = 'post_title')
+    {
+        $value = $this->get_field_value($name);
+        return json_decode($value, true);
     }
 
     public function get_event_revisions()
@@ -1951,10 +1964,11 @@ class PlekEventHandler
      * Loads the Timetable for the current Event.
      * 
      *
-     * @param boolean $formated - If the timetalbe should be returned as an array or formated string
+     * @param boolean $formated - If the timetalbe should be returned as an array or formated string. 
+     * @param string $template - Template file to use
      * @return string|array The timetable
      */
-    public function get_timetable($formated = true)
+    public function get_timetable($formated = true, $template = '')
     {
         if (empty($this->event['timetable'])) {
             return null;
@@ -1982,7 +1996,10 @@ class PlekEventHandler
             if (!isset($formated[$day][$timestamp])) {
                 $formated[$day][$timestamp] = '';
             }
-            $formated[$day][$timestamp] .= "<div class='timetable_row'>
+
+            $formated[$day][$timestamp] .= (!empty($template)) ?
+                PlekTemplateHandler::load_template_to_var($template, '', $playtime, $band_origin_formated, $band_name, $band_id, $this)
+                : "<div class='timetable_row' data-band-id='{$band_id}'>
             <span class='playtime'>{$playtime}</span>
             <span class='band_origin'>{$band_origin_formated}</span>
             <span class='band_name'>{$band_name}</span>
@@ -2007,6 +2024,24 @@ class PlekEventHandler
     }
 
     /**
+     * Gets the playtime of a band for the current event
+     *
+     * @param int|string $band_id - The ID of the Band
+     * @param string $format - The Format of the playtime
+     * @return null|string The formated playtime on success, null if not found
+     */
+    public function get_band_playtime($band_id, $format = 'd. m - H:i')
+    {
+        if (empty($this->event['timetable'])) {
+            return null;
+        }
+        $timestamp = (!empty($this->event['timetable'][$band_id]['timestamp'])) ? $this->event['timetable'][$band_id]['timestamp'] : 0;
+        if ($timestamp === 0) {
+            return null;
+        }
+        return ($timestamp === 0) ? null : date($format, $timestamp);
+    }
+    /**
      * HOOK: This adds the timetable and order to the Band.
      *
      * @param array $item Band Item
@@ -2027,5 +2062,154 @@ class PlekEventHandler
             $item['band_sort'] = $sort;
         }
         return $item;
+    }
+
+    /**
+     * Gets the band gallery relationship array
+     *
+     * @return array album_id => array('band_id', 'gallery_id'), album_id => ....
+     */
+    public function get_event_gallery_array()
+    {
+        return $this->get_field_value_decoded('band_gallery_relationship');
+    }
+    /**
+     * Gets the event gallery id by band. If no band specified, a array with all the band gallery relationship will be returned.
+     *
+     * @param int|string $band_id
+     * @return int|array Gallery ID if band_id is defined and found in the event or the whole band_gallery_relationship field
+     */
+    public function get_event_gallery_id_by_band($band_id = null)
+    {
+        $albums = $this->get_field_value_decoded('band_gallery_relationship');
+        $band_id = intval($band_id);
+        if (empty($albums)) {
+            return (!empty($band_id)) ? '' : array();
+        }
+        foreach ($albums as $galleries) {
+            if (isset($galleries[$band_id])) {
+                return intval($galleries[$band_id]);
+            }
+        }
+        return $albums;
+    }
+
+    /**
+     * Gets the event album id by band. If no band specified, a array with all the band albums and gallery relationship will be returned.
+     *
+     * @param int|string $band_id
+     * @return int|array Album ID if band_id is defined and found in the event or the whole band_gallery_relationship field
+     */
+    public function get_event_album_id_by_band($band_id = null)
+    {
+        $albums = $this->get_field_value_decoded('band_gallery_relationship');
+        $band_id = intval($band_id);
+        if (empty($albums)) {
+            return (!empty($band_id)) ? '' : array();
+        }
+        foreach ($albums as $album_id => $galleries) {
+            if (isset($galleries[$band_id])) {
+                return intval($album_id);
+            }
+        }
+        return $albums;
+    }
+
+    /**
+     * Adds the gallery to the band_gallery_relationship event field
+     *
+     * @param int $event_id
+     * @param int $band_id
+     * @param int $gallery_id
+     * @param int $album_id
+     * @return bool|null True on success, false on error, null if no changes.
+     */
+    public function add_band_gallery_to_event($event_id, $band_id, $gallery_id, $album_id)
+    {
+        global $plek_handler;
+        $albums = $this->get_field_value_decoded('band_gallery_relationship');
+        if (isset($albums[$album_id])) {
+            $albums[$album_id][$band_id] = intval($gallery_id); //Add the Band & gallery to existing album
+        } else {
+            $albums[$album_id] = array($band_id => intval($gallery_id)); //Create a new album index
+        }
+        return $plek_handler->update_field('band_gallery_relationship', json_encode($albums), intval($event_id));
+    }
+
+    /**
+     * Adds the album id to a event.
+     * This function adds the album id to the band_gallery_relationship acf
+     *
+     * @param int $event_id
+     * @param int $album_id - The ID of the album
+     * @return bool|null True on success, false on error, null if no changes.
+     */
+    public function add_album_to_event($event_id, $album_id)
+    {
+        global $plek_handler;
+        $albums = $this->get_field_value_decoded('band_gallery_relationship');
+        //$album_ids = $this->get_field_value('album_ids');
+        //$album_ids = explode(',',$album_ids);
+
+        if (!isset($albums[$album_id])) {
+            $albums[$album_id] = array();
+        }
+        /*       if(!array_search($album_id, $album_ids)){
+            $album_ids[] = $album_id;
+        } */
+        return $plek_handler->update_field('band_gallery_relationship', json_encode($albums), intval($event_id));
+        //$update_album_id = $plek_handler->update_field('album_ids', implode(',', $album_ids), intval($event_id));
+    }
+
+    /**
+     * Creates the ngg Album title based on the playdate of the band and the event title 
+     * The Band_id is needed to determen the playdate
+     * playdate - Eventname
+     *
+     * @param int $event_id - The ID of the Event
+     * @param int $band_id - The ID of the Band
+     * @return string The Album Title
+     */
+    public function generate_album_title($event_id, $band_id)
+    {
+        if (empty($this->get_id()) or $this->get_id() !== strval($event_id)) {
+            //Load the event
+            $this->load_event($event_id);
+        }
+        //Default format
+        $date = $this->get_start_date('Y.m.d');
+        $name = $this->get_name();
+        if ($this->is_multiday()) {
+            //Check the day the band is playing, if multiday and timetable defined.
+            $playday = $this->get_band_playtime($band_id, 'Y.m.d');
+            $date = ($playday === null) ? $date : $playday;
+        }
+        return $date . ' - ' . $name;
+    }
+    /**
+     * Creates the ngg gallery title based on the playdate of the band,  the band name and the location
+     * The Band_id is needed to determen the playdate
+     *  Bandname @ Locationname - playdate
+     *
+     * @param int $event_id - The ID of the Event
+     * @param int $band_id - The ID of the Band
+     * @return string The Album Title
+     */
+    public function generate_gallery_title($event_id, $band_id)
+    {
+        if (empty($this->get_id()) or $this->get_id() !== strval($event_id)) {
+            //Load the event
+            $this->load_event($event_id);
+        }
+
+        $band_handler = new PlekBandHandler;
+        $band_handler->load_band_object_by_id($band_id);
+
+        $playday = $this->get_band_playtime($band_id, 'd.m.Y');
+        $date = ($playday === null) ? $this->get_start_date('d.m.Y') : $playday;
+
+        $venue = $this->get_venue_name();
+
+        return $band_handler->get_name() . ' @ ' . $venue . ' - ' . $date;
     }
 }

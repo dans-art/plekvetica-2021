@@ -1949,6 +1949,9 @@ input[type=checkbox] {
   margin-top: 0;
   margin: 0.3em 5%; }
 
+#event-review-images-upload-container {
+  display: none; }
+
 .plekvetica-add-event {
   /*Messages*/ }
   .plekvetica-add-event #plekAddEvent input {
