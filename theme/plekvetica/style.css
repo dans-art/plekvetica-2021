@@ -1949,8 +1949,49 @@ input[type=checkbox] {
   margin-top: 0;
   margin: 0.3em 5%; }
 
-#event-review-images-upload-container {
+#edit_event_review_form #event-review-images-upload-container {
   display: none; }
+#edit_event_review_form .review_band_images_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center; }
+#edit_event_review_form span.image_upload_add_btn.plek-button {
+  flex-basis: 2.5rem;
+  font-size: 1.5rem;
+  padding: 0; }
+#edit_event_review_form span.band_origin {
+  flex-basis: 2.5rem;
+  padding: 0 0.5rem; }
+#edit_event_review_form .image_upload_status {
+  flex-basis: 2rem;
+  text-align: center; }
+  #edit_event_review_form .image_upload_status::before {
+    font-family: "FontAwesome";
+    display: block;
+    width: 100%; }
+  #edit_event_review_form .image_upload_status.status-ok::before {
+    content: "\f00c";
+    color: #268c37;
+    background-color: white; }
+  #edit_event_review_form .image_upload_status.status-missing::before {
+    content: "\f0fe"; }
+  #edit_event_review_form .image_upload_status.status-uploading::before {
+    content: "\f102";
+    color: #6278d9;
+    background-color: white; }
+#edit_event_review_form span.band_name {
+  min-width: 55%; }
+#edit_event_review_form .sort-button.plek-button {
+  flex-basis: 2.5rem; }
+#edit_event_review_form span.playtime {
+  padding: 0 0.5rem; }
+#edit_event_review_form div#event-review-images-uploaded-container {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap; }
+  #edit_event_review_form div#event-review-images-uploaded-container .image_to_upload {
+    flex-basis: 20%; }
 
 .plekvetica-add-event {
   /*Messages*/ }

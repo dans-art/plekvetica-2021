@@ -27,6 +27,7 @@ if (empty($event_class->get_event())) {
 //s($album);
 //$album->sortorder = array("1648","1649");
 //s(C_Album_Mapper::get_instance()->save($album));
+
 //s(C_NextGen_Serializable::serialize(array("1649","1648","1647","1"))); //-> sortorder in ngg_albums
 
 //create album - working

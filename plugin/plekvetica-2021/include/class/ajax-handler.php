@@ -675,7 +675,9 @@ class PlekAjaxHandler
                 $album_id = $this->get_ajax_data('album_id');
 
                 $gallery_name = $event_handler->generate_gallery_title($event_id, $band_id);
-                $new_gallery = $gallery_handler->create_gallery($gallery_name);
+                $gallery_description = $event_handler->generate_gallery_description($event_id, $band_id);
+                
+                $new_gallery = $gallery_handler->create_gallery($gallery_name, $gallery_description);
                 $band_handler -> load_band_object_by_id($band_id);
                 if (is_int($new_gallery)) {
                     //Add Gallery to album

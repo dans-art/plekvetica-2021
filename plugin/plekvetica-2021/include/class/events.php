@@ -1140,6 +1140,7 @@ class PlekEvents extends PlekEventHandler
 
             $min = ($plek_handler->is_dev_server()) ? '' : '.min';
             wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler.js', ['jquery', 'plek-language'], $this->version);
+            wp_enqueue_script('plek-jquery-ui', "https://code.jquery.com/ui/1.13.0/jquery-ui.js", ['jquery']);
         });
     }
 

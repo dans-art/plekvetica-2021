@@ -68,8 +68,8 @@ var plekerror = {
      * @param {string} title The title of the message. This will only be shown, if not field is present with the given id
      */
     display_error(field, message, title = '') {
-        console.log(field);
-        console.log(message);
+        console.log('Error in Field: ' + field);
+        console.log('Message: ' + message);
         
         if (jQuery('#' + field).length > 0) {
             //Error is field error

@@ -14,18 +14,18 @@ $band_gallery = $event_object->get_event_gallery_id_by_band($band_id);
 $album_id = $event_object->get_event_album_id_by_band($band_id);
 $image_count = 0;
 
-s($band_gallery);
-s($album_id);
 if (is_int($band_gallery)) {
     $image_count = $gallery_handler->get_gallery_images_count($band_gallery);
 }
 ?>
 
 <div class='review_band_images_container'>
-    <span class='image_upload_add_btn plek-button' data-band_id='<?php echo $band_id; ?>' data-gallery_id='<?php echo $band_gallery; ?>' data-album_id='<?php echo $album_id; ?>'><i class="far fa-plus-square"></i></span>
-    <span class='image_upload_status status-<?php echo (!empty($band_gallery)) ? 'ok' : 'missing'; ?>'></span>
+    <span class='image_upload_add_btn plek-button' data-band_id='<?php echo $band_id; ?>' data-gallery_id='<?php echo $band_gallery; ?>' data-album_id='<?php echo $album_id; ?>'>
+        <span class='image_upload_status status-<?php echo (!empty($band_gallery) AND !empty($image_count)) ? 'ok' : 'missing'; ?>'></span>
+    </span>
     <span class='playtime'><?php echo $playtime; ?></span>
     <span class='band_origin'><?php echo $band_origin_formated; ?></span>
     <span class='band_name'><?php echo $band_name; ?></span>
     <span class='image_count'><?php echo __('Images:', 'pleklang'); ?> <?php echo $image_count; ?></span>
+    <div class='sort-button plek-button'><i class="fas fa-arrows-alt-v"></i></div>
 </div>

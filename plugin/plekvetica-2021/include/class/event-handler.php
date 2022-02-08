@@ -2075,44 +2075,46 @@ class PlekEventHandler
     }
     /**
      * Gets the event gallery id by band. If no band specified, a array with all the band gallery relationship will be returned.
+     * If Band set, but no entry found, it will return null
      *
      * @param int|string $band_id
-     * @return int|array Gallery ID if band_id is defined and found in the event or the whole band_gallery_relationship field
+     * @return int|array|null Gallery ID if band_id is defined and found in the event or the whole band_gallery_relationship field
      */
     public function get_event_gallery_id_by_band($band_id = null)
     {
         $albums = $this->get_field_value_decoded('band_gallery_relationship');
         $band_id = intval($band_id);
         if (empty($albums)) {
-            return (!empty($band_id)) ? '' : array();
+            return (!empty($band_id)) ? null : array();
         }
         foreach ($albums as $galleries) {
             if (isset($galleries[$band_id])) {
                 return intval($galleries[$band_id]);
             }
         }
-        return $albums;
+        return null;
     }
 
     /**
      * Gets the event album id by band. If no band specified, a array with all the band albums and gallery relationship will be returned.
-     *
+     * If Band set, but no entry found, it will return null
+     * 
      * @param int|string $band_id
-     * @return int|array Album ID if band_id is defined and found in the event or the whole band_gallery_relationship field
+     * @return int|array|null Album ID if band_id is defined and found in the event or the whole band_gallery_relationship field
      */
     public function get_event_album_id_by_band($band_id = null)
     {
         $albums = $this->get_field_value_decoded('band_gallery_relationship');
         $band_id = intval($band_id);
         if (empty($albums)) {
-            return (!empty($band_id)) ? '' : array();
+            return (!empty($band_id)) ? null : array();
         }
         foreach ($albums as $album_id => $galleries) {
             if (isset($galleries[$band_id])) {
                 return intval($album_id);
             }
         }
-        return $albums;
+        return null;
     }
 
     /**
@@ -2168,7 +2170,7 @@ class PlekEventHandler
      *
      * @param int $event_id - The ID of the Event
      * @param int $band_id - The ID of the Band
-     * @return string The Album Title
+     * @return string The album title
      */
     public function generate_album_title($event_id, $band_id)
     {
@@ -2193,7 +2195,7 @@ class PlekEventHandler
      *
      * @param int $event_id - The ID of the Event
      * @param int $band_id - The ID of the Band
-     * @return string The Album Title
+     * @return string The gallery title
      */
     public function generate_gallery_title($event_id, $band_id)
     {
@@ -2211,5 +2213,28 @@ class PlekEventHandler
         $venue = $this->get_venue_name();
 
         return $band_handler->get_name() . ' @ ' . $venue . ' - ' . $date;
+    }
+
+    /**
+     * Generates a description for the event gallery.
+     *
+     * @param int $event_id - The ID of the Event
+     * @param int $band_id - The ID of the Band
+     * @return string The gallery description
+     */
+    public function generate_gallery_description($event_id, $band_id)
+    {
+        if (empty($this->get_id()) or $this->get_id() !== strval($event_id)) {
+            //Load the event
+            $this->load_event($event_id);
+        }
+
+        $band_handler = new PlekBandHandler;
+        $band_handler->load_band_object_by_id($band_id);
+
+        $venue = $this->get_venue_name();
+        $band = $band_handler->get_name();
+        $veneu = '';
+        return sprintf(__('The Photos of %s at %s by Plekvetica','pleklang'), $band, $venue);
     }
 }

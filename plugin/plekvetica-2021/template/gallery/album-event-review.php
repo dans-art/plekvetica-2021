@@ -1,7 +1,10 @@
 <?php
 extract(get_defined_vars());
-$album_id = $template_args[0];
+$album_id = isset($template_args[0]) ? intval($template_args[0]) : 0;
 
+if($album_id === 0){
+    return;
+}
 $gallery_class = new PlekGalleryHandler;
 
 ?>

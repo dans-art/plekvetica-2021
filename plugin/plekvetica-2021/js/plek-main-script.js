@@ -11,17 +11,17 @@ let plek_main = {
         });
     },
 
-    config_topbar(){
+    config_topbar() {
         topbar.config({
-            autoRun      : true,
-            barThickness : 3,
-            barColors    : {
-                '0'      : '#8C262E',
-                '1.0'    : '#8C262E'
+            autoRun: true,
+            barThickness: 3,
+            barColors: {
+                '0': '#8C262E',
+                '1.0': '#8C262E'
             },
-            shadowBlur   : 10,
-            shadowColor  : 'rgba(0,   0,   0,   .6)'
-          })
+            shadowBlur: 10,
+            shadowColor: 'rgba(0,   0,   0,   .6)'
+        })
     },
 
     activate_button_loader(element, text) {
@@ -51,7 +51,7 @@ let plek_main = {
 
     activate_loader_style(element) {
         jQuery(element).addClass('loader');
-        if(jQuery(element).is("input")){
+        if (jQuery(element).is("input")) {
             //Loader does not work on input fields. Add loader after button
             let btn_id = jQuery(element).attr('id');
             jQuery(element).after(`<div id='input_loader_${btn_id}' class='input_loader'></div>`);
@@ -60,10 +60,10 @@ let plek_main = {
 
     deactivate_loader_style(element) {
         jQuery(element).removeClass('loader');
-        if(jQuery(element).is("input")){
+        if (jQuery(element).is("input")) {
             //Loader does not work on input fields. Add loader after button
             let btn_id = jQuery(element).attr('id');
-            jQuery('#input_loader_'+btn_id).remove();
+            jQuery('#input_loader_' + btn_id).remove();
 
         }
     },
@@ -187,12 +187,40 @@ let plek_main = {
                 //Display the Image on screen
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    jQuery('#'+id+'-image img').attr('src', e.target.result);
+                    jQuery('#' + id + '-image img').attr('src', e.target.result);
                 }
                 reader.readAsDataURL(upload);
             }
             jQuery(item).next(".plek-button").text(text); //Change the Button Text
         }
+    },
+
+    /**
+ * Loads the Preview Image to a dom element
+ * @param {dom} dom_element - The dom element to add the image to.
+ * @param {object} file_upload - The uploaded file 
+ * @returns 
+ */
+    get_preview_image(dom_element, file_upload) {
+        if (typeof file_upload === "object") {
+            //File has been uploaded
+            if (file_upload.type.search("image/") === 0) {
+                //File is type image
+                //Display the Image on screen
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    if (jQuery(dom_element).nodeName !== "IMG") {
+                        jQuery(dom_element).find('img').attr('src', e.target.result);
+                    } else {
+                        jQuery(dom_element).attr('src', e.target.result);
+                    }
+                }
+                reader.readAsDataURL(file_upload);
+                return true;
+            }
+        }
+        return false;
+
     },
 
     /**
@@ -262,10 +290,19 @@ let plek_main = {
 
     },
 
+    /**
+     * Checks if a ajax response has errors.
+     * 
+     * @param {object|string} data - The data from the plekvetica ajax request.
+     * @returns bool|null true if errors exists, false if no errors, null if data is empty
+     */
     response_has_errors(data) {
         try {
+            if (empty(data)) {
+                return null;
+            }
             var encoded_data = data;
-            if (typeof data != 'object') {
+            if (typeof data !== 'object') {
                 encoded_data = JSON.parse(data);
             }
             if (encoded_data.error.length === 0) {
@@ -274,7 +311,7 @@ let plek_main = {
             return true;
         } catch (e) {
             console.log(e);
-            return false;
+            return true;
         }
     },
 
@@ -310,9 +347,9 @@ let plek_main = {
                 }
                 if (typeof value == "string") {
                     //Error not assigned to field
-                    if(display_unassigned_as_toastr){
-                        plekerror.display_error(false, value, __('Error','pleklang'));
-                    }else{
+                    if (display_unassigned_as_toastr) {
+                        plekerror.display_error(false, value, __('Error', 'pleklang'));
+                    } else {
                         //Attach after form end
                         jQuery(form).after(plek_main.format_error_message(value));
                     }
@@ -478,7 +515,7 @@ let plek_main = {
      */
     url_replace_param(param, value, update_url = true) {
         let query = window.location.search;
-        if(query.indexOf(param+'='+value) > 0){
+        if (query.indexOf(param + '=' + value) > 0) {
             //This parameter is already set with the same value.
             return window.location.origin + window.location.pathname + query;
         }
@@ -490,7 +527,7 @@ let plek_main = {
             new_query = query + separator + param + "=" + value;
         }
         let new_url = window.location.origin + window.location.pathname + new_query;
-        if(update_url){
+        if (update_url) {
             this.update_browser_url(new_url, document.title);
         }
         return new_url;
@@ -503,7 +540,7 @@ let plek_main = {
      * @param {string} title The Title of the document
      * @returns 
      */
-    update_browser_url(url, title){
+    update_browser_url(url, title) {
         //Change the URL
         window.history.pushState({}, title, url);
         //Update the title
@@ -589,11 +626,11 @@ plek_main.construct();
  * 
  */
 
-function empty(value){
-    if(typeof value === 'undefined'){
+function empty(value) {
+    if (typeof value === 'undefined') {
         return true;
     }
-    if(value.length === 0){
+    if (value.length === 0) {
         return true;
     }
     return false;

@@ -223,14 +223,15 @@ class PlekGalleryHandler
      * @param string $album_name - The Name of the new Album
      * @return string|int String on with Error message on error, true on success
      */
-    public function create_gallery($gallery_name = null)
+    public function create_gallery($gallery_name = null, $description = '')
     {
         global $nggdb;
         if (empty($gallery_name)) {
             return __('No Gallery name provided', 'pleklang');
         }
         $path = '/wp-content/gallery/' . date('Y') . '/' . sanitize_title($gallery_name) . '/';
-        $new_gallery = $nggdb->add_gallery($gallery_name, $path);
+        $author = get_current_user_id();
+        $new_gallery = $nggdb->add_gallery($gallery_name, $path, $description, 0, 0, $author);
 
         if (is_int($new_gallery)) {
             return $new_gallery;

@@ -588,7 +588,79 @@ input[type=checkbox]{
 }
 
 //Review Event form
-#event-review-images-upload-container{
-  display: none;
+#edit_event_review_form{
+  
+  #event-review-images-upload-container{
+    display: none;
+  }
+  
+  .review_band_images_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  span.image_upload_add_btn.plek-button {
+    flex-basis: 2.5rem;
+    font-size: 1.5rem;
+    padding: 0;
+  }
+
+  span.band_origin{
+    flex-basis: 2.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .image_upload_status{
+    flex-basis: 2rem;
+    text-align: center;
+
+    &::before{
+      font-family: "FontAwesome";
+      display: block;
+      width: 100%;
+    }
+
+    &.status-ok::before{
+      content: "\f00c"; //Check
+      color: $color-green;
+      background-color: $text-color;
+    }
+    
+    &.status-missing::before{
+      content: "\f0fe"; //plus-square
+    }
+    
+    &.status-uploading::before{
+      content: "\f102"; //Double arrow up
+      color: $color-blue;
+      background-color: $text-color;
+    }
+  }
+  
+  span.band_name {
+    min-width: 55%;
+  }
+
+  .sort-button.plek-button {
+    flex-basis: 2.5rem;
+  }
+
+  span.playtime {
+    padding: 0 0.5rem;
 }
+
+  div#event-review-images-uploaded-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .image_to_upload{
+      flex-basis: 20%;
+    }
+  }
+
+}
+
 

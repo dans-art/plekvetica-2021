@@ -229,7 +229,7 @@ class PlekBandHandler
      */
     public function get_photos()
     {
-        return (isset($this->band['band_galleries'])) ? explode(',', $this->band['band_galleries']) : '';
+        return (isset($this->band['band_galleries'])) ? explode(',', $this->band['band_galleries']) : array();
     }
 
     /**
