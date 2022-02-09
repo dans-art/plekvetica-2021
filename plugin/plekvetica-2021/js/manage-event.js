@@ -176,6 +176,12 @@ let plek_manage_event = {
             window.plekevent.save_event_login(type);
         });
 
+        jQuery("#plek-submit-event-edit-review").on('click', (event) => {
+            event.preventDefault();
+            jQuery(this).prop("disabled", true);
+            plekevent.save_review(); 
+        });
+
         /** Display and position the Output container */
         jQuery('.plek-search-input').focus(function (element) {
             plektemplate.hide_overlay();

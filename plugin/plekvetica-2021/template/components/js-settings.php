@@ -6,9 +6,15 @@
  */
 extract(get_defined_vars());
 $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings. Not used now, but maybe later...
-
 ?>
 <?php if ($type === 'manage_event_buttons') : ?>
+	<script type="text/javascript" defer='defer'>
+		/*jQuery(document).ready(function() {
+		});*/
+	</script>
+<?php endif; ?>
+
+<?php if ($type === 'manage_event_functions') : ?>
 	<script type="text/javascript" defer='defer'>
 		var bandPreloadedData = null;
 		var venuePreloadedData = null;
@@ -69,6 +75,7 @@ $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings.
 	<script type="text/javascript" defer='defer'>
 		jQuery(document).ready(function() {
 			plek_gallery_handler.nonce = "<?php echo M_Security::create_nonce('nextgen_upload_image'); ?>";
+			plek_manage_event.add_event_listeners();
 		});
 	</script>
 <?php endif; ?>

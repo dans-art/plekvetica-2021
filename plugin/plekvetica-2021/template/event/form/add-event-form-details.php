@@ -33,6 +33,6 @@ $event_class->load_event($event_id);
 </div>
 
 <?php PlekTemplateHandler::load_template('overlay', 'components','add-new-organizer', PlekTemplateHandler::load_template_to_var('organizer-form','event/organizer', null, 'add')); ?>
-<?php PlekTemplateHandler::load_template('js-settings', 'components','manage_event_buttons'); ?>
+<?php PlekTemplateHandler::load_template('js-settings', 'components','manage_event_functions'); ?>
 <?php PlekTemplateHandler::load_template('js-settings', 'components','add_event_details'); ?>
 

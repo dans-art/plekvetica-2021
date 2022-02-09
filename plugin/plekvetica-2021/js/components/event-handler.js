@@ -164,7 +164,7 @@ var plekevent = {
                 let ts = jQuery(e).data('timestamp');
                 if (ts > vob_timestamp) {
                     //Item found thats bigger, add before
-                    console.log("insert: "+item_for+' on index'+i);
+                    console.log("insert: " + item_for + ' on index' + i);
                     jQuery(data_to_insert).insertBefore(e);
                     return false; //break the loop
                 }
@@ -229,18 +229,18 @@ var plekevent = {
             }];
         }
         let last_item = jQuery('.band-time-input').last().val();
-        
+
         //Restart the flatpickr for the time inputs
         flatpickr("#event-band-selection .band-time-input", plek_manage_event.flatpickr_band_options); //Load the Flatpickr
-        
-        if( last_item === '0'){
+
+        if (last_item === '0') {
             return; //End the function, if the last added item has no time set.
         }
-        
+
         //Add the time to the label if set in the input
-        jQuery('.band-time-input').each(function(index, item){
+        jQuery('.band-time-input').each(function (index, item) {
             let val = jQuery(item).val();
-            if(!val.length !== 0 && val !== '0'){
+            if (!val.length !== 0 && val !== '0') {
                 jQuery(item).parent().find('.time-label').text(val);
             }
 
@@ -410,6 +410,46 @@ var plekevent = {
 
     },
 
+    save_review(){
+        let datab = plekevent.prepare_data('save_event_review','edit_event_review_form');
+        let form = 'edit_event_review_form';
+        //No Validator needed, skip
+
+        let button = jQuery('#edit_event_review_form .plek-main-submit-button');
+        let orig_btn_text = button.val();
+        plek_main.activate_loader_style(button);
+
+        //Validation was ok, send it to the server
+        jQuery.ajax({
+            url: window.ajaxurl,
+            data: datab,
+            type: 'POST',
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function success(data) {
+                let text = plek_main.get_text_from_ajax_request(data, true);
+                let errors = plek_main.show_field_errors(data, form);
+                if (errors === true) {
+                    console.log("Contains Errors");
+                    text = "Das Formular enthält Fehler, bitte korrigieren";
+                    plek_main.deactivate_button_loader(button, orig_btn_text);
+                    jQuery(button).prop("disabled", false); //Enable the button again.
+                } else {
+                    let message = plek_main.get_first_success_from_ajax_request(data);
+                    plekerror.display_info(message, __('Review status', 'pleklang'));
+                    plek_main.deactivate_button_loader(button, orig_btn_text);
+                    jQuery(button).prop("disabled", false); //Enable the button again.
+                    return;
+                }
+            },
+            error: function error(data) {
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+
+            }
+        });
+    },
+
     /**
      * Prepares the Form Data and Validator.
      * This functions adds the required fields to the validator for checking the values and adds the form data elements.
@@ -477,11 +517,18 @@ var plekevent = {
             let is_guest = (selected_btn === 'add_as_guest' ? true : false);
             datab.append('is_guest', is_guest);
         }
-        if(type === 'save_edit_event'){
+        if (type === 'save_edit_event') {
             datab.append('event_ticket_raffle', this.get_field_value('event_ticket_raffle'));
             datab.append('event_status', this.get_field_value('event_status'));
             datab.append('event_featured', this.get_field_value('event_featured'));
             datab.append('event_promote', this.get_field_value('event_promote'));
+        }
+
+        if (type === 'save_event_review') {
+            datab.append('event_text_lead', this.get_field_value('event_text_lead'));
+            datab.append('review_old_album_id', this.get_field_value('review_old_album_id'));
+            datab.append('event_description', this.get_field_value('event_description'));
+            datab.append('event_gallery_sortorder', plek_gallery_handler.get_band_gallery_sortorder());
         }
 
         console.log("Added Validator fields for: " + type);
@@ -592,7 +639,7 @@ var plekevent = {
                 if (jQuery("#" + name + ":checked").length > 0) {
                     return jQuery('#' + name).val();
                 } else {
-                    return "";
+                    return jQuery('#'+name).val();
                 }
                 break;
 
