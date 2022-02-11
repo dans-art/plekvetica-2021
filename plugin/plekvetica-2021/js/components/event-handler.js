@@ -437,7 +437,7 @@ var plekevent = {
                     jQuery(button).prop("disabled", false); //Enable the button again.
                 } else {
                     let message = plek_main.get_first_success_from_ajax_request(data);
-                    plekerror.display_info(message, __('Review status', 'pleklang'));
+                    plekerror.display_info(__('Review status', 'pleklang'), message);
                     plek_main.deactivate_button_loader(button, orig_btn_text);
                     jQuery(button).prop("disabled", false); //Enable the button again.
                     return;
@@ -525,10 +525,14 @@ var plekevent = {
         }
 
         if (type === 'save_event_review') {
+            datab.append('event_id', this.get_field_value('event_id'));
             datab.append('event_text_lead', this.get_field_value('event_text_lead'));
-            datab.append('review_old_album_id', this.get_field_value('review_old_album_id'));
-            datab.append('event_description', this.get_field_value('event_description'));
-            datab.append('event_gallery_sortorder', plek_gallery_handler.get_band_gallery_sortorder());
+            if(!empty(this.get_field_value('review_old_album_id'))){
+                datab.append('event_review_old_album_id', this.get_field_value('review_old_album_id'));
+            }
+            datab.append('event_text_review', this.get_field_value('event_text_review'));
+            datab.append('event_gallery_sortorder', JSON.stringify(plek_gallery_handler.get_band_gallery_sortorder()));
+            datab.append('hp-password', this.get_field_value('hp-password'));
         }
 
         console.log("Added Validator fields for: " + type);

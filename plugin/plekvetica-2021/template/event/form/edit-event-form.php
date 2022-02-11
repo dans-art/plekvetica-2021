@@ -54,6 +54,7 @@ if (empty($event_class->get_event())) {
 	<input type="text" name="hp-password" id="hp-password" style="display: none;" tabindex="-1" autocomplete="false" />
 
 	<div class="submit-event-edit-from">
+		<?php PlekTemplateHandler::load_template('button', 'components', get_permalink($event_class->get_id()), __('Back to the Event', 'pleklang'), '_self', 'back_to_event_btn'); ?>
 		<input type="submit" name="plek-submit" id="plek-submit-event-edit" class='plek-button plek-main-submit-button' data-type="save_edit_event" value="<?php echo __('Save event', 'pleklang'); ?>">
 	</div>
 </form>

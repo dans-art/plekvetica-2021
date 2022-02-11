@@ -621,12 +621,6 @@ input[type=checkbox]{
       display: block;
       width: 100%;
     }
-
-    &.status-ok::before{
-      content: "\f00c"; //Check
-      color: $color-green;
-      background-color: $text-color;
-    }
     
     &.status-missing::before{
       content: "\f0fe"; //plus-square
@@ -637,6 +631,13 @@ input[type=checkbox]{
       color: $color-blue;
       background-color: $text-color;
     }
+
+    &.status-ok::before{
+      content: "\f00c"; //Check
+      color: $color-green;
+      background-color: $text-color;
+    }
+
   }
   
   span.band_name {
@@ -651,7 +652,7 @@ input[type=checkbox]{
     padding: 0 0.5rem;
 }
 
-  div#event-review-images-uploaded-container {
+  div#images-uploaded-container {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
@@ -661,6 +662,55 @@ input[type=checkbox]{
     }
   }
 
+  
+}
+
+//Submit button container for edit and review from.
+.submit-event-edit-review-from,
+.submit-event-edit-from{
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+
+  #back_to_event_btn{
+    background-color: $color-gray;
+    flex-basis: 1;
+  }
+
+  input{
+    flex-basis: 1;
+  }
+
+}
+
+//The File upload button
+#event-review-images-upload-container {
+
+  position: relative;
+
+  input[type=file]{
+    width: 100%;
+    min-height: 3rem;
+    position: absolute;
+    top: 0;
+    height: 10rem;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .upload-box{
+    width: 100%;
+    background-color: $text-color;
+    color: $color-gray;
+    text-align: center;
+    padding: 2rem;
+    height: 10rem;
+
+    .icon{
+        font-size: 3rem;
+    }
+  }
+  
 }
 
 

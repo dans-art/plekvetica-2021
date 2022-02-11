@@ -36,8 +36,8 @@ $album->name = 'New Testalbum - '.date('H:m:s');
 s(C_Album_Mapper::get_instance()->save($album));
  */
 //s(json_encode(array(123 => array(258 => 1648))));
-global $nggdb;
-
+global $nggdb, $wpdb;
+s($wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->nggalbum WHERE name = %s", '2019.11.29 - Macbeth Joker Fest') ));
 ?>
 <form name="edit_event_review_form" id="edit_event_review_form" action="" method="post">
 
@@ -57,11 +57,10 @@ global $nggdb;
 	<input type="text" name="hp-password" id="hp-password" style="display: none;" tabindex="-1" autocomplete="false" />
 
 	<div class="submit-event-edit-review-from">
+		<?php PlekTemplateHandler::load_template('button', 'components', get_permalink( $event_class->get_id()), __('Back to the Event','pleklang'), '_self', 'back_to_event_btn'); ?>
 		<input type="submit" name="plek-submit" id="plek-submit-event-edit-review" class='plek-button plek-main-submit-button' data-type="save_edit_event_review" value="<?php echo __('Save event review', 'pleklang'); ?>">
 	</div>
 </form>
 
 <?php PlekTemplateHandler::load_template('js-settings', 'components', 'manage_event_review'); ?>
-<?php 
-s($event_class);
- ?>
+<?php  ?>

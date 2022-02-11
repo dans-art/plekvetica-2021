@@ -268,8 +268,23 @@ class PlekEventHandler
         return $postponed_obj;
     }
 
+    /**
+     * Loads the event albums of the current event
+     * Since 1.2 this function can return a single int or a array with album ids.
+     *
+     * @return int|array The album Ids
+     */
     public function get_event_album()
     {
+        $band_gallery_relationship = $this->get_field_value_decoded('band_gallery_relationship');
+        if(!empty($band_gallery_relationship)){
+            $albums = array();
+            foreach($band_gallery_relationship as $album_id => $galleries){
+                $albums[] = $album_id;
+            }
+            return $albums;
+        }
+        //Support for the old album_id
         $album_id = $this->get_field_value('gallery_id');
         if (empty($album_id)) {
             return __('No photos found for this event.', 'pleklang');
@@ -1420,7 +1435,7 @@ class PlekEventHandler
     /**
      * Saves the details of the event
      * 
-     * @return mixed Event ID on sucess, error message on error.
+     * @return mixed Event ID on success, error message on error.
      */
     public function save_event_details()
     {
@@ -1448,6 +1463,76 @@ class PlekEventHandler
             return sprintf(__('Failed to save meta data for: %s', 'pleklang'), $errors);
         }
 
+        return $event_id;
+    }
+
+    /**
+     * Saves the event review.
+     *
+     * @return mixed Event ID on success, error message on error.
+     */
+    public function save_event_review()
+    {
+        global $plek_ajax_handler,
+            $plek_handler;
+
+        $validator = $this->validate_event_review();
+        if ($validator->all_fields_are_valid(null, true) !== true) {
+            return $validator->get_errors();
+        }
+        $event_id = intval($plek_ajax_handler->get_ajax_data('event_id'));
+
+        //Update the Event description
+
+        $acf = array();
+        $failed = array();
+
+        $acf['text_review'] = $this->get_event_form_value('event_text_review');
+        $acf['text_lead'] =  $this->get_event_form_value('event_text_lead');
+        $acf['album_ids'] =  $this->get_event_form_value('event_review_old_album_id');
+        $acf['is_review'] =  true;
+
+        $sortorder =  $plek_ajax_handler->get_ajax_data_as_array('event_gallery_sortorder');
+        if (!empty($sortorder) and empty($acf['album_ids'])) {
+            foreach ($sortorder as $album_id => $gallery_id_array) {
+                $album_mapper = C_Album_Mapper::get_instance();
+                $album = $album_mapper->find($album_id);
+                if ($album) {
+                    $album->sortorder = $gallery_id_array;
+                    if (!C_Album_Mapper::get_instance()->save($album)) {
+                        $failed[] = 'event_gallery_sortorder (Could not save the galleries)';
+                    }
+                } else {
+                    $failed[] = 'event_gallery_sortorder (No Album found)';
+                }
+            }
+        }
+
+
+        //Check if the Event is already a review. If not, send a Info to the admin
+        //This will only fire if the Event gets flaged as review for the first time.
+        $old_event_review_status = get_field('is_review', $event_id);
+        if (!$old_event_review_status) {
+            $notify = new PlekNotificationHandler;
+            $notify->push_to_admin(
+                __('New Review published', 'pleklang'),
+                sprintf(__('A new Review of the Event "%s" got published.', 'pleklang'), get_the_title($event_id)),
+                get_permalink($event_id)
+            );
+        }
+
+        //Save all the ACF Values
+        foreach ($acf as $afc_name => $value) {
+            if ($plek_handler->update_field($afc_name, $value, $event_id) === false) {
+                $failed[] = $afc_name;
+            }
+        }
+
+
+
+        if (!empty($failed)) {
+            return __('Failed to update the review field(s): ', 'pleklang') . implode(', ', $failed);
+        }
         return $event_id;
     }
 
@@ -1636,6 +1721,35 @@ class PlekEventHandler
             $validator->set_type('event_promote', 'bool');
             $validator->set_type('event_ticket_raffle', 'url');
         }
+
+        return $validator;
+    }
+
+    /**
+     * Validates the Review Event form.
+     * Checks the fields: event_id, event_text_lead, text_review, review_old_album_id, event_gallery_sortorder, hp-password (honeypot)
+     *
+     * @return object PlekFormValidator object
+     */
+    public function validate_event_review()
+    {
+
+        $validator = new PlekFormValidator;
+
+        $validator->set_ignore('type');
+
+        $validator->set_type('event_text_lead', 'textlong');
+        $validator->set_required('event_text_lead');
+        $validator->set_type('text_review', 'textlong');
+
+        //Gallery
+        $validator->set_type('review_old_album_id', 'int');
+        $validator->set_type('event_gallery_sortorder', 'default');
+
+        $validator->set_type('event_id', 'int');
+        $validator->set_required('event_id');
+        $validator->set_type('hp-password', 'honeypot');
+
 
         return $validator;
     }
@@ -2235,6 +2349,6 @@ class PlekEventHandler
         $venue = $this->get_venue_name();
         $band = $band_handler->get_name();
         $veneu = '';
-        return sprintf(__('The Photos of %s at %s by Plekvetica','pleklang'), $band, $venue);
+        return sprintf(__('The Photos of %s at %s by Plekvetica', 'pleklang'), $band, $venue);
     }
 }

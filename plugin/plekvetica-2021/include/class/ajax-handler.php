@@ -76,10 +76,14 @@ class PlekAjaxHandler
                     $plek_ajax_errors->add('save_event_details', $save_details); //PlekEventValidator Errors
                 }
                 break;
-            case 'editEvent':
-                //@todo:Old Plekvetica Event function. Replace with new!
-                echo plekEvent();
-                die();
+                case 'save_event_review':
+                    $plek_event = new PlekEvents;
+                    $save_review = $plek_event->save_event_review(); 
+                    if (is_int($save_review)) {
+                        $this->set_success(__('Event Review saved','pleklang'));
+                    } else {
+                        $plek_ajax_errors->add('save_event_details', $save_review); //Error message
+                    }
                 break;
             case 'check_event_duplicate':
                 $plek_event = new PlekEvents;
@@ -655,11 +659,12 @@ class PlekAjaxHandler
                 $new_album = $gallery_handler->create_album($album_name);
                 if (is_int($new_album)) {
                     //Add the album to the event gallery relationship
-                    if (!$event_handler->add_album_to_event($event_id, $new_album)) {
+                    if ($event_handler->add_album_to_event($event_id, $new_album) === false) {
                         $this->set_error(__('Failed to add the album to the event', 'pleklang'));
                     }
                     $this->set_success($new_album);
                     $this->set_success($album_name);
+                    $this->set_success($event_handler->is_multiday()); //Returns if the Event is a Multiday event.
                 } else {
                     $this->set_error($new_album);
                 }
@@ -676,7 +681,7 @@ class PlekAjaxHandler
 
                 $gallery_name = $event_handler->generate_gallery_title($event_id, $band_id);
                 $gallery_description = $event_handler->generate_gallery_description($event_id, $band_id);
-                
+
                 $new_gallery = $gallery_handler->create_gallery($gallery_name, $gallery_description);
                 $band_handler -> load_band_object_by_id($band_id);
                 if (is_int($new_gallery)) {

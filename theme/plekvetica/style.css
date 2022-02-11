@@ -1970,15 +1970,15 @@ input[type=checkbox] {
     font-family: "FontAwesome";
     display: block;
     width: 100%; }
-  #edit_event_review_form .image_upload_status.status-ok::before {
-    content: "\f00c";
-    color: #268c37;
-    background-color: white; }
   #edit_event_review_form .image_upload_status.status-missing::before {
     content: "\f0fe"; }
   #edit_event_review_form .image_upload_status.status-uploading::before {
     content: "\f102";
     color: #6278d9;
+    background-color: white; }
+  #edit_event_review_form .image_upload_status.status-ok::before {
+    content: "\f00c";
+    color: #268c37;
     background-color: white; }
 #edit_event_review_form span.band_name {
   min-width: 55%; }
@@ -1986,12 +1986,45 @@ input[type=checkbox] {
   flex-basis: 2.5rem; }
 #edit_event_review_form span.playtime {
   padding: 0 0.5rem; }
-#edit_event_review_form div#event-review-images-uploaded-container {
+#edit_event_review_form div#images-uploaded-container {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap; }
-  #edit_event_review_form div#event-review-images-uploaded-container .image_to_upload {
+  #edit_event_review_form div#images-uploaded-container .image_to_upload {
     flex-basis: 20%; }
+
+.submit-event-edit-review-from,
+.submit-event-edit-from {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem; }
+  .submit-event-edit-review-from #back_to_event_btn,
+  .submit-event-edit-from #back_to_event_btn {
+    background-color: #424242;
+    flex-basis: 1; }
+  .submit-event-edit-review-from input,
+  .submit-event-edit-from input {
+    flex-basis: 1; }
+
+#event-review-images-upload-container {
+  position: relative; }
+  #event-review-images-upload-container input[type=file] {
+    width: 100%;
+    min-height: 3rem;
+    position: absolute;
+    top: 0;
+    height: 10rem;
+    opacity: 0;
+    cursor: pointer; }
+  #event-review-images-upload-container .upload-box {
+    width: 100%;
+    background-color: white;
+    color: #424242;
+    text-align: center;
+    padding: 2rem;
+    height: 10rem; }
+    #event-review-images-upload-container .upload-box .icon {
+      font-size: 3rem; }
 
 .plekvetica-add-event {
   /*Messages*/ }

@@ -206,6 +206,13 @@ class PlekGalleryHandler
         if (empty($album_name)) {
             return __('No Album name provided', 'pleklang');
         }
+
+        //Check if the album name already exists
+        $existing = $this->get_album_by_name($album_name, 'id');
+        if ($existing) {
+            return intval($existing);
+        }
+
         $album = new stdClass();
         $album->name = $album_name;
         $new_album = C_Album_Mapper::get_instance()->save($album);
@@ -369,5 +376,53 @@ class PlekGalleryHandler
         $filepart['basename'] = $filepart['filename'] . '.' . $filepart['extension'];
 
         return $filepart;
+    }
+
+    /**
+     * Finds a album by name.
+     *
+     * @param string $name - The name of the album to find
+     * @param string $field - the field to return. Default: all.
+     * @return mixed false if no album found, null if field not found, object, string or int on success.
+     */
+    public function get_album_by_name($name, $field = 'all')
+    {
+        global $wpdb;
+        $prep = $wpdb->prepare("SELECT * FROM $wpdb->nggalbum WHERE name = %s", $name);
+        $found = $wpdb->get_row($prep);
+        if (!$found) {
+            return false;
+        }
+        if ($field === 'all') {
+            return $found;
+        }
+        if (isset($found->{$field})) {
+            return $found->{$field};
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Get the day of the album according to the date of the album
+     *
+     * @param int $album_id
+     * @return string The name of the weekday.
+     */
+    public function get_album_day($album_id)
+    {
+        //Get the album Title
+        $album_mapper = C_Album_Mapper::get_instance();
+        $album = $album_mapper->find($album_id);
+        if (empty($album->name)) {
+            return null;
+        }
+        $date = preg_match('/[0-9]{4}.[0-9]{2}.[0-9]{2}/', $album->name, $match);
+        if (!$date) {
+            return null;
+        }
+        $date = (isset($match[0])) ? str_replace('.', '-', $match[0]) : "";
+        $time = strtotime($date);
+        return date_i18n( 'l', $time);
     }
 }

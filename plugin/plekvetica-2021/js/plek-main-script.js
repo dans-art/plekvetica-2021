@@ -289,6 +289,29 @@ let plek_main = {
         }
 
     },
+    
+    /**
+     * Gets the result from the ajax response.
+     * 
+     * @param {object|string} data The Ajax response. As object or string.
+     * @param {int} array_index The Index to return.
+     * @returns string The Value of the array at index position.
+     */
+    get_success_item_from_ajax_request(data, array_index) {
+        try {
+            let encoded_data = (typeof data === "object") ? data : JSON.parse(data);
+            if (typeof encoded_data.success[array_index] !== 'undefined') {
+                return encoded_data.success[array_index];
+            }else{
+                return false;
+            }
+            return text;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+
+    },
 
     /**
      * Checks if a ajax response has errors.
