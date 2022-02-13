@@ -18,7 +18,7 @@ var plekerror = {
                 "onclick": null,
                 "showDuration": "1000",
                 "hideDuration": "1000",
-                "timeOut": "4000",
+                "timeOut": "0",
                 "extendedTimeOut": "0",
                 "showEasing": "swing",
                 "hideEasing": "linear",
@@ -36,7 +36,7 @@ var plekerror = {
      * @param {bool} closeButton If the close button should be shown
      * @param {string} positionClass The position class. Options: https://codeseven.github.io/toastr/demo.html
      */
-    set_toastr(timeOut = 4000, closeButton = true, positionClass = 'toast-top-right') {
+    set_toastr(timeOut = 0, closeButton = true, positionClass = 'toast-top-right') {
         try {
             toastr.options = {
                 "closeButton": closeButton,

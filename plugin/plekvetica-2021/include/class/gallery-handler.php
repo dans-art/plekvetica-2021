@@ -292,7 +292,7 @@ class PlekGalleryHandler
             return __('File is not a valid Image. Only JPG\'s are allowed!.', 'pleklang');
         }
         //check for existing files
-        $filename = $this -> get_unique_file_name($gallery_path, $file_name);
+        $filename = $this->get_unique_file_name($gallery_path, $file_name);
 
         //Create dir if not exists
         if (!file_exists($gallery_path)) {
@@ -320,6 +320,10 @@ class PlekGalleryHandler
 
         //add the preview image if needed
         nggAdmin::set_gallery_preview($gallery_id);
+
+        //Remove the headers to avoid cookies to be created
+        header_remove();
+
         return isset($image_id[0]) ? $image_id[0] : 0;
     }
 
@@ -388,18 +392,19 @@ class PlekGalleryHandler
      * @param string $filename - Filename with extension.
      * @return string The new Filename.
      */
-    public function get_unique_file_name($path_to_file, $filename){
+    public function get_unique_file_name($path_to_file, $filename)
+    {
         $filename_parts = explode('.', $filename);
         $extension = end($filename_parts);
         //remove the extension 
         unset($filename_parts[array_key_last($filename_parts)]);
 
         $filename_no_ex = implode('.', $filename_parts);
-        $count = '';
 
-        while(file_exists($path_to_file . $filename_no_ex . $count . '.'. $extension )){
-            $count = (!is_int($count)) ? 0 : + 1;
-            $filename =  $filename_no_ex . $count . '.'. $extension;
+        $count = 0;
+        while (file_exists($path_to_file . $filename_no_ex . $count . '.' . $extension)) {
+            $count = (!is_int($count)) ? 0 : $count + 1;
+            $filename =  $filename_no_ex . $count . '.' . $extension;
         }
         return $filename;
     }
@@ -449,6 +454,6 @@ class PlekGalleryHandler
         }
         $date = (isset($match[0])) ? str_replace('.', '-', $match[0]) : "";
         $time = strtotime($date);
-        return date_i18n( 'l', $time);
+        return date_i18n('l', $time);
     }
 }

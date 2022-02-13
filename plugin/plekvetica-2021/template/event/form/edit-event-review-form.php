@@ -39,6 +39,8 @@ s(C_Album_Mapper::get_instance()->save($album));
 
 //global $nggdb, $wpdb;
 
+//$gall_hand = new PlekGalleryHandler;
+//s($gall_hand->get_unique_file_name("A:/WEB/localdev/dansdev/plekvetica//wp-content/gallery/2022/amon-amarth/", "59229761_10157471744719090_3194451504870195200_o.jpg"));
 ?>
 <form name="edit_event_review_form" id="edit_event_review_form" action="" method="post">
 

@@ -117,13 +117,19 @@ var plek_gallery_handler = {
      */
     async add_images_click_action(button) {
 
+        let img_con = jQuery('#event-review-images-upload-container');
+
         //activate the loader button
         plek_main.activate_button_loader(button);
+
         if(plek_gallery_handler.lock_add_images_button === true){
             plekerror.display_error(null, __('Please wait for the album and galleries to be created.','pleklang'));
             return;
         }
         plek_gallery_handler.lock_add_images_button = true;
+
+        //Hide the upload container
+        img_con.hide();
 
         //Checks if the gallery and albums are set for the band.
         let album_gallery_created = await plek_gallery_handler.check_album_and_gallery_ids(button);
@@ -140,7 +146,7 @@ var plek_gallery_handler = {
         let album_id = jQuery(button).data('album_id');
 
         //Nothing to create / All created, show upload dialog
-        let img_con = jQuery('#event-review-images-upload-container');
+        
         let upload_btn = img_con.find('#review_images_upload_btn');
 
         img_con.show();
@@ -193,7 +199,7 @@ var plek_gallery_handler = {
                     return false;
                 }
                 jQuery(button).data('gallery_id', new_gallery_id);
-                console.log('Gallery added' + new_gallery_id);
+                console.log('Gallery added: ' + new_gallery_id);
             }
             return true;
         } catch (error) {
@@ -222,9 +228,21 @@ var plek_gallery_handler = {
         plek_main.activate_button_loader('#review_images_upload_btn', __('Uploading images...', 'pleklang'));
 
         jQuery.each(files, function (index, upload) {
+            if(upload.size > plek_gallery_handler.max_upload_size){
+                //Skip item if filesize to big
+                return;
+            }
+
             let formdata = new FormData();
             formdata.append('file_data', upload);
+
             plek_gallery_handler.upload_image(index, formdata, gallery_id);
+
+            //Mark the picture as being uploaded
+            let container = '#images-uploaded-container';
+            let item = jQuery(container + ' .image_to_upload')[index];
+            jQuery(item).addClass('upload_in_progress');
+            jQuery(item).addClass('current_upload');
         }
         );
     },
@@ -237,11 +255,18 @@ var plek_gallery_handler = {
     image_upload_form_change_action(files_input) {
         var image_container = jQuery('#images-uploaded-container');
 
-        //Display the new images
+        //Empty all the items
+        jQuery(image_container).html('');
+
+        //The images
         let files = jQuery('#review_images').prop('files');
+
+        //get the existing count of the items
+        let existing_count = jQuery('#images-uploaded-container .image_to_upload').length;
 
         jQuery.each(files, function (index, upload) {
             //Display the preview
+            index = existing_count + index;
             if(upload.size > plek_gallery_handler.max_upload_size){
                 plekerror.display_error(null, __('Imagesize is to big for: ', 'pleklang') + upload.name, 'Image upload error');
                 return;
@@ -300,8 +325,8 @@ var plek_gallery_handler = {
         let container = '#images-uploaded-container';
         let button = jQuery(`.image_upload_add_btn[data-gallery_id='${gallery_id}']`);
         let button_status = jQuery(button).find('.image_upload_status');
-        let item = jQuery(container + ' .image_to_upload')[index];
-        let items_total = jQuery(container + ' .image_to_upload').length;
+        let item = jQuery(container + ' #image_'+index);
+        let items_total = jQuery(container + ' .image_to_upload.current_upload').length;
         if (empty(item)) {
             console.log("Preview Image not found!");
             return false;
@@ -313,8 +338,11 @@ var plek_gallery_handler = {
         }else{
             jQuery(item).addClass("upload_failed");
         }
-        let items_done = jQuery(container + ' .image_to_upload.upload_complete').length;
-        let procentage_complete = (items_done / items_total * 100);
+        jQuery(item).removeClass('upload_in_progress');
+        
+        let items_done = jQuery(container + ' .image_to_upload.current_upload.upload_complete').length;
+        let items_failed = jQuery(container + ' .image_to_upload.current_upload.upload_failed').length;
+        let procentage_complete = ((items_done + items_failed) / items_total * 100);
 
         //Set the submit button text
         let btn_text = __('Upload: ', 'pleklang') + Math.round(procentage_complete) + '%';
@@ -323,13 +351,9 @@ var plek_gallery_handler = {
         //Update picture count
         let old_count = jQuery(button).parent().find('.image_count .nr').text();
         jQuery(button).parent().find('.image_count .nr').text(parseInt(old_count) + 1); //Add one to the existing
-
+ 
         if (procentage_complete === 100) {
             //All uploaded.            
-            //Empty all the Images from before + hide container
-            //jQuery(container).html('');
-            //jQuery('#event-review-images-upload-container').hide();
-            //jQuery('#review_images').val('');
             
             //Empty the file upload input
             jQuery('#review_images').val('');
@@ -337,11 +361,12 @@ var plek_gallery_handler = {
             jQuery(button_status).removeClass('status-uploading');
             jQuery(button_status).addClass('status-ok');
 
+            jQuery(container).find('.image_to_upload').removeClass('current_upload');
 
             plek_main.deactivate_button_loader('#review_images_upload_btn', __('Upload images', 'pleklang'));
 
             plekerror.display_info(__('Image upload', 'pleklang'), __('Images uploaded: ', 'pleklang') + items_done);
-            debugger;
+            
         }
 
 
@@ -366,8 +391,9 @@ var plek_gallery_handler = {
             }
         });
         return gallery_ids;
-    }
+    },
 
 }
+
 
 plek_gallery_handler.construct();
