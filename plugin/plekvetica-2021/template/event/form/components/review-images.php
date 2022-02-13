@@ -41,6 +41,7 @@ $template = 'event/form/components/review-image-band-item';
 </div>
 <div id='event-review-images-upload-container' class="plek-event-form-container">
 	<div class='upload-box'>
+		<div class="gallery_title"></div>
 		<div class="icon"><i class="fas fa-camera"></i></div>
 		<div class="info"><?php echo sprintf(__('Select all the images of the Band. Max filesize %s mb ','pleklang'), number_format(wp_max_upload_size() / 1048576, 0)); ?></div>
 	</div>

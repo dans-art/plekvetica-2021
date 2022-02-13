@@ -656,9 +656,28 @@ input[type=checkbox]{
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    position: relative;
 
     .image_to_upload{
       flex-basis: 20%;
+
+      &::before{
+        font-family: "FontAwesome";
+        font-size: 1.5rem;
+        position: absolute;
+        padding-left: 15%;
+        text-shadow: 2px 2px 7px black;
+      }
+      &.upload_complete::before{
+        content: "\f058"; //Checkmark in circle
+        color: $color-green;
+      }
+  
+      &.upload_failed::before{
+        content: "\f057"; //X in circle
+        color: $color-red;
+      }
+
     }
   }
 
@@ -710,6 +729,7 @@ input[type=checkbox]{
         font-size: 3rem;
     }
   }
+
   
 }
 

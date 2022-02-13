@@ -1989,9 +1989,22 @@ input[type=checkbox] {
 #edit_event_review_form div#images-uploaded-container {
   display: flex;
   gap: 1rem;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  position: relative; }
   #edit_event_review_form div#images-uploaded-container .image_to_upload {
     flex-basis: 20%; }
+    #edit_event_review_form div#images-uploaded-container .image_to_upload::before {
+      font-family: "FontAwesome";
+      font-size: 1.5rem;
+      position: absolute;
+      padding-left: 15%;
+      text-shadow: 2px 2px 7px black; }
+    #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete::before {
+      content: "\f058";
+      color: #268c37; }
+    #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_failed::before {
+      content: "\f057";
+      color: #D9042B; }
 
 .submit-event-edit-review-from,
 .submit-event-edit-from {

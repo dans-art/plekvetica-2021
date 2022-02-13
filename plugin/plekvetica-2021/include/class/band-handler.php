@@ -849,7 +849,7 @@ class PlekBandHandler
             $fh = new PlekFileHandler;
             $fh->set_image_options(680, 680, 'jpeg', 70);
 
-            $attachment_id = $fh->resize_uploaded_image('band-logo', $title);
+            $attachment_id = $fh->handle_uploaded_file('band-logo', $title);
             if (is_int($attachment_id)) {
                 $acf['bandlogo'] = $attachment_id;
             }

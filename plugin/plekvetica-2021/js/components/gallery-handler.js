@@ -8,7 +8,7 @@ var plek_gallery_handler = {
     max_upload_size : 0,
 
     construct() {
-        this.max_upload_size = 2621440 ; //2.5mb in binary
+        this.max_upload_size = 1048576; //1mb in binary
         //plekevent.add_events_listener();
         jQuery('.image_upload_add_btn').on('click', function (event) {
             plek_gallery_handler.add_images_click_action(this);
@@ -112,16 +112,28 @@ var plek_gallery_handler = {
      * Fires when the button is clicked to add new images
      * If no album is set, the function will create a new album
      * 
-     * @todo: use a async function to make sure the album_id is created before the gallery is created
+     * @todo: block the button action to avoid creating multiple galleries / Albums
      * @param {object} button The clicked button 
      */
     async add_images_click_action(button) {
+
+        //activate the loader button
+        plek_main.activate_button_loader(button);
+        if(plek_gallery_handler.lock_add_images_button === true){
+            plekerror.display_error(null, __('Please wait for the album and galleries to be created.','pleklang'));
+            return;
+        }
+        plek_gallery_handler.lock_add_images_button = true;
+
         //Checks if the gallery and albums are set for the band.
         let album_gallery_created = await plek_gallery_handler.check_album_and_gallery_ids(button);
 
         if (!album_gallery_created) {
             plekerror.display_error(null, __('Error while creating album or gallery', 'pleklang'), __('Error', 'pleklang'));
         }
+
+        //deactivate the loader button after gallery / album creation
+        plek_main.deactivate_button_loader(button);
 
         let band_id = jQuery(button).data('band_id');
         let gallery_id = jQuery(button).data('gallery_id');
@@ -133,6 +145,11 @@ var plek_gallery_handler = {
 
         img_con.show();
 
+        //Set the gallery name
+        let band_name = jQuery(button).parent().find('.band_name').text();
+        let band_playtime = jQuery(button).parent().find('.playtime').text();
+        jQuery('#event-review-images-upload-container').find('.gallery_title').text(band_playtime + ' ' +  band_name);
+
         //Empty all the Images from before
         jQuery('#images-uploaded-container').html('');
         jQuery('#review_images').val('');
@@ -140,6 +157,13 @@ var plek_gallery_handler = {
         upload_btn.data('gallery_id', gallery_id);
         upload_btn.data('album_id', album_id);
         upload_btn.data('band_id', band_id);
+
+        //Scroll to the container
+        let pos_top = img_con.position().top;
+        let win_height = jQuery(window).height() / 2;
+        jQuery('html').animate({ scrollTop: pos_top - win_height }, 600);
+
+        plek_gallery_handler.lock_add_images_button = false;
     },
 
     /**
@@ -218,7 +242,6 @@ var plek_gallery_handler = {
 
         jQuery.each(files, function (index, upload) {
             //Display the preview
-            debugger;
             if(upload.size > plek_gallery_handler.max_upload_size){
                 plekerror.display_error(null, __('Imagesize is to big for: ', 'pleklang') + upload.name, 'Image upload error');
                 return;
@@ -254,7 +277,13 @@ var plek_gallery_handler = {
             contentType: false,
             success: function success(data) {
                 console.log("uploaded");
-                plek_gallery_handler.upload_image_progess_update(index, gallery_id);
+                //Check for errors
+                let success = true;
+                if(plek_main.response_has_errors(data)){
+                    let success = false;
+                    plekerror.display_error(data);
+                }
+                plek_gallery_handler.upload_image_progess_update(index, gallery_id, success);
             },
             error: function error(data) {
 
@@ -264,8 +293,10 @@ var plek_gallery_handler = {
     /**
      * Displays the information about the upload of the images.
      * @param {int} index Index of the images in the file input
+     * @param {int} gallery_id Id of the gallery
+     * @param {bool} is_success If the upload was successfully or not
      */
-    upload_image_progess_update(index, gallery_id) {
+    upload_image_progess_update(index, gallery_id, is_success) {
         let container = '#images-uploaded-container';
         let button = jQuery(`.image_upload_add_btn[data-gallery_id='${gallery_id}']`);
         let button_status = jQuery(button).find('.image_upload_status');
@@ -277,7 +308,11 @@ var plek_gallery_handler = {
         }
 
         //Indicator for the preview picture
-        jQuery(item).addClass("upload_complete");
+        if(is_success){
+            jQuery(item).addClass("upload_complete");
+        }else{
+            jQuery(item).addClass("upload_failed");
+        }
         let items_done = jQuery(container + ' .image_to_upload.upload_complete').length;
         let procentage_complete = (items_done / items_total * 100);
 
@@ -292,8 +327,11 @@ var plek_gallery_handler = {
         if (procentage_complete === 100) {
             //All uploaded.            
             //Empty all the Images from before + hide container
-            jQuery(container).html('');
-            jQuery('#event-review-images-upload-container').hide();
+            //jQuery(container).html('');
+            //jQuery('#event-review-images-upload-container').hide();
+            //jQuery('#review_images').val('');
+            
+            //Empty the file upload input
             jQuery('#review_images').val('');
 
             jQuery(button_status).removeClass('status-uploading');
@@ -303,6 +341,7 @@ var plek_gallery_handler = {
             plek_main.deactivate_button_loader('#review_images_upload_btn', __('Upload images', 'pleklang'));
 
             plekerror.display_info(__('Image upload', 'pleklang'), __('Images uploaded: ', 'pleklang') + items_done);
+            debugger;
         }
 
 

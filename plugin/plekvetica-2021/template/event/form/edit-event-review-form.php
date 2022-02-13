@@ -36,8 +36,9 @@ $album->name = 'New Testalbum - '.date('H:m:s');
 s(C_Album_Mapper::get_instance()->save($album));
  */
 //s(json_encode(array(123 => array(258 => 1648))));
-global $nggdb, $wpdb;
-s($wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->nggalbum WHERE name = %s", '2019.11.29 - Macbeth Joker Fest') ));
+
+//global $nggdb, $wpdb;
+
 ?>
 <form name="edit_event_review_form" id="edit_event_review_form" action="" method="post">
 

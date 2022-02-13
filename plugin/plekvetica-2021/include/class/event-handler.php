@@ -1558,7 +1558,7 @@ class PlekEventHandler
             $fh = new PlekFileHandler;
             $fh->set_image_options(999, 999, 'jpeg', 70);
 
-            $attachment_id = $fh->resize_uploaded_image($field_id, $title);
+            $attachment_id = $fh->handle_uploaded_file($field_id, $title);
             if (is_int($attachment_id)) {
                 return intval($attachment_id);
             }

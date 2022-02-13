@@ -291,7 +291,8 @@ class PlekGalleryHandler
         if ($filepart['extension'] !== 'jpg' || !@getimagesize($temp_file)) {
             return __('File is not a valid Image. Only JPG\'s are allowed!.', 'pleklang');
         }
-        //@todo: check for existing files
+        //check for existing files
+        $filename = $this -> get_unique_file_name($gallery_path, $file_name);
 
         //Create dir if not exists
         if (!file_exists($gallery_path)) {
@@ -307,9 +308,11 @@ class PlekGalleryHandler
         if (!@move_uploaded_file($temp_file, $gallery_path . $filename)) {
             return __('Error, the file could not be moved to : ', 'nggallery') . esc_html($gallery_path);
         }
-        //@todo: Set CHMOD for the new file?
 
         $image_id = nggAdmin::add_Images($gallery_id, array($filename));
+
+        //Resize the original image to the max image size set in the ngg options
+        nggAdmin::resize_image($image_id[0]);
 
         //create thumbnails
         nggAdmin::create_thumbnail($image_id[0]);
@@ -376,6 +379,29 @@ class PlekGalleryHandler
         $filepart['basename'] = $filepart['filename'] . '.' . $filepart['extension'];
 
         return $filepart;
+    }
+
+    /**
+     * Creates an unique filename.
+     *
+     * @param string $path_to_file - Path to the file with tailing slash. 
+     * @param string $filename - Filename with extension.
+     * @return string The new Filename.
+     */
+    public function get_unique_file_name($path_to_file, $filename){
+        $filename_parts = explode('.', $filename);
+        $extension = end($filename_parts);
+        //remove the extension 
+        unset($filename_parts[array_key_last($filename_parts)]);
+
+        $filename_no_ex = implode('.', $filename_parts);
+        $count = '';
+
+        while(file_exists($path_to_file . $filename_no_ex . $count . '.'. $extension )){
+            $count = (!is_int($count)) ? 0 : + 1;
+            $filename =  $filename_no_ex . $count . '.'. $extension;
+        }
+        return $filename;
     }
 
     /**
