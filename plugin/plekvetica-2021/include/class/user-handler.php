@@ -768,4 +768,15 @@ class PlekUserHandler
         }
         return true;
     }
+
+    /**
+     * Returns all the users with the userrole "exuser"
+     *
+     * @return array The found users.
+     */
+    public static function get_ex_users()
+    {
+        $users = get_users(array('role' => 'exuser'));
+        return $users;
+    }
 }

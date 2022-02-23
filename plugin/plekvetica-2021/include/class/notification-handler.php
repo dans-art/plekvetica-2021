@@ -707,4 +707,36 @@ class PlekNotificationHandler extends WP_List_Table
         }
         return true;
     }
+
+    /**
+     * Function to filter the wp_mail function.
+     * This function checks if a email gets send to a ex user and if so, it removes them from the list.
+     *
+     * @param array $args
+     * @return array The WP_mail args
+     */
+    public function filter_wp_mail($args){
+        //Get the blocked users
+        $ex_members = PlekUserHandler::get_ex_users();
+        
+        if(empty($ex_members)){
+            return $args; //Do nothing
+        }
+        //Convert to array if not array
+        if(is_string($args['to'])){
+            $args['to'] = explode(',' , $args['to']); 
+        }
+        
+        foreach($ex_members as $user){
+            $user_email = $user->user_email;
+            $search = preg_grep("/".$user_email."/", $args['to']);
+            if(!empty($search)){
+                //Email was found in the recipients.
+                foreach($search as $skey => $email){
+                    unset($args['to'][$skey]); //Remove the item
+                }
+            }
+        }
+        return $args;
+    }
 }

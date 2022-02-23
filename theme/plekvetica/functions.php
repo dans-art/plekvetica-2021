@@ -7,6 +7,8 @@ add_action( 'after_setup_theme', [$plek_theme, 'plek_theme_setup'] );
 add_filter( 'generate_copyright', [$plek_theme, 'plek_footer_creds_text'] );
 add_filter('wp_nav_menu_items', [$plek_theme, 'plek_nav_items'], 10, 2);
 
+add_filter('disable_wp_rest_api_post_var', [$plek_theme, 'disable_wp_rest_api_post_var'], 10, 1);
+
 class plekTheme{
 
     public function plek_nav_items($items, $args){
@@ -36,8 +38,24 @@ class plekTheme{
         return $copyright;
     }
 
+    /**
+     * Adds editor style and theme support
+     *
+     * @return void
+     */
     public function plek_theme_setup(){
         add_theme_support('editor-styles');
         add_editor_style('css/backend-style.css');
+        return;
+    }
+
+    /**
+     * Enables the REST API for Contact Form 7 if the API is disabled by Disable WP REST API Plugin 
+     *
+     * @param mixed $var
+     * @return string
+     */
+    public function disable_wp_rest_api_post_var($var) { 
+        return '_wpcf7'; 
     }
 }
