@@ -13,8 +13,8 @@ $postponed = ($event_object->is_postponed()) ? 'selected' : '';
 		<label for="event_status"><?php echo __('Event status', 'pleklang'); ?></label>
 		<select name="event_status" id="event_status" class="input">
 			<option value="null"><?php echo __('Event will happen as scheduled','pleklang') ?></option>
-			<option value="event_postponed"><?php echo __('Event has been postponed','pleklang') ?> <?php echo $postponed; ?></option>
-			<option value="event_canceled"><?php echo __('Event has been canceled','pleklang') ?> <?php echo $canceled; ?></option>
+			<option value="event_postponed" <?php echo $postponed; ?>><?php echo __('Event has been postponed without new date','pleklang') ?> </option>
+			<option value="event_canceled" <?php echo $canceled; ?>><?php echo __('Event has been canceled','pleklang') ?></option>
 		</select>
 	</div>
 

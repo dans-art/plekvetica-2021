@@ -49,6 +49,10 @@ let plek_main = {
         jQuery(element).addClass('disable');
     },
 
+    /**
+     * Activates the loader style for the element.
+     * @param {object} element 
+     */
     activate_loader_style(element) {
         jQuery(element).addClass('loader');
         if (jQuery(element).is("input")) {

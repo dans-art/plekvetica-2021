@@ -305,7 +305,7 @@ var plekevent = {
                 let errors = plek_main.show_field_errors(data, form);
                 if (errors === true) {
                     console.log("Contains Errors");
-                    text = "Das Formular enthält Fehler, bitte korrigieren";
+                    plekerror.display_error(null, __('This form contains errors, please fix them.', 'pleklang'), __('Form error', 'pleklang'));
                     plek_main.deactivate_button_loader(button, orig_btn_text);
                     jQuery(button).prop("disabled", false); //Enable the button again.
                 } else {
@@ -319,31 +319,43 @@ var plekevent = {
                     let user_id = (typeof success_obj[1] !== 'undefined') ? success_obj[1] : 0;
                     let event_url = (typeof success_obj[2] !== 'undefined') ? success_obj[2] : '';
 
-                    //Redirect to next stage
+                    //It is a edit event. Do not redirect or change the url in anyway
+                    if(type === 'save_edit_event'){
+                        plekerror.display_info(__('Event saved!', 'pleklang'));
+                        plek_main.deactivate_button_loader(button, orig_btn_text);
+                        jQuery(button).prop("disabled", false); //Enable the button again.
+                        return;
+                    }
+
+                    //It is a Add Event process
+                    //Redirect to next stage and display the appropriate information
                     plek_main.url_replace_param('event_id', event_id);
                     var stage = 'details'; //Default is details
                     if (type === 'save_basic_event' && user_id === 0) {
-                        //User is not logged in and type is basic event
+                        //User is not logged in and type is basic event, set stage to login
                         stage = 'login';
                     }
 
+                    //Set the current stage
                     let url = plek_main.url_replace_param('stage', stage);
-                    if (type === 'save_event_details' || type === 'save_edit_event') {
+
+                    if (type === 'save_event_details') {
                         if (user_id === 0) {
-                            plekerror.display_info(__('Event saved, thanks a lot!<br/>Our Eventmanager will check and publish the Event', 'pleklang'));
+                            plekerror.display_info(__('Event saved!', 'pleklang'), __('Thanks a lot!<br/>Our Eventmanager will check and publish the Event', 'pleklang'));
                         } else {
+                            //User is a logged in user
                             let event_url_label = __('To my Event', 'pleklang')
                             let event_url_html = `<a href='${event_url}'>${event_url_label}</a>`;
-                            plekerror.display_info(__('Event saved! Check it out here: ' + event_url_html, 'pleklang'));
+                            plekerror.display_info(__('Event saved!','pleklang'), __('Check it out here: ' + event_url_html, 'pleklang'));
                         }
                     } else {
                         //Show success message
-                        plekerror.display_info(__('Event saved!', 'pleklang'));
+                        plekerror.display_info(__('Data saved!', 'pleklang'));
                         setTimeout(() => {
-                            debugger;
                             window.location = url;
                         }, 500);
                     }
+                   
                     plek_main.deactivate_button_loader(button, orig_btn_text);
                     jQuery(button).prop("disabled", false); //Enable the button again.
                     return;
@@ -597,6 +609,7 @@ var plekevent = {
         }
         return false;
     },
+
     /**
      * 
      * @param {string} id ID of the Input field to get the date from

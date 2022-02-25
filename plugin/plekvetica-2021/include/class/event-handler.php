@@ -56,13 +56,20 @@ class PlekEventHandler
 
     /**
      * Checks if the Event has be postponed or not.
+     * Checks the acf postponed_event_dates and postponed_event
      * The "postponed_event" can have a JSON string or "1"
      *
      * @return boolean
      */
     public function is_postponed()
     {
-        return (!empty($this->get_field_value('postponed_event'))) ? true : false;
+        if (!empty($this->get_field_value('postponed_event_dates'))) {
+            return true;
+        }
+        if (!empty($this->get_field_value('postponed_event'))) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -72,6 +79,10 @@ class PlekEventHandler
      */
     public function is_public(string $event_id = null)
     {
+        if(!$event_id){
+            return false;
+        }
+
         if (!$event_id) {
             $status = $this->$this->get_field_value('post_status');
         } else {
@@ -180,6 +191,7 @@ class PlekEventHandler
     /**
      * Checks if the current event got postponed or not
      * and if the event is the original
+     * @deprecated 1.2 - Use is_postponed_event() only
      *
      * @return boolean true, if the event got postponed and this is the original event, otherwise false.
      */
@@ -197,7 +209,7 @@ class PlekEventHandler
     }
 
     /**
-     * Checks if the currente event got postponed or not
+     * Checks if the current event got postponed or not
      * and if the event is the postponed one.
      *
      * @return boolean true, if the event got postponed and this is the postponed event, otherwise false.
@@ -207,6 +219,9 @@ class PlekEventHandler
         $current_id = (int) $this->get_ID();
         $postponed_obj = $this->get_postponed_obj();
         if (!$postponed_obj) {
+            if($this -> is_postponed()){
+                return true; //Its a Event with the new postponed field
+            }
             return false;
         }
         if ($postponed_obj->postponed_id === $current_id) {
@@ -242,6 +257,22 @@ class PlekEventHandler
     }
 
     /**
+     * Get the ID of the original event, if the event got postponed.
+     *
+     * @return mixed false if no orig_id was found, ID on success
+     */
+    public function get_postponed_original_event_date($date_format = 'd. F Y')
+    {
+        //Only support for old Postponed Events
+        $is_postponed_new = (!empty($this->get_field_value('postponed_event_dates'))) ? true : false ;
+        if(!$is_postponed_new AND $this->is_postponed_event()){
+            $postponed_id_orig = $this->get_postponed_original_event_id();
+            return tribe_get_start_date($postponed_id_orig, true ,'d. F Y');
+        }
+        return false;
+    }
+
+    /**
      * Get the ID of the postponed event, if the event got postponed.
      *
      * @return mixed false if no postponed_id was found, ID on success
@@ -255,17 +286,67 @@ class PlekEventHandler
         return $postponed_obj->postponed_id;
     }
 
+    /**
+     * Loads the postponed object. This object contains the original and postponed id
+     *
+     * @return bool|object False if nothing found, object on success
+     */
     public function get_postponed_obj()
     {
         $postponed = $this->get_field_value('postponed_event');
-        $postponed_obj = json_decode($postponed);
         if (empty($postponed)) {
             return false;
         }
+        $postponed_obj = json_decode($postponed);
         if (!isset($postponed_obj->orig_id) or !isset($postponed_obj->postponed_id)) {
             return false;
         }
         return $postponed_obj;
+    }
+    
+    /**
+     * Gets the new postponed object. It contains a json string with the editdate and the new date
+     *
+     * @return array|false Array on success, false on error.
+     */
+    public function get_postponed_new_obj()
+    {
+        $postponed = $this->get_field_value('postponed_event_dates');
+        if (empty($postponed)) {
+            return false;
+        }
+        $postponed_obj = json_decode($postponed);
+        return $postponed_obj;
+    }
+
+    /**
+     * Gets the Text added before the main content for postponed events
+     *
+     * @return string The postponed text
+     */
+    public function get_postponed_event_text(){
+        //New Events
+        if($this->is_postponed() AND !$this->get_postponed_obj()){
+            $postponed_history = $this->get_postponed_new_obj();
+            $pp_history_list = array();
+            if(is_object($postponed_history)){
+                //Get only the last item to make things more readable
+                end($postponed_history);
+                $moddate = key($postponed_history);
+                if(!is_object($postponed_history->{$moddate})){
+                    //Date is not set
+                    $pp_history_list[] = sprintf(__('At %s to undefined date','pleklang'), date_i18n('d. m Y', $moddate));
+                }else{
+                    $old_start_date = date_i18n('d. F Y', strtotime($postponed_history->{$moddate}->old_date));
+                    $new_start_date = date_i18n('d. F Y', strtotime($postponed_history->{$moddate}->new_date));
+                    return sprintf(__('This event has been postponed from %s to %s', 'pleklang'), $old_start_date, $new_start_date);
+                }
+            }
+            return false;
+        }
+        //Old Events
+        $postponed_event_old_date = $this->get_postponed_original_event_date('d. F Y');
+        return sprintf(__('This event was moved from %s to %s.', 'pleklang'),$postponed_event_old_date, $this -> get_start_date('d. F Y'));
     }
 
     /**
@@ -277,9 +358,9 @@ class PlekEventHandler
     public function get_event_album()
     {
         $band_gallery_relationship = $this->get_field_value_decoded('band_gallery_relationship');
-        if(!empty($band_gallery_relationship)){
+        if (!empty($band_gallery_relationship)) {
             $albums = array();
-            foreach($band_gallery_relationship as $album_id => $galleries){
+            foreach ($band_gallery_relationship as $album_id => $galleries) {
                 $albums[] = $album_id;
             }
             return $albums;
@@ -1410,7 +1491,6 @@ class PlekEventHandler
     /**
      * Checks if the Event status is postponed. If so, the acf postponed_event gets filled out.
      * @param int|string $event_id - The Id of the Event
-     * @todo: Test this function!
      * 
      * @return bool True on success, false on error, null if the field has not be changed
      */
@@ -1418,18 +1498,33 @@ class PlekEventHandler
     {
         global $plek_ajax_handler;
         global $plek_handler;
-        $postponed = $plek_ajax_handler->get_ajax_data('event_status');
-        if ($postponed !== 'event_postponed' or empty($event_id)) {
+        
+        if (empty($event_id)) {
             return false;
         }
-        $old_event_startdate = tribe_get_start_date($event_id);
+
+        $postponed = $plek_ajax_handler->get_ajax_data('event_status');
+        $new_event_startdate = date('Y-m-d', strtotime($plek_ajax_handler->get_ajax_data('event_start_date')));
+        $old_event_startdate = tribe_get_start_date($event_id, true, 'Y-m-d');
+
+        //Prepare the array
         $prev_postponed_dates_json = get_field('postponed_event_dates', $event_id);
-        $prev_postponed_dates = json_decode($prev_postponed_dates_json);
+        $prev_postponed_dates = json_decode($prev_postponed_dates_json, true);
         if (empty($prev_postponed_dates) or !is_array($prev_postponed_dates)) {
             $prev_postponed_dates = [];
         }
+
         $today = time();
-        $prev_postponed_dates[$today] = $old_event_startdate;
+        if($new_event_startdate !== $old_event_startdate){
+            //Startdate was modified
+            $prev_postponed_dates[$today] = array('old_date' => $old_event_startdate, 'new_date' => $new_event_startdate);
+        }elseif($postponed === 'event_postponed'){
+            //Postponed but no date changed
+            $prev_postponed_dates[$today] = 'tbd';
+        }else{
+            return;
+        }
+
         return $plek_handler->update_field('postponed_event_dates', json_encode($prev_postponed_dates), $event_id);
     }
     /**

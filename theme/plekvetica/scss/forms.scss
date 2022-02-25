@@ -693,11 +693,10 @@ input[type=checkbox]{
 
   #back_to_event_btn{
     background-color: $color-gray;
-    flex-basis: 1;
   }
 
-  input{
-    flex-basis: 1;
+  div{
+    flex-basis: 50%;
   }
 
 }

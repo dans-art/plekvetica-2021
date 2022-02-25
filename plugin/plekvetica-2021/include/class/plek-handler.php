@@ -258,6 +258,16 @@ class PlekHandler
         if ($pos <= 8 and $pos > 2) {
             return true;
         }
+
+        $pos = strpos($url, "2021.plekvetica.ch");
+        if ($pos <= 8 and $pos > 0) {
+            return true;
+        }
+
+        $pos = strpos($url, "dev.plekvetica.ch");
+        if ($pos <= 8 and $pos > 0) {
+            return true;
+        }
         return false;
     }
 

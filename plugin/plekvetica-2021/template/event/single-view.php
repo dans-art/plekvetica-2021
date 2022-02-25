@@ -10,11 +10,10 @@ if (!is_object($plek_event)) {
     echo __('Error: Event Object not found', 'pleklang');
     return;
 }
-$is_postponed = $plek_event->is_postponed_original_event();
-$is_postponed_new = $plek_event->is_postponed_event();
+$is_postponed = $plek_event->is_postponed();
+$is_postponed_old = $plek_event->is_postponed_event();
 $postponed_id = $plek_event->get_postponed_event_id();
-$postponed_id_orig = $plek_event->get_postponed_original_event_id();
-$postponed_event_old_date = ($is_postponed_new)?tribe_get_start_date($postponed_id_orig, true ,'d. F Y'):'';
+
 
 $can_edit = PlekUserHandler::user_can_edit_post($plek_event);
 $is_in_team = PlekUserHandler::user_is_in_team();
@@ -37,7 +36,7 @@ if ($is_review) {
 wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-single.min.js', ['jquery', 'plek-language'], $plek_handler -> version);
 ?>
 
-<?php if ($is_postponed and $plek_event->is_public($postponed_id)) : ?>
+<?php if ($is_postponed and $plek_event->is_public($postponed_id) AND intval($plek_event-> get_ID()) !== $postponed_id) : ?>
     <h1><?php echo $plek_event->get_field('post_title'); ?></h1>
     <div><?php echo __('This event has been postponed', 'pleklang'); ?></div>
     <a href="<?php echo get_permalink($postponed_id); ?>"><?php echo __('To the new event', 'pleklang'); ?></a>
@@ -53,6 +52,9 @@ wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-sing
                 <?php PlekTemplateHandler::load_template('poster', 'event/meta'); ?>
                 <?php if ($is_review) {
                     PlekTemplateHandler::load_template('image-banner', 'components', __('Review', 'pleklang'));
+                } ?>
+                <?php if ($is_postponed) {
+                    PlekTemplateHandler::load_template('image-banner', 'components', __('Postponed', 'pleklang'));
                 } ?>
                 <?php if ($is_canceled) {
                     PlekTemplateHandler::load_template('image-banner', 'components', __('Canceled', 'pleklang'));
@@ -73,8 +75,8 @@ wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-sing
             <?php if ($is_canceled) : ?>
                 <div class="plek-message red"><?php echo __('This event has been canceled', 'pleklang'); ?></div>
             <?php endif; ?>
-            <?php if ($is_postponed_new) : ?>
-                <div class="plek-message"><?php echo sprintf(__('This event was moved from %s to %s.', 'pleklang'),$postponed_event_old_date, $plek_event -> get_start_date('d. F Y')); ?></div>
+            <?php if ($is_postponed) : ?>
+                <div class="plek-message"><?php echo $plek_event->get_postponed_event_text(); ?></div>
             <?php endif; ?>
         </div>
         <?php

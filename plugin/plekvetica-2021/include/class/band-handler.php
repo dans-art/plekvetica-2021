@@ -1096,7 +1096,7 @@ class PlekBandHandler
     {
         global $plek_event;
         global $plek_handler;
-        $from = date('Y-m-d H:m:i');
+        $from = date('Y-m-d H:i:s');
 
         $band = $this->load_band_object_by_id($band_id);
         $follower = $this->get_follower_count();
@@ -1179,7 +1179,7 @@ class PlekBandHandler
         global $plek_event;
         global $plek_handler;
 
-        $from = date('Y-m-d H:m:i');
+        $from = date('Y-m-d H:i:s');
         $future_events = $plek_event->get_events_of_band($band_id, $from);
         $event_count = count($future_events);
 

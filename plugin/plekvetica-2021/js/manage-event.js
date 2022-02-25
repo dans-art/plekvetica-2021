@@ -138,9 +138,17 @@ let plek_manage_event = {
             }
         });
 
+        //On change of the start date
         jQuery('#event_start_date').change(function () {
             var start_date = jQuery('#event_start_date').val();
+            var end_date = jQuery('#event_end_date').val();
             var end_options = flatpickr_options;
+            //Check if the new startdate is before the enddate.
+            let startDD = new Date(start_date);
+            let endDD = new Date(end_date);
+            if (startDD > endDD) { //if startdate is bigger than enddate, reset the enddate.
+                jQuery('#event_end_date').val(''); //Reset the Enddate
+            }
             end_options['minDate'] = start_date;
             flatpickr("#event_end_date", end_options);
         });
@@ -487,7 +495,6 @@ let plek_manage_event = {
      */
     add_vob_to_current_selection(type) {
         let jdata = (typeof plek_manage_event.existing_vob_data[type] === 'object') ? plek_manage_event.existing_vob_data[type] : {};
-
         for (const [vob_id, item] of Object.entries(jdata)) {
             switch (type) {
                 case 'bands':

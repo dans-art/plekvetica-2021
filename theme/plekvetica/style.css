@@ -2013,11 +2013,10 @@ input[type=checkbox] {
   gap: 1rem; }
   .submit-event-edit-review-from #back_to_event_btn,
   .submit-event-edit-from #back_to_event_btn {
-    background-color: #424242;
-    flex-basis: 1; }
-  .submit-event-edit-review-from input,
-  .submit-event-edit-from input {
-    flex-basis: 1; }
+    background-color: #424242; }
+  .submit-event-edit-review-from div,
+  .submit-event-edit-from div {
+    flex-basis: 50%; }
 
 #event-review-images-upload-container {
   position: relative; }

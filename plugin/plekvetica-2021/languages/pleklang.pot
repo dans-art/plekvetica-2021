@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plekvetica - 2021\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-13 21:04+0000\n"
+"POT-Creation-Date: 2022-02-25 20:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -178,7 +178,7 @@ msgid "Back"
 msgstr ""
 
 #: template/event/form/edit-event-form.php:57
-#: template/event/form/edit-event-review-form.php:63
+#: template/event/form/edit-event-review-form.php:64
 msgid "Back to the Event"
 msgstr ""
 
@@ -527,7 +527,7 @@ msgid "Event has been canceled"
 msgstr ""
 
 #: template/event/form/components/attributes.php:16
-msgid "Event has been postponed"
+msgid "Event has been postponed without new date"
 msgstr ""
 
 #: include/class/ajax-handler.php:202
@@ -723,7 +723,7 @@ msgstr ""
 msgid "Full Review"
 msgstr ""
 
-#: template/event/form/edit-event-review-form.php:53
+#: template/event/form/edit-event-review-form.php:54
 msgid "Full Review Text"
 msgstr ""
 
@@ -778,7 +778,7 @@ msgstr ""
 msgid "Image upload"
 msgstr ""
 
-#: template/event/form/edit-event-review-form.php:50
+#: template/event/form/edit-event-review-form.php:51
 msgid "Images"
 msgstr ""
 
@@ -833,7 +833,7 @@ msgstr ""
 msgid "Interviews"
 msgstr ""
 
-#: template/event/form/edit-event-review-form.php:47
+#: template/event/form/edit-event-review-form.php:48
 msgid "Intro Text"
 msgstr ""
 
@@ -1382,7 +1382,7 @@ msgstr ""
 msgid "Save event details"
 msgstr ""
 
-#: template/event/form/edit-event-review-form.php:64
+#: template/event/form/edit-event-review-form.php:65
 msgid "Save event review"
 msgstr ""
 

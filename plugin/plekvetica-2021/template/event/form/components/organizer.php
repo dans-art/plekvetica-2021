@@ -10,7 +10,7 @@ if(isset($_REQUEST['event_id']) AND isset($_REQUEST['stage'])){
     //Only show proposals for organizer if not edit event
     $venue_id = intval($event_object->get_field_value('_EventVenueID'));
     $propose_organi = $plek_event->get_organizers_of_venue($venue_id);
-
+    
 }else{
     //Edit Event
     $organi_handler = new PlekOrganizerHandler;
