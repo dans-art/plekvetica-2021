@@ -25,6 +25,8 @@ add_shortcode('plek_event_review_form', [$plek_event, 'plek_event_review_form_sh
 
 //Bands
 add_shortcode('plek_band_page', [new PlekBandHandler, 'plek_band_page_shortcode']);
+add_shortcode('plek_add_band_button', [new PlekBandHandler, 'plek_add_band_button_shortcode']);
+add_shortcode('plek_add_band_form', [new PlekBandHandler, 'plek_add_band_form_shortcode']);
 
 //Venue
 add_shortcode('plek_venue_edit_page', [new PlekVenueHandler, 'plek_venue_edit_page_shortcode']);

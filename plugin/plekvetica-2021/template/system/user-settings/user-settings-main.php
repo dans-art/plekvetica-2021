@@ -10,8 +10,12 @@ if(!isset($user -> meta['nickname'])){
     echo __('Error: User object could not be loaded.','pleklang');
     return false;
 }
-
+$gravatar_link = "<a href='https://de.gravatar.com' target='_blank'>gravatar.com</a>";
 ?>
+<div id="plek-user-avatar">
+    <?php echo get_avatar($user); ?>
+    <span><?php echo sprintf(__('To change your avatar, you have to set or replace it via %s','pleklang'), $gravatar_link); ?></span>
+</div>
 <form id='plek-user-settings-form' class="plek-form">
     <input id="user-id" name="user-id" type="text" class='plek-hidden' value="<?php echo $user -> ID; ?>"></input>
 

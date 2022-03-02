@@ -46,6 +46,28 @@ class PlekBandHandler
     }
 
     /**
+     * Shortcode for the add Band button
+     *
+     * @return string The Button
+     */
+    public function plek_add_band_button_shortcode()
+    {
+        global $plek_handler;
+        $add_band_page_id = $plek_handler->get_plek_option('add_band_page_id');
+        return PlekTemplateHandler::load_template_to_var('button', 'components', get_permalink($add_band_page_id), __('Add new Band','pleklang'));
+    }
+
+    /**
+     * Shortcode for the add Band from
+     *
+     * @return string The new band form
+     */
+    public function plek_add_band_form_shortcode()
+    {
+        return PlekTemplateHandler::load_template_to_var('band-form', 'band');
+    }
+
+    /**
      * Loads the Band Term. Loads all ACF fields.
      *
      * @param string $slug - Band / tag slug

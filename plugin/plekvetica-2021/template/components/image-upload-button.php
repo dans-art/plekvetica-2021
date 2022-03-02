@@ -10,7 +10,7 @@ extract(get_defined_vars());
 $id = (isset($template_args[0])) ? $template_args[0] : ''; //Id of the field
 $image = (isset($template_args[1])) ? $template_args[1] : '#'; //Existing image
 $placeholder = (isset($template_args[2])) ? $template_args[2] : $plek_handler->placeholder_image; //Placeholder Image
-$button_text = ($image !== '#')?__('Replace', 'pleklang'):__('Upload', 'pleklang');
+$button_text = ($image !== '#' AND !empty($image))?__('Replace', 'pleklang'):__('Upload', 'pleklang');
 
 if (strlen($image) < 3 or !is_string($image)) {
     $image = $placeholder;
