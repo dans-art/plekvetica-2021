@@ -8,8 +8,13 @@ let plek_band = {
 
     construct() {
         if(jQuery('#plek-band-form').length > 0){
-            //Page is Edit Band page
-            this.on_edit_band();
+            if(empty(jQuery('#band-id').val())){
+                this.on_band_add(); //Load specific functions only applying to new bands
+                this.on_edit_band(); //Also add the functions for the edit band.
+            }else{
+                //Page is Edit Band page
+                this.on_edit_band();
+            }
         }else{
             //Frontend and other functions, which are not on the edit band page
             jQuery(document).on("click", '.plek-follow-band-btn', function () {
@@ -20,6 +25,9 @@ let plek_band = {
 
     },
 
+    /**
+     * Functions and eventlistener on band_edit
+     */
     on_edit_band() {
         jQuery(document).ready(function () {
             jQuery('select').select2({
@@ -71,6 +79,15 @@ let plek_band = {
             if (e.which == 13) {
                 plek_band.on_enter(e);
             }
+        });
+    },
+
+    /**
+     * Functions only for the new band form 
+     */
+    on_band_add(){
+        jQuery('#band-name').on('change', (e)=>{
+            plek_band.check_existing_band();
         });
     },
 
@@ -202,6 +219,41 @@ let plek_band = {
                     jQuery('#band-form-submit').text(plek_band.default_button_texts.submit);
                 }, 5000);
 
+            },
+            error: function error(data) {
+                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
+
+            }
+        });
+    },
+    
+    /**
+     * Checks for existing band. If found, it will display an notification.
+     */
+    check_existing_band() {
+
+        if(empty(jQuery('#band-name').val())){
+            return;
+        }
+        var data = new FormData();
+        data.append('action', 'plek_band_actions');
+        data.append('do', 'check_existing_band');
+        data.append('band-name', jQuery('#band-name').val());
+
+        jQuery.ajax({
+            url: window.ajaxurl,
+            type: 'POST',
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function success(data) {
+                let error = plek_main.get_first_error_from_ajax_request(data);
+                if(!empty(error)){
+                    plekerror.set_toastr(0, true);
+                    plekerror.display_info(__('Info','pleklang'), error);
+                    plekerror.reset_toastr();
+                }
             },
             error: function error(data) {
                 plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));

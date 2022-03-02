@@ -807,6 +807,32 @@ class PlekBandHandler
     }
 
     /**
+     * Checks if a band already exists or not.
+     *
+     * @return string|bool String with the name of the Band if exists, otherwise false
+     */
+    public function band_exists_ajax(){
+        global $plek_ajax_handler;
+        $name = $plek_ajax_handler -> get_ajax_data_esc('band-name');
+
+        //Check for existing bands
+        $terms = get_terms(array('name' => $name, 'hide_empty' => false, 'taxonomy' => 'post_tag'));
+
+        if (empty($terms)) {
+            return false;
+        }
+        $bands = array();
+        foreach($terms as $term){
+            $origin = get_field('herkunft', 'term_'.$term->term_id);
+            $bands[] = '<a href="'.get_term_link($term->term_id).'" target="_blank">'.$term->name.' ('.$origin.')</a>'; 
+        }
+        if(count($bands) > 1){
+            return sprintf(__('Some Bands with the Name "%s" where found.<br/>%s<br/>Please check if the Band you like to add does not exist.','pleklang'), $name, implode('<br/>', $bands));
+        }else{
+            return sprintf(__('A Band with the Name "%s" was found.<br/>%s<br/>Please check if the Band you like to add does not exist','pleklang'), $name, $bands[0]);
+        }
+    }
+    /**
      * Validates all Band data
      * @param bool $require_id If the ID is required. Set this to false to save a new Band.
      *
@@ -822,6 +848,7 @@ class PlekBandHandler
         $validator->set('band-description', false, 'text');
         $validator->set('band-genre', true, 'textshort');
         $validator->set('band-origin', true, 'textshort');
+        $validator->set_not_value('band-origin', 'NULL');
         $validator->set('band-link-fb', false, 'url');
         $validator->set('band-link-web', false, 'url');
         $validator->set('band-link-insta', false, 'url');

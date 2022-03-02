@@ -16,6 +16,7 @@ class PlekFormValidator
     protected $min_length = array(); //Min length of the value
     protected $hint = array(); //When validation fails, this hint will be displayed to help the user
     protected $value_in_array = array(); // If set, the validator loops the array and checks for the array values
+    protected $not_value = array(); //Checks if the value is not the defined value
 
     protected $allowed_file_types = array();
 
@@ -189,6 +190,23 @@ class PlekFormValidator
     }
 
     /**
+     * Sets the fields as an array value
+     * The validator will check every item in the array if valid
+     *
+     * @param string $fieldname
+     * @param mixed $value
+     * @return void
+     */
+    public function set_not_value(string $fieldname, $value)
+    {
+        if(!isset($this->not_value[$fieldname])){
+            $this->not_value[$fieldname] = array($value);
+        }
+        $this->not_value[$fieldname][] = $value;
+        return;
+    }
+
+    /**
      * Sets the allowed file types of a field
      *
      * @param string $fieldname
@@ -274,6 +292,17 @@ class PlekFormValidator
                 return false;
             }
         }
+
+        //Check if the value is allowed
+        if(!empty($this->not_value[$fieldname])){
+            foreach($this->not_value[$fieldname] as $not_allowed_value){
+                if($not_allowed_value === $value){
+                    $this->set_error($fieldname, __('The given value is not allowed. Please choose something different.','pleklang'));
+                    return false;
+                }
+            }
+        }
+
         //Sets the default values
         $this->setup_field($fieldname);
 

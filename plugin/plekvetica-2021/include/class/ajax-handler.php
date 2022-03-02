@@ -76,14 +76,14 @@ class PlekAjaxHandler
                     $plek_ajax_errors->add('save_event_details', $save_details); //PlekEventValidator Errors
                 }
                 break;
-                case 'save_event_review':
-                    $plek_event = new PlekEvents;
-                    $save_review = $plek_event->save_event_review(); 
-                    if (is_int($save_review)) {
-                        $this->set_success(__('Event Review saved','pleklang'));
-                    } else {
-                        $plek_ajax_errors->add('save_event_details', $save_review); //Error message
-                    }
+            case 'save_event_review':
+                $plek_event = new PlekEvents;
+                $save_review = $plek_event->save_event_review();
+                if (is_int($save_review)) {
+                    $this->set_success(__('Event Review saved', 'pleklang'));
+                } else {
+                    $plek_ajax_errors->add('save_event_details', $save_review); //Error message
+                }
                 break;
             case 'check_event_duplicate':
                 $plek_event = new PlekEvents;
@@ -354,6 +354,15 @@ class PlekAjaxHandler
                     $this->set_success($saved);
                 }
                 break;
+            case 'check_existing_band':
+                $plek_band = new PlekBandHandler;
+                $exists = $plek_band->band_exists_ajax();
+                if ($exists) {
+                    $this->set_error($exists);
+                } else {
+                    $this->set_success(__('Band is unique', 'pleklang'));
+                }
+                break;
             default:
                 # code...
                 break;
@@ -396,6 +405,15 @@ class PlekAjaxHandler
                     $this->set_success($toggle);
                 } else {
                     $this->set_error(__('Error while changing the following status', 'pleklang'));
+                }
+                break;
+            case 'check_existing_band':
+                $plek_band = new PlekBandHandler;
+                $exists = $plek_band->band_exists_ajax();
+                if ($exists) {
+                    $this->set_error($exists);
+                } else {
+                    $this->set_success(__('Band is unique', 'pleklang'));
                 }
                 break;
             default:
@@ -683,7 +701,7 @@ class PlekAjaxHandler
                 $gallery_description = $event_handler->generate_gallery_description($event_id, $band_id);
 
                 $new_gallery = $gallery_handler->create_gallery($gallery_name, $gallery_description);
-                $band_handler -> load_band_object_by_id($band_id);
+                $band_handler->load_band_object_by_id($band_id);
                 if (is_int($new_gallery)) {
                     //Add Gallery to album
                     $add_to_album = $gallery_handler->add_gallery_to_album($album_id, array($new_gallery));
