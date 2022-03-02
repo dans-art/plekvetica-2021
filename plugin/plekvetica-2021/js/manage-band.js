@@ -80,15 +80,18 @@ let plek_band = {
                 plek_band.on_enter(e);
             }
         });
+
+        //Check for existing bands on name change.
+        jQuery('#band-name').on('change', (e)=>{
+            plek_band.check_existing_band();
+        });
     },
 
     /**
      * Functions only for the new band form 
      */
     on_band_add(){
-        jQuery('#band-name').on('change', (e)=>{
-            plek_band.check_existing_band();
-        });
+
     },
 
     on_enter(e) {
@@ -239,6 +242,7 @@ let plek_band = {
         data.append('action', 'plek_band_actions');
         data.append('do', 'check_existing_band');
         data.append('band-name', jQuery('#band-name').val());
+        data.append('band-id', jQuery('#band-id').val());
 
         jQuery.ajax({
             url: window.ajaxurl,

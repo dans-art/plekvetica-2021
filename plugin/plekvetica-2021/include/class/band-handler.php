@@ -814,6 +814,7 @@ class PlekBandHandler
     public function band_exists_ajax(){
         global $plek_ajax_handler;
         $name = $plek_ajax_handler -> get_ajax_data_esc('band-name');
+        $band_id = $plek_ajax_handler -> get_ajax_data_esc('band-id');
 
         //Check for existing bands
         $terms = get_terms(array('name' => $name, 'hide_empty' => false, 'taxonomy' => 'post_tag'));
@@ -823,8 +824,14 @@ class PlekBandHandler
         }
         $bands = array();
         foreach($terms as $term){
+            if(intval($band_id) === $term->term_id){
+                continue; //Skip if the band is the current edited band.
+            }
             $origin = get_field('herkunft', 'term_'.$term->term_id);
             $bands[] = '<a href="'.get_term_link($term->term_id).'" target="_blank">'.$term->name.' ('.$origin.')</a>'; 
+        }
+        if(empty($bands)){
+            return false;
         }
         if(count($bands) > 1){
             return sprintf(__('Some Bands with the Name "%s" where found.<br/>%s<br/>Please check if the Band you like to add does not exist.','pleklang'), $name, implode('<br/>', $bands));
