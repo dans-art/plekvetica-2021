@@ -71,6 +71,23 @@ class PlekEventHandler
         }
         return false;
     }
+    
+    /**
+     * Checks if the Event has been postponed to a unknown date.
+     *
+     * @return boolean True if last postponed history item is tbd. Otherwise false.
+     */
+    public function is_postponed_to_unknown()
+    {
+        $postponed_object = $this->get_postponed_new_obj();
+        if (empty($postponed_object)) {
+            return false;
+        }
+        if(end($postponed_object) === 'tbd'){
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Checks if the loaded event is a public / published
@@ -79,7 +96,7 @@ class PlekEventHandler
      */
     public function is_public(string $event_id = null)
     {
-        if(!$event_id){
+        if (!$event_id) {
             return false;
         }
 
@@ -219,7 +236,7 @@ class PlekEventHandler
         $current_id = (int) $this->get_ID();
         $postponed_obj = $this->get_postponed_obj();
         if (!$postponed_obj) {
-            if($this -> is_postponed()){
+            if ($this->is_postponed()) {
                 return true; //Its a Event with the new postponed field
             }
             return false;
@@ -264,10 +281,10 @@ class PlekEventHandler
     public function get_postponed_original_event_date($date_format = 'd. F Y')
     {
         //Only support for old Postponed Events
-        $is_postponed_new = (!empty($this->get_field_value('postponed_event_dates'))) ? true : false ;
-        if(!$is_postponed_new AND $this->is_postponed_event()){
+        $is_postponed_new = (!empty($this->get_field_value('postponed_event_dates'))) ? true : false;
+        if (!$is_postponed_new and $this->is_postponed_event()) {
             $postponed_id_orig = $this->get_postponed_original_event_id();
-            return tribe_get_start_date($postponed_id_orig, true ,'d. F Y');
+            return tribe_get_start_date($postponed_id_orig, true, 'd. F Y');
         }
         return false;
     }
@@ -303,7 +320,7 @@ class PlekEventHandler
         }
         return $postponed_obj;
     }
-    
+
     /**
      * Gets the new postponed object. It contains a json string with the editdate and the new date
      *
@@ -324,19 +341,19 @@ class PlekEventHandler
      *
      * @return string The postponed text
      */
-    public function get_postponed_event_text(){
+    public function get_postponed_event_text()
+    {
         //New Events
-        if($this->is_postponed() AND !$this->get_postponed_obj()){
+        if ($this->is_postponed() and !$this->get_postponed_obj()) {
             $postponed_history = $this->get_postponed_new_obj();
-            $pp_history_list = array();
-            if(is_object($postponed_history)){
+            if (is_object($postponed_history)) {
                 //Get only the last item to make things more readable
                 end($postponed_history);
                 $moddate = key($postponed_history);
-                if(!is_object($postponed_history->{$moddate})){
+                if (!is_object($postponed_history->{$moddate})) {
                     //Date is not set
-                    $pp_history_list[] = sprintf(__('At %s to undefined date','pleklang'), date_i18n('d. m Y', $moddate));
-                }else{
+                    return sprintf(__('Postponed at %s to undefined date', 'pleklang'), date_i18n('d. F Y', $moddate));
+                } else {
                     $old_start_date = date_i18n('d. F Y', strtotime($postponed_history->{$moddate}->old_date));
                     $new_start_date = date_i18n('d. F Y', strtotime($postponed_history->{$moddate}->new_date));
                     return sprintf(__('This event has been postponed from %s to %s', 'pleklang'), $old_start_date, $new_start_date);
@@ -346,7 +363,7 @@ class PlekEventHandler
         }
         //Old Events
         $postponed_event_old_date = $this->get_postponed_original_event_date('d. F Y');
-        return sprintf(__('This event was moved from %s to %s.', 'pleklang'),$postponed_event_old_date, $this -> get_start_date('d. F Y'));
+        return sprintf(__('This event was moved from %s to %s.', 'pleklang'), $postponed_event_old_date, $this->get_start_date('d. F Y'));
     }
 
     /**
@@ -1492,18 +1509,20 @@ class PlekEventHandler
      * Checks if the Event status is postponed. If so, the acf postponed_event gets filled out.
      * @param int|string $event_id - The Id of the Event
      * 
+     * @todo: Set the official Events calendar checkbox for postponed events
      * @return bool True on success, false on error, null if the field has not be changed
      */
     public function save_event_postponed($event_id)
     {
         global $plek_ajax_handler;
         global $plek_handler;
-        
+
         if (empty($event_id)) {
             return false;
         }
 
-        $postponed = $plek_ajax_handler->get_ajax_data('event_status');
+        $postponed = $plek_ajax_handler->get_ajax_data('event_status'); //This is the event status, set when no new date is known
+        $postponed_checked = $plek_ajax_handler->get_ajax_data('is_postponed_check'); //This is checked by the user to mark the event as postponed
         $new_event_startdate = date('Y-m-d', strtotime($plek_ajax_handler->get_ajax_data('event_start_date')));
         $old_event_startdate = tribe_get_start_date($event_id, true, 'Y-m-d');
 
@@ -1515,13 +1534,15 @@ class PlekEventHandler
         }
 
         $today = time();
-        if($new_event_startdate !== $old_event_startdate){
+        $last_item = end($prev_postponed_dates);
+        $last_is_tba = ($last_item === 'tbd') ? true : false;
+        if ($new_event_startdate !== $old_event_startdate and $postponed_checked === '1') {
             //Startdate was modified
             $prev_postponed_dates[$today] = array('old_date' => $old_event_startdate, 'new_date' => $new_event_startdate);
-        }elseif($postponed === 'event_postponed'){
+        } elseif ($postponed === 'event_postponed' and $last_is_tba === false) {
             //Postponed but no date changed
             $prev_postponed_dates[$today] = 'tbd';
-        }else{
+        } else {
             return;
         }
 

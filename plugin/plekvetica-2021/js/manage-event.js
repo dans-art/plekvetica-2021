@@ -53,6 +53,7 @@ let plek_manage_event = {
         }
     },
     existing_vob_data: {},
+    is_edit_event : false,
 
     __construct() {
         if (this.constructed === true) {
@@ -81,6 +82,13 @@ let plek_manage_event = {
         plek_manage_event.add_vob_to_current_selection('venue');
         plek_manage_event.add_vob_to_current_selection('organizers');
 
+        //Check if edit event is populated. If so, it is the edit event form or the add details form
+        if(!empty(plekevent.get_field_value('event_id'))){
+            this.is_edit_event = true;
+        }
+
+        //Hide the is postponed field
+        jQuery('.event-date-postponed-check-container').hide();
     },
 
     /**
@@ -151,6 +159,10 @@ let plek_manage_event = {
             }
             end_options['minDate'] = start_date;
             flatpickr("#event_end_date", end_options);
+            //Show checkbox if date was changed and edit event
+            if(plek_manage_event.is_edit_event){
+                jQuery('.event-date-postponed-check-container').show();
+            }
         });
 
         jQuery('#plek-submit-basic-event').click(function (event) {

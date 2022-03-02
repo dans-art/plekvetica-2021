@@ -27,7 +27,7 @@ $currencies_options = $event_object->get_currencies(true, $event_currency);
 		<div class="event_price_currency_container">
 			<label for="event_currency"><?php echo __('Currency', 'pleklang'); ?></label>
 			<div class="price-box">
-				<select id="event_currency">
+				<select id="event_currency" autocomplete="off">
 					<?php echo $currencies_options; ?>
 				</select>
 			</div>

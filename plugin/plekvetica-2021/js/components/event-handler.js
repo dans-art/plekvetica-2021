@@ -534,6 +534,7 @@ var plekevent = {
             datab.append('event_status', this.get_field_value('event_status'));
             datab.append('event_featured', this.get_field_value('event_featured'));
             datab.append('event_promote', this.get_field_value('event_promote'));
+            datab.append('is_postponed_check', this.get_field_value('is_postponed_check'));
         }
 
         if (type === 'save_event_review') {
