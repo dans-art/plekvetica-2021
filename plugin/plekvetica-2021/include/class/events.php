@@ -686,6 +686,7 @@ class PlekEvents extends PlekEventHandler
                 case 'post_tag':
                     $band_class = new PlekBandHandler;
                     $band = array();
+                    $band['ID'] = intval($line->term_id);
                     $band['name'] = $line->name;
                     $band['slug'] = $line->slug;
                     $band['link'] = $band_class->get_band_link($line->slug);

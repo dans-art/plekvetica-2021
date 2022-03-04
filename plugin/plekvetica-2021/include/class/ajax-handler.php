@@ -697,30 +697,36 @@ class PlekAjaxHandler
                 $band_id = $this->get_ajax_data('band_id');
                 $album_id = $this->get_ajax_data('album_id');
 
-                $gallery_name = $event_handler->generate_gallery_title($event_id, $band_id);
-                $gallery_description = $event_handler->generate_gallery_description($event_id, $band_id);
+                if (!empty($band_id) and !empty($event_id)) {
+                    $gallery_name = $event_handler->generate_gallery_title($event_id, $band_id);
+                    $gallery_description = $event_handler->generate_gallery_description($event_id, $band_id);
 
-                $new_gallery = $gallery_handler->create_gallery($gallery_name, $gallery_description);
-                $band_handler->load_band_object_by_id($band_id);
-                if (is_int($new_gallery)) {
-                    //Add Gallery to album
-                    $add_to_album = $gallery_handler->add_gallery_to_album($album_id, array($new_gallery));
-                    if ($add_to_album !== true) {
-                        $this->set_error($add_to_album);
+                    $new_gallery = $gallery_handler->create_gallery($gallery_name, $gallery_description);
+                    $band_handler->load_band_object_by_id($band_id);
+                    if (is_int($new_gallery)) {
+                        //Add Gallery to album
+                        $add_to_album = $gallery_handler->add_gallery_to_album($album_id, array($new_gallery));
+                        if ($add_to_album !== true) {
+                            $this->set_error($add_to_album);
+                        }
+                        //Add the gallery to the event gallery relationship
+                        if (!$event_handler->add_band_gallery_to_event($event_id, $band_id, $new_gallery, $album_id)) {
+                            $this->set_error(__('Failed to add the gallery to the event', 'pleklang'));
+                        }
+                        //Add the gallery to the band
+                        if (!$band_handler->update_band_galleries($new_gallery)) {
+                            $this->set_error(__('Failed to add the gallery to the band', 'pleklang'));
+                        }
+                        $this->set_success($new_gallery);
+                        $this->set_success($gallery_name);
+                    } else {
+                        $this->set_error($new_gallery);
                     }
-                    //Add the gallery to the event gallery relationship
-                    if (!$event_handler->add_band_gallery_to_event($event_id, $band_id, $new_gallery, $album_id)) {
-                        $this->set_error(__('Failed to add the gallery to the event', 'pleklang'));
-                    }
-                    //Add the gallery to the band
-                    if (!$band_handler->update_band_galleries($new_gallery)) {
-                        $this->set_error(__('Failed to add the gallery to the band', 'pleklang'));
-                    }
-                    $this->set_success($new_gallery);
-                    $this->set_success($gallery_name);
-                } else {
-                    $this->set_error($new_gallery);
+                }else{
+                    $this->set_error(__('Band ID or Event ID not provided','pleklang'));
                 }
+
+
                 break;
 
             case 'add_image':
