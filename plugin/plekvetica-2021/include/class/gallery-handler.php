@@ -253,7 +253,7 @@ class PlekGalleryHandler
      */
     public function upload_image()
     {
-        require(NGG_MODULE_DIR . '\ngglegacy\admin\functions.php');
+        require(NGG_MODULE_DIR . '/ngglegacy/admin/functions.php');
         global $plek_ajax_handler, $nggdb, $ngg;
 
         $file = $plek_ajax_handler->get_ajax_files_data('file_data');
