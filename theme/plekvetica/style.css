@@ -747,6 +747,12 @@ input[type="phone"] {
     .notifications-button-container #notifications-button .fas {
       padding: 0.75em 0; }
 
+/* Toastr*/
+.toast-info a,
+.toast-info a:hover,
+.toast-info a:active {
+  color: black; }
+
 .band img {
   vertical-align: sub;
   width: 19px; }

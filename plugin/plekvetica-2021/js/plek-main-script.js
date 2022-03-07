@@ -1,4 +1,5 @@
 let plek_main = {
+
     construct() {
         jQuery(window).resize();
         jQuery(document).ready(function () {
@@ -180,8 +181,13 @@ let plek_main = {
         });
     },
 
+    /**
+     * Changes the Text of the upload button as soon as the file got selected.
+     * @param {object} item The Upload input
+     */
+
     image_upload_button_change(item) {
-        let text = __('File selected', "pleklang");
+        let text = (!empty(jQuery(item).data('selected-text'))) ? jQuery(item).data('selected-text') : __('File selected', "pleklang");
         var upload = jQuery(item).prop("files")[0];
         var id = jQuery(item).attr("id");
         if (typeof upload === "object") {
@@ -293,7 +299,7 @@ let plek_main = {
         }
 
     },
-    
+
     /**
      * Gets the result from the ajax response.
      * 
@@ -306,7 +312,7 @@ let plek_main = {
             let encoded_data = (typeof data === "object") ? data : JSON.parse(data);
             if (typeof encoded_data.success[array_index] !== 'undefined') {
                 return encoded_data.success[array_index];
-            }else{
+            } else {
                 return false;
             }
             return text;

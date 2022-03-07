@@ -43,9 +43,9 @@ $current_album = $event_object->get_field_value('gallery_id');
 		<div class="icon"><i class="fas fa-camera"></i></div>
 		<div class="info"><?php echo sprintf(__('Select all the images of the Band. Max filesize %s mb ', 'pleklang'), number_format(wp_max_upload_size() / 1048576, 0)); ?></div>
 	</div>
-	<input type="file" multiple='multiple' id="review_images" name="review_images[]" />
+	<input type="file" multiple='multiple' id="review_images" name="review_images[]" data-selected-text="<?php echo __('Upload images','pleklang') ?>" />
 	<button class='plek-button' type="button" id="review_images_upload_btn" name="review_images_upload_btn" data-gallery_id='null' data-album_id='null'>
-		<?php echo __('Upload images', 'pleklang') ?>
+		<?php echo __('Select images', 'pleklang') ?>
 	</button>
 </div>
 <div id='images-uploaded-container' class="plek-event-form-container">
