@@ -888,14 +888,15 @@ class PlekEventHandler
         ON organi_name.ID = organi.meta_value
         WHERE posts.post_type = 'tribe_events'
         AND venue.meta_value = '%s'
+        AND organi.meta_value IS NOT NULL
         GROUP BY organi.meta_value
         ORDER BY ocount DESC
         LIMIT 4;", $venue);
         $result =  $wpdb->get_results($query);
+
         if (!$add_current_user_organi) {
             return $result;
         }
-
         $user_organizer_id = PlekUserHandler::get_user_setting('organizer_id');
         if (!empty($user_organizer_id)) {
             //Check if organizer is already set. If so, return the array.

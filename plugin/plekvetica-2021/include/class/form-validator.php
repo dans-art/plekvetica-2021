@@ -283,6 +283,9 @@ class PlekFormValidator
         if (!$is_array and isset($this->value_in_array[$fieldname])) {
             //Field is an array. Loop array and check
             $values = (is_array($value)) ? $value : json_decode($value);
+            if(empty($values)){
+                $values = array();
+            }
             foreach ($values as $val) {
                 $this->field_is_valid($fieldname, $val, true);
             }

@@ -308,7 +308,7 @@ class PlekGalleryHandler
         if (!@move_uploaded_file($temp_file, $gallery_path . $filename)) {
             return __('Error, the file could not be moved to : ', 'nggallery') . esc_html($gallery_path);
         }
-
+        
         $image_id = nggAdmin::add_Images($gallery_id, array($filename));
 
         //Resize the original image to the max image size set in the ngg options
