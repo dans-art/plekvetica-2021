@@ -49,6 +49,10 @@ div.plek-review-search{
  .plek-event-form-container{
 
   margin-bottom: 2em;
+  width: 80%;
+  position: relative;
+  padding-right: 40px;
+  max-width: 750px;
 
   .plek-field-error{
     padding: 0.5em 0;
@@ -130,9 +134,10 @@ input[type=checkbox]{
 .plek-search-overlay{
   position: absolute;
   background-color: $color-gray-light;
-  width: 72%;
   max-width: 755px;
   z-index: 10000;
+  margin-right: 40px;
+  width: 100%;
 }
 
 #event-organizer-proposal,
@@ -350,6 +355,12 @@ input[type=checkbox]{
 .item.plek-add-item {
 	width: 100%;
 	margin: 0.2em 0;
+}
+
+.event-prices-container{
+  input{
+    width: 100%;
+  }
 }
 
 

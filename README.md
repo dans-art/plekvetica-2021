@@ -1,4 +1,12 @@
 # plekvetica-2021
+Version 2.0
+- Neues "Event eintragen" Formular
+- Neues "Event Review schreiben" Formular
+- "Band hinzufügen" Formular hinzugefügt
+- Diverse Optimierungen und Fixes
+- Konzertfotos können nun im Frontend hochgeladen werden
+- Akkreditierungen werden nun geloggt
+-  
 
 Version 1.1.1
 
