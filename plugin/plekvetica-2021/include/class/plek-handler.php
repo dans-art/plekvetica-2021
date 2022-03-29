@@ -180,7 +180,7 @@ class PlekHandler
     public function enqueue_scripts()
     {
         $plugin_meta = get_plugin_data(PLEK_PATH . 'plekvetica.php');
-        $this->version = (!empty($plugin_meta['Version'])) ? $plugin_meta['Version'] : "000";
+        $this->version = (!empty($plugin_meta['Version']) AND $plugin_meta['Version'] !== null) ? $plugin_meta['Version'] : "2.0";
         
         if ($this->is_dev_server()) {
             wp_enqueue_script('plek-topbar', PLEK_PLUGIN_DIR_URL . 'plugins/topbar/topbar.min.js', $this->version);

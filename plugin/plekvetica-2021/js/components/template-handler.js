@@ -140,7 +140,7 @@ var plektemplate = {
         if (code.length < 1) {
             return "";
         }
-        return window.plek_plugin_dir_url + 'images/flags/' + code + '.png'
+        return window.plek_plugin_dir_url + 'images/flags/' + code.toLowerCase() + '.png'
     },
 
     get_item_to_add(data) {

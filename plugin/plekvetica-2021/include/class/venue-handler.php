@@ -39,7 +39,7 @@ class PlekVenueHandler
      * @param int|string $venue_id 
      * @return void
      */
-    public function load_venue(mixed $venue_id)
+    public function load_venue($venue_id)
     {
         $venue_object = tribe_get_venue_object($venue_id, 'OBJECT', null);
         if ($venue_object === null or $venue_object->post_type !== 'tribe_venue') {

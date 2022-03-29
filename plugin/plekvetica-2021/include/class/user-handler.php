@@ -26,7 +26,7 @@ class PlekUserHandler
      * @param object|int $plek_event - The Plek Event Object or the event_id
      * @return void
      */
-    public static function current_user_can_edit(mixed $plek_event)
+    public static function current_user_can_edit($plek_event)
     {
         if (is_string($plek_event) or is_int($plek_event)) {
             $post_id = intval($plek_event);
@@ -242,7 +242,7 @@ class PlekUserHandler
      * @param mixed $event PlekEvent Object or event id
      * @return void
      */
-    public static function user_can_edit_post(mixed $event)
+    public static function user_can_edit_post($event)
     {
         if (self::current_user_is_locked()) {
             return false;

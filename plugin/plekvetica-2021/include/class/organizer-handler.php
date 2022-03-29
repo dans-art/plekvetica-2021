@@ -32,7 +32,7 @@ class PlekOrganizerHandler
      * @param int|string $organizer_id
      * @return void
      */
-    public function load_organizer(mixed $organizer_id)
+    public function load_organizer($organizer_id)
     {
         $organizer_object = tribe_get_organizer_object($organizer_id, 'OBJECT', null);
         if ($organizer_object === null or $organizer_object->post_type !== 'tribe_organizer') {

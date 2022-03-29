@@ -856,7 +856,7 @@ class PlekAjaxHandler
      * @param mixed $message
      * @return void
      */
-    public function set_success(mixed $message)
+    public function set_success($message)
     {
         $this->success[] = $message;
         return;
