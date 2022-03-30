@@ -711,6 +711,13 @@ input[type=checkbox]{
     flex-basis: 50%;
   }
 
+  .input_loader{
+    top: -5px;
+  }
+
+}
+#back_to_event_btn{
+  flex-basis: 50%;
 }
 
 //The File upload button

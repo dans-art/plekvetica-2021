@@ -1082,7 +1082,31 @@ class PlekEvents extends PlekEventHandler
         } else {
             return __('No Event ID found', 'pleklang');
         }
+    }
 
+    /**
+     * Loads the latest added Events
+     *
+     * @return string The formated Events
+     */
+    public function plek_event_recently_added_shortcode($atts = [])
+    {
+        $short_args = shortcode_atts(
+            array(
+                'nr_posts' => '25',
+            ), $atts
+        );
+        
+        $events = tribe_get_events([
+            'posts_per_page' => $short_args['nr_posts'],
+            'order'       => 'DESC',
+            'orderby' => 'publish_date',
+            'post_status' => 'publish'
+        ]);
+        if (empty($events)) {
+            return __('No new Events found', 'pleklang');
+        }
+        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'new_events');
     }
 
     public function enqueue_event_form_styles()
@@ -1124,7 +1148,6 @@ class PlekEvents extends PlekEventHandler
             wp_enqueue_script('plek-compare-algorithm', PLEK_PLUGIN_DIR_URL . "js/components/compare-algorithm{$min}.js", ['jquery', 'plek-language', 'manage-plek-events']);
             wp_set_script_translations('plek-compare-algorithm', 'pleklang', PLEK_PATH . "/languages");
             wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler.js', ['jquery', 'plek-language'], $plek_handler->version);
-
         });
     }
 

@@ -191,6 +191,7 @@ input[type="submit"]{
     to { transform: rotate(360deg) }
   }
 
+
   .input_loader{
     top: -9px;
     padding: 0;
@@ -831,13 +832,17 @@ margin: 4px 0px 0px 0;
 }
 
 /* Toastr*/
-.toast-info{
-  a,
-  a:hover,
-  a:active{
-    color: $text-color-black;
-  }
+#toast-container{
+  z-index: 9999999;
 
+  .toast-info{
+    a,
+    a:hover,
+    a:active{
+      color: $text-color-black;
+    }
+  
+  }
 }
 
 #wpadminbar{

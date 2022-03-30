@@ -1617,6 +1617,10 @@ class PlekEventHandler
         $acf['album_ids'] =  $this->get_event_form_value('event_review_old_album_id');
         $acf['is_review'] =  true;
 
+        if(empty($acf['text_review'])){
+            $acf['text_review'] = " "; //Workaround to avoid displaying the original post content. 
+        }
+
         $sortorder =  $plek_ajax_handler->get_ajax_data_as_array('event_gallery_sortorder');
         if (!empty($sortorder) and empty($acf['album_ids'])) {
             foreach ($sortorder as $album_id => $gallery_id_array) {

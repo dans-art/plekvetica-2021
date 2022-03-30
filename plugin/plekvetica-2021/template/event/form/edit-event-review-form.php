@@ -62,7 +62,9 @@ s(C_Album_Mapper::get_instance()->save($album));
 
 	<div class="submit-event-edit-review-from">
 		<?php PlekTemplateHandler::load_template('button', 'components', get_permalink( $event_class->get_id()), __('Back to the Event','pleklang'), '_self', 'back_to_event_btn'); ?>
-		<input type="submit" name="plek-submit" id="plek-submit-event-edit-review" class='plek-button plek-main-submit-button' data-type="save_edit_event_review" value="<?php echo __('Save event review', 'pleklang'); ?>">
+		<div class="submit-button-container">
+			<input type="submit" name="plek-submit" id="plek-submit-event-edit-review" class='plek-button plek-main-submit-button' data-type="save_edit_event_review" value="<?php echo __('Save event review', 'pleklang'); ?>">
+		</div>
 	</div>
 </form>
 

@@ -7,6 +7,7 @@ if(!$event){
 }
 $startDatetime = $event->get_field_value('_EventStartDate');
 $stime = strtotime($startDatetime);
+$poster = $event->get_poster(); 
 ?>
 <article class="tribe-events-calendar-list__event <?php echo $event -> get_event_classes(); ?>">
 
@@ -23,7 +24,10 @@ $stime = strtotime($startDatetime);
             <?php if($event -> is_featured()): ?>
             <?php PlekTemplateHandler::load_template('image-banner-star', 'components') ?>
             <?php endif; ?>
-            <?php echo $event->get_poster(); ?>
+            <?php echo $poster; ?>
+            <?php if (empty($poster)) : ?>
+                <img src="<?php echo $event->poster_placeholder; ?>" />
+            <?php endif; ?>
         </a>
     </div>
 
