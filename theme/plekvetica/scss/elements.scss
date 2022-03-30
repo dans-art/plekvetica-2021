@@ -398,9 +398,12 @@ input[type="phone"]{
 }
 
 
+.select2-container--open{
+  z-index: 10000;
+}
 .select2-container--open .select2-dropdown--below,
 .select2-container--open .select2-dropdown--above{
-  margin-top: -0.5em;
+  margin-top: 24px;
 }
 .select2-container--plek{
 .select2-container--focus .select2-selection--multiple{
@@ -440,6 +443,7 @@ span.select2-search{
   text-indent: 1px;
   box-shadow: none;
   background-image: none;
+
   div {
     border-left: 2px solid #dce4ec;
     border-radius: 0 4px 4px 0;
@@ -531,7 +535,8 @@ margin: 4px 0px 0px 0;
 .select2-selection--single{
   background: $text-color;
   border: 0px;
-  height:34px;
+  height:3rem;
+
   .select2-selection__rendered{
     color: $color-gray-form-input;
     line-height:34px;
@@ -591,6 +596,9 @@ margin: 4px 0px 0px 0;
     float: left;
     margin-right: 5px;
     margin-top: 5px;
+    margin-left: 5px;
+    max-height: 2em;
+    line-height: 1.5rem;
   }
   .select2-selection__choice__remove{
     padding: 0;
@@ -830,4 +838,8 @@ margin: 4px 0px 0px 0;
     color: $text-color-black;
   }
 
+}
+
+#wpadminbar{
+  z-index: 9999999;
 }

@@ -283,7 +283,7 @@ var plekevent = {
 
         var datab = this.prepare_data(type, form);
         if (plekvalidator.validate_form_data(datab, form) !== true) {
-            jQuery('#' + form).prop("disabled", false); //Enable the button again.
+            jQuery('#' + form + ' .plek-main-submit-button').prop("disabled", false); //Enable the button again.
             plekvalidator.display_errors(form);
             //plekerror.display_error();
             return false;
@@ -353,7 +353,12 @@ var plekevent = {
                         plekerror.display_info(__('Data saved!', 'pleklang'));
                         setTimeout(() => {
                             window.location = url;
-                        }, 500);
+                        }, 6000); //Auto redirect after 6 seconds
+                        //Modifies the Button to direct to the next page
+                        jQuery(button).data('type', 'new_event_next_page');
+                        orig_btn_text = __('Add Event details','pleklang');
+                        jQuery(button).data('url', url);
+
                     }
                    
                     plek_main.deactivate_button_loader(button, orig_btn_text);

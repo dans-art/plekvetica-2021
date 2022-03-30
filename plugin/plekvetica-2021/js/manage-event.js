@@ -170,6 +170,11 @@ let plek_manage_event = {
             jQuery(this).prop("disabled", true);
             var type = jQuery(this).data("type");
             var form = 'add_event_basic';
+            if(type === 'new_event_next_page'){
+                let url = jQuery(this).data("url");
+                window.location = url;
+                return;
+            }
             window.plekevent.save_event(type, form);
         });
 

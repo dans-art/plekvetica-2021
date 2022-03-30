@@ -64,6 +64,10 @@ class PlekEventHandler
     public function is_postponed()
     {
         if (!empty($this->get_field_value('postponed_event_dates'))) {
+            $postponed_obj = json_decode($this->get_field_value('postponed_event_dates'), true);
+            if(empty($postponed_obj)){
+                return false;
+            }
             return true;
         }
         if (!empty($this->get_field_value('postponed_event'))) {
@@ -1442,7 +1446,7 @@ class PlekEventHandler
 
         $result =  tribe_get_events(
             [
-                'start_date' => $start_date,
+                'eventDate' => $start_date,
                 'tag' => $bands
             ]
         );
@@ -1493,7 +1497,11 @@ class PlekEventHandler
         $plek_handler->update_field('band_order_time', $plek_ajax_handler->get_ajax_data('band_order_time'), $event_id);
 
         //Update the Event genres / categories
-        $this->update_event_genres($event_id);
+        if(!$this->update_event_genres($event_id))
+        {
+            apply_filters('simple_history_log', 'Failed to update the Event genres');
+
+        }
 
         if (PlekUserHandler::user_is_logged_in()) {
             //Info to Band follower
@@ -2107,11 +2115,10 @@ class PlekEventHandler
     {
         //Get all the bands
         //set the event post_category
-        if (!$this->load_event($event_id)) {
+        if (!$this->load_event($event_id, 'all')) {
             return false;
         }
         $bands = $this->get_bands();
-
         if (empty($bands)) {
             return false;
         }
