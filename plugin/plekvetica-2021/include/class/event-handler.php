@@ -65,7 +65,7 @@ class PlekEventHandler
     {
         if (!empty($this->get_field_value('postponed_event_dates'))) {
             $postponed_obj = json_decode($this->get_field_value('postponed_event_dates'), true);
-            if(empty($postponed_obj)){
+            if (empty($postponed_obj)) {
                 return false;
             }
             return true;
@@ -75,7 +75,7 @@ class PlekEventHandler
         }
         return false;
     }
-    
+
     /**
      * Checks if the Event has been postponed to a unknown date.
      *
@@ -87,7 +87,7 @@ class PlekEventHandler
         if (empty($postponed_object)) {
             return false;
         }
-        if(end($postponed_object) === 'tbd'){
+        if (end($postponed_object) === 'tbd') {
             return true;
         }
         return false;
@@ -1094,7 +1094,7 @@ class PlekEventHandler
      *
      * @return array The Authors (user_id => display_name, ...)
      */
-    public function get_event_authors()
+    public function get_event_authors($only_ids = false)
     {
         $authors_handler = new PlekAuthorHandler;
         $guest_author = $authors_handler->get_guest_author_id();
@@ -1113,6 +1113,13 @@ class PlekEventHandler
                 continue;
             }
             $authors[$user->ID] = $user->display_name;
+        }
+        if ($only_ids) {
+            $stripped_authors = array();
+            foreach ($authors as $author_id => $author_name) {
+                $stripped_authors[] = $author_id;
+            }
+            $authors = $stripped_authors;
         }
         return $authors;
     }
@@ -1367,7 +1374,7 @@ class PlekEventHandler
         $reported_time = (!empty($reported_on)) ? strtotime($reported_on) : null;
         if ($reported_time === null or ($reported_time - time() > 259200)) { //Allow reporting again after three days
             //Get the users to notify
-            $users = $this->get_event_authors();
+            $users = $this->get_event_authors(true);
             $crew = $this->get_event_akkredi_crew();
             if (is_array($crew)) {
                 foreach ($crew as $member) {
@@ -1497,10 +1504,8 @@ class PlekEventHandler
         $plek_handler->update_field('band_order_time', $plek_ajax_handler->get_ajax_data('band_order_time'), $event_id);
 
         //Update the Event genres / categories
-        if(!$this->update_event_genres($event_id))
-        {
+        if (!$this->update_event_genres($event_id)) {
             apply_filters('simple_history_log', 'Failed to update the Event genres');
-
         }
 
         if (PlekUserHandler::user_is_logged_in()) {
@@ -1617,7 +1622,7 @@ class PlekEventHandler
         $acf['album_ids'] =  $this->get_event_form_value('event_review_old_album_id');
         $acf['is_review'] =  true;
 
-        if(empty($acf['text_review'])){
+        if (empty($acf['text_review'])) {
             $acf['text_review'] = " "; //Workaround to avoid displaying the original post content. 
         }
 
@@ -2476,6 +2481,6 @@ class PlekEventHandler
         $venue = $this->get_venue_name();
         $band = $band_handler->get_name();
 
-        return sprintf(__('Photos of %s at %s by Plekvetica','pleklang'), $band, $venue);
+        return sprintf(__('Photos of %s at %s by Plekvetica', 'pleklang'), $band, $venue);
     }
 }

@@ -54,7 +54,7 @@ class PlekNotificationHandler extends WP_List_Table
         //Assign the Message ID to the users
         foreach ($user_ids as $user_id) {
             $data_user = array();
-            $data_user['user_id'] = $user_id;
+            $data_user['user_id'] = $this -> get_valid_user_id($user_id);
             $data_user['email_send'] = 0; //Get this from user preferences
             $data_user['dismissed'] = 0;
             $data_user['message_id'] = $message_id;
@@ -68,6 +68,21 @@ class PlekNotificationHandler extends WP_List_Table
         }
 
         return true;
+    }
+
+    /**
+     * Checks if a user id is set and valid. If not, it will try to get the admin set in the options
+     *
+     * @param int $user_id - The user id to validate
+     * @return void
+     */
+    public function get_valid_user_id($user_id){
+        global $plek_handler;
+        if(empty($user_id) OR $user_id == 0){
+            $admin_user = get_user_by( 'email', $plek_handler->get_plek_option('admin_email'));
+            $user_id = (is_object($admin_user) AND $admin_user->ID !== 0) ? $admin_user->ID : 1;
+        }
+        return intval($user_id);
     }
 
     /**
