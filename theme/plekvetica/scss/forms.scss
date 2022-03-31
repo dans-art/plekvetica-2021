@@ -356,6 +356,15 @@ input[type=checkbox]{
 .item.plek-add-item {
 	width: 100%;
 	margin: 0.2em 0;
+  position: relative;
+
+  &.exact-match-result .title-container::after{
+    position: absolute;
+    right: 1rem;
+    font-family: "FontAwesome";
+    content: "\f005";
+    color: $color-yellow;
+  }
 }
 
 .event-prices-container{

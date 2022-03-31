@@ -138,6 +138,12 @@ var pleksearch = {
 
   },
 
+  /**
+   * Just returns the first parameter. For the Promise of search()... for whatever reason.
+   * 
+   * @param {mixed} data 
+   * @returns 
+   */
   transport_data(data){
     return data;
   },
@@ -145,27 +151,22 @@ var pleksearch = {
   /**
    * Sorts the result from the search by percentage
    * @param {object} data 
-   * @returns The sorted object
-   * @todo: Use a class property to store the array and values from the last search. This way you can get the current percentage of the last found Items. 
+   * @returns The sorted object 
    */
   sort_results(data) {
-    debugger;
-    pleksearch.last_search_result = data;
-    console.log(data);
     jQuery.each(data, function (key, value) {
       let sliced_key = ("0000000" + key).slice(-7);
-      data[value.perc + sliced_key] = value; //Adds the match score to the key to make it sortable. The 1000 allows the higher score to have a smaller number
+      data[value.perc + sliced_key] = value; //Adds the match score to the key to make it sortable.
       delete data[key]; //Remove the original key
     });
 
-    let sorted_arr = Object.keys(data).reverse();
+    let sorted_arr = Object.keys(data).sort();
     let sorted_obj = new Object;
     jQuery.each(sorted_arr, function (index, key) {
       let sorted_value = data[key];
       sorted_obj[key] = sorted_value; //Adds the value to the sorted obj
     });
 
-    var sorted = data;
     return sorted_obj;
   },
   /**
