@@ -6,6 +6,7 @@ var pleksearch = {
 
   current_type: null,
   treshhold: 60,
+  last_search_result: null,
 
   fire_search(element) {
     var search_field_id = jQuery(element).attr('id');
@@ -54,10 +55,13 @@ var pleksearch = {
     var type = window.pleksearch.current_type;
     header = plektemplate.load_search_overlay_header(total);
 
-    jQuery.each(result_object, function (key, value) {
+    pleksearch.last_search_result = result_object;
+    let sorted = pleksearch.sort_results(result_object);
+
+    jQuery.each(sorted, function (key, value) {
       switch (type) {
         case 'event_band':
-          result = plektemplate.load_band_item_template(value.data) + result;
+          result = plektemplate.load_band_item_template(value.data, value.perc) + result;
           break;
         case 'event_venue':
           result = plektemplate.load_venue_item_template(value.data)  + result;
@@ -124,14 +128,20 @@ var pleksearch = {
           results[value.id] = item;
         }
       });
+
       return new Promise(resolve => {
-        resolve(pleksearch.sort_results(results));
+        resolve(pleksearch.transport_data(results));
       });
     });
 
 
 
   },
+
+  transport_data(data){
+    return data;
+  },
+
   /**
    * Sorts the result from the search by percentage
    * @param {object} data 
@@ -139,6 +149,8 @@ var pleksearch = {
    * @todo: Use a class property to store the array and values from the last search. This way you can get the current percentage of the last found Items. 
    */
   sort_results(data) {
+    debugger;
+    pleksearch.last_search_result = data;
     console.log(data);
     jQuery.each(data, function (key, value) {
       let sliced_key = ("0000000" + key).slice(-7);
@@ -153,8 +165,6 @@ var pleksearch = {
       sorted_obj[key] = sorted_value; //Adds the value to the sorted obj
     });
 
-    console.log(sorted_obj);
-    debugger;
     var sorted = data;
     return sorted_obj;
   },
