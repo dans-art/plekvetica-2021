@@ -101,11 +101,7 @@ class PlekEventHandler
     public function is_public(string $event_id = null)
     {
         if (!$event_id) {
-            return false;
-        }
-
-        if (!$event_id) {
-            $status = $this->$this->get_field_value('post_status');
+            $status = $this->get_field_value('post_status');
         } else {
             $status = get_post_status($event_id);
         }
@@ -1724,7 +1720,7 @@ class PlekEventHandler
             $guest_name = $plek_ajax_handler->get_ajax_data('guest_name');
             $guest_email = $plek_ajax_handler->get_ajax_data('guest_email');
             $guest_author = array('name' => $guest_name, 'email' => $guest_email);
-            if (!$plek_handler->update_field('guest_author', json_encode($guest_author), $event_id)) {
+            if (!$plek_handler->update_field('guest_author', json_encode($guest_author, JSON_UNESCAPED_UNICODE), $event_id)) {
                 return __('Error: Could not update the guest Author!', 'pleklang');
             }
             //Set the guest author ID

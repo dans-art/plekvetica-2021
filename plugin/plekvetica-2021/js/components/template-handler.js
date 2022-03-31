@@ -23,7 +23,9 @@ var plektemplate = {
         let band_playtime = (typeof data.timetable === 'object' && typeof data.timetable.playtime !== 'undefined') ? data.timetable.playtime : 0;
         let playtime_formated = (typeof data.timetable === 'object' && typeof data.timetable.playtime_formated !== 'undefined') ? data.timetable.playtime_formated : '0';
         let timestamp = (typeof data.timetable === 'object' && typeof data.timetable.timestamp !== 'undefined') ? data.timetable.timestamp : 0;
-        return `<button type='button' class='item plek-add-item' 
+        let match = (!empty(data.perc) && data.perc === 100) ? 'exact-match-result' : '' ;
+        debugger;
+        return `<button type='button' class='item plek-add-item ${match}' 
         data-for='event-band-selection' data-type='event_band' data-id='${data.id}' 
         data-sort='${data.band_sort}' data-playtime='${band_playtime}' data-timestamp='${timestamp}'>
         <div class='title-container'>

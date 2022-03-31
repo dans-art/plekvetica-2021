@@ -414,7 +414,6 @@ var plekevent = {
                     //Redirect to next stage
                     plek_main.url_replace_param('event_id', event_id);
                     let url = plek_main.url_replace_param('stage', 'details');
-
                     window.location = url; //Redirect to the details page
                     return;
                 }

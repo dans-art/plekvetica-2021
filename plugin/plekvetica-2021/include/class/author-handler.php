@@ -41,15 +41,22 @@ class PlekAuthorHandler
         return site_url('author/'.$user_nicename);
     }
 
+    /**
+     * Gets the guest author from the acf
+     *
+     * @param integer|null $event_id - ID of the Event
+     * @return object|string Error message on failure, object on success.
+     */
     public function get_event_guest_author(int $event_id = null){
         $guest_author = get_field('guest_author', $event_id);
-        
+        $guest_author = str_replace("'", "\'", $guest_author); //Escape the single quote to avoid json_decode errors
         if(empty($guest_author)){
             return __('No Author found','pleklang');
         }
         $guest_object = json_decode($guest_author);
         if(isset($guest_object -> name)){
-            return $guest_object -> name . ' - ' . __('Guest Author','pleklang'); ;
+            $guest_name = str_replace("\'", "'", $guest_object -> name); //de-escape the single quote again for display.
+            return  $guest_name . ' - ' . __('Guest Author','pleklang'); ;
         }
         return false;
     }

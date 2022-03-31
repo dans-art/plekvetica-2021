@@ -608,6 +608,11 @@ margin: 4px 0px 0px 0;
 }
 }
 
+.flatpickr-current-month .select2-container--plek .select2-selection--single .select2-selection__rendered {
+  line-height: 0.2rem;
+  height: 2rem;
+}
+
 //Youtube Videos
 #video_preview_con{
   display: flex;

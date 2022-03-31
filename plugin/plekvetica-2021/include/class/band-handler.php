@@ -711,7 +711,7 @@ class PlekBandHandler
 
             $bands_formated[$band->term_id] = $current;
         }
-        return json_encode($bands_formated);
+        return json_encode($bands_formated, JSON_UNESCAPED_UNICODE);
     }
 
     public function format_band_genres(array $genres)

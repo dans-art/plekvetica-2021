@@ -636,7 +636,7 @@ class PlekAjaxHandler
                 $notify = new PlekNotificationHandler;
                 $return_arr['content'] = $notify->get_user_notifications_formated();
                 $return_arr['count'] = $notify->get_number_of_notificaions();
-                echo json_encode($return_arr);
+                echo json_encode($return_arr, JSON_UNESCAPED_UNICODE);
                 break;
             case 'block_my_missing_reviews':
                 $return_arr = array();
@@ -646,7 +646,7 @@ class PlekAjaxHandler
                     $return_arr['content'] = "<span class='plek-no-open-reviews'>" . __('Super! No missing Reviews.', 'pleklang') . "</span>";
                 }
                 $return_arr['count'] = 0;
-                echo json_encode($return_arr);
+                echo json_encode($return_arr, JSON_UNESCAPED_UNICODE);
                 break;
         }
         die();
@@ -879,6 +879,6 @@ class PlekAjaxHandler
     {
         $this->get_ajax_errors();
         $ret = ['success' => $this->success, 'error' => $this->error, 'system_error' => $this->system_error];
-        return json_encode($ret);
+        return json_encode($ret, JSON_UNESCAPED_UNICODE);
     }
 }

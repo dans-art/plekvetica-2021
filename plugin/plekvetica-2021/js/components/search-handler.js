@@ -57,14 +57,14 @@ var pleksearch = {
     jQuery.each(result_object, function (key, value) {
       switch (type) {
         case 'event_band':
-          result += plektemplate.load_band_item_template(value.data);
+          result = plektemplate.load_band_item_template(value.data) + result;
           break;
         case 'event_venue':
-          result += plektemplate.load_venue_item_template(value.data);
+          result = plektemplate.load_venue_item_template(value.data)  + result;
           break;
         case 'event_organizer':
           console.log(plektemplate.load_organizer_item_template(value.data));
-          result += plektemplate.load_organizer_item_template(value.data);
+          result = plektemplate.load_organizer_item_template(value.data) + result;
           break;
         default:
           break;
@@ -103,11 +103,17 @@ var pleksearch = {
       //Loop the data object
       jQuery.each(data, function (key, value) {
         var compare_prep = value.name.toLowerCase().replace(/[^a-z 0-9]/, '');
-        var sm_compare = smith_waterman(search_for_prep, compare_prep, {
-          'match': 10,
-          'mismatch': -1,
-          'gap': -1
-        });
+        try {
+          var sm_compare = smith_waterman(search_for_prep, compare_prep, {
+            'match': 10,
+            'mismatch': -1,
+            'gap': -1
+          });
+        } catch (error) {
+          return new Promise(resolve => {
+            resolve(false);
+          });
+        }
         var exact_hit = pleksearch.is_exact_hit(search_for_prep, compare_prep);
         if (sm_compare.peak.value >= window.pleksearch.threshhold || exact_hit > 0 || exact_hit === true) {
           var item = {};
@@ -126,9 +132,31 @@ var pleksearch = {
 
 
   },
+  /**
+   * Sorts the result from the search by percentage
+   * @param {object} data 
+   * @returns The sorted object
+   * @todo: Use a class property to store the array and values from the last search. This way you can get the current percentage of the last found Items. 
+   */
   sort_results(data) {
+    console.log(data);
+    jQuery.each(data, function (key, value) {
+      let sliced_key = ("0000000" + key).slice(-7);
+      data[value.perc + sliced_key] = value; //Adds the match score to the key to make it sortable. The 1000 allows the higher score to have a smaller number
+      delete data[key]; //Remove the original key
+    });
+
+    let sorted_arr = Object.keys(data).reverse();
+    let sorted_obj = new Object;
+    jQuery.each(sorted_arr, function (index, key) {
+      let sorted_value = data[key];
+      sorted_obj[key] = sorted_value; //Adds the value to the sorted obj
+    });
+
+    console.log(sorted_obj);
+    debugger;
     var sorted = data;
-    return sorted;
+    return sorted_obj;
   },
   /**
    * 

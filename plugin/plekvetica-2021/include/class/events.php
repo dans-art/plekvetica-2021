@@ -1096,12 +1096,12 @@ class PlekEvents extends PlekEventHandler
                 'nr_posts' => '25',
             ), $atts
         );
-        
+        $post_status = PlekUserHandler::user_is_in_team() ? array('publish', 'draft') : 'publish';
         $events = tribe_get_events([
             'posts_per_page' => $short_args['nr_posts'],
             'order'       => 'DESC',
             'orderby' => 'publish_date',
-            'post_status' => 'publish'
+            'post_status' => $post_status
         ]);
         if (empty($events)) {
             return __('No new Events found', 'pleklang');
