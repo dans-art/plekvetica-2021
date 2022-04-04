@@ -1100,7 +1100,7 @@ class PlekEvents extends PlekEventHandler
         $events = tribe_get_events([
             'posts_per_page' => $short_args['nr_posts'],
             'order'       => 'DESC',
-            'orderby' => 'publish_date',
+            'orderby' => 'ID',
             'post_status' => $post_status
         ]);
         if (empty($events)) {
