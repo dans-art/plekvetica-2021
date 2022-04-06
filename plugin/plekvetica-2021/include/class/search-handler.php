@@ -61,11 +61,19 @@ class PlekSearchHandler
         }
     }
 
-    public function get_photos()
+    /**
+     * Loads all the galleries containing the search query or given parameter.
+     *
+     * @param string $query - The query to search for.
+     * @return string The formated result
+     */
+    public function get_photos($query = null)
     {
         global $nggdb;
         global $plek_handler;
-        $query = get_search_query();
+        if($query === null OR !is_string($query)){
+            $query = get_search_query();
+        }
         $search_result = $nggdb->search_for_galleries($query);
         if (!empty($search_result)) {
             $this->found_photos = $search_result;

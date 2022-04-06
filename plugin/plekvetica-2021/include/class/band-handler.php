@@ -445,6 +445,12 @@ class PlekBandHandler
         return site_url('/' . $tag_base . '/' . $band_slug, 'https');
     }
 
+    /**
+     * Checks if the given string is a Band link
+     *
+     * @param string $url
+     * @return boolean
+     */
     public static function is_band_link(string $url)
     {
         if (preg_match('/\/band\//', $url)) {

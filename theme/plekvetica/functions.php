@@ -12,7 +12,6 @@ add_filter('disable_wp_rest_api_post_var', [$plek_theme, 'disable_wp_rest_api_po
 add_filter('auth_cookie_expiration', [$plek_theme, 'keep_me_logged_in']);
 
 
-
 class plekTheme
 {
 
@@ -58,14 +57,22 @@ class plekTheme
     }
 
     /**
-     * Enables the REST API for Contact Form 7 if the API is disabled by Disable WP REST API Plugin 
+     * Enables the REST API for Contact Form 7 if the API is disabled by Disable WP REST API Plugin
+     * @todo: Remove this hook and create a custom rest api disabling function!
      *
      * @param mixed $var
      * @return string
      */
     public function disable_wp_rest_api_post_var($var)
     {
-        return '_wpcf7';
+        if(isset($_REQUEST['_wpcf7'])){
+            return '_wpcf7'; //For the contact form 7
+        }
+
+        if(isset($_REQUEST['prev_url']) AND $_REQUEST['should_manage_url']){
+            return 'prev_url'; //For the Events Calendar pagination 
+        }
+        return false;
     }
 
     public function keep_me_logged_in($expirein)
