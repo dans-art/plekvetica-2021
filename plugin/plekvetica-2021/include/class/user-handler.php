@@ -770,7 +770,7 @@ class PlekUserHandler
     }
 
     /**
-     * Returns all the users with the userrole "exuser"
+     * Returns all the users with the user role "exuser"
      *
      * @return array The found users.
      */

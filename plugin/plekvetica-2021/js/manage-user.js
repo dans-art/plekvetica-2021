@@ -1,6 +1,6 @@
 let plek_user = {
 
-    default_button_texts = {},
+    default_button_texts  = {},
 
 
     construct() {

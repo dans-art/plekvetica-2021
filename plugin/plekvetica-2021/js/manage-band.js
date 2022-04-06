@@ -3,7 +3,7 @@
  */
 let plek_band = {
 
-    default_button_texts = {},
+    default_button_texts  = {},
 
 
     construct() {
@@ -58,8 +58,10 @@ let plek_band = {
                 }
                 return;
             }
-            //Check if submit button
-            if (e.currentTarget.id === 'band-form-submit') {
+            //Check if submit button and if it is not add Event form
+            //This function must be disabled on add event, otherwise it will create two Bands
+            let is_edit_event = (!empty(jQuery('#add_event_basic'))) ? true : false;
+            if (e.currentTarget.id === 'band-form-submit' && !is_edit_event) {
                 var data = jQuery('#plek-band-form').serialize();
                 plek_band.save_band(data);
                 return;
