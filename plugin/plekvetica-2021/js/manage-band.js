@@ -60,8 +60,9 @@ let plek_band = {
             }
             //Check if submit button and if it is not add Event form
             //This function must be disabled on add event, otherwise it will create two Bands
-            let is_edit_event = (!empty(jQuery('#add_event_basic'))) ? true : false;
-            if (e.currentTarget.id === 'band-form-submit' && !is_edit_event) {
+            let is_add_event = (!empty(jQuery('#add_event_basic'))) ? true : false;
+            let is_edit_event = (!empty(jQuery('#edit_event_form'))) ? true : false;
+            if (e.currentTarget.id === 'band-form-submit' && !is_edit_event && !is_add_event) {
                 var data = jQuery('#plek-band-form').serialize();
                 plek_band.save_band(data);
                 return;
