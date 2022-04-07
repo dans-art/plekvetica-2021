@@ -390,6 +390,11 @@ input[type="phone"]{
     color: $color-red-strong !important;
     margin-top: -1em;
   }
+
+  .select2-results__options{
+    height: 50rem;
+    overflow-x: scroll;
+  }
 }
 
 

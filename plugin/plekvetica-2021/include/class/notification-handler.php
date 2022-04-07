@@ -26,6 +26,7 @@ class PlekNotificationHandler extends WP_List_Table
      * @param string $action - The link to click. Should be a valid html link
      * @param string $type - The type of the notification
      * @return int|false Id of the inserted row or false on error.
+     * @todo: Make proper error handling, support HTML formated text
      */
     public function push_notification($user_ids = array(), $type = '', $subject = '', $message = '', $action = '')
     {
@@ -43,11 +44,12 @@ class PlekNotificationHandler extends WP_List_Table
         $data['pushed_on'] = date('Y-m-d H:i:s');
         $data['notify_type'] = ($type !== null) ? $type : '';
         $data['subject'] = ($subject !== null) ? $subject : '';
-        $data['message'] = ($message !== null) ? $message : '';
+        $data['message'] = ($message !== null) ? sanitize_text_field( $message ) : '';
         $data['action_link'] = ($action !== null) ? $action : '';
         if ($wpdb->insert($table_notify_messages, $data)) {
             $message_id = $wpdb->insert_id;
         } else {
+            //s($wpdb->last_error);
             return false;
         }
 
@@ -645,6 +647,24 @@ class PlekNotificationHandler extends WP_List_Table
             $counter++;
         }
         return ($counter === 0) ? false : $counter;
+    }
+
+    /**
+     * Sends a reminder to the accreditation manager for upcoming events with no confirmed status.
+     *
+     * @return void
+     */
+    public function send_akkredi_reminder(){
+        global $plek_handler;
+        global $plek_event;
+
+        $user_id = $plek_handler->get_plek_option('akkredi_user_id');
+        $user_id = (empty($user_id) OR $user_id === '0') ? '1' :  $user_id; //Set it to the user 1 if no user found
+
+        $subject = __('Missing accreditation requests','pleklang');
+        $message = __('Some Events are not requested yet...','pleklang') . $plek_event -> plek_event_upcoming_no_akkredi_shortcode();
+        $action = 'none';
+        return $this -> push_notification([$user_id],'akkredi_notify', $subject, $message, $action);
     }
 
     /**

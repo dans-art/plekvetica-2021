@@ -1109,6 +1109,52 @@ class PlekEvents extends PlekEventHandler
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'new_events');
     }
 
+    /**
+     * Displays all the events with no confirmed or declined akkreditation status.
+     *
+     * @param array $atts
+     * @return void
+     */
+    public function plek_event_upcoming_no_akkredi_shortcode($atts = [])
+    {
+        global $wpdb;
+        $short_args = shortcode_atts(
+            array(
+                'nr_posts' => '25',
+            ), $atts
+        );
+        $limit = $short_args['nr_posts'];
+        $page_obj = $this->get_pages_object($limit);
+
+
+        $from = date('Y-m-d M:i:s', strtotime('+17 days', time()) ); //17 days from today
+        $to = date('Y-m-d M:i:s', strtotime('+60 days', time()) ); //34 days from today
+
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , startdate.meta_value as startdate
+            FROM `{$wpdb->prefix}posts` as posts
+            LEFT JOIN {$wpdb->prefix}postmeta as startdate
+            ON posts.ID = startdate.post_id AND startdate.meta_key = '_EventStartDate'
+            LEFT JOIN {$wpdb->prefix}postmeta as akkredi
+            ON posts.ID = akkredi.post_id AND akkredi.meta_key = 'akk_status'
+            
+            WHERE posts.ID IS NOT NULL
+            AND startdate.meta_value > '%s'
+            AND startdate.meta_value < '%s'
+            AND posts.post_status IN ('publish')
+            AND akkredi.meta_value IN ('aa', 'aw')
+            AND posts.post_type = 'tribe_events'
+            
+            ORDER BY startdate.meta_value ASC
+            LIMIT %d OFFSET %d", $from, $to, $limit, $page_obj->offset);
+        $posts = $wpdb->get_results($query);
+
+        if(empty($posts)){
+            return __('No Events found','pleklang');
+        }
+
+        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $posts, 'new_events');
+    }
+
     public function enqueue_event_form_styles()
     {
         wp_enqueue_style('flatpickr-style', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr.min.css');
