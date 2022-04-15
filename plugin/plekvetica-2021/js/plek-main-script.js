@@ -650,6 +650,59 @@ let plek_main = {
         });
     },
 
+    /**
+     * Removes all the inputs within the given form id.
+     * @param {string} form_id 
+     */
+    clear_form_inputs(form_id){
+        let form = jQuery('#'+form_id);
+        if(empty(form)){
+            return false;
+        }
+        //Clear all the Input fields
+        form.find('input').each((id, item) => {
+            jQuery(item).val('');
+        });
+        //Clear all the textarea fields
+        form.find('textarea').each((id, item) => {
+            if(!empty(tinymce.get(id))){
+                tinymce.get(id).setContent('');
+            }
+            jQuery(item).val(''); //Fallback if no wp editor
+        });
+        //Clear all the textarea fields
+        form.find('select').each((id, item) => {
+            jQuery(item).val('').trigger('change');
+        });
+
+        //On band Inputs
+        if(form_id === 'plek-band-form'){
+            form.find('.video_preview_item').each((id, item) => {
+                plek_band.remove_band_video(item);
+            });
+            this.reset_file_inputs(form_id);
+        }
+        return true;
+    },
+
+    /**
+     * Resets the file inputs and replaces the selected image with the placeholder.
+     * @param {string} form_id 
+     */
+    reset_file_inputs(form_id){
+        //Empty the file input
+        jQuery('#'.form_id).find('input[type=file]').each((id, item) => {
+            jQuery(item).val(null);
+        });
+        //Restore the placeholder file
+        let placeholder = plek_home_url + '/wp-content/plugins/plekvetica-2021/images/placeholder/default_placeholder.jpg';
+        jQuery('#'+form_id).find('.plek-image-upload-container').find('img').first().attr('src', placeholder);
+        
+        //Reset the Button text
+        jQuery('#'+form_id).find('.plek-image-upload-container').find('.plek-button').text(__('Upload','pleklang'));
+        
+    }
+
 }
 
 plek_main.construct();
@@ -659,7 +712,15 @@ plek_main.construct();
  * 
  */
 
+/**
+ * Checks if the given value is empty or null
+ * @param {mixed} value 
+ * @returns 
+ */
 function empty(value) {
+    if(value === null){
+        return true;
+    }
     if (typeof value === 'undefined') {
         return true;
     }

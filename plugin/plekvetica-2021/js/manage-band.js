@@ -167,6 +167,10 @@ let plek_band = {
         plek_band.load_youtube_video(new_vid, item_id);
     },
 
+    /**
+     * Removes the given band video.
+     * @param {object} item 
+     */
     remove_band_video(item) {
         jQuery(item).parent().remove();
         console.log(item);
@@ -187,7 +191,6 @@ let plek_band = {
 
     /**
      * Sends the band data to save via ajax
-     * @todo: On add band, check if band does not exist (while the form is getting filled out)
      * @param {*} data 
      */
     save_band(data) {
@@ -220,6 +223,7 @@ let plek_band = {
                     }
                 }
                 plek_main.deactivate_button_loader(button, text);
+                plek_main.clear_form_inputs('plek-band-form');
                 jQuery('#band-form-cancel').text(__('Back','pleklang'));
                 setTimeout(() => {
                     jQuery('#band-form-submit').text(plek_band.default_button_texts.submit);

@@ -119,12 +119,12 @@ var pleksearch = {
           });
         }
         var exact_hit = pleksearch.is_exact_hit(search_for_prep, compare_prep);
-        if (sm_compare.peak.value >= window.pleksearch.threshhold || exact_hit > 0 || exact_hit === true) {
+        if (sm_compare.peak.value >= window.pleksearch.threshhold || exact_hit === true) {
           var item = {};
           item.type = type;
           item.data = value;
-          item.class = (exact_hit === true || sm_compare.peak.value === 100) ? 'exact-hit' : '';
-          item.perc = (exact_hit === true) ? 100 : sm_compare.peak.value;
+          item.class = (exact_hit === true) ? 'exact-hit' : '';
+          item.perc = (exact_hit === true) ? 150 : sm_compare.peak.value;
           results[value.id] = item;
         }
       });
@@ -173,7 +173,7 @@ var pleksearch = {
    * 
    * @param {*} needle 
    * @param {*} haystack 
-   * @returns false, if string was not found, >= 0 if string was found.
+   * @returns false, if string was not found, true if it is a exact hit.
    */
   is_exact_hit(needle, haystack) {
     var exact_hit = haystack.search(needle); //Returns -1 if String is not found in compare
@@ -181,7 +181,7 @@ var pleksearch = {
       return true;
 
     }
-    return exact_hit;
+    return false;
   },
 
   async get_preloaded_data(type) {

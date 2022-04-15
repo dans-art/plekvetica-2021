@@ -7,6 +7,13 @@
 extract(get_defined_vars());
 $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings. Not used now, but maybe later...
 ?>
+<?php //General settings and variables to pass ?>
+<script type="text/javascript" defer='defer'>
+	if(typeof plek_home_url === 'undefined'){
+		let plek_home_url = '<?php echo home_url(); ?>';
+	}
+</script>
+
 <?php if ($type === 'manage_event_buttons') : ?>
 	<script type="text/javascript" defer='defer'>
 		/*jQuery(document).ready(function() {
@@ -21,7 +28,11 @@ $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings.
 		var organizerPreloadedData = null;
 		jQuery(document).ready(function() {
 			plek_manage_event.__construct();
-			jQuery('#event-band-selection').sortable(); //Make the Band list sortable
+			try {
+				jQuery('#event-band-selection').sortable(); //Make the Band list sortable
+			} catch (error) {
+				console.log(error);
+			}
 		});
 	</script>
 <?php endif; ?>
@@ -58,7 +69,11 @@ $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings.
 		var organizerPreloadedData = null;
 		jQuery(document).ready(function() {
 			plek_manage_event.__construct();
-			jQuery('#event-band-selection').sortable(); //Make the Band list sortable
+			try {
+				jQuery('#event-band-selection').sortable(); //Make the Band list sortable
+			} catch (error) {
+				console.log(error);
+			}
 		});
 	</script>
 <?php endif; ?>
