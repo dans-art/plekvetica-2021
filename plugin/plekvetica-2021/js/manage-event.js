@@ -323,6 +323,7 @@ let plek_manage_event = {
                                 //Only add to selection, if the return object is the data for the preloader
                                 plekevent.add_new_vob_to_selection(type, return_obj[1], preloader_data);
                                 //New Band, Venue or Organizer added
+                                plek_main.clear_form_inputs('plek-' + vob_form_name + '-form'); //clear the form
                                 plek_manage_event.vob_add_to_session(return_obj[1]);
                             }
                         }

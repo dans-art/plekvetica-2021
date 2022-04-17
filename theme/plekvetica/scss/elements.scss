@@ -392,7 +392,7 @@ input[type="phone"]{
   }
 
   .select2-results__options{
-    height: 50rem;
+    max-height: 20rem;
     overflow-x: scroll;
   }
 }

@@ -695,7 +695,7 @@ let plek_main = {
             jQuery(item).val(null);
         });
         //Restore the placeholder file
-        let placeholder = plek_home_url + '/wp-content/plugins/plekvetica-2021/images/placeholder/default_placeholder.jpg';
+        let placeholder = document.plek_home_url + '/wp-content/plugins/plekvetica-2021/images/placeholder/default_placeholder.jpg';
         jQuery('#'+form_id).find('.plek-image-upload-container').find('img').first().attr('src', placeholder);
         
         //Reset the Button text

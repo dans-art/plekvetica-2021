@@ -6,11 +6,12 @@
  */
 extract(get_defined_vars());
 $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings. Not used now, but maybe later...
+
 ?>
 <?php //General settings and variables to pass ?>
 <script type="text/javascript" defer='defer'>
-	if(typeof plek_home_url === 'undefined'){
-		let plek_home_url = '<?php echo home_url(); ?>';
+	if(typeof document.plek_home_url === 'undefined'){
+		document.plek_home_url = '<?php echo home_url(); ?>';
 	}
 </script>
 

@@ -452,7 +452,7 @@ input[type="phone"] {
     color: #c11d1d !important;
     margin-top: -1em; }
   .select2-container .select2-results__options {
-    height: 50rem;
+    max-height: 20rem;
     overflow-x: scroll; }
 
 /* Assign min-width to container */
