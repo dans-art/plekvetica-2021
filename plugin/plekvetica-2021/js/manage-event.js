@@ -2,7 +2,7 @@
 
 //Global Options
 var flatpickr_options = {
-    "locale": "de",
+    locale: "de",
     enableTime: true,
     dateFormat: "Y-m-d H:i:S",
     altInput: true,
@@ -43,7 +43,7 @@ let plek_manage_event = {
     constructed: false,
     //Options for the Band Items
     flatpickr_band_options: {
-        "locale": "de",
+        locale: "de",
         enableTime: true,
         dateFormat: "Y-m-d H:i:S",
         altInput: true,
@@ -71,11 +71,13 @@ let plek_manage_event = {
         jQuery(document).ready(function () {
             plek_manage_event.prepare_validator_fields();
             plekvalidator.monitor_fields();
+
+            //Load the Flatpicker
+            flatpickr("#event_start_date", flatpickr_options);
+            flatpickr("#event_end_date", flatpickr_options);
+
         });
 
-        //Load the Flatpicker
-        flatpickr("#event_start_date", flatpickr_options);
-        flatpickr("#event_end_date", flatpickr_options);
 
         //Populate the existing vob data
         plek_manage_event.add_vob_to_current_selection('bands');

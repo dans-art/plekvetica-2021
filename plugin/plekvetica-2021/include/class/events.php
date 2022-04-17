@@ -1157,7 +1157,8 @@ class PlekEvents extends PlekEventHandler
 
     public function enqueue_event_form_styles()
     {
-        wp_enqueue_style('flatpickr-style', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr.min.css');
+        //wp_enqueue_style('flatpickr-style', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr.min.css');
+        wp_enqueue_style('flatpickr-dark-style', 'https://npmcdn.com/flatpickr/dist/themes/dark.css');
     }
 
     /**
@@ -1177,8 +1178,10 @@ class PlekEvents extends PlekEventHandler
 
             $min = ($plek_handler->is_dev_server()) ? '' : '.min';
 
-            wp_enqueue_script('flatpickr-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9.js');
-            wp_enqueue_script('flatpickr-de-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9-de.js');
+            //wp_enqueue_script('flatpickr-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9.js');
+            //wp_enqueue_script('flatpickr-de-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9-de.js');
+            wp_enqueue_script('flatpickr-cdn-script', 'https://npmcdn.com/flatpickr/dist/flatpickr.min.js',[], $plek_handler->version);
+            wp_enqueue_script('flatpickr-cdn-de-script', 'https://npmcdn.com/flatpickr/dist/l10n/de.js',[], $plek_handler->version);
             wp_enqueue_script('manage-plek-events', PLEK_PLUGIN_DIR_URL . "js/manage-event{$min}.js", ['jquery', 'plek-language']);
             wp_enqueue_script('plek-jquery-ui', "https://code.jquery.com/ui/1.13.0/jquery-ui.js", ['jquery']);
 
