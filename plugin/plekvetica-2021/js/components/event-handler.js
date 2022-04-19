@@ -111,7 +111,6 @@ var plekevent = {
 
         var data = { id: item_id, html: html, timestamp: vob_timestamp, sort: vob_sort }
         var data_to_insert = plektemplate.get_item_to_add(data);
-
         //Remove Existing Venues
         if (type === 'event_venue') {
             this.remove_all_items('event-venue-selection');
@@ -120,6 +119,7 @@ var plekevent = {
         if (jQuery(`#${item_for} .plek-select-item[data-id='${item_id}']`).length === 0) {//Only add if not already added
             if (typeof vob_timestamp !== 'undefined' && vob_timestamp !== 0) {
                 this.vob_insert_with_timestamp(item_id, item_for, data_to_insert, vob_timestamp);
+                console.log("Add item with timestamp: " + item_for);
             } else if (typeof vob_sort !== 'undefined') {
                 this.vob_insert_with_sort(item_id, item_for, data_to_insert, vob_sort);
             } else {
@@ -224,6 +224,7 @@ var plekevent = {
                 from: startDate,
                 to: endDate
             }];
+            //plek_manage_event.flatpickr_band_options.defaultDate = this.get_event_date('event_start_date', 'date');
         }
         let last_item = jQuery('.band-time-input').last().val();
 
@@ -237,6 +238,7 @@ var plekevent = {
         });
 
         if (last_item === '0') {
+            console.log('Last item triggered');
             return; //End the function, if the last added item has no time set.
         }
 

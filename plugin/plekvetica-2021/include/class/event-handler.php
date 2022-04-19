@@ -2156,8 +2156,8 @@ class PlekEventHandler
     public function filter_end_date(string $end_date)
     {
         global $plek_ajax_handler;
-        if (!empty($end_time)) {
-            return $end_time;
+        if (!empty($end_date)) {
+            return strtotime($end_date);
         }
         $start_time = strtotime($plek_ajax_handler->get_ajax_data('event_start_date'));
         $start_date = date('Y-m-d', $start_time);

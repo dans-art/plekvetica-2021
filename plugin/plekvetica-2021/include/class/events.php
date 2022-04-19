@@ -224,7 +224,7 @@ class PlekEvents extends PlekEventHandler
         $sort_obj = json_decode($order_str);
         $timetable = array();
         $band_sort = array();
-        $time_format = 'H:i';
+        $time_format = ($this->is_multiday()) ? 'Y-m-d H:i:s' : 'H:i:s';
         foreach ($sort_obj as $band_id => $item) {
             if (isset($item->order)) {
                 $band_sort[$item->order] = $band_id;
