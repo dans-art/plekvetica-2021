@@ -29,7 +29,7 @@ if($start_date === date_i18n('Y-m-d') AND $start_date_time === date_i18n('H:i:s'
 		</div>
 	</div>
 	<div class="event-date-multi-check-container">
-		<input type="checkbox" name="is_multiday" id="is_multiday" class="input" value="<?php echo ($event_object->is_multiday()) ? '1' : ''; ?>" autocomplete="off"/>
+		<input type="checkbox" name="is_multiday" id="is_multiday" class="input" value="<?php echo ($event_object->is_multiday()) ? '1' : ''; ?>" <?php echo ($event_object->is_multiday()) ? 'checked' : ''; ?> autocomplete="off"/>
 		<label class="checkbox-label" for="is_multiday"><?php echo __('Define End Date/Time', 'pleklang'); ?></label>
 	</div>
 	<div class="event-date-postponed-check-container">

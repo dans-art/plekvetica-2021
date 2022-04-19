@@ -135,7 +135,7 @@ class PlekEvents extends PlekEventHandler
             $this->errors[$event_id] = __('No Event found', 'plek');
             return false;
         }
-
+        
         $this->event['data'] = $db_result[0];
         $this->load_event_meta($event_id);
         $this->load_event_terms($event_id);
@@ -1130,7 +1130,7 @@ class PlekEvents extends PlekEventHandler
         $from = date('Y-m-d M:i:s', strtotime('+17 days', time()) ); //17 days from today
         $to = date('Y-m-d M:i:s', strtotime('+60 days', time()) ); //34 days from today
 
-        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , startdate.meta_value as startdate
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title, posts.post_status, startdate.meta_value as startdate
             FROM `{$wpdb->prefix}posts` as posts
             LEFT JOIN {$wpdb->prefix}postmeta as startdate
             ON posts.ID = startdate.post_id AND startdate.meta_key = '_EventStartDate'

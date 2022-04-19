@@ -139,7 +139,7 @@ var plekevent = {
                 window.plekevent.check_existing_event();
                 window.plekevent.generate_title();
             }
-            this.set_band_time_flatpickr();
+            this.set_band_time_flatpickr(`#${item_for}`);
         }
     },
 
@@ -150,8 +150,6 @@ var plekevent = {
      * @param {*} vob_timestamp 
      */
     vob_insert_with_timestamp(item_id, item_for, data_to_insert, vob_timestamp) {
-        console.log('insert with timestamp: ' + vob_timestamp);
-        console.log(data_to_insert);
 
         //Search for items
         if (jQuery('#' + item_for + ' .plek-select-item').length === 0) {
@@ -178,8 +176,6 @@ var plekevent = {
     },
 
     vob_insert_with_sort(item_id, item_for, data_to_insert, vob_sort) {
-        console.log('insert with sort: ' + vob_sort);
-        console.log(data_to_insert);
         if (jQuery('#' + item_for + ' .plek-select-item').length === 0) {
             //no items added so far. Add.
             jQuery('#' + item_for).append(data_to_insert);
@@ -204,8 +200,9 @@ var plekevent = {
 
     /**
      * Sets the flatpicker_band options and ensures that the date can only be set on the date of the event
+     * @todo: allow individual item to be set? This function will update all band time inputs.
      */
-    set_band_time_flatpickr() {
+    set_band_time_flatpickr(item_id = null) {
         //Set available dates
         let defaultStartDate = '2020-01-01';
         let defaultEndDate = '9020-01-01';
@@ -230,8 +227,14 @@ var plekevent = {
         }
         let last_item = jQuery('.band-time-input').last().val();
 
-        //Restart the flatpickr for the time inputs
-        flatpickr("#event-band-selection .band-time-input", plek_manage_event.flatpickr_band_options); //Load the Flatpickr
+        //Set the flatpickr for all time inputs
+        jQuery("#event-band-selection .band-time-input").each((index, item) => {
+            if(jQuery(item).val() == 0){
+                jQuery(item).val(defaultStartDate);
+            }
+            //jQuery(item).flatpickr(); //Load the Flatpickr
+            jQuery(item).flatpickr(plek_manage_event.flatpickr_band_options); //Load the Flatpickr
+        });
 
         if (last_item === '0') {
             return; //End the function, if the last added item has no time set.

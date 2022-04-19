@@ -136,6 +136,10 @@ let plek_manage_event = {
                 hide_end_date();
             }
         });
+        //Show the enddate if checkbox is preselected
+        if (jQuery('#is_multiday').is(':checked')) {
+            show_end_date();
+        }
 
         jQuery('#no_band').click(function () {
             if (jQuery(this).is(':checked')) {
@@ -533,6 +537,12 @@ let plek_manage_event = {
                 default:
                     break;
             }
+        }
+        if(type === 'bands'){
+            //Set the flatpickr for all the band time buttons
+            jQuery(document).ready(() =>{
+                plekevent.set_band_time_flatpickr();
+            });
         }
         return;
     },
