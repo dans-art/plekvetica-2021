@@ -2246,7 +2246,7 @@ class PlekEventHandler
             $timestamp = (!empty($this->event['timetable'][$band_id]['timestamp'])) ? $this->event['timetable'][$band_id]['timestamp'] : 0;
 
             $playtime = (isset($this->event['timetable'][$band_id]['playtime_formated'])) ? $this->event['timetable'][$band_id]['playtime_formated'] : '';
-            $playtime = (!empty($playtime)) ? $playtime : 'tbd';
+            $playtime = (!empty($playtime)) ? date( 'H:i', strtotime($playtime) )  : 'tbd';
 
             $day = ($is_multiday and $timestamp > 0) ? date('d. F', $timestamp) : __('No Time defined', 'pleklang');
             if (!isset($formated[$day][$timestamp])) {
