@@ -71,6 +71,7 @@ class PlekEvents extends PlekEventHandler
      */
     public function get_field(string $name = 'post_title', string $template = null)
     {
+        global $plek_handler;
         switch ($name) {
             case 'bands':
                 return $this->format_bands($this->event['bands']);
@@ -80,7 +81,9 @@ class PlekEvents extends PlekEventHandler
                 break;
             case 'post_content':
             case 'text_lead':
-                return apply_filters('the_content', $this->get_field_value($name)); //Apply shortcodes in the Content
+                $content = apply_filters('the_content', $this->get_field_value($name)); //Apply shortcodes in the Content
+                $content = strip_tags($content, $plek_handler -> get_allowed_tags('textarea')); //Removes all the un-allowed tags.
+                return $content;
                 break;
             case 'venue_short':
                 return tribe_get_venue($this->get_field_value($name));

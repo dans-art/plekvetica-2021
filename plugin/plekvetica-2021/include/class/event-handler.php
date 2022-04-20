@@ -417,6 +417,12 @@ class PlekEventHandler
         return $this->get_field_value('ID');
     }
 
+    /**
+     * Loads the content and allows to shorten the output.
+     *
+     * @param integer $max_chars
+     * @return string The content
+     */
     public function get_content(int $max_chars = 0)
     {
         if ($max_chars > 0) {
@@ -1972,11 +1978,11 @@ class PlekEventHandler
     public function get_event_details_data()
     {
         global $plek_ajax_handler;
+        global $plek_handler;
         $args = array();
         //Add URL
         //Add Poster
-
-        $args['post_content'] = $this->get_event_form_value('event_description');
+        $args['post_content'] = $this->get_event_form_value('event_description', $plek_handler->get_forbidden_tags('textarea'));
         $args['EventCost'] = $this->get_event_form_value('event_price_boxoffice');
         $args['EventURL'] = $this->get_event_form_value('event_fb_link');
         $args['Organizer'] = $this->get_event_form_value('event_organizer');
@@ -2051,11 +2057,13 @@ class PlekEventHandler
      * This function is used to filter special cases like event_poster
      *
      * @param string $form_field_name
+     * @param string $strip_tags - Removes the given HTML Tags from the input. false = remove no tags, array = removes all given tags
      * @return string The Value of the field.
      */
-    public function get_event_form_value($form_field_name)
+    public function get_event_form_value($form_field_name, $strip_tags = true)
     {
         global $plek_ajax_handler;
+        global $plek_handler;
         $event_id = intval($plek_ajax_handler->get_ajax_data('event_id'));
 
         switch ($form_field_name) {
@@ -2087,7 +2095,12 @@ class PlekEventHandler
                 break;
 
             default:
-                return  $plek_ajax_handler->get_ajax_data($form_field_name);
+                $data = $plek_ajax_handler->get_ajax_data($form_field_name);
+                //strip the tags
+                if (is_array($strip_tags)) {
+                    $data = $plek_handler->remove_tags($data, $strip_tags);
+                }
+                return  $data;
                 break;
         }
         return false;

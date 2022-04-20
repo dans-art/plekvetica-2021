@@ -377,4 +377,77 @@ class PlekHandler
         return $tribe_locations -> get_countries();
     }
 
+    /**
+     * Gets the allowed html tags by type.
+     * Supported: textarea
+     *
+     * @param string $type - The type of content.
+     * @return array The allowed tags or empty array.
+     */
+    public function get_allowed_tags($type = null){
+        switch ($type) {
+            case 'textarea':
+                return ['strong','b', 'i', 'br', 'p', 'h4', 'h5', 'h6'];
+                break;
+            
+            default:
+                return [];
+                break;
+        }
+    }
+
+    /**
+     * Gets the html tags to remove by type.
+     * Supported: textarea
+     *
+     * @param string $type - The type of content.
+     * @return array The tags to remove by type of array ['script']
+     */
+    public function get_forbidden_tags($type = null){
+        switch ($type) {
+            case 'textarea':
+                return ['script'];
+                break;
+            
+            default:
+                return ['script'];
+                break;
+        }
+    }
+
+    /**
+     * Removes specific tags and their content from a string
+     *
+     * @param string $content
+     * @param array $tags_to_remove - The tags to remove as an array.
+     * @return string The clean string
+     */
+    public function remove_tags($content, $tags_to_remove = ['script']){
+
+        if(empty($tags_to_remove)){
+            return $content;
+        }
+
+        $content = mb_convert_encoding($content,'HTML-ENTITIES', 'UTF-8');
+        $dom = new DOMDocument();
+        $dom -> loadHTML($content,LIBXML_HTML_NOIMPLIED|LIBXML_HTML_NODEFDTD|LIBXML_NOWARNING);
+  
+
+        $remove = [];
+        //Collect all the tags to remove
+        foreach($tags_to_remove as $tag){
+            $remover = $dom -> getElementsByTagName($tag);
+            foreach($remover as $item){
+                $remove[] = $item;
+            }
+        }
+
+        //remove all the tags
+        foreach($remove as $item_to_remove){
+            $item_to_remove -> parentNode -> removeChild($item_to_remove);
+        }
+
+        return $dom->saveHTML();
+    }
+
 }
