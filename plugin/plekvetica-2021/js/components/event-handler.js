@@ -640,10 +640,11 @@ var plekevent = {
      * @returns {bool} True if it is a single day event, false otherwise 
      */
     event_is_single_day() {
-        return !jQuery('#is_multiday').is(':checked');
-        /*if(jQuery('#is_multiday').is(':checked') === true){
+ 
+        //If the Multiday is not checked, it can only be a single day.
+        if(jQuery('#is_multiday').is(':checked') === false){
             return true;
-        }*/
+        }
 
         let startDate = jQuery('#event_start_date').val();
         let startDateArr = startDate.split(' ');//Array [ "2022-01-20", "12:00:00" ] 
