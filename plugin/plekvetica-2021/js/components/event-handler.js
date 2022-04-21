@@ -203,30 +203,10 @@ var plekevent = {
      * @todo: allow individual item to be set? This function will update all band time inputs.
      */
     set_band_time_flatpickr(item_id = null) {
-        //Set available dates
         let defaultStartDate = '2020-01-01';
-        let defaultEndDate = '9020-01-01';
 
-        //Set the Options for single day
-        if (this.event_is_single_day()) {
-            plek_manage_event.flatpickr_band_options.time_24hr = true;
-            plek_manage_event.flatpickr_band_options.dateFormat = 'H:i';
-            plek_manage_event.flatpickr_band_options.altFormat = 'H:i';
-            //plek_manage_event.flatpickr_band_options.defaultDate = '01:01';
-            plek_manage_event.flatpickr_band_options.noCalendar = true;
-        } else {
-            //Event is multy day
-            let startDate = this.get_event_date('event_start_date', 'date');
-            let endDate = this.get_event_date('event_end_date', 'date');
-            startDate = (startDate.length === 0) ? defaultStartDate : startDate;
-            endDate = (endDate.length === 0) ? defaultEndDate : endDate;
-            plek_manage_event.flatpickr_band_options.enable = [{
-                from: startDate,
-                to: endDate
-            }];
-            //plek_manage_event.flatpickr_band_options.defaultDate = this.get_event_date('event_start_date', 'date');
-        }
         let last_item = jQuery('.band-time-input').last().val();
+        this.set_flatpickr_band_time_options();
 
         //Set the flatpickr for all time inputs
         jQuery("#event-band-selection .band-time-input").each((index, item) => {
@@ -243,15 +223,77 @@ var plekevent = {
         }
 
         //Add the time to the label if set in the input
-        jQuery('.band-time-input').each(function (index, item) {
-            let val = jQuery(item).val();
-            if (!val.length !== 0 && val !== '0') {
-                jQuery(item).parent().find('.time-label').text(val);
-            }
+        jQuery('#event-band-selection .plek-select-item').each(function (index, item) {
+            plekevent.update_band_playtime_button_text(item);
 
         });
+        return;
 
+    },
 
+    /**
+     * Updates the time of the band playtime button
+     * @param {object} item 
+     */
+    update_band_playtime_button_text(item){
+        let unix_timestamp = jQuery(item).data('timestamp');
+        let js_date = new Date(unix_timestamp * 1000); //Convert to MS
+
+        if(js_date.getFullYear === '1970'){
+            //Replace the button with the clock icon, if the date is not found
+            jQuery(item).find('.time-label').html('<i class="far fa-clock"></i>');
+            return false;
+        }
+
+        var hours = '0' + js_date.getUTCHours();
+        var minutes = '0' + js_date.getUTCMinutes();
+        if(this.event_is_single_day()){
+            var time = hours.slice(-2) + ':' + minutes.slice(-2);
+        }else{
+            let day = '0' + js_date.getUTCDate();
+            let month = '0' + js_date.getUTCMonth();
+            var time =  day.slice(-2) + '.' + month.slice(-2) + '<br/>' + hours.slice(-2) + ':' + minutes.slice(-2);
+        }
+        
+        //Update the button label
+        jQuery(item).find('.time-label').html(time);
+        return;
+    },
+
+    /**
+     * Sets the flatpickr options depending on the event date.
+     * @returns void
+     */
+    set_flatpickr_band_time_options(){
+        //Set available dates
+        let defaultStartDate = '2020-01-01';
+        let defaultEndDate = '9020-01-01';
+        //Set the Options for single day
+        if (this.event_is_single_day()) {
+            plek_manage_event.flatpickr_band_options.time_24hr = true;
+            plek_manage_event.flatpickr_band_options.dateFormat = 'H:i';
+            plek_manage_event.flatpickr_band_options.altFormat = 'H:i';
+            //plek_manage_event.flatpickr_band_options.defaultDate = '01:01';
+            plek_manage_event.flatpickr_band_options.noCalendar = true;
+            console.log('Event is single day');
+        } else {
+            //Event is multy day
+            let startDate = this.get_event_date('event_start_date', 'date');
+            let endDate = this.get_event_date('event_end_date', 'date');
+            startDate = (startDate.length === 0) ? defaultStartDate : startDate;
+            endDate = (endDate.length === 0) ? defaultEndDate : endDate;
+            plek_manage_event.flatpickr_band_options.dateFormat = 'Y-m-d H:i:S';
+            plek_manage_event.flatpickr_band_options.altFormat = 'j.m H:i';
+            //plek_manage_event.flatpickr_band_options.defaultDate = '01:01';
+            plek_manage_event.flatpickr_band_options.noCalendar = false;
+            plek_manage_event.flatpickr_band_options.enable = [{
+                from: startDate,
+                to: endDate
+            }];
+            console.log('Event is multi day');
+            //plek_manage_event.flatpickr_band_options.defaultDate = this.get_event_date('event_start_date', 'date');
+        }
+        return;
     },
 
     /**
@@ -598,6 +640,11 @@ var plekevent = {
      * @returns {bool} True if it is a single day event, false otherwise 
      */
     event_is_single_day() {
+        return !jQuery('#is_multiday').is(':checked');
+        /*if(jQuery('#is_multiday').is(':checked') === true){
+            return true;
+        }*/
+
         let startDate = jQuery('#event_start_date').val();
         let startDateArr = startDate.split(' ');//Array [ "2022-01-20", "12:00:00" ] 
 

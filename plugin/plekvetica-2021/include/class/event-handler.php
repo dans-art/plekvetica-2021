@@ -1111,7 +1111,7 @@ class PlekEventHandler
         $authors = array();
         foreach ($post_authors as $user) {
             if ($user->ID === $guest_author) {
-                $authors[$user->ID] = $authors_handler->get_event_guest_author($page_id);
+                $authors[$user->ID] = $authors_handler->get_event_guest_author($page_id, $user->ID);
                 continue;
             }
             $authors[$user->ID] = $user->display_name;

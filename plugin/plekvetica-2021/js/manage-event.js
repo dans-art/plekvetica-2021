@@ -135,6 +135,8 @@ let plek_manage_event = {
             } else {
                 hide_end_date();
             }
+            plekevent.set_band_time_flatpickr(); //Updates the band times, if time changed
+            console.log('Updated band time multiday btn');
         });
         //Show the enddate if checkbox is preselected
         if (jQuery('#is_multiday').is(':checked')) {
@@ -169,6 +171,12 @@ let plek_manage_event = {
             if(plek_manage_event.is_edit_event){
                 jQuery('.event-date-postponed-check-container').show();
             }
+        });
+
+        //On change of the start or enddate
+        jQuery('.date-input-container input').change(function () {
+            plekevent.set_band_time_flatpickr(); //Updates the band times, if time changed
+            console.log('Updated band time');
         });
 
         jQuery('#plek-submit-basic-event').click(function (event) {

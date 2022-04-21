@@ -45,13 +45,16 @@ class PlekAuthorHandler
      * Gets the guest author from the acf
      *
      * @param integer|null $event_id - ID of the Event
-     * @return object|string Error message on failure, object on success.
+     * @return object|string Message on failure, object on success.
      */
-    public function get_event_guest_author(int $event_id = null){
+    public function get_event_guest_author(int $event_id = null, $event_author_id = null){
         $guest_author = get_field('guest_author', $event_id);
         $guest_author = str_replace("'", "\'", $guest_author); //Escape the single quote to avoid json_decode errors
         if(empty($guest_author)){
-            return __('No Author found','pleklang');
+            if($event_author_id === $this -> get_guest_author_id()){
+                return __('Guest Author','pleklang');
+            }
+            return __('No Author found','pleklang'); //This should never happen, but just in case.
         }
         $guest_object = json_decode($guest_author);
         if(isset($guest_object -> name)){
@@ -61,6 +64,11 @@ class PlekAuthorHandler
         return false;
     }
 
+    /**
+     * Returns the guest author id set in the plekvetica settings
+     *
+     * @return int|bool - ID if value is set, false otherwise.
+     */
     public function get_guest_author_id(){
         global $plek_handler;
         $id = $plek_handler -> get_plek_option('guest_author_id');
