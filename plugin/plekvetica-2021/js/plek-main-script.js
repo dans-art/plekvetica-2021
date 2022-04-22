@@ -707,13 +707,16 @@ let plek_main = {
      * Converts the timestamp to the desired date format
      * @param {string} timestamp The Timestamp in Seconds (eg. from PHP)
      * @param {string} format The format to return
-     * @returns String The date without timezone.
+     * @returns String The date without timezone or false if not timestamp received
      */
     get_formated_date(timestamp, format = ''){
 
         var length = format.length;
         if(length === 0){
             return '';
+        }
+        if(empty(timestamp)){
+            return false;
         }
 
         var formated_date = ''; 
@@ -726,8 +729,7 @@ let plek_main = {
 
             let fixed_js_date = new Date(time + offset);
             //let fixed_js_date = js_date; //Don't fix the timezone offset
-            console.log(js_date);
-            console.log(fixed_js_date);
+
             switch (item) {
                 case 'H':
                     var timepiece = '0' + fixed_js_date.getHours();

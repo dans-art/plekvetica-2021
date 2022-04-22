@@ -139,7 +139,7 @@ var plekevent = {
                 window.plekevent.check_existing_event();
                 window.plekevent.generate_title();
             }
-            this.set_band_time_flatpickr(`#${item_for}`);
+            this.set_band_time_flatpickr(item_id);
         }
     },
 
@@ -201,6 +201,9 @@ var plekevent = {
     /**
      * Sets the flatpicker_band options and ensures that the date can only be set on the date of the event
      * @todo: allow individual item to be set? This function will update all band time inputs.
+     * 
+     * @param {int} item_id The ID of the Band
+     * @returns 
      */
     set_band_time_flatpickr(item_id = null) {
         let defaultStartDate = '2020-01-01';
@@ -211,19 +214,22 @@ var plekevent = {
         //Set the flatpickr for all time inputs
         //This selects to many inputs, make more distinct selection!
 
+        if (!empty(jQuery('#band-time-' + item_id))) {
+            plek_manage_event.flatpickr_band_options.defaultDate = plekevent.get_band_default_date(`.plek-select-item[data-id='${item_id}']`);
+            jQuery('#band-time-' + item_id).flatpickr(plek_manage_event.flatpickr_band_options); //Load the Flatpickr
+            plekevent.update_band_playtime_button_text(`.plek-select-item[data-id='${item_id}']`);
+            return;
+        }
+
         jQuery("#event-band-selection .band-time-input").each((index, item) => {
-            if(empty(jQuery(item).attr('name'))){
+            if (empty(jQuery(item).attr('name'))) {
                 return; //Skip if no name defined, aka it is a flatpickr input field 
             }
-            if(jQuery(item).val() == 0){
+            if (jQuery(item).val() == 0) {
                 jQuery(item).val(defaultStartDate);
             }
-            //jQuery(item).flatpickr(); //Load the Flatpickr
             //Set the date from the input
-            console.log("Set for:");
-            console.log(item);
-            console.log("Set default time to:" + jQuery(item).val());
-            plek_manage_event.flatpickr_band_options.defaultDate = jQuery(item).val();
+            plek_manage_event.flatpickr_band_options.defaultDate = plekevent.get_band_default_date(jQuery(item).closest('.plek-select-item'));
             jQuery(item).flatpickr(plek_manage_event.flatpickr_band_options); //Load the Flatpickr
         });
 
@@ -242,23 +248,38 @@ var plekevent = {
     },
 
     /**
+     * Gets the default date of a band vob input
+     * 
+     * @param {object} item The Band item to get the time from (input band-time-xxx)
+     * @returns The full date or the playtime.
+     */
+    get_band_default_date(item) {
+        let timestamp = jQuery(item).data('timestamp');
+        if (this.event_is_single_day()) {
+            return (empty(timestamp)) ? '19:00' : plek_main.get_formated_date(timestamp, 'H:i');
+        } else {
+            return (empty(timestamp)) ? this.get_event_date('event_start_date', 'datetime') : plek_main.get_formated_date(timestamp, 'Y-m-d H:i:s');
+        }
+    },
+
+    /**
      * Updates the time of the band playtime button
      * @param {object} item 
      */
-    update_band_playtime_button_text(item){
+    update_band_playtime_button_text(item) {
         let unix_timestamp = jQuery(item).data('timestamp');
         let js_date = new Date(unix_timestamp * 1000); //Convert to MS
 
-        if(js_date.getFullYear === '1970'){
+        if (js_date.getFullYear === '1970') {
             //Replace the button with the clock icon, if the date is not found
             jQuery(item).find('.time-label').html('<i class="far fa-clock"></i>');
             return false;
         }
 
-       if(this.event_is_single_day()){
+        if (this.event_is_single_day()) {
             var time = plek_main.get_formated_date(unix_timestamp, 'H:i');
-        }else{
-           var time = plek_main.get_formated_date(unix_timestamp, 'd.m<br/>H:i');
+        } else {
+            var time = plek_main.get_formated_date(unix_timestamp, 'd.m<br/>H:i');
         }
         //Update the button label
         jQuery(item).find('.time-label').html(time);
@@ -269,7 +290,7 @@ var plekevent = {
      * Sets the flatpickr options depending on the event date.
      * @returns void
      */
-    set_flatpickr_band_time_options(){
+    set_flatpickr_band_time_options() {
         //Set available dates
         let defaultStartDate = '2020-01-01';
         let defaultEndDate = '9020-01-01';
@@ -278,9 +299,11 @@ var plekevent = {
             plek_manage_event.flatpickr_band_options.time_24hr = true;
             plek_manage_event.flatpickr_band_options.dateFormat = 'H:i';
             plek_manage_event.flatpickr_band_options.altFormat = 'H:i';
-            //plek_manage_event.flatpickr_band_options.defaultDate = '01:01';
             plek_manage_event.flatpickr_band_options.noCalendar = true;
-            console.log('Event is single day');
+            plek_manage_event.flatpickr_band_options.enable = [{
+                from: '00:00',
+                to: '23:59'
+            }];
         } else {
             //Event is multy day
             let startDate = this.get_event_date('event_start_date', 'date');
@@ -289,14 +312,11 @@ var plekevent = {
             endDate = (endDate.length === 0) ? defaultEndDate : endDate;
             plek_manage_event.flatpickr_band_options.dateFormat = 'Y-m-d H:i:S';
             plek_manage_event.flatpickr_band_options.altFormat = 'j.m H:i';
-            //plek_manage_event.flatpickr_band_options.defaultDate = '01:01';
             plek_manage_event.flatpickr_band_options.noCalendar = false;
             plek_manage_event.flatpickr_band_options.enable = [{
-                from: startDate,
-                to: endDate
+                from: startDate + ' 00:00:00',
+                to: endDate + ' 23:59:59'
             }];
-            console.log('Event is multi day');
-            //plek_manage_event.flatpickr_band_options.defaultDate = this.get_event_date('event_start_date', 'date');
         }
         return;
     },
@@ -372,7 +392,7 @@ var plekevent = {
                     let event_url = (typeof success_obj[2] !== 'undefined') ? success_obj[2] : '';
 
                     //It is a edit event. Do not redirect or change the url in anyway
-                    if(type === 'save_edit_event'){
+                    if (type === 'save_edit_event') {
                         plekerror.display_info(__('Event saved!', 'pleklang'));
                         plek_main.deactivate_button_loader(button, orig_btn_text);
                         jQuery(button).prop("disabled", false); //Enable the button again.
@@ -398,7 +418,7 @@ var plekevent = {
                             //User is a logged in user
                             let event_url_label = __('To my Event', 'pleklang')
                             let event_url_html = `<a href='${event_url}'>${event_url_label}</a>`;
-                            plekerror.display_info(__('Event saved!','pleklang'), __('Check it out here: ' + event_url_html, 'pleklang'));
+                            plekerror.display_info(__('Event saved!', 'pleklang'), __('Check it out here: ' + event_url_html, 'pleklang'));
                         }
                     } else {
                         //Show success message
@@ -408,11 +428,11 @@ var plekevent = {
                         }, 6000); //Auto redirect after 6 seconds
                         //Modifies the Button to direct to the next page
                         jQuery(button).data('type', 'new_event_next_page');
-                        orig_btn_text = __('Add Event details','pleklang');
+                        orig_btn_text = __('Add Event details', 'pleklang');
                         jQuery(button).data('url', url);
 
                     }
-                   
+
                     plek_main.deactivate_button_loader(button, orig_btn_text);
                     jQuery(button).prop("disabled", false); //Enable the button again.
                     return;
@@ -478,8 +498,8 @@ var plekevent = {
 
     },
 
-    save_review(){
-        let datab = plekevent.prepare_data('save_event_review','edit_event_review_form');
+    save_review() {
+        let datab = plekevent.prepare_data('save_event_review', 'edit_event_review_form');
         let form = 'edit_event_review_form';
         //No Validator needed, skip
 
@@ -596,7 +616,7 @@ var plekevent = {
         if (type === 'save_event_review') {
             datab.append('event_id', this.get_field_value('event_id'));
             datab.append('event_text_lead', this.get_field_value('event_text_lead'));
-            if(!empty(this.get_field_value('review_old_album_id'))){
+            if (!empty(this.get_field_value('review_old_album_id'))) {
                 datab.append('event_review_old_album_id', this.get_field_value('review_old_album_id'));
             }
             datab.append('event_text_review', this.get_field_value('event_text_review'));
@@ -645,9 +665,9 @@ var plekevent = {
      * @returns {bool} True if it is a single day event, false otherwise 
      */
     event_is_single_day() {
- 
+
         //If the Multiday is not checked, it can only be a single day.
-        if(jQuery('#is_multiday').is(':checked') === false){
+        if (jQuery('#is_multiday').is(':checked') === false) {
             return true;
         }
 
@@ -692,6 +712,9 @@ var plekevent = {
             case "time":
                 return (typeof dateSplit[1] !== 'undefined') ? dateSplit[1] : '';
                 break;
+            case "datetime":
+                return jQuery('#' + id).val(); //Just returns the datetime as it is set in the input field
+                break;
             default:
                 return dateSplit;
                 break;
@@ -719,7 +742,7 @@ var plekevent = {
                 if (jQuery("#" + name + ":checked").length > 0) {
                     return jQuery('#' + name).val();
                 } else {
-                    return jQuery('#'+name).val();
+                    return jQuery('#' + name).val();
                 }
                 break;
 
