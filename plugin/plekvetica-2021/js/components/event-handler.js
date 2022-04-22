@@ -209,11 +209,21 @@ var plekevent = {
         this.set_flatpickr_band_time_options();
 
         //Set the flatpickr for all time inputs
+        //This selects to many inputs, make more distinct selection!
+
         jQuery("#event-band-selection .band-time-input").each((index, item) => {
+            if(empty(jQuery(item).attr('name'))){
+                return; //Skip if no name defined, aka it is a flatpickr input field 
+            }
             if(jQuery(item).val() == 0){
                 jQuery(item).val(defaultStartDate);
             }
             //jQuery(item).flatpickr(); //Load the Flatpickr
+            //Set the date from the input
+            console.log("Set for:");
+            console.log(item);
+            console.log("Set default time to:" + jQuery(item).val());
+            plek_manage_event.flatpickr_band_options.defaultDate = jQuery(item).val();
             jQuery(item).flatpickr(plek_manage_event.flatpickr_band_options); //Load the Flatpickr
         });
 
@@ -245,16 +255,11 @@ var plekevent = {
             return false;
         }
 
-        var hours = '0' + js_date.getUTCHours();
-        var minutes = '0' + js_date.getUTCMinutes();
-        if(this.event_is_single_day()){
-            var time = hours.slice(-2) + ':' + minutes.slice(-2);
+       if(this.event_is_single_day()){
+            var time = plek_main.get_formated_date(unix_timestamp, 'H:i');
         }else{
-            let day = '0' + js_date.getUTCDate();
-            let month = '0' + js_date.getUTCMonth();
-            var time =  day.slice(-2) + '.' + month.slice(-2) + '<br/>' + hours.slice(-2) + ':' + minutes.slice(-2);
+           var time = plek_main.get_formated_date(unix_timestamp, 'd.m<br/>H:i');
         }
-        
         //Update the button label
         jQuery(item).find('.time-label').html(time);
         return;

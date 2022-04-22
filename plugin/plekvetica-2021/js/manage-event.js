@@ -76,13 +76,13 @@ let plek_manage_event = {
             flatpickr("#event_start_date", flatpickr_options);
             flatpickr("#event_end_date", flatpickr_options);
 
+            //Populate the existing vob data
+            plek_manage_event.add_vob_to_current_selection('bands');
+            plek_manage_event.add_vob_to_current_selection('venue');
+            plek_manage_event.add_vob_to_current_selection('organizers');
         });
 
 
-        //Populate the existing vob data
-        plek_manage_event.add_vob_to_current_selection('bands');
-        plek_manage_event.add_vob_to_current_selection('venue');
-        plek_manage_event.add_vob_to_current_selection('organizers');
 
         //Check if edit event is populated. If so, it is the edit event form or the add details form
         if(!empty(plekevent.get_field_value('event_id'))){
@@ -549,7 +549,7 @@ let plek_manage_event = {
         if(type === 'bands'){
             //Set the flatpickr for all the band time buttons
             jQuery(document).ready(() =>{
-                plekevent.set_band_time_flatpickr();
+                //plekevent.set_band_time_flatpickr();
             });
         }
         return;

@@ -701,7 +701,68 @@ let plek_main = {
         //Reset the Button text
         jQuery('#'+form_id).find('.plek-image-upload-container').find('.plek-button').text(__('Upload','pleklang'));
         
+    },
+
+    /**
+     * Converts the timestamp to the desired date format
+     * @param {string} timestamp The Timestamp in Seconds (eg. from PHP)
+     * @param {string} format The format to return
+     * @returns String The date without timezone.
+     */
+    get_formated_date(timestamp, format = ''){
+
+        var length = format.length;
+        if(length === 0){
+            return '';
+        }
+
+        var formated_date = ''; 
+        let pieces = Array.from(format);
+        jQuery(pieces).each((index, item) => {
+            let js_date = new Date(timestamp * 1000);
+            //Timezone fix
+            let time = js_date.getTime();
+            let offset = js_date.getTimezoneOffset() * 60000;
+
+            let fixed_js_date = new Date(time + offset);
+            //let fixed_js_date = js_date; //Don't fix the timezone offset
+            console.log(js_date);
+            console.log(fixed_js_date);
+            switch (item) {
+                case 'H':
+                    var timepiece = '0' + fixed_js_date.getHours();
+                    timepiece = timepiece.slice(-2);
+                    break;
+                case 'i':
+                    var timepiece = '0' + fixed_js_date.getMinutes();
+                    timepiece = timepiece.slice(-2);
+                    break;
+                case 's':
+                    var timepiece = '0' + fixed_js_date.getSeconds();
+                    timepiece = timepiece.slice(-2);
+                    break;
+                case 'd':
+                    var timepiece = '0' + fixed_js_date.getDate();
+                    timepiece = timepiece.slice(-2);
+                    break;
+                case 'm':
+                    var timepiece = '0' + (fixed_js_date.getMonth() + 1);
+                    timepiece = timepiece.slice(-2);
+                    break;
+                case 'Y':
+                    var timepiece = fixed_js_date.getFullYear();
+                    break;
+            
+                default:
+                    timepiece = item;
+                    break;
+            }
+            formated_date = formated_date + timepiece;
+        });
+
+        return formated_date;
     }
+
 
 }
 
