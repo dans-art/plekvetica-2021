@@ -2261,7 +2261,9 @@ class PlekEventHandler
             <span class='band_name'>{$band_name}</span>
             </div>";
         }
-
+        //Sort the Date
+        ksort($formated);
+        
         foreach ($formated as $day_index => $day_items) {
             ksort($formated[$day_index]);
         }
