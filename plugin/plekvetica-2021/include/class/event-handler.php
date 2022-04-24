@@ -2239,14 +2239,14 @@ class PlekEventHandler
         $formated = array();
         foreach ($this->event['bands'] as $band_id => $item) {
             $band_name = $item['name'];
-            $band_origin = $item['herkunft'];
+            $band_origin = (isset($item['herkunft'])) ? $item['herkunft'] : 'NULL';
             $band_origin_formated = $band_handler->get_flag_formated($band_origin);
 
             //$timestamp = array_search($band_id, $this->event['timetable']); //Timestamp or false
             $timestamp = (!empty($this->event['timetable'][$band_id]['timestamp'])) ? $this->event['timetable'][$band_id]['timestamp'] : 0;
 
             $playtime = (isset($this->event['timetable'][$band_id]['playtime_formated'])) ? $this->event['timetable'][$band_id]['playtime_formated'] : '';
-            $playtime = (!empty($playtime)) ? date( 'H:i', strtotime($playtime) )  : 'tbd';
+            $playtime = (!empty($playtime)) ? date('H:i', strtotime($playtime))  : 'tbd';
 
             $day = ($is_multiday and $timestamp > 0) ? date('d. F', $timestamp) : __('No Time defined', 'pleklang');
             if (!isset($formated[$day][$timestamp])) {

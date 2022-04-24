@@ -1204,9 +1204,18 @@ article.plek-event-item-compact {
 .timetable-container .timetable_row {
   margin-left: 5%;
   width: 95%; }
+.timetable-container .band_origin {
+  position: relative;
+  width: 2rem;
+  display: inline-block; }
 .timetable-container .band_origin img {
   max-height: 1.4rem;
-  padding: 0 0.5rem; }
+  position: absolute;
+  top: -1rem;
+  right: 0; }
+.timetable-container span.playtime {
+  min-width: 3rem;
+  display: inline-block; }
 
 /*Revision Container*/
 #revloader {
