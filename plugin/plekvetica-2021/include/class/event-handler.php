@@ -100,7 +100,7 @@ class PlekEventHandler
      */
     public function is_public(string $event_id = null)
     {
-        if (!$event_id) {
+        if (!empty($this->get_field_value('post_status'))) {
             $status = $this->get_field_value('post_status');
         } else {
             $status = get_post_status($event_id);
@@ -2263,7 +2263,7 @@ class PlekEventHandler
         }
         //Sort the Date
         ksort($formated);
-        
+
         foreach ($formated as $day_index => $day_items) {
             ksort($formated[$day_index]);
         }

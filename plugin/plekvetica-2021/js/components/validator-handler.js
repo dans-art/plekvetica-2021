@@ -265,11 +265,19 @@ var plekvalidator = {
             return false;
         }
 
+        let reg_patern = null;
         switch (type) {
             case 'int':
-                const reg_int = new RegExp('^[0-9]+$');
-                if (reg_int.test(value) === false) {
+                reg_patern = new RegExp('^[0-9]+$');
+                if (reg_patern.test(value) === false) {
                     plekvalidator.add_error(field_id, error_msg.invalid_type, form);
+                    return false;
+                }
+                break;
+            case 'price':
+                reg_patern = new RegExp('^[0-9.-]+$');
+                if (reg_patern.test(value) === false) {
+                    plekvalidator.add_error(field_id, __('Field contains fobidden characters. Only Numbers, dots and dashes are allowed.','pleklang'), form);
                     return false;
                 }
                 break;
@@ -277,6 +285,12 @@ var plekvalidator = {
             case 'honeypot':
                 if (value.length > 0) {
                     plekvalidator.add_error(field_id, error_msg.nice_try, form);
+                    return false;
+                }
+                break;
+            case 'url':
+                if (value.indexOf('https://') === -1 && value.indexOf('http://') === -1 && value.indexOf('www.') === -1) {
+                    plekvalidator.add_error(field_id, __('Please provide a valid URL. Must start with https// or www.','pleklang'), form);
                     return false;
                 }
                 break;
