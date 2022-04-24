@@ -214,20 +214,25 @@ var plekevent = {
         //Set the flatpickr for all time inputs
         //This selects to many inputs, make more distinct selection!
 
-        if (!empty(jQuery('#band-time-' + item_id))) {
-            plek_manage_event.flatpickr_band_options.defaultDate = plekevent.get_band_default_date(`.plek-select-item[data-id='${item_id}']`);
-            jQuery('#band-time-' + item_id).flatpickr(plek_manage_event.flatpickr_band_options); //Load the Flatpickr
-            plekevent.update_band_playtime_button_text(`.plek-select-item[data-id='${item_id}']`);
+        if (!empty(jQuery('#event-band-selection #band-time-' + item_id))) {
+            plek_manage_event.flatpickr_band_options.defaultDate = plekevent.get_band_default_date(`#event-band-selection .plek-select-item[data-id='${item_id}']`);
+            jQuery('#event-band-selection #band-time-' + item_id).flatpickr(plek_manage_event.flatpickr_band_options); //Load the Flatpickr
+            plekevent.update_band_playtime_button_text(`#event-band-selection .plek-select-item[data-id='${item_id}']`);
             return;
         }
 
+        console.log("Update all Bandtimes");
         jQuery("#event-band-selection .band-time-input").each((index, item) => {
             if (empty(jQuery(item).attr('name'))) {
                 return; //Skip if no name defined, aka it is a flatpickr input field 
             }
             if (jQuery(item).val() == 0) {
                 jQuery(item).val(defaultStartDate);
+            }else{
+                //Update the timestamp, if time set.
+                this.update_band_timestamp(item);
             }
+
             //Set the date from the input
             plek_manage_event.flatpickr_band_options.defaultDate = plekevent.get_band_default_date(jQuery(item).closest('.plek-select-item'));
             jQuery(item).flatpickr(plek_manage_event.flatpickr_band_options); //Load the Flatpickr
@@ -245,6 +250,30 @@ var plekevent = {
         });
         return;
 
+    },
+
+    /**
+     * Updates the current timestamp of a band.
+     * @param {object} item The Band item to get the time from (input band-time-xxx)
+     * @returns void
+     */
+    update_band_timestamp(item){
+        let current_value = jQuery(item).val();
+        if(current_value !== '00:00'){
+            //Probably edit event, not timestamp loaded from the db
+            let start_date = plekevent.get_event_date('event_start_date', 'date');
+            if(current_value.length === 5){
+                //Is single day, add the date to the current value (current_value is only the time)
+                current_value = start_date + ' ' + current_value;
+            }
+            let date = new Date(current_value);
+            //Add the timezone offset to the time and convert to seconds.
+            let timestamp_in_seconds = (date.getTime() - date.getTimezoneOffset() * 60000 )/ 1000;
+            ;
+            jQuery(item).closest('.plek-select-item').data('timestamp', timestamp_in_seconds);
+            console.log("Set timestamp to: "+timestamp_in_seconds);
+        }
+        return;
     },
 
     /**
@@ -269,8 +298,7 @@ var plekevent = {
     update_band_playtime_button_text(item) {
         let unix_timestamp = jQuery(item).data('timestamp');
         let js_date = new Date(unix_timestamp * 1000); //Convert to MS
-
-        if (js_date.getFullYear === '1970') {
+        if (js_date.getFullYear() === 1970) {
             //Replace the button with the clock icon, if the date is not found
             jQuery(item).find('.time-label').html('<i class="far fa-clock"></i>');
             return false;
@@ -295,7 +323,8 @@ var plekevent = {
         let defaultStartDate = '2020-01-01';
         let defaultEndDate = '9020-01-01';
         //Set the Options for single day
-        if (this.event_is_single_day()) {
+        var is_single_day = this.event_is_single_day();
+        if (is_single_day) {
             plek_manage_event.flatpickr_band_options.time_24hr = true;
             plek_manage_event.flatpickr_band_options.dateFormat = 'H:i';
             plek_manage_event.flatpickr_band_options.altFormat = 'H:i';
@@ -318,6 +347,7 @@ var plekevent = {
                 to: endDate + ' 23:59:59'
             }];
         }
+        console.log('Set flatpicker time. Singleday: '+is_single_day);
         return;
     },
 
@@ -670,7 +700,6 @@ var plekevent = {
         if (jQuery('#is_multiday').is(':checked') === false) {
             return true;
         }
-
         let startDate = jQuery('#event_start_date').val();
         let startDateArr = startDate.split(' ');//Array [ "2022-01-20", "12:00:00" ] 
 

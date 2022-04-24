@@ -5,7 +5,7 @@
 var pleksearch = {
 
   current_type: null,
-  treshhold: 60,
+  threshold : 40,
   last_search_result: null,
 
   fire_search(element) {
@@ -34,13 +34,13 @@ var pleksearch = {
 
     switch (type) {
       case 'event_venue':
-        window.pleksearch.threshhold = 40;
+        window.pleksearch.threshold  = 40;
         break;
       case 'event_band':
-        window.pleksearch.threshhold = 60;
+        window.pleksearch.threshold  = 40;
         break;
       case 'event_organizer':
-        window.pleksearch.threshhold = 60;
+        window.pleksearch.threshold  = 40;
         break;
 
       default:
@@ -119,7 +119,7 @@ var pleksearch = {
           });
         }
         var exact_hit = pleksearch.is_exact_hit(search_for_prep, compare_prep);
-        if (sm_compare.peak.value >= window.pleksearch.threshhold || exact_hit === true) {
+        if (sm_compare.peak.value >= window.pleksearch.threshold  || exact_hit === true) {
           var item = {};
           item.type = type;
           item.data = value;
@@ -127,6 +127,9 @@ var pleksearch = {
           item.perc = (exact_hit === true) ? 150 : sm_compare.peak.value;
           results[value.id] = item;
         }
+        /*if(sm_compare.peak.value > 10){
+          console.log("Search: " +  sm_compare.pattern + ' - ' + sm_compare.peak.value);
+        }*/
       });
 
       return new Promise(resolve => {
