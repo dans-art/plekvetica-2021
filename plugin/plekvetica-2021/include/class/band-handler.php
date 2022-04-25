@@ -801,7 +801,7 @@ class PlekBandHandler
             //Send Notification to admin
             $message = sprintf(__('A new Band "%s" has been added.', 'pleklang'), $name);
             $action = get_term_link((int) $add_term['term_id']);
-            PlekNotificationHandler::push_to_admin(__('New Band added', 'pleklang'), $message, $action);
+            PlekNotificationHandler::push_to_role('eventmanager', __('New Band added', 'pleklang'), $message, $action);
             return $this->update_band($add_term['term_id'], true);
         }
 

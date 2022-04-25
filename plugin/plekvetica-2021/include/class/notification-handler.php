@@ -141,7 +141,7 @@ class PlekNotificationHandler extends WP_List_Table
      * Sends an Notification to a certain role.
      * Currently, all the messages go to the admin. This is a placeholder for later.
      *
-     * @param string $role - The role to send the message to.
+     * @param string $role - The role to send the message to. Supported are admin, eventmanager
      * @param string $subject - Subject of the message / Title
      * @param string $message - THe Message to show
      * @param string $action - The link to click. Should be a valid html link
@@ -150,19 +150,24 @@ class PlekNotificationHandler extends WP_List_Table
      */
     public static function push_to_role($role = null, $subject = null, $message = null, $action = null, $type = 'admin_info')
     {
+        global $plek_handler;
+        $recipient_id = 0; //Can be single id or array with user ids
         switch ($role) {
             case 'admin':
                 return self::push_to_admin($subject, $message, $action, $type);
                 break;
             case 'eventmanager':
-                //@todo: Replace with own function to send it to the eventmanager.
-                return self::push_to_admin($subject, $message, $action, $type);
+                $plek_user = new PlekUserHandler;
+                $recipient_id = $plek_user->get_users_by_role('eventmanager',true);
+                $type = ($type === 'admin_info') ? 'eventmanager_info' : $type ;
                 break;
-
-            default:
+                
+                default:
                 return false;
                 break;
-        }
+            }
+            $notify = new PlekNotificationHandler;
+            return $notify->push_notification($recipient_id, $type, $subject, $message, $action);
     }
 
 
@@ -274,12 +279,23 @@ class PlekNotificationHandler extends WP_List_Table
 
     /**
      * Prepares the items to be displayed as a Table in the Backend.
-     *
+     * 
+     * @param array|string $args - See WP_List_Table's _constructor() for the supported args. Some are not supported by plek.
      * @return void
      */
-    public function prepare_backend_notification_items()
+    public function prepare_backend_notification_items($args = array())
     {
         global $_wp_column_headers;
+        $args = wp_parse_args(
+            $args,
+            array(
+                'plural'   => '',
+                'singular' => '',
+                'ajax'     => false,
+                'screen'   => null,
+            )
+        );
+        $this->_args = $args;
         $screen = get_current_screen();
 
         $this->screen = $screen;

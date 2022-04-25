@@ -539,6 +539,20 @@ class PlekUserHandler
     }
 
     /**
+     * Gets all the users within a specific role
+     *
+     * @param string $rolename
+     * @param boolean $return_only_ids
+     * @return WP_User object
+     */
+    public function get_users_by_role($rolename, $return_only_ids = false){
+        $rolename = htmlspecialchars($rolename);
+        $fields = ($return_only_ids)?'ID':'all';
+        $search = get_users(['role__in' => $rolename, 'fields' => $fields]);
+        return $search;
+    }
+
+    /**
      * Adds the custom roles to WP
      *
      * @return void
