@@ -672,6 +672,7 @@ class PlekAjaxHandler
             case 'add_album':
                 $gallery_handler = new PlekGalleryHandler;
                 $event_handler = new PlekEvents;
+                
                 $event_id = $this->get_ajax_data('event_id');
                 $band_id = $this->get_ajax_data('band_id');
                 $album_name = $event_handler->generate_album_title($event_id, $band_id);
@@ -726,7 +727,6 @@ class PlekAjaxHandler
                 }else{
                     $this->set_error(__('Band ID or Event ID not provided','pleklang'));
                 }
-
 
                 break;
 

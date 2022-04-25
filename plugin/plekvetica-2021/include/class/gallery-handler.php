@@ -238,6 +238,7 @@ class PlekGalleryHandler
         }
         $path = '/wp-content/gallery/' . date('Y') . '/' . sanitize_title($gallery_name) . '/';
         $author = get_current_user_id();
+       
         $new_gallery = $nggdb->add_gallery($gallery_name, $path, $description, 0, 0, $author);
 
         if (is_int($new_gallery)) {

@@ -2492,6 +2492,6 @@ class PlekEventHandler
         $venue = $this->get_venue_name();
         $band = $band_handler->get_name();
 
-        return sprintf(__('Photos of %s at %s by Plekvetica', 'pleklang'), $band, $venue);
+        return sprintf(__('Photos of %1$s at %2$s by Plekvetica', 'pleklang'), $band, $venue);
     }
 }

@@ -141,9 +141,9 @@ var plek_gallery_handler = {
         //deactivate the loader button after gallery / album creation
         plek_main.deactivate_button_loader(button);
 
-        let band_id = jQuery(button).data('band_id');
-        let gallery_id = jQuery(button).data('gallery_id');
-        let album_id = jQuery(button).data('album_id');
+        let band_id = jQuery(button).attr('data-band_id');
+        let gallery_id = jQuery(button).attr('data-gallery_id');
+        let album_id = jQuery(button).attr('data-album_id');
 
         //Nothing to create / All created, show upload dialog
         
@@ -160,9 +160,13 @@ var plek_gallery_handler = {
         jQuery('#images-uploaded-container').html('');
         jQuery('#review_images').val('');
 
-        upload_btn.data('gallery_id', gallery_id);
-        upload_btn.data('album_id', album_id);
-        upload_btn.data('band_id', band_id);
+        upload_btn.attr('data-gallery_id', gallery_id);
+        upload_btn.attr('data-album_id', album_id);
+        upload_btn.attr('data-band_id', band_id);
+
+        //Add the Icon to the button
+        //jQuery(button).find('.image_upload_status').addClass('status-ok');
+        this.update_gallery_button_status(gallery_id, 'done');
 
         //Scroll to the container
         let pos_top = img_con.position().top;
@@ -177,10 +181,10 @@ var plek_gallery_handler = {
      */
     async check_album_and_gallery_ids(button) {
         try {
-            let gallery_id = jQuery(button).data('gallery_id');
-            let album_id = jQuery(button).data('album_id');
+            let gallery_id = jQuery(button).attr('data-gallery_id');
+            let album_id = jQuery(button).attr('data-album_id');
             let event_id = jQuery('#event_id').val();
-            let band_id = jQuery(button).data('band_id');
+            let band_id = jQuery(button).attr('data-band_id');
             if (empty(album_id)) {
                 //No album set so far
                 let new_album_id = await plek_gallery_handler.create_album(event_id, band_id);
@@ -189,7 +193,7 @@ var plek_gallery_handler = {
                     return false;
                 }
                 album_id = new_album_id;
-                jQuery(button).data('album_id', new_album_id);
+                jQuery(button).attr('data-album_id', new_album_id);
                 console.log('album created: ' + new_album_id);
             }
             if (empty(gallery_id)) {
@@ -198,7 +202,7 @@ var plek_gallery_handler = {
                     console.log(__('Error while creating a new gallery', 'pleklang'));
                     return false;
                 }
-                jQuery(button).data('gallery_id', new_gallery_id);
+                jQuery(button).attr('data-gallery_id', new_gallery_id);
                 console.log('Gallery added: ' + new_gallery_id);
             }
             return true;
@@ -208,12 +212,42 @@ var plek_gallery_handler = {
         }
     },
     /**
+     * Updates the css of the add gallery/album button 
+     * @param {int} gallery_id The ID of the gallery to change the button type from
+     * @param {string} status_type Status to set. done, uploading and missing are accepted.
+     * @returns 
+     */
+    update_gallery_button_status(gallery_id, status_type){
+        let css_status = '';
+        switch (status_type) {
+            case 'done':
+                css_status = 'status-ok';
+                break;
+                case 'uploading':
+                css_status = 'status-uploading';
+                break;
+                
+                default: //status missing
+                css_status = 'status-missing';
+                break;
+        }
+        let button = jQuery(`.image_upload_add_btn[data-gallery_id='${gallery_id}']`).find('.image_upload_status');
+        //Remove the previous status
+        button.removeClass('status-missing');
+        button.removeClass('status-ok');
+        button.removeClass('status-uploading');
+
+        //Set the new status
+        button.addClass(css_status);
+        return;
+    },
+    /**
  * Fires when the button is clicked to upload images
  * 
  * @param {object} button The clicked button 
  */
     upload_images_click_action(button) {
-        let gallery_id = jQuery(button).data('gallery_id');
+        let gallery_id = jQuery(button).attr('data-gallery_id');
 
         let files = jQuery('#review_images').prop('files');
 
@@ -223,7 +257,8 @@ var plek_gallery_handler = {
         }
 
         //Set the button to status uploading
-        jQuery(`.image_upload_add_btn[data-gallery_id='${gallery_id}']`).find('.image_upload_status').addClass('status-uploading');
+        //jQuery(`.image_upload_add_btn[data-gallery_id='${gallery_id}']`).find('.image_upload_status').addClass('status-uploading');
+        this.update_gallery_button_status(gallery_id, 'uploading');
         //Add the button loader
         plek_main.activate_button_loader('#review_images_upload_btn', __('Uploading images...', 'pleklang'));
 
@@ -358,8 +393,7 @@ var plek_gallery_handler = {
             //Empty the file upload input
             jQuery('#review_images').val('');
 
-            jQuery(button_status).removeClass('status-uploading');
-            jQuery(button_status).addClass('status-ok');
+            this.update_gallery_button_status(gallery_id, 'done');
 
             jQuery(container).find('.image_to_upload').removeClass('current_upload');
 
@@ -368,7 +402,7 @@ var plek_gallery_handler = {
             plekerror.display_info(__('Image upload', 'pleklang'), __('Images uploaded: ', 'pleklang') + items_done);
             
         }
-
+        return;
 
     },
 
@@ -381,8 +415,8 @@ var plek_gallery_handler = {
         let container = jQuery('#event-review-images-container');
 
         jQuery(container).find('.review_band_images_container').each((index, item) => {
-            let gallery_id = jQuery(item).find('.image_upload_add_btn ').data('gallery_id');
-            let album_id = jQuery(item).find('.image_upload_add_btn ').data('album_id');
+            let gallery_id = jQuery(item).find('.image_upload_add_btn ').attr('data-gallery_id');
+            let album_id = jQuery(item).find('.image_upload_add_btn ').attr('data-album_id');
             if (!empty(gallery_id)) {
                 if (empty(gallery_ids[album_id])) {
                     gallery_ids[album_id] = [];
