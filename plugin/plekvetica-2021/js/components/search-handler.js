@@ -118,8 +118,18 @@ var pleksearch = {
             resolve(false);
           });
         }
+
+        //Dynamic threshold
+        //If the input length is less than 20% of the search length, the threshold will be more sensitive.
+        let input_length = search_for_prep.length;
+        let search_length = sm_compare.pattern.length;
+        let threshold = window.pleksearch.threshold;
+        if((input_length / search_length  * 100) < 20){
+          threshold = threshold / 2; //Divide the threshold in half, if the input is below 20% 
+        }
+
         var exact_hit = pleksearch.is_exact_hit(search_for_prep, compare_prep);
-        if (sm_compare.peak.value >= window.pleksearch.threshold  || exact_hit === true) {
+        if (sm_compare.peak.value >= threshold  || exact_hit === true) {
           var item = {};
           item.type = type;
           item.data = value;
@@ -127,8 +137,8 @@ var pleksearch = {
           item.perc = (exact_hit === true) ? 150 : sm_compare.peak.value;
           results[value.id] = item;
         }
-        /*if(sm_compare.peak.value > 10){
-          console.log("Search: " +  sm_compare.pattern + ' - ' + sm_compare.peak.value);
+        /*if(sm_compare.peak.value > 1){
+          console.log("Search: " +  sm_compare.pattern + ' - ' + sm_compare.peak.value + " :: "+input_length+' -- '+search_length + `( threshold ${threshold})`);
         }*/
       });
 
