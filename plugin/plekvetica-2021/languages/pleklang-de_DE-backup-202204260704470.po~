@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2022-04-26 07:04+0000\n"
+"PO-Revision-Date: 2022-04-26 07:03+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -1322,9 +1322,7 @@ msgid "Photos of %1$s at %2$s by Plekvetica"
 msgstr "Alle Fotos von %s @ % von Plekvetica"
 
 #: js/components/validator-handler.js:293
-#, fuzzy
-#| msgid "Please provide a valid URL. Must start with https// or www."
-msgid "Please provide a valid URL. Must start with https:// or www."
+msgid "Please provide a valid URL. Must start with https// or www."
 msgstr "Bitte gib eine valide URL an. Muss mit https:// oder www. beginnen"
 
 #: template/event/form/components/review-images.php:20

@@ -1,4 +1,11 @@
 # plekvetica-2021
+Version 2.0.1
+- Fehler im neuen Formular behoben
+- Neuer Shortcode 'plek_event_upcoming_no_akkredi' zum anzeigen fehlender akkreditierungen
+- Neuer Shortcode 'plek_event_recently_added' zum anzeigen neuer Events
+- Diverse Style anpassungen
+- Übersetzungen angepasst
+
 Version 2.0
 - Neues "Event eintragen" Formular
 - Neues "Event Review schreiben" Formular

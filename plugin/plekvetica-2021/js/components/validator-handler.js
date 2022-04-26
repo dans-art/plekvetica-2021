@@ -290,7 +290,7 @@ var plekvalidator = {
                 break;
             case 'url':
                 if (value.indexOf('https://') === -1 && value.indexOf('http://') === -1 && value.indexOf('www.') === -1) {
-                    plekvalidator.add_error(field_id, __('Please provide a valid URL. Must start with https// or www.','pleklang'), form);
+                    plekvalidator.add_error(field_id, __('Please provide a valid URL. Must start with https:// or www.','pleklang'), form);
                     return false;
                 }
                 break;
