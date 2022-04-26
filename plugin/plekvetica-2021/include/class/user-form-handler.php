@@ -80,7 +80,7 @@ class PlekUserFormHandler extends PlekUserHandler
         $validator->set_required('display-name');
         $validator->set_type('display-name', 'default');
 
-        $validator->set_type('description', 'test');
+        $validator->set_type('description', 'default');
 
         $validator->set_type('new-password', 'password');
         $validator->set_type('new-password-repeat', 'password');
@@ -150,11 +150,11 @@ class PlekUserFormHandler extends PlekUserHandler
         global $plek_ajax_errors;
 
         $userdata = array();
-        $userdata['ID'] = htmlspecialchars($plek_ajax_handler->get_ajax_data('user-id'));
-        $userdata['first_name'] = htmlspecialchars($plek_ajax_handler->get_ajax_data('first-name'));
-        $userdata['last_name'] = htmlspecialchars($plek_ajax_handler->get_ajax_data('last-name'));
-        $userdata['display_name'] = htmlspecialchars($plek_ajax_handler->get_ajax_data('display-name'));
-        $userdata['description'] = htmlspecialchars($plek_ajax_handler->get_ajax_data('description'));
+        $userdata['ID'] = $plek_ajax_handler->get_ajax_data_esc('user-id', false);
+        $userdata['first_name'] = $plek_ajax_handler->get_ajax_data_esc('first-name', false);
+        $userdata['last_name'] = $plek_ajax_handler->get_ajax_data_esc('last-name', false);
+        $userdata['display_name'] = $plek_ajax_handler->get_ajax_data_esc('display-name', false);
+        $userdata['description'] = $plek_ajax_handler->get_ajax_data_esc('description', true);
         if (!empty($plek_ajax_handler->get_ajax_data('new-password'))) {
             $userdata['user_pass'] = $plek_ajax_handler->get_ajax_data('new-password');
         }
@@ -184,7 +184,7 @@ class PlekUserFormHandler extends PlekUserHandler
         //Save the organizer id
         if (empty($old_organi_id)) {
             $user = wp_get_current_user();
-            if($plek_handler -> update_field('organizer_id',$organi_id,'user_'.$user->ID) === false){
+            if ($plek_handler->update_field('organizer_id', $organi_id, 'user_' . $user->ID) === false) {
                 $plek_ajax_errors->add('save_user', __('Failed to write organizer meta', 'pleklang'));
                 return false;
             }
@@ -223,7 +223,7 @@ class PlekUserFormHandler extends PlekUserHandler
         $band_ids = $plek_ajax_handler->get_ajax_data('band-ids');
         $band_ids_imploded = implode(',', $band_ids);
 
-        if($plek_handler -> update_field('band_id',$band_ids_imploded,'user_'.$user->ID) === false){
+        if ($plek_handler->update_field('band_id', $band_ids_imploded, 'user_' . $user->ID) === false) {
             $plek_ajax_errors->add('save_user', __('Failed to write band meta', 'pleklang'));
             return false;
         }

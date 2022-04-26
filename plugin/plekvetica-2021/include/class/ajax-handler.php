@@ -672,7 +672,7 @@ class PlekAjaxHandler
             case 'add_album':
                 $gallery_handler = new PlekGalleryHandler;
                 $event_handler = new PlekEvents;
-                
+
                 $event_id = $this->get_ajax_data('event_id');
                 $band_id = $this->get_ajax_data('band_id');
                 $album_name = $event_handler->generate_album_title($event_id, $band_id);
@@ -724,8 +724,8 @@ class PlekAjaxHandler
                     } else {
                         $this->set_error($new_gallery);
                     }
-                }else{
-                    $this->set_error(__('Band ID or Event ID not provided','pleklang'));
+                } else {
+                    $this->set_error(__('Band ID or Event ID not provided', 'pleklang'));
                 }
 
                 break;
@@ -794,15 +794,17 @@ class PlekAjaxHandler
     /**
      * Returns the Value from a $_Request field and applies htmlspecialchars() function 
      */
-    public function get_ajax_data_esc(string $field = '')
+    public function get_ajax_data_esc(string $field = '', $remove_unallowed_tags = false)
     {
+        global $plek_handler;
+        $forbidden_tags = $plek_handler->get_forbidden_tags('textarea');
         if (isset($_REQUEST[$field]) and is_string($_REQUEST[$field])) {
-            return htmlspecialchars($_REQUEST[$field]);
+            return ($remove_unallowed_tags) ? htmlspecialchars($plek_handler->remove_tags($_REQUEST[$field], $forbidden_tags)) : htmlspecialchars($_REQUEST[$field]);
         }
         if (isset($_REQUEST[$field]) and is_array($_REQUEST[$field])) {
             $new_arr = array();
             foreach ($_REQUEST[$field] as $id => $value) {
-                $new_arr[htmlspecialchars($id)] = htmlspecialchars($value);
+                $new_arr[htmlspecialchars($id)] = ($remove_unallowed_tags) ? htmlspecialchars($plek_handler->remove_tags($value, $forbidden_tags)) : htmlspecialchars($value);
             }
             return $new_arr;
         }
