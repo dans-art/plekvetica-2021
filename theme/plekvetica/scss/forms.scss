@@ -45,6 +45,42 @@ div.plek-review-search{
 .submit.plek-button{
   margin-left: 20%;
   }
+
+ .plek-event-form-container{
+
+  margin-bottom: 2em;
+  width: 80%;
+  position: relative;
+  max-width: 750px;
+
+  .plek-field-error{
+    padding: 0.5em 0;
+  }
+ }
+
+ .event-default-container{
+  display: flex;
+  flex-direction: column;
+  margin-top: 1em;
+}
+
+.event-price-container{
+  justify-content: space-between;
+  flex-grow: 1;
+
+  div{
+    width: 100%;
+  }  
+}
+
+
+input[type=checkbox]{
+  margin: 1rem 0 0 0;
+  height: 1.5rem;
+  width: 1.5rem;
+  filter: hue-rotate(143deg);
+}
+
 .event-basic-container {
 
   .event-name-container{
@@ -82,7 +118,7 @@ div.plek-review-search{
 
 .event-search-bar-container{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: nowrap;
     justify-content: space-between;
 
@@ -97,10 +133,14 @@ div.plek-review-search{
 .plek-search-overlay{
   position: absolute;
   background-color: $color-gray-light;
-  width: 72%;
   max-width: 755px;
-  z-index: 9999;
-  
+  z-index: 10000;
+  margin-right: 40px;
+  width: 100%;
+}
+
+#event-organizer-proposal,
+.plek-search-overlay{
   .item{
     padding: 1em;
 
@@ -125,19 +165,175 @@ div.plek-review-search{
     padding-left: 2em;
   }
 
+  //Hide items
+  .button-container,
+  .remove-item{
+    display: none;
+  }
+
 }
+
+#event_band_overlay .plek-add-item{
+  .title-container{
+    display: flex;
+    align-content: center;
+    align-items: center;
+    text-align: left;
+  }
+  
+  .title-group{
+    padding-left: 1em;
+  }
+
+  .item-title{
+    font-weight: bold;
+  }
+  .subtitle{
+    padding-left: 0;
+  }
+}
+
+#event-band-selection{
+
+  color: black;
+
+  .plek-select-item{
+    padding:0;
+    background: $text-color;
+    margin: 0.2em 0;
+  }
+
+  .remove-item:first-child{
+    display: none; //Hide the first item, only used for the organizer and location
+  }
+
+  .item-title{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .button-container {
+    display: flex;
+    gap: 0.5em;
+    margin: 0.5em;
+  }
+
+  .title-container{
+    display: flex;
+    align-items: center;
+    padding: 0 0.5em;
+
+    .item-title{
+      font-weight: bold;
+    }
+  }
+
+  .sort-button,
+  .sort-button i{
+    cursor: n-resize;
+  }
+
+  .sort-button,
+  .band-time,
+  .remove-item {
+    text-align: center;
+    align-self: center;
+    padding: 1em;
+    margin: 0;
+    min-width: 3.5em;
+    max-width: 3.5em;
+    min-height: 3.5em;
+    max-height: 3.5em;
+    word-wrap: normal;
+  }
+
+  .band-time{
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0;
+
+    .time-label{
+      width: 100%;
+    }
+
+    input{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+    }
+  }
+}
+
+#event-organizer-proposal{
+
+  .event-organizer-proposal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: $featured-color;
+
+    .title::before{
+      font-family: "FontAwesome";
+      content: "\f0e8";
+      padding-right: 0.5em;
+    }
+
+    .subtitle{
+      display: none;
+    }
+  }
+
+}
+
+#event-organizer-selection{
+  .organi-apply-proposal-btn{
+    display: none;
+  }
+}
+
 .overlay_background{
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height:0;
-  z-index: 0;
+  z-index: 9;
+  opacity: 0.3;
+  background-color: $color-gray-dark;
+}
+
+.plek-overlay-container{
+
+  width: 100%;
+  left: 0;
+  right: 0;
+
+  .overlay_background{
+    background-color: rgba(24, 2, 2, 0.93);
+    z-index: 9999;
+  }
+
+  .overlay_content{
+    width: 80%;
+    margin: 10%;
+    background-color: $color-gray;
+    padding: 1em;
+    z-index: 10000;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
 }
 
 .item.plek-select-item .title{
   display: flex;
-
+  
   img{
     max-height: 1em;
     margin-right: 1em;
@@ -149,6 +345,67 @@ div.plek-review-search{
     cursor: pointer;
     font-size: 1.2em;
   }
+}
+.item.plek-add-item .subtitle,
+.item.plek-select-item .subtitle{
+  .country{
+    display: block;
+  }
+}
+
+.item.plek-add-item {
+	width: 100%;
+	margin: 0.2em 0;
+  position: relative;
+
+  &.exact-match-result .title-container::after{
+    position: absolute;
+    right: 1rem;
+    font-family: "Font Awesome 5 Free";
+    content: "\f005";
+    color: $color-yellow;
+    font-weight: 900;
+  }
+}
+
+.event-prices-container{
+  input{
+    width: 100%;
+  }
+}
+
+
+
+/* Add Event Form Login*/
+
+#plek-event-guest-login-form-container {
+	display: flex;
+	justify-content: space-between;
+  margin: 1em 0;
+  gap: 1em;
+
+  .event-name-container,
+  .event-email-container {
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+#plek-event-member-login-form-container{
+  .login-submit{
+    display: none;
+  }
+}
+
+#plek-event-member-login-form-container,
+#plek-event-guest-login-form-container{
+  margin: 0px 10%;
+}
+
+#select-login-type {
+	display: flex;
+	gap: 1em;
 }
 
 /* Register User*/
@@ -163,9 +420,7 @@ div.plek-review-search{
   width: 100%;
 }
 
-#plek-user-settings-form,
-#plek-band-form,
-#register-new-user-form{
+.plek-form{
   margin-left: 2%;
   width: 96%;
 
@@ -178,7 +433,7 @@ div.plek-review-search{
     display: none;
   }
 
-  input,
+  input:not([type="checkbox"]),
   textarea,
   select{
     width: 100%;
@@ -190,16 +445,25 @@ div.plek-review-search{
     padding-top: 0.5em;
   }
 
+  label.checkbox-label{
+    width: auto;
+    display: inline;
+  }
+
   button.plek-button{
     width: 24%;
     white-space: normal;
+  }
+  
+  button.plek-button.selected,
+  a.plek-button.selected{
+    background-color: $color-gray-light;
   }
 
   
   button.plek-button.full-width{
     width: 100%;
   }
-
 
 
   #user-settings-submit{
@@ -248,25 +512,253 @@ div.plek-review-search{
 }
 
 //File Upload Button
-.plek-upload-button-container{
-  position: relative;
-  overflow: hidden;
-  width: 200px;
-  margin-top: -3em;
+.plek-image-upload-container{
+  display: flex;
+  gap: 1em;
 
-  input{
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 0.5em 0;
-    margin: 0;
-    opacity: 0;
-    filter: alpha(opacity=0);
-    cursor: pointer;
+  .upload-button{
+    margin-top: 2em;
+    position: relative;
+    display: flex;
+    align-self: center;
+
+    input{
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 0.5em 0;
+      margin-top: -2em;
+      opacity: 0;
+      filter: alpha(opacity=0);
+      cursor: pointer;
+    }
+  }
+
+  .plek-button{
+    margin-top: -2em !important;
+  }
+
+  .upload-image{
+    max-width: 200px;
+    max-height: 300px;
+    overflow: hidden;
+  }
+
+  .image_preloaded_id{
+    display: none;
+  }
+
+}
+
+
+//Add/Edit Event form
+
+.plek-form{
+  .wp-editor-container{
+    border: 0px;
   }
 }
 
-.plek-upload-button-container.no-img{
-  margin-top: 0;
+.event-basic-container .event-date-picker .date-input-container{
+
+  flex-basis: 100%;
+
+  input{
+    text-align: center;
+  }
+}
+
+.event-band-none-checkbox,
+.event-date-multi-check-container{
+  padding-top: 0.7em;
+}
+
+.item.plek-select-item {
+	padding: 0.7em 0;
+}
+
+.event-price-container {
+	display: flex;
+	gap: 1em;
+
+  .price-box{
+    display: flex;
+    flex-wrap: wrap;
+
+    select{
+      flex-basis: 60%;
+      text-align: center;
+      flex: 1 0 0;
+    }
+    input{
+      flex: 1 0 50%;
+    }
+
+    .plek-field-error{
+      flex-basis: 100%;
+    }
+  }
+}
+
+.plek-search-overlay{
+
+  button.plek-button{
+      width: 90%;
+      margin-top: 0;
+      margin: 0.3em 5%;
+  }
+}
+
+//Review Event form
+#edit_event_review_form{
+  
+  #event-review-images-upload-container{
+    display: none;
+  }
+  
+  .review_band_images_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  span.image_upload_add_btn.plek-button {
+    flex-basis: 2.5rem;
+    font-size: 1.5rem;
+    padding: 0;
+  }
+
+  span.band_origin{
+    flex-basis: 2.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .image_upload_status{
+    flex-basis: 2rem;
+    text-align: center;
+
+    &::before{
+      font-family: "FontAwesome";
+      display: block;
+      width: 100%;
+    }
+    
+    &.status-missing::before{
+      content: "\f0fe"; //plus-square
+    }
+    
+    &.status-uploading::before{
+      content: "\f102"; //Double arrow up
+      color: $color-blue;
+      background-color: $text-color;
+    }
+
+    &.status-ok::before{
+      content: "\f00c"; //Check
+      color: $color-green;
+      background-color: $text-color;
+    }
+
+  }
+  
+  span.band_name {
+    min-width: 55%;
+  }
+
+  .sort-button.plek-button {
+    flex-basis: 2.5rem;
+  }
+
+  span.playtime {
+    padding: 0 0.5rem;
+}
+
+  div#images-uploaded-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    position: relative;
+
+    .image_to_upload{
+      flex-basis: 20%;
+
+      &::before{
+        font-family: "FontAwesome";
+        font-size: 1.5rem;
+        position: absolute;
+        padding-left: 15%;
+        text-shadow: 2px 2px 7px black;
+      }
+      &.upload_complete::before{
+        content: "\f058"; //Checkmark in circle
+        color: $color-green;
+      }
+  
+      &.upload_failed::before{
+        content: "\f057"; //X in circle
+        color: $color-red;
+      }
+
+    }
+  }
+
+  
+}
+
+//Submit button container for edit and review from.
+.submit-event-edit-review-from,
+.submit-event-edit-from{
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+
+  #back_to_event_btn{
+    background-color: $color-gray;
+  }
+
+  div{
+    flex-basis: 50%;
+  }
+
+  .input_loader{
+    top: -5px;
+  }
 
 }
+#back_to_event_btn{
+  flex-basis: 50%;
+}
+
+//The File upload button
+#event-review-images-upload-container {
+
+  position: relative;
+
+  input[type=file]{
+    width: 100%;
+    min-height: 3rem;
+    position: absolute;
+    top: 0;
+    height: 10rem;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .upload-box{
+    width: 100%;
+    background-color: $text-color;
+    color: $color-gray;
+    text-align: center;
+    padding: 2rem;
+    height: 10rem;
+
+    .icon{
+        font-size: 3rem;
+    }
+  }
+
+  
+}
+
+

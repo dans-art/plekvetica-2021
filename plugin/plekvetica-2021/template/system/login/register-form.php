@@ -11,12 +11,12 @@ if (is_user_logged_in()) {
 ?>
 <h1><?php echo __('Sign up at Plekvetica', 'pleklang'); ?></h1>
 
-<form id="register-new-user-form">
+<form id="register-new-user-form" class="plek-form">
 	<fieldset id="register-new-user-fieldset">
 		<label for="user-display-name"><?php echo __('Displayname', 'pleklang'); ?></label>
 		<input type="text" name="user-display-name" id="user-display-name" class="input" />
 
-		<label for="user-email"><?php echo __('E-mail', 'pleklang'); ?></label>
+		<label for="user-email"><?php echo __('Email', 'pleklang'); ?></label>
 		<input type="email" name="user-email" id="user-email" class="input" />
 
 		<label for="user-pass"><?php echo __('Password', 'pleklang'); ?></label>

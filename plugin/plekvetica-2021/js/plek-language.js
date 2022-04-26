@@ -2,6 +2,8 @@
  * Translates strings...
 * @todo: Replace all strings to translate with the trans function
  */
+const { __, _x, _n, _nx } = wp.i18n;
+
 let plek_lang = {
 
     de_DE : {

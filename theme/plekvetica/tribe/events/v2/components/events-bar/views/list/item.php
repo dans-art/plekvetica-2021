@@ -15,7 +15,7 @@
  *
  * @version 5.3.0
 */
-$add_label = __('Event hinzufügen','pleklang');
+$add_label = __('Add event','pleklang');
 
 $list_item_classes = [ 'tribe-events-c-view-selector__list-item', "tribe-events-c-view-selector__list-item--$public_view_slug" ];
 if ( $view_slug === $public_view_slug ) {

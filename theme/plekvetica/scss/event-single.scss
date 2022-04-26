@@ -85,6 +85,49 @@
   }
 }
 
+/* Timetable */
+
+.timetable-container{
+
+  .date{
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  .timetable_content{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .timetable_day{
+    margin-bottom: 1rem;
+    min-width: 333px;
+  }
+  .timetable_row{
+    margin-left: 5%;
+    width: 95%;
+  }
+  .band_origin {
+    position: relative;
+    width: 2rem;
+    display: inline-block;
+  }
+  .band_origin img{
+    max-height: 1.4rem;
+    position: absolute;
+    top: -1rem;
+    right: 0;
+  }
+
+  span.playtime {
+    min-width: 3rem;
+    display: inline-block;
+}
+
+}
+
+
 /*Revision Container*/
 #revloader{
 

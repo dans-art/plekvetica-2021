@@ -3,13 +3,18 @@
  */
 let plek_band = {
 
-    default_button_texts = {},
+    default_button_texts  = {},
 
 
     construct() {
         if(jQuery('#plek-band-form').length > 0){
-            //Page is Edit Band page
-            this.on_edit_band();
+            if(empty(jQuery('#band-id').val())){
+                this.on_band_add(); //Load specific functions only applying to new bands
+                this.on_edit_band(); //Also add the functions for the edit band.
+            }else{
+                //Page is Edit Band page
+                this.on_edit_band();
+            }
         }else{
             //Frontend and other functions, which are not on the edit band page
             jQuery(document).on("click", '.plek-follow-band-btn', function () {
@@ -20,6 +25,9 @@ let plek_band = {
 
     },
 
+    /**
+     * Functions and eventlistener on band_edit
+     */
     on_edit_band() {
         jQuery(document).ready(function () {
             jQuery('select').select2({
@@ -31,11 +39,6 @@ let plek_band = {
         }
         );
 
-        jQuery("input#band-logo").change(function () {
-            let btn = jQuery('.plek-upload-button-container .plek-button');
-            plek_band.change_file_upload_button(btn, plek_lang.trans('Datei gewählt'));
-        });
-
         default_button_texts.submit = jQuery('#band-form-submit').text();
 
 
@@ -44,11 +47,22 @@ let plek_band = {
             e.preventDefault();
             //Check if cancel button
             if (e.currentTarget.id === 'band-form-cancel') {
-                history.back();
+                if(jQuery('#band-form-cancel').closest(".overlay_content").length === 0){
+                    //Not in overlay, go back to previous site and reload
+                    window.location=document.referrer;
+                }else{
+                    //Form is in a overlay, close overlay
+                    let overlay_id = jQuery('#band-form-cancel').closest(".overlay_content").parent().prop("id");
+                    overlay_id = overlay_id.replace("_overlay","");
+                    plektemplate.hide_overlay(overlay_id);
+                }
                 return;
             }
-            //Check if submit button
-            if (e.currentTarget.id === 'band-form-submit') {
+            //Check if submit button and if it is not add Event form
+            //This function must be disabled on add event, otherwise it will create two Bands
+            let is_add_event = (!empty(jQuery('#add_event_basic'))) ? true : false;
+            let is_edit_event = (!empty(jQuery('#edit_event_form'))) ? true : false;
+            if (e.currentTarget.id === 'band-form-submit' && !is_edit_event && !is_add_event) {
                 var data = jQuery('#plek-band-form').serialize();
                 plek_band.save_band(data);
                 return;
@@ -69,10 +83,18 @@ let plek_band = {
                 plek_band.on_enter(e);
             }
         });
+
+        //Check for existing bands on name change.
+        jQuery('#band-name').on('change', (e)=>{
+            plek_band.check_existing_band();
+        });
     },
 
-    change_file_upload_button(btn, text) {
-        jQuery(btn).text(text);
+    /**
+     * Functions only for the new band form 
+     */
+    on_band_add(){
+
     },
 
     on_enter(e) {
@@ -111,7 +133,7 @@ let plek_band = {
         data.append('action', 'plek_band_actions');
         data.append('do', 'get_youtube_video');
         data.append('video_id', video_id);
-        let loading = '<div class="loading-youtube">' + plek_lang.trans('Lade Video') + '</div>';
+        let loading = '<div class="loading-youtube">' + __('Loading Video', 'pleklang') + '</div>';
         jQuery('#video_preview_con').append('<div class="video_preview_item" id="video_' + item_id + '" data-videoid="' + video_id + '">' + loading + '</div>');
 
 
@@ -145,6 +167,10 @@ let plek_band = {
         plek_band.load_youtube_video(new_vid, item_id);
     },
 
+    /**
+     * Removes the given band video.
+     * @param {object} item 
+     */
     remove_band_video(item) {
         jQuery(item).parent().remove();
         console.log(item);
@@ -163,20 +189,67 @@ let plek_band = {
 
     },
 
-
+    /**
+     * Sends the band data to save via ajax
+     * @param {*} data 
+     */
     save_band(data) {
-        plek_main.activate_button_loader('#band-form-submit', 'Speichere Einstellungen...');
+        plek_main.activate_button_loader('#band-form-submit', __('Save Band...','pleklang'));
         plek_main.remove_field_errors();
 
         let button = jQuery('#band-form-submit');
         let form = document.getElementById('plek-band-form');
-        var data = new FormData(form);
+        var data = this.prepare_band_data(form);
+        jQuery.ajax({
+            url: window.ajaxurl,
+            type: 'POST',
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function success(data) {
+                let text = '';
+                let errors = plek_main.show_field_errors(data, form);
+                if (errors === true) {
+                    console.log("Contains Errors");
+                    text = "Das Formular enthält Fehler, bitte korrigieren";
+                } else {
+                    text = plek_main.get_first_success_from_ajax_request(data);
+                    let band_obj = plek_main.get_ajax_success_object(data);
+                    if(typeof band_obj[1] !== 'undefined' && typeof band_obj[2] !== 'undefined'){
+                        if(typeof plekevent !== 'undefined'){
+                            //plekevent.add_new_band_to_selection(band_obj[1], band_obj[2]); //Not needed for save_band only!?
+                        }
+                    }
+                }
+                plek_main.deactivate_button_loader(button, text);
+                plek_main.clear_form_inputs('plek-band-form');
+                jQuery('#band-form-cancel').text(__('Back','pleklang'));
+                setTimeout(() => {
+                    jQuery('#band-form-submit').text(plek_band.default_button_texts.submit);
+                }, 5000);
+
+            },
+            error: function error(data) {
+                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
+
+            }
+        });
+    },
+    
+    /**
+     * Checks for existing band. If found, it will display an notification.
+     */
+    check_existing_band() {
+
+        if(empty(jQuery('#band-name').val())){
+            return;
+        }
+        var data = new FormData();
         data.append('action', 'plek_band_actions');
-        data.append('do', 'save_band');
-        var file_data = jQuery('#band-logo').prop('files')[0];
-        data.append('band-description', tinymce.editors['band-description'].getContent());
-        data.append('band-logo-data', file_data);
-        data.append('band-logo', '666'); //This is just a placeholder for the validator to validate.
+        data.append('do', 'check_existing_band');
+        data.append('band-name', jQuery('#band-name').val());
+        data.append('band-id', jQuery('#band-id').val());
 
         jQuery.ajax({
             url: window.ajaxurl,
@@ -186,26 +259,29 @@ let plek_band = {
             contentType: false,
             data: data,
             success: function success(data) {
-                let text = plek_main.get_text_from_ajax_request(data, true);
-                let errors = plek_main.show_field_errors(data, form);
-                if (errors === true) {
-                    console.log("Contains Errors");
-                    text = "Das Formular enthält Fehler, bitte korrigieren";
-                } else {
-                    text = plek_main.get_text_from_ajax_request(data, true);
+                let error = plek_main.get_first_error_from_ajax_request(data);
+                if(!empty(error)){
+                    plekerror.set_toastr(0, true);
+                    plekerror.display_info(__('Info','pleklang'), error);
+                    plekerror.reset_toastr();
                 }
-                plek_main.deactivate_button_loader(button, text);
-                jQuery('#band-form-cancel').text(plek_lang.trans('Zurück'));
-                setTimeout(() => {
-                    jQuery('#band-form-submit').text(plek_band.default_button_texts.submit);
-                }, 5000);
-
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, "Error loading data.... ");
+                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
 
             }
         });
+    },
+
+    prepare_band_data(form){
+        var data = new FormData(form);
+        data.append('action', 'plek_band_actions');
+        data.append('do', 'save_band');
+        var file_data = jQuery('#band-logo').prop('files')[0];
+        data.append('band-description', tinymce.editors['band-description'].getContent());
+        data.append('band-logo-data', file_data);
+        data.append('band-logo', '666'); //This is just a placeholder for the validator to validate.
+        return data;
     },
 
     toggle_follower() {
@@ -246,7 +322,7 @@ let plek_band = {
             },
             error: function error(data) {
                 plek_main.deactivate_loader_style(button);
-                jQuery('.plek-follow-band-btn .label').text('Error loading data....');
+                jQuery('.plek-follow-band-btn .label').text('Error loading data.');
             }
         });
     }

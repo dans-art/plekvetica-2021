@@ -1,10 +1,28 @@
 let plek_main = {
+
     construct() {
         jQuery(window).resize();
         jQuery(document).ready(function () {
             plek_main.add_event_listener();
             plek_main.content_loader();
+
+            //Config and run the Topbar function
+            plek_main.config_topbar();
+            topbar.show();
         });
+    },
+
+    config_topbar() {
+        topbar.config({
+            autoRun: true,
+            barThickness: 3,
+            barColors: {
+                '0': '#8C262E',
+                '1.0': '#8C262E'
+            },
+            shadowBlur: 10,
+            shadowColor: 'rgba(0,   0,   0,   .6)'
+        })
     },
 
     activate_button_loader(element, text) {
@@ -32,12 +50,27 @@ let plek_main = {
         jQuery(element).addClass('disable');
     },
 
+    /**
+     * Activates the loader style for the element.
+     * @param {object} element 
+     */
     activate_loader_style(element) {
         jQuery(element).addClass('loader');
+        if (jQuery(element).is("input")) {
+            //Loader does not work on input fields. Add loader after button
+            let btn_id = jQuery(element).attr('id');
+            jQuery(element).after(`<div id='input_loader_${btn_id}' class='input_loader'></div>`);
+        }
     },
 
     deactivate_loader_style(element) {
         jQuery(element).removeClass('loader');
+        if (jQuery(element).is("input")) {
+            //Loader does not work on input fields. Add loader after button
+            let btn_id = jQuery(element).attr('id');
+            jQuery('#input_loader_' + btn_id).remove();
+
+        }
     },
 
     get_text_from_ajax_request(data, only_success = false) {
@@ -100,7 +133,7 @@ let plek_main = {
 
                 },
                 error: function error(data) {
-                    jQuery(current_item).text('Error loading data....');
+                    jQuery(current_item).text('Error loading data.');
                 }
             });
 
@@ -118,7 +151,11 @@ let plek_main = {
         /** Navi Search Button */
         jQuery('.plek-menu-search').on('click', 'a', function (e) {
             e.preventDefault();
-            plek_main.redirect_to_search(this);
+            if (jQuery(".plek-menu-search input").val().length > 0) {
+                plek_main.redirect_to_search(this);
+            } else {
+                jQuery(".plek-menu-search input").focus();
+            }
         });
         /** Navi Search on enter key press */
         jQuery('.plek-menu-search input').keypress(function (e) {
@@ -137,6 +174,63 @@ let plek_main = {
         jQuery('#notifications-container').on('click', '.dismiss_notification', function (e) {
             plek_main.dismiss_notification(this);
         });
+
+        /** Change Upload Button Text and show Image */
+        jQuery("input[type='file']").change(function () {
+            plek_main.image_upload_button_change(this);
+        });
+    },
+
+    /**
+     * Changes the Text of the upload button as soon as the file got selected.
+     * @param {object} item The Upload input
+     */
+
+    image_upload_button_change(item) {
+        let text = (!empty(jQuery(item).data('selected-text'))) ? jQuery(item).data('selected-text') : __('File selected', "pleklang");
+        var upload = jQuery(item).prop("files")[0];
+        var id = jQuery(item).attr("id");
+        if (typeof upload === "object") {
+            //File has been uploaded
+            if (upload.type.search("image/") === 0) {
+                //File is type image
+                //Display the Image on screen
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    jQuery('#' + id + '-image img').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(upload);
+            }
+            jQuery(item).next(".plek-button").text(text); //Change the Button Text
+        }
+    },
+
+    /**
+ * Loads the Preview Image to a dom element
+ * @param {dom} dom_element - The dom element to add the image to.
+ * @param {object} file_upload - The uploaded file 
+ * @returns 
+ */
+    get_preview_image(dom_element, file_upload) {
+        if (typeof file_upload === "object") {
+            //File has been uploaded
+            if (file_upload.type.search("image/") === 0) {
+                //File is type image
+                //Display the Image on screen
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    if (jQuery(dom_element).nodeName !== "IMG") {
+                        jQuery(dom_element).find('img').attr('src', e.target.result);
+                    } else {
+                        jQuery(dom_element).attr('src', e.target.result);
+                    }
+                }
+                reader.readAsDataURL(file_upload);
+                return true;
+            }
+        }
+        return false;
+
     },
 
     /**
@@ -157,19 +251,25 @@ let plek_main = {
 
     get_ajax_success_object(data) {
         try {
-            let encoded_data = JSON.parse(data);
+            let encoded_data = (typeof data === "object") ? data : JSON.parse(data);
             if (encoded_data.success.length > 0) {
                 return encoded_data.success;
             }
 
         } catch (e) {
+            console.warn("Data could not converted into JSON data at get_ajax_success_object()");
             return data;
         }
     },
 
+    /**
+     * Gets the first error of the ajax response
+     * @param {object} data 
+     * @returns 
+     */
     get_first_error_from_ajax_request(data) {
         try {
-            let encoded_data = JSON.parse(data);
+            let encoded_data = (typeof data === "object") ? data : JSON.parse(data);
             let text = "";
             if (encoded_data.error.length > 0) {
                 text += encoded_data.error[0];
@@ -181,10 +281,61 @@ let plek_main = {
 
     },
 
+    /**
+     * Gets the first error of the ajax response
+     * @param {object} data 
+     * @returns 
+     */
+    get_first_success_from_ajax_request(data) {
+        try {
+            let encoded_data = (typeof data === "object") ? data : JSON.parse(data);
+            let text = "";
+            if (encoded_data.success.length > 0) {
+                text += encoded_data.success[0];
+            }
+            return text;
+        } catch (e) {
+            return data;
+        }
+
+    },
+
+    /**
+     * Gets the result from the ajax response.
+     * 
+     * @param {object|string} data The Ajax response. As object or string.
+     * @param {int} array_index The Index to return.
+     * @returns string The Value of the array at index position.
+     */
+    get_success_item_from_ajax_request(data, array_index) {
+        try {
+            let encoded_data = (typeof data === "object") ? data : JSON.parse(data);
+            if (typeof encoded_data.success[array_index] !== 'undefined') {
+                return encoded_data.success[array_index];
+            } else {
+                return false;
+            }
+            return text;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+
+    },
+
+    /**
+     * Checks if a ajax response has errors.
+     * 
+     * @param {object|string} data - The data from the plekvetica ajax request.
+     * @returns bool|null true if errors exists, false if no errors, null if data is empty
+     */
     response_has_errors(data) {
         try {
+            if (empty(data)) {
+                return null;
+            }
             var encoded_data = data;
-            if (typeof data != 'object') {
+            if (typeof data !== 'object') {
                 encoded_data = JSON.parse(data);
             }
             if (encoded_data.error.length === 0) {
@@ -193,11 +344,19 @@ let plek_main = {
             return true;
         } catch (e) {
             console.log(e);
-            return false;
+            return true;
         }
     },
 
-    show_field_errors(data, form = 'form') {
+    /**
+     * Displays the form field errors
+     * 
+     * @param {string|object} data The Error Object or Json String
+     * @param {string} form The Form ID
+     * @param {bool} display_unassigned_as_toastr Set to true if the unassigned errors should be displayed as a toastr message.
+     * @returns 
+     */
+    show_field_errors(data, form = 'form', display_unassigned_as_toastr = true) {
         let error_count = 0;
         try {
             var encoded_data = data;
@@ -220,12 +379,18 @@ let plek_main = {
                     }
                 }
                 if (typeof value == "string") {
-                    //Error not assigned to field 
-                    jQuery(form).after(plek_main.format_error_message(value));
+                    //Error not assigned to field
+                    if (display_unassigned_as_toastr) {
+                        plekerror.display_error(false, value, __('Error', 'pleklang'));
+                    } else {
+                        //Attach after form end
+                        jQuery(form).after(plek_main.format_error_message(value));
+                    }
                     console.log("not assigned");
                     console.log(form);
+                    error_count++;
                 }
-                //Set the error message
+                //Set the error message, but only if array / object
                 jQuery(value).each(function (i) {
                     jQuery('#' + id).after(plek_main.format_error_message(value[i]));
                     error_count++;
@@ -234,10 +399,10 @@ let plek_main = {
             if (error_count === 0) {
                 return false;
             }
-            return true;
+            return true; //Has Errors
         } catch (e) {
             console.log(e);
-            return false;
+            return true;
         }
     },
 
@@ -301,7 +466,7 @@ let plek_main = {
             },
             error: function error(data) {
                 plek_main.deactivate_loader_style(button);
-                jQuery(button).text('Error loading data....');
+                jQuery(button).text('Error loading data.');
             }
         });
     },
@@ -352,7 +517,7 @@ let plek_main = {
         let base = window.location.pathname;
         let query = window.location.search;
         let new_url = '';
-        var separator = (query.indexOf('?') === -1)?'?':'&';
+        var separator = (query.indexOf('?') === -1) ? '?' : '&';
         if (base.search('page/') > 0) {
             new_url = base.replace(/(page\/[0-9]+)/, 'page/' + page_number);
         } else {
@@ -369,11 +534,52 @@ let plek_main = {
 
         /** Add the search query, if not existing */
         if (url_object.get(s) !== null && query.search('s=') === 0) {
-                new_url = new_url + separator + 's=' + url_object.get(s);
-        } 
+            new_url = new_url + separator + 's=' + url_object.get(s);
+        }
         return new_url;
     },
 
+    /**
+     * 
+     * @param {string} param - Name of the Parameter to replace or add
+     * @param {string} value - The value of the parameter
+     * @param {bool} update_ur - If the Function updates the current url or not
+     * @returns 
+     */
+    url_replace_param(param, value, update_url = true) {
+        let query = window.location.search;
+        if (query.indexOf(param + '=' + value) > 0) {
+            //This parameter is already set with the same value.
+            return window.location.origin + window.location.pathname + query;
+        }
+        let regex = new RegExp(param + "=([A-z0-9_-]*)");
+        let new_query = query.replace(regex, param + '=' + value);
+        if (query === new_query) {
+            //Could not replace the param, try to add
+            let separator = (query.indexOf('?') === -1) ? '?' : '&';
+            new_query = query + separator + param + "=" + value;
+        }
+        let new_url = window.location.origin + window.location.pathname + new_query;
+        if (update_url) {
+            this.update_browser_url(new_url, document.title);
+        }
+        return new_url;
+    },
+
+    /**
+     * Sets the browser url and title
+     * 
+     * @param {string} url The new URL
+     * @param {string} title The Title of the document
+     * @returns 
+     */
+    update_browser_url(url, title) {
+        //Change the URL
+        window.history.pushState({}, title, url);
+        //Update the title
+        document.title = title;
+        return;
+    },
     /**
      * Scroll to the top of the reloaded current block.
      * @param {string} block_id 
@@ -395,10 +601,10 @@ let plek_main = {
      */
     toggle_notification_container(item) {
         if (jQuery('#notifications-container').is(':hidden')) {
-            jQuery('#notifications-container').show(100, function(){
+            jQuery('#notifications-container').show(100, function () {
                 //Check for click event outside of the container. if detected, close the container.
-                jQuery('body').on('click',function(event){
-                    if(!jQuery(event.target).closest('#notifications-container').length){
+                jQuery('body').on('click', function (event) {
+                    if (!jQuery(event.target).closest('#notifications-container').length) {
                         jQuery('#notifications-container').hide(100);
                         jQuery('body').off('click');
                     }
@@ -412,7 +618,7 @@ let plek_main = {
      * Dismisses a Notification
      * @param {*} item 
      */
-     dismiss_notification(item) {
+    dismiss_notification(item) {
         var dismiss_id = jQuery(item).data('dismiss-id');
 
         jQuery(item).find('i').removeClass('fa-times');
@@ -433,17 +639,156 @@ let plek_main = {
             success: function success(data) {
                 let errors = plek_main.response_has_errors(data);
                 if (errors === true) {
-                    console.log("Contains Errors: "+ plek_main.get_first_error_from_ajax_request(data));
+                    console.log("Contains Errors: " + plek_main.get_first_error_from_ajax_request(data));
                 } else {
                     jQuery('#notification_' + dismiss_id).addClass('dismissed');
                 }
             },
             error: function error(data) {
-                //jQuery(current_item).text('Error loading data....');
+                //jQuery(current_item).text('Error loading data.');
             }
         });
     },
 
+    /**
+     * Removes all the inputs within the given form id.
+     * @param {string} form_id 
+     */
+    clear_form_inputs(form_id){
+        let form = jQuery('#'+form_id);
+        if(empty(form)){
+            return false;
+        }
+        //Clear all the Input fields
+        form.find('input').each((id, item) => {
+            jQuery(item).val('');
+        });
+        //Clear all the textarea fields
+        form.find('textarea').each((id, item) => {
+            if(!empty(tinymce.get(id))){
+                tinymce.get(id).setContent('');
+            }
+            jQuery(item).val(''); //Fallback if no wp editor
+        });
+        //Clear all the textarea fields
+        form.find('select').each((id, item) => {
+            jQuery(item).val('').trigger('change');
+        });
+
+        //On band Inputs
+        if(form_id === 'plek-band-form'){
+            form.find('.video_preview_item').each((id, item) => {
+                plek_band.remove_band_video(item);
+            });
+            this.reset_file_inputs(form_id);
+        }
+        return true;
+    },
+
+    /**
+     * Resets the file inputs and replaces the selected image with the placeholder.
+     * @param {string} form_id 
+     */
+    reset_file_inputs(form_id){
+        //Empty the file input
+        jQuery('#'.form_id).find('input[type=file]').each((id, item) => {
+            jQuery(item).val(null);
+        });
+        //Restore the placeholder file
+        let placeholder = document.plek_home_url + '/wp-content/plugins/plekvetica-2021/images/placeholder/default_placeholder.jpg';
+        jQuery('#'+form_id).find('.plek-image-upload-container').find('img').first().attr('src', placeholder);
+        
+        //Reset the Button text
+        jQuery('#'+form_id).find('.plek-image-upload-container').find('.plek-button').text(__('Upload','pleklang'));
+        
+    },
+
+    /**
+     * Converts the timestamp to the desired date format
+     * @param {string} timestamp The Timestamp in Seconds (eg. from PHP)
+     * @param {string} format The format to return
+     * @returns String The date without timezone or false if not timestamp received
+     */
+    get_formated_date(timestamp, format = ''){
+
+        var length = format.length;
+        if(length === 0){
+            return '';
+        }
+        if(empty(timestamp)){
+            return false;
+        }
+
+        var formated_date = ''; 
+        let pieces = Array.from(format);
+        jQuery(pieces).each((index, item) => {
+            let js_date = new Date(timestamp * 1000);
+            //Timezone fix
+            let time = js_date.getTime();
+            let offset = js_date.getTimezoneOffset() * 60000;
+
+            let fixed_js_date = new Date(time + offset);
+            //let fixed_js_date = js_date; //Don't fix the timezone offset
+
+            switch (item) {
+                case 'H':
+                    var timepiece = '0' + fixed_js_date.getHours();
+                    timepiece = timepiece.slice(-2);
+                    break;
+                case 'i':
+                    var timepiece = '0' + fixed_js_date.getMinutes();
+                    timepiece = timepiece.slice(-2);
+                    break;
+                case 's':
+                    var timepiece = '0' + fixed_js_date.getSeconds();
+                    timepiece = timepiece.slice(-2);
+                    break;
+                case 'd':
+                    var timepiece = '0' + fixed_js_date.getDate();
+                    timepiece = timepiece.slice(-2);
+                    break;
+                case 'm':
+                    var timepiece = '0' + (fixed_js_date.getMonth() + 1);
+                    timepiece = timepiece.slice(-2);
+                    break;
+                case 'Y':
+                    var timepiece = fixed_js_date.getFullYear();
+                    break;
+            
+                default:
+                    timepiece = item;
+                    break;
+            }
+            formated_date = formated_date + timepiece;
+        });
+
+        return formated_date;
+    }
+
+
 }
 
 plek_main.construct();
+
+/**
+ * Some functions to make live easier
+ * 
+ */
+
+/**
+ * Checks if the given value is empty or null
+ * @param {mixed} value 
+ * @returns 
+ */
+function empty(value) {
+    if(value === null){
+        return true;
+    }
+    if (typeof value === 'undefined') {
+        return true;
+    }
+    if (value.length === 0) {
+        return true;
+    }
+    return false;
+}

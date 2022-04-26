@@ -68,9 +68,9 @@ if ($page_obj->total_pages === 0) {
     </span>
     <span class="page-count">
         <?php if ($is_band_page) : ?>
-            <div class="total_posts"><?php echo sprintf(__('Bands %d bis %d von %d', 'pleklang'), $page_obj->from_posts, $page_obj->to_posts, $page_obj->total_posts); ?></div>
+            <div class="total_posts"><?php echo sprintf(__('Bands %d to %d of %d', 'pleklang'), $page_obj->from_posts, $page_obj->to_posts, $page_obj->total_posts); ?></div>
         <?php else : ?>
-            <div class="total_posts"><?php echo sprintf(__('Events %d bis %d von %d', 'pleklang'), $page_obj->from_posts, $page_obj->to_posts, $page_obj->total_posts); ?></div>
+            <div class="total_posts"><?php echo sprintf(__('Events %d to %d of %d', 'pleklang'), $page_obj->from_posts, $page_obj->to_posts, $page_obj->total_posts); ?></div>
         <?php endif; ?>
     </span>
     <span class="pagination-next">

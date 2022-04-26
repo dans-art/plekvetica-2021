@@ -9,7 +9,7 @@ $selected = (isset($template_args[2])) ? $template_args[2] : array(); //Values t
 $multiple = (isset($template_args[3]) AND $template_args[3] === true) ? 'multiple' : ''; //Defines if multiple selections are possible / allowed
 $name_mod = ($multiple)? $id.'[]': $id;
 if(empty($data)){
-	echo __('Fehler: Keine Optionen gefunden!','pleklang');
+	echo __('Error: No options found!','pleklang');
 	return;
 }
 

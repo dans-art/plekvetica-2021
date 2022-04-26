@@ -23,12 +23,19 @@ class PlekUserHandler
     /**
      * Checks if the current unser is allowed to edit this post.
      *
-     * @param object $plek_event - The Plek Event Object
+     * @param object|int $plek_event - The Plek Event Object or the event_id
      * @return void
      */
-    public static function current_user_can_edit(object $plek_event)
+    public static function current_user_can_edit($plek_event)
     {
-        $post_id = (!$plek_event->get_ID()) ? get_the_ID() : $plek_event->get_ID();
+        if (is_string($plek_event) or is_int($plek_event)) {
+            $post_id = intval($plek_event);
+        } else {
+
+            $post_id = (!$plek_event->get_ID()) ? get_the_ID() : $plek_event->get_ID();
+            $plek_event = new PlekEvents;
+            $plek_event->load_event($post_id);
+        }
         if (get_post_status($post_id) !== 'publish') {
             return false;
         }
@@ -44,7 +51,7 @@ class PlekUserHandler
     {
         global $plek_handler;
         //Do nothing if site is on dev system
-        if($plek_handler -> is_dev_server()){
+        if ($plek_handler->is_dev_server()) {
             return true;
         }
         $user = wp_get_current_user();
@@ -229,7 +236,13 @@ class PlekUserHandler
         return self::search_role('plek-partner', $user);
     }
 
-    public static function user_can_edit_post(object $plek_event)
+    /**
+     * Undocumented function
+     *
+     * @param mixed $event PlekEvent Object or event id
+     * @return void
+     */
+    public static function user_can_edit_post($event)
     {
         if (self::current_user_is_locked()) {
             return false;
@@ -237,16 +250,34 @@ class PlekUserHandler
         if (current_user_can('edit_posts')) {
             return true;
         }
+        if (!is_object($event)) {
+            $plek_events = new PlekEvents;
+            $plek_events->load_event($event, 'all');
+            $event = $plek_events;
+        }
+
+        if (!is_object($event)) {
+            return false; //Event not found
+        }
         $user_id = self::get_user_id();
-        $post_authors = $plek_event->get_event_authors();
+        $post_authors = $event->get_event_authors();
         if (isset($post_authors[$user_id])) {
             return true;
         }
+
+        //Check if the post is published. If not, it is possible to edit this post by anyone within 24h
+        $status = $event->get_field_value('post_status', false);
+        $created = strtotime($event->get_field_value('post_date', false));
+
+        if ($status === 'draft' and (time() - $created) < (24 * 60 * 60)) { //Check if the post is a draft and not created later than 1 day ago
+            return true;
+        }
+
         $user_role = self::get_user_role();
         switch ($user_role) {
             case 'plek-organi':
-                $event_organi = $plek_event->get_field_value('_EventOrganizerID', true);
-                $user_organi_id = (string) PlekUserHandler::get_user_setting('organizer_id');
+                $event_organi = $event->get_field_value('_EventOrganizerID', true);
+                $user_organi_id = (string) PlekUserHandler::get_user_setting('$oid_id');
                 if (!is_array($event_organi)) {
                     return false;
                 }
@@ -258,7 +289,7 @@ class PlekUserHandler
             case 'plek-band':
                 $managing_bands = PlekUserHandler::get_user_meta('band_id');
                 $managing_bands = explode(',', $managing_bands);
-                $event_bands = $plek_event->get_bands();
+                $event_bands = $event->get_bands();
                 if (!empty($managing_bands)) {
                     foreach ($managing_bands as $band_id) {
                         if (isset($event_bands[$band_id])) {
@@ -310,6 +341,44 @@ class PlekUserHandler
         }
         return false;
     }
+    /**
+     * Checks if the current user is allowed to edit the venue
+     *
+     * @param int $venue_id - ID of the venue
+     * @return bool true if allowed, otherwise false
+     * @todo Check if user is creator of venue or has the necessary rights 
+     */
+    public static function user_can_edit_venue(int $venue_id)
+    {
+        if (self::current_user_is_locked()) {
+            return false;
+        }
+        if (PlekUserHandler::user_is_in_team()) {
+            return true; //Team Members are always allowed to edit.
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the current user is allowed to edit the $oid
+     *
+     * @param int $organizer_id - ID of the organizer
+     * @return bool true if allowed, otherwise false
+     * @todo Check if user is creator of organizer or has the necessary rights 
+     */
+    public static function user_can_edit_organizer(int $organizer_id)
+    {
+        if (self::current_user_is_locked()) {
+            return false;
+        }
+        if (PlekUserHandler::user_is_in_team()) {
+            return true; //Team Members are always allowed to edit.
+        }
+        if ((int) self::get_user_setting('organizer_id') === $organizer_id) {
+            return true;
+        }
+        return false;
+    }
 
     public static function check_user_setup($rolename)
     {
@@ -338,11 +407,16 @@ class PlekUserHandler
      *
      * @return int Id of the logged in user
      */
-    public static function get_user_id()
+    public static function get_user_id($return_guest_id = false)
     {
-        return get_current_user_id();
+        global $plek_handler;
+        $id = get_current_user_id();
+        if ($id === 0 and $return_guest_id === true) {
+            $id = (int) $plek_handler->get_plek_option('guest_author_id');
+        }
+        return $id;
     }
- 
+
     /**
      * Returns the current user login name
      *
@@ -351,9 +425,9 @@ class PlekUserHandler
     public static function get_user_login_name()
     {
         $user = wp_get_current_user();
-        if(isset($user -> user_login)){
-            return $user -> user_login;
-        }else{
+        if (isset($user->user_login)) {
+            return $user->user_login;
+        } else {
             return false;
         }
     }
@@ -465,6 +539,20 @@ class PlekUserHandler
     }
 
     /**
+     * Gets all the users within a specific role
+     *
+     * @param string $rolename
+     * @param boolean $return_only_ids
+     * @return WP_User object
+     */
+    public function get_users_by_role($rolename, $return_only_ids = false){
+        $rolename = htmlspecialchars($rolename);
+        $fields = ($return_only_ids)?'ID':'all';
+        $search = get_users(['role__in' => $rolename, 'fields' => $fields]);
+        return $search;
+    }
+
+    /**
      * Adds the custom roles to WP
      *
      * @return void
@@ -489,7 +577,7 @@ class PlekUserHandler
             }
         }
         if (!self::check_user_roles('plek-organi')) {
-            if (add_role('plek-organi', __('Veranstalter', 'plek'), array('edit_tribe_organizers' => true, 'edit_tribe_events' => true))) {
+            if (add_role('plek-organi', __('Organizer', 'plek'), array('edit_tribe_organizers' => true, 'edit_tribe_events' => true))) {
                 $added_role[] = "Veranstalter";
             }
         }
@@ -563,9 +651,9 @@ class PlekUserHandler
             $plek_ajax_errors->add('save_user', sprintf(__('Failed to create new user (%s)', 'pleklang'), $error_message));
             return false;
         }
-        
+
         //Save the Meta data
-        if($plek_handler -> update_field('plek_user_lock_key',$user_lock_key,'user_'.$new_user) === false){
+        if ($plek_handler->update_field('plek_user_lock_key', $user_lock_key, 'user_' . $new_user) === false) {
             $plek_ajax_errors->add('save_user', __('Failed to write meta for new user', 'pleklang'));
             return false;
         }
@@ -610,7 +698,7 @@ class PlekUserHandler
 
         $subject = __('Only one step left for your account at plekvetica!', 'pleklang');
         $my_plek_id = $plek_handler->get_plek_option('my_plek_page_id');
-        $my_plekvetica_url = (!empty($my_plek_id))?get_permalink($my_plek_id):"https://plekvetica.ch/my-plekvetica";
+        $my_plekvetica_url = (!empty($my_plek_id)) ? get_permalink($my_plek_id) : "https://plekvetica.ch/my-plekvetica";
 
         $emailer = new PlekEmailSender;
         $emailer->set_to($email);
@@ -695,5 +783,14 @@ class PlekUserHandler
         return true;
     }
 
-
+    /**
+     * Returns all the users with the user role "exuser"
+     *
+     * @return array The found users.
+     */
+    public static function get_ex_users()
+    {
+        $users = get_users(array('role' => 'exuser'));
+        return $users;
+    }
 }

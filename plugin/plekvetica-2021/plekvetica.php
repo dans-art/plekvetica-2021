@@ -4,7 +4,7 @@
  * Plugin Name: Plekvetica - 2021
  * Plugin URI: https://www.plekvetica.ch/
  * Description: Modifikationen und spezielle Funktionen für die Plekvetica Seite.
- * Version: 1.2
+ * Version: 2.0.1
  * Date: 2021-04-07
  * Author: Daniel Spycher
  * Author URI: https://www.dev.dans-art.ch/
@@ -12,7 +12,7 @@
  * Domain Path: /languages
  * Textdomain: pleklang
  * @todo: 
- *       - Add Roles: partner 
+ * - Add Roles: partner 
  * - Add LazyLoading for all images
  * - check if The Event Calendar, ACF is installed
  * - Add support for Partner role.

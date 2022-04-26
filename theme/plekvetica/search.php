@@ -48,7 +48,7 @@ get_header(); ?>
 
 		</div>
 		<div class="plek-search-photos">
-			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Fotos', 'pleklang')); ?>
+			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Photos', 'pleklang')); ?>
 			<?php echo $plek_search_handler -> get_photos(); ?>
 		</div>
 		<div class="plek-search-videos">

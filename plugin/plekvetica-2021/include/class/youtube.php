@@ -249,7 +249,7 @@ class plekYoutube
     public function get_ajax_single_video(){
         $id = (isset($_REQUEST['video_id'])) ? $_REQUEST['video_id'] : null;
         if($id === null){
-            return __('Keine Youtube Video ID gefunden','pleklang');
+            return __('No Youtube Video ID found','pleklang');
         }
         $id = $this -> extract_video_ids(array($id));
         //$this -> videos_per_page = 1;

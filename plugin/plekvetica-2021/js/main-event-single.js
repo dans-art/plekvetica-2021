@@ -181,7 +181,7 @@ let plek_single_event_main = {
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, "Error loading data.... ");
+                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
 
             }
           });
@@ -206,7 +206,7 @@ let plek_single_event_main = {
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, "Error loading data.... ");
+                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
 
             }
           });
@@ -221,10 +221,10 @@ let plek_single_event_main = {
         jQuery.ajax({
             url: window.ajaxurl,
             data: {
-              'action': 'plek_set_Accredi_status',
+              'action': 'plek_event_actions',
+              'do': 'add_akkredi_member',
               'user': user,
               'id': event_id,
-              'type': type
             },
             success: function success(data) {
                 let text = plek_main.get_text_from_ajax_request(data);
@@ -233,7 +233,7 @@ let plek_single_event_main = {
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, "Error loading data.... ");
+                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
 
             }
           });
@@ -266,7 +266,7 @@ let plek_single_event_main = {
                 }
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, "Error loading data.... ");
+                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
             }
           });
           return;
@@ -288,7 +288,7 @@ let plek_single_event_main = {
                 plek_main.deactivate_button(button);
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, "Error loading data.... ");
+                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
             }
           });
           return;
@@ -331,7 +331,7 @@ let plek_single_event_main = {
             },
             error: function error(data) {
                 plek_main.deactivate_loader_style(button);
-                jQuery('.plek-follow-event-btn .label').text('Error loading data....');
+                jQuery('.plek-follow-event-btn .label').text('Error loading data.');
             }
         });
     },
@@ -370,7 +370,7 @@ let plek_single_event_main = {
             },
             error: function error(data) {
                 plek_main.deactivate_loader_style(button);
-                jQuery('#plek-report-incorrect-event').text('Error loading data....');
+                jQuery('#plek-report-incorrect-event').text('Error loading data.');
             }
         });
     }    

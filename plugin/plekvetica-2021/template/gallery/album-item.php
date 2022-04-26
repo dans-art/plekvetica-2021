@@ -22,7 +22,7 @@ $sorten_title = (isset($options['shorten_title']))?$options['shorten_title']:tru
             </a>
         </span>
         <span class="caption_link">
-            <a href="<?php echo PlekGalleryHandler::get_gallery_link($gallery_object, $page_id); ?>" title="<?php echo sprintf(__('Zur Galerie: %s', 'pleklang'), $gallery_object->title); ?>">
+            <a href="<?php echo PlekGalleryHandler::get_gallery_link($gallery_object, $page_id); ?>" title="<?php echo sprintf(__('To the gallery: %s', 'pleklang'), $gallery_object->title); ?>">
             <?php 
             if($sorten_title){
                 echo PlekGalleryHandler::get_band_name($gallery_object); 

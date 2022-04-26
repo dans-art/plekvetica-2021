@@ -25,7 +25,7 @@ $dismissed = (isset($notify_object->dismissed) and $notify_object->dismissed ===
         </a>
     <?php endif; ?>
     <?php if (empty($dismissed)) : ?>
-        <button class="dismiss_notification" data-dismiss-id="<?php echo $id; ?>"><i class="fas fa-times"></i></button>
+        <button type='button' class="dismiss_notification" data-dismiss-id="<?php echo $id; ?>"><i class="fas fa-times"></i></button>
     <?php else: ?>
         <span class="is_dismissed">x</span>
     <?php endif; ?>

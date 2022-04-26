@@ -18,11 +18,11 @@ $my_band_follows = $plek_event_blocks->get_block('my_band_follows');
 <div class="my-plek-container">
     <div class="my-plek-head-container">
         <div class="this-week-posts">
-            <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Deine Woche', 'pleklang')); ?>
+            <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Your Week', 'pleklang')); ?>
             <?php if (!empty($my_week_block)) : ?>
                 <?php echo $my_week_block; ?>
             <?php else : ?>
-                <span class="plek-no-next-events"><?php echo __('Für die nächsten 7 Tage stehen keine Events an!', 'pleklang'); ?></span>
+                <span class="plek-no-next-events"><?php echo __('There are no events for the next 7 days!', 'pleklang'); ?></span>
             <?php endif; ?>
         </div>
     </div>
@@ -40,7 +40,7 @@ $my_band_follows = $plek_event_blocks->get_block('my_band_follows');
     </div>
     <div class="all-posts">
         <?php if (!empty($my_events_block)) : ?>
-            <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Alle deine Events', 'pleklang')); ?>
+            <?php PlekTemplateHandler::load_template('text-bar', 'components', __('All your events', 'pleklang')); ?>
             <?php echo $my_events_block; ?>
         <?php endif; ?>
     </div>

@@ -21,13 +21,14 @@ class PlekNotificationHandler extends WP_List_Table
      * @todo: Push notification to Mobile App
      *
      * @param array $user_ids
-     * @param [type] $type
-     * @param [type] $subject
-     * @param [type] $message
-     * @param [type] $action
+     * @param string $subject - Subject of the message / Title
+     * @param string $message - THe Message to show
+     * @param string $action - The link to click. Should be a valid html link
+     * @param string $type - The type of the notification
      * @return int|false Id of the inserted row or false on error.
+     * @todo: Make proper error handling, support HTML formated text
      */
-    public function push_notification($user_ids = array(), $type = null, $subject = null, $message = null, $action = null)
+    public function push_notification($user_ids = array(), $type = '', $subject = '', $message = '', $action = '')
     {
         global $wpdb;
         $table_notify = $wpdb->prefix . 'plek_notifications';
@@ -41,20 +42,21 @@ class PlekNotificationHandler extends WP_List_Table
         //Insert the Message
         $data = array();
         $data['pushed_on'] = date('Y-m-d H:i:s');
-        $data['notify_type'] = $type;
-        $data['subject'] = $subject;
-        $data['message'] = $message;
-        $data['action_link'] = $action;
+        $data['notify_type'] = ($type !== null) ? $type : '';
+        $data['subject'] = ($subject !== null) ? $subject : '';
+        $data['message'] = ($message !== null) ? sanitize_text_field( $message ) : '';
+        $data['action_link'] = ($action !== null) ? $action : '';
         if ($wpdb->insert($table_notify_messages, $data)) {
             $message_id = $wpdb->insert_id;
         } else {
+            //s($wpdb->last_error);
             return false;
         }
 
         //Assign the Message ID to the users
         foreach ($user_ids as $user_id) {
             $data_user = array();
-            $data_user['user_id'] = $user_id;
+            $data_user['user_id'] = $this -> get_valid_user_id($user_id);
             $data_user['email_send'] = 0; //Get this from user preferences
             $data_user['dismissed'] = 0;
             $data_user['message_id'] = $message_id;
@@ -66,8 +68,108 @@ class PlekNotificationHandler extends WP_List_Table
         if (count($user_ids) !== $inserted) {
             return false;
         }
+
         return true;
     }
+
+    /**
+     * Checks if a user id is set and valid. If not, it will try to get the admin set in the options
+     *
+     * @param int $user_id - The user id to validate
+     * @return void
+     */
+    public function get_valid_user_id($user_id){
+        global $plek_handler;
+        if(empty($user_id) OR $user_id == 0){
+            $admin_user = get_user_by( 'email', $plek_handler->get_plek_option('admin_email'));
+            $user_id = (is_object($admin_user) AND $admin_user->ID !== 0) ? $admin_user->ID : 1;
+        }
+        return intval($user_id);
+    }
+
+    /**
+     * Sends a notification to all the accredited Members of an Event
+     *
+     * @param string|integer $event_id
+     * @param string $subject - Subject of the message / Title
+     * @param string $message - THe Message to show
+     * @param string $action - The link to click. Should be a valid html link
+     * @param string $type - The type of the notification
+     * @return int|false Id of the inserted row or false on error.
+     */
+    public function push_accredi_members($event_id, $type = null, $subject = null, $message = null, $action = null)
+    {
+
+        $users = get_field("akkreditiert", $event_id);
+        $user_arr = array();
+        if (is_array($users)) {
+            foreach ($users as $login_name) {
+                $user = get_user_by('login', $login_name);
+                if (!empty($user->ID)) {
+                    $user_arr[] = $user->ID;
+                }
+            }
+            if (!empty($user_arr)) {
+                return $this->push_notification($user_arr, $type, $subject, $message, $action);
+            }
+        }
+        return false;
+    }
+    /**
+     * Sends a notification to the admin
+     *
+     * @param string|integer $event_id
+     * @param string $subject - Subject of the message / Title
+     * @param string $message - THe Message to show
+     * @param string $action - The link to click. Should be a valid html link
+     * @param string $type - The type of the notification
+     * @return int|false Id of the inserted row or false on error.
+     */
+    public static function push_to_admin($subject = null, $message = null, $action = null, $type = 'admin_info')
+    {
+        global $plek_handler;
+
+        $admin = get_user_by('email', $plek_handler->get_plek_option('admin_email'));
+        if (!isset($admin->ID)) {
+            return false;
+        }
+        $notify = new PlekNotificationHandler;
+        return $notify->push_notification(array($admin->ID), $type, $subject, $message, $action);
+    }
+
+    /**
+     * Sends an Notification to a certain role.
+     * Currently, all the messages go to the admin. This is a placeholder for later.
+     *
+     * @param string $role - The role to send the message to. Supported are admin, eventmanager
+     * @param string $subject - Subject of the message / Title
+     * @param string $message - THe Message to show
+     * @param string $action - The link to click. Should be a valid html link
+     * @param string $type - The type of the notification
+     * @return void
+     */
+    public static function push_to_role($role = null, $subject = null, $message = null, $action = null, $type = 'admin_info')
+    {
+        global $plek_handler;
+        $recipient_id = 0; //Can be single id or array with user ids
+        switch ($role) {
+            case 'admin':
+                return self::push_to_admin($subject, $message, $action, $type);
+                break;
+            case 'eventmanager':
+                $plek_user = new PlekUserHandler;
+                $recipient_id = $plek_user->get_users_by_role('eventmanager',true);
+                $type = ($type === 'admin_info') ? 'eventmanager_info' : $type ;
+                break;
+                
+                default:
+                return false;
+                break;
+            }
+            $notify = new PlekNotificationHandler;
+            return $notify->push_notification($recipient_id, $type, $subject, $message, $action);
+    }
+
 
     /**
      * Pushes a notification again, so the user receives again an email. In the Notification Panel the message will be shown as un-dismissed
@@ -75,8 +177,9 @@ class PlekNotificationHandler extends WP_List_Table
      * @param int $notification_id
      * @return bool
      */
-    public function push_again($notification_id = null){
-        if($notification_id === null){
+    public function push_again($notification_id = null)
+    {
+        if ($notification_id === null) {
             return false;
         }
         global $wpdb;
@@ -85,7 +188,6 @@ class PlekNotificationHandler extends WP_List_Table
         $where = array('id' => $notification_id);
         $format = array('%d');
         return $wpdb->update($table, $data, $where, $format, $format);
- 
     }
 
     /**
@@ -139,12 +241,12 @@ class PlekNotificationHandler extends WP_List_Table
     {
         global $wpdb;
         $limit = 20;
-        $order = (!empty($_GET['order'])) ? htmlspecialchars($_GET['order']) : 'ASC';
+        $order = (!empty($_GET['order'])) ? htmlspecialchars($_GET['order']) : 'DESC';
         $order_by = (!empty($_GET['orderby'])) ? htmlspecialchars($_GET['orderby']) : 'pushed_on';
         $paged = (int) (isset($_GET['paged']) and $_GET['paged'] > 0) ? htmlspecialchars($_GET['paged']) : 0;
         $offset = ($paged > 1) ? (($paged - 1) * $limit) : 0;
 
-        if(empty($_POST['s'])){
+        if (empty($_POST['s'])) {
             $query_notifications = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS
             notify.*, msg.*
             FROM `{$wpdb->prefix}plek_notifications` as notify
@@ -152,10 +254,10 @@ class PlekNotificationHandler extends WP_List_Table
             ON notify.message_id = msg.msg_id
             ORDER BY {$order_by} {$order}
             LIMIT %d,%d", $offset, $limit);
-        }else{
+        } else {
             //Query is search query
             $search = sanitize_text_field($_POST['s']);
-            $like = '%'.$wpdb -> esc_like($search).'%';
+            $like = '%' . $wpdb->esc_like($search) . '%';
             $query_notifications = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS
             notify.*, msg.*
             FROM `{$wpdb->prefix}plek_notifications` as notify
@@ -177,15 +279,27 @@ class PlekNotificationHandler extends WP_List_Table
 
     /**
      * Prepares the items to be displayed as a Table in the Backend.
-     *
+     * 
+     * @param array|string $args - See WP_List_Table's _constructor() for the supported args. Some are not supported by plek.
      * @return void
      */
-    public function prepare_backend_notification_items()
+    public function prepare_backend_notification_items($args = array())
     {
         global $_wp_column_headers;
+        $args = wp_parse_args(
+            $args,
+            array(
+                'plural'   => '',
+                'singular' => '',
+                'ajax'     => false,
+                'screen'   => null,
+            )
+        );
+        $this->_args = $args;
         $screen = get_current_screen();
 
         $this->screen = $screen;
+
         $columns = $this->get_columns();
         $_wp_column_headers[$screen->id] = $columns;
 
@@ -207,7 +321,7 @@ class PlekNotificationHandler extends WP_List_Table
 
         $this->process_bulk_action();
 
-        $this -> search_box(__('Find','pleklang'),'search_id');
+        $this->search_box(__('Find', 'pleklang'), 'search_id');
     }
 
     /**
@@ -232,7 +346,7 @@ class PlekNotificationHandler extends WP_List_Table
             case 'dismissed':
             case 'email_send':
                 $light = ($item->$column === '1') ? 'green' : 'red';
-                $status = ($item->$column === '1') ? __('Yes', 'pleklang') : __('No', 'pleklang');;
+                $status = ($item->$column === '1') ? __('Yes', 'pleklang') : __('No', 'pleklang');
                 return "<span class='plek-light {$light}'>{$status}</span>";
                 break;
             case 'cb':
@@ -270,13 +384,13 @@ class PlekNotificationHandler extends WP_List_Table
         $items = (!empty($_POST['bulk-actions'])) ? $_POST['bulk-actions'] : array();
         switch ($action) {
             case 'delete':
-                foreach($items AS $item_to_process){
-                    $this -> delete_notification($item_to_process);
+                foreach ($items as $item_to_process) {
+                    $this->delete_notification($item_to_process);
                 }
                 break;
             case 'push_again':
-                foreach($items AS $item_to_process){
-                    $this -> push_again((int)$item_to_process);
+                foreach ($items as $item_to_process) {
+                    $this->push_again((int)$item_to_process);
                 }
                 break;
 
@@ -284,7 +398,7 @@ class PlekNotificationHandler extends WP_List_Table
                 //Do nothing...
                 break;
         }
-       // wp_redirect( esc_url( add_query_arg() ) );
+        // wp_redirect( esc_url( add_query_arg() ) );
         //exit;
     }
 
@@ -297,8 +411,8 @@ class PlekNotificationHandler extends WP_List_Table
     {
         $columns = array(
             'cb' => '<input type="checkbox"/>',
-            'user_id' => __('User', 'pleklang'),
             'pushed_on' => __('Created', 'pleklang'),
+            'user_id' => __('User', 'pleklang'),
             'notify_type' => __('Type', 'pleklang'),
             'subject' => __('Subject and Message', 'pleklang'),
             'action_link' => __('Link', 'pleklang'),
@@ -316,8 +430,8 @@ class PlekNotificationHandler extends WP_List_Table
     public function get_sortable_columns()
     {
         $columns = array(
-            'user_id' => array('user_id', false),
             'pushed_on' => array('pushed_on', false),
+            'user_id' => array('user_id', false),
             'notify_type' => array('notify_type', false),
             'subject' => array('subject', false),
             'action_link' => array('action_link', false),
@@ -552,6 +666,24 @@ class PlekNotificationHandler extends WP_List_Table
     }
 
     /**
+     * Sends a reminder to the accreditation manager for upcoming events with no confirmed status.
+     *
+     * @return void
+     */
+    public function send_akkredi_reminder(){
+        global $plek_handler;
+        global $plek_event;
+
+        $user_id = $plek_handler->get_plek_option('akkredi_user_id');
+        $user_id = (empty($user_id) OR $user_id === '0') ? '1' :  $user_id; //Set it to the user 1 if no user found
+
+        $subject = __('Missing accreditation requests','pleklang');
+        $message = __('Some Events are not requested yet...','pleklang') . $plek_event -> plek_event_upcoming_no_akkredi_shortcode();
+        $action = 'none';
+        return $this -> push_notification([$user_id],'akkredi_notify', $subject, $message, $action);
+    }
+
+    /**
      * Dissmisses a Notification by the notification id.
      * Only if the User is the "owner" of this notification, it will get dismissed.
      */
@@ -583,7 +715,7 @@ class PlekNotificationHandler extends WP_List_Table
         $format = array('%d');
         return $wpdb->update($table, $data, $where, $format, $format);
     }
-    
+
     /**
      * Deletes a notification
      *
@@ -625,5 +757,37 @@ class PlekNotificationHandler extends WP_List_Table
             }
         }
         return true;
+    }
+
+    /**
+     * Function to filter the wp_mail function.
+     * This function checks if a email gets send to a ex user and if so, it removes them from the list.
+     *
+     * @param array $args
+     * @return array The WP_mail args
+     */
+    public function filter_wp_mail($args){
+        //Get the blocked users
+        $ex_members = PlekUserHandler::get_ex_users();
+        
+        if(empty($ex_members)){
+            return $args; //Do nothing
+        }
+        //Convert to array if not array
+        if(is_string($args['to'])){
+            $args['to'] = explode(',' , $args['to']); 
+        }
+        
+        foreach($ex_members as $user){
+            $user_email = $user->user_email;
+            $search = preg_grep("/".$user_email."/", $args['to']);
+            if(!empty($search)){
+                //Email was found in the recipients.
+                foreach($search as $skey => $email){
+                    unset($args['to'][$skey]); //Remove the item
+                }
+            }
+        }
+        return $args;
     }
 }

@@ -11,7 +11,7 @@ if (!PlekUserHandler::user_can_edit_band($band_object)) {
 }
 ?>
 
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Band verwalten', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Manage Band', 'pleklang')); ?>
 <div class="meta-content">
   <div class="band-edit-buttons">
     <?php //Allow everyone to suggest changes to band. 

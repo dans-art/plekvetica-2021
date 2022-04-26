@@ -54,11 +54,11 @@ if ( ! $event->thumbnail->exists ) { ?>
 			class="tribe-events-calendar-list__event-featured-image"
 		/>
 	<?php if ($event->featured) {
-		PlekTemplateHandler::load_template('image-banner', 'components', __('Von uns empfohlen', 'pleklang'));
+		PlekTemplateHandler::load_template('image-banner', 'components', __('Recommended by us', 'pleklang'));
 	}
 	?>
 	<?php if ($plek_event-> get_raffle()) {
-		PlekTemplateHandler::load_template('image-banner', 'components', __('Ticketverlosung', 'pleklang'));
+		PlekTemplateHandler::load_template('image-banner', 'components', __('Ticket raffle', 'pleklang'));
 	}
 	?>
 	</a>

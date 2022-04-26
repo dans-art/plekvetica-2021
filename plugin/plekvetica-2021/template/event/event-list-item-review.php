@@ -5,7 +5,7 @@ $event = isset($template_args[0])?$template_args[0]:null;
 $index = isset($template_args[1])?$template_args[1]:null; //Index, Nr of the loop
 $separate_by = isset($template_args[2])?$template_args[2]:null; //The timeframe to separate. Currently only "month" is supported.
 $last_date = !empty($template_args[3])?$template_args[3]:null; //The date of the last event. If this is empty, there will be no separation
-
+ 
 
 if(!method_exists($event, 'get_field_value')){
     if(!isset($event -> ID)){
@@ -17,6 +17,7 @@ if(!method_exists($event, 'get_field_value')){
     $event->load_event($id);
 }
 
+$poster = $event->get_poster();
 $startDatetime = $event->get_field_value('_EventStartDate');
 $stime = strtotime($startDatetime);
 
@@ -52,7 +53,10 @@ if($separate_by){
     </div>
     <div class="tribe-events-calendar-list__event-featured-image-wrapper tribe-common-g-col">
         <a href="<?php echo $event->get_permalink(); ?>" title="<?php echo $event->get_name(); ?>" rel="bookmark" class="tribe-events-calendar-list__event-featured-image-link">
-            <?php echo $event->get_poster(); ?> 
+        <?php echo $poster; ?>
+            <?php if (empty($poster)) : ?>
+                <img src="<?php echo $event->poster_placeholder; ?>" />
+            <?php endif; ?>
         </a>
     </div>
 

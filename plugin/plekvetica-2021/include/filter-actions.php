@@ -18,6 +18,8 @@ add_filter('tribe_get_event', [$plek_event,'plek_tribe_add_terms'], 10, 1);
 //Add the band dropdown to the gallery view of ngg
 //add_filter( 'ngg_manage_gallery_fields', 'filter_ngg_manage_gallery_fields', 10, 3 );
 
+add_filter('wp_mail', [new PlekNotificationHandler, 'filter_wp_mail'], 1, 1);
+
 add_action('init', [$plek_handler, 'load_textdomain']); //load language 
 add_action('wp_head', [$plek_handler,'enqueue_scripts']);
 add_action('wp_head', [$plek_handler, 'enqueue_ajax_functions']);
@@ -48,8 +50,16 @@ add_action('wp_ajax_nopriv_plek_user_actions',  [new PlekAjaxHandler,'plek_ajax_
 add_action('wp_ajax_plek_band_actions',  [new PlekAjaxHandler,'plek_ajax_band_actions']);
 add_action('wp_ajax_nopriv_plek_band_actions',  [new PlekAjaxHandler,'plek_ajax_band_nopriv_actions']);
 
+add_action('wp_ajax_plek_venue_actions',  [new PlekAjaxHandler,'plek_ajax_venue_actions']);
+add_action('wp_ajax_nopriv_plek_venue_actions',  [new PlekAjaxHandler,'plek_ajax_venue_nopriv_actions']);
+
+add_action('wp_ajax_plek_organizer_actions',  [new PlekAjaxHandler,'plek_ajax_organizer_actions']);
+add_action('wp_ajax_nopriv_plek_organizer_actions',  [new PlekAjaxHandler,'plek_ajax_organizer_nopriv_actions']);
+
 add_action('wp_ajax_plek_content_loader',  [new PlekAjaxHandler,'plek_ajax_content_loader_actions']);
 add_action('wp_ajax_nopriv_plek_content_loader',  [new PlekAjaxHandler,'plek_ajax_content_loader_nopriv_actions']);
+
+add_action('wp_ajax_plek_ajax_gallery_actions',  [new PlekAjaxHandler,'plek_ajax_gallery_actions']);
 
 //JS Debugger
 add_action( 'plek_js_debug', [$plek_handler,'set_js_error'], 10, 1 );

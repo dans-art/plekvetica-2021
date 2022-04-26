@@ -14,3 +14,8 @@
         }
     }
 }
+
+/* Fix to hide the featured Image in the Post Content*/
+.single-post .wp-block-post-featured-image{
+    display: none;
+}

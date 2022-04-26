@@ -1,5 +1,5 @@
 <?php
-
+// @todo: remove this file? unused?? 
 extract(get_defined_vars());
 $event_class = $template_args[0]; //Plek_events_form Object
 
@@ -9,7 +9,7 @@ $event_class = $template_args[0]; //Plek_events_form Object
 
 
 		<div class="submit plek-button">
-			<input type="submit" name="plek-band-submit" id="plek-band-submit" value="<?php echo __('Band eintragen','pleklang');?>">
+			<input type="submit" name="plek-band-submit" id="plek-band-submit" value="<?php echo __('Add Band','pleklang');?>">
 		</div>
 	</form>
 </div>

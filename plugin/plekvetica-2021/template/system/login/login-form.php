@@ -10,7 +10,7 @@ $current_url = get_permalink( $obj_id );
 <div class='login-messages'>
     <?php if ((isset($_REQUEST['login']) and $_REQUEST['login'] === 'failed')) : ?>
         <div class="loggin-error">
-            <?php echo __('Login fehlgeschlagen. Bitte überprüfe deine Login-Daten.', 'pleklang'); ?>
+            <?php echo __('Login failed. Please check your login details.', 'pleklang'); ?>
         </div>
         <?php endif; ?>
     </div>
@@ -19,7 +19,7 @@ $current_url = get_permalink( $obj_id );
     </div>
     <div class="link-container">
         <div class="lostpassword-link">
-            <a href="<?php echo $current_url ;?>?action=reset_password"><?php echo __('Passwort zurücksetzen','pleklang');?></a>
+            <a href="<?php echo $current_url ;?>?action=reset_password"><?php echo __('Reset password','pleklang');?></a>
         </div>
         <div class="register-link">
             <a href="<?php echo $current_url ;?>?action=sign_up"><?php echo __('Sign up at Plekvetica','pleklang');?></a>

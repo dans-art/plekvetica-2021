@@ -218,6 +218,11 @@
       #menu-item-67072 a::before{
         content: "\f2ce";
       }
+      //Bands - Add
+      .menui-bands-add a::before,
+      .menu-item-75816 a::before{
+        content: "\f2c1";
+      }
 
       //Videos
       .menui-video a::before,
@@ -342,6 +347,17 @@
       #notifications-container{
           width: 100%;
       }
+
+      .plek-search-overlay,
+      .plek-event-form-container{
+          margin-right: 30px;
+      }
+
+      #event-band-selection{
+          .sort-button{
+              display: none; /*Disable the sort function on smaller screens aka smartphones*/
+          }
+      }
 }
 
 @media (max-width: 767px){
@@ -392,6 +408,26 @@
             display: block;
         }
     }
+
+    //Add/Edit Event form
+
+    .event-basic-container .event-date-picker{
+        flex-direction: column;
+      }
+    /* Timetable */
+
+    #event-container .timetable-container{
+            .timetable_content{
+              flex-direction: column;
+            }
+          
+        }
+
+  .event-prices-container{
+    .event-price-container{
+      flex-direction: column;
+    }
+  }
     
 }
 
@@ -562,6 +598,14 @@
         white-space: normal;
       }
     }
+    .submit-event-edit-from{
+        flex-direction: column;
+        gap: 0;
+    }
+
+    #plek-event-guest-login-form-container{
+        flex-direction: column;
+    }
 
     #video_preview_con {
         justify-content: center;
@@ -636,6 +680,16 @@
             content: '\f0c0';
         }
     }
+
+    .plek-event-form-container,
+    .submit.plek-button{
+        margin-left: 0;
+    }
+
+    .plek-event-form-container{
+        width: 100%;
+        padding-right: 0;
+      }
 
 }
 

@@ -20,6 +20,10 @@
   }
 }
 
+.main-navigation{
+  z-index: 999999; /* Make sure that the navi is always on top */
+}
+
 .main-navigation .main-nav ul li a {
   line-height: 38px;
 }

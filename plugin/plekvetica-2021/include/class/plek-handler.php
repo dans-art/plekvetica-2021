@@ -8,9 +8,11 @@ class PlekHandler
     protected $js_debug = array();
     public $version = "";
     public $ajax_included = false;
+    public $placeholder_image = '';
 
     public function __construct()
     {
+        $this -> placeholder_image = PLEK_PLUGIN_DIR_URL . 'images/placeholder/default_placeholder.jpg';
     }
 
     public function set_js_error($msg)
@@ -79,10 +81,10 @@ class PlekHandler
      *
      * @param string $field_name
      * @param string $type - type of field to get. Leave empty if data from a normal post gets fetched
-     * @param integer $page_id
+     * @param integer|string $page_id
      * @return array|false Array on success, false if field is not found.
      */
-    public function get_acf_choices(string $field_name, string $type, int $page_id)
+    public function get_acf_choices(string $field_name, string $type, $page_id)
     {
         switch ($type) {
             case 'term':
@@ -123,7 +125,7 @@ class PlekHandler
             foreach ($items as $index => $nav) {
                 if ($nav->post_name === 'login-logout') {
                     if (is_user_logged_in()) {
-                        $items[$index]->title = __('Mein Plekvetica', 'pleklang');
+                        $items[$index]->title = __('My Plekvetica', 'pleklang');
                         $items[$index]->classes[] = 'member-area-nav';
                     } else {
                         $items[$index]->title = __('Login', 'pleklang');
@@ -169,31 +171,42 @@ class PlekHandler
         wp_enqueue_style('toastr-style', PLEK_PLUGIN_DIR_URL . 'plugins/toastr/toastr.min.css');
         wp_enqueue_script('toastr-script', PLEK_PLUGIN_DIR_URL . 'plugins/toastr/toastr.min.js', ['jquery']);
     }
+
+    /**
+     * Enqueues the default scripts
+     *
+     * @return void
+     */
     public function enqueue_scripts()
     {
         $plugin_meta = get_plugin_data(PLEK_PATH . 'plekvetica.php');
-        $this->version = (!empty($plugin_meta['Version'])) ? $plugin_meta['Version'] : "000";
-
+        $this->version = (!empty($plugin_meta['Version']) AND $plugin_meta['Version'] !== null) ? $plugin_meta['Version'] : "2.0";
+        
         if ($this->is_dev_server()) {
+            wp_enqueue_script('plek-topbar', PLEK_PLUGIN_DIR_URL . 'plugins/topbar/topbar.min.js', $this->version);
             wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.js', ['jquery'], $this->version);
-            wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.js', ['jquery'], $this->version);
+            wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.js', ['jquery','wp-i18n'], $this->version);
         } else {
-            wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js', ['jquery'], $this->version);
-            wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.min.js', ['jquery'], $this->version);
+            wp_enqueue_script('plek-topbar', PLEK_PLUGIN_DIR_URL . 'plugins/topbar/topbar.min.js', $this->version);
+            wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.min.js', ['jquery', 'wp-i18n'], $this->version);
+            wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js', ['jquery', 'plek-language'], $this->version);
         }
-    }
 
+        wp_set_script_translations( 'plek-language', 'pleklang', PLEK_PATH . "/languages");
+    }
+    
     public function enqueue_select2()
     {
         wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css');
         wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array('jquery'));
     }
-
+    
     public function enqueue_context_menu()
     {
         global $plek_handler;
         wp_enqueue_style('plek-contextMenu-style', PLEK_PLUGIN_DIR_URL . 'css/jquery.contextMenu.min.css', array('generate-child'));
         wp_enqueue_script('plek-contextMenu-script',  PLEK_PLUGIN_DIR_URL . 'js/components/context-menu.min.js', array('jquery', 'plek-script', 'plek-language'), $plek_handler -> version);
+        wp_set_script_translations( 'plek-contextMenu-script', 'pleklang', PLEK_PATH . "/languages");
     }
 
     /**
@@ -208,7 +221,7 @@ class PlekHandler
 
     public function load_textdomain()
     {
-        load_textdomain('pleklang', PLEK_PATH . 'languages/plekvetica-2021-' . determine_locale() . '.mo');
+        load_textdomain('pleklang', PLEK_PATH . 'languages/pleklang-' . determine_locale() . '.mo');
     }
 
     /**
@@ -243,6 +256,16 @@ class PlekHandler
         }
         $pos = strpos($url, "localhost/plekvetica");
         if ($pos <= 8 and $pos > 2) {
+            return true;
+        }
+
+        $pos = strpos($url, "2021.plekvetica.ch");
+        if ($pos <= 8 and $pos > 0) {
+            return true;
+        }
+
+        $pos = strpos($url, "dev.plekvetica.ch");
+        if ($pos <= 8 and $pos > 0) {
             return true;
         }
         return false;
@@ -323,4 +346,108 @@ class PlekHandler
             (isset($e['query']) && !empty($e['query']) ? '?' . (is_array($e['query']) ? http_build_query($e['query'], '', '&') : $e['query']) : '') .
             (isset($e['fragment']) ? "#$e[fragment]" : '');
     }
+
+    /**
+     * Gets a post content with stripped tags and shorten to length
+     *
+     * @param [type] $post_id
+     * @param [type] $max_len
+     * @return string The shorten content
+     */
+    public function get_the_content_stripped($post_id, $max_len)
+    {
+        $text = get_the_content(null, false, $post_id);
+        if (strlen($text) > $max_len) {
+            $text = substr($text, 0, $max_len) . "...";
+        }
+        return strip_tags($text);
+    }
+
+    /**
+     * Get all the countries from teh tribe locations
+     * in order to work, the tribe events plugin has to be installed
+     *
+     * @return array|false Array with CODE => Countryname or false on error
+     */
+    public function get_all_countries(){
+        if(!class_exists('Tribe__Languages__Locations')){
+            return false;
+        }
+        $tribe_locations = new Tribe__Languages__Locations;
+        return $tribe_locations -> get_countries();
+    }
+
+    /**
+     * Gets the allowed html tags by type.
+     * Supported: textarea
+     *
+     * @param string $type - The type of content.
+     * @return array The allowed tags or empty array.
+     */
+    public function get_allowed_tags($type = null){
+        switch ($type) {
+            case 'textarea':
+                return ['strong','b', 'i', 'br', 'p', 'h4', 'h5', 'h6'];
+                break;
+            
+            default:
+                return [];
+                break;
+        }
+    }
+
+    /**
+     * Gets the html tags to remove by type.
+     * Supported: textarea
+     *
+     * @param string $type - The type of content.
+     * @return array The tags to remove by type of array ['script']
+     */
+    public function get_forbidden_tags($type = null){
+        switch ($type) {
+            case 'textarea':
+                return ['script'];
+                break;
+            
+            default:
+                return ['script'];
+                break;
+        }
+    }
+
+    /**
+     * Removes specific tags and their content from a string
+     *
+     * @param string $content
+     * @param array $tags_to_remove - The tags to remove as an array.
+     * @return string The clean string
+     */
+    public function remove_tags($content, $tags_to_remove = ['script']){
+
+        if(empty($tags_to_remove)){
+            return $content;
+        }
+
+        $content = mb_convert_encoding($content,'HTML-ENTITIES', 'UTF-8');
+        $dom = new DOMDocument();
+        $dom -> loadHTML($content,LIBXML_HTML_NOIMPLIED|LIBXML_HTML_NODEFDTD|LIBXML_NOWARNING);
+  
+
+        $remove = [];
+        //Collect all the tags to remove
+        foreach($tags_to_remove as $tag){
+            $remover = $dom -> getElementsByTagName($tag);
+            foreach($remover as $item){
+                $remove[] = $item;
+            }
+        }
+
+        //remove all the tags
+        foreach($remove as $item_to_remove){
+            $item_to_remove -> parentNode -> removeChild($item_to_remove);
+        }
+
+        return $dom->saveHTML();
+    }
+
 }
