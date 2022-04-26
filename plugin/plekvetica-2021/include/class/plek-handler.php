@@ -77,6 +77,24 @@ class PlekHandler
     }
 
     /**
+     * This function allows you to test the code in the template/components/codetester.php
+     *
+     * @param array $attr - Attributes for the Shortcode. Supported are: allow_prod
+     * @return string The output from the codetester.
+     */
+    public function plek_tester_shortcode($attr){
+        $attributes = shortcode_atts(array(
+            'allow_prod' => false
+        ), $attr);
+        if(!$this->is_dev_server() AND $attributes['allow_prod'] === false){
+            return 'This function is not allowed on the Production server';
+        }
+
+        return PlekTemplateHandler::load_template_to_var('codetester', 'components');
+
+    }
+
+    /**
      * Get all the options from a ACF - Field
      *
      * @param string $field_name

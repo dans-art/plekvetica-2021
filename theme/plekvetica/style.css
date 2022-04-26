@@ -708,7 +708,8 @@ input[type="phone"] {
   right: 0px;
   margin-top: -5em;
   padding-left: 0.5em;
-  box-shadow: -10px 5px 5px #0000003b; }
+  box-shadow: -10px 5px 5px #0000003b;
+  z-index: 99999; }
   #notifications-container .no-notifications {
     text-align: center;
     padding: 2em; }
@@ -1941,6 +1942,13 @@ input[type=checkbox] {
     width: 35%; }
   .plek-form #band-genre-loader {
     display: flex; }
+  .plek-form #plek-memeber-perks ul {
+    list-style: ''; }
+  .plek-form #plek-memeber-perks li::before {
+    content: "\f00c";
+    font-family: 'FontAwesome';
+    padding-right: 1rem;
+    color: #268c37; }
 
 .plek-image-upload-container {
   display: flex;

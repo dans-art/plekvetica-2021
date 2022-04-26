@@ -509,6 +509,19 @@ input[type=checkbox]{
 
 
   }
+
+  #plek-memeber-perks{
+    ul{
+      list-style: '';
+    }
+
+    li::before{
+      content: "\f00c";
+      font-family: 'FontAwesome';
+      padding-right: 1rem;
+      color: $color-green;
+    }
+  }
 }
 
 //File Upload Button

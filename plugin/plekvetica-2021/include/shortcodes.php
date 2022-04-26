@@ -39,6 +39,10 @@ add_shortcode('plek_organizer_edit_page', [new PlekOrganizerHandler, 'plek_organ
 //Login
 add_shortcode('plek_login_page', [$plek_login_handler, 'plek_login_page_shortcode']);
 
+//Development
+add_shortcode('plek_codetester', [$plek_handler, 'plek_tester_shortcode']);
+
+
 
 
 

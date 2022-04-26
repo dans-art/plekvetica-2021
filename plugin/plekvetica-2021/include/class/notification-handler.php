@@ -31,6 +31,7 @@ class PlekNotificationHandler extends WP_List_Table
     public function push_notification($user_ids = array(), $type = '', $subject = '', $message = '', $action = '')
     {
         global $wpdb;
+        global $plek_handler;
         $table_notify = $wpdb->prefix . 'plek_notifications';
         $table_notify_messages = $wpdb->prefix . 'plek_notifications_msg';
         $inserted = 0;
@@ -44,19 +45,21 @@ class PlekNotificationHandler extends WP_List_Table
         $data['pushed_on'] = date('Y-m-d H:i:s');
         $data['notify_type'] = ($type !== null) ? $type : '';
         $data['subject'] = ($subject !== null) ? $subject : '';
-        $data['message'] = ($message !== null) ? sanitize_text_field( $message ) : '';
+        $data['message'] = ($message !== null) ? $message : '';
         $data['action_link'] = ($action !== null) ? $action : '';
-        if ($wpdb->insert($table_notify_messages, $data)) {
+        if ($wpdb->insert($table_notify_messages, $data, ['%s', '%s', '%s', '%s', '%s'])) {
             $message_id = $wpdb->insert_id;
         } else {
-            //s($wpdb->last_error);
+            if($plek_handler->is_dev_server()){
+                s($wpdb->last_error);
+            }
             return false;
         }
 
         //Assign the Message ID to the users
         foreach ($user_ids as $user_id) {
             $data_user = array();
-            $data_user['user_id'] = $this -> get_valid_user_id($user_id);
+            $data_user['user_id'] = $this->get_valid_user_id($user_id);
             $data_user['email_send'] = 0; //Get this from user preferences
             $data_user['dismissed'] = 0;
             $data_user['message_id'] = $message_id;
@@ -78,11 +81,12 @@ class PlekNotificationHandler extends WP_List_Table
      * @param int $user_id - The user id to validate
      * @return void
      */
-    public function get_valid_user_id($user_id){
+    public function get_valid_user_id($user_id)
+    {
         global $plek_handler;
-        if(empty($user_id) OR $user_id == 0){
-            $admin_user = get_user_by( 'email', $plek_handler->get_plek_option('admin_email'));
-            $user_id = (is_object($admin_user) AND $admin_user->ID !== 0) ? $admin_user->ID : 1;
+        if (empty($user_id) or $user_id == 0) {
+            $admin_user = get_user_by('email', $plek_handler->get_plek_option('admin_email'));
+            $user_id = (is_object($admin_user) and $admin_user->ID !== 0) ? $admin_user->ID : 1;
         }
         return intval($user_id);
     }
@@ -158,16 +162,16 @@ class PlekNotificationHandler extends WP_List_Table
                 break;
             case 'eventmanager':
                 $plek_user = new PlekUserHandler;
-                $recipient_id = $plek_user->get_users_by_role('eventmanager',true);
-                $type = ($type === 'admin_info') ? 'eventmanager_info' : $type ;
+                $recipient_id = $plek_user->get_users_by_role('eventmanager', true);
+                $type = ($type === 'admin_info') ? 'eventmanager_info' : $type;
                 break;
-                
-                default:
+
+            default:
                 return false;
                 break;
-            }
-            $notify = new PlekNotificationHandler;
-            return $notify->push_notification($recipient_id, $type, $subject, $message, $action);
+        }
+        $notify = new PlekNotificationHandler;
+        return $notify->push_notification($recipient_id, $type, $subject, $message, $action);
     }
 
 
@@ -513,7 +517,7 @@ class PlekNotificationHandler extends WP_List_Table
               pushed_on datetime NOT NULL,
               notify_type VARCHAR (255) NOT NULL,
               subject VARCHAR (255) NOT NULL,
-              message VARCHAR (1500) NOT NULL,
+              message LONGTEXT NOT NULL,
               action_link VARCHAR (255) NOT NULL,
               email_send int (1) NOT NULL,
               dismissed int (1) NOT NULL,
@@ -526,6 +530,9 @@ class PlekNotificationHandler extends WP_List_Table
 
         if ($db_version === null or $db_version < 1.2) {
             self::update_database(1.2, $table_name);
+        }
+        if ($db_version === null or $db_version < 1.3) {
+            self::update_database(1.3, $table_name);
         }
 
         return;
@@ -568,7 +575,7 @@ class PlekNotificationHandler extends WP_List_Table
                     pushed_on datetime NOT NULL,
                     notify_type VARCHAR (255) NOT NULL,
                     subject VARCHAR (255) NOT NULL,
-                    message VARCHAR (1500) NOT NULL,
+                    message LONGTEXT NOT NULL,
                     action_link VARCHAR (255) NOT NULL,
                     PRIMARY KEY  id (msg_id)
                   ) $charset_collate;";
@@ -616,7 +623,26 @@ class PlekNotificationHandler extends WP_List_Table
                 }
                 break;
 
-            default:
+            case 1.3:
+                require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+                //Change the message type to LONGTEXT
+                $notifi_msg = "CREATE TABLE {$table_name}_msg (
+                    msg_id bigint(20) NOT NULL AUTO_INCREMENT,
+                    pushed_on datetime NOT NULL,
+                    notify_type VARCHAR (255) NOT NULL,
+                    subject VARCHAR (255) NOT NULL,
+                    message LONGTEXT NOT NULL,
+                    action_link VARCHAR (255) NOT NULL,
+                    PRIMARY KEY  id (msg_id)
+                  ) $charset_collate;";
+
+                //Updates the Structure of the DB Tables
+                dbDelta($notifi_msg);
+
+                update_option('plek_db_version', $to_version);
+                return true;
+                break;
+                default:
                 # code...
                 break;
         }
@@ -670,17 +696,18 @@ class PlekNotificationHandler extends WP_List_Table
      *
      * @return void
      */
-    public function send_akkredi_reminder(){
+    public function send_akkredi_reminder()
+    {
         global $plek_handler;
         global $plek_event;
 
         $user_id = $plek_handler->get_plek_option('akkredi_user_id');
-        $user_id = (empty($user_id) OR $user_id === '0') ? '1' :  $user_id; //Set it to the user 1 if no user found
+        $user_id = (empty($user_id) or $user_id === '0') ? '1' :  $user_id; //Set it to the user 1 if no user found
 
-        $subject = __('Missing accreditation requests','pleklang');
-        $message = __('Some Events are not requested yet...','pleklang') . $plek_event -> plek_event_upcoming_no_akkredi_shortcode();
+        $subject = __('Missing accreditation requests', 'pleklang');
+        $message = __('Some Events are not requested yet...', 'pleklang') . $plek_event->plek_event_upcoming_no_akkredi_shortcode();
         $action = 'none';
-        return $this -> push_notification([$user_id],'akkredi_notify', $subject, $message, $action);
+        return $this->push_notification([$user_id], 'akkredi_notify', $subject, $message, $action);
     }
 
     /**
@@ -766,24 +793,25 @@ class PlekNotificationHandler extends WP_List_Table
      * @param array $args
      * @return array The WP_mail args
      */
-    public function filter_wp_mail($args){
+    public function filter_wp_mail($args)
+    {
         //Get the blocked users
         $ex_members = PlekUserHandler::get_ex_users();
-        
-        if(empty($ex_members)){
+
+        if (empty($ex_members)) {
             return $args; //Do nothing
         }
         //Convert to array if not array
-        if(is_string($args['to'])){
-            $args['to'] = explode(',' , $args['to']); 
+        if (is_string($args['to'])) {
+            $args['to'] = explode(',', $args['to']);
         }
-        
-        foreach($ex_members as $user){
+
+        foreach ($ex_members as $user) {
             $user_email = $user->user_email;
-            $search = preg_grep("/".$user_email."/", $args['to']);
-            if(!empty($search)){
+            $search = preg_grep("/" . $user_email . "/", $args['to']);
+            if (!empty($search)) {
                 //Email was found in the recipients.
-                foreach($search as $skey => $email){
+                foreach ($search as $skey => $email) {
                     unset($args['to'][$skey]); //Remove the item
                 }
             }
