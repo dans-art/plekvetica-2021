@@ -252,10 +252,11 @@ class PlekNotificationHandler extends WP_List_Table
 
         if (empty($_POST['s'])) {
             $query_notifications = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS
-            notify.*, msg.*
+            notify.*, msg.*, GROUP_CONCAT(notify.user_id, '') AS user_ids
             FROM `{$wpdb->prefix}plek_notifications` as notify
             LEFT JOIN `{$wpdb->prefix}plek_notifications_msg` as msg
             ON notify.message_id = msg.msg_id
+            GROUP BY notify.message_id
             ORDER BY {$order_by} {$order}
             LIMIT %d,%d", $offset, $limit);
         } else {
@@ -263,7 +264,7 @@ class PlekNotificationHandler extends WP_List_Table
             $search = sanitize_text_field($_POST['s']);
             $like = '%' . $wpdb->esc_like($search) . '%';
             $query_notifications = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS
-            notify.*, msg.*
+            notify.*, msg.*, GROUP_CONCAT(notify.user_id, '') AS user_ids
             FROM `{$wpdb->prefix}plek_notifications` as notify
             LEFT JOIN `{$wpdb->prefix}plek_notifications_msg` as msg
             ON notify.message_id = msg.msg_id
@@ -272,6 +273,7 @@ class PlekNotificationHandler extends WP_List_Table
             OR msg.action_link LIKE '%s'
             OR msg.message LIKE '%s'
             OR msg.notify_type LIKE '%s'
+            GROUP BY notify.message_id
             ORDER BY {$order_by} {$order}
             LIMIT %d,%d", $like, $like, $like, $like, $like, $offset, $limit);
         }
@@ -290,42 +292,46 @@ class PlekNotificationHandler extends WP_List_Table
     public function prepare_backend_notification_items($args = array())
     {
         global $_wp_column_headers;
-        $args = wp_parse_args(
-            $args,
-            array(
-                'plural'   => '',
-                'singular' => '',
-                'ajax'     => false,
-                'screen'   => null,
-            )
-        );
-        $this->_args = $args;
+
+        parent ::__construct(array(
+            'plural'   => '',
+            'singular' => '',
+            'ajax'     => false,
+            'screen'   => null,
+        ));
+
         $screen = get_current_screen();
 
         $this->screen = $screen;
-
+        
         $columns = $this->get_columns();
         $_wp_column_headers[$screen->id] = $columns;
-
+        
         $hidden = array();
         $sortable = $this->get_sortable_columns();
         $this->_column_headers = array($columns, $hidden, $sortable);
-
+        
         $items = $this->get_all_notifications();
         $total_posts = $items[0];
         $this->items = $items[1];
         $limit = $items[2];
-
+        
         $this->set_pagination_args(
             array(
                 'total_items' => $total_posts,
                 'per_page' => $limit
-            )
-        );
-
+                )
+            );
+            
         $this->process_bulk_action();
 
         $this->search_box(__('Find', 'pleklang'), 'search_id');
+    }
+
+
+    public function single_row_columns($item){
+        //s($item);
+        return parent::single_row_columns($item);
     }
 
     /**
@@ -338,9 +344,15 @@ class PlekNotificationHandler extends WP_List_Table
     public function column_default($item, $column)
     {
         switch ($column) {
-            case 'user_id':
-                $user = get_user_by('id', $item->$column);
-                return isset($user->user_nicename) ? $user->user_nicename : 'NotFound';
+            case 'user_ids':
+                $users = explode(',',$item->{$column});
+                $users_text = "";
+                foreach($users as $user_item){
+                    $user = get_user_by('id', intval($user_item));
+                    $user_nn = isset($user->user_nicename) ? $user->user_nicename : 'NotFound';
+                    $users_text .= $user_nn . '<br/>';
+                }
+                return $users_text;
                 break;
             case 'subject':
                 $subject = (!empty($item->$column)) ? $item->$column : 'No Subject';
@@ -416,7 +428,7 @@ class PlekNotificationHandler extends WP_List_Table
         $columns = array(
             'cb' => '<input type="checkbox"/>',
             'pushed_on' => __('Created', 'pleklang'),
-            'user_id' => __('User', 'pleklang'),
+            'user_ids' => __('User', 'pleklang'),
             'notify_type' => __('Type', 'pleklang'),
             'subject' => __('Subject and Message', 'pleklang'),
             'action_link' => __('Link', 'pleklang'),
@@ -435,7 +447,7 @@ class PlekNotificationHandler extends WP_List_Table
     {
         $columns = array(
             'pushed_on' => array('pushed_on', false),
-            'user_id' => array('user_id', false),
+            'user_ids' => array('user_id', false),
             'notify_type' => array('notify_type', false),
             'subject' => array('subject', false),
             'action_link' => array('action_link', false),

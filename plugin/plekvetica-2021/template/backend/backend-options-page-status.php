@@ -1,5 +1,6 @@
 <h2>Plevetica Status</h2>
 <?php
+global $plek_handler;
 global $backend_class;
 ?>
 
@@ -15,4 +16,8 @@ if (PlekUserHandler::check_user_roles()) {
 } else {
     echo __("Not all user roles exist!", "pleklang");
 }
+?>
+<h2>Cron Jobs</h2>
+<?php 
+echo $plek_handler->get_plek_crons();
 ?>

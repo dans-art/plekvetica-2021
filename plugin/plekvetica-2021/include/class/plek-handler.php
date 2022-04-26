@@ -12,7 +12,7 @@ class PlekHandler
 
     public function __construct()
     {
-        $this -> placeholder_image = PLEK_PLUGIN_DIR_URL . 'images/placeholder/default_placeholder.jpg';
+        $this->placeholder_image = PLEK_PLUGIN_DIR_URL . 'images/placeholder/default_placeholder.jpg';
     }
 
     public function set_js_error($msg)
@@ -82,16 +82,16 @@ class PlekHandler
      * @param array $attr - Attributes for the Shortcode. Supported are: allow_prod
      * @return string The output from the codetester.
      */
-    public function plek_tester_shortcode($attr){
+    public function plek_tester_shortcode($attr)
+    {
         $attributes = shortcode_atts(array(
             'allow_prod' => false
         ), $attr);
-        if(!$this->is_dev_server() AND $attributes['allow_prod'] === false){
+        if (!$this->is_dev_server() and $attributes['allow_prod'] === false) {
             return 'This function is not allowed on the Production server';
         }
 
         return PlekTemplateHandler::load_template_to_var('codetester', 'components');
-
     }
 
     /**
@@ -198,33 +198,33 @@ class PlekHandler
     public function enqueue_scripts()
     {
         $plugin_meta = get_plugin_data(PLEK_PATH . 'plekvetica.php');
-        $this->version = (!empty($plugin_meta['Version']) AND $plugin_meta['Version'] !== null) ? $plugin_meta['Version'] : "2.0";
-        
+        $this->version = (!empty($plugin_meta['Version']) and $plugin_meta['Version'] !== null) ? $plugin_meta['Version'] : "2.0";
+
         if ($this->is_dev_server()) {
             wp_enqueue_script('plek-topbar', PLEK_PLUGIN_DIR_URL . 'plugins/topbar/topbar.min.js', $this->version);
             wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.js', ['jquery'], $this->version);
-            wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.js', ['jquery','wp-i18n'], $this->version);
+            wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.js', ['jquery', 'wp-i18n'], $this->version);
         } else {
             wp_enqueue_script('plek-topbar', PLEK_PLUGIN_DIR_URL . 'plugins/topbar/topbar.min.js', $this->version);
             wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.min.js', ['jquery', 'wp-i18n'], $this->version);
             wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js', ['jquery', 'plek-language'], $this->version);
         }
 
-        wp_set_script_translations( 'plek-language', 'pleklang', PLEK_PATH . "/languages");
+        wp_set_script_translations('plek-language', 'pleklang', PLEK_PATH . "/languages");
     }
-    
+
     public function enqueue_select2()
     {
         wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css');
         wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array('jquery'));
     }
-    
+
     public function enqueue_context_menu()
     {
         global $plek_handler;
         wp_enqueue_style('plek-contextMenu-style', PLEK_PLUGIN_DIR_URL . 'css/jquery.contextMenu.min.css', array('generate-child'));
-        wp_enqueue_script('plek-contextMenu-script',  PLEK_PLUGIN_DIR_URL . 'js/components/context-menu.min.js', array('jquery', 'plek-script', 'plek-language'), $plek_handler -> version);
-        wp_set_script_translations( 'plek-contextMenu-script', 'pleklang', PLEK_PATH . "/languages");
+        wp_enqueue_script('plek-contextMenu-script',  PLEK_PLUGIN_DIR_URL . 'js/components/context-menu.min.js', array('jquery', 'plek-script', 'plek-language'), $plek_handler->version);
+        wp_set_script_translations('plek-contextMenu-script', 'pleklang', PLEK_PATH . "/languages");
     }
 
     /**
@@ -234,7 +234,7 @@ class PlekHandler
     {
         PlekUserHandler::add_user_roles();
         PlekNotificationHandler::create_database();
-        $this -> register_cron_jobs();
+        $this->register_cron_jobs();
     }
 
     public function load_textdomain()
@@ -295,15 +295,48 @@ class PlekHandler
      */
     public function register_cron_jobs()
     {
+        //Remove the old hook names
+        wp_clear_scheduled_hook("send_unsend_email_notifications");
+        wp_clear_scheduled_hook("update_all_band_scores");
+
         //Send the email notifications
-        if (!wp_next_scheduled('send_unsend_email_notifications')) {
-            wp_schedule_event(time(), 'hourly', 'send_unsend_email_notifications');
+        if (!wp_next_scheduled('plek_cron_send_unsend_email_notifications')) {
+            wp_schedule_event(time(), 'hourly', 'plek_cron_send_unsend_email_notifications');
         }
-        
+
+        //Send the akkreditation reminder
+        if (!wp_next_scheduled('plek_cron_send_accredi_reminder')) {
+            wp_schedule_event(time(), 'weekly', 'plek_cron_send_akkredi_reminder');
+        }
+
         //Update Bandscores
-        if (!wp_next_scheduled('update_all_band_scores')) {
-            wp_schedule_event(time(), 'hourly', 'update_all_band_scores');
+        if (!wp_next_scheduled('plek_cron_update_all_band_scores')) {
+            wp_schedule_event(time(), 'hourly', 'plek_cron_update_all_band_scores');
         }
+    }
+
+    /**
+     * Gets all the loaded cron jobs with their next execution time
+     *
+     * @return string The active plekvetica cronjobs
+     */
+    public function get_plek_crons()
+    {
+        $crons = _get_cron_array();
+        $jobs = "";
+        foreach ($crons as $exetime => $cron) {
+
+            //only if plek cron
+            foreach ($cron as $cronname => $single_cron) {
+                if (strpos($cronname, 'plek_cron_') !== 0) {
+                    continue;
+                }
+                $first_key = array_key_first($single_cron);
+                $schedule = (isset($single_cron[$first_key]['schedule'])) ? $single_cron[$first_key]['schedule'] : 'Not found';
+                $jobs .= date_i18n('d.m Y H:i:s', $exetime) . " - $cronname - Runs: $schedule <br/>";
+            }
+        }
+        return $jobs;
     }
 
 
@@ -356,10 +389,10 @@ class PlekHandler
     {
         $e = $parse_url_array;
         return (isset($e['host']) ? (
-                (isset($e['scheme']) ? "$e[scheme]://" : '//') .
-                (isset($e['user']) ? $e['user'] . (isset($e['pass']) ? ":$e[pass]" : '') . '@' : '') .
-                $e['host'] .
-                (isset($e['port']) ? ":$e[port]" : '')) : '') .
+            (isset($e['scheme']) ? "$e[scheme]://" : '//') .
+            (isset($e['user']) ? $e['user'] . (isset($e['pass']) ? ":$e[pass]" : '') . '@' : '') .
+            $e['host'] .
+            (isset($e['port']) ? ":$e[port]" : '')) : '') .
             (isset($e['path']) ? $e['path'] : '/') .
             (isset($e['query']) && !empty($e['query']) ? '?' . (is_array($e['query']) ? http_build_query($e['query'], '', '&') : $e['query']) : '') .
             (isset($e['fragment']) ? "#$e[fragment]" : '');
@@ -387,12 +420,13 @@ class PlekHandler
      *
      * @return array|false Array with CODE => Countryname or false on error
      */
-    public function get_all_countries(){
-        if(!class_exists('Tribe__Languages__Locations')){
+    public function get_all_countries()
+    {
+        if (!class_exists('Tribe__Languages__Locations')) {
             return false;
         }
         $tribe_locations = new Tribe__Languages__Locations;
-        return $tribe_locations -> get_countries();
+        return $tribe_locations->get_countries();
     }
 
     /**
@@ -402,12 +436,13 @@ class PlekHandler
      * @param string $type - The type of content.
      * @return array The allowed tags or empty array.
      */
-    public function get_allowed_tags($type = null){
+    public function get_allowed_tags($type = null)
+    {
         switch ($type) {
             case 'textarea':
-                return ['strong','b', 'i', 'br', 'p', 'h4', 'h5', 'h6'];
+                return ['strong', 'b', 'i', 'br', 'p', 'h4', 'h5', 'h6'];
                 break;
-            
+
             default:
                 return [];
                 break;
@@ -421,12 +456,13 @@ class PlekHandler
      * @param string $type - The type of content.
      * @return array The tags to remove by type of array ['script']
      */
-    public function get_forbidden_tags($type = null){
+    public function get_forbidden_tags($type = null)
+    {
         switch ($type) {
             case 'textarea':
                 return ['script'];
                 break;
-            
+
             default:
                 return ['script'];
                 break;
@@ -440,32 +476,32 @@ class PlekHandler
      * @param array $tags_to_remove - The tags to remove as an array.
      * @return string The clean string
      */
-    public function remove_tags($content, $tags_to_remove = ['script']){
+    public function remove_tags($content, $tags_to_remove = ['script'])
+    {
 
-        if(empty($tags_to_remove)){
+        if (empty($tags_to_remove)) {
             return $content;
         }
 
-        $content = mb_convert_encoding($content,'HTML-ENTITIES', 'UTF-8');
+        $content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
         $dom = new DOMDocument();
-        $dom -> loadHTML($content,LIBXML_HTML_NOIMPLIED|LIBXML_HTML_NODEFDTD|LIBXML_NOWARNING);
-  
+        $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOWARNING);
+
 
         $remove = [];
         //Collect all the tags to remove
-        foreach($tags_to_remove as $tag){
-            $remover = $dom -> getElementsByTagName($tag);
-            foreach($remover as $item){
+        foreach ($tags_to_remove as $tag) {
+            $remover = $dom->getElementsByTagName($tag);
+            foreach ($remover as $item) {
                 $remove[] = $item;
             }
         }
 
         //remove all the tags
-        foreach($remove as $item_to_remove){
-            $item_to_remove -> parentNode -> removeChild($item_to_remove);
+        foreach ($remove as $item_to_remove) {
+            $item_to_remove->parentNode->removeChild($item_to_remove);
         }
 
         return $dom->saveHTML();
     }
-
 }
