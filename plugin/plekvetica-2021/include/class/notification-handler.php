@@ -329,17 +329,12 @@ class PlekNotificationHandler extends WP_List_Table
     }
 
 
-    public function single_row_columns($item){
-        //s($item);
-        return parent::single_row_columns($item);
-    }
-
     /**
      * Modifies the look of the table items
      *
-     * @param [type] $item
-     * @param [type] $column
-     * @return void
+     * @param object $item - The current line object
+     * @param string $column - Name of the column
+     * @return string Value of the current column
      */
     public function column_default($item, $column)
     {
@@ -708,7 +703,7 @@ class PlekNotificationHandler extends WP_List_Table
      *
      * @return void
      */
-    public function send_akkredi_reminder()
+    public function send_accredi_reminder()
     {
         global $plek_handler;
         global $plek_event;

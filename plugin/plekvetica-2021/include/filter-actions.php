@@ -35,8 +35,9 @@ add_action( 'wp_authenticate', [$plek_login_handler, 'wp_authenticate_action'], 
 
 //Cron Jobs
 add_action('plek_cron_send_unsend_email_notifications', [new PlekNotificationHandler, 'send_unsend_email_notifications']);
-add_action('plek_cron_send_akkredi_reminder', [new PlekNotificationHandler, 'send_akkredi_reminder']);
+add_action('plek_cron_send_accredi_reminder', [new PlekNotificationHandler, 'send_accredi_reminder']);
 add_action('plek_cron_update_all_band_scores', [new PlekBandHandler, 'update_all_band_scores']);
+add_filter('cron_schedules', [$plek_handler, 'add_cron_schedule'], 1, 1);
 
 //Ajax
 add_action('wp_ajax_plek_ajax_event_form', [new PlekAjaxHandler,'plek_ajax_event_form_action']);

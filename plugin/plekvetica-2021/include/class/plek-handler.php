@@ -291,22 +291,26 @@ class PlekHandler
 
     /**
      * Registers the cron jobs
-     * @todo: Create one function single for daily, hourly, weekly, ....
      */
     public function register_cron_jobs()
     {
-        //Remove the old hook names
+        //Remove all the schedules
         wp_clear_scheduled_hook("send_unsend_email_notifications");
         wp_clear_scheduled_hook("update_all_band_scores");
+        wp_clear_scheduled_hook("plek_cron_send_akkredi_reminder");
+        //The new and active ones
+        wp_clear_scheduled_hook("plek_cron_send_unsend_email_notifications");
+        wp_clear_scheduled_hook("plek_cron_send_accredi_reminder");
+        wp_clear_scheduled_hook("plek_cron_update_all_band_scores");
 
         //Send the email notifications
         if (!wp_next_scheduled('plek_cron_send_unsend_email_notifications')) {
-            wp_schedule_event(time(), 'hourly', 'plek_cron_send_unsend_email_notifications');
+            wp_schedule_event(time(), 'plekeverysixmin', 'plek_cron_send_unsend_email_notifications');
         }
 
         //Send the akkreditation reminder
         if (!wp_next_scheduled('plek_cron_send_accredi_reminder')) {
-            wp_schedule_event(time(), 'weekly', 'plek_cron_send_akkredi_reminder');
+            wp_schedule_event(time(), 'weekly', 'plek_cron_send_accredi_reminder');
         }
 
         //Update Bandscores
@@ -337,6 +341,20 @@ class PlekHandler
             }
         }
         return $jobs;
+    }
+
+    /**
+     * Adds Schedule times
+     *
+     * @param array $schedules
+     * @return array All the Schedules times set.
+     */
+    public function add_cron_schedule($schedules){
+        $schedules['plekeverysixmin'] = array(
+            'interval' => 360,
+            'display' => __('Every 6 Minutes', 'pleklang');
+        );
+        return $schedules;
     }
 
 
