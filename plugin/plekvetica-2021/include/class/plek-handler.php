@@ -352,7 +352,7 @@ class PlekHandler
     public function add_cron_schedule($schedules){
         $schedules['plekeverysixmin'] = array(
             'interval' => 360,
-            'display' => __('Every 6 Minutes', 'pleklang');
+            'display' => __('Every 6 Minutes', 'pleklang')
         );
         return $schedules;
     }
