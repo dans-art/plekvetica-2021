@@ -556,10 +556,11 @@ class PlekBandHandler
     /**
      * Get all the Genres
      * Loads the Genres in $this -> band_genres
+     * @param bool $return_as_array - If a array containing only the slug and name should be returned
      *
-     * @return array Array with WP_Term Objects
+     * @return array Array with WP_Term Objects or Array[slug] => Name
      */
-    public function get_all_genres()
+    public function get_all_genres($return_as_array = false)
     {
         if (!empty($this->band_genres)) {
             return $this->band_genres;
@@ -570,7 +571,38 @@ class PlekBandHandler
             return false;
         }
         $this->band_genres = $cats;
-        return $cats;
+        if(!$return_as_array){
+            return $cats;
+        }
+        $return_arr = [];
+        foreach($cats as $categories){
+            $return_arr[$categories->slug] = $categories->name;
+        }
+        return $return_arr;
+    }
+
+    /**
+     * Loads all the Band genres from ACF
+     *
+     * @return bool|array False on error, array with the choices / genres 
+     */
+    public function get_acf_band_genres(){
+        $item = get_posts([
+            'post_type' => 'acf-field',
+            'title' => 'Genre',
+        ]);
+        //make sure we got the right one
+        foreach($item as $genre){
+            if($genre -> post_excerpt === 'band_genre'){
+                //This is the one
+                $genres = maybe_unserialize($genre->post_content);
+                if(isset($genres['choices'])){
+                    return $genres['choices'];
+                }
+                return false;
+            }
+        }
+        return false;
     }
 
     /**

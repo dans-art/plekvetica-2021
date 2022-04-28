@@ -99,13 +99,16 @@ class PlekHandler
      *
      * @param string $field_name
      * @param string $type - type of field to get. Leave empty if data from a normal post gets fetched
-     * @param integer|string $page_id
+     * @param integer|string $page_id - The page id of to get the choices from.
      * @return array|false Array on success, false if field is not found.
      */
-    public function get_acf_choices(string $field_name, string $type, $page_id)
+    public function get_acf_choices(string $field_name, string $type, $page_id = null)
     {
         switch ($type) {
             case 'term':
+                $page = 'term_' . $page_id;
+                break;
+            case 'band':
                 $page = 'term_' . $page_id;
                 break;
 
@@ -129,6 +132,7 @@ class PlekHandler
         }
         return $acf['choices'];
     }
+
 
     public function plek_get_team_shortcode()
     {
