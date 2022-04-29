@@ -239,6 +239,9 @@ class PlekHandler
         PlekUserHandler::add_user_roles();
         PlekNotificationHandler::create_database();
         $this->register_cron_jobs();
+        //Updates the genres
+        $pg = new plekGenres;
+        $pg->update_genres();
     }
 
     public function load_textdomain()
@@ -353,7 +356,8 @@ class PlekHandler
      * @param array $schedules
      * @return array All the Schedules times set.
      */
-    public function add_cron_schedule($schedules){
+    public function add_cron_schedule($schedules)
+    {
         $schedules['plekeverysixmin'] = array(
             'interval' => 360,
             'display' => __('Every 6 Minutes', 'pleklang')

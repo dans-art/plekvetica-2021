@@ -11,7 +11,7 @@ class plekGenres
      *
      * @var array ['name'] => 'displayName'
      */
-    protected $genres = [
+    public $genres = [
         'alternative-rock' => 'Alternative Rock',
         'black-metal' => 'Black Metal',
         'brutal-slam-death-metal-grindcore' => 'Brutal / Slam Death Metal',
@@ -54,41 +54,57 @@ class plekGenres
         'symphonic-black-metal' => 'Symphonic Black Metal',
         'thrash-metal' => 'Thrash Metal',
         //Update 2.1.1
-        'viking-metal' => 'Viking Metal'
+        'viking-metal' => 'Viking Metal',
+        'tec-death-metal' => 'Technical Death Metal',
+        'indian-metal' => 'Indian Metal'
     ];
-    public $errors = array();
+    public $errors = array(); //A collection of errors since initialization
+    public $changes = array(); //The changes made since initialization
 
+    /**
+     * Updates all the genres. 
+     *
+     * @return bool|array True on success, Array with errors on error.
+     */
+    public function update_genres()
+    {
+        if (!$this->update_acf_choices() or !$this->update_category_genres() or !$this->genre_category_cleanup()) {
+            return $this->errors;
+        }
+        return true;
+    }
     /**
      * Insert or updates the genres / categories.
      *
      * @return bool True on success, false on errors
      */
-    public function update_genres()
+    public function update_category_genres()
     {
         $plek_band = new PlekBandHandler;
         $category_genres = $plek_band->get_all_genres(true);
         $this->errors['update_genres'] = [];
 
-        foreach($this->genres as $slug => $name){
-            if(!isset($category_genres[$slug])){
+        foreach ($this->genres as $slug => $name) {
+            if (!isset($category_genres[$slug])) {
                 //Category does not exist, insert
-                $insert = wp_insert_term( $name, 'tribe_events_cat', ['slug' => $slug] );
-                if(is_wp_error($insert)){
+                $insert = wp_insert_term($name, 'tribe_events_cat', ['slug' => $slug]);
+                if (is_wp_error($insert)) {
                     $this->errors['update_genres'][$slug] = $insert;
+                } else {
+                    $this->changes['update_genres'][] = $name . ' added in Categories';
                 }
-            }
-            else{
+            } else {
                 //Get the existing category and update the name if missmatch
-                $args = array('orderby' => 'name', 'hide_empty' => 0, 'hierarchical' => 1, 'taxonomy' => 'tribe_events_cat');
-                $cats = get_terms(['slug' => $slug, 'taxonomy' => 'tribe_events_cat']);
-                if(isset($cats[0] -> name) AND $name !== $cats[0] -> name){
+                $cats = get_terms(['slug' => $slug, 'taxonomy' => 'tribe_events_cat', 'hide_empty' => false]);
+                if (isset($cats[0]->name) and $name !== $cats[0]->name) {
                     //Name missmatch
-                    $id = $cats[0] -> term_id;
-                    $update = wp_update_term( $id, 'tribe_events_cat', ['slug' => $slug, 'name' => $name] );
-                    if(is_wp_error($update)){
+                    $id = $cats[0]->term_id;
+                    $update = wp_update_term($id, 'tribe_events_cat', ['slug' => $slug, 'name' => $name]);
+                    if (is_wp_error($update)) {
                         $this->errors['update_genres'][$slug] = $update;
+                    } else {
+                        $this->changes['update_genres'][] = $name . ' updated in Categories';
                     }
-
                 }
             }
         }
@@ -104,20 +120,23 @@ class plekGenres
     {
         $afc_content = null;
         $afc_id = null;
+        $original_genres_count = 0;
         $this->errors['update_acf'] = [];
         $item = get_posts([
             'post_type' => 'acf-field',
             'title' => 'Genre',
         ]);
         //make sure we got the right one
-        foreach($item as $genre){
-            if($genre -> post_excerpt === 'band_genre'){
+        foreach ($item as $genre) {
+            if ($genre->post_excerpt === 'band_genre') {
                 //This is the one
                 $afc_id = $genre->ID;
                 $content = maybe_unserialize($genre->post_content);
-                if(!isset($content['choices'])){
+                if (!isset($content['choices'])) {
                     $this->errors['update_acf'][] = 'No Choices found.';
                     return false;
+                } else {
+                    $original_genres_count = count($content['choices']);
                 }
                 $afc_content = $content;
             }
@@ -126,12 +145,14 @@ class plekGenres
         $afc_content['choices'] = $this->genres;
 
         //sanatize the data
-        $content = maybe_serialize( $afc_content );
+        $content = maybe_serialize($afc_content);
 
         //save to the db
-        $update = wp_update_post(['ID'=> $afc_id, 'post_content' => $content ], true);
-        if(is_wp_error( $update )){
+        $update = wp_update_post(['ID' => $afc_id, 'post_content' => $content], true);
+        if (is_wp_error($update)) {
             $this->errors['update_acf'][] = $update;
+        } else {
+            $this->changes['update_acf'][] = 'ACF updated. From ' . $original_genres_count . ' to ' . count($this->genres) . ' Genres';
         }
         return (empty($this->errors['update_acf'])) ? true : false;
     }
@@ -140,14 +161,14 @@ class plekGenres
      * Checks if all the ACF Genres are set as Categories and vice versa.
      * It compares the saved genres with the genres defined in this class
      *
-     * @return bood|string true if everything is ok, string if there are missing genres.
+     * @return bool|string true if everything is ok, string if there are missing genres.
      */
     public function check_genres()
     {
         $plek_band = new PlekBandHandler;
         $acf_genres = $plek_band->get_acf_band_genres();
         $category_genres = $plek_band->get_all_genres(true);
-  
+
         $genres_to_check = $this->genres;
         $errors = [];
         foreach ($genres_to_check as $slug => $name) {
@@ -170,13 +191,13 @@ class plekGenres
                 $errors[] = 'Category Genre Name missmatch: ' . $slug;
                 $error = true;
             }
-            if(!$error){
+            if (!$error) {
                 unset($genres_to_check[$slug]);
             }
             unset($acf_genres[$slug]);
             unset($category_genres[$slug]);
         }
-        
+
         $acf_leftover = implode(', ', $acf_genres);
         $category_leftover = implode(', ', $category_genres);
         $genres_leftover = implode(', ', $genres_to_check);
@@ -184,6 +205,33 @@ class plekGenres
         if (empty($acf_leftover) and empty($category_leftover) and empty($genres_to_check)) {
             return true;
         }
-        return "ACF Only: $acf_leftover <br/> Category Only: $category_leftover <br/> Not in DB: $genres_leftover<br/>".implode('<br/>', $errors);
+        return "ACF Only: $acf_leftover <br/> Category Only: $category_leftover <br/> Not in DB: $genres_leftover<br/>" . implode('<br/>', $errors);
+    }
+
+    /**
+     * Removes all the categories which are not defined in the $this->genres array.
+     *
+     * @return bool True on success, false on error
+     */
+    public function genre_category_cleanup()
+    {
+        $plek_band = new PlekBandHandler;
+        $this->errors['remove_cat'] = [];
+
+        $category_genres = $plek_band->get_all_genres();
+        foreach ($category_genres as $term_object) {
+            if (!isset($this->genres[$term_object->slug])) {
+                //Genre / category does not exist in the array. Remove it.
+                $id = $term_object->term_id;
+                $remove = wp_delete_term($id, 'tribe_events_cat');
+                //save to the db
+                if (is_wp_error($remove)) {
+                    $this->errors['remove_cat'][] = $remove;
+                } else {
+                    $this->changes['remove_cat'][] = $term_object->name . ' removed from Categories';
+                }
+            }
+        }
+        return (empty($this->errors['remove_cat'])) ? true : false;
     }
 }
