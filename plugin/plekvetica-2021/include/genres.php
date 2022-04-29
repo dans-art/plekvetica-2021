@@ -52,15 +52,88 @@ class plekGenres
         'rock-n-roll' => 'Rock ‚N‘ Roll',
         'stoner-metal' => 'Stoner Metal',
         'symphonic-black-metal' => 'Symphonic Black Metal',
-        'thrash-metal' => 'Thrash Metal'
+        'thrash-metal' => 'Thrash Metal',
+        //Update 2.1.1
+        'viking-metal' => 'Viking Metal'
     ];
+    public $errors = array();
 
+    /**
+     * Insert or updates the genres / categories.
+     *
+     * @return bool True on success, false on errors
+     */
     public function update_genres()
     {
+        $plek_band = new PlekBandHandler;
+        $category_genres = $plek_band->get_all_genres(true);
+        $this->errors['update_genres'] = [];
+
+        foreach($this->genres as $slug => $name){
+            if(!isset($category_genres[$slug])){
+                //Category does not exist, insert
+                $insert = wp_insert_term( $name, 'tribe_events_cat', ['slug' => $slug] );
+                if(is_wp_error($insert)){
+                    $this->errors['update_genres'][$slug] = $insert;
+                }
+            }
+            else{
+                //Get the existing category and update the name if missmatch
+                $args = array('orderby' => 'name', 'hide_empty' => 0, 'hierarchical' => 1, 'taxonomy' => 'tribe_events_cat');
+                $cats = get_terms(['slug' => $slug, 'taxonomy' => 'tribe_events_cat']);
+                if(isset($cats[0] -> name) AND $name !== $cats[0] -> name){
+                    //Name missmatch
+                    $id = $cats[0] -> term_id;
+                    $update = wp_update_term( $id, 'tribe_events_cat', ['slug' => $slug, 'name' => $name] );
+                    if(is_wp_error($update)){
+                        $this->errors['update_genres'][$slug] = $update;
+                    }
+
+                }
+            }
+        }
+        return (empty($this->errors['update_genres'])) ? true : false;
     }
 
+    /**
+     * Updates the ACF Choices
+     *
+     * @return bool True on success, false on errors
+     */
     public function update_acf_choices()
     {
+        $afc_content = null;
+        $afc_id = null;
+        $this->errors['update_acf'] = [];
+        $item = get_posts([
+            'post_type' => 'acf-field',
+            'title' => 'Genre',
+        ]);
+        //make sure we got the right one
+        foreach($item as $genre){
+            if($genre -> post_excerpt === 'band_genre'){
+                //This is the one
+                $afc_id = $genre->ID;
+                $content = maybe_unserialize($genre->post_content);
+                if(!isset($content['choices'])){
+                    $this->errors['update_acf'][] = 'No Choices found.';
+                    return false;
+                }
+                $afc_content = $content;
+            }
+        }
+        //Set the new choices
+        $afc_content['choices'] = $this->genres;
+
+        //sanatize the data
+        $content = maybe_serialize( $afc_content );
+
+        //save to the db
+        $update = wp_update_post(['ID'=> $afc_id, 'post_content' => $content ], true);
+        if(is_wp_error( $update )){
+            $this->errors['update_acf'][] = $update;
+        }
+        return (empty($this->errors['update_acf'])) ? true : false;
     }
 
     /**
@@ -74,8 +147,6 @@ class plekGenres
         $plek_band = new PlekBandHandler;
         $acf_genres = $plek_band->get_acf_band_genres();
         $category_genres = $plek_band->get_all_genres(true);
-        s($acf_genres);
-        s($category_genres);
   
         $genres_to_check = $this->genres;
         $errors = [];
