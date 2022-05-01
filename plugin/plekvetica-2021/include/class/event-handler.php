@@ -2517,7 +2517,7 @@ class PlekEventHandler
         $missing = array();
         $fields_to_check = ($all)
         ? ['post_title' => __('Title','pleklang'),
-        'post_content' => __('Content','pleklang'),
+        'post_content' => __('Description','pleklang'),
         '_EventVenueID' => __('Venue','pleklang'),
         '_EventOrganizerID' => __('Organizer','pleklang'),
         '_EventStartDate' => __('Start Date','pleklang'),
@@ -2538,6 +2538,9 @@ class PlekEventHandler
         //Check some extra fields
         if(empty($this->get_timetable())){
             $missing['timetable'] = __('Timetable','pleklang'); 
+        }
+        if(empty($this->get_poster())){
+            $missing['poster'] = __('Poster','pleklang'); 
         }
         if(empty($missing)){
             return false;

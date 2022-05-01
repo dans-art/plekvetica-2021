@@ -111,7 +111,7 @@ class PlekEvents extends PlekEventHandler
      * @param string $status - Post status. "All" to get all the posts. Default = publish
      * @return bool true on success, false on error
      */
-    public function load_event(int $event_id = null, string $status = 'publish')
+    public function load_event($event_id = null, string $status = 'publish')
     {
         global $wpdb;
 
@@ -230,10 +230,12 @@ class PlekEvents extends PlekEventHandler
         $band_sort = array();
         $time_format = ($this->is_multiday()) ? 'Y-m-d H:i:s' : 'H:i:s';
         foreach ($sort_obj as $band_id => $item) {
+            //If Order is defined
             if (isset($item->order)) {
                 $band_sort[$item->order] = $band_id;
             }
-            if (isset($item->datetime) and $item->datetime !== '0') {
+            //Check if playtime is defined
+            if (isset($item->datetime) and $item->datetime != '0') {
                 $time = strtotime($item->datetime);
                 $timetable[$band_id] = array(
                     'timestamp' => $time,
@@ -1041,7 +1043,8 @@ class PlekEvents extends PlekEventHandler
         $this->enqueue_event_form_styles();
         $plek_handler->enqueue_toastr();
 
-        $event_id = (!empty($_REQUEST['event_id'])) ? htmlspecialchars($_REQUEST['event_id']) : "";
+        //The Event ID. BUT only on add Event. If it is Edit Event, the Variable name is only Edit!
+        $event_id = (!empty($_REQUEST['event_id'])) ? intval($_REQUEST['event_id']) : "";
 
         if (empty($_REQUEST['stage']) and !empty($_REQUEST['action'])) {
             //Hack to allow for password reset
@@ -1051,7 +1054,10 @@ class PlekEvents extends PlekEventHandler
         }
 
         if (isset($_REQUEST['edit'])) {
-            $event->load_event(intval($_REQUEST['edit']));
+            if(!PlekUserHandler::user_can_edit_post($_REQUEST['edit'])){
+                return __('You are not allowed to edit this Event!','pleklang');
+            }
+            $event->load_event(intval($_REQUEST['edit']), 'all');
             return PlekTemplateHandler::load_template_to_var('edit-event-form', 'event/form', $event);
         }
 

@@ -255,7 +255,7 @@ class PlekUserHandler
             $plek_events->load_event($event, 'all');
             $event = $plek_events;
         }
-
+        
         if (!is_object($event)) {
             return false; //Event not found
         }
@@ -270,8 +270,19 @@ class PlekUserHandler
         $created = strtotime($event->get_field_value('post_date', false));
 
         if ($status === 'draft' and (time() - $created) < (24 * 60 * 60)) { //Check if the post is a draft and not created later than 1 day ago
-            return true;
+           return true;
         }
+
+        //If the event got created by a guest, check if the guest is allowed to edit
+        $guest_hash = (isset($_REQUEST['guest_edit'])) ? $_REQUEST['guest_edit'] : null;
+        if(!empty($guest_hash)){
+            $guest_author = $event->get_field_value('guest_author', false);
+            $name_obj = (!empty($guest_author)) ? json_decode($guest_author) : null;
+            if(is_object($name_obj) AND md5($name_obj->name.$name_obj->email) === $guest_hash){
+                return true;
+            }
+        }
+
 
         $user_role = self::get_user_role();
         switch ($user_role) {
@@ -545,9 +556,10 @@ class PlekUserHandler
      * @param boolean $return_only_ids
      * @return WP_User object
      */
-    public function get_users_by_role($rolename, $return_only_ids = false){
+    public function get_users_by_role($rolename, $return_only_ids = false)
+    {
         $rolename = htmlspecialchars($rolename);
-        $fields = ($return_only_ids)?'ID':'all';
+        $fields = ($return_only_ids) ? 'ID' : 'all';
         $search = get_users(['role__in' => $rolename, 'fields' => $fields]);
         return $search;
     }

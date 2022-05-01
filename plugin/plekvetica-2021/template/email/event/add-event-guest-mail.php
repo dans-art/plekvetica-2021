@@ -11,7 +11,7 @@ $user_email = (isset($template_args[2])) ? $template_args[2] : 'unbekannt@plekve
 $missing_details = $event->get_missing_event_details();
 
 $subject = __('Thanks for your contribution','pleklang');
-$edit_link = $event->get_edit_event_link( $event->get_ID() ) . '&author=' .md5($user_email);
+$edit_link = $event->get_edit_event_link( $event->get_ID() ) . '&guest_edit=' .md5($user_name.$user_email);
 
 include(PLEK_PATH . 'template/email/email-styles.php');
 
