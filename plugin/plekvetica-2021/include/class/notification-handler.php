@@ -39,6 +39,9 @@ class PlekNotificationHandler extends WP_List_Table
         if (empty($user_ids) or $user_ids === null) {
             $user_ids = array(get_current_user_id());
         }
+        if (!is_array($user_ids)) {
+            $user_ids = [$user_ids];
+        }
 
         //Insert the Message
         $data = array();
@@ -50,7 +53,7 @@ class PlekNotificationHandler extends WP_List_Table
         if ($wpdb->insert($table_notify_messages, $data, ['%s', '%s', '%s', '%s', '%s'])) {
             $message_id = $wpdb->insert_id;
         } else {
-            if($plek_handler->is_dev_server()){
+            if ($plek_handler->is_dev_server()) {
                 s($wpdb->last_error);
             }
             return false;
@@ -164,6 +167,9 @@ class PlekNotificationHandler extends WP_List_Table
                 $plek_user = new PlekUserHandler;
                 $recipient_id = $plek_user->get_users_by_role('eventmanager', true);
                 $type = ($type === 'admin_info') ? 'eventmanager_info' : $type;
+                break;
+            case 'guest':
+                $recipient_id = $plek_handler->get_plek_option('guest_author_id');
                 break;
 
             default:
@@ -293,7 +299,7 @@ class PlekNotificationHandler extends WP_List_Table
     {
         global $_wp_column_headers;
 
-        parent ::__construct(array(
+        parent::__construct(array(
             'plural'   => '',
             'singular' => '',
             'ajax'     => false,
@@ -303,26 +309,26 @@ class PlekNotificationHandler extends WP_List_Table
         $screen = get_current_screen();
 
         $this->screen = $screen;
-        
+
         $columns = $this->get_columns();
         $_wp_column_headers[$screen->id] = $columns;
-        
+
         $hidden = array();
         $sortable = $this->get_sortable_columns();
         $this->_column_headers = array($columns, $hidden, $sortable);
-        
+
         $items = $this->get_all_notifications();
         $total_posts = $items[0];
         $this->items = $items[1];
         $limit = $items[2];
-        
+
         $this->set_pagination_args(
             array(
                 'total_items' => $total_posts,
                 'per_page' => $limit
-                )
-            );
-            
+            )
+        );
+
         $this->process_bulk_action();
 
         $this->search_box(__('Find', 'pleklang'), 'search_id');
@@ -340,9 +346,9 @@ class PlekNotificationHandler extends WP_List_Table
     {
         switch ($column) {
             case 'user_ids':
-                $users = explode(',',$item->{$column});
+                $users = explode(',', $item->{$column});
                 $users_text = "";
-                foreach($users as $user_item){
+                foreach ($users as $user_item) {
                     $user = get_user_by('id', intval($user_item));
                     $user_nn = isset($user->user_nicename) ? $user->user_nicename : 'NotFound';
                     $users_text .= $user_nn . '<br/>';
@@ -649,7 +655,7 @@ class PlekNotificationHandler extends WP_List_Table
                 update_option('plek_db_version', $to_version);
                 return true;
                 break;
-                default:
+            default:
                 # code...
                 break;
         }
@@ -683,6 +689,12 @@ class PlekNotificationHandler extends WP_List_Table
             if (!isset($user->user_email)) {
                 continue;
             }
+            if ($notify->notify_type === 'added_event_guest_info') {
+                if ($this->maybe_send_add_event_guest_info($notify->subject, $notify->message)) {
+                    $this->notification_email_sent($notify->id);
+                }
+                continue;
+            }
             $emailer = new PlekEmailSender;
             $emailer->set_default();
             $subject = (isset($notify->subject)) ? $notify->subject : __('News from Plekvetica', 'pleklang');
@@ -696,6 +708,35 @@ class PlekNotificationHandler extends WP_List_Table
             $counter++;
         }
         return ($counter === 0) ? false : $counter;
+    }
+
+    /**
+     * Checks if there is a notification to send to the guest user.
+     * This email will be added on event creation and will be send after 15min of creation.
+     *
+     * @param string $subject The subject of the email
+     * @param string $message The message (expects a serialized string with event_id, user_name and user_email)
+     * @return bool True if email successfully send, false otherwise.
+     */
+    public function maybe_send_add_event_guest_info($subject, $message)
+    {
+        $data = maybe_unserialize($message);
+        $event_id = (!empty($data[0])) ? $data[0] : null;
+        $user_name = (!empty($data[1])) ? $data[1] : null;
+        $user_mail = (!empty($data[2])) ? $data[2] : null;
+        if (empty($event_id) or empty($user_mail) or empty($user_name)) {
+            return false;
+        }
+        $pe = new PlekEvents;
+        $pe->load_event($event_id, 'all');
+        $post_modified = $pe->get_field_value('post_modified');
+        //Check if creation date is bigger than 900 sec (15min)
+        if (strtotime($post_modified)  - time() > 900) {
+            $emailer = new PlekEmailSender;
+            $message = PlekTemplateHandler::load_template_to_var('add-event-guest-mail', 'email/event', $pe, $user_name, $user_mail);
+            return $emailer->send_mail($user_mail, $subject, $message);
+        }
+        return false;
     }
 
     /**

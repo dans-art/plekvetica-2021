@@ -16,6 +16,10 @@ class PlekEmailSender
     protected $headers = array();
     protected $attachments = "";
 
+    public function __construct()
+    {
+        $this->set_default();
+    }
     /**
      * Sets the default values for the from field, content type and charset
      *
@@ -96,7 +100,28 @@ class PlekEmailSender
 
     }
 
-    public function send_mail(){
+    /**
+     * Sends a mail via wp_mail. The attributes can also be defined before with the setter methods of this class
+     *
+     * @param string $to
+     * @param string $subject
+     * @param string $message
+     * @param array $headers
+     * @return bool Whether the mail was sent successfully or not
+     */
+    public function send_mail($to = null, $subject = null, $message = null, $headers = null){
+        if(is_string($to)){
+            $this->set_to($to);
+        }
+        if(is_string($subject)){
+            $this->set_subject($subject);
+        }
+        if(is_string($message)){
+            $this->set_message($message);
+        }
+        if(is_array($headers)){
+            $this->headers = $headers;
+        }
         return wp_mail( $this -> to, $this -> subject, $this -> message, $this -> headers, $this -> attachments );
     }
     

@@ -407,14 +407,24 @@ class PlekEventHandler
     }
 
 
+    /**
+     * Gets the name, aka post title of the loaded event
+     *
+     * @return string The Title
+     */
     public function get_name()
     {
         return $this->get_field_value('post_title');
     }
 
+    /**
+     * Gets the ID, of the loaded event
+     *
+     * @return int The ID
+     */
     public function get_ID()
     {
-        return $this->get_field_value('ID');
+        return intval($this->get_field_value('ID'));
     }
 
     /**
@@ -1720,7 +1730,6 @@ class PlekEventHandler
         //Add user to Event
         $is_guest = filter_var($plek_ajax_handler->get_ajax_data('is_guest'), FILTER_VALIDATE_BOOLEAN);
         $event_id = (int) $plek_ajax_handler->get_ajax_data('event_id');
-
         if ($is_guest) {
             //Add the Guest Autors name
             $guest_name = $plek_ajax_handler->get_ajax_data('guest_name');
@@ -1731,6 +1740,9 @@ class PlekEventHandler
             }
             //Set the guest author ID
             $login = (int) $plek_handler->get_plek_option('guest_author_id');
+            //Send mail to user
+           $pn = new PlekNotificationHandler;
+           $pn->push_to_role('guest', __('Your new Event at Plekvetica','pleklang'), maybe_serialize( [$event_id, $guest_name, $guest_email] ), null, 'added_event_guest_info');
         } else {
             //Try to login the user
             $user_name = $plek_ajax_handler->get_ajax_data('user_login');
@@ -2493,5 +2505,43 @@ class PlekEventHandler
         $band = $band_handler->get_name();
 
         return sprintf(__('Photos of %1$s at %2$s by Plekvetica', 'pleklang'), $band, $venue);
+    }
+
+    /**
+     * Checks if a Event has certain fields filled out.
+     *
+     * @param boolean $all
+     * @return bool|array False if no missing data found, array with the missing fields
+     */
+    public function get_missing_event_details($all = true){
+        $missing = array();
+        $fields_to_check = ($all)
+        ? ['post_title' => __('Title','pleklang'),
+        'post_content' => __('Content','pleklang'),
+        '_EventVenueID' => __('Venue','pleklang'),
+        '_EventOrganizerID' => __('Organizer','pleklang'),
+        '_EventStartDate' => __('Start Date','pleklang'),
+        '_EventEndDate' => __('End Date','pleklang'),
+        'vorverkauf-preis' => __('Presale','pleklang'),
+        '_EventCost' => __('Boxoffice','pleklang')] //All the fields to check
+        : [];//Only the most important ones (default)
+
+        foreach($fields_to_check as $field_name => $nicename){
+            if(empty($this->get_field_value($field_name))){
+                $missing[$field_name] = $nicename; 
+            }
+        }
+        //Check some extra fields
+        if(empty($this->get_bands())){
+            $missing['bands'] = __('Bands','pleklang'); 
+        }
+        //Check some extra fields
+        if(empty($this->get_timetable())){
+            $missing['timetable'] = __('Timetable','pleklang'); 
+        }
+        if(empty($missing)){
+            return false;
+        }
+        return $missing;
     }
 }

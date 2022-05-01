@@ -127,7 +127,8 @@ class PlekEvents extends PlekEventHandler
         `posts`.`post_title`,
         `posts`.`post_content`,
         `posts`.`post_status`,
-        `posts`.`post_date`
+        `posts`.`post_date`,
+        `posts`.`post_modified`
         FROM `" . $wpdb->prefix . "posts` `posts`
         WHERE `posts`.ID = '$event_id' AND `posts`.`post_type` = 'tribe_events' 
         $status_query
