@@ -53,7 +53,7 @@ let plek_manage_event = {
         }
     },
     existing_vob_data: {},
-    is_edit_event : false,
+    is_edit_event: false,
 
     __construct() {
         if (this.constructed === true) {
@@ -85,7 +85,7 @@ let plek_manage_event = {
 
 
         //Check if edit event is populated. If so, it is the edit event form or the add details form
-        if(!empty(plekevent.get_field_value('event_id'))){
+        if (!empty(plekevent.get_field_value('event_id'))) {
             this.is_edit_event = true;
         }
 
@@ -168,7 +168,7 @@ let plek_manage_event = {
             end_options['minDate'] = start_date;
             flatpickr("#event_end_date", end_options);
             //Show checkbox if date was changed and edit event
-            if(plek_manage_event.is_edit_event){
+            if (plek_manage_event.is_edit_event) {
                 jQuery('.event-date-postponed-check-container').show();
             }
         });
@@ -184,7 +184,7 @@ let plek_manage_event = {
             jQuery(this).prop("disabled", true);
             var type = jQuery(this).data("type");
             var form = 'add_event_basic';
-            if(type === 'new_event_next_page'){
+            if (type === 'new_event_next_page') {
                 let url = jQuery(this).data("url");
                 window.location = url;
                 return;
@@ -199,7 +199,7 @@ let plek_manage_event = {
             var form = 'add_event_details';
             window.plekevent.save_event(type, form);
         });
-        
+
         jQuery('#plek-submit-event-edit').click(function (event) {
             event.preventDefault();
             jQuery(this).prop("disabled", true);
@@ -218,7 +218,7 @@ let plek_manage_event = {
         jQuery("#plek-submit-event-edit-review").on('click', (event) => {
             event.preventDefault();
             jQuery(this).prop("disabled", true);
-            plekevent.save_review(); 
+            plekevent.save_review();
         });
 
         /** Display and position the Output container */
@@ -394,7 +394,8 @@ let plek_manage_event = {
     },
 
     /**
-     * 
+     * Adds the fileds to the validator
+     * @returns void
      */
     prepare_validator_fields() {
 
@@ -546,9 +547,9 @@ let plek_manage_event = {
                     break;
             }
         }
-        if(type === 'bands'){
+        if (type === 'bands') {
             //Set the flatpickr for all the band time buttons
-            jQuery(document).ready(() =>{
+            jQuery(document).ready(() => {
                 //plekevent.set_band_time_flatpickr();
             });
         }
@@ -649,6 +650,96 @@ let plek_add_event_functions = {
     show_vob_form(type) {
         plektemplate.hide_overlay();
         plektemplate.show_overlay(type);
+    },
+
+    /**
+     * Sets a reminder in the localStorage.
+     * 
+     * @param {int} event_id The Event ID
+     * @returns void
+     */
+    add_event_details_reminder(event_id) {
+        let reminder = new Object;
+        let date = new Date;
+        reminder.valid_till = date.getTime() + (1000 * 60 * 15); //Add 15 minutes to the current time
+        reminder.event_id = event_id;
+        if (window.localStorage.getItem('plek_event_reminder') === null) {
+            window.localStorage.setItem('plek_event_reminder', JSON.stringify([reminder]));
+        } else {
+            //There is already one object
+            let existing_remember = window.localStorage.getItem('plek_event_reminder');
+            try {
+                let reminder_obj = JSON.parse(existing_remember);
+                reminder_obj.push(reminder);
+                window.localStorage.setItem('plek_event_reminder', JSON.stringify(reminder_obj));
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        return;
+    },
+
+    /**
+     * Removes the reminder from the local storage
+     * @param {int} event_id 
+     */
+    remove_event_details_reminder(event_id) {
+        let existing_remember = window.localStorage.getItem('plek_event_reminder');
+        try {
+            var reminder_obj = JSON.parse(existing_remember);
+            debugger;
+            jQuery(reminder_obj).each((index, obj) => {
+                if (obj.event_id == event_id) {
+                    reminder_obj.splice(index, 1);
+                }
+            });
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+        //Set the remaining items
+        if (empty(existing_remember)) {
+            window.localStorage.removeItem('plek_event_reminder');
+            return true;
+        }
+        window.localStorage.setItem('plek_event_reminder', JSON.stringify(reminder_obj));
+        return true;
+    },
+
+    /**
+     * Tries to display the reminder. If multiple reminders are set, they will be displayed at the same time.
+     * @returns 
+     */
+    maybe_display_event_details_reminder() {
+        let reminder = window.localStorage.getItem('plek_event_reminder');
+        if (reminder === null) {
+            return false;
+        }
+        try {
+            let reminder_obj = JSON.parse(reminder);
+            let date = new Date();
+            jQuery(reminder_obj).each((index, obj) => {
+                //Delete if time is up
+                if (date.getTime() > obj.valid_till) {
+                    plek_add_event_functions.remove_event_details_reminder(obj.event_id);
+                    return; //DOn't display the message anymore.
+                }
+                //Display if it is still valid
+                let url = '<a href="edit' + obj.event_id + '">' + __('Edit Event', 'pleklang') + '</a>';
+                plekerror.set_toastr(
+                    0,
+                    true,
+                    'toast-bottom-center',
+                    () => { plek_add_event_functions.remove_event_details_reminder(obj.event_id); }
+                );
+                plekerror.display_info(__('Eventmanager Tipp', 'pleklang'), __('The Event you added misses some details. Please add them here:', 'pleklang') + '<br/>' + url);
+                plekerror.reset_toastr();
+            });
+
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
     }
 
 }

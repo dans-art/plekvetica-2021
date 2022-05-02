@@ -23,7 +23,8 @@ var plekerror = {
                 "showEasing": "swing",
                 "hideEasing": "linear",
                 "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
+                "hideMethod": "fadeOut",
+                'onCloseClick' : null
             }
         } catch (error) {
             console.log(error);
@@ -36,7 +37,7 @@ var plekerror = {
      * @param {bool} closeButton If the close button should be shown
      * @param {string} positionClass The position class. Options: https://codeseven.github.io/toastr/demo.html
      */
-    set_toastr(timeOut = 0, closeButton = true, positionClass = 'toast-top-right') {
+    set_toastr(timeOut = 0, closeButton = true, positionClass = 'toast-top-right', onCloseClick = null) {
         try {
             toastr.options = {
                 "closeButton": closeButton,
@@ -53,7 +54,8 @@ var plekerror = {
                 "showEasing": "swing",
                 "hideEasing": "linear",
                 "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
+                "hideMethod": "fadeOut",
+                "onCloseClick" : onCloseClick
             }
         } catch (error) {
             console.log(error);
