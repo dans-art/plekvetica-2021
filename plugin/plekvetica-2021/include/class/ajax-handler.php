@@ -274,6 +274,9 @@ class PlekAjaxHandler
                 $event_id = $this->get_ajax_data('id');
                 $publish = $plek_event->publish_event($event_id);
                 $plek_event->update_event_genres($event_id); //Workaround for setting the Event genres.
+                //Send info to Band followers
+                $pn = new PlekNotificationHandler;
+                $pn->push_to_band_follower($event_id);
                 if ($publish === true) {
                     $this->set_success(__('Event published', 'pleklang'));
                 } else {

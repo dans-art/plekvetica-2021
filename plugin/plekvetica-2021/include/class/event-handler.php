@@ -2547,4 +2547,34 @@ class PlekEventHandler
         }
         return $missing;
     }
+
+    /**
+     * Gets all the followers of a band by an event
+     *
+     * @param int|string $event_id
+     * @param bool $sort_by_user If this is true, the resulting array will be sorted by user_id instead of band_id
+     * @return array|false False on error, array on success ([band_id => [user_id => user_id, ...], band_id => ...])
+     */
+    public function get_event_band_follower($event_id, $sort_by_user = false){
+        if(!$this->is_event_loaded()){
+            $this->load_event($event_id);
+        }
+        $bands = $this->get_bands(false);
+        if(empty($bands)){
+            return false;
+        }
+        $follower = [];
+        foreach($bands as $band_id => $band_item){
+            if(isset($band_item['band_follower']) AND is_array($band_item['band_follower'])){
+                foreach($band_item['band_follower'] as $user_id){
+                    if($sort_by_user){
+                        $follower[$user_id][$band_id] = $band_id;
+                    }else{
+                        $follower[$band_id][$user_id] = $user_id;
+                    }
+                }
+            }
+        }
+        return $follower;
+    }
 }

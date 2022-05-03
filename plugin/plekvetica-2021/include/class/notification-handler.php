@@ -180,6 +180,40 @@ class PlekNotificationHandler extends WP_List_Table
         return $notify->push_notification($recipient_id, $type, $subject, $message, $action);
     }
 
+    /**
+     * Pushes a notification to all followers of the bands of the given event
+     *
+     * @param string|int $event_id
+     * @return bool
+     */
+    public function push_to_band_follower($event_id)
+    {
+        global $plek_event;
+
+        if (empty($event_id)) {
+            return false;
+        }
+        $follower = $plek_event->get_event_band_follower($event_id, true);
+
+        if (!empty($follower) and is_array($follower)) {
+            foreach ($follower as $user_id => $bands) {
+                $message = PlekTemplateHandler::load_template_to_var('new_event_band_info', 'email/event', $event_id, $user_id, $bands);
+                $link = get_permalink($event_id);
+                echo $message;
+                $this->push_notification($user_id,'event_band_info', __('This Event may interest you','pleklang'), $message, $link);
+            }
+            $nr_info_user = count($follower);
+            apply_filters(
+                'simple_history_log',
+                'New Event Info send to ' . $nr_info_user . ' users',
+                array(
+                    'users' => maybe_serialize( $follower ),
+                )
+            );
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Pushes a notification again, so the user receives again an email. In the Notification Panel the message will be shown as un-dismissed
