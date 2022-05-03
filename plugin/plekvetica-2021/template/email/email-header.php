@@ -15,6 +15,14 @@ include(PLEK_PATH . 'template/email/email-styles.php');
 
 <head>
     <title><?php echo $subject; ?></title>
+    <style type="text/css">
+        .im{
+            color: <?php echo $text_color; ?> !important; 
+        }
+        .ii a[href]{
+            color: <?php echo $link_color; ?> !important; 
+        }
+    </style>
 </head>
 
 <body>
