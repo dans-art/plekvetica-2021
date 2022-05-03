@@ -530,4 +530,13 @@ class PlekHandler
 
         return $dom->saveHTML();
     }
+
+    /**
+     * Adds the general JS settings / properties from the js-settings.php template.
+     *
+     * @return string The Script code
+     */
+    public function add_general_js_settings(){
+        return PlekTemplateHandler::load_template('js-settings', 'components', 'general');
+    }
 }

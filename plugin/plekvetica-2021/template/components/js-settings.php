@@ -6,14 +6,23 @@
  */
 extract(get_defined_vars());
 $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings. Not used now, but maybe later...
-
+global $plek_handler;
 ?>
-<?php //General settings and variables to pass ?>
-<script type="text/javascript" defer='defer'>
-	if(typeof document.plek_home_url === 'undefined'){
-		document.plek_home_url = '<?php echo home_url(); ?>';
-	}
-</script>
+<?php //General settings and variables to pass 
+?>
+<?php if ($type === 'general') : ?>
+	<script type="text/javascript" defer='defer'>
+		if (typeof document.plek_home_url === 'undefined') {
+			document.plek_home_url = '<?php echo home_url(); ?>';
+		}
+		jQuery(document).ready(() => {
+			if (typeof plek_main === 'object') {
+				plek_main.event_edit_page_id = "<?php echo get_permalink($plek_handler->get_plek_option('edit_event_page_id')); ?>";
+				plek_main.event_add_page_id = "<?php echo get_permalink($plek_handler->get_plek_option('add_event_page_id')); ?>";
+			}
+		});
+	</script>
+<?php endif; ?>
 
 <?php if ($type === 'manage_event_buttons') : ?>
 	<script type="text/javascript" defer='defer'>
@@ -57,8 +66,8 @@ $type = (isset($template_args[0])) ? $template_args[0] : ''; //Type of Settings.
 			plek_main.update_browser_url(url, title);
 			plek_manage_event.add_event_listeners();
 			//Add the validator fields
-            plek_manage_event.prepare_validator_fields();
-            plekvalidator.monitor_fields();
+			plek_manage_event.prepare_validator_fields();
+			plekvalidator.monitor_fields();
 		});
 	</script>
 <?php endif; ?>

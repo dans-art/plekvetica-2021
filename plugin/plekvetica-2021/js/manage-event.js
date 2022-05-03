@@ -658,19 +658,24 @@ let plek_add_event_functions = {
      * @param {int} event_id The Event ID
      * @returns void
      */
-    add_event_details_reminder(event_id) {
+    add_event_details_reminder(event_id, event_name, add_event_stage = null) {
         let reminder = new Object;
         let date = new Date;
         reminder.valid_till = date.getTime() + (1000 * 60 * 15); //Add 15 minutes to the current time
         reminder.event_id = event_id;
+        reminder.name = event_name;
+        reminder.stage = add_event_stage;
+
         if (window.localStorage.getItem('plek_event_reminder') === null) {
-            window.localStorage.setItem('plek_event_reminder', JSON.stringify([reminder]));
+            let reminder_obj = {};
+            reminder_obj[event_id] = reminder
+            window.localStorage.setItem('plek_event_reminder', JSON.stringify(reminder_obj));
         } else {
             //There is already one object
             let existing_remember = window.localStorage.getItem('plek_event_reminder');
             try {
                 let reminder_obj = JSON.parse(existing_remember);
-                reminder_obj.push(reminder);
+                reminder_obj[event_id] = reminder;
                 window.localStorage.setItem('plek_event_reminder', JSON.stringify(reminder_obj));
             } catch (error) {
                 console.log(error);
@@ -683,14 +688,21 @@ let plek_add_event_functions = {
      * Removes the reminder from the local storage
      * @param {int} event_id 
      */
-    remove_event_details_reminder(event_id) {
+    remove_event_details_reminder(event_id, prompt = false) {
         let existing_remember = window.localStorage.getItem('plek_event_reminder');
         try {
             var reminder_obj = JSON.parse(existing_remember);
-            debugger;
-            jQuery(reminder_obj).each((index, obj) => {
+            jQuery.each(reminder_obj, (index, obj) => {
                 if (obj.event_id == event_id) {
-                    reminder_obj.splice(index, 1);
+                    if (prompt) {
+                        let button_text = __('You are deleting this Notification permanently. You will probably not be able to Edit this Event afterwards.\nAre your sure?', 'pleklang');
+                        if (confirm(button_text) === true) {
+                            //Only remove if confirmed
+                            delete reminder_obj[index];
+                        }
+                    } else {
+                        delete reminder_obj[index];
+                    }
                 }
             });
         } catch (error) {
@@ -711,6 +723,11 @@ let plek_add_event_functions = {
      * @returns 
      */
     maybe_display_event_details_reminder() {
+        //Ignor the function if page is a add / edit event page
+        if (plek_main.page_has_event_form()) {
+            return false;
+        }
+
         let reminder = window.localStorage.getItem('plek_event_reminder');
         if (reminder === null) {
             return false;
@@ -718,21 +735,26 @@ let plek_add_event_functions = {
         try {
             let reminder_obj = JSON.parse(reminder);
             let date = new Date();
-            jQuery(reminder_obj).each((index, obj) => {
+            jQuery.each(reminder_obj, (index, obj) => {
                 //Delete if time is up
                 if (date.getTime() > obj.valid_till) {
                     plek_add_event_functions.remove_event_details_reminder(obj.event_id);
                     return; //DOn't display the message anymore.
                 }
                 //Display if it is still valid
-                let url = '<a href="edit' + obj.event_id + '">' + __('Edit Event', 'pleklang') + '</a>';
+                let url = (!empty(obj.stage)) ? plek_main.event_add_page_id : plek_main.event_edit_page_id;
+                let link_text = (!empty(obj.stage)) ?  __('Continue with adding the Event', 'pleklang') :  __('Edit Event', 'pleklang') ;
+                let link_name = (!empty(obj.name)) ?  link_text + ': ' + obj.name : link_text ;
+                let link = (!empty(obj.stage))
+                    ? '<a class="fix_event_link" data-event_id= "' + obj.event_id + '" href="' + url + '?event_id=' + obj.event_id + '&stage=' + obj.stage + '">' + link_name + '</a>'
+                    : '<a class="fix_event_link" data-event_id= "' + obj.event_id + '" href="' + url + '?edit=' + obj.event_id + '">' + link_name + '</a>';
                 plekerror.set_toastr(
                     0,
                     true,
-                    'toast-bottom-center',
-                    () => { plek_add_event_functions.remove_event_details_reminder(obj.event_id); }
+                    'toast-bottom-full-width',
+                    () => { plek_add_event_functions.remove_event_details_reminder(obj.event_id, true); }
                 );
-                plekerror.display_info(__('Eventmanager Tipp', 'pleklang'), __('The Event you added misses some details. Please add them here:', 'pleklang') + '<br/>' + url);
+                plekerror.display_info(__('Eventmanager Tipp', 'pleklang'), __('The Event you added misses some details. Please add them here:', 'pleklang') + '<br/>' + link);
                 plekerror.reset_toastr();
             });
 
@@ -740,7 +762,7 @@ let plek_add_event_functions = {
             console.log(error);
             return false;
         }
-    }
+    },
 
 }
 

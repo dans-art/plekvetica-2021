@@ -450,6 +450,7 @@ var plekevent = {
                             let event_url_html = `<a href='${event_url}'>${event_url_label}</a>`;
                             plekerror.display_info(__('Event saved!', 'pleklang'), __('Check it out here: ' + event_url_html, 'pleklang'));
                         }
+                        plek_add_event_functions.remove_event_details_reminder(event_id);
                     } else {
                         //Show success message
                         plekerror.display_info(__('Data saved!', 'pleklang'));
@@ -460,7 +461,9 @@ var plekevent = {
                         jQuery(button).data('type', 'new_event_next_page');
                         orig_btn_text = __('Add Event details', 'pleklang');
                         jQuery(button).data('url', url);
-
+                    }
+                    if(type === 'save_basic_event'){
+                        plek_add_event_functions.add_event_details_reminder(event_id, '', 'login');
                     }
 
                     plek_main.deactivate_button_loader(button, orig_btn_text);
@@ -475,6 +478,11 @@ var plekevent = {
         });
 
     },
+    /**
+     * Saves the Event login
+     * @param {string} type The Type to save 
+     * @returns 
+     */
     save_event_login(type) {
         console.log("savelogin " + type);
         var form = 'add_event_login';
@@ -512,6 +520,9 @@ var plekevent = {
                     let success_obj = plek_main.get_ajax_success_object(data);
                     let event_id = (typeof success_obj[0] !== 'undefined') ? success_obj[0] : '000';
                     let user_id = (typeof success_obj[1] !== 'undefined') ? success_obj[1] : 0;
+
+                    //Update the reminder
+                    plek_add_event_functions.add_event_details_reminder(event_id, '', 'details');
 
                     //Redirect to next stage
                     plek_main.url_replace_param('event_id', event_id);

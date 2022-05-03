@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2022-05-03 06:09+0000\n"
+"PO-Revision-Date: 2022-05-03 06:08+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -1334,7 +1334,7 @@ msgid "Photos"
 msgstr "Fotos"
 
 #: include/class/event-handler.php:2507
-#, php-format
+#, fuzzy, php-format
 #| msgid "Photos of %s at %s by Plekvetica"
 msgid "Photos of %1$s at %2$s by Plekvetica"
 msgstr "Alle Fotos von %s @ % von Plekvetica"

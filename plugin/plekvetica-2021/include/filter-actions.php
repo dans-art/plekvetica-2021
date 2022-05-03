@@ -23,6 +23,7 @@ add_filter('wp_mail', [new PlekNotificationHandler, 'filter_wp_mail'], 1, 1);
 add_action('init', [$plek_handler, 'load_textdomain']); //load language 
 add_action('wp_head', [$plek_handler, 'enqueue_scripts']);
 add_action('wp_head', [$plek_handler, 'enqueue_ajax_functions']);
+add_action('wp_footer', [$plek_handler, 'add_general_js_settings'], 0, 99);
 
 add_action('admin_menu', [$backend_class, 'setup_options']);
 add_action('admin_init', [$backend_class, 'plek_register_settings']);
