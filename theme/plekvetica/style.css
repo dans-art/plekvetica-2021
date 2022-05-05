@@ -413,6 +413,9 @@ blockquote {
   .tribe-events-calendar-list__event .plek-message.red {
     color: #8C262E;
     border-color: #8C262E; }
+  .plek-message.smaller,
+  .tribe-events-calendar-list__event .plek-message.smaller {
+    font-size: 0.9em; }
 
 input[type="phone"] {
   color: #666666;
@@ -775,6 +778,9 @@ input[type="phone"] {
 
 #wpadminbar {
   z-index: 9999999; }
+
+.smaller {
+  font-size: 0.8rem; }
 
 .band img {
   vertical-align: sub;

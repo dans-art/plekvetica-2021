@@ -331,6 +331,10 @@ blockquote{
     color: $color-red-light;
     border-color: $color-red-light;
   }
+
+  &.smaller{
+    font-size: 0.9em;
+  }
 }
 
 //Generate Press Fix
@@ -858,4 +862,8 @@ margin: 4px 0px 0px 0;
 
 #wpadminbar{
   z-index: 9999999;
+}
+
+.smaller{
+  font-size: 0.8rem;
 }

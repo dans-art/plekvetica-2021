@@ -23,6 +23,7 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
 
 //Debug
  require_once(PLEK_PATH."../plekvetica/include/scripts/kint.phar");
+ require_once(PLEK_PATH."plugins/debug/kint.phar");
  /**
   * Adds a message to the JS debugger. This will be printed out in the footer of the page.
   *

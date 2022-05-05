@@ -38,31 +38,6 @@ class PlekEvents extends PlekEventHandler
     }
 
     /**
-     * Returns the current loaded Event, formated for the Form fields.
-     *
-     * @return object - Event_Form Object
-     */
-    /*public function get_event_for_form(){
-        s($this -> get_event());
-        //s($plek_event);
-        $event_object  = new stdClass;
-        $event_object -> ID = ''; //String
-        $event_object -> post_title = ''; //String
-        $event_object -> post_content = ''; //String
-        $event_object -> start_date = ''; //String
-        $event_object -> end_date = ''; //String
-        $event_object -> multiday = false; //bool
-        $event_object -> bands_ids = ''; //String - Json
-        $event_object -> venue_id = ''; //String
- 
-        return $event_object;
-    }*/
-    /*
-    public function get_event_for_form_json(){
-        return json_encode($this -> get_event_for_form());
-    }
-*/
-    /**
      * Gets a field by name. Loads the template if specified or returns the value.
      *
      * @param string $name - Name of the field. See WP_Posts, Tribe_Event Object

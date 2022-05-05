@@ -1,4 +1,12 @@
 # plekvetica-2021
+Version 2.1.1
+- Cronjob hinzugefügt um über fehlende Akkreditierungsanfragen zu informiern
+- Neue Genres hinzugefügt (42 -> XX)
+- Funktion um die Kategorie-Genres mit den ACF Genres abzugleichen
+- Gast Autoren erhalten eine Email, wenn sie einen Event einstellen und die Infos, ob noch Detail-angaben fehlen.
+- Folloer einer Band werden Benachrichtigt, wenn ein neuer Event mit dessen Band(s) erstellt wrid.
+- Diverse kleine Verbesserungen
+
 Version 2.0.1
 - Fehler im neuen Formular behoben
 - Neuer Shortcode 'plek_event_upcoming_no_akkredi' zum anzeigen fehlender akkreditierungen
@@ -13,7 +21,6 @@ Version 2.0
 - Diverse Optimierungen und Fixes
 - Konzertfotos können nun im Frontend hochgeladen werden
 - Akkreditierungen werden nun geloggt
--  
 
 Version 1.1.1
 
