@@ -104,3 +104,11 @@ global $plek_handler;
 		});
 	</script>
 <?php endif; ?>
+
+<?php if ($type === 'teamcalendar') : ?>
+	<script type="text/javascript" defer='defer'>
+		jQuery(document).ready(function() {
+			plek_team_cal.construct();
+		});
+	</script>
+<?php endif; ?>

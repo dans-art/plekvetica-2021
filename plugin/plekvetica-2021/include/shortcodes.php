@@ -25,6 +25,10 @@ add_shortcode('plek_event_review_form', [$plek_event, 'plek_event_review_form_sh
 add_shortcode('plek_event_recently_added', [$plek_event, 'plek_event_recently_added_shortcode']);
 add_shortcode('plek_event_upcoming_no_akkredi', [$plek_event, 'plek_event_upcoming_no_akkredi_shortcode']);
 
+//Events Admin
+add_shortcode('plek_event_team_calendar', [$plek_event, 'plek_event_team_calendar_shortcode']);
+
+
 //Bands
 add_shortcode('plek_band_page', [new PlekBandHandler, 'plek_band_page_shortcode']);
 add_shortcode('plek_add_band_button', [new PlekBandHandler, 'plek_add_band_button_shortcode']);

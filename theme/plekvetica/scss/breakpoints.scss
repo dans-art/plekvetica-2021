@@ -428,6 +428,58 @@
       flex-direction: column;
     }
   }
+
+    //Team Calendar
+    .plek-post-type-team-calendar{
+        color: $text-color;
+        color: white;
+        position: unset;
+        left: 0;
+        width: unset;
+        margin: 0 0vw;
+        
+        table, td, th{
+            display: flex;
+            border: 0;
+        }
+
+        tr{
+            flex-direction: row;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+
+            &:nth-child(2n + 0){
+                background-color: $text-color-black;
+            }
+        }
+
+        td{
+          flex-basis: 33%;
+          text-align: center;
+        }
+
+        //The Event date
+        td:nth-child(2){
+            flex-basis: 20%;
+        }
+
+        //The Event Name
+        td:nth-child(3){
+            flex-basis: 46%;
+        }
+
+        thead{
+            display: none;
+        }
+
+        .event_poster{
+            max-width: unset;
+        }
+
+      }
+  
     
 }
 

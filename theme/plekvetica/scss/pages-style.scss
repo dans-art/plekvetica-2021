@@ -461,28 +461,30 @@ ul.partner-container{
 }
 
 //Team Calendar
-body.page-id-24565{
-    #content{
-        width: 100%;
-        max-width: 100%;
+.plek-post-type-team-calendar{
+    color: $text-color;
+    color: white;
+    position: relative;
+    left: calc(-49vw + 50%);
+    width: 94vw;
+    margin: 0 2vw;
+    
+    table, td, th{
+        border-color: $color-gray-light;
     }
 
-    .eTPoster img{
-        width: 110px;
+    td{
+      color: $text-color;
     }
 
- .dataTables_scroll{
-    table, td, th {
-        border: 1px solid gray;
+    thead{
+        background-color: $color-red-dark;
     }
- }
- label,
- .dataTables_info,
- .dataTables_paginate a{
-     color:white !important;
- }
- td {
-    color: black;
-}
-}
+
+    .event_poster{
+        max-width: 150px;
+    }
+
+  }
+  
 

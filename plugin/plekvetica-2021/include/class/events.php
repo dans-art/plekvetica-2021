@@ -803,6 +803,30 @@ class PlekEvents extends PlekEventHandler
     }
 
     /**
+     * Shortcode for the team calendar
+     *
+     * @return string HTML code of the team calendar
+     */
+    public function plek_event_team_calendar_shortcode(){
+        wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery'], 1);
+        
+        $meta_query = array();
+        $meta_query['is_review'] = array('key' => 'akk_status', 'compare' => '!=', 'value' => 'NULL');
+        $events = tribe_get_events([
+            'eventDisplay'   => 'custom',
+            'start_date'     => date('Y-m-d', time() -  172800), // 172800 = Two days in seconds 
+            'posts_per_page' => 50,
+            'order'       => 'ASC',
+            'order_by'       => 'start_date',
+            'meta_query' => $meta_query
+        ]);
+        if (empty($events)) {
+            return __('No reviews found', 'pleklang');
+        }
+        return PlekTemplateHandler::load_template_to_var('event-team-calendar-list-item', 'event/admin', $events);
+    }
+
+    /**
      * Loads all the published reviews
      */
 

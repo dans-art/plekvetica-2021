@@ -17,7 +17,7 @@ jQuery(document).ready(function () {
     console.log("Ready!");
 
     //Load the Select2
-    jQuery('select').select2({
+    jQuery('select:not(.no-select2)').select2({
         theme: "plek"
     });
 

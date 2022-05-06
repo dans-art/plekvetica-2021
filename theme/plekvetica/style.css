@@ -1593,19 +1593,21 @@ ul.partner-container {
   #plek-search-page .tribe-events-calendar-list__event {
     margin: 0.2em 0; }
 
-body.page-id-24565 #content {
-  width: 100%;
-  max-width: 100%; }
-body.page-id-24565 .eTPoster img {
-  width: 110px; }
-body.page-id-24565 .dataTables_scroll table, body.page-id-24565 .dataTables_scroll td, body.page-id-24565 .dataTables_scroll th {
-  border: 1px solid gray; }
-body.page-id-24565 label,
-body.page-id-24565 .dataTables_info,
-body.page-id-24565 .dataTables_paginate a {
-  color: white !important; }
-body.page-id-24565 td {
-  color: black; }
+.plek-post-type-team-calendar {
+  color: white;
+  color: white;
+  position: relative;
+  left: calc(-49vw + 50%);
+  width: 94vw;
+  margin: 0 2vw; }
+  .plek-post-type-team-calendar table, .plek-post-type-team-calendar td, .plek-post-type-team-calendar th {
+    border-color: #595959; }
+  .plek-post-type-team-calendar td {
+    color: white; }
+  .plek-post-type-team-calendar thead {
+    background-color: #40030E; }
+  .plek-post-type-team-calendar .event_poster {
+    max-width: 150px; }
 
 form .plek-field-error {
   color: #D9042B;
@@ -2915,7 +2917,37 @@ input[type=checkbox] {
     flex-direction: column; }
 
   .event-prices-container .event-price-container {
-    flex-direction: column; } }
+    flex-direction: column; }
+
+  .plek-post-type-team-calendar {
+    color: white;
+    color: white;
+    position: unset;
+    left: 0;
+    width: unset;
+    margin: 0 0vw; }
+    .plek-post-type-team-calendar table, .plek-post-type-team-calendar td, .plek-post-type-team-calendar th {
+      display: flex;
+      border: 0; }
+    .plek-post-type-team-calendar tr {
+      flex-direction: row;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 1rem 0; }
+      .plek-post-type-team-calendar tr:nth-child(2n + 0) {
+        background-color: black; }
+    .plek-post-type-team-calendar td {
+      flex-basis: 33%;
+      text-align: center; }
+    .plek-post-type-team-calendar td:nth-child(2) {
+      flex-basis: 20%; }
+    .plek-post-type-team-calendar td:nth-child(3) {
+      flex-basis: 46%; }
+    .plek-post-type-team-calendar thead {
+      display: none; }
+    .plek-post-type-team-calendar .event_poster {
+      max-width: unset; } }
 @media (max-width: 599px) {
   .plek-pre-button-seperator {
     height: 0; }

@@ -514,11 +514,18 @@ class PlekEventHandler
         return new stdClass();
     }
 
+    /**
+     * Returns the poster of a event
+     *
+     * @param string $alt - The Alt text to display
+     * @param string|array $size - The size of the image. Accepts registered size name or array with width & height (default: medium)
+     * @return null|string The Image as HTML code
+     */
     public function get_poster(string $alt = '', $size = '')
     {
         $attr = array('alt' => $alt);
         $size = (empty($size)) ? 'medium' : $size;
-        $poster = wp_get_attachment_image($this->get_field_value('_thumbnail_id'), $size, false, $attr);
+        $poster = wp_get_attachment_image(intval($this->get_field_value('_thumbnail_id')), $size, false, $attr);
         if (!empty($poster)) {
             return $poster;
         }
@@ -533,7 +540,7 @@ class PlekEventHandler
      */
     public function get_poster_url($size = 'medium')
     {
-        $poster_arr = wp_get_attachment_image_src($this->get_field_value('_thumbnail_id'), $size);
+        $poster_arr = wp_get_attachment_image_src(intval($this->get_field_value('_thumbnail_id')), $size);
         if (isset($poster_arr[0])) {
             return $poster_arr[0];
         }
@@ -1081,14 +1088,16 @@ class PlekEventHandler
     /**
      * Get all the Interviews and their status.
      * Returns array(0 => status_code, 1 => Name of Band)
+     * @param bool $return_as_string - If the function should return a string with the results.
      *
-     * @return bool|array - False if no Interviews ar saved, Array if exists 
+     * @return bool|array|string - False if no Interviews ar saved, Array if exists, String if parameter 1 is true
      */
-    public function get_event_interviews()
+    public function get_event_interviews($return_as_string = false)
     {
         $interviews = $this->get_field_value('interview_with');
         $int_arr = explode(PHP_EOL, $interviews);
         $ret_arr = [];
+        $ret_string = "";
         if (empty($interviews)) {
             return false;
         }
@@ -1097,8 +1106,13 @@ class PlekEventHandler
             $ret_arr[$key]['status'] = (count($item) > 1) ? $item[0] : '';
             unset($item[0]); //Remove the Status
             $ret_arr[$key]['name'] = (count($item) > 1) ? preg_replace('/^[A-Za-z]{0,5}:{1} {0,}/', '', $int_arr[$key]) :  implode('', $item);
+            $ret_string .= $ret_arr[$key]['name'] . " (" . $this->get_event_status_text($ret_arr[$key]['status']) . ")<br/>";
         }
-        return $ret_arr;
+        if (!$return_as_string) {
+            return $ret_arr;
+        } else {
+            return $ret_string;
+        }
     }
 
     /**
@@ -1159,15 +1173,24 @@ class PlekEventHandler
         return (!empty($crew)) ? $crew : false;
     }
 
+    /**
+     * Loads the Status text. If no code is given, the status of the current loaded event will be returned.
+     *
+     * @param string $status_code - (aw, ab, aa, no, iq, ib, ia) are accepted.
+     * @return string The status code or false if not found.
+     */
     public function get_event_status_text(string $status_code = '')
     {
         if (empty($status_code)) {
-            return false;
+            $status_code = $this->get_field_value('akk_status');
+            if (empty($status_code)) {
+                return false;
+            }
         }
         $status_code = $this->prepare_status_code($status_code);
         switch ($status_code) {
             case 'aw':
-            case 'iq':
+            case 'iw':
                 return __('Wish', 'pleklang');
                 break;
             case 'ab':
@@ -1180,6 +1203,9 @@ class PlekEventHandler
                 break;
             case 'no':
                 return __('Declined', 'pleklang');
+                break;
+            case 'null':
+                return __('Undefined', 'pleklang');
                 break;
             default:
                 return false;
@@ -1211,11 +1237,32 @@ class PlekEventHandler
 
     }
 
+    /**
+     * Converts the given got do lower char and removes whitespaces
+     *
+     * @param string $status_code
+     * @return string The sanitized status code
+     */
     public function prepare_status_code(string $status_code)
     {
         $status_code = trim($status_code);
         $status_code = strtolower($status_code);
         return $status_code;
+    }
+
+    /**
+     * Gets all the available status codes
+     *
+     * @param string $type - The Type to get. (event_status, interview_status)
+     * @return array The available status codes
+     */
+    public function get_status_codes($type = 'event_status')
+    {
+        if ($type === 'interview_status') {
+            return ['null', 'iw', 'ia', 'ib', 'no'];
+        } else {
+            return ['null', 'aw', 'aa', 'ab', 'no'];
+        }
     }
 
     /**
@@ -1236,9 +1283,13 @@ class PlekEventHandler
         $current = get_field('akkreditiert', $event_id);
         $event_title = get_the_title($event_id);
 
-        $find = array_search($user_login, $current);
-        if ($find === true) {
-            return __('Member is already set', 'pleklang');
+        if (is_array($current)) {
+            $find = array_search($user_login, $current);
+            if ($find === true) {
+                return __('Member is already set', 'pleklang');
+            }
+        }else{
+            $current = array();
         }
         $current[] = $user_login;
 
@@ -1741,8 +1792,8 @@ class PlekEventHandler
             //Set the guest author ID
             $login = (int) $plek_handler->get_plek_option('guest_author_id');
             //Send mail to user
-           $pn = new PlekNotificationHandler;
-           $pn->push_to_role('guest', __('Your new Event at Plekvetica','pleklang'), maybe_serialize( [$event_id, $guest_name, $guest_email] ), null, 'added_event_guest_info');
+            $pn = new PlekNotificationHandler;
+            $pn->push_to_role('guest', __('Your new Event at Plekvetica', 'pleklang'), maybe_serialize([$event_id, $guest_name, $guest_email]), null, 'added_event_guest_info');
         } else {
             //Try to login the user
             $user_name = $plek_ajax_handler->get_ajax_data('user_login');
@@ -2513,36 +2564,39 @@ class PlekEventHandler
      * @param boolean $all
      * @return bool|array False if no missing data found, array with the missing fields
      */
-    public function get_missing_event_details($all = true){
+    public function get_missing_event_details($all = true)
+    {
         $missing = array();
         $fields_to_check = ($all)
-        ? ['post_title' => __('Title','pleklang'),
-        'post_content' => __('Description','pleklang'),
-        '_EventVenueID' => __('Venue','pleklang'),
-        '_EventOrganizerID' => __('Organizer','pleklang'),
-        '_EventStartDate' => __('Start Date','pleklang'),
-        '_EventEndDate' => __('End Date','pleklang'),
-        'vorverkauf-preis' => __('Presale','pleklang'),
-        '_EventCost' => __('Boxoffice','pleklang')] //All the fields to check
-        : [];//Only the most important ones (default)
+            ? [
+                'post_title' => __('Title', 'pleklang'),
+                'post_content' => __('Description', 'pleklang'),
+                '_EventVenueID' => __('Venue', 'pleklang'),
+                '_EventOrganizerID' => __('Organizer', 'pleklang'),
+                '_EventStartDate' => __('Start Date', 'pleklang'),
+                '_EventEndDate' => __('End Date', 'pleklang'),
+                'vorverkauf-preis' => __('Presale', 'pleklang'),
+                '_EventCost' => __('Boxoffice', 'pleklang')
+            ] //All the fields to check
+            : []; //Only the most important ones (default)
 
-        foreach($fields_to_check as $field_name => $nicename){
-            if(empty($this->get_field_value($field_name))){
-                $missing[$field_name] = $nicename; 
+        foreach ($fields_to_check as $field_name => $nicename) {
+            if (empty($this->get_field_value($field_name))) {
+                $missing[$field_name] = $nicename;
             }
         }
         //Check some extra fields
-        if(empty($this->get_bands())){
-            $missing['bands'] = __('Bands','pleklang'); 
+        if (empty($this->get_bands())) {
+            $missing['bands'] = __('Bands', 'pleklang');
         }
         //Check some extra fields
-        if(empty($this->get_timetable())){
-            $missing['timetable'] = __('Timetable','pleklang'); 
+        if (empty($this->get_timetable())) {
+            $missing['timetable'] = __('Timetable', 'pleklang');
         }
-        if(empty($this->get_poster())){
-            $missing['poster'] = __('Poster','pleklang'); 
+        if (empty($this->get_poster())) {
+            $missing['poster'] = __('Poster', 'pleklang');
         }
-        if(empty($missing)){
+        if (empty($missing)) {
             return false;
         }
         return $missing;
@@ -2555,21 +2609,22 @@ class PlekEventHandler
      * @param bool $sort_by_user If this is true, the resulting array will be sorted by user_id instead of band_id
      * @return array|false False on error, array on success ([band_id => [user_id => user_id, ...], band_id => ...])
      */
-    public function get_event_band_follower($event_id, $sort_by_user = false){
-        if(!$this->is_event_loaded()){
+    public function get_event_band_follower($event_id, $sort_by_user = false)
+    {
+        if (!$this->is_event_loaded()) {
             $this->load_event($event_id);
         }
         $bands = $this->get_bands(false);
-        if(empty($bands)){
+        if (empty($bands)) {
             return false;
         }
         $follower = [];
-        foreach($bands as $band_id => $band_item){
-            if(isset($band_item['band_follower']) AND is_array($band_item['band_follower'])){
-                foreach($band_item['band_follower'] as $user_id){
-                    if($sort_by_user){
+        foreach ($bands as $band_id => $band_item) {
+            if (isset($band_item['band_follower']) and is_array($band_item['band_follower'])) {
+                foreach ($band_item['band_follower'] as $user_id) {
+                    if ($sort_by_user) {
                         $follower[$user_id][$band_id] = $band_id;
-                    }else{
+                    } else {
                         $follower[$band_id][$user_id] = $user_id;
                     }
                 }
