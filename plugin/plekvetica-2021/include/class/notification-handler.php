@@ -216,6 +216,47 @@ class PlekNotificationHandler extends WP_List_Table
     }
 
     /**
+     * Pushes a notification to the Organizer.
+     * This is function expects a Tribe_Events Organizer ID!
+     * For this function to work, it is mandatory, that the Organizer has a email Address in the ACF 
+     *
+     * @param string|int $organizer_id - The Tribe_Events Organizer ID
+     * @param string $type - The Type of the notification (Available: accredi_request)
+     * @param array $args - The arguments for the specific type
+     * Arguments for Type
+     * - accredi_request: (array) [event_id,..]
+     * @return bool|string True on success, error message on error
+     */
+    public function push_to_organizer($organizer_id, $type, $args){
+        $message = '';
+        $subject = '';
+        $plek_organi = new PlekOrganizerHandler;
+        $organi_contact = $plek_organi->get_organizer_media_contact($organizer_id);
+
+        if(!is_array($organi_contact) OR !isset($organi_contact['email'])){
+            return __('Organizer contact data not found','pleklang');
+        }
+
+        switch ($type) {
+            case 'accredi_request':
+                if(!isset($args['event_ids']) OR !is_array($args['event_ids']) OR empty($args['event_id'])){
+                    return __('No Event ID given. Expects an Array with the Event IDs','pleklang');
+                }
+                $subject = __('Accreditation request from Plekvetica','pleklang');
+                $message = PlekTemplateHandler::load_template_to_var('organizer-accreditation-request', 'email/organizer', $organi_contact, $args['event_ids']);
+                break;
+            
+            default:
+                return __('No type found','pleklang');
+                break;
+        }
+
+        //Send the mail
+        $emailer = new PlekEmailSender;
+        return $emailer->send_mail($organi_contact['email'], $subject, $message);
+    }
+
+    /**
      * Pushes a notification again, so the user receives again an email. In the Notification Panel the message will be shown as un-dismissed
      *
      * @param int $notification_id

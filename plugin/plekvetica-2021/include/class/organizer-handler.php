@@ -21,7 +21,7 @@ class PlekOrganizerHandler
     public function __construct()
     {
         global $plek_event;
-        if(is_object($plek_event)){
+        if (is_object($plek_event)) {
             $plek_event->enqueue_event_form_scripts();
         }
     }
@@ -41,10 +41,30 @@ class PlekOrganizerHandler
         $this->organizer['id'] = isset($organizer_object->ID) ? $organizer_object->ID : '';
         $this->organizer['name'] = isset($organizer_object->post_title) ? $organizer_object->post_title : '';
         $this->organizer['email'] = isset($organizer_object->email) ? $organizer_object->email : '';
+        $this->organizer['media_email'] = get_field('email_organi_akkredi', $organizer_object->ID);
+        $this->organizer['media_name'] = get_field('name_organi_akkredi', $organizer_object->ID);
+
         $this->organizer['website_link'] = isset($organizer_object->website) ? $organizer_object->website : '';
         $this->organizer['phone'] = isset($organizer_object->phone) ? $organizer_object->phone : '';
 
         return $this->organizer;
+    }
+
+    /**
+     * Receives the Organizer Media Email and name
+     *
+     * @param string|int $organizer_id - The Tribe_Events organizer ID
+     * @return bool|array False if not found. The Email Address and name as an array, if found (name=>'', email='')
+     */
+    public function get_organizer_media_contact($organizer_id = null)
+    {
+        if (!empty($organizer_id)) {
+            $this->load_organizer($organizer_id);
+        }
+        if (!isset($this->organizer['media_email']) OR !isset($this->organizer['media_name'])) {
+            return false;
+        }
+        return ['name' => $this->organizer['media_name'], 'email' => $this->organizer['media_email']];
     }
 
     /**
@@ -218,7 +238,7 @@ class PlekOrganizerHandler
     public function get_all_organizers_json()
     {
         global $plek_handler;
-        $organizers = $this -> get_all_organizers();
+        $organizers = $this->get_all_organizers();
         $organi_formated = array();
         $max_description_length = 170;
         foreach ($organizers as $organi) {

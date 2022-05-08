@@ -3,6 +3,7 @@ global $plek_event;
 global $plek_handler;
 $current_user = wp_get_current_user();
 $event_id = get_the_ID();
+
 $review_titel = ($plek_event->is_review()) ? __('Edit review', 'pleklang') : __('Write Review', 'pleklang');
 $akk_status = $plek_event->get_field_value('akk_status');
 $interviews = $plek_event->get_event_interviews();
@@ -11,6 +12,7 @@ $event_edit_page_id = $plek_handler->get_plek_option('edit_event_page_id');
 $event_edit_review_id = $plek_handler->get_plek_option('edit_event_review_page_id');
 $is_canceled = $plek_event->is_canceled();
 $show_edit_button = $plek_event->show_event_edit_button($plek_event);
+$missing_details = $plek_event->get_missing_event_details();
 
 //s($post_authors);
 ?>
@@ -48,7 +50,7 @@ $show_edit_button = $plek_event->show_event_edit_button($plek_event);
     <?php endif; ?>
     <?php
     //Promote on Facebook Button    
-    if (PlekUserHandler::current_user_can_edit($plek_event) and !$plek_event->is_review() and !$plek_event -> is_past_event() and PlekUserHandler::user_is_in_team()) : ?>
+    if (PlekUserHandler::current_user_can_edit($plek_event) and !$plek_event->is_review() and !$plek_event->is_past_event() and PlekUserHandler::user_is_in_team()) : ?>
         <a id="promoteEvent" name="promoteEvent" class="plek-button full-width blue" data-eventid="<?php echo $event_id; ?>"><i class="fab fa-facebook-square"></i> <?php echo __('Promote Event', 'pleklang'); ?></a>
     <?php endif; ?>
     <?php
@@ -102,6 +104,14 @@ $show_edit_button = $plek_event->show_event_edit_button($plek_event);
         </dl>
     <?php endif; //Accreditations & Interview status and crew END
     ?>
+    <?php if (is_array($missing_details) and !empty($missing_details)) : ?>
+        <?php
+        echo __('Missing Event Details', 'pleklang'); ?>
+        <br />
+        <?php
+        echo implode('<br/>', $missing_details);
+        ?>
+    <?php endif; ?>
 </div>
 
 <?php PlekTemplateHandler::load_template('js-settings', 'components', 'manage_event_buttons'); ?>

@@ -27,6 +27,7 @@ add_shortcode('plek_event_upcoming_no_akkredi', [$plek_event, 'plek_event_upcomi
 
 //Events Admin
 add_shortcode('plek_event_team_calendar', [$plek_event, 'plek_event_team_calendar_shortcode']);
+add_shortcode('plek_event_team_accredi', [$plek_event, 'plek_event_team_accredi_shortcode']);
 
 
 //Bands

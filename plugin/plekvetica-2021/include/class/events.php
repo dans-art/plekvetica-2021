@@ -811,7 +811,7 @@ class PlekEvents extends PlekEventHandler
         wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery'], 1);
         
         $meta_query = array();
-        $meta_query['is_review'] = array('key' => 'akk_status', 'compare' => '!=', 'value' => 'NULL');
+        $meta_query['akk_status'] = array('key' => 'akk_status', 'compare' => '!=', 'value' => 'NULL');
         $events = tribe_get_events([
             'eventDisplay'   => 'custom',
             'start_date'     => date('Y-m-d', time() -  172800), // 172800 = Two days in seconds 
@@ -821,9 +821,37 @@ class PlekEvents extends PlekEventHandler
             'meta_query' => $meta_query
         ]);
         if (empty($events)) {
-            return __('No reviews found', 'pleklang');
+            return __('No posts found', 'pleklang');
         }
         return PlekTemplateHandler::load_template_to_var('event-team-calendar-list-item', 'event/admin', $events);
+    }
+
+    /**
+     * Gets all the Events without confirmed accreditation status (ab)
+     * @todo: Sort by organizer ID...? Group by ID
+     *
+     * @return string The HTML code returend by the event-team-accredi-list template
+     */
+    public function plek_event_team_accredi_shortcode(){
+        wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery'], 1);
+        
+        $meta_query = array();
+        $meta_query['akk_status'] = array('key' => 'akk_status', 'compare' => '!=', 'value' => 'NULL');
+        $meta_query['event_crew'] = array('key' => 'akkreditiert', 'compare' => '!=', 'value' => 'NULL');
+        $events = tribe_get_events([
+            'eventDisplay'   => 'custom',
+            'start_date'     => date('Y-m-d', time()), //From today 
+            'posts_per_page' => 50,
+            'order'       => 'ASC',
+            'order_by'       => 'start_date',
+            'group_by'       => 'ID',
+            'meta_query' => $meta_query
+        ]);
+        if (empty($events)) {
+            return __('No posts found', 'pleklang');
+        }
+        return PlekTemplateHandler::load_template_to_var('event-team-calendar-accredi', 'event/admin', $events);
+        
     }
 
     /**

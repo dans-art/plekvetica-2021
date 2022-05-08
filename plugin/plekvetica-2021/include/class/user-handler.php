@@ -482,11 +482,14 @@ class PlekUserHandler
     /**
      * Get the Display name of the user
      *
-     * @param string|int $login_name - The login name or id of the user
+     * @param string|int $login_name - The login name or id of the user. If no value provided, the current user will be returned.
      * @return bool false if $login_name is not string nor int. Otherwise Displayname if found.
      */
-    public static function get_user_display_name($login_name)
+    public static function get_user_display_name($login_name = null)
     {
+        if(empty($login_name)){
+            $user = get_current_user();
+        }
         if(is_string($login_name)){
             $user = get_user_by('login', $login_name);
         }

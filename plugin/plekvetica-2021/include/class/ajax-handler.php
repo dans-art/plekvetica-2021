@@ -283,6 +283,24 @@ class PlekAjaxHandler
                     $this->set_error($publish);
                 }
                 break;
+            case 'request_accreditation':
+                $user = new PlekUserHandler;
+                if (!$user->user_is_in_team()) {
+                    $this->set_error(__('You are not allowed to use this function', 'pleklang'));
+                    break;
+                }
+                $organizer_id = $this->get_ajax_data('organizer_id');
+                $event_ids = $this->get_ajax_data_as_array('event_ids', true);
+
+                //Send request to organizer
+                $pn = new PlekNotificationHandler;
+                $send_mail = $pn->push_to_organizer($organizer_id, 'accredi_request', $event_ids);
+                if ($send_mail === true) {
+                    $this->set_success(__('Accreditation requested', 'pleklang'));
+                } else {
+                    $this->set_error($send_mail);
+                }
+                break;
             default:
                 # code...
                 $this->set_error(__('You are not allowed to use this function', 'pleklang'));

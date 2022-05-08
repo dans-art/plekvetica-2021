@@ -1,5 +1,7 @@
 <?php
-
+/** Displays all the events without confirmed accreditation status (ab)
+ * Displays a accreditation button for easy accreditation. 
+ */
 extract(get_defined_vars());
 $events = isset($template_args[0]) ?  $template_args[0] : [];
 if (empty($events)) {

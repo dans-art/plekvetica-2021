@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class to send emails
  */
@@ -7,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-class PlekEmailSender 
+class PlekEmailSender
 {
 
     protected $to = array();
@@ -25,9 +26,10 @@ class PlekEmailSender
      *
      * @return void
      */
-    public function set_default(){
-        $this -> set_from('info@plekvetica.ch', 'Plekvetica');
-        $this -> set_type();
+    public function set_default()
+    {
+        $this->set_from('info@plekvetica.ch', 'Plekvetica');
+        $this->set_type();
         return;
     }
 
@@ -43,27 +45,32 @@ class PlekEmailSender
      * @param string $cc_name
      * @return void
      */
-    public function set_to(string $to,  string $bcc_mail = "", string $cc_mail = "", string $bcc_name = "", string $cc_name = ""){
-        $this -> to[] = $to;
-        if(!empty($bcc_mail)){
-            $this -> headers[] = "BCC: {$bcc_name} <{$bcc_mail}>";
+    public function set_to(string $to,  string $bcc_mail = "", string $cc_mail = "", string $bcc_name = "", string $cc_name = "")
+    {
+        $this->to[] = sanitize_email($to);
+        if (!empty($bcc_mail)) {
+            $bcc_mail = sanitize_email($bcc_mail);
+            $this->headers[] = "BCC: {$bcc_name} <{$bcc_mail}>";
         }
-        if(!empty($cc_mail)){
-            $this -> headers[] = "CC: {$cc_name} <{$cc_mail}>";
+        if (!empty($cc_mail)) {
+            $cc_mail = sanitize_email($cc_mail);
+            $this->headers[] = "CC: {$cc_name} <{$cc_mail}>";
         }
         return;
     }
 
-    public function set_subject(string $subject){
-        $this -> subject = $subject;
+    public function set_subject(string $subject)
+    {
+        $this->subject = $subject;
         return;
     }
 
-    public function set_message(string $message = ""){
-       $this -> message = $message;
-       return;
+    public function set_message(string $message = "")
+    {
+        $this->message = $message;
+        return;
     }
-    
+
     /**
      * Loads the template with the given arguments
      * Template has to be within the template/email folder
@@ -73,31 +80,33 @@ class PlekEmailSender
      * @param mixed ...$args - Arguments for the template 
      * @return string The created message
      */
-    public function set_message_from_template(string $template = '', string $subject = '', ...$args){
-       $template = (empty($template))?'default-email':$template;
-       $this -> message = PlekTemplateHandler::load_template_to_var($template, 'email', $subject, $args);
-       return $this -> message;
+    public function set_message_from_template(string $template = '', string $subject = '', ...$args)
+    {
+        $template = (empty($template)) ? 'default-email' : $template;
+        $this->message = PlekTemplateHandler::load_template_to_var($template, 'email', $subject, $args);
+        return $this->message;
     }
 
-    public function set_from($email, $name = ''){
-        $this -> headers[] = "From: {$name} <{$email}>";
-        return;
-
-    }
-
-    public function set_reply_to($email, $name = ''){
-        $this -> headers[] = "Reply-To: {$name} <{$email}>";
-        return;
-
-    }
-
-    public function set_type($content_type = 'text/html', $charset = 'UTF-8'){
-        $this -> headers[] = "Content-Type: {$content_type}; charset={$charset}";
+    public function set_from($email, $name = '')
+    {
+        $this->headers[] = "From: {$name} <{$email}>";
         return;
     }
 
-    public function set_attachments($attachments = null){
+    public function set_reply_to($email, $name = '')
+    {
+        $this->headers[] = "Reply-To: {$name} <{$email}>";
+        return;
+    }
 
+    public function set_type($content_type = 'text/html', $charset = 'UTF-8')
+    {
+        $this->headers[] = "Content-Type: {$content_type}; charset={$charset}";
+        return;
+    }
+
+    public function set_attachments($attachments = null)
+    {
     }
 
     /**
@@ -109,20 +118,20 @@ class PlekEmailSender
      * @param array $headers
      * @return bool Whether the mail was sent successfully or not
      */
-    public function send_mail($to = null, $subject = null, $message = null, $headers = null){
-        if(is_string($to)){
+    public function send_mail($to = null, $subject = null, $message = null, $headers = null)
+    {
+        if (is_string($to)) {
             $this->set_to($to);
         }
-        if(is_string($subject)){
+        if (is_string($subject)) {
             $this->set_subject($subject);
         }
-        if(is_string($message)){
+        if (is_string($message)) {
             $this->set_message($message);
         }
-        if(is_array($headers)){
+        if (is_array($headers)) {
             $this->headers = $headers;
         }
-        return wp_mail( $this -> to, $this -> subject, $this -> message, $this -> headers, $this -> attachments );
+        return wp_mail($this->to, $this->subject, $this->message, $this->headers, $this->attachments);
     }
-    
 }
