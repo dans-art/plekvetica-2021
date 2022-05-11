@@ -823,30 +823,53 @@ class PlekEvents extends PlekEventHandler
         if (empty($events)) {
             return __('No posts found', 'pleklang');
         }
-        return PlekTemplateHandler::load_template_to_var('event-team-calendar-list-item', 'event/admin', $events);
+        return PlekTemplateHandler::load_template_to_var('event-team-calendar', 'event/admin', $events);
     }
 
     /**
      * Gets all the Events without confirmed accreditation status (ab)
      * @todo: Sort by organizer ID...? Group by ID
      *
-     * @return string The HTML code returend by the event-team-accredi-list template
+     * @return string The HTML code returend by the event-team-calendar-accredi template
      */
     public function plek_event_team_accredi_shortcode(){
+        
+        global $wpdb;
+
         wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery'], 1);
         
-        $meta_query = array();
-        $meta_query['akk_status'] = array('key' => 'akk_status', 'compare' => '!=', 'value' => 'NULL');
-        $meta_query['event_crew'] = array('key' => 'akkreditiert', 'compare' => '!=', 'value' => 'NULL');
-        $events = tribe_get_events([
-            'eventDisplay'   => 'custom',
-            'start_date'     => date('Y-m-d', time()), //From today 
-            'posts_per_page' => 50,
-            'order'       => 'ASC',
-            'order_by'       => 'start_date',
-            'group_by'       => 'ID',
-            'meta_query' => $meta_query
-        ]);
+        $limit = 100;
+        $from = date('Y-m-d H:i:s');
+        $to = '9999-01-01 00:00:00';
+
+        $query = $wpdb->prepare(
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)  as startdate
+        FROM `{$wpdb->prefix}posts` as posts 
+        LEFT JOIN {$wpdb->prefix}postmeta as date
+        ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
+
+        LEFT JOIN {$wpdb->prefix}postmeta as organizer
+        ON (posts.ID = organizer.post_id AND organizer.meta_key = '_EventOrganizerID')
+
+        LEFT JOIN {$wpdb->prefix}postmeta as akk_status
+        ON (posts.ID = akk_status.post_id AND akk_status.meta_key = 'akk_status')
+
+   
+        WHERE post_type = 'tribe_events'
+        AND posts.post_status IN ('publish', 'draft')
+        AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
+        AND akk_status.meta_value = 'aw'
+        
+        ORDER BY organizer.meta_value ASC
+        LIMIT %d OFFSET 0",
+            $from,
+            $to,
+            $limit,
+        );
+        $events = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        $this->total_posts['plek_event_team_accredi'] = $total_posts;
+
         if (empty($events)) {
             return __('No posts found', 'pleklang');
         }

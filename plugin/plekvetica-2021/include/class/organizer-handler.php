@@ -51,6 +51,21 @@ class PlekOrganizerHandler
     }
 
     /**
+     * Returns the Organizer name of the given ID
+     * 
+     * @param string|int $organizer_id
+     * @return string|false Name of the Organizer, "Undefined" or false if not found.
+     */
+    public static function get_organizer_name_by_id($organizer_id){
+
+        $organizer_object = tribe_get_organizer_object($organizer_id, 'OBJECT', null);
+        if ($organizer_object === null or $organizer_object->post_type !== 'tribe_organizer') {
+            return false;
+        }
+        return (isset($organizer_object->post_title)) ? $organizer_object->post_title : __('Undefined','pleklang');
+    }
+
+    /**
      * Receives the Organizer Media Email and name
      *
      * @param string|int $organizer_id - The Tribe_Events organizer ID
