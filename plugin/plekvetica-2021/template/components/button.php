@@ -16,15 +16,11 @@ $data = (isset($template_args[5])) ? $template_args[5] : []; //Data attribute as
 
 $href = (!empty($link)) ? "href=\"{$link}\"" : '';
 
-/**
- * Not working! Why!!!
- */
 if (is_array($data)) {
-    $data_mod = array_filter($data, function ($value, $key) {
-        return "data-{$key}='{$value}'";
-    }, ARRAY_FILTER_USE_BOTH);
-    s($data_mod);
-    $data = implode(' ', $data_mod);
+    array_walk($data, function (&$value, $key) {
+        $value = "data-{$key}='{$value}'";
+    });
+    $data = is_array($data) ? implode(' ', $data) :$data;
 }
 ?>
 
