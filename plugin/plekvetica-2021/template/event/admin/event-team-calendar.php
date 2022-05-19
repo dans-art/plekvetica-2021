@@ -14,6 +14,7 @@ if (empty($events)) {
                 <td><?php echo __('Poster', 'pleklang'); ?></td>
                 <td><?php echo __('Date', 'pleklang'); ?></td>
                 <td><?php echo __('Name', 'pleklang'); ?></td>
+                <td><?php echo __('Ort und Veranstalter', 'pleklang'); ?></td>
                 <td><?php echo __('Acc Status', 'pleklang'); ?></td>
                 <td><?php echo __('Acc Team', 'pleklang'); ?></td>
                 <td><?php echo __('Interviews', 'pleklang'); ?></td>
@@ -37,6 +38,7 @@ if (empty($events)) {
                     <td class="event_poster"><?php echo $poster; ?></td>
                     <td><?php echo $list_event->get_start_date('d-m-Y'); ?></td>
                     <td class="event_name" class="<?php echo ($canceled === true) ? 'event_canceled' : ''; ?>"><a href="<?php echo get_permalink($list_event->get_ID()); ?>"><?php echo $list_event->get_name(); ?></a></td>
+                    <td><?php echo 'Organi - Location'; ?></td>
                     <td><?php echo $acc_status; ?></td>
                     <td><?php echo $acc_crew; ?></td>
                     <td><?php echo $list_event->get_event_interviews(true); ?></td>

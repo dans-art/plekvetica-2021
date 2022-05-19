@@ -10,5 +10,5 @@ $pn = new PlekNotificationHandler;
 //s($plek_handler -> get_plek_crons());
 $pn = new PlekNotificationHandler;
 //$pn -> push_to_band_follower(63058);
-$pn -> push_notification([1],'test', 'Style Test', 'Just a style test', 'none');
+//$pn -> push_notification([1],'test', 'Style Test', 'Just a style test', 'none');
 //$emailer->send_mail($guest_email, __('Your Event at Plekvetica','pleklang'), $message);
