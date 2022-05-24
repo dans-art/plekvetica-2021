@@ -867,3 +867,20 @@ margin: 4px 0px 0px 0;
 .smaller{
   font-size: 0.8rem;
 }
+
+/* Accredi Status Dropdown */
+.plek-event-status-dropdown.no-select2,
+.plek-event-status-dropdown.no-select2 option{
+  &[cstatus="aw"]{
+    color:$color-blue;
+  }
+  &[cstatus="aa"]{
+    color:$color-gray;
+  }
+  &[cstatus="ab"]{
+    color:$color-green;
+  }
+  &[cstatus="no"]{
+    color:$color-red;
+  }
+}

@@ -27,6 +27,8 @@ let plek_team_cal = {
         const status = jQuery(item).val();
         const event_id = jQuery(item).data('event_id');
         const event_name = jQuery(item).parent().parent().find('.event_name').text();
+        jQuery(item).attr('cstatus', status);
+
         jQuery.ajax({
             url: ajaxurl,
             data: {

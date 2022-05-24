@@ -547,6 +547,33 @@ class PlekEventHandler
         return false;
     }
 
+    /**
+     * Returns all the organizers of a event. 
+     *
+     * @param bool|string $separator - The Seperator as a string or false to return the names as an array 
+     * @return array|string - Array if separator is false, otherwise string with separator. 
+     */
+    public function get_organizers($separator = false)
+    {
+        $organizers = $this->get_field_value('_EventOrganizerID', true);
+        if (!is_array($organizers)) {
+            return $organizers; //Returns probably a string with the name.
+        }
+        $organizers = array_map(function ($value) {
+            return tribe_get_organizer($value);
+        }, $organizers);
+        if (is_string($separator)) {
+            return implode($separator, $organizers);
+        }
+        return $organizers;
+    }
+
+    /**
+     * Returns the thumbnail object
+     *
+     * @param string $size - The size. Accepts small, medium, maxres and default.
+     * @return object The thumbnail object
+     */
     public function get_thumbnail_object($size = '')
     {
         $size = (empty($size)) ? 'medium' : $size;
@@ -948,7 +975,7 @@ class PlekEventHandler
      */
     public function get_field_value($name = 'post_title', $return_all = false)
     {
-        if (isset($this->event['data']->$name)) {
+        if (property_exists($this->event['data'], $name)) {
             return $this->event['data']->$name;
         }
         if (isset($this->event['meta'][$name][0])) {
@@ -1288,7 +1315,7 @@ class PlekEventHandler
             if ($find === true) {
                 return __('Member is already set', 'pleklang');
             }
-        }else{
+        } else {
             $current = array();
         }
         $current[] = $user_login;
@@ -1372,6 +1399,11 @@ class PlekEventHandler
             );
             $action = get_permalink($event_id);
             $notify->push_accredi_members($event_id, 'event', $subject, $message, $action);
+        }
+
+        //Set Event to featured if status code is ab (accreditation confirmed)
+        if ($status_code === 'ab') {
+            return ($this->update_event_meta($event_id, '_tribe_featured', '1') === false) ? __('Error while updating the event featured status', 'pleklang') : true;
         }
 
         return ($update !== false) ? true : __('Error while updating the accreditation status', 'pleklang');
@@ -2224,6 +2256,28 @@ class PlekEventHandler
     }
 
     /**
+     * Updates a event meta field
+     * This function updates all the fields with the $field_name / meta_key of the given event id
+     *
+     * @param string|int $event_id - The Event ID
+     * @param string $field_name - The Meta Key
+     * @param string $value - The Value to save
+     * @return int|bool Meta ID on insert, true on update, null if nothing was updated, false on error
+     */
+    public function update_event_meta($event_id, $field_name, $value)
+    {
+        $update = update_post_meta($event_id, $field_name, $value);
+        if ($update) {
+            return $update; //Meta ID on insert, true on update
+        }
+        //Check if the existing field is the same as the given one
+        $current = get_post_meta($event_id, $field_name, true);
+        if ($current === $value) {
+            return null; //No update, since the value is the same as the saved one.
+        }
+        return false;
+    }
+    /**
      * This checks for the enddate and set it to the startdate at 24:00, if empty
      * 
      * @param string $end_date The End Date
@@ -2600,6 +2654,39 @@ class PlekEventHandler
             return false;
         }
         return $missing;
+    }
+
+    /**
+     * Formats the missing event details.
+     *
+     * @param boolean $all
+     * @param string $output - Type of output. Currenly supportet: list, br (default)
+     * @param string $before_item - String to add before the item
+     * @param string $after_item - String to add after the item
+     * @return string The HTML Code
+     */
+    public function get_missing_event_details_formated($all = true, $output = 'br', $before_item = '', $after_item = '')
+    {
+        $missing = $this->get_missing_event_details();
+        if (empty($missing)) {
+            return false;
+        }
+
+        foreach ($missing as $field_id => $field_value) {
+            $missing[$field_id] =  $before_item . $field_value . $after_item;
+            if ($output === 'list') {
+                $missing[$field_id] = '<li>' . $field_value . '</li>';
+            }
+        }
+        switch ($output) {
+            case 'list':
+                return '<ul>' . implode('', $missing) . '</ul>';
+                break;
+
+            default:
+                return implode('<br/>', $missing);
+                break;
+        }
     }
 
     /**

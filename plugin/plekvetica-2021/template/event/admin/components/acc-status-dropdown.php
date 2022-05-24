@@ -11,9 +11,9 @@ $current_status_code = $event->get_field_value('akk_status');
 $status_code_arr = $event->get_status_codes();
 
 ?>
-<select id="<?php echo $id; ?>" class="<?php echo $class; ?> no-select2" autocomplete="off" data-event_id="<?php echo $event->get_ID(); ?>">
+<select id="<?php echo $id; ?>" class="<?php echo $class; ?> no-select2" autocomplete="off" data-event_id="<?php echo $event->get_ID(); ?>" cstatus="<?php echo $current_status_code; ?>">
 	<?php foreach ($status_code_arr as $code) : ?>
-		<option value='<?php echo $code; ?>' <?php echo ($code == $current_status_code) ? "selected" : ""; ?>>
+		<option value='<?php echo $code; ?>' <?php echo ($code == $current_status_code) ? "selected" : ""; ?> cstatus="<?php echo $code; ?>">
 			<?php echo $event->get_event_status_text($code); ?>
 		</option>
 	<?php endforeach; ?>

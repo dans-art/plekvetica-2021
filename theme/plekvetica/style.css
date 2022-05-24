@@ -782,6 +782,20 @@ input[type="phone"] {
 .smaller {
   font-size: 0.8rem; }
 
+/* Accredi Status Dropdown */
+.plek-event-status-dropdown.no-select2[cstatus="aw"],
+.plek-event-status-dropdown.no-select2 option[cstatus="aw"] {
+  color: #6278d9; }
+.plek-event-status-dropdown.no-select2[cstatus="aa"],
+.plek-event-status-dropdown.no-select2 option[cstatus="aa"] {
+  color: #424242; }
+.plek-event-status-dropdown.no-select2[cstatus="ab"],
+.plek-event-status-dropdown.no-select2 option[cstatus="ab"] {
+  color: #268c37; }
+.plek-event-status-dropdown.no-select2[cstatus="no"],
+.plek-event-status-dropdown.no-select2 option[cstatus="no"] {
+  color: #D9042B; }
+
 .band img {
   vertical-align: sub;
   width: 19px; }
@@ -1608,6 +1622,38 @@ ul.partner-container {
     background-color: #40030E; }
   .plek-post-type-team-calendar .event_poster {
     max-width: 150px; }
+  .plek-post-type-team-calendar .event-canceled .event_name {
+    text-decoration: line-through; }
+  .plek-post-type-team-calendar .event-organizer,
+  .plek-post-type-team-calendar .event-location {
+    padding-left: 2rem;
+    position: relative;
+    padding-bottom: 0.5rem; }
+  .plek-post-type-team-calendar .event-organizer::before,
+  .plek-post-type-team-calendar .event-location::before {
+    font-family: 'FontAwesome';
+    left: 0;
+    position: absolute; }
+  .plek-post-type-team-calendar .event-organizer::before {
+    content: '\f0c0'; }
+  .plek-post-type-team-calendar .event-location::before {
+    content: '\f015'; }
+  .plek-post-type-team-calendar .event-organi-and-location {
+    padding-left: 2rem;
+    position: relative;
+    padding-bottom: 0.5rem; }
+    .plek-post-type-team-calendar .event-organi-and-location::before {
+      font-family: 'FontAwesome';
+      left: 0;
+      top: -1rem;
+      position: absolute;
+      content: '\f0c0'; }
+    .plek-post-type-team-calendar .event-organi-and-location::after {
+      font-family: 'FontAwesome';
+      left: 0;
+      top: 1rem;
+      position: absolute;
+      content: '\f015'; }
 
 form .plek-field-error {
   color: #D9042B;
@@ -2936,14 +2982,17 @@ input[type=checkbox] {
       flex-wrap: wrap;
       margin: 1rem 0; }
       .plek-post-type-team-calendar tr:nth-child(2n + 0) {
-        background-color: black; }
+        background-color: #424242; }
     .plek-post-type-team-calendar td {
-      flex-basis: 33%;
-      text-align: center; }
+      flex-basis: 33%; }
     .plek-post-type-team-calendar td:nth-child(2) {
       flex-basis: 20%; }
     .plek-post-type-team-calendar td:nth-child(3) {
-      flex-basis: 46%; }
+      flex-basis: 100%; }
+    .plek-post-type-team-calendar td:nth-child(4) {
+      flex-basis: 100%; }
+      .plek-post-type-team-calendar td:nth-child(4) .event-organizer {
+        padding-right: 1rem; }
     .plek-post-type-team-calendar thead {
       display: none; }
     .plek-post-type-team-calendar .event_poster {
