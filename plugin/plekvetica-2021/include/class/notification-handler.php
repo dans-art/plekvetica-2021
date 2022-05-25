@@ -239,7 +239,7 @@ class PlekNotificationHandler extends WP_List_Table
 
         switch ($type) {
             case 'accredi_request':
-                if(!isset($args['event_ids']) OR !is_array($args['event_ids']) OR empty($args['event_id'])){
+                if(!isset($args['event_ids']) OR !is_array($args['event_ids']) OR empty($args['event_ids'])){
                     return __('No Event ID given. Expects an Array with the Event IDs','pleklang');
                 }
                 $subject = __('Accreditation request from Plekvetica','pleklang');

@@ -105,12 +105,16 @@ $missing_details = $plek_event->get_missing_event_details();
     <?php endif; //Accreditations & Interview status and crew END
     ?>
     <?php if (is_array($missing_details) and !empty($missing_details)) : ?>
-        <?php
-        echo __('Missing Event Details', 'pleklang'); ?>
-        <br />
-        <?php
-        echo implode('<br/>', $missing_details);
-        ?>
+        <dl>
+            <dt><?php
+                echo __('Missing Event Details', 'pleklang'); ?>
+            </dt>
+            <dd>
+                <?php
+                echo implode('<br/>', $missing_details);
+                ?>
+            </dd>
+        </dl>
     <?php endif; ?>
 </div>
 

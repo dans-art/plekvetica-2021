@@ -7,6 +7,22 @@ class PlekEventHandler
 {
 
     /**
+     * Get the errors stored in the class property "error"
+     *
+     * @param boolean $last_only - If only the last error should be returned.
+     * @return array|string Array if all items are returned or string if $last_only
+     */
+    public function get_error($last_only = false)
+    {
+        if (empty($this->errors)) {
+            return ($last_only) ? '' : [];
+        }
+        if (!$last_only) {
+            return $this->errors;
+        }
+        return $this->errors[array_key_last($this->errors)];
+    }
+    /**
      * Checks if a event is loaded
      *
      * @return boolean
@@ -1201,6 +1217,30 @@ class PlekEventHandler
     }
 
     /**
+     * Loads the event crew formated
+     *@param bool|string $separator - If string, the output will be string, separated by the given string
+     * @return false|string false if no crew is found, string if separator is defined or array.
+     */
+    public function get_event_akkredi_crew_formated($separator = false)
+    {
+        $crew = $this->get_event_akkredi_crew();
+        if (!is_array($crew)) {
+            return false;
+        }
+        //Get the nicename and primary role
+        $crew_formated = array_map(function ($login_name) {
+            $display_name = PlekUserHandler::get_user_real_name($login_name);
+            //Get the role of the user. If the user is an admin, he will get the role photographer
+            $role = PlekUserHandler::get_user_primary_role($login_name, ['administrator' => 'photographer']);
+            return sprintf('%s (%s)', $display_name, $role);
+        }, $crew);
+        if (!is_string($separator)) {
+            return $crew_formated;
+        }
+        return implode($separator, $crew_formated);
+    }
+
+    /**
      * Loads the Status text. If no code is given, the status of the current loaded event will be returned.
      *
      * @param string $status_code - (aw, ab, aa, no, iq, ib, ia) are accepted.
@@ -1381,6 +1421,13 @@ class PlekEventHandler
         if (array_search($status_code, $allowed_codes) === false) {
             return __('Error: Status code not allowed', 'pleklang');
         }
+        //Check if Event exists
+        $pe = new PlekEvents;
+        $loaded_event = $pe->load_event($event_id);
+        if (!$loaded_event) {
+            return $pe->get_error(true); //Error message
+        }
+
         $status_code = $this->prepare_status_code($status_code);
         $update = $plek_handler->update_field('akk_status', $status_code, $event_id);
 

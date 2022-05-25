@@ -854,11 +854,15 @@ class PlekEvents extends PlekEventHandler
         LEFT JOIN {$wpdb->prefix}postmeta as akk_status
         ON (posts.ID = akk_status.post_id AND akk_status.meta_key = 'akk_status')
 
+        LEFT JOIN {$wpdb->prefix}postmeta as cancel_event
+        ON (posts.ID = cancel_event.post_id AND cancel_event.meta_key = 'cancel_event')
+
    
         WHERE post_type = 'tribe_events'
         AND posts.post_status IN ('publish', 'draft')
         AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
         AND akk_status.meta_value = 'aw'
+        AND cancel_event.meta_value != '1'
         
         ORDER BY organizer.meta_value ASC
         LIMIT %d OFFSET 0",
@@ -1353,5 +1357,18 @@ class PlekEvents extends PlekEventHandler
             return __('Follow', 'pleklang');
         }
         return false;
+    }
+
+    /**
+     * Confirms a accreditation request
+     *
+     * @param string|int $event_id - The Event ID
+     * @return bool|string True on success, string on error
+     */
+    public function confirm_accreditation($event_id){
+        if(empty($event_id)){
+            return __('No Event ID found.','pleklang');
+        }
+        return $this->set_akkredi_status(intval($event_id), 'ab');
     }
 }

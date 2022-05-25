@@ -18,6 +18,17 @@ class PlekUserHandler
             'plek-organi' => __('Organizer', 'pleklang'),
             'plek-partner' => __('Partner', 'pleklang'),
         );
+
+        self::$team_roles = array(
+            'administrator' => __('Administrator', 'pleklang'),
+            'plekmanager' => __('Plekvetica Manager', 'pleklang'),
+            'cutter' => __('Cutter', 'pleklang'),
+            'eventmanager' => __('Eventmanager', 'pleklang'),
+            'interviewer' => __('Interviewer', 'pleklang'),
+            'photographer' => __('Photographer', 'pleklang'),
+            'reviewwriter' => __('Review writer', 'pleklang'),
+            'videograph' => __('Videograph', 'pleklang')
+        );
     }
 
     /**
@@ -255,7 +266,7 @@ class PlekUserHandler
             $plek_events->load_event($event, 'all');
             $event = $plek_events;
         }
-        
+
         if (!is_object($event)) {
             return false; //Event not found
         }
@@ -270,15 +281,15 @@ class PlekUserHandler
         $created = strtotime($event->get_field_value('post_date', false));
 
         if ($status === 'draft' and (time() - $created) < (24 * 60 * 60)) { //Check if the post is a draft and not created later than 1 day ago
-           return true;
+            return true;
         }
 
         //If the event got created by a guest, check if the guest is allowed to edit
         $guest_hash = (isset($_REQUEST['guest_edit'])) ? $_REQUEST['guest_edit'] : null;
-        if(!empty($guest_hash)){
+        if (!empty($guest_hash)) {
             $guest_author = $event->get_field_value('guest_author', false);
             $name_obj = (!empty($guest_author)) ? json_decode($guest_author) : null;
-            if(is_object($name_obj) AND md5($name_obj->name.$name_obj->email) === $guest_hash){
+            if (is_object($name_obj) and md5($name_obj->name . $name_obj->email) === $guest_hash) {
                 return true;
             }
         }
@@ -455,6 +466,39 @@ class PlekUserHandler
         $first_role = reset($roles);
         return (!empty($first_role)) ? $first_role : null;
     }
+
+    /**
+     * Get the primary role of the user
+     *
+     * @param string|int $login_name - The login name or id of the user. If no value provided, the current user will be returned.
+     * @param array $replace_role - Allows to replace a role. array(role_to_search => $role_to_replace,...)
+     * @return bool false if $login_name is not string nor int, null if no Role found, Otherwise the primary role.
+     */
+    public static function get_user_primary_role($login_name = null, $replace_role = [])
+    {
+        if (empty($login_name)) {
+            $user = wp_get_current_user();
+        }
+        if (is_string($login_name)) {
+            $user = get_user_by('login', $login_name);
+        } elseif (is_int($login_name)) {
+            $user = get_user_by('ID', $login_name);
+        } else {
+            return false;
+        }
+
+        $role_first = array_key_first($user->roles);
+        if (!isset($user->roles[array_key_first($user->roles)])) {
+            return null; //No role found
+        }
+
+        if (isset($replace_role[$user->roles[$role_first]])) {
+            $user->roles[$role_first] = $replace_role[$user->roles[$role_first]]; //Replaces the role
+        }
+
+        return (isset(self::$team_roles[$user->roles[$role_first]])) ? self::$team_roles[$user->roles[$role_first]] : $user->roles[$role_first]; //Retruns the translated string if found, otherwise the technical role name
+    }
+
     /**
      * Search for a specific role.
      *
@@ -471,7 +515,7 @@ class PlekUserHandler
         }
         $roles = $user->roles;
         $role_to_search = (!is_array($rolename)) ? array($rolename) : $rolename;
-        foreach ($role_to_search as $role) {
+        foreach ($role_to_search as $role => $role_name) {
             if (array_search($role, $roles) !== false) {
                 return true;
             }
@@ -487,20 +531,45 @@ class PlekUserHandler
      */
     public static function get_user_display_name($login_name = null)
     {
-        if(empty($login_name)){
-            $user = get_current_user();
+        if (empty($login_name)) {
+            $user = wp_get_current_user();
+        } else {
+            if (is_string($login_name)) {
+                $user = get_user_by('login', $login_name);
+            } elseif (is_int($login_name)) {
+                $user = get_user_by('ID', $login_name);
+            } else {
+                return false;
+            }
         }
-        if(is_string($login_name)){
-            $user = get_user_by('login', $login_name);
-        }
-        elseif(is_int($login_name)){
-            $user = get_user_by('ID', $login_name);
-        }else{
-            return false;
-        }
-
         return (isset($user->display_name)) ? $user->display_name : $login_name;
     }
+
+    /**
+     * Get the real name (firstname lastname) of the user
+     *
+     * @param string|int $login_name - The login name or id of the user. If no value provided, the current user will be returned.
+     * @return bool false if $login_name is not string nor int. Otherwise Displayname if found.
+     */
+    public static function get_user_real_name($login_name = null)
+    {
+        if (empty($login_name)) {
+            $user = wp_get_current_user();
+        }
+        if (is_string($login_name)) {
+            $user = get_user_by('login', $login_name);
+        } elseif (is_int($login_name)) {
+            $user = get_user_by('ID', $login_name);
+        } else {
+            return false;
+        }
+        $user_meta = get_user_meta($user->ID);
+        $first = (isset($user_meta['first_name'][0])) ? $user_meta['first_name'][0] : 'NoFirst';
+        $last = (isset($user_meta['last_name'][0])) ? $user_meta['last_name'][0] : 'NoLast';
+
+        return sprintf('%s %s', $first, $last);
+    }
+
 
     /**
      * Get the ID of the user

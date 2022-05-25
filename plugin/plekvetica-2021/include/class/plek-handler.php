@@ -536,7 +536,34 @@ class PlekHandler
      *
      * @return string The Script code
      */
-    public function add_general_js_settings(){
+    public function add_general_js_settings()
+    {
         return PlekTemplateHandler::load_template('js-settings', 'components', 'general');
+    }
+
+    /**
+     * Function for the Shortcode plek_external_actions. Various actions.
+     * - Confirm accreditation
+     *
+     * @return void
+     */
+    public function plek_external_actions_shortcode()
+    {
+        $action = (isset($_GET['action'])) ? $_GET['action'] : null;
+        switch ($action) {
+            case 'confirm_accreditation':
+                $pe = new PlekEvents;
+                $event_id = (isset($_GET['event_id'])) ? $_GET['event_id'] : null;
+                $confirm = $pe->confirm_accreditation($event_id);
+                if($confirm === true){
+                    return __('Accreditation confirmed, thanks a lot!','pleklang');
+                }else{
+                    return sprintf(__('Error: Accreditation could not be confirmed! (%s)','pleklang'), $confirm);
+                }
+                break;
+            default:
+                return __('Action not found or not supported', 'pleklang');
+                break;
+        }
     }
 }

@@ -285,25 +285,28 @@ class PlekAjaxHandler
                 break;
             case 'request_accreditation':
                 $user = new PlekUserHandler;
+                $pe = new PlekEvents;
                 if (!$user->user_is_in_team()) {
                     $this->set_error(__('You are not allowed to use this function', 'pleklang'));
                     break;
                 }
                 $organizer_id = $this->get_ajax_data('organizer_id');
                 $event_ids = $this->get_ajax_data_as_array('event_ids', true);
-
                 //Send request to organizer
                 $pn = new PlekNotificationHandler;
-                $send_mail = $pn->push_to_organizer($organizer_id, 'accredi_request', $event_ids);
+                $send_mail = $pn->push_to_organizer($organizer_id, 'accredi_request', ['event_ids' => $event_ids]);
                 if ($send_mail === true) {
-                    $this->set_success(__('Accreditation requested', 'pleklang'));
+                    foreach($event_ids as $event_id){
+                        $pe->set_akkredi_status($event_id, 'aa');
+                    }
+                    $this->set_success(__('Accreditation request sent to organizer', 'pleklang'));
                 } else {
                     $this->set_error($send_mail);
                 }
                 break;
             default:
                 # code...
-                $this->set_error(__('You are not allowed to use this function', 'pleklang'));
+                $this->set_error(__('You are not allowed to use this request or function not found', 'pleklang'));
                 break;
         }
         echo $this->get_ajax_return();
@@ -807,7 +810,7 @@ class PlekAjaxHandler
                 $val_arr[$index] = htmlspecialchars($val);
             }
         }
-        return $val_arr;
+        return is_array($val_arr) ? $val_arr : [$val_arr]; //Convert to array if no array
     }
 
 

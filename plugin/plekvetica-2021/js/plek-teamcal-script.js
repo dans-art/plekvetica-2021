@@ -70,7 +70,7 @@ let plek_team_cal = {
         if(!empty(media_email) && confirm(confirm_message) == false){
             return false;
         }
-        this.send_accreditation_request(event_id, organizer_id);
+        this.send_accreditation_request(event_id, organizer_id, item);
         return;
     },
 
@@ -98,7 +98,7 @@ let plek_team_cal = {
         });
 
         //Send the request to the media person
-        this.send_accreditation_request(event_ids, organizer_id);
+        this.send_accreditation_request(event_ids, organizer_id, item);
 
        return true;
     },
@@ -110,13 +110,13 @@ let plek_team_cal = {
      * @param {int} event_ids The ID of the event
      * @param {int} organizer_id The ID of the organizer
      */
-    send_accreditation_request(event_ids, organizer_id){
+    send_accreditation_request(event_ids, organizer_id, button){
 
         jQuery.ajax({
             url: ajaxurl,
             data: {
               'action': 'plek_event_actions',
-              'do': 'request_accredi',
+              'do': 'request_accreditation',
               'event_ids': event_ids,
               'organizer_id': organizer_id
             },
@@ -127,12 +127,16 @@ let plek_team_cal = {
                   text = plek_main.get_first_error_from_ajax_request(data);
               } else {
                   text = plek_main.get_text_from_ajax_request(data, true);
+                  //Set the Button to green
+                  jQuery(button).parent().children('a').css('background-color', 'green');
+                  //Remove the dropdown
+                  jQuery(button).parent().prev().find('select').hide();
               }
-              //plekerror.display_info(__('Change Event Status','pleklang'), event_name+': '+text);
+              plekerror.display_info(__('Accreditation request','pleklang'), text);
             },
             error: function error(data) {
                 console.log(data);
-                plekerror.display_error('', __('Update failed!','pleklang'), __('Change Event Status','pleklang'));
+                plekerror.display_error('', __('Error while sending accreditation request','pleklang'), __('Accreditation request','pleklang'));
             }
           });
     }

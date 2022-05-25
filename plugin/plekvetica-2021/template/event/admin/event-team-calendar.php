@@ -14,7 +14,7 @@ if (empty($events)) {
                 <td><?php echo __('Poster', 'pleklang'); ?></td>
                 <td><?php echo __('Date', 'pleklang'); ?></td>
                 <td><?php echo __('Name', 'pleklang'); ?></td>
-                <td><?php echo __('Ort und Veranstalter', 'pleklang'); ?></td>
+                <td><?php echo __('Venue and Organizer', 'pleklang'); ?></td>
                 <td><?php echo __('Acc Status', 'pleklang'); ?></td>
                 <td><?php echo __('Acc Team', 'pleklang'); ?></td>
                 <td><?php echo __('Interviews', 'pleklang'); ?></td>
@@ -31,7 +31,7 @@ if (empty($events)) {
                 $organizer = $list_event->get_organizers('<br/>');
                 $location = tribe_get_venue($list_event->get_ID());
 
-                $acc_crew = ($list_event->get_event_akkredi_crew()) ? implode('<br/>', $list_event->get_event_akkredi_crew()) : __('Nobody', 'pleklang');
+                $acc_crew = ($list_event->get_event_akkredi_crew()) ? $list_event->get_event_akkredi_crew_formated('<br/>') : __('Nobody', 'pleklang');
                 $acc_status = (current_user_can('plekmanager') or current_user_can('administrator')) ? PlekTemplateHandler::load_template_to_var('acc-status-dropdown', 'event/admin/components', $list_event) : $list_event->get_event_status_text();
                 $canceled = ($list_event->is_canceled()) ? '<i title = "' . __('Event has ben canceled', 'pleklang') . '" class="fas fa-calendar-times"></i>' : false;
                 $featured = ($list_event->is_featured()) ? '<i  title = "' . __('Event is featured event', 'pleklang') . '" class="fas fa-star"></i>' : false;

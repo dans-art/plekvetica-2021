@@ -80,6 +80,7 @@ class PlekBackend /*extends WP_List_Table*/
         add_settings_field('add_band_page_id', 'ID der "Band hinzufügen" Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'add_band_page_id', 'type' => 'input'));
         add_settings_field('edit_event_review_page_id', 'ID der "Event review" Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'edit_event_review_page_id', 'type' => 'input'));
         add_settings_field('my_plek_page_id', 'ID der "My Plekvetica" Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'my_plek_page_id', 'type' => 'input'));
+        add_settings_field('plek_ex_actions_page', 'ID der Seite mit dem plek_external_actions Shortcode', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'plek_ex_actions_page', 'type' => 'input'));
         
         add_settings_field('admin_email', 'Email vom Seiten Admin', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'admin_email', 'type' => 'input'));
         add_settings_field('it_support_email', 'Email vom IT Support', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'it_support_email', 'type' => 'input'));
