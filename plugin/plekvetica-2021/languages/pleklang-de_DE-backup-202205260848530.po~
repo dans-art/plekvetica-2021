@@ -8,11 +8,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2022-05-26 09:01+0000\n"
+"PO-Revision-Date: 2022-05-25 23:22+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.6.2; wp-6.0\n"
+"X-Loco-Version: 2.6.1; wp-5.9.3\n"
 "X-Domain: plekvetica-2021\n"
 
 #: template/email/event/new_event_band_info.php:43
@@ -160,7 +160,7 @@ msgstr "Akkreditierungsstatus"
 #: include/class/event-handler.php:1438
 #, php-format
 msgid "Accreditation status of \"%s\" changed to \"%s\""
-msgstr "Akkreditierungsstatus von \"%s\" wurde auf \"%s\" geändert"
+msgstr "Akkreditierungsstatus wurde von \"%s\" auf \"%s\" geändert"
 
 #: template/event/meta/eventmanager.php:83
 msgid "Accredited members"

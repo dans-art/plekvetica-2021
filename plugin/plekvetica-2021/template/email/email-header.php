@@ -19,8 +19,16 @@ include(PLEK_PATH . 'template/email/email-styles.php');
         .im{
             color: <?php echo $text_color; ?> !important; 
         }
-        .ii a[href]{
+        a{
             color: <?php echo $link_color; ?> !important; 
+        }
+        a.plek-button{
+            background-color: <?php echo $color_red_light; ?>;
+            text-align: center;
+            color: <?php echo $text_color; ?> !important;
+            padding: 0.5em;
+            margin: 0.3em 0;
+            display: block;
         }
     </style>
 </head>
