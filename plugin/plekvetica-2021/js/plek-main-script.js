@@ -675,8 +675,9 @@ let plek_main = {
         });
         //Clear all the textarea fields
         form.find('textarea').each((id, item) => {
-            if (!empty(tinymce.get(id))) {
-                tinymce.get(id).setContent('');
+            let textarea_id = jQuery(item).attr('id');
+            if (!empty(tinymce.get(textarea_id))) {
+                tinymce.get(textarea_id).setContent('');
             }
             jQuery(item).val(''); //Fallback if no wp editor
         });

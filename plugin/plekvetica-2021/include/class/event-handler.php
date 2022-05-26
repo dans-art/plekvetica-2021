@@ -991,7 +991,7 @@ class PlekEventHandler
      */
     public function get_field_value($name = 'post_title', $return_all = false)
     {
-        if (property_exists($this->event['data'], $name)) {
+        if ((isset($this->event['data'])) AND (is_object($this->event['data'])) AND property_exists($this->event['data'], $name)) {
             return $this->event['data']->$name;
         }
         if (isset($this->event['meta'][$name][0])) {
