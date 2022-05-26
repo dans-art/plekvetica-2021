@@ -142,6 +142,8 @@ class PlekEvents extends PlekEventHandler
         $this->event['data'] = $tribe_event;
         if (is_int($tribe_event->ID)) {
             $this->load_event_meta($tribe_event->ID);
+            $this->load_event_terms($tribe_event->ID);
+            $this->load_band_order_and_timetable();
         }
         return;
     }
