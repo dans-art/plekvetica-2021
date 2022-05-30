@@ -1244,25 +1244,27 @@ class PlekEvents extends PlekEventHandler
 
             $min = ($plek_handler->is_dev_server()) ? '' : '.min';
 
-            //wp_enqueue_script('flatpickr-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9.js');
-            //wp_enqueue_script('flatpickr-de-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9-de.js');
             wp_enqueue_script('flatpickr-cdn-script', 'https://npmcdn.com/flatpickr/dist/flatpickr.min.js',[], $plek_handler->version);
             wp_enqueue_script('flatpickr-cdn-de-script', 'https://npmcdn.com/flatpickr/dist/l10n/de.js',[], $plek_handler->version);
-            wp_enqueue_script('manage-plek-events', PLEK_PLUGIN_DIR_URL . "js/manage-event{$min}.js", ['jquery', 'plek-language'], $plek_handler->version);
+            wp_enqueue_script('manage-plek-events', PLEK_PLUGIN_DIR_URL . "js/manage-event{$min}.js", ['jquery', 'plek-language', 'wp-i18n'], $plek_handler->version);
             wp_enqueue_script('plek-jquery-ui', "https://code.jquery.com/ui/1.13.0/jquery-ui.js", ['jquery']);
-
+            
             //Load handler
             $handler = array('event', 'error', 'validator', 'search', 'template');
-            $dependencies = array('jquery', 'plek-language', 'manage-plek-events');
-
+            $dependencies = array('jquery', 'plek-language', 'manage-plek-events', 'wp-i18n');
+            
             foreach ($handler as $handler_name) {
                 wp_enqueue_script("plek-{$handler_name}-handler", PLEK_PLUGIN_DIR_URL . "js/components/{$handler_name}-handler{$min}.js", $dependencies);
                 wp_set_script_translations("plek-{$handler_name}-handler", 'pleklang', PLEK_PATH . "/languages");
             }
-
-            wp_enqueue_script('plek-compare-algorithm', PLEK_PLUGIN_DIR_URL . "js/components/compare-algorithm{$min}.js", ['jquery', 'plek-language', 'manage-plek-events']);
+            
+            wp_enqueue_script('plek-compare-algorithm', PLEK_PLUGIN_DIR_URL . "js/components/compare-algorithm{$min}.js", ['jquery', 'plek-language', 'manage-plek-events', 'wp-i18n']);
+            wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler.js', ['jquery', 'plek-language', 'wp-i18n'], $plek_handler->version);
+            
+            //Set the script translations, called by Wordpress load_script_translations()
             wp_set_script_translations('plek-compare-algorithm', 'pleklang', PLEK_PATH . "/languages");
-            wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler.js', ['jquery', 'plek-language'], $plek_handler->version);
+            wp_set_script_translations('manage-plek-events', 'pleklang', PLEK_PATH . "/languages");
+            wp_set_script_translations('plek-file-upload-script', 'pleklang', PLEK_PATH . "/languages");
         });
     }
 
