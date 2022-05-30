@@ -487,6 +487,10 @@ class PlekUserHandler
             return false;
         }
 
+        if (!$user OR !is_array($user->roles)) {
+            return false;
+        }
+
         $role_first = array_key_first($user->roles);
         if (!isset($user->roles[array_key_first($user->roles)])) {
             return null; //No role found
@@ -561,6 +565,9 @@ class PlekUserHandler
         } elseif (is_int($login_name)) {
             $user = get_user_by('ID', $login_name);
         } else {
+            return false;
+        }
+        if (!$user) {
             return false;
         }
         $user_meta = get_user_meta($user->ID);

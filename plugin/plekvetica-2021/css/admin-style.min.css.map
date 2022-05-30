@@ -1,7 +1,9 @@
 {
-"version": 3,
-"mappings": "AAIQ,iCAAE;EACE,OAAO,EAAE,IAAI;EACb,cAAc,EAAE,MAAM;AAE1B,kCAAG;EACC,SAAS,EAAE,KAAK",
-"sources": ["../scss/admin-style.scss"],
-"names": [],
-"file": "admin-style.min.css"
+    "version": 3,
+    "mappings": "AAAA,AAIQ,kBAJU,CAEd,WAAW,CAEP,EAAE,AAAA,CACE,OAAO,CAAE,IAAI,CACb,cAAc,CAAE,MAAM,CACzB,AAPT,AAQQ,kBARU,CAEd,WAAW,CAMP,GAAG,AAAA,CACC,SAAS,CAAE,KAAK,CACnB,AAIT,AAAA,UAAU,CAAC,2BAA2B,CAAC,GAAG,AAAA,CAClC,SAAS,CAAE,IAAI,CACtB",
+    "sources": [
+        "../scss/admin-style.scss"
+    ],
+    "names": [],
+    "file": "admin-style.min.css"
 }

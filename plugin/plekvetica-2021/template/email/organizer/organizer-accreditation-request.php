@@ -33,7 +33,8 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
                         $pe = new PlekEvents;
                         $pe->load_event($event_id);
                         $event_name =  $pe->get_name();
-                        $confirm_accredi_button_link = get_permalink( $plek_handler->get_plek_option('plek_ex_actions_page') ). '?action=confirm_accreditation&event_id='.$event_id; //@todo: Add function to automatic confirm the accreditation of a Event. 
+                        $security_key = md5($event_id.'confirm_accreditation');
+                        $confirm_accredi_button_link = get_permalink( $plek_handler->get_plek_option('plek_ex_actions_page') ). '?action=confirm_accreditation&event_id='.$event_id.'&key='.$security_key;
                         ?>
                         <a href="<?php echo get_permalink($pe->get_ID()); ?>" target="_blank"><?php echo $event_name; ?></a><br />
                         <?php echo $pe->get_event_akkredi_crew_formated('<br/>');

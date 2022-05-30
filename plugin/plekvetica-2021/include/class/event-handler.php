@@ -432,6 +432,18 @@ class PlekEventHandler
     {
         return $this->get_field_value('post_title');
     }
+    
+    /**
+     * Gets the name, aka post title of the loaded event as a link
+     *@param string $target - The target of the link
+     * @return string The Title with the link to the post
+     */
+    public function get_name_link($target = '_blank')
+    {
+        $link = get_permalink($this->get_ID());
+        $name = $this->get_name();
+        return "<a href='$link' target='$target'>$name</a>";
+    }
 
     /**
      * Gets the ID, of the loaded event
@@ -1219,7 +1231,7 @@ class PlekEventHandler
     /**
      * Loads the event crew formated
      *@param bool|string $separator - If string, the output will be string, separated by the given string
-     * @return false|string false if no crew is found, string if separator is defined or array.
+     * @return false|string|array false if no crew is found, string if separator is defined or array.
      */
     public function get_event_akkredi_crew_formated($separator = false)
     {
@@ -1232,7 +1244,7 @@ class PlekEventHandler
             $display_name = PlekUserHandler::get_user_real_name($login_name);
             //Get the role of the user. If the user is an admin, he will get the role photographer
             $role = PlekUserHandler::get_user_primary_role($login_name, ['administrator' => 'photographer']);
-            return sprintf('%s (%s)', $display_name, $role);
+            return (empty($display_name)) ? false : sprintf('%s (%s)', $display_name, $role);
         }, $crew);
         if (!is_string($separator)) {
             return $crew_formated;

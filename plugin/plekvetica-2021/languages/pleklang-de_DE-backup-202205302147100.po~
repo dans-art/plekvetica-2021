@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2022-05-30 21:47+0000\n"
+"PO-Revision-Date: 2022-05-30 21:38+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -127,7 +127,7 @@ msgstr "Accredi Action"
 msgid "Accreditate Event for: "
 msgstr "Akkreditiere Event für:"
 
-#: include/class/plek-handler.php:568
+#: include/class/plek-handler.php:564
 msgid "Accreditation confirmed"
 msgstr "Akkreditation bestätigt"
 
@@ -166,7 +166,7 @@ msgstr "Akkreditierungsstatus von \"%s\" wurde auf \"%s\" geändert"
 msgid "Accredited members"
 msgstr "Akkreditierte Mitglieder"
 
-#: include/class/plek-handler.php:575
+#: include/class/plek-handler.php:571
 msgid "Action not found or not supported"
 msgstr "Aktion nicht gefunden oder nicht unterstützt"
 
@@ -305,7 +305,7 @@ msgstr "Bands zum verwalten"
 msgid "Bandscore"
 msgstr "Bandscore"
 
-#: template/email/organizer/organizer-accreditation-request.php:48
+#: template/email/organizer/organizer-accreditation-request.php:47
 #, php-format
 msgid "Best regards, %s"
 msgstr "Beste Grüsse, %s"
@@ -360,7 +360,7 @@ msgstr "Schliessen"
 msgid "Community / Fan"
 msgstr "Community / Fan"
 
-#: template/email/organizer/organizer-accreditation-request.php:42
+#: template/email/organizer/organizer-accreditation-request.php:41
 #, php-format
 msgid "Confirm accreditation for %s"
 msgstr "Bestätige die Akkreditierung für %s"
@@ -604,7 +604,7 @@ msgstr "Fehler beim aktualisieren des hervorgehoben Status."
 msgid "Error: %s "
 msgstr "Fehler: %s "
 
-#: include/class/plek-handler.php:571
+#: include/class/plek-handler.php:567
 #, php-format
 msgid "Error: Accreditation could not be confirmed! (%s)"
 msgstr "Fehler: Akkreditierung konnte nicht bestätigt werden (%s)"
@@ -1864,7 +1864,7 @@ msgstr "Danke für die Bestätigung"
 msgid "Thanks for your contribution"
 msgstr "Danke für deinen Beitrag"
 
-#: template/email/organizer/organizer-accreditation-request.php:46
+#: template/email/organizer/organizer-accreditation-request.php:45
 msgid "Thanks in advance and have a great Day!"
 msgstr "Danke im voraus und einen schönen Tag wünschen wir!"
 
@@ -1897,18 +1897,15 @@ msgid "The Event %s is now confirmed as accredited"
 msgstr "Der Event %s ist nun als akkreditiert bestätigt"
 
 #: template/event/organizer/accredi_confirm_message.php:37
-#, fuzzy, php-format
-#| msgid ""
-#| "The Event %s is now confirmed as accredited by the following Plekvetica "
-#| "Members"
+#, php-format
 msgid ""
-"The Event %s is now confirmed as accredited for the following Plekvetica "
+"The Event %s is now confirmed as accredited by the following Plekvetica "
 "Members"
 msgstr ""
 "Für die folgenden Plekvetica Mitglieder ist der Event %s nun als "
 "akkreditiert bestätigt"
 
-#: include/class/plek-handler.php:568
+#: include/class/plek-handler.php:564
 msgid "The Event got confirmed by the organizer"
 msgstr "Der Event wurde durch den Veranstalter bestätigt"
 
@@ -2264,10 +2261,6 @@ msgstr "Du bist nicht berechtigt, diesen Veranstalter zu bearbeiten!"
 #: include/class/venue-handler.php:122 template/event/venue/venue-form.php:16
 msgid "You are not allowed to edit this venue!"
 msgstr "Du bist nicht berechtigt, diesen Ort zu bearbeiten!"
-
-#: include/class/plek-handler.php:563
-msgid "You are not allowed to run this action"
-msgstr "Du hast keine Berechtigung diese Aktion durchzuführen."
 
 #: include/class/ajax-handler.php:271 include/class/ajax-handler.php:290
 #: include/class/ajax-handler.php:348

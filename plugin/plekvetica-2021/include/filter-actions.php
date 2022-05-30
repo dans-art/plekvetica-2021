@@ -8,15 +8,7 @@ if (!defined('ABSPATH')) {
  * @todo Fire only on event list / month view. Not Single Events!
  */
 add_filter('tribe_get_event', [$plek_event, 'plek_tribe_add_terms'], 10, 1);
-/*add_filter('tribe_events_pro_pre_get_posts', function($event){
-    return $event;
-}, 10, 1);*/
 
-//Deactivate the Block editor
-//add_filter('use_block_editor_for_post_type', [$plek_handler, 'plek_disable_gutenberg'], 10, 2);
-
-//Add the band dropdown to the gallery view of ngg
-//add_filter( 'ngg_manage_gallery_fields', 'filter_ngg_manage_gallery_fields', 10, 3 );
 
 add_filter('wp_mail', [new PlekNotificationHandler, 'filter_wp_mail'], 1, 1);
 
@@ -25,8 +17,9 @@ add_action('wp_head', [$plek_handler, 'enqueue_scripts']);
 add_action('wp_head', [$plek_handler, 'enqueue_ajax_functions']);
 add_action('wp_footer', [$plek_handler, 'add_general_js_settings'], 0, 99);
 
-add_action('admin_menu', [$backend_class, 'setup_options']);
+add_action('admin_menu', [$backend_class, 'plek_add_menu']);
 add_action('admin_init', [$backend_class, 'plek_register_settings']);
+
 add_action('admin_init', [$backend_class, 'enqueue_admin_style']);
 
 add_filter('wp_get_nav_menu_items', [$plek_handler, 'wp_get_nav_menu_items_filter'], 10, 3);

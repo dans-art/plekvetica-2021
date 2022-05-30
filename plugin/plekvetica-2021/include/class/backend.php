@@ -39,9 +39,19 @@ class PlekBackend /*extends WP_List_Table*/
      *
      * @return void
      */
-    public function setup_options()
+    public function plek_add_menu()
     {
-        add_options_page('Plekvetica Options', 'Plekvetica', 'manage_options', 'plek-options', [$this, 'render_options']);
+        $icon_url = PLEK_PLUGIN_DIR_URL.'/images/icon/plek-icon-2022.png';
+        add_menu_page(
+            __('Plekvetica', 'pleklang'),
+            __('Plekvetica', 'pleklang'),
+            'manage_options',
+            'plek-options', 
+            [$this, 'render_options'],
+            $icon_url,
+            58
+        );
+
     }
 
     /**

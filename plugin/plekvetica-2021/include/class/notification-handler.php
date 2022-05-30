@@ -171,6 +171,10 @@ class PlekNotificationHandler extends WP_List_Table
             case 'guest':
                 $recipient_id = $plek_handler->get_plek_option('guest_author_id');
                 break;
+            case 'accredi_manager':
+                $recipient_id = $plek_handler->get_plek_option('akkredi_user_id');
+                $type = 'accredi_info';
+                break;
 
             default:
                 return false;
