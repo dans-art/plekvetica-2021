@@ -57,7 +57,7 @@ class PlekEvents extends PlekEventHandler
             case 'post_content':
             case 'text_lead':
                 $content = apply_filters('the_content', $this->get_field_value($name)); //Apply shortcodes in the Content
-                $content = strip_tags($content, $plek_handler -> get_allowed_tags('textarea')); //Removes all the un-allowed tags.
+                $content = strip_tags($content, $plek_handler->get_allowed_tags('textarea')); //Removes all the un-allowed tags.
                 return $content;
                 break;
             case 'venue_short':
@@ -114,7 +114,7 @@ class PlekEvents extends PlekEventHandler
             $this->errors[$event_id] = __('No Event found', 'plek');
             return false;
         }
-        
+
         $this->event['data'] = $db_result[0];
         $this->load_event_meta($event_id);
         $this->load_event_terms($event_id);
@@ -808,10 +808,13 @@ class PlekEvents extends PlekEventHandler
      * Shortcode for the team calendar
      *
      * @return string HTML code of the team calendar
+     * @todo: Translation not working.
      */
-    public function plek_event_team_calendar_shortcode(){
-        wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery'], 1);
-        
+    public function plek_event_team_calendar_shortcode()
+    {
+        wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery', 'plek-language', 'wp-i18n'], 1);
+        wp_set_script_translations('plek-teamcal-script', 'pleklang', PLEK_PATH . "/languages");
+
         $meta_query = array();
         $meta_query['akk_status'] = array('key' => 'akk_status', 'compare' => '!=', 'value' => 'NULL');
         $events = tribe_get_events([
@@ -834,12 +837,14 @@ class PlekEvents extends PlekEventHandler
      *
      * @return string The HTML code returend by the event-team-calendar-accredi template
      */
-    public function plek_event_team_accredi_shortcode(){
-        
+    public function plek_event_team_accredi_shortcode()
+    {
+
         global $wpdb;
 
         wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery'], 1);
-        
+        wp_set_script_translations('plek-teamcal-script', 'pleklang', PLEK_PATH . "/languages");
+
         $limit = 100;
         $from = date('Y-m-d H:i:s');
         $to = '9999-01-01 00:00:00';
@@ -880,7 +885,6 @@ class PlekEvents extends PlekEventHandler
             return __('No posts found', 'pleklang');
         }
         return PlekTemplateHandler::load_template_to_var('event-team-calendar-accredi', 'event/admin', $events);
-        
     }
 
     /**
@@ -1110,8 +1114,8 @@ class PlekEvents extends PlekEventHandler
         }
 
         if (isset($_REQUEST['edit'])) {
-            if(!PlekUserHandler::user_can_edit_post($_REQUEST['edit'])){
-                return __('You are not allowed to edit this Event!','pleklang');
+            if (!PlekUserHandler::user_can_edit_post($_REQUEST['edit'])) {
+                return __('You are not allowed to edit this Event!', 'pleklang');
             }
             $event->load_event(intval($_REQUEST['edit']), 'all');
             return PlekTemplateHandler::load_template_to_var('edit-event-form', 'event/form', $event);
@@ -1160,7 +1164,8 @@ class PlekEvents extends PlekEventHandler
         $short_args = shortcode_atts(
             array(
                 'nr_posts' => '25',
-            ), $atts
+            ),
+            $atts
         );
         $post_status = PlekUserHandler::user_is_in_team() ? array('publish', 'draft') : 'publish';
         $events = tribe_get_events([
@@ -1187,14 +1192,15 @@ class PlekEvents extends PlekEventHandler
         $short_args = shortcode_atts(
             array(
                 'nr_posts' => '25',
-            ), $atts
+            ),
+            $atts
         );
         $limit = $short_args['nr_posts'];
         $page_obj = $this->get_pages_object($limit);
 
 
-        $from = date('Y-m-d M:i:s', strtotime('+17 days', time()) ); //17 days from today
-        $to = date('Y-m-d M:i:s', strtotime('+60 days', time()) ); //34 days from today
+        $from = date('Y-m-d M:i:s', strtotime('+17 days', time())); //17 days from today
+        $to = date('Y-m-d M:i:s', strtotime('+60 days', time())); //34 days from today
 
         $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title, posts.post_status, startdate.meta_value as startdate
             FROM `{$wpdb->prefix}posts` as posts
@@ -1214,8 +1220,8 @@ class PlekEvents extends PlekEventHandler
             LIMIT %d OFFSET %d", $from, $to, $limit, $page_obj->offset);
         $posts = $wpdb->get_results($query);
 
-        if(empty($posts)){
-            return __('No Events found','pleklang');
+        if (empty($posts)) {
+            return __('No Events found', 'pleklang');
         }
 
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $posts, 'new_events');
@@ -1244,23 +1250,23 @@ class PlekEvents extends PlekEventHandler
 
             $min = ($plek_handler->is_dev_server()) ? '' : '.min';
 
-            wp_enqueue_script('flatpickr-cdn-script', 'https://npmcdn.com/flatpickr/dist/flatpickr.min.js',[], $plek_handler->version);
-            wp_enqueue_script('flatpickr-cdn-de-script', 'https://npmcdn.com/flatpickr/dist/l10n/de.js',[], $plek_handler->version);
+            wp_enqueue_script('flatpickr-cdn-script', 'https://npmcdn.com/flatpickr/dist/flatpickr.min.js', [], $plek_handler->version);
+            wp_enqueue_script('flatpickr-cdn-de-script', 'https://npmcdn.com/flatpickr/dist/l10n/de.js', [], $plek_handler->version);
             wp_enqueue_script('manage-plek-events', PLEK_PLUGIN_DIR_URL . "js/manage-event{$min}.js", ['jquery', 'plek-language', 'wp-i18n'], $plek_handler->version);
             wp_enqueue_script('plek-jquery-ui', "https://code.jquery.com/ui/1.13.0/jquery-ui.js", ['jquery']);
-            
+
             //Load handler
             $handler = array('event', 'error', 'validator', 'search', 'template');
             $dependencies = array('jquery', 'plek-language', 'manage-plek-events', 'wp-i18n');
-            
+
             foreach ($handler as $handler_name) {
                 wp_enqueue_script("plek-{$handler_name}-handler", PLEK_PLUGIN_DIR_URL . "js/components/{$handler_name}-handler{$min}.js", $dependencies);
                 wp_set_script_translations("plek-{$handler_name}-handler", 'pleklang', PLEK_PATH . "/languages");
             }
-            
+
             wp_enqueue_script('plek-compare-algorithm', PLEK_PLUGIN_DIR_URL . "js/components/compare-algorithm{$min}.js", ['jquery', 'plek-language', 'manage-plek-events', 'wp-i18n']);
             wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler.js', ['jquery', 'plek-language', 'wp-i18n'], $plek_handler->version);
-            
+
             //Set the script translations, called by Wordpress load_script_translations()
             wp_set_script_translations('plek-compare-algorithm', 'pleklang', PLEK_PATH . "/languages");
             wp_set_script_translations('manage-plek-events', 'pleklang', PLEK_PATH . "/languages");
@@ -1369,9 +1375,10 @@ class PlekEvents extends PlekEventHandler
      * @param string|int $event_id - The Event ID
      * @return bool|string True on success, string on error
      */
-    public function confirm_accreditation($event_id){
-        if(empty($event_id)){
-            return __('No Event ID found.','pleklang');
+    public function confirm_accreditation($event_id)
+    {
+        if (empty($event_id)) {
+            return __('No Event ID found.', 'pleklang');
         }
         return $this->set_akkredi_status(intval($event_id), 'ab');
     }

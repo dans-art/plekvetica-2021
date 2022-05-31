@@ -7,8 +7,8 @@ if (!defined('ABSPATH')) {
 class PlekUserHandler
 {
 
-    protected static $team_roles = array('administrator', 'plekmanager', 'cutter', 'eventmanager', 'interviewer', 'photographer', 'reviewwriter', 'videograph'); //All the possible roles of the team members
-    protected static $plek_custom_roles = array();
+    protected static $team_roles = []; //Set by the constructor 
+    protected static $plek_custom_roles = []; //Set by the constructor 
 
     public function __construct()
     {
@@ -19,7 +19,16 @@ class PlekUserHandler
             'plek-partner' => __('Partner', 'pleklang'),
         );
 
-        self::$team_roles = array(
+        self::$team_roles = self::get_team_roles();
+    }
+
+    /**
+     * Get the team roles.
+     *
+     * @return void
+     */
+    public static function get_team_roles(){
+        return array(
             'administrator' => __('Administrator', 'pleklang'),
             'plekmanager' => __('Plekvetica Manager', 'pleklang'),
             'cutter' => __('Cutter', 'pleklang'),
@@ -28,7 +37,7 @@ class PlekUserHandler
             'photographer' => __('Photographer', 'pleklang'),
             'reviewwriter' => __('Review writer', 'pleklang'),
             'videograph' => __('Videograph', 'pleklang')
-        );
+        ); 
     }
 
     /**
@@ -144,7 +153,8 @@ class PlekUserHandler
      */
     public static function user_is_in_team(object $user = null)
     {
-        return self::search_role(self::$team_roles, $user);
+        $team_roles = self::get_team_roles();
+        return self::search_role($team_roles, $user);
     }
 
     /**
@@ -499,14 +509,14 @@ class PlekUserHandler
         if (isset($replace_role[$user->roles[$role_first]])) {
             $user->roles[$role_first] = $replace_role[$user->roles[$role_first]]; //Replaces the role
         }
-
-        return (isset(self::$team_roles[$user->roles[$role_first]])) ? self::$team_roles[$user->roles[$role_first]] : $user->roles[$role_first]; //Retruns the translated string if found, otherwise the technical role name
+        $team_roles = self::get_team_roles();
+        return (isset($team_roles[$user->roles[$role_first]])) ? $team_roles[$user->roles[$role_first]] : $user->roles[$role_first]; //Retruns the translated string if found, otherwise the technical role name
     }
 
     /**
      * Search for a specific role.
      *
-     * @param string $rolename - name of the role
+     * @param string|array $rolename - name of the role to search for. Can be single role as string or array with roles
      * @param object $user - WP_User object
      * @return bool
      */

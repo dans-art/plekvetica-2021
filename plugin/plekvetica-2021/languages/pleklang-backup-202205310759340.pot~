@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plekvetica - 2021\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 07:59+0000\n"
+"POT-Creation-Date: 2022-05-31 07:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -129,7 +129,7 @@ msgid "Accreditation confirmed"
 msgstr ""
 
 #: template/email/organizer/organizer-accreditation-request.php:24
-#: js/plek-teamcal-script.js:136 js/plek-teamcal-script.js:140
+#: js/plek-teamcal-script.js:135 js/plek-teamcal-script.js:139
 msgid "Accreditation request"
 msgstr ""
 
@@ -456,11 +456,6 @@ msgstr ""
 msgid "Displayname"
 msgstr ""
 
-#: js/plek-teamcal-script.js:90
-#, javascript-format
-msgid "Do you wanna send %d accreditation requests to:"
-msgstr ""
-
 #: js/plek-teamcal-script.js:69
 msgid "Do you wanna send a accreditation request to:"
 msgstr ""
@@ -591,7 +586,7 @@ msgstr ""
 msgid "Error while saving the organizer settings."
 msgstr ""
 
-#: js/plek-teamcal-script.js:140
+#: js/plek-teamcal-script.js:139
 msgid "Error while sending accreditation request"
 msgstr ""
 
