@@ -12,4 +12,12 @@ $pn = new PlekNotificationHandler;
 //$pn -> push_to_band_follower(63058);
 //$pn -> push_notification([1],'test', 'Style Test', 'Just a style test', 'none');
 //$emailer->send_mail($guest_email, __('Your Event at Plekvetica','pleklang'), $message);
-echo PlekTemplateHandler::load_template_to_var('accredi_confirm_message','event/organizer', 76061);
+//echo PlekTemplateHandler::load_template_to_var('accredi_confirm_message','event/organizer', 76061);
+$organizer_id = 26575;
+$plek_organi = new PlekOrganizerHandler;
+$organi_contact = $plek_organi->get_organizer_media_contact($organizer_id);
+$args = array();
+$args['event_ids'] = [68222];
+//echo PlekTemplateHandler::load_template_to_var('organizer-accreditation-request', 'email/organizer', $organi_contact, $args['event_ids'], $organizer_id);
+
+echo PlekTemplateHandler::load_template_to_var('accreditation-confirmed-admin-info','email/event');

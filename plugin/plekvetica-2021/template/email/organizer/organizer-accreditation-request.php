@@ -7,6 +7,7 @@ global $plek_handler;
 
 $organizer_contact = (isset($template_args[0])) ? $template_args[0] : ['email' => '', 'name' => '']; //The contact details of the organizer
 $event_ids = (isset($template_args[1])) ? $template_args[1] : []; //The Event IDs for the accreditation
+$organizer_id = (isset($template_args[2])) ? $template_args[2] : 0; //The ID of the organizer
 
 $user_name = PlekUserHandler::get_user_display_name();
 
@@ -34,7 +35,7 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
                         $pe->load_event($event_id);
                         $event_name =  $pe->get_name();
                         $security_key = md5($event_id.'confirm_accreditation');
-                        $confirm_accredi_button_link = get_permalink( $plek_handler->get_plek_option('plek_ex_actions_page') ). '?action=confirm_accreditation&event_id='.$event_id.'&key='.$security_key;
+                        $confirm_accredi_button_link = get_permalink( $plek_handler->get_plek_option('plek_ex_actions_page') ). '?action=confirm_accreditation&event_id='.$event_id.'&organizer_id='.$organizer_id.'&key='.$security_key;
                         ?>
                         <a href="<?php echo get_permalink($pe->get_ID()); ?>" target="_blank"><?php echo $event_name; ?></a><br />
                         <?php echo $pe->get_event_akkredi_crew_formated('<br/>');

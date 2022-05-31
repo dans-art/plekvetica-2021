@@ -551,7 +551,7 @@ class PlekHandler
     {
         $action = (isset($_GET['action'])) ? $_GET['action'] : null;
         switch ($action) {
-            /**
+                /**
              * Confirms the accreditation by the organizer
              */
             case 'confirm_accreditation':
@@ -559,16 +559,21 @@ class PlekHandler
                 $pn = new PlekNotificationHandler;
                 $event_id = (isset($_GET['event_id'])) ? $_GET['event_id'] : null;
                 $security_key = (isset($_GET['key'])) ? $_GET['key'] : null;
-                if($security_key !== md5($event_id.'confirm_accreditation')){
-                    return __('You are not allowed to run this action','pleklang');
+                if ($security_key !== md5($event_id . 'confirm_accreditation')) {
+                    return __('You are not allowed to run this action', 'pleklang');
                 }
                 $confirm = $pe->confirm_accreditation($event_id);
-                if($confirm === true){
-                   //Send info to accredi Manager
-                   $pn->push_to_role('accredi_manager', __('Accreditation confirmed','pleklang'), __('The Event got confirmed by the organizer','pleklang'), get_permalink($event_id));
-                    return PlekTemplateHandler::load_template_to_var('accredi_confirm_message','event/organizer', $event_id);
-                }else{
-                    return sprintf(__('Error: Accreditation could not be confirmed! (%s)','pleklang'), $confirm);
+                if ($confirm === true) {
+                    //Send info to accredi Manager
+                    $pn->push_to_role(
+                        'accredi_manager',
+                        __('Accreditation confirmed', 'pleklang'),
+                        PlekTemplateHandler::load_template_to_var('accreditation-confirmed-admin-info', 'email/event'),
+                        get_permalink($event_id)
+                    );
+                    return PlekTemplateHandler::load_template_to_var('accredi_confirm_message', 'event/organizer', $event_id);
+                } else {
+                    return sprintf(__('Error: Accreditation could not be confirmed! (%s)', 'pleklang'), $confirm);
                 }
                 break;
             default:

@@ -247,7 +247,7 @@ class PlekNotificationHandler extends WP_List_Table
                     return __('No Event ID given. Expects an Array with the Event IDs','pleklang');
                 }
                 $subject = __('Accreditation request from Plekvetica','pleklang');
-                $message = PlekTemplateHandler::load_template_to_var('organizer-accreditation-request', 'email/organizer', $organi_contact, $args['event_ids']);
+                $message = PlekTemplateHandler::load_template_to_var('organizer-accreditation-request', 'email/organizer', $organi_contact, $args['event_ids'], $organizer_id);
                 break;
             
             default:

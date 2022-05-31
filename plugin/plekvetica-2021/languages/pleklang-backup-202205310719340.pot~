@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plekvetica - 2021\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 07:19+0000\n"
+"POT-Creation-Date: 2022-05-30 21:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -124,11 +124,11 @@ msgstr ""
 msgid "Accreditate Event for: "
 msgstr ""
 
-#: include/class/plek-handler.php:570
+#: include/class/plek-handler.php:568
 msgid "Accreditation confirmed"
 msgstr ""
 
-#: template/email/organizer/organizer-accreditation-request.php:24
+#: template/email/organizer/organizer-accreditation-request.php:23
 #: js/plek-teamcal-script.js:135 js/plek-teamcal-script.js:139
 msgid "Accreditation request"
 msgstr ""
@@ -138,7 +138,7 @@ msgid "Accreditation request added"
 msgstr ""
 
 #: include/class/notification-handler.php:249
-#: template/email/organizer/organizer-accreditation-request.php:14
+#: template/email/organizer/organizer-accreditation-request.php:13
 msgid "Accreditation request from Plekvetica"
 msgstr ""
 
@@ -163,7 +163,7 @@ msgstr ""
 msgid "Accredited members"
 msgstr ""
 
-#: include/class/plek-handler.php:580
+#: include/class/plek-handler.php:575
 msgid "Action not found or not supported"
 msgstr ""
 
@@ -302,7 +302,7 @@ msgstr ""
 msgid "Bandscore"
 msgstr ""
 
-#: template/email/organizer/organizer-accreditation-request.php:49
+#: template/email/organizer/organizer-accreditation-request.php:48
 #, php-format
 msgid "Best regards, %s"
 msgstr ""
@@ -355,7 +355,7 @@ msgstr ""
 msgid "Community / Fan"
 msgstr ""
 
-#: template/email/organizer/organizer-accreditation-request.php:43
+#: template/email/organizer/organizer-accreditation-request.php:42
 #, php-format
 msgid "Confirm accreditation for %s"
 msgstr ""
@@ -412,10 +412,6 @@ msgstr ""
 #: include/class/form-validator.php:511 template/event/meta/datetime.php:9
 #: template/event/form/components/date.php:20
 msgid "Date & Time"
-msgstr ""
-
-#: template/email/event/accreditation-confirmed-admin-info.php:35
-msgid "Date of confirmation"
 msgstr ""
 
 #: template/system/user-settings/band-settings-form.php:18
@@ -603,7 +599,7 @@ msgstr ""
 msgid "Error: %s "
 msgstr ""
 
-#: include/class/plek-handler.php:576
+#: include/class/plek-handler.php:571
 #, php-format
 msgid "Error: Accreditation could not be confirmed! (%s)"
 msgstr ""
@@ -853,7 +849,7 @@ msgstr ""
 msgid "First Name"
 msgstr ""
 
-#: include/class/band-handler.php:1165 include/class/events.php:1361
+#: include/class/band-handler.php:1165 include/class/events.php:1359
 #: template/band/meta/details.php:19 template/event/meta/details.php:7
 msgid "Follow"
 msgstr ""
@@ -918,7 +914,7 @@ msgstr ""
 msgid "Hey %s, Some of your followed Bands are playing at %s"
 msgstr ""
 
-#: template/email/organizer/organizer-accreditation-request.php:26
+#: template/email/organizer/organizer-accreditation-request.php:25
 #, php-format
 msgid "Hi, %s"
 msgstr ""
@@ -1108,10 +1104,6 @@ msgstr ""
 msgid "Mark this event as postponed"
 msgstr ""
 
-#: template/email/event/accreditation-confirmed-admin-info.php:34
-msgid "Media contact"
-msgstr ""
-
 #: include/class/event-handler.php:1410
 msgid "Member is already removed"
 msgstr ""
@@ -1274,7 +1266,7 @@ msgstr ""
 msgid "No Event ID found"
 msgstr ""
 
-#: include/class/events.php:1374
+#: include/class/events.php:1372
 msgid "No Event ID found."
 msgstr ""
 
@@ -1406,7 +1398,6 @@ msgid "Oops, something went wrong.... sorry!"
 msgstr ""
 
 #: include/class/event-handler.php:2688 include/class/user-handler.php:18
-#: template/email/event/accreditation-confirmed-admin-info.php:33
 #: template/event/admin/event-team-calendar-accredi.php:14
 #: template/event/form/add-event-form-details.php:18
 #: template/event/form/edit-event-form.php:36
@@ -1839,7 +1830,7 @@ msgstr ""
 msgid "Thanks for your contribution"
 msgstr ""
 
-#: template/email/organizer/organizer-accreditation-request.php:47
+#: template/email/organizer/organizer-accreditation-request.php:46
 msgid "Thanks in advance and have a great Day!"
 msgstr ""
 
@@ -1864,21 +1855,20 @@ msgstr ""
 msgid "The Event %s got added to the Plekvetica Eventcalendar."
 msgstr ""
 
-#: template/email/event/accreditation-confirmed-admin-info.php:30
-#, php-format
-msgid "The Event %s got confirmed by the organizer."
-msgstr ""
-
-#: template/event/organizer/accredi_confirm_message.php:48
+#: template/event/organizer/accredi_confirm_message.php:47
 #, php-format
 msgid "The Event %s is now confirmed as accredited"
 msgstr ""
 
-#: template/event/organizer/accredi_confirm_message.php:35
+#: template/event/organizer/accredi_confirm_message.php:37
 #, php-format
 msgid ""
 "The Event %s is now confirmed as accredited for the following Plekvetica "
 "Members"
+msgstr ""
+
+#: include/class/plek-handler.php:568
+msgid "The Event got confirmed by the organizer"
 msgstr ""
 
 #: js/manage-event.js:757
@@ -2042,7 +2032,7 @@ msgstr ""
 msgid "To the Website of %s"
 msgstr ""
 
-#: include/class/events.php:1328
+#: include/class/events.php:1326
 msgid "Today"
 msgstr ""
 
@@ -2054,7 +2044,7 @@ msgstr ""
 msgid "Undefined"
 msgstr ""
 
-#: include/class/band-handler.php:1163 include/class/events.php:1359
+#: include/class/band-handler.php:1163 include/class/events.php:1357
 #: template/band/meta/details.php:19 template/event/meta/details.php:7
 msgid "Unfollow"
 msgstr ""
@@ -2145,11 +2135,11 @@ msgstr ""
 msgid "Watch %s on Youtube."
 msgstr ""
 
-#: template/email/organizer/organizer-accreditation-request.php:29
+#: template/email/organizer/organizer-accreditation-request.php:28
 msgid "We like to ask for an accreditation for the following Events"
 msgstr ""
 
-#: template/email/organizer/organizer-accreditation-request.php:28
+#: template/email/organizer/organizer-accreditation-request.php:27
 msgid "We like to ask for an accreditation of the following Event"
 msgstr ""
 
