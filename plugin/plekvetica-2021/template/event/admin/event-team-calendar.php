@@ -40,7 +40,7 @@ if (empty($events)) {
             ?>
                 <tr class='event-list-item <?php echo ($list_event->is_canceled()) ? 'event-canceled' : ''; ?> <?php echo ($featured_missing) ? 'event-missing-featured' : ''; ?> <?php echo ($missing_details) ? 'event-missing-details' : ''; ?>'>
                     <td class="event_poster"><?php echo $poster; ?></td>
-                    <td><?php echo $list_event->get_start_date('d-m-Y'); ?></td>
+                    <td><?php echo $list_event->get_event_date('d-m-Y'); ?></td>
                     <td class="event_name"><a href="<?php echo get_permalink($list_event->get_ID()); ?>"><?php echo $list_event->get_name(); ?></a></td>
                     <td class='event-organi-and-location-container'>
                         <?php if($location === $organizer): ?>

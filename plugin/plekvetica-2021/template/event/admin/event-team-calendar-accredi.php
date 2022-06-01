@@ -27,8 +27,8 @@ if (empty($events)) {
                 $loaded_ids[$event->ID] = $event->ID;
                 $list_event = new PlekEvents();
                 $list_event->load_event_from_tribe_events($event);
-                $startDatetime = $list_event->get_field_value('_EventStartDate');
-                $stime = strtotime($startDatetime);
+                //$startDatetime = $list_event->get_field_value('_EventStartDate');
+                //$stime = strtotime($startDatetime);
                 $acc_status = (current_user_can('plekmanager') or current_user_can('administrator')) ? PlekTemplateHandler::load_template_to_var('acc-status-dropdown', 'event/admin/components', $list_event) : $list_event->get_event_status_text();
 
                 $organizer_ids = $list_event->get_field_value('_EventOrganizerID', true);
@@ -61,7 +61,7 @@ if (empty($events)) {
             ?>
                 <tr class="event-item accredi-event-item" data-organizer_id="<?php echo (is_array($organizer_ids)) ? implode(',', $organizer_ids) : $organizer_ids; ?>" data-event_id="<?php echo $event->ID; ?>">
                     <td class="event_organizer"><?php echo (is_array($organizers)) ? implode('', $organizers) : $organizers; ?></td>
-                    <td><?php echo $list_event->get_start_date('d-m-Y'); ?></td>
+                    <td><?php echo $list_event->get_event_date('d-m-Y'); ?></td>
                     <td class="event_name" class="<?php echo ($canceled === true) ? 'event_canceled' : ''; ?>"><a href="<?php echo get_permalink($list_event->get_ID()); ?>"><?php echo $list_event->get_name(); ?></a></td>
                     <td><?php echo $acc_crew; ?></td>
                     <td><?php echo $acc_status; ?></td>

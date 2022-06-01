@@ -17,7 +17,7 @@ $organizer_id = 26575;
 $plek_organi = new PlekOrganizerHandler;
 $organi_contact = $plek_organi->get_organizer_media_contact($organizer_id);
 $args = array();
-$args['event_ids'] = [68222];
+$args['event_ids'] = [68222, 75900];
 //echo PlekTemplateHandler::load_template_to_var('organizer-accreditation-request', 'email/organizer', $organi_contact, $args['event_ids'], $organizer_id);
 
 echo PlekTemplateHandler::load_template_to_var('accreditation-confirmed-admin-info','email/event');

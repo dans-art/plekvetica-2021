@@ -770,6 +770,20 @@ class PlekEventHandler
         return date_i18n($format, $seconds);
     }
 
+    /**
+     * Returns the event Date. If multiday, the enddate will be returned as well.
+     *
+     * @param string $format - Format of the date
+     * @param string $separator - Separator between start and enddate (only on multiday)
+     * @return string The even date
+     */
+    public function get_event_date(string $format = 'd m Y', $separator = ' - '){
+        if($this->is_multiday()){
+            return $this->get_start_date($format) . $separator . $this->get_end_date($format);
+        }
+        return $this->get_start_date($format);
+    }
+
     public function get_event_classes(bool $return_string = true)
     {
         $classes = array();

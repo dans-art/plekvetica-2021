@@ -28,6 +28,7 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
                     ? __('We like to ask for an accreditation of the following Event', 'pleklang')
                     : __('We like to ask for an accreditation for the following Events', 'pleklang'); ?>
                 <br />
+                <br />
                 <?php if (is_array($event_ids) and !empty($event_ids)) : ?>
                     <?php foreach ($event_ids as $event_id) : ?>
                         <?php
@@ -38,6 +39,7 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
                         $confirm_accredi_button_link = get_permalink( $plek_handler->get_plek_option('plek_ex_actions_page') ). '?action=confirm_accreditation&event_id='.$event_id.'&organizer_id='.$organizer_id.'&key='.$security_key;
                         ?>
                         <a href="<?php echo get_permalink($pe->get_ID()); ?>" target="_blank"><?php echo $event_name; ?></a><br />
+                        <?php echo $pe->get_event_date('d.m.Y'); ?><br/>
                         <?php echo $pe->get_event_akkredi_crew_formated('<br/>');
                         ?><br />
                         <?php PlekTemplateHandler::load_template('button', 'components', $confirm_accredi_button_link, sprintf(__('Confirm accreditation for %s', 'pleklang'), $event_name), '_blank'); ?><br />
