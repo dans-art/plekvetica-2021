@@ -20,4 +20,9 @@ $args = array();
 $args['event_ids'] = [68222, 75900];
 //echo PlekTemplateHandler::load_template_to_var('organizer-accreditation-request', 'email/organizer', $organi_contact, $args['event_ids'], $organizer_id);
 
-echo PlekTemplateHandler::load_template_to_var('accreditation-confirmed-admin-info','email/event');
+//echo PlekTemplateHandler::load_template_to_var('accreditation-confirmed-admin-info','email/event');
+/*
+$message = sprintf(__('A new Band "%s" has been added.', 'pleklang'), 'Testband');
+$message .= '<br/>'.PlekUserHandler::get_current_user_display_name(__('Added by','pleklang'));
+$action = get_term_link(3424);
+s(PlekNotificationHandler::push_to_role('eventmanager', __('New Band added', 'pleklang'), $message, $action));*/

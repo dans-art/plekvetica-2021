@@ -27,7 +27,8 @@ class PlekUserHandler
      *
      * @return void
      */
-    public static function get_team_roles(){
+    public static function get_team_roles()
+    {
         return array(
             'administrator' => __('Administrator', 'pleklang'),
             'plekmanager' => __('Plekvetica Manager', 'pleklang'),
@@ -37,7 +38,7 @@ class PlekUserHandler
             'photographer' => __('Photographer', 'pleklang'),
             'reviewwriter' => __('Review writer', 'pleklang'),
             'videograph' => __('Videograph', 'pleklang')
-        ); 
+        );
     }
 
     /**
@@ -497,7 +498,7 @@ class PlekUserHandler
             return false;
         }
 
-        if (!$user OR !is_array($user->roles)) {
+        if (!$user or !is_array($user->roles)) {
             return false;
         }
 
@@ -557,6 +558,23 @@ class PlekUserHandler
             }
         }
         return (isset($user->display_name)) ? $user->display_name : $login_name;
+    }
+
+
+    /**
+     * Gets the current user display name or "Guest Author" if not found.
+     *
+     * @param string $prepend - Content to add before the user name
+     * @param string $append - Content to add after the user name
+     * @return string The Username
+     */
+    public static function get_current_user_display_name($prepend = '', $append = '')
+    {
+        $logged_in = self::get_user_display_name();
+        if (!$logged_in) {
+            return $prepend . ' ' . __('Guest Author', 'pleklang') . ' ' . $append;
+        }
+        return  $prepend . ' ' . $logged_in . ' ' . $append;
     }
 
     /**

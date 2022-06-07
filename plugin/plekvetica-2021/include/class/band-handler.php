@@ -833,6 +833,7 @@ class PlekBandHandler
         if (is_array($add_term) and isset($add_term['term_id'])) {
             //Send Notification to admin
             $message = sprintf(__('A new Band "%s" has been added.', 'pleklang'), $name);
+            $message .= '<br/>'.PlekUserHandler::get_current_user_display_name(__('Added by','pleklang'));
             $action = get_term_link((int) $add_term['term_id']);
             PlekNotificationHandler::push_to_role('eventmanager', __('New Band added', 'pleklang'), $message, $action);
             return $this->update_band($add_term['term_id'], true);
