@@ -28,11 +28,13 @@ class PlekSearchHandler
     {
         $query = get_search_query();
         $search_result = PlekBandHandler::search_band($query);
-        if (!empty($search_result)) {
-
+        if (!empty($search_result) AND isset($search_result[0]) AND $search_result[0] !== false) {
             $result = "";
             $this->found_bands = [];
             foreach ($search_result as $term) {
+                if(!is_object($term)){
+                    continue;
+                }
                 $this->found_bands[] = $term->term_id;
                 $result .= PlekTemplateHandler::load_template_to_var('band-list-item', 'band', $term->slug);
             }

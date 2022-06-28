@@ -58,8 +58,7 @@ class PlekEvents extends PlekEventHandler
             case 'text_lead':
                 $content = apply_filters('the_content', $this->get_field_value($name)); //Apply shortcodes in the 
                 $forbidden_tags = $plek_handler->get_forbidden_tags('textarea');
-                $content =  $plek_handler->remove_tags($content, $forbidden_tags); 
-                //$content = strip_tags($content, $plek_handler->get_allowed_tags('textarea')); //Removes all the un-allowed tags.
+                //$content =  $plek_handler->remove_tags($content, $forbidden_tags); //causes more problems that it solves...
                 return $content;
                 break;
             case 'venue_short':
