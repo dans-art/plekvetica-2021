@@ -1,6 +1,6 @@
 <?php
 global $plek_event;
-$text_review = $plek_event->get_field_value('text_review');
+$text_review = apply_filters('the_content', $plek_event->get_field_value('text_review'));
 ?>
         <div class="event-text-lead"><?php echo $plek_event->get_field('text_lead'); ?></div>
         <div class="event-photos">

@@ -466,7 +466,7 @@ class PlekHandler
     {
         switch ($type) {
             case 'textarea':
-                return ['strong', 'b', 'i', 'br', 'p', 'h4', 'h5', 'h6'];
+                return ['strong', 'b', 'i', 'br', 'p', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'img'];
                 break;
 
             default:
@@ -505,12 +505,13 @@ class PlekHandler
     public function remove_tags($content, $tags_to_remove = ['script'])
     {
 
-        if (empty($tags_to_remove)) {
+        if (empty($tags_to_remove) or !is_array($tags_to_remove)) {
             return $content;
         }
 
         $content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
         $dom = new DOMDocument();
+        libxml_use_internal_errors(true); //Catch errors
         $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOWARNING);
 
 
@@ -527,7 +528,7 @@ class PlekHandler
         foreach ($remove as $item_to_remove) {
             $item_to_remove->parentNode->removeChild($item_to_remove);
         }
-
+        libxml_clear_errors(); //Clear errors catched before
         return $dom->saveHTML();
     }
 
