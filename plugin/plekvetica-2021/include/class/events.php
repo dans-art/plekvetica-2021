@@ -821,6 +821,7 @@ class PlekEvents extends PlekEventHandler
         $events = tribe_get_events([
             'eventDisplay'   => 'custom',
             'start_date'     => date('Y-m-d', time() -  172800), // 172800 = Two days in seconds 
+            'end_date'     => date('Y-m-d', time() +  60*60*365*5), // Five Years from today 
             'posts_per_page' => 50,
             'order'       => 'ASC',
             'order_by'       => 'start_date',
