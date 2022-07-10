@@ -432,7 +432,7 @@ class PlekEventHandler
     {
         return $this->get_field_value('post_title');
     }
-    
+
     /**
      * Gets the name, aka post title of the loaded event as a link
      *@param string $target - The target of the link
@@ -777,8 +777,9 @@ class PlekEventHandler
      * @param string $separator - Separator between start and enddate (only on multiday)
      * @return string The even date
      */
-    public function get_event_date(string $format = 'd m Y', $separator = ' - '){
-        if($this->is_multiday()){
+    public function get_event_date(string $format = 'd m Y', $separator = ' - ')
+    {
+        if ($this->is_multiday()) {
             return $this->get_start_date($format) . $separator . $this->get_end_date($format);
         }
         return $this->get_start_date($format);
@@ -1017,7 +1018,7 @@ class PlekEventHandler
      */
     public function get_field_value($name = 'post_title', $return_all = false)
     {
-        if ((isset($this->event['data'])) AND (is_object($this->event['data'])) AND property_exists($this->event['data'], $name)) {
+        if ((isset($this->event['data'])) and (is_object($this->event['data'])) and property_exists($this->event['data'], $name)) {
             return $this->event['data']->$name;
         }
         if (isset($this->event['meta'][$name][0])) {
@@ -1794,18 +1795,23 @@ class PlekEventHandler
             $acf['text_review'] = " "; //Workaround to avoid displaying the original post content. 
         }
 
+        //Updates the sortorder in the Album. 
         $sortorder =  $plek_ajax_handler->get_ajax_data_as_array('event_gallery_sortorder');
-        if (!empty($sortorder) and empty($acf['album_ids'])) {
-            foreach ($sortorder as $album_id => $gallery_id_array) {
+        if (!empty($sortorder[0]) and empty($acf['album_ids'])) {
+            foreach ($sortorder[0] as $album_id => $gallery_id_array) {
                 $album_mapper = C_Album_Mapper::get_instance();
                 $album = $album_mapper->find($album_id);
-                if ($album) {
+                //Save the new sortorder, but only if it got changed
+                if (!$album) {
+                    $failed[] = 'event_gallery_sortorder (No Album found)';
+                    continue;
+                }
+                if ($sortorder[0]->{$album_id} !== $album->sortorder) {
+                    //Only try to save when there are new values
                     $album->sortorder = $gallery_id_array;
                     if (!C_Album_Mapper::get_instance()->save($album)) {
                         $failed[] = 'event_gallery_sortorder (Could not save the galleries)';
                     }
-                } else {
-                    $failed[] = 'event_gallery_sortorder (No Album found)';
                 }
             }
         }
@@ -2531,7 +2537,7 @@ class PlekEventHandler
     public function get_event_gallery_id_by_band($band_id = null)
     {
         $albums = $this->get_field_value_decoded('band_gallery_relationship');
-        $band_id = intval($band_id);
+        $band_id = (strpos($band_id, 'impression') !== false) ? $band_id : intval($band_id); //convert to Int if it is no impression gallery
         if (empty($albums)) {
             return (!empty($band_id)) ? null : array();
         }
@@ -2553,7 +2559,7 @@ class PlekEventHandler
     public function get_event_album_id_by_band($band_id = null)
     {
         $albums = $this->get_field_value_decoded('band_gallery_relationship');
-        $band_id = intval($band_id);
+        $band_id = (strpos($band_id, 'impression') !== false) ? $band_id : intval($band_id); //convert to Int if it is no impression album
         if (empty($albums)) {
             return (!empty($band_id)) ? null : array();
         }
@@ -2626,9 +2632,19 @@ class PlekEventHandler
             //Load the event
             $this->load_event($event_id);
         }
+
         //Default format
         $date = $this->get_start_date('Y.m.d');
         $name = $this->get_name();
+
+        if (strpos($band_id, 'impression') !== false) {
+            //It is an Impression Album
+            $name_part = explode('_', $band_id); //impression_DATE eg: impression_13.01.2022
+            $name_date = isset($name_part[1]) ? $name_part[1] : $date;
+            $date_converted = date('Y.m.d', strtotime($name_date)); //Convert the date
+            return $date_converted . ' - ' . $name;
+        }
+
         if ($this->is_multiday()) {
             //Check the day the band is playing, if multiday and timetable defined.
             $playday = $this->get_band_playtime($band_id, 'Y.m.d');
@@ -2652,13 +2668,21 @@ class PlekEventHandler
             $this->load_event($event_id);
         }
 
+        $venue = $this->get_venue_name();
+
+        if (strpos($band_id, 'impression') !== false) {
+            //It is an Impression Gallery
+            $name_part = explode('_', $band_id); //impression_DATE eg: impression_13.01.2022
+            $name_date = isset($name_part[1]) ? $name_part[1] : $this->get_start_date('d.m.Y');
+            $date_converted = date('d.m.Y', strtotime($name_date)); //Convert the date
+            return __('Impression', 'pleklang') . ' @ ' . $venue . ' - ' . $date_converted;
+        }
+
         $band_handler = new PlekBandHandler;
         $band_handler->load_band_object_by_id($band_id);
 
         $playday = $this->get_band_playtime($band_id, 'd.m.Y');
         $date = ($playday === null) ? $this->get_start_date('d.m.Y') : $playday;
-
-        $venue = $this->get_venue_name();
 
         return $band_handler->get_name() . ' @ ' . $venue . ' - ' . $date;
     }

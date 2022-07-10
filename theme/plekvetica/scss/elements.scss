@@ -175,6 +175,14 @@ input[type="submit"]{
     }
   }
 
+  /* Image Animation*/
+/* Loader */
+img.loader {
+    animation-name: plek-image-loader;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+  }
+
   @keyframes plek-button-loader {
     /*0% {width: 0%; left: 0;}
     25% {width: 100%; left: 0;}
@@ -189,6 +197,12 @@ input[type="submit"]{
   @keyframes plek-spinning-item {
     from { transform: rotate(0deg) }
     to { transform: rotate(360deg) }
+  }
+
+  @keyframes plek-image-loader {
+    0% { opacity: 1 }
+    50% { opacity: 0.2 }
+    100% { opacity: 1 }
   }
 
 

@@ -698,7 +698,7 @@ class PlekAjaxHandler
                 $event_handler = new PlekEvents;
 
                 $event_id = $this->get_ajax_data('event_id');
-                $band_id = $this->get_ajax_data('band_id');
+                $band_id = $this->get_ajax_data('band_id'); //Band id or impression_DATE eg: impression_13.01.2022
                 $album_name = $event_handler->generate_album_title($event_id, $band_id);
                 $new_album = $gallery_handler->create_album($album_name);
                 if (is_int($new_album)) {
@@ -706,8 +706,8 @@ class PlekAjaxHandler
                     if ($event_handler->add_album_to_event($event_id, $new_album) === false) {
                         $this->set_error(__('Failed to add the album to the event', 'pleklang'));
                     }
-                    $this->set_success($new_album);
-                    $this->set_success($album_name);
+                    $this->set_success($new_album); //Album ID
+                    $this->set_success($album_name); //Album Name
                     $this->set_success($event_handler->is_multiday()); //Returns if the Event is a Multiday event.
                 } else {
                     $this->set_error($new_album);
@@ -739,8 +739,8 @@ class PlekAjaxHandler
                         if (!$event_handler->add_band_gallery_to_event($event_id, $band_id, $new_gallery, $album_id)) {
                             $this->set_error(__('Failed to add the gallery to the event', 'pleklang'));
                         }
-                        //Add the gallery to the band
-                        if (!$band_handler->update_band_galleries($new_gallery)) {
+                        //Add the gallery to the band, but only if the gallery is a band gallery
+                        if ((strpos($band_id, 'impression') === false) AND !$band_handler->update_band_galleries($new_gallery)) {
                             $this->set_error(__('Failed to add the gallery to the band', 'pleklang'));
                         }
                         $this->set_success($new_gallery);
@@ -763,6 +763,17 @@ class PlekAjaxHandler
                     $this->set_success($image);
                 } else {
                     $this->set_error($image);
+                }
+                break;
+            case 'set_preview_image':
+                $gallery_handler = new PlekGalleryHandler;
+                $event_handler = new PlekEvents;
+
+                $set_preview = $gallery_handler->set_preview_image();
+                if ($set_preview) {
+                    $this->set_success($set_preview);
+                } else {
+                    $this->set_error($set_preview);
                 }
                 break;
             default:
@@ -802,7 +813,7 @@ class PlekAjaxHandler
      */
     public function get_ajax_data_as_array(string $field = '', bool $escape = false)
     {
-        $value = (isset($_REQUEST[$field])) ? $_REQUEST[$field] : "";
+        $value = (isset($_REQUEST[$field])) ? stripslashes($_REQUEST[$field]) : "";
         $val_arr = json_decode($value);
         if ($escape and is_array($val_arr)) {
             //Escape all the data

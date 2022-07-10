@@ -29,10 +29,10 @@ $current_album = $event_object->get_field_value('gallery_id');
 		<?php else : ?>
 			<?php
 			//$bands = $event_object->get_timetable(false, $template);
+			//Add the Impressions Galleries
+			PlekTemplateHandler::load_template('review-image-impression-items', 'event/form/components/', $event_object);
+			
 			$bands = $event_object->get_bands();
-			//Add the Impressions Gallery
-			PlekTemplateHandler::load_template($template, '', 0, '', __('Impressions','pleklang'), 'xxx', $event_object);
-
 			foreach ($bands as $index => $band_item) {
 				PlekTemplateHandler::load_template($template, '', 0, $band_item['flag'], $band_item['name'], $band_item['ID'], $event_object);
 			}

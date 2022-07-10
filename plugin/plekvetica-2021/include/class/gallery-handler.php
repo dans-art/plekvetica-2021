@@ -457,4 +457,31 @@ class PlekGalleryHandler
         $time = strtotime($date);
         return date_i18n('l', $time);
     }
+
+    /**
+     * Set the preview image for a gallery
+     * Ajax function call, requires image_id and gallery_id sent via $_POST
+     *
+     * @return string  Error or success message
+     */
+    public function set_preview_image(){
+        global $plek_ajax_handler;
+        $image_id = intval($plek_ajax_handler->get_ajax_data_esc('image_id')); 
+        $gallery_id = intval($plek_ajax_handler->get_ajax_data_esc('gallery_id'));
+
+        $gallery_mapper = C_Gallery_Mapper::get_instance();
+        $gallery = $gallery_mapper->find($gallery_id);
+	    if (!$gallery) {
+            return __('Gallery not found','pleklang');
+
+	    }
+        if($gallery->previewpic !== $image_id){
+            $gallery->previewpic = $image_id;
+            if(!$gallery_mapper->save($gallery)){
+                return __('Gallery preview not set because of unknown error','pleklang');
+            }
+        }
+
+        return __('Gallery preview successfully set','pleklang');
+    }
 }
