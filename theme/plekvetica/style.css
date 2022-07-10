@@ -2123,7 +2123,8 @@ input[type=checkbox] {
   position: relative; }
   #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete {
     height: 19vw;
-    overflow: hidden; }
+    overflow: hidden;
+    max-height: 207px; }
   #edit_event_review_form div#images-uploaded-container .image_to_upload {
     flex-basis: 20%;
     max-width: 20%;
@@ -2143,8 +2144,8 @@ input[type=checkbox] {
       #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete:hover::after {
         content: "\f302";
         position: absolute;
-        left: 5vw;
-        top: 2vw;
+        left: 42%;
+        top: 16%;
         font-size: 2rem;
         font-family: "FontAwesome"; }
     #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete img {
@@ -3029,7 +3030,15 @@ input[type=checkbox] {
     .plek-post-type-team-calendar thead {
       display: none; }
     .plek-post-type-team-calendar .event_poster {
-      max-width: unset; } }
+      max-width: unset; }
+
+  /* Review Image uploader */
+  #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete {
+    height: 45vw;
+    max-height: 361px; }
+  #edit_event_review_form div#images-uploaded-container .image_to_upload {
+    flex-basis: 47%;
+    max-width: 47%; } }
 @media (max-width: 599px) {
   .plek-pre-button-seperator {
     height: 0; }

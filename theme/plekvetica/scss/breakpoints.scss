@@ -488,6 +488,20 @@
 
       }
   
+      /* Review Image uploader */
+      #edit_event_review_form div#images-uploaded-container {
+
+    
+        .image_to_upload.upload_complete{
+            height: 45vw;
+            max-height: 361px;
+        }
+    
+        .image_to_upload{
+          flex-basis: 47%;
+          max-width: 47%;
+        }
+    }
     
 }
 
