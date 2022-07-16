@@ -9,6 +9,13 @@ if (!defined('ABSPATH')) {
  */
 add_filter('tribe_get_event', [$plek_event, 'plek_tribe_add_terms'], 10, 1);
 
+/**
+ * Add the caps for the co-authors.
+ */
+add_filter('coauthors_edit_author_cap', function($caps){
+  return 'edit_tribe_events';
+}, 10, 1);
+
 
 add_filter('wp_mail', [new PlekNotificationHandler, 'filter_wp_mail'], 1, 1);
 
