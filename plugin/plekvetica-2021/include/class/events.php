@@ -818,6 +818,7 @@ class PlekEvents extends PlekEventHandler
 
         $meta_query = array();
         $meta_query['akk_status'] = array('key' => 'akk_status', 'compare' => '!=', 'value' => 'NULL');
+        $meta_query['akkreditiert'] = array('key' => 'akkreditiert', 'compare' => '!=', 'value' => '');
         $args = [
             'eventDisplay'   => 'custom',
             'start_date'     => date('Y-m-d', time() -  172800), // 172800 = Two days in seconds 

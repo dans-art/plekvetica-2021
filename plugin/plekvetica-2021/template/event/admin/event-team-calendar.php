@@ -5,6 +5,7 @@ $events = isset($template_args[0]) ?  $template_args[0] : [];
 if (empty($events)) {
     return false;
 }
+$total_events = count($events);
 ?>
 
 <div class="tribe-events">
@@ -67,6 +68,9 @@ if (empty($events)) {
             }
             ?>
         </table>
+    </div>
+    <div>
+        <?php echo __('Total Posts:','pleklang') . $total_events; ?>
     </div>
 </div>
 <?php
