@@ -818,15 +818,16 @@ class PlekEvents extends PlekEventHandler
 
         $meta_query = array();
         $meta_query['akk_status'] = array('key' => 'akk_status', 'compare' => '!=', 'value' => 'NULL');
-        $events = tribe_get_events([
+        $args = [
             'eventDisplay'   => 'custom',
             'start_date'     => date('Y-m-d', time() -  172800), // 172800 = Two days in seconds 
-            'end_date'     => date('Y-m-d', time() +  60*60*365*5), // Five Years from today 
+            'end_date'     => date('Y-m-d', time() +  60*60*24*365*5), // Five Years from today 
             'posts_per_page' => 50,
             'order'       => 'ASC',
             'order_by'       => 'start_date',
             'meta_query' => $meta_query
-        ]);
+        ];
+        $events = tribe_get_events($args);
         if (empty($events)) {
             return __('No posts found', 'pleklang');
         }

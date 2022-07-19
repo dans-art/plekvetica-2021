@@ -425,12 +425,15 @@ class PlekEventHandler
 
     /**
      * Gets the name, aka post title of the loaded event
-     *
+     * @param int|string $event_id The Event ID
      * @return string The Title
      */
-    public function get_name()
+    public function get_name($event_id = null)
     {
-        return $this->get_field_value('post_title');
+        if($this->is_event_loaded() AND $event_id === null){
+            return $this->get_field_value('post_title');
+        }
+        return get_the_title($event_id);
     }
 
     /**
@@ -518,6 +521,19 @@ class PlekEventHandler
     public function get_permalink()
     {
         return get_permalink($this->get_ID());
+    }
+
+    /**
+     * Get the link to a Event with the Title of the Event
+     *
+     * @param int|string $event_id
+     * @param string $target The target for the html link
+     * @return string The Link as a HTML a element
+     */
+    public function get_link_with_title($event_id = null, $target='_blank'){
+        $link = ($this->is_event_loaded() and $event_id === null) ? get_permalink($this->get_ID()) : get_permalink($event_id);
+        $title = ($this->is_event_loaded() and $event_id === null) ? $this->get_name() : get_the_title($event_id);
+        return sprintf('<a href="%s" target="%s">%s</a>', $link, $target, $title);
     }
 
     public function get_guid()
@@ -1819,8 +1835,8 @@ class PlekEventHandler
 
         //Check if the Event is already a review. If not, send a Info to the admin
         //This will only fire if the Event gets flaged as review for the first time.
-        $old_event_review_status = get_field('is_review', $event_id);
-        if (!$old_event_review_status) {
+        $old_event_review_status = boolval(get_field('is_review', $event_id));
+        if ($old_event_review_status !== true) {
             $notify = new PlekNotificationHandler;
             $notify->push_to_admin(
                 __('New Review published', 'pleklang'),
@@ -1841,6 +1857,10 @@ class PlekEventHandler
         if (!empty($failed)) {
             return __('Failed to update the review field(s): ', 'pleklang') . implode(', ', $failed);
         }
+        
+        apply_filters( 'simple_history_log', 'Review of "'.$this->get_name($event_id).'" saved by '. PlekUserHandler::get_current_user_display_name(),
+        ['url' => get_permalink($event_id)] );
+
         return $event_id;
     }
 
