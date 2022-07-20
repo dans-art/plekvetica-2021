@@ -430,7 +430,7 @@ class PlekEventHandler
      */
     public function get_name($event_id = null)
     {
-        if($this->is_event_loaded() AND $event_id === null){
+        if ($this->is_event_loaded() and $event_id === null) {
             return $this->get_field_value('post_title');
         }
         return get_the_title($event_id);
@@ -451,7 +451,7 @@ class PlekEventHandler
     /**
      * Gets the ID, of the loaded event
      *
-     * @return int The ID
+     * @return int The ID or null, if not event loaded
      */
     public function get_ID()
     {
@@ -530,7 +530,8 @@ class PlekEventHandler
      * @param string $target The target for the html link
      * @return string The Link as a HTML a element
      */
-    public function get_link_with_title($event_id = null, $target='_blank'){
+    public function get_link_with_title($event_id = null, $target = '_blank')
+    {
         $link = ($this->is_event_loaded() and $event_id === null) ? get_permalink($this->get_ID()) : get_permalink($event_id);
         $title = ($this->is_event_loaded() and $event_id === null) ? $this->get_name() : get_the_title($event_id);
         return sprintf('<a href="%s" target="%s">%s</a>', $link, $target, $title);
@@ -1236,6 +1237,27 @@ class PlekEventHandler
         return $authors;
     }
 
+    /**
+     * Sets the author for the current event.
+     *
+     * @param int $user_id - The ID of the user, or current user if not set
+     * @param bool $append_user -If true, all other authors are removed. 
+     * @return bool True on success, false on error.
+     */
+    public function set_event_author($user_id, $append_user = true)
+    {
+        if (!is_int($this->get_ID())) {
+            return false;
+        }
+        $co_authors = new CoAuthors_Plus();
+
+        $user_id = (!empty($user_id)) ? $user_id : get_current_user_id();
+        $user = get_user_by('id', $user_id);
+ 
+        return $co_authors->add_coauthors($this->get_ID(), [$user->user_nicename], $append_user);
+
+    }
+
     public function show_publish_button(int $post_id = null)
     {
         if (!PlekUserHandler::user_is_in_team()) {
@@ -1852,14 +1874,19 @@ class PlekEventHandler
             }
         }
 
+        //Add the current author to the post if not already set.
+
 
 
         if (!empty($failed)) {
             return __('Failed to update the review field(s): ', 'pleklang') . implode(', ', $failed);
         }
-        
-        apply_filters( 'simple_history_log', 'Review of "'.$this->get_name($event_id).'" saved by '. PlekUserHandler::get_current_user_display_name(),
-        ['url' => get_permalink($event_id)] );
+
+        apply_filters(
+            'simple_history_log',
+            'Review of "' . $this->get_name($event_id) . '" saved by ' . PlekUserHandler::get_current_user_display_name(),
+            ['url' => get_permalink($event_id)]
+        );
 
         return $event_id;
     }
