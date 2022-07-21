@@ -15,7 +15,7 @@ $pe = new PlekEvents;
 //$emailer->send_mail($guest_email, __('Your Event at Plekvetica','pleklang'), $message);
 //echo PlekTemplateHandler::load_template_to_var('accredi_confirm_message','event/organizer', 76061);
 $pe->load_event(67249);
-s($pe->set_event_author(15,false));
+s($pe->accredi_crew_to_wp_authors());
 //echo PlekTemplateHandler::load_template_to_var('organizer-accreditation-request', 'email/organizer', $organi_contact, $args['event_ids'], $organizer_id);
 
 //echo PlekTemplateHandler::load_template_to_var('accreditation-confirmed-admin-info','email/event');

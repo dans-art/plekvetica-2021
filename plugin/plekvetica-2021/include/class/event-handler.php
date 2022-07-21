@@ -1253,11 +1253,36 @@ class PlekEventHandler
 
         $user_id = (!empty($user_id)) ? $user_id : get_current_user_id();
         $user = get_user_by('id', $user_id);
- 
-        return $co_authors->add_coauthors($this->get_ID(), [$user->user_nicename], $append_user);
 
+        return $co_authors->add_coauthors($this->get_ID(), [$user->user_nicename], $append_user);
     }
 
+    /**
+     * Adds the accredi crew to the current event as wp authors
+     *
+     * @return bool true on success, false on error
+     */
+    public function accredi_crew_to_wp_authors()
+    {
+        if (!$this->is_event_loaded()) {
+            return false;
+        }
+        $crew = $this->get_event_akkredi_crew($this->get_ID());
+        foreach ($crew as $user_login) {
+            $user = get_user_by('login', $user_login);
+            if (isset($user->ID) and $user->ID !== 0) {
+                $this->set_event_author($user->ID);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks if the publish button should be shown or not.
+     *
+     * @param integer|null $post_id
+     * @return bool True if the button is to show, false otherwise
+     */
     public function show_publish_button(int $post_id = null)
     {
         if (!PlekUserHandler::user_is_in_team()) {
@@ -1812,14 +1837,13 @@ class PlekEventHandler
     {
         global $plek_ajax_handler,
             $plek_handler;
-
         $validator = $this->validate_event_review();
         if ($validator->all_fields_are_valid(null, true) !== true) {
             return $validator->get_errors();
         }
         $event_id = intval($plek_ajax_handler->get_ajax_data('event_id'));
-
-        //Update the Event description
+        $this->load_event($event_id);
+ 
 
         $acf = array();
         $failed = array();
@@ -1874,8 +1898,8 @@ class PlekEventHandler
             }
         }
 
-        //Add the current author to the post if not already set.
-
+        //Add the accredi crew to the autors
+        $this->accredi_crew_to_wp_authors();
 
 
         if (!empty($failed)) {
