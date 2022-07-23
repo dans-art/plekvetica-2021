@@ -776,12 +776,23 @@ let plek_main = {
         return formated_date;
     },
     /**
- * Checks if the current page contains a edit / add event form 
- * 
- * @returns bool True if page contains a even form, false otherwise
- */
+     * Checks if the current page contains a edit / add event form 
+     * 
+     * @returns bool True if page contains a even form, false otherwise
+     */
     page_has_event_form() {
         if (!empty(jQuery('#edit_event_form')) || !empty(jQuery('#add_event_basic')) || !empty(jQuery('#add_event_login')) || !empty(jQuery('#add_event_details'))) {
+            return true;
+        }
+        return false;
+    },
+    /**
+     * Checks if the current page contains a login / lost-password event form 
+     * 
+     * @returns bool True if page contains a even form, false otherwise
+     */
+     page_has_login_form() {
+        if (!empty(jQuery('#register-new-user-form')) || !empty(jQuery('#loginform')) || !empty(jQuery('#lostpasswordform')) ) {
             return true;
         }
         return false;

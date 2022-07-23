@@ -469,7 +469,6 @@ let plek_manage_event = {
             }
 
             //Add the fields to the validator
-            //@todo: All Event details fields should be optional
             if (form === 'add_event_login') {
 
                 //Get the selected login type (Login / Guest)
@@ -639,7 +638,7 @@ let plek_add_event_functions = {
     },
 
     hide_login_containers() {
-        jQuery("#submit-add-event-login-from, #plek-event-member-login-form-container, #plek-event-guest-login-form-container").hide();
+        jQuery("#submit-add-event-login-from:not(.selected), #plek-event-member-login-form-container:not(.selected), #plek-event-guest-login-form-container:not(.selected)").hide();
         jQuery('#add_login, #add_as_guest').removeClass('selected');
     },
 
@@ -689,6 +688,7 @@ let plek_add_event_functions = {
      * @param {int} event_id 
      */
     remove_event_details_reminder(event_id, prompt = false) {
+        console.log("Event Reminder removed");
         let existing_remember = window.localStorage.getItem('plek_event_reminder');
         try {
             var reminder_obj = JSON.parse(existing_remember);
@@ -724,7 +724,7 @@ let plek_add_event_functions = {
      */
     maybe_display_event_details_reminder() {
         //Ignor the function if page is a add / edit event page
-        if (plek_main.page_has_event_form()) {
+        if (plek_main.page_has_event_form() || plek_main.page_has_login_form()) {
             return false;
         }
 
@@ -743,8 +743,8 @@ let plek_add_event_functions = {
                 }
                 //Display if it is still valid
                 let url = (!empty(obj.stage)) ? plek_main.event_add_page_id : plek_main.event_edit_page_id;
-                let link_text = (!empty(obj.stage)) ?  __('Continue with adding the Event', 'pleklang') :  __('Edit Event', 'pleklang') ;
-                let link_name = (!empty(obj.name)) ?  link_text + ': ' + obj.name : link_text ;
+                let link_text = (!empty(obj.stage)) ? __('Continue with adding the Event', 'pleklang') : __('Edit Event', 'pleklang');
+                let link_name = (!empty(obj.name)) ? link_text + ': ' + obj.name : link_text;
                 let link = (!empty(obj.stage))
                     ? '<a class="fix_event_link" data-event_id= "' + obj.event_id + '" href="' + url + '?event_id=' + obj.event_id + '&stage=' + obj.stage + '">' + link_name + '</a>'
                     : '<a class="fix_event_link" data-event_id= "' + obj.event_id + '" href="' + url + '?edit=' + obj.event_id + '">' + link_name + '</a>';

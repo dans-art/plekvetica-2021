@@ -4,7 +4,7 @@
  * Plugin Name: Plekvetica
  * Plugin URI: https://www.plekvetica.ch/
  * Description: Modifikationen und spezielle Funktionen für die Plekvetica Seite.
- * Version: 2.2.0
+ * Version: 2.3.0
  * Date: 2021-04-07
  * Author: Daniel Spycher
  * Author URI: https://www.dev.dans-art.ch/
@@ -38,10 +38,11 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
  /* if(!class_exists("Tribe__Events__Main")){
     exit('Event Calendar not installed');
  } */
+
  
  //Include all of the classes
  require_once(PLEK_PATH . 'include/include-classes.php');
-
+ 
  $plek_event = new PlekEvents;
  $plek_handler = new PlekHandler;
  $plek_search_handler = new PlekSearchHandler;
@@ -51,11 +52,17 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
  $plek_ajax_handler = new PlekAjaxHandler;
  $plek_event_blocks = new PlekEventBlocks;
 
+//Redirecting
+require_once(PLEK_PATH . 'include/redirect.php');
+
  //Error Handling
  $plek_ajax_errors = new WP_Error();
 
  require_once(PLEK_PATH . 'include/filter-actions.php');
  require_once(PLEK_PATH . 'include/shortcodes.php');
+ 
+
+
 
  //Activation of Plugin
 register_activation_hook( __FILE__, [$plek_handler,'activate_plugin'] );

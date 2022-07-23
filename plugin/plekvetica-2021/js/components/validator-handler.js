@@ -238,8 +238,9 @@ var plekvalidator = {
                     return; //Make sure to end the function on success
                 }
             } catch (error) {
+                //Value is not a array, or cannot be converted to a array
                 //Do noting if no error
-                console.log(error);
+                //console.log(error);
             }
         }
 

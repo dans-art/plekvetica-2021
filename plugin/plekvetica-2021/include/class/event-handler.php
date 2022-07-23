@@ -2812,9 +2812,9 @@ class PlekEventHandler
             $missing['bands'] = __('Bands', 'pleklang');
         }
         //Check some extra fields
-        if (empty($this->get_timetable())) {
+        /*if (empty($this->get_timetable())) {
             $missing['timetable'] = __('Timetable', 'pleklang');
-        }
+        }*/
         if (empty($this->get_poster())) {
             $missing['poster'] = __('Poster', 'pleklang');
         }

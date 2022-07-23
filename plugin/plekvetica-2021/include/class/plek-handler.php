@@ -509,6 +509,10 @@ class PlekHandler
             return $content;
         }
 
+        if(empty($content)){
+            return '';
+        }
+
         $content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
         $dom = new DOMDocument();
         libxml_use_internal_errors(true); //Catch errors
