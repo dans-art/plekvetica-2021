@@ -258,6 +258,19 @@ let plek_main = {
         window.location.replace(url);
         return;
     },
+    
+    /**
+     * Redirects to another page with an additional timeout
+     * @param {string} url 
+     * @param {int} timeout 
+     * @returns 
+     */
+    redirect_to_url(url, timeout = 0) {
+        setTimeout(() => {
+            window.location.replace(url);
+        }, timeout);
+        return;
+    },
 
     get_ajax_success_object(data) {
         try {

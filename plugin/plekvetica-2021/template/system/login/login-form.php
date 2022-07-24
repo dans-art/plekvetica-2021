@@ -8,7 +8,7 @@ $current_url = get_permalink($obj_id);
 $referer = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : $current_url;
 $my_plek_id = $plek_handler->get_plek_option('my_plek_page_id');
 $my_plekvetica_url = (!empty($my_plek_id)) ? get_permalink($my_plek_id) : "https://plekvetica.ch/my-plekvetica";
-
+$event_id = (isset($_REQUEST['event_id']) & !empty($_REQUEST['event_id'])) ? $_REQUEST['event_id'] : null;
 ?>
 <h1>Login</h1>
 <div class='login-messages'>
@@ -23,9 +23,9 @@ $my_plekvetica_url = (!empty($my_plek_id)) ? get_permalink($my_plek_id) : "https
 </div>
 <div class="link-container">
     <div class="lostpassword-link">
-        <a href="<?php echo $my_plekvetica_url; ?>?action=reset_password"><?php echo __('Reset password', 'pleklang'); ?></a>
+        <a href="<?php echo $my_plekvetica_url; ?>?action=reset_password<?php echo ($event_id) ? "&return_to_edit_event=" . $event_id : ''; ?>"><?php echo __('Reset password', 'pleklang'); ?></a>
     </div>
     <div class="register-link">
-        <a href="<?php echo $my_plekvetica_url; ?>?action=sign_up"><?php echo __('Sign up at Plekvetica', 'pleklang'); ?></a>
+        <a href="<?php echo $my_plekvetica_url; ?>?action=sign_up<?php echo ($event_id) ? "&return_to_edit_event=" . $event_id : ''; ?>"><?php echo __('Sign up at Plekvetica', 'pleklang'); ?></a>
     </div>
 </div>

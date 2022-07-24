@@ -1,11 +1,11 @@
 let plek_user = {
 
-    default_button_texts  = {},
+    default_button_texts  : {},
 
 
     construct() {
 
-        default_button_texts.submit = jQuery('#user-settings-submit').text();
+        plek_user.default_button_texts.submit = jQuery('#user-settings-submit').text();
         //On Submitbutton click
         jQuery('#plek-submit').click(function (e) {
             e.preventDefault();
@@ -13,8 +13,13 @@ let plek_user = {
             plek_user.submit(type);
         });
 
-        //on Input click
+        //on register Input click
         jQuery('#register-new-user input[type!="submit"]').click(function(){
+            //reset Button status
+            jQuery('#plek-submit').val(plek_user.default_button_texts.submit);
+        })
+        //on reset password Input click
+        jQuery('#lostpasswordform #plek-submit').click(function(){
             //reset Button status
             jQuery('#plek-submit').val(plek_user.default_button_texts.submit);
         })
@@ -41,13 +46,22 @@ let plek_user = {
         })
     },
 
+    /**
+     * Sending a user form
+     * @param {string} type 
+     * @returns void
+     */
     submit(type) {
         switch (type) {
             case "add-user-account":
                 this.add_user_account();
                 break;
+            case "resetpassword":
+                this.reset_password();
+                break;
 
             default:
+                console.log("Submit Type not found: " + type);
                 break;
         }
         return;
@@ -79,6 +93,48 @@ let plek_user = {
                 }else{
                     plek_main.deactivate_button(button);
                     jQuery('#register-new-user input[type!="submit"]').val(''); //Reset Fields
+                }
+                plek_main.deactivate_button_loader(button, text);
+
+            },
+            error: function error(data) {
+                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
+
+            }
+          });
+          return;
+    },
+    reset_password() {
+        let button = jQuery('#plek-submit');
+        let button_cta = button.text();
+
+        plek_main.activate_button_loader('#plek-submit', __('Sending password reset request...','pleklang'));
+        plek_main.remove_field_errors();
+        
+        let data = jQuery('#lostpasswordform').serialize();
+        
+        data += '&action=plek_user_actions',
+        data += '&do=reset_password',
+
+        jQuery.ajax({
+            url: window.ajaxurl,
+            type: 'POST',
+            cache: false,
+            data: data,
+            success: function success(data) {
+                let text = plek_main.get_text_from_ajax_request(data, true);
+                let errors = plek_main.show_field_errors(data, '#lostpasswordform');
+                if(errors === true){
+                    text = "Das Formular enthält Fehler, bitte korrigieren";
+                    plek_user.reset_button_text_after_input_focus(button, button_cta);
+                }else{
+                    //Success
+                    plek_main.deactivate_button(button);
+                    jQuery('#lostpasswordform input[type!="submit"]').val(''); //Reset Fields
+                    //Redirect to the edit event on success.
+                    if(!empty(jQuery('#redirect_to').attr('value'))){
+                        plek_main.redirect_to_url(jQuery('#redirect_to').attr('value'));
+                    }
                 }
                 plek_main.deactivate_button_loader(button, text);
 

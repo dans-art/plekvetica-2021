@@ -642,6 +642,9 @@ class PlekAjaxHandler
             case 'save_user_settings':
                 $this->set_error(__('You have to be logged in in order to save the settings.', 'pleklang'));
                 break;
+            case 'reset_password':
+                $this->set_success(__('New password request sent. Please check your email.', 'pleklang'));
+                break;
 
             default:
                 # code...
