@@ -296,7 +296,7 @@ class PlekAjaxHandler
                 $pn = new PlekNotificationHandler;
                 $send_mail = $pn->push_to_organizer($organizer_id, 'accredi_request', ['event_ids' => $event_ids]);
                 if ($send_mail === true) {
-                    foreach($event_ids as $event_id){
+                    foreach ($event_ids as $event_id) {
                         $pe->set_akkredi_status($event_id, 'aa');
                     }
                     $this->set_success(__('Accreditation request sent to organizer', 'pleklang'));
@@ -643,7 +643,26 @@ class PlekAjaxHandler
                 $this->set_error(__('You have to be logged in in order to save the settings.', 'pleklang'));
                 break;
             case 'reset_password':
-                $this->set_success(__('New password request sent. Please check your email.', 'pleklang'));
+                $pu = new PlekUserHandler;
+                $send_mail = $pu->send_password_reset_mail();
+                if ($send_mail === true) {
+                    $this->set_success(__('New password request sent. Please check your email.', 'pleklang'));
+                } else {
+                    $this->set_error($send_mail);
+                }
+                break;
+            case 'set_new_password':
+                $pu = new PlekUserHandler;
+                $reset_pass = $pu->set_new_password();
+                if ($reset_pass === true) {
+                    $this->set_success(__('New password set. You can login now with your new password.', 'pleklang'));
+                } else {
+                    if(is_array($reset_pass)){
+                        $this->set_error_array($reset_pass);
+                    }else{
+                        $this->set_error($reset_pass);
+                    }
+                }
                 break;
 
             default:
@@ -743,7 +762,7 @@ class PlekAjaxHandler
                             $this->set_error(__('Failed to add the gallery to the event', 'pleklang'));
                         }
                         //Add the gallery to the band, but only if the gallery is a band gallery
-                        if ((strpos($band_id, 'impression') === false) AND !$band_handler->update_band_galleries($new_gallery)) {
+                        if ((strpos($band_id, 'impression') === false) and !$band_handler->update_band_galleries($new_gallery)) {
                             $this->set_error(__('Failed to add the gallery to the band', 'pleklang'));
                         }
                         $this->set_success($new_gallery);

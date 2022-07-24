@@ -920,4 +920,77 @@ class PlekUserHandler
         $users = get_users(array('role' => 'exuser'));
         return $users;
     }
+
+    /**
+     * Sends the email after password reset request
+     *
+     * @return bool|string True on success, false on error
+     */
+    public function send_password_reset_mail(){
+        $user = (isset($_REQUEST['user_login'])) ? $_REQUEST['user_login']: '';
+        if(empty($user)){
+            return __('No username or email provided','pleklang');
+        }
+        $send_mail = retrieve_password($user);
+        if(is_wp_error( $send_mail )){
+            return $send_mail->get_error_message();
+        }
+        return true;
+    }
+
+    /**
+     * Sets the new password for the user.
+     *
+     * @return bool|string|array True on success, string or array on error
+     */
+    public function set_new_password(){
+        global $plek_ajax_handler;
+        $validator = new PlekFormValidator();
+        $validator->set('user_login', true, 'default');
+        $validator->set('user_key', true, 'default');
+        $validator->set('new_password', true, 'password');
+        $validator->set('new_password_repeat', true, 'password');
+        $valid = $validator->all_fields_are_valid();
+        if(!$valid){
+            return $validator->get_errors();
+        }
+
+        $user_login = $plek_ajax_handler->get_ajax_data('user_login');
+        $user_key = $plek_ajax_handler->get_ajax_data('user_key');
+        $new_password = $plek_ajax_handler->get_ajax_data('new_password');
+        $new_password_repeat = $plek_ajax_handler->get_ajax_data('new_password_repeat');
+
+        if($new_password !== $new_password_repeat){
+            return __('The passwords have to match','pleklang');
+        }
+        //Check for valid key
+        $user = check_password_reset_key( $user_key, $user_login );
+        if(is_wp_error( $user )){
+            return $user->get_error_message();
+        }
+
+        reset_password( $user, $new_password);
+
+        return true;
+    }
+
+    /**
+     * Prepares the message for the password reset
+     *
+     * @param string $message
+     * @param string $key
+     * @param string $user_login
+     * @param object $user_data
+     * @return string The message
+     */     
+    public function retrieve_password_message_filter($message, $key, $user_login, $user_data){
+        global $plek_handler;
+        $my_plek_id = $plek_handler->get_plek_option('my_plek_page_id');
+        $my_plekvetica_url = (!empty($my_plek_id)) ? get_permalink($my_plek_id) : "https://plekvetica.ch/my-plekvetica";
+        $pw_reset_url = $my_plekvetica_url . '?action=rp&user_key='.$key.'&user_login='.rawurlencode($user_login);
+        $plek_message = sprintf(__('Hi, %s','pleklang'), $user_data->first_name) . '<br/>';
+        $plek_message .= __('There was a new password requested for your account. If you aware of this action, please continue with the link below and set a new password.','pleklang'). '<br/>';
+        $plek_message .= __('Otherwise you can ignore this message.','pleklang');
+        return PlekTemplateHandler::load_template_to_var('default-email', 'email', __('Reset password request','pleklang'), [$plek_message, $pw_reset_url]);
+    }
 }

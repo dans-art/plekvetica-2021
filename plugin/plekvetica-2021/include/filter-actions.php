@@ -12,7 +12,7 @@ add_filter('tribe_get_event', [$plek_event, 'plek_tribe_add_terms'], 10, 1);
 /**
  * Add the caps for the co-authors.
  */
-add_filter('coauthors_edit_author_cap', function($caps){
+add_filter('coauthors_edit_author_cap', function ($caps) {
   return 'edit_tribe_events';
 }, 10, 1);
 
@@ -72,6 +72,7 @@ add_action('wp_footer', [$plek_handler, 'get_js_errors']);
 add_action('after_setup_theme', [new PlekUserHandler, 'disable_admin']);
 add_action('after_setup_theme', [new PlekUserHandler, 'unlock_user_and_login'], 10, 1);
 
+add_filter('retrieve_password_message', [new PlekUserHandler, 'retrieve_password_message_filter'], 1, 4);
 //Band Page
 add_filter('pre_get_posts', [new PlekBandHandler, 'bandpage_pagination_hack']);
 

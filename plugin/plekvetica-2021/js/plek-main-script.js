@@ -390,15 +390,26 @@ let plek_main = {
             for (const [id, value] of Object.entries(encoded_data.error)) {
                 if (typeof value == "object") {
                     for (const [sub_id, sub_value] of Object.entries(value)) {
-                        jQuery(sub_value).each(function (i) {
-                            console.log("set " + sub_id);
+                        if(typeof sub_value === 'string'){
                             var field_selector = jQuery('#' + sub_id);
-                            if (field_selector.length === 0) {
-                                var field_selector = jQuery(form); //If field is not found, attach the error at the end of the given form
-                            }
-                            jQuery(field_selector).after(plek_main.format_error_message(sub_value[i]));
-                            error_count++;
-                        });
+                            jQuery(field_selector).after(plek_main.format_error_message(sub_value));
+                        }
+                        else if(typeof sub_value === 'array' || typeof sub_value === 'object'){
+                            jQuery(sub_value).each(function (i) {
+                                console.log("set " + sub_id);
+                                var field_selector = jQuery('#' + sub_id);
+                                if (field_selector.length === 0) {
+                                    var field_selector = jQuery(form); //If field is not found, attach the error at the end of the given form
+                                }
+                                jQuery(field_selector).after(plek_main.format_error_message(sub_value[i]));
+                                error_count++;
+                            });
+                        }
+                        else{
+                            console.log('Unknown type in show_field_errors');
+                            console.log(sub_value);
+                        }
+
                     }
                 }
                 if (typeof value == "string") {
@@ -413,11 +424,18 @@ let plek_main = {
                     console.log(form);
                     error_count++;
                 }
+                //set the error message as a string
+                if(typeof value === 'string'){
+                    jQuery('#' + id).after(plek_main.format_error_message(value));
+                    error_count++;
+                }
                 //Set the error message, but only if array / object
+                if(typeof value === 'array' || typeof value === 'object'){
                 jQuery(value).each(function (i) {
                     jQuery('#' + id).after(plek_main.format_error_message(value[i]));
                     error_count++;
                 });
+                }
             }
             if (error_count === 0) {
                 return false;

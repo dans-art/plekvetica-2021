@@ -59,6 +59,9 @@ let plek_user = {
             case "resetpassword":
                 this.reset_password();
                 break;
+            case "set_new_password":
+                this.set_new_password();
+                break;
 
             default:
                 console.log("Submit Type not found: " + type);
@@ -125,7 +128,7 @@ let plek_user = {
                 let text = plek_main.get_text_from_ajax_request(data, true);
                 let errors = plek_main.show_field_errors(data, '#lostpasswordform');
                 if(errors === true){
-                    text = "Das Formular enthält Fehler, bitte korrigieren";
+                    text = __('The form contains errors, please fix them','pleklang');
                     plek_user.reset_button_text_after_input_focus(button, button_cta);
                 }else{
                     //Success
@@ -133,8 +136,48 @@ let plek_user = {
                     jQuery('#lostpasswordform input[type!="submit"]').val(''); //Reset Fields
                     //Redirect to the edit event on success.
                     if(!empty(jQuery('#redirect_to').attr('value'))){
-                        plek_main.redirect_to_url(jQuery('#redirect_to').attr('value'));
+                        plek_main.redirect_to_url(jQuery('#redirect_to').attr('value'), 4000);
                     }
+                }
+                plek_main.deactivate_button_loader(button, text);
+
+            },
+            error: function error(data) {
+                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
+
+            }
+          });
+          return;
+    },
+    set_new_password() {
+        let button = jQuery('#plek-submit');
+        let button_cta = button.text();
+
+        plek_main.activate_button_loader('#plek-submit', __('Sending password reset request...','pleklang'));
+        plek_main.remove_field_errors();
+        
+        let data = jQuery('#set_new_password_form').serialize();
+
+        data += '&action=plek_user_actions',
+        data += '&do=set_new_password',
+
+        jQuery.ajax({
+            url: window.ajaxurl,
+            type: 'POST',
+            cache: false,
+            data: data,
+            success: function success(data) {
+                let text = plek_main.get_text_from_ajax_request(data, true);
+                let errors = plek_main.show_field_errors(data, '#set_new_password_form');
+                if(errors === true){
+                    text = __('The form contains errors, please fix them','pleklang');
+                    plek_user.reset_button_text_after_input_focus(button, button_cta);
+                }else{
+                    //Success
+                    plek_main.deactivate_button(button);
+                    jQuery('#set_new_password_form input[type!="submit"]').val(''); //Reset Fields
+                    //Redirect to login on success.
+                    //if(!empty(jQuery('#redirect_to').attr('value'))){
                 }
                 plek_main.deactivate_button_loader(button, text);
 
