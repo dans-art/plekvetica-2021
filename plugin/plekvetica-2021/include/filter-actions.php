@@ -72,7 +72,10 @@ add_action('wp_footer', [$plek_handler, 'get_js_errors']);
 add_action('after_setup_theme', [new PlekUserHandler, 'disable_admin']);
 add_action('after_setup_theme', [new PlekUserHandler, 'unlock_user_and_login'], 10, 1);
 
+//Password reset
 add_filter('retrieve_password_message', [new PlekUserHandler, 'retrieve_password_message_filter'], 1, 4);
+add_filter('retrieve_password_notification_email', [new PlekUserHandler, 'retrieve_password_notification_email_filter'], 1, 1);
+
 //Band Page
 add_filter('pre_get_posts', [new PlekBandHandler, 'bandpage_pagination_hack']);
 

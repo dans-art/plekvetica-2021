@@ -49,6 +49,16 @@ class PlekHandler
         return $options[$options_name];
     }
 
+    /**
+     * Get the link to the my-plekvetica page
+     *
+     * @return string URL
+     */
+    public function get_my_plekvetica_link(){
+        $my_plek_id = $this->get_plek_option('my_plek_page_id');
+        return(!empty($my_plek_id)) ? get_permalink($my_plek_id) : "https://plekvetica.ch/my-plekvetica";
+    }
+
     public function print_url(string $url)
     {
         $new_url = $url;

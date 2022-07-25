@@ -94,6 +94,18 @@ var plekerror = {
         toastr.info(message, title);
     },
 
+    /**
+     * Displays a toastr success / green message
+     * 
+     * @param {string} title The title to display
+     * @param {string} message The message to show
+     */
+    display_success(title, message) {
+        console.log(title);
+        console.log(message);
+        toastr.success(message, title);
+    },
+
     add_error_to_field(field, message) {
         jQuery('#' + field).parent().append(`<div id='plek-field-error-${field}' class='plek-field-error'>
         ${message}
