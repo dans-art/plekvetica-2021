@@ -823,7 +823,7 @@ let plek_main = {
      * @returns bool True if page contains a even form, false otherwise
      */
      page_has_login_form() {
-        if (!empty(jQuery('#register-new-user-form')) || !empty(jQuery('#loginform')) || !empty(jQuery('#lostpasswordform')) ) {
+        if (!empty(jQuery('#register-new-user-form')) || !empty(jQuery('#loginform')) || !empty(jQuery('#lostpasswordform'))  || !empty(jQuery('#set_new_password_form')) ) {
             return true;
         }
         return false;

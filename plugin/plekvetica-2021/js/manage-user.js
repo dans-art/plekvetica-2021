@@ -91,13 +91,16 @@ let plek_user = {
                     let text = plek_main.get_text_from_ajax_request(data, true);
                     let errors = plek_main.show_field_errors(data, '#register-new-user-form');
                     if (errors === true) {
-                        text = "Das Formular enthält Fehler, bitte korrigieren";
                         plek_user.reset_button_text_after_input_focus(button, button_cta);
+                        text = (empty(text)) ? __('The from has errors, please fix them', 'pleklang') : text;
+                        plekerror.display_error(false, text, __('New account', 'pleklang'))
                     } else {
                         plek_main.deactivate_button(button);
                         jQuery('#register-new-user input[type!="submit"]').val(''); //Reset Fields
+                        plekerror.display_success(__('New account', 'pleklang'), text);
+
                     }
-                    plek_main.deactivate_button_loader(button, text);
+                    plek_main.deactivate_button_loader(button, button_cta);
 
                 },
                 error: function error(data) {
@@ -117,7 +120,6 @@ let plek_user = {
 
         plek_main.activate_button_loader('#plek-submit', __('Sending password reset request...', 'pleklang'));
         plek_main.remove_field_errors();
-        debugger;
         let data = jQuery('#lostpasswordform').serialize();
 
         data += '&action=plek_user_actions';

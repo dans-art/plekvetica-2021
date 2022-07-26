@@ -1813,9 +1813,15 @@ class PlekEventHandler
         if (!PlekUserHandler::user_can_edit_post($event_id)) {
             return __('Sorry, you are not allowed to edit this Event!', 'pleklang');
         }
+
         //Save Event
         $args = $this->get_event_details_data();
-
+        
+        //Set Event status to publish if user is logged in
+        if(PlekUserHandler::user_is_logged_in()){
+            $args['post_status'] = 'publish';
+        }
+        
         $event_id = tribe_update_event($event_id, $args);
 
         //Save the rest of the Data

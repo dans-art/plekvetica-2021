@@ -688,7 +688,7 @@ let plek_add_event_functions = {
      * @param {int} event_id 
      */
     remove_event_details_reminder(event_id, prompt = false) {
-        console.log("Event Reminder removed");
+        console.log("Event Reminder removed of");
         let existing_remember = window.localStorage.getItem('plek_event_reminder');
         try {
             var reminder_obj = JSON.parse(existing_remember);
