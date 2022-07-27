@@ -323,6 +323,8 @@ class PlekUserFormHandler extends PlekUserHandler
         $validator->set_required('user-pass-repeat');
         $validator->set_type('user-pass-repeat', 'password');
 
+        $validator->set('return_to_edit_event', false, 'int');
+
         $pass = $plek_ajax_handler->get_ajax_data('user-pass');
         $pass_rep = $plek_ajax_handler->get_ajax_data('user-pass-repeat');
 

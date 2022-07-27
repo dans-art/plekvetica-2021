@@ -28,7 +28,7 @@ $return_to_edit_event = (isset($_REQUEST['return_to_edit_event'])) ? $_REQUEST['
 		<input type="password" name="user-pass-repeat" id="user-pass-repeat" class="input" />
 
 		<label for="user-account-type"><?php echo __('Register as...', 'pleklang'); ?></label>
-		<select name="user-account-type" id="user-account-type" class="dropdown">
+		<select name="user-account-type" id="user-account-type" class="dropdown no-select2">
 			<option value="null"><?php echo __('Please select...', 'pleklang'); ?></option>
 			<?php foreach ($plek_user_handler->get_public_user_roles() as $role_id => $role_name) : ?>
 				<?php if ($role_id === 'plek-partner') {
