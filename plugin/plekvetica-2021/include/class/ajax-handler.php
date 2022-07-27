@@ -274,15 +274,39 @@ class PlekAjaxHandler
                 $event_id = $this->get_ajax_data('id');
                 $publish = $plek_event->publish_event($event_id);
                 $plek_event->update_event_genres($event_id); //Workaround for setting the Event genres.
+                //Send info to Band followers
+                $pn = new PlekNotificationHandler;
+                $pn->push_to_band_follower($event_id);
                 if ($publish === true) {
                     $this->set_success(__('Event published', 'pleklang'));
                 } else {
                     $this->set_error($publish);
                 }
                 break;
+            case 'request_accreditation':
+                $user = new PlekUserHandler;
+                $pe = new PlekEvents;
+                if (!$user->user_is_in_team()) {
+                    $this->set_error(__('You are not allowed to use this function', 'pleklang'));
+                    break;
+                }
+                $organizer_id = $this->get_ajax_data('organizer_id');
+                $event_ids = $this->get_ajax_data_as_array('event_ids', true);
+                //Send request to organizer
+                $pn = new PlekNotificationHandler;
+                $send_mail = $pn->push_to_organizer($organizer_id, 'accredi_request', ['event_ids' => $event_ids]);
+                if ($send_mail === true) {
+                    foreach ($event_ids as $event_id) {
+                        $pe->set_akkredi_status($event_id, 'aa');
+                    }
+                    $this->set_success(__('Accreditation request sent to organizer', 'pleklang'));
+                } else {
+                    $this->set_error($send_mail);
+                }
+                break;
             default:
                 # code...
-                $this->set_error(__('You are not allowed to use this function', 'pleklang'));
+                $this->set_error(__('You are not allowed to use this request or function not found', 'pleklang'));
                 break;
         }
         echo $this->get_ajax_return();
@@ -618,6 +642,28 @@ class PlekAjaxHandler
             case 'save_user_settings':
                 $this->set_error(__('You have to be logged in in order to save the settings.', 'pleklang'));
                 break;
+            case 'reset_password':
+                $pu = new PlekUserHandler;
+                $send_mail = $pu->send_password_reset_mail();
+                if ($send_mail === true) {
+                    $this->set_success(__('New password request sent. Please check your email.', 'pleklang'));
+                } else {
+                    $this->set_error($send_mail);
+                }
+                break;
+            case 'set_new_password':
+                $pu = new PlekUserHandler;
+                $reset_pass = $pu->set_new_password();
+                if ($reset_pass === true) {
+                    $this->set_success(__('New password set. You can login now with your new password.', 'pleklang'));
+                } else {
+                    if(is_array($reset_pass)){
+                        $this->set_error_array($reset_pass);
+                    }else{
+                        $this->set_error($reset_pass);
+                    }
+                }
+                break;
 
             default:
                 # code...
@@ -672,9 +718,9 @@ class PlekAjaxHandler
             case 'add_album':
                 $gallery_handler = new PlekGalleryHandler;
                 $event_handler = new PlekEvents;
-                
+
                 $event_id = $this->get_ajax_data('event_id');
-                $band_id = $this->get_ajax_data('band_id');
+                $band_id = $this->get_ajax_data('band_id'); //Band id or impression_DATE eg: impression_13.01.2022
                 $album_name = $event_handler->generate_album_title($event_id, $band_id);
                 $new_album = $gallery_handler->create_album($album_name);
                 if (is_int($new_album)) {
@@ -682,8 +728,8 @@ class PlekAjaxHandler
                     if ($event_handler->add_album_to_event($event_id, $new_album) === false) {
                         $this->set_error(__('Failed to add the album to the event', 'pleklang'));
                     }
-                    $this->set_success($new_album);
-                    $this->set_success($album_name);
+                    $this->set_success($new_album); //Album ID
+                    $this->set_success($album_name); //Album Name
                     $this->set_success($event_handler->is_multiday()); //Returns if the Event is a Multiday event.
                 } else {
                     $this->set_error($new_album);
@@ -715,8 +761,8 @@ class PlekAjaxHandler
                         if (!$event_handler->add_band_gallery_to_event($event_id, $band_id, $new_gallery, $album_id)) {
                             $this->set_error(__('Failed to add the gallery to the event', 'pleklang'));
                         }
-                        //Add the gallery to the band
-                        if (!$band_handler->update_band_galleries($new_gallery)) {
+                        //Add the gallery to the band, but only if the gallery is a band gallery
+                        if ((strpos($band_id, 'impression') === false) and !$band_handler->update_band_galleries($new_gallery)) {
                             $this->set_error(__('Failed to add the gallery to the band', 'pleklang'));
                         }
                         $this->set_success($new_gallery);
@@ -724,8 +770,8 @@ class PlekAjaxHandler
                     } else {
                         $this->set_error($new_gallery);
                     }
-                }else{
-                    $this->set_error(__('Band ID or Event ID not provided','pleklang'));
+                } else {
+                    $this->set_error(__('Band ID or Event ID not provided', 'pleklang'));
                 }
 
                 break;
@@ -739,6 +785,17 @@ class PlekAjaxHandler
                     $this->set_success($image);
                 } else {
                     $this->set_error($image);
+                }
+                break;
+            case 'set_preview_image':
+                $gallery_handler = new PlekGalleryHandler;
+                $event_handler = new PlekEvents;
+
+                $set_preview = $gallery_handler->set_preview_image();
+                if ($set_preview) {
+                    $this->set_success($set_preview);
+                } else {
+                    $this->set_error($set_preview);
                 }
                 break;
             default:
@@ -778,7 +835,7 @@ class PlekAjaxHandler
      */
     public function get_ajax_data_as_array(string $field = '', bool $escape = false)
     {
-        $value = (isset($_REQUEST[$field])) ? $_REQUEST[$field] : "";
+        $value = (isset($_REQUEST[$field])) ? stripslashes($_REQUEST[$field]) : "";
         $val_arr = json_decode($value);
         if ($escape and is_array($val_arr)) {
             //Escape all the data
@@ -786,7 +843,7 @@ class PlekAjaxHandler
                 $val_arr[$index] = htmlspecialchars($val);
             }
         }
-        return $val_arr;
+        return is_array($val_arr) ? $val_arr : [$val_arr]; //Convert to array if no array
     }
 
 
@@ -794,15 +851,17 @@ class PlekAjaxHandler
     /**
      * Returns the Value from a $_Request field and applies htmlspecialchars() function 
      */
-    public function get_ajax_data_esc(string $field = '')
+    public function get_ajax_data_esc(string $field = '', $remove_unallowed_tags = false)
     {
+        global $plek_handler;
+        $forbidden_tags = $plek_handler->get_forbidden_tags('textarea');
         if (isset($_REQUEST[$field]) and is_string($_REQUEST[$field])) {
-            return htmlspecialchars($_REQUEST[$field]);
+            return ($remove_unallowed_tags) ? htmlspecialchars($plek_handler->remove_tags($_REQUEST[$field], $forbidden_tags)) : htmlspecialchars($_REQUEST[$field]);
         }
         if (isset($_REQUEST[$field]) and is_array($_REQUEST[$field])) {
             $new_arr = array();
             foreach ($_REQUEST[$field] as $id => $value) {
-                $new_arr[htmlspecialchars($id)] = htmlspecialchars($value);
+                $new_arr[htmlspecialchars($id)] = ($remove_unallowed_tags) ? htmlspecialchars($plek_handler->remove_tags($value, $forbidden_tags)) : htmlspecialchars($value);
             }
             return $new_arr;
         }

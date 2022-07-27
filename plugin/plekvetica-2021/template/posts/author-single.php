@@ -21,7 +21,9 @@ $page_obj = $plek_event->get_pages_object();
         <div class="plek-author-data">
             <dl>
                 <dt><?php echo __('Involved since:', 'pleklang'); ?></dt>
-                <dd><?php echo date_i18n('d F Y', strtotime($author_acf['since'])); ?></dd>
+                <?php if (isset($author_acf['since'])) : ?>
+                    <dd><?php echo date_i18n('d F Y', strtotime($author_acf['since'])); ?></dd>
+                <?php endif; ?>
                 <dt><?php echo __('About', 'pleklang'); ?></dt>
                 <dd><?php echo (!empty($author_description)) ? htmlspecialchars_decode($author_description) : __('This Author has no description.', 'pleklang'); ?></dd>
             </dl>

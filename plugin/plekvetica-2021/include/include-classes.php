@@ -36,3 +36,5 @@ require_once(PLEK_PATH . 'include/class/file-handler.php');
 require_once(PLEK_PATH . 'include/class/email-sender.php');
 require_once(PLEK_PATH . 'include/class/notification-handler.php');
 
+require_once(PLEK_PATH . 'include//genres.php');
+

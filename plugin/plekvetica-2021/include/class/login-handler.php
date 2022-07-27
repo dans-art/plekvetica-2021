@@ -119,7 +119,8 @@ class PlekLoginHandler
     public static function enqueue_scripts()
     {
         global $plek_handler;
-        wp_enqueue_script('plek-manage-user-script', PLEK_PLUGIN_DIR_URL . 'js/manage-user.min.js', ['jquery', 'plek-language'], $plek_handler->version);
+        $min = ($plek_handler -> is_dev_server()) ? '' : '.min' ;
+        wp_enqueue_script('plek-manage-user-script', PLEK_PLUGIN_DIR_URL . 'js/manage-user'.$min.'.js', ['jquery', 'plek-language'], $plek_handler->version);
     }
 
     /**

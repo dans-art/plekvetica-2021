@@ -54,7 +54,7 @@ class PlekBandHandler
     {
         global $plek_handler;
         $add_band_page_id = $plek_handler->get_plek_option('add_band_page_id');
-        return PlekTemplateHandler::load_template_to_var('button', 'components', get_permalink($add_band_page_id), __('Add new Band','pleklang'));
+        return PlekTemplateHandler::load_template_to_var('button', 'components', get_permalink($add_band_page_id), __('Add new Band', 'pleklang'));
     }
 
     /**
@@ -556,10 +556,11 @@ class PlekBandHandler
     /**
      * Get all the Genres
      * Loads the Genres in $this -> band_genres
+     * @param bool $return_as_array - If a array containing only the slug and name should be returned
      *
-     * @return array Array with WP_Term Objects
+     * @return array Array with WP_Term Objects or Array[slug] => Name
      */
-    public function get_all_genres()
+    public function get_all_genres($return_as_array = false)
     {
         if (!empty($this->band_genres)) {
             return $this->band_genres;
@@ -570,7 +571,39 @@ class PlekBandHandler
             return false;
         }
         $this->band_genres = $cats;
-        return $cats;
+        if (!$return_as_array) {
+            return $cats;
+        }
+        $return_arr = [];
+        foreach ($cats as $categories) {
+            $return_arr[$categories->slug] = $categories->name;
+        }
+        return $return_arr;
+    }
+
+    /**
+     * Loads all the Band genres from ACF
+     *
+     * @return bool|array False on error, array with the choices / genres 
+     */
+    public function get_acf_band_genres()
+    {
+        $item = get_posts([
+            'post_type' => 'acf-field',
+            'title' => 'Genre',
+        ]);
+        //make sure we got the right one
+        foreach ($item as $genre) {
+            if ($genre->post_excerpt === 'band_genre') {
+                //This is the one
+                $genres = maybe_unserialize($genre->post_content);
+                if (isset($genres['choices'])) {
+                    return $genres['choices'];
+                }
+                return false;
+            }
+        }
+        return false;
     }
 
     /**
@@ -800,6 +833,7 @@ class PlekBandHandler
         if (is_array($add_term) and isset($add_term['term_id'])) {
             //Send Notification to admin
             $message = sprintf(__('A new Band "%s" has been added.', 'pleklang'), $name);
+            $message .= '<br/>'.PlekUserHandler::get_current_user_display_name(__('Added by','pleklang'));
             $action = get_term_link((int) $add_term['term_id']);
             PlekNotificationHandler::push_to_role('eventmanager', __('New Band added', 'pleklang'), $message, $action);
             return $this->update_band($add_term['term_id'], true);
@@ -817,10 +851,11 @@ class PlekBandHandler
      *
      * @return string|bool String with the name of the Band if exists, otherwise false
      */
-    public function band_exists_ajax(){
+    public function band_exists_ajax()
+    {
         global $plek_ajax_handler;
-        $name = $plek_ajax_handler -> get_ajax_data_esc('band-name');
-        $band_id = $plek_ajax_handler -> get_ajax_data_esc('band-id');
+        $name = $plek_ajax_handler->get_ajax_data_esc('band-name');
+        $band_id = $plek_ajax_handler->get_ajax_data_esc('band-id');
 
         //Check for existing bands
         $terms = get_terms(array('name' => $name, 'hide_empty' => false, 'taxonomy' => 'post_tag'));
@@ -829,20 +864,20 @@ class PlekBandHandler
             return false;
         }
         $bands = array();
-        foreach($terms as $term){
-            if(intval($band_id) === $term->term_id){
+        foreach ($terms as $term) {
+            if (intval($band_id) === $term->term_id) {
                 continue; //Skip if the band is the current edited band.
             }
-            $origin = get_field('herkunft', 'term_'.$term->term_id);
-            $bands[] = '<a href="'.get_term_link($term->term_id).'" target="_blank">'.$term->name.' ('.$origin.')</a>'; 
+            $origin = get_field('herkunft', 'term_' . $term->term_id);
+            $bands[] = '<a href="' . get_term_link($term->term_id) . '" target="_blank">' . $term->name . ' (' . $origin . ')</a>';
         }
-        if(empty($bands)){
+        if (empty($bands)) {
             return false;
         }
-        if(count($bands) > 1){
-            return sprintf(__('Some Bands with the Name "%s" where found.<br/>%s<br/>Please check if the Band you like to add does not exist.','pleklang'), $name, implode('<br/>', $bands));
-        }else{
-            return sprintf(__('A Band with the Name "%s" was found.<br/>%s<br/>Please check if the Band you like to add does not exist','pleklang'), $name, $bands[0]);
+        if (count($bands) > 1) {
+            return sprintf(__('Some Bands with the Name "%s" where found.<br/>%s<br/>Please check if the Band you like to add does not exist.', 'pleklang'), $name, implode('<br/>', $bands));
+        } else {
+            return sprintf(__('A Band with the Name "%s" was found.<br/>%s<br/>Please check if the Band you like to add does not exist', 'pleklang'), $name, $bands[0]);
         }
     }
     /**
@@ -1281,17 +1316,18 @@ class PlekBandHandler
      * @param int $gallery_id
      * @return bool|null True on success, false on error, null if nothing changed.
      */
-    public function update_band_galleries($gallery_id){
+    public function update_band_galleries($gallery_id)
+    {
         global $plek_handler;
 
-        if(empty($this -> band)){
+        if (empty($this->band)) {
             return false;
         }
-        $existing = $this -> get_photos();
-        if(array_search($gallery_id, $existing)){
+        $existing = $this->get_photos();
+        if (array_search($gallery_id, $existing)) {
             return null; //No need for update, if already exists.
         }
         $existing[] = $gallery_id;
-        return $plek_handler -> update_field('band_galleries', implode(',',$existing), 'term_'.$this->get_id());
+        return $plek_handler->update_field('band_galleries', implode(',', $existing), 'term_' . $this->get_id());
     }
 }

@@ -74,4 +74,14 @@ class PlekAuthorHandler
         $id = $plek_handler -> get_plek_option('guest_author_id');
         return (!empty($id))?(int) $id: false;
     }
+
+    public function set_post_author($post_id, $user_id){
+
+    }
+    
+    public function remove_post_author($post_id, $user_id){
+
+    }
+
+    
 }

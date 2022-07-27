@@ -16,6 +16,9 @@ var plek_gallery_handler = {
         jQuery('#review_images_upload_btn').on('click', function (event) {
             plek_gallery_handler.upload_images_click_action(this);
         });
+        jQuery('#images-uploaded-container').on('click', '.image_to_upload.upload_complete', function (event) {
+            plek_gallery_handler.set_gallery_preview_click_action(this);
+        });
 
         jQuery('#review_images').on('change', function (event) {
             plek_gallery_handler.image_upload_form_change_action(this);
@@ -246,8 +249,9 @@ var plek_gallery_handler = {
  * 
  * @param {object} button The clicked button 
  */
-    upload_images_click_action(button) {
+    async upload_images_click_action(button) {
         let gallery_id = jQuery(button).attr('data-gallery_id');
+        let album_id = jQuery(button).attr('data-album_id');
 
         let files = jQuery('#review_images').prop('files');
 
@@ -271,15 +275,57 @@ var plek_gallery_handler = {
             let formdata = new FormData();
             formdata.append('file_data', upload);
 
-            plek_gallery_handler.upload_image(index, formdata, gallery_id);
-
             //Mark the picture as being uploaded
             let container = '#images-uploaded-container';
             let item = jQuery(container + ' .image_to_upload')[index];
+            jQuery(container).attr('data-album_id', album_id);
+            jQuery(container).attr('data-gallery_id', gallery_id);
             jQuery(item).addClass('upload_in_progress');
             jQuery(item).addClass('current_upload');
+
+            plek_gallery_handler.upload_image(index, formdata, gallery_id);
         }
         );
+    },
+
+    /**
+     * Sets the clicked image as the preview for the gallery
+     * @param {object} image The clicked image
+     */
+    set_gallery_preview_click_action(image){
+        let gallery_id = jQuery(image).parent().attr('data-gallery_id');
+        let image_id = jQuery(image).attr('data-image_id');
+        let img_element = jQuery(image).find('img');
+        plek_main.activate_loader_style(img_element);
+        
+        let formdata = new FormData();
+        formdata.append('action', 'plek_ajax_gallery_actions');
+        formdata.append('do', 'set_preview_image');
+        formdata.append('gallery_id', gallery_id);
+        formdata.append('image_id', image_id);
+
+        jQuery.ajax({
+            url: ajaxurl,
+            data: formdata,
+            type: 'POST',
+            cache: false,
+            processData: false,
+            contentType: false,
+            async: false,
+            success: function success(data) {
+                console.log("uploaded");
+                //Check for errors
+                if(plek_main.response_has_errors(data)){
+                    plekerror.display_error('', plek_main.get_first_error_from_ajax_request(data),__('Upload Error','pleklang'));
+                }else{
+                    plekerror.display_info(__('Gallery preview', 'pleklang'), plek_main.get_first_success_from_ajax_request(data));
+                }
+                plek_main.deactivate_loader_style(img_element);
+            },
+            error: function error(data) {
+
+            }
+        });
     },
 
     /**
@@ -335,15 +381,17 @@ var plek_gallery_handler = {
             cache: false,
             processData: false,
             contentType: false,
+            async: false,
             success: function success(data) {
                 console.log("uploaded");
                 //Check for errors
                 let success = true;
                 if(plek_main.response_has_errors(data)){
-                    let success = false;
-                    plekerror.display_error(data);
+                    success = false;
+                    plekerror.display_error('', plek_main.get_first_error_from_ajax_request(data),__('Upload Error','pleklang'));
                 }
-                plek_gallery_handler.upload_image_progess_update(index, gallery_id, success);
+                let image_id = (success) ? plek_main.get_first_success_from_ajax_request(data): 0;
+                plek_gallery_handler.upload_image_progess_update(index, gallery_id, success, image_id);
             },
             error: function error(data) {
 
@@ -355,13 +403,14 @@ var plek_gallery_handler = {
      * @param {int} index Index of the images in the file input
      * @param {int} gallery_id Id of the gallery
      * @param {bool} is_success If the upload was successfully or not
+     * @param {int} image_id The ID of the Uploaded Image
      */
-    upload_image_progess_update(index, gallery_id, is_success) {
+    upload_image_progess_update(index, gallery_id, is_success, image_id) {
         let container = '#images-uploaded-container';
         let button = jQuery(`.image_upload_add_btn[data-gallery_id='${gallery_id}']`);
         let button_status = jQuery(button).find('.image_upload_status');
         let item = jQuery(container + ' #image_'+index);
-        let items_total = jQuery(container + ' .image_to_upload.current_upload').length;
+        let items_total = jQuery(container + ' .image_to_upload').length;
         if (empty(item)) {
             console.log("Preview Image not found!");
             return false;
@@ -370,6 +419,7 @@ var plek_gallery_handler = {
         //Indicator for the preview picture
         if(is_success){
             jQuery(item).addClass("upload_complete");
+            jQuery(item).attr("data-image_id", image_id);
         }else{
             jQuery(item).addClass("upload_failed");
         }
@@ -377,17 +427,17 @@ var plek_gallery_handler = {
         
         let items_done = jQuery(container + ' .image_to_upload.current_upload.upload_complete').length;
         let items_failed = jQuery(container + ' .image_to_upload.current_upload.upload_failed').length;
-        let procentage_complete = ((items_done + items_failed) / items_total * 100);
+        let percentage_complete = ((items_done + items_failed) / items_total * 100);
 
         //Set the submit button text
-        let btn_text = __('Upload: ', 'pleklang') + Math.round(procentage_complete) + '%';
+        let btn_text = __('Upload: ', 'pleklang') + Math.round(percentage_complete) + '%';
         jQuery('#review_images_upload_btn').text(btn_text);
 
         //Update picture count
         let old_count = jQuery(button).parent().find('.image_count .nr').text();
         jQuery(button).parent().find('.image_count .nr').text(parseInt(old_count) + 1); //Add one to the existing
- 
-        if (procentage_complete === 100) {
+
+        if (percentage_complete === 100) {
             //All uploaded.            
             
             //Empty the file upload input

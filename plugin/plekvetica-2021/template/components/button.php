@@ -11,8 +11,19 @@ $label = (isset($template_args[1])) ? $template_args[1] : ''; //Label to display
 $target = (isset($template_args[2])) ? $template_args[2] : '_self'; //The Target
 $id = (isset($template_args[3])) ? $template_args[3] : ''; //id
 $class = (isset($template_args[4])) ? $template_args[4] : ''; //classes
+$data = (isset($template_args[5])) ? $template_args[5] : []; //Data attribute as a array
 
-$href = (!empty($link))?"href=\"{$link}\"":'';
+
+$href = (!empty($link)) ? "href=\"{$link}\"" : '';
+
+if (is_array($data)) {
+    array_walk($data, function (&$value, $key) {
+        $value = "data-{$key}='{$value}'";
+    });
+    $data = is_array($data) ? implode(' ', $data) :$data;
+}
 ?>
 
-<a class="plek-button <?php echo $class; ?>" <?php if (!empty($id)) {echo 'id="' . $id . '"';} ?> <?php echo $href; ?> target="<?php echo $target; ?>"><?php echo $label; ?></a>
+<a class="plek-button <?php echo $class; ?>" <?php echo $data; ?> <?php if (!empty($id)) {
+                                                                        echo 'id="' . $id . '"';
+                                                                    } ?> <?php echo $href; ?> target="<?php echo $target; ?>"><?php echo $label; ?></a>

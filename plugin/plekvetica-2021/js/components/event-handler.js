@@ -228,7 +228,7 @@ var plekevent = {
             }
             if (jQuery(item).val() == 0) {
                 jQuery(item).val(defaultStartDate);
-            }else{
+            } else {
                 //Update the timestamp, if time set.
                 this.update_band_timestamp(item);
             }
@@ -257,21 +257,21 @@ var plekevent = {
      * @param {object} item The Band item to get the time from (input band-time-xxx)
      * @returns void
      */
-    update_band_timestamp(item){
+    update_band_timestamp(item) {
         let current_value = jQuery(item).val();
-        if(current_value !== '00:00'){
+        if (current_value !== '00:00') {
             //Probably edit event, not timestamp loaded from the db
             let start_date = plekevent.get_event_date('event_start_date', 'date');
-            if(current_value.length === 5){
+            if (current_value.length === 5) {
                 //Is single day, add the date to the current value (current_value is only the time)
                 current_value = start_date + ' ' + current_value;
             }
             let date = new Date(current_value);
             //Add the timezone offset to the time and convert to seconds.
-            let timestamp_in_seconds = (date.getTime() - date.getTimezoneOffset() * 60000 )/ 1000;
+            let timestamp_in_seconds = (date.getTime() - date.getTimezoneOffset() * 60000) / 1000;
             ;
             jQuery(item).closest('.plek-select-item').data('timestamp', timestamp_in_seconds);
-            console.log("Set timestamp to: "+timestamp_in_seconds);
+            console.log("Set timestamp to: " + timestamp_in_seconds);
         }
         return;
     },
@@ -347,7 +347,7 @@ var plekevent = {
                 to: endDate + ' 23:59:59'
             }];
         }
-        console.log('Set flatpicker time. Singleday: '+is_single_day);
+        console.log('Set flatpicker time. Singleday: ' + is_single_day);
         return;
     },
 
@@ -450,6 +450,7 @@ var plekevent = {
                             let event_url_html = `<a href='${event_url}'>${event_url_label}</a>`;
                             plekerror.display_info(__('Event saved!', 'pleklang'), __('Check it out here: ' + event_url_html, 'pleklang'));
                         }
+                        plek_add_event_functions.remove_event_details_reminder(event_id);
                     } else {
                         //Show success message
                         plekerror.display_info(__('Data saved!', 'pleklang'));
@@ -460,7 +461,9 @@ var plekevent = {
                         jQuery(button).data('type', 'new_event_next_page');
                         orig_btn_text = __('Add Event details', 'pleklang');
                         jQuery(button).data('url', url);
-
+                    }
+                    if (type === 'save_basic_event') {
+                        plek_add_event_functions.add_event_details_reminder(event_id, '', 'login');
                     }
 
                     plek_main.deactivate_button_loader(button, orig_btn_text);
@@ -475,6 +478,11 @@ var plekevent = {
         });
 
     },
+    /**
+     * Saves the Event login
+     * @param {string} type The Type to save 
+     * @returns 
+     */
     save_event_login(type) {
         console.log("savelogin " + type);
         var form = 'add_event_login';
@@ -512,6 +520,9 @@ var plekevent = {
                     let success_obj = plek_main.get_ajax_success_object(data);
                     let event_id = (typeof success_obj[0] !== 'undefined') ? success_obj[0] : '000';
                     let user_id = (typeof success_obj[1] !== 'undefined') ? success_obj[1] : 0;
+
+                    //Update the reminder
+                    plek_add_event_functions.add_event_details_reminder(event_id, '', 'details');
 
                     //Redirect to next stage
                     plek_main.url_replace_param('event_id', event_id);
@@ -616,7 +627,8 @@ var plekevent = {
             datab.append('event_price_presale', this.get_field_value('event_price_presale'));
             datab.append('event_price_link', this.get_field_value('event_price_link'));
 
-            datab.append('event_id', this.get_field_value('event_id'));
+            let event_id = this.get_field_value('event_id');
+            datab.append('event_id', event_id);
 
         }
         if (type === "save_add_event_login") {
@@ -631,7 +643,8 @@ var plekevent = {
                 datab.append('guest_email', this.get_field_value('guest_email'));
 
             }
-            datab.append('event_id', this.get_field_value('event_id'));
+
+            datab.append('event_id', this.get_event_id());
             let is_guest = (selected_btn === 'add_as_guest' ? true : false);
             datab.append('is_guest', is_guest);
         }
@@ -656,6 +669,30 @@ var plekevent = {
 
         console.log("Added Validator fields for: " + type);
         return datab;
+    },
+
+    /**
+     * Loads the Event ID. If not found in a form field, it tries to load the ID from the local storage of the reminder function
+     * @param add_to_form If the value should be added to the form.
+     * @returns Event ID
+     */
+    get_event_id(add_to_form = true){
+        let event_id = this.get_field_value('event_id');
+        if (empty(event_id)) {
+            //Get the event_id from storage
+            let prev_event = window.localStorage.getItem('plek_event_reminder');
+            try {
+                let prev_event_obj = JSON.parse(prev_event);
+                event_id = (!empty(Object.keys(prev_event_obj)[0])) ? Object.keys(prev_event_obj)[0] : '';
+                console.log("Event ID loaded from Storage");
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        if(add_to_form){
+            jQuery('input#event_id').val(event_id);
+        }
+        return parseInt(event_id);
     },
 
     /**

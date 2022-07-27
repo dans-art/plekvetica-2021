@@ -16,14 +16,15 @@ var plekerror = {
                 "positionClass": "toast-top-right",
                 "preventDuplicates": true,
                 "onclick": null,
-                "showDuration": "1000",
+                "showDuration": "3000",
                 "hideDuration": "1000",
                 "timeOut": "0",
                 "extendedTimeOut": "0",
                 "showEasing": "swing",
                 "hideEasing": "linear",
                 "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
+                "hideMethod": "fadeOut",
+                'onCloseClick' : null
             }
         } catch (error) {
             console.log(error);
@@ -36,7 +37,7 @@ var plekerror = {
      * @param {bool} closeButton If the close button should be shown
      * @param {string} positionClass The position class. Options: https://codeseven.github.io/toastr/demo.html
      */
-    set_toastr(timeOut = 0, closeButton = true, positionClass = 'toast-top-right') {
+    set_toastr(timeOut = 0, closeButton = true, positionClass = 'toast-top-right', onCloseClick = null) {
         try {
             toastr.options = {
                 "closeButton": closeButton,
@@ -46,14 +47,15 @@ var plekerror = {
                 "positionClass": positionClass,
                 "preventDuplicates": true,
                 "onclick": null,
-                "showDuration": "1000",
+                "showDuration": "3000",
                 "hideDuration": "1000",
                 "timeOut": timeOut,
                 "extendedTimeOut": "0",
                 "showEasing": "swing",
                 "hideEasing": "linear",
                 "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
+                "hideMethod": "fadeOut",
+                "onCloseClick" : onCloseClick
             }
         } catch (error) {
             console.log(error);
@@ -90,6 +92,18 @@ var plekerror = {
         console.log(title);
         console.log(message);
         toastr.info(message, title);
+    },
+
+    /**
+     * Displays a toastr success / green message
+     * 
+     * @param {string} title The title to display
+     * @param {string} message The message to show
+     */
+    display_success(title, message) {
+        console.log(title);
+        console.log(message);
+        toastr.success(message, title);
     },
 
     add_error_to_field(field, message) {

@@ -38,7 +38,6 @@ $gravatar_link = "<a href='https://de.gravatar.com' target='_blank'>gravatar.com
     <input id="new-password-repeat" name="new-password-repeat" type="password" value=""></input>
     
     <?php 
-    
     if(PlekUserHandler::user_is_organizer($user)){
         PlekTemplateHandler::load_template('organizer-settings-form', 'system/user-settings', $user);
     }

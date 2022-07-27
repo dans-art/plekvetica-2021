@@ -7,6 +7,22 @@ class PlekEventHandler
 {
 
     /**
+     * Get the errors stored in the class property "error"
+     *
+     * @param boolean $last_only - If only the last error should be returned.
+     * @return array|string Array if all items are returned or string if $last_only
+     */
+    public function get_error($last_only = false)
+    {
+        if (empty($this->errors)) {
+            return ($last_only) ? '' : [];
+        }
+        if (!$last_only) {
+            return $this->errors;
+        }
+        return $this->errors[array_key_last($this->errors)];
+    }
+    /**
      * Checks if a event is loaded
      *
      * @return boolean
@@ -407,14 +423,39 @@ class PlekEventHandler
     }
 
 
-    public function get_name()
+    /**
+     * Gets the name, aka post title of the loaded event
+     * @param int|string $event_id The Event ID
+     * @return string The Title
+     */
+    public function get_name($event_id = null)
     {
-        return $this->get_field_value('post_title');
+        if ($this->is_event_loaded() and $event_id === null) {
+            return $this->get_field_value('post_title');
+        }
+        return get_the_title($event_id);
     }
 
+    /**
+     * Gets the name, aka post title of the loaded event as a link
+     *@param string $target - The target of the link
+     * @return string The Title with the link to the post
+     */
+    public function get_name_link($target = '_blank')
+    {
+        $link = get_permalink($this->get_ID());
+        $name = $this->get_name();
+        return "<a href='$link' target='$target'>$name</a>";
+    }
+
+    /**
+     * Gets the ID, of the loaded event
+     *
+     * @return int The ID or null, if not event loaded
+     */
     public function get_ID()
     {
-        return $this->get_field_value('ID');
+        return intval($this->get_field_value('ID'));
     }
 
     /**
@@ -482,6 +523,20 @@ class PlekEventHandler
         return get_permalink($this->get_ID());
     }
 
+    /**
+     * Get the link to a Event with the Title of the Event
+     *
+     * @param int|string $event_id
+     * @param string $target The target for the html link
+     * @return string The Link as a HTML a element
+     */
+    public function get_link_with_title($event_id = null, $target = '_blank')
+    {
+        $link = ($this->is_event_loaded() and $event_id === null) ? get_permalink($this->get_ID()) : get_permalink($event_id);
+        $title = ($this->is_event_loaded() and $event_id === null) ? $this->get_name() : get_the_title($event_id);
+        return sprintf('<a href="%s" target="%s">%s</a>', $link, $target, $title);
+    }
+
     public function get_guid()
     {
         return $this->get_field_value('guid');
@@ -504,11 +559,18 @@ class PlekEventHandler
         return new stdClass();
     }
 
+    /**
+     * Returns the poster of a event
+     *
+     * @param string $alt - The Alt text to display
+     * @param string|array $size - The size of the image. Accepts registered size name or array with width & height (default: medium)
+     * @return null|string The Image as HTML code
+     */
     public function get_poster(string $alt = '', $size = '')
     {
         $attr = array('alt' => $alt);
         $size = (empty($size)) ? 'medium' : $size;
-        $poster = wp_get_attachment_image($this->get_field_value('_thumbnail_id'), $size, false, $attr);
+        $poster = wp_get_attachment_image(intval($this->get_field_value('_thumbnail_id')), $size, false, $attr);
         if (!empty($poster)) {
             return $poster;
         }
@@ -523,13 +585,40 @@ class PlekEventHandler
      */
     public function get_poster_url($size = 'medium')
     {
-        $poster_arr = wp_get_attachment_image_src($this->get_field_value('_thumbnail_id'), $size);
+        $poster_arr = wp_get_attachment_image_src(intval($this->get_field_value('_thumbnail_id')), $size);
         if (isset($poster_arr[0])) {
             return $poster_arr[0];
         }
         return false;
     }
 
+    /**
+     * Returns all the organizers of a event. 
+     *
+     * @param bool|string $separator - The Seperator as a string or false to return the names as an array 
+     * @return array|string - Array if separator is false, otherwise string with separator. 
+     */
+    public function get_organizers($separator = false)
+    {
+        $organizers = $this->get_field_value('_EventOrganizerID', true);
+        if (!is_array($organizers)) {
+            return $organizers; //Returns probably a string with the name.
+        }
+        $organizers = array_map(function ($value) {
+            return tribe_get_organizer($value);
+        }, $organizers);
+        if (is_string($separator)) {
+            return implode($separator, $organizers);
+        }
+        return $organizers;
+    }
+
+    /**
+     * Returns the thumbnail object
+     *
+     * @param string $size - The size. Accepts small, medium, maxres and default.
+     * @return object The thumbnail object
+     */
     public function get_thumbnail_object($size = '')
     {
         $size = (empty($size)) ? 'medium' : $size;
@@ -696,6 +785,21 @@ class PlekEventHandler
             return $seconds;
         }
         return date_i18n($format, $seconds);
+    }
+
+    /**
+     * Returns the event Date. If multiday, the enddate will be returned as well.
+     *
+     * @param string $format - Format of the date
+     * @param string $separator - Separator between start and enddate (only on multiday)
+     * @return string The even date
+     */
+    public function get_event_date(string $format = 'd m Y', $separator = ' - ')
+    {
+        if ($this->is_multiday()) {
+            return $this->get_start_date($format) . $separator . $this->get_end_date($format);
+        }
+        return $this->get_start_date($format);
     }
 
     public function get_event_classes(bool $return_string = true)
@@ -931,7 +1035,7 @@ class PlekEventHandler
      */
     public function get_field_value($name = 'post_title', $return_all = false)
     {
-        if (isset($this->event['data']->$name)) {
+        if ((isset($this->event['data'])) and (is_object($this->event['data'])) and property_exists($this->event['data'], $name)) {
             return $this->event['data']->$name;
         }
         if (isset($this->event['meta'][$name][0])) {
@@ -1071,14 +1175,16 @@ class PlekEventHandler
     /**
      * Get all the Interviews and their status.
      * Returns array(0 => status_code, 1 => Name of Band)
+     * @param bool $return_as_string - If the function should return a string with the results.
      *
-     * @return bool|array - False if no Interviews ar saved, Array if exists 
+     * @return bool|array|string - False if no Interviews ar saved, Array if exists, String if parameter 1 is true
      */
-    public function get_event_interviews()
+    public function get_event_interviews($return_as_string = false)
     {
         $interviews = $this->get_field_value('interview_with');
         $int_arr = explode(PHP_EOL, $interviews);
         $ret_arr = [];
+        $ret_string = "";
         if (empty($interviews)) {
             return false;
         }
@@ -1087,8 +1193,13 @@ class PlekEventHandler
             $ret_arr[$key]['status'] = (count($item) > 1) ? $item[0] : '';
             unset($item[0]); //Remove the Status
             $ret_arr[$key]['name'] = (count($item) > 1) ? preg_replace('/^[A-Za-z]{0,5}:{1} {0,}/', '', $int_arr[$key]) :  implode('', $item);
+            $ret_string .= $ret_arr[$key]['name'] . " (" . $this->get_event_status_text($ret_arr[$key]['status']) . ")<br/>";
         }
-        return $ret_arr;
+        if (!$return_as_string) {
+            return $ret_arr;
+        } else {
+            return $ret_string;
+        }
     }
 
     /**
@@ -1126,6 +1237,52 @@ class PlekEventHandler
         return $authors;
     }
 
+    /**
+     * Sets the author for the current event.
+     *
+     * @param int $user_id - The ID of the user, or current user if not set
+     * @param bool $append_user -If true, all other authors are removed. 
+     * @return bool True on success, false on error.
+     */
+    public function set_event_author($user_id, $append_user = true)
+    {
+        if (!is_int($this->get_ID())) {
+            return false;
+        }
+        $co_authors = new CoAuthors_Plus();
+
+        $user_id = (!empty($user_id)) ? $user_id : get_current_user_id();
+        $user = get_user_by('id', $user_id);
+
+        return $co_authors->add_coauthors($this->get_ID(), [$user->user_nicename], $append_user);
+    }
+
+    /**
+     * Adds the accredi crew to the current event as wp authors
+     *
+     * @return bool true on success, false on error
+     */
+    public function accredi_crew_to_wp_authors()
+    {
+        if (!$this->is_event_loaded()) {
+            return false;
+        }
+        $crew = $this->get_event_akkredi_crew($this->get_ID());
+        foreach ($crew as $user_login) {
+            $user = get_user_by('login', $user_login);
+            if (isset($user->ID) and $user->ID !== 0) {
+                $this->set_event_author($user->ID);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks if the publish button should be shown or not.
+     *
+     * @param integer|null $post_id
+     * @return bool True if the button is to show, false otherwise
+     */
     public function show_publish_button(int $post_id = null)
     {
         if (!PlekUserHandler::user_is_in_team()) {
@@ -1149,15 +1306,48 @@ class PlekEventHandler
         return (!empty($crew)) ? $crew : false;
     }
 
+    /**
+     * Loads the event crew formated
+     *@param bool|string $separator - If string, the output will be string, separated by the given string
+     * @return false|string|array false if no crew is found, string if separator is defined or array.
+     */
+    public function get_event_akkredi_crew_formated($separator = false)
+    {
+        $crew = $this->get_event_akkredi_crew();
+        if (!is_array($crew)) {
+            return false;
+        }
+        //Get the nicename and primary role
+        $crew_formated = array_map(function ($login_name) {
+            $display_name = PlekUserHandler::get_user_real_name($login_name);
+            //Get the role of the user. If the user is an admin, he will get the role photographer
+            $role = PlekUserHandler::get_user_primary_role($login_name, ['administrator' => 'photographer']);
+            return (empty($display_name)) ? false : sprintf('%s (%s)', $display_name, $role);
+        }, $crew);
+        if (!is_string($separator)) {
+            return $crew_formated;
+        }
+        return implode($separator, $crew_formated);
+    }
+
+    /**
+     * Loads the Status text. If no code is given, the status of the current loaded event will be returned.
+     *
+     * @param string $status_code - (aw, ab, aa, no, iq, ib, ia) are accepted.
+     * @return string The status code or false if not found.
+     */
     public function get_event_status_text(string $status_code = '')
     {
         if (empty($status_code)) {
-            return false;
+            $status_code = $this->get_field_value('akk_status');
+            if (empty($status_code)) {
+                return false;
+            }
         }
         $status_code = $this->prepare_status_code($status_code);
         switch ($status_code) {
             case 'aw':
-            case 'iq':
+            case 'iw':
                 return __('Wish', 'pleklang');
                 break;
             case 'ab':
@@ -1170,6 +1360,9 @@ class PlekEventHandler
                 break;
             case 'no':
                 return __('Declined', 'pleklang');
+                break;
+            case 'null':
+                return __('Undefined', 'pleklang');
                 break;
             default:
                 return false;
@@ -1201,11 +1394,32 @@ class PlekEventHandler
 
     }
 
+    /**
+     * Converts the given got do lower char and removes whitespaces
+     *
+     * @param string $status_code
+     * @return string The sanitized status code
+     */
     public function prepare_status_code(string $status_code)
     {
         $status_code = trim($status_code);
         $status_code = strtolower($status_code);
         return $status_code;
+    }
+
+    /**
+     * Gets all the available status codes
+     *
+     * @param string $type - The Type to get. (event_status, interview_status)
+     * @return array The available status codes
+     */
+    public function get_status_codes($type = 'event_status')
+    {
+        if ($type === 'interview_status') {
+            return ['null', 'iw', 'ia', 'ib', 'no'];
+        } else {
+            return ['null', 'aw', 'aa', 'ab', 'no'];
+        }
     }
 
     /**
@@ -1226,9 +1440,13 @@ class PlekEventHandler
         $current = get_field('akkreditiert', $event_id);
         $event_title = get_the_title($event_id);
 
-        $find = array_search($user_login, $current);
-        if ($find === true) {
-            return __('Member is already set', 'pleklang');
+        if (is_array($current)) {
+            $find = array_search($user_login, $current);
+            if ($find === true) {
+                return __('Member is already set', 'pleklang');
+            }
+        } else {
+            $current = array();
         }
         $current[] = $user_login;
 
@@ -1293,6 +1511,13 @@ class PlekEventHandler
         if (array_search($status_code, $allowed_codes) === false) {
             return __('Error: Status code not allowed', 'pleklang');
         }
+        //Check if Event exists
+        $pe = new PlekEvents;
+        $loaded_event = $pe->load_event($event_id);
+        if (!$loaded_event) {
+            return $pe->get_error(true); //Error message
+        }
+
         $status_code = $this->prepare_status_code($status_code);
         $update = $plek_handler->update_field('akk_status', $status_code, $event_id);
 
@@ -1311,6 +1536,11 @@ class PlekEventHandler
             );
             $action = get_permalink($event_id);
             $notify->push_accredi_members($event_id, 'event', $subject, $message, $action);
+        }
+
+        //Set Event to featured if status code is ab (accreditation confirmed)
+        if ($status_code === 'ab') {
+            return ($this->update_event_meta($event_id, '_tribe_featured', '1') === false) ? __('Error while updating the event featured status', 'pleklang') : true;
         }
 
         return ($update !== false) ? true : __('Error while updating the accreditation status', 'pleklang');
@@ -1583,9 +1813,15 @@ class PlekEventHandler
         if (!PlekUserHandler::user_can_edit_post($event_id)) {
             return __('Sorry, you are not allowed to edit this Event!', 'pleklang');
         }
+
         //Save Event
         $args = $this->get_event_details_data();
-
+        
+        //Set Event status to publish if user is logged in
+        if(PlekUserHandler::user_is_logged_in()){
+            $args['post_status'] = 'publish';
+        }
+        
         $event_id = tribe_update_event($event_id, $args);
 
         //Save the rest of the Data
@@ -1607,14 +1843,13 @@ class PlekEventHandler
     {
         global $plek_ajax_handler,
             $plek_handler;
-
         $validator = $this->validate_event_review();
         if ($validator->all_fields_are_valid(null, true) !== true) {
             return $validator->get_errors();
         }
         $event_id = intval($plek_ajax_handler->get_ajax_data('event_id'));
-
-        //Update the Event description
+        $this->load_event($event_id);
+ 
 
         $acf = array();
         $failed = array();
@@ -1628,18 +1863,23 @@ class PlekEventHandler
             $acf['text_review'] = " "; //Workaround to avoid displaying the original post content. 
         }
 
+        //Updates the sortorder in the Album. 
         $sortorder =  $plek_ajax_handler->get_ajax_data_as_array('event_gallery_sortorder');
-        if (!empty($sortorder) and empty($acf['album_ids'])) {
-            foreach ($sortorder as $album_id => $gallery_id_array) {
+        if (!empty($sortorder[0]) and empty($acf['album_ids'])) {
+            foreach ($sortorder[0] as $album_id => $gallery_id_array) {
                 $album_mapper = C_Album_Mapper::get_instance();
                 $album = $album_mapper->find($album_id);
-                if ($album) {
+                //Save the new sortorder, but only if it got changed
+                if (!$album) {
+                    $failed[] = 'event_gallery_sortorder (No Album found)';
+                    continue;
+                }
+                if ($sortorder[0]->{$album_id} !== $album->sortorder) {
+                    //Only try to save when there are new values
                     $album->sortorder = $gallery_id_array;
                     if (!C_Album_Mapper::get_instance()->save($album)) {
                         $failed[] = 'event_gallery_sortorder (Could not save the galleries)';
                     }
-                } else {
-                    $failed[] = 'event_gallery_sortorder (No Album found)';
                 }
             }
         }
@@ -1647,8 +1887,8 @@ class PlekEventHandler
 
         //Check if the Event is already a review. If not, send a Info to the admin
         //This will only fire if the Event gets flaged as review for the first time.
-        $old_event_review_status = get_field('is_review', $event_id);
-        if (!$old_event_review_status) {
+        $old_event_review_status = boolval(get_field('is_review', $event_id));
+        if ($old_event_review_status !== true) {
             $notify = new PlekNotificationHandler;
             $notify->push_to_admin(
                 __('New Review published', 'pleklang'),
@@ -1664,11 +1904,20 @@ class PlekEventHandler
             }
         }
 
+        //Add the accredi crew to the autors
+        $this->accredi_crew_to_wp_authors();
 
 
         if (!empty($failed)) {
             return __('Failed to update the review field(s): ', 'pleklang') . implode(', ', $failed);
         }
+
+        apply_filters(
+            'simple_history_log',
+            'Review of "' . $this->get_name($event_id) . '" saved by ' . PlekUserHandler::get_current_user_display_name(),
+            ['url' => get_permalink($event_id)]
+        );
+
         return $event_id;
     }
 
@@ -1720,7 +1969,6 @@ class PlekEventHandler
         //Add user to Event
         $is_guest = filter_var($plek_ajax_handler->get_ajax_data('is_guest'), FILTER_VALIDATE_BOOLEAN);
         $event_id = (int) $plek_ajax_handler->get_ajax_data('event_id');
-
         if ($is_guest) {
             //Add the Guest Autors name
             $guest_name = $plek_ajax_handler->get_ajax_data('guest_name');
@@ -1731,6 +1979,9 @@ class PlekEventHandler
             }
             //Set the guest author ID
             $login = (int) $plek_handler->get_plek_option('guest_author_id');
+            //Send mail to user
+            $pn = new PlekNotificationHandler;
+            $pn->push_to_role('guest', __('Your new Event at Plekvetica', 'pleklang'), maybe_serialize([$event_id, $guest_name, $guest_email]), null, 'added_event_guest_info');
         } else {
             //Try to login the user
             $user_name = $plek_ajax_handler->get_ajax_data('user_login');
@@ -2161,6 +2412,28 @@ class PlekEventHandler
     }
 
     /**
+     * Updates a event meta field
+     * This function updates all the fields with the $field_name / meta_key of the given event id
+     *
+     * @param string|int $event_id - The Event ID
+     * @param string $field_name - The Meta Key
+     * @param string $value - The Value to save
+     * @return int|bool Meta ID on insert, true on update, null if nothing was updated, false on error
+     */
+    public function update_event_meta($event_id, $field_name, $value)
+    {
+        $update = update_post_meta($event_id, $field_name, $value);
+        if ($update) {
+            return $update; //Meta ID on insert, true on update
+        }
+        //Check if the existing field is the same as the given one
+        $current = get_post_meta($event_id, $field_name, true);
+        if ($current === $value) {
+            return null; //No update, since the value is the same as the saved one.
+        }
+        return false;
+    }
+    /**
      * This checks for the enddate and set it to the startdate at 24:00, if empty
      * 
      * @param string $end_date The End Date
@@ -2341,7 +2614,7 @@ class PlekEventHandler
     public function get_event_gallery_id_by_band($band_id = null)
     {
         $albums = $this->get_field_value_decoded('band_gallery_relationship');
-        $band_id = intval($band_id);
+        $band_id = (strpos($band_id, 'impression') !== false) ? $band_id : intval($band_id); //convert to Int if it is no impression gallery
         if (empty($albums)) {
             return (!empty($band_id)) ? null : array();
         }
@@ -2363,7 +2636,7 @@ class PlekEventHandler
     public function get_event_album_id_by_band($band_id = null)
     {
         $albums = $this->get_field_value_decoded('band_gallery_relationship');
-        $band_id = intval($band_id);
+        $band_id = (strpos($band_id, 'impression') !== false) ? $band_id : intval($band_id); //convert to Int if it is no impression album
         if (empty($albums)) {
             return (!empty($band_id)) ? null : array();
         }
@@ -2436,9 +2709,19 @@ class PlekEventHandler
             //Load the event
             $this->load_event($event_id);
         }
+
         //Default format
         $date = $this->get_start_date('Y.m.d');
         $name = $this->get_name();
+
+        if (strpos($band_id, 'impression') !== false) {
+            //It is an Impression Album
+            $name_part = explode('_', $band_id); //impression_DATE eg: impression_13.01.2022
+            $name_date = isset($name_part[1]) ? $name_part[1] : $date;
+            $date_converted = date('Y.m.d', strtotime($name_date)); //Convert the date
+            return $date_converted . ' - ' . $name;
+        }
+
         if ($this->is_multiday()) {
             //Check the day the band is playing, if multiday and timetable defined.
             $playday = $this->get_band_playtime($band_id, 'Y.m.d');
@@ -2462,13 +2745,21 @@ class PlekEventHandler
             $this->load_event($event_id);
         }
 
+        $venue = $this->get_venue_name();
+
+        if (strpos($band_id, 'impression') !== false) {
+            //It is an Impression Gallery
+            $name_part = explode('_', $band_id); //impression_DATE eg: impression_13.01.2022
+            $name_date = isset($name_part[1]) ? $name_part[1] : $this->get_start_date('d.m.Y');
+            $date_converted = date('d.m.Y', strtotime($name_date)); //Convert the date
+            return __('Impression', 'pleklang') . ' @ ' . $venue . ' - ' . $date_converted;
+        }
+
         $band_handler = new PlekBandHandler;
         $band_handler->load_band_object_by_id($band_id);
 
         $playday = $this->get_band_playtime($band_id, 'd.m.Y');
         $date = ($playday === null) ? $this->get_start_date('d.m.Y') : $playday;
-
-        $venue = $this->get_venue_name();
 
         return $band_handler->get_name() . ' @ ' . $venue . ' - ' . $date;
     }
@@ -2493,5 +2784,113 @@ class PlekEventHandler
         $band = $band_handler->get_name();
 
         return sprintf(__('Photos of %1$s at %2$s by Plekvetica', 'pleklang'), $band, $venue);
+    }
+
+    /**
+     * Checks if a Event has certain fields filled out.
+     *
+     * @param boolean $all
+     * @return bool|array False if no missing data found, array with the missing fields
+     */
+    public function get_missing_event_details($all = true)
+    {
+        $missing = array();
+        $fields_to_check = ($all)
+            ? [
+                'post_title' => __('Title', 'pleklang'),
+                'post_content' => __('Description', 'pleklang'),
+                '_EventVenueID' => __('Venue', 'pleklang'),
+                '_EventOrganizerID' => __('Organizer', 'pleklang'),
+                '_EventStartDate' => __('Start Date', 'pleklang'),
+                '_EventEndDate' => __('End Date', 'pleklang'),
+                'vorverkauf-preis' => __('Presale', 'pleklang'),
+                '_EventCost' => __('Boxoffice', 'pleklang')
+            ] //All the fields to check
+            : []; //Only the most important ones (default)
+
+        foreach ($fields_to_check as $field_name => $nicename) {
+            if (empty($this->get_field_value($field_name))) {
+                $missing[$field_name] = $nicename;
+            }
+        }
+        //Check some extra fields
+        if (empty($this->get_bands())) {
+            $missing['bands'] = __('Bands', 'pleklang');
+        }
+        //Check some extra fields
+        /*if (empty($this->get_timetable())) {
+            $missing['timetable'] = __('Timetable', 'pleklang');
+        }*/
+        if (empty($this->get_poster())) {
+            $missing['poster'] = __('Poster', 'pleklang');
+        }
+        if (empty($missing)) {
+            return false;
+        }
+        return $missing;
+    }
+
+    /**
+     * Formats the missing event details.
+     *
+     * @param boolean $all
+     * @param string $output - Type of output. Currenly supportet: list, br (default)
+     * @param string $before_item - String to add before the item
+     * @param string $after_item - String to add after the item
+     * @return string The HTML Code
+     */
+    public function get_missing_event_details_formated($all = true, $output = 'br', $before_item = '', $after_item = '')
+    {
+        $missing = $this->get_missing_event_details();
+        if (empty($missing)) {
+            return false;
+        }
+
+        foreach ($missing as $field_id => $field_value) {
+            $missing[$field_id] =  $before_item . $field_value . $after_item;
+            if ($output === 'list') {
+                $missing[$field_id] = '<li>' . $field_value . '</li>';
+            }
+        }
+        switch ($output) {
+            case 'list':
+                return '<ul>' . implode('', $missing) . '</ul>';
+                break;
+
+            default:
+                return implode('<br/>', $missing);
+                break;
+        }
+    }
+
+    /**
+     * Gets all the followers of a band by an event
+     *
+     * @param int|string $event_id
+     * @param bool $sort_by_user If this is true, the resulting array will be sorted by user_id instead of band_id
+     * @return array|false False on error, array on success ([band_id => [user_id => user_id, ...], band_id => ...])
+     */
+    public function get_event_band_follower($event_id, $sort_by_user = false)
+    {
+        if (!$this->is_event_loaded()) {
+            $this->load_event($event_id);
+        }
+        $bands = $this->get_bands(false);
+        if (empty($bands)) {
+            return false;
+        }
+        $follower = [];
+        foreach ($bands as $band_id => $band_item) {
+            if (isset($band_item['band_follower']) and is_array($band_item['band_follower'])) {
+                foreach ($band_item['band_follower'] as $user_id) {
+                    if ($sort_by_user) {
+                        $follower[$user_id][$band_id] = $band_id;
+                    } else {
+                        $follower[$band_id][$user_id] = $user_id;
+                    }
+                }
+            }
+        }
+        return $follower;
     }
 }

@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) {
 add_shortcode('plek_text_bar', [$plek_handler, 'text_bar_from_shortcode']); 
 add_shortcode('plek_text_two_line_title', [$plek_handler, 'plek_text_two_line_title_from_shortcode']); 
 add_shortcode('plek_get_team', [$plek_handler, 'plek_get_team_shortcode']); 
+add_shortcode('plek_external_actions', [$plek_handler, 'plek_external_actions_shortcode']);
 
 //Search
 add_shortcode('plek_review_search', [$plek_search_handler, 'plek_review_search_shortcode']); 
@@ -25,6 +26,11 @@ add_shortcode('plek_event_review_form', [$plek_event, 'plek_event_review_form_sh
 add_shortcode('plek_event_recently_added', [$plek_event, 'plek_event_recently_added_shortcode']);
 add_shortcode('plek_event_upcoming_no_akkredi', [$plek_event, 'plek_event_upcoming_no_akkredi_shortcode']);
 
+//Events Admin
+add_shortcode('plek_event_team_calendar', [$plek_event, 'plek_event_team_calendar_shortcode']);
+add_shortcode('plek_event_team_accredi', [$plek_event, 'plek_event_team_accredi_shortcode']);
+
+
 //Bands
 add_shortcode('plek_band_page', [new PlekBandHandler, 'plek_band_page_shortcode']);
 add_shortcode('plek_add_band_button', [new PlekBandHandler, 'plek_add_band_button_shortcode']);
@@ -39,6 +45,5 @@ add_shortcode('plek_organizer_edit_page', [new PlekOrganizerHandler, 'plek_organ
 //Login
 add_shortcode('plek_login_page', [$plek_login_handler, 'plek_login_page_shortcode']);
 
-
-
-
+//Development
+add_shortcode('plek_codetester', [$plek_handler, 'plek_tester_shortcode']);

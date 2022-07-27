@@ -461,28 +461,76 @@ ul.partner-container{
 }
 
 //Team Calendar
-body.page-id-24565{
-    #content{
-        width: 100%;
-        max-width: 100%;
+.plek-post-type-team-calendar{
+    color: $text-color;
+    color: white;
+    position: relative;
+    left: calc(-49vw + 50%);
+    width: 94vw;
+    margin: 0 2vw;
+    
+    table, td, th{
+        border-color: $color-gray-light;
     }
 
-    .eTPoster img{
-        width: 110px;
+    td{
+      color: $text-color;
     }
 
- .dataTables_scroll{
-    table, td, th {
-        border: 1px solid gray;
+    thead{
+        background-color: $color-red-dark;
     }
- }
- label,
- .dataTables_info,
- .dataTables_paginate a{
-     color:white !important;
- }
- td {
-    color: black;
-}
-}
+
+    .event_poster{
+        max-width: 150px;
+    }
+    
+    .event-canceled .event_name{
+        text-decoration: line-through;
+    }
+
+    .event-organizer,
+    .event-location{
+        padding-left: 2rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .event-organizer::before,
+    .event-location::before{
+        font-family: 'FontAwesome';
+        left: 0;
+        position: absolute;
+    }
+    
+    .event-organizer::before{
+        content: '\f0c0';
+    }
+    
+    .event-location::before{
+        content: '\f015';
+    }
+
+    .event-organi-and-location{
+        padding-left: 2rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+
+        &::before{
+            font-family: 'FontAwesome';
+            left: 0;
+            top: -1rem;
+            position: absolute;
+            content: '\f0c0'; 
+        }
+        &::after{
+            font-family: 'FontAwesome';
+            left: 0;
+            top: 1rem;
+            position: absolute;
+            content: '\f015'; 
+        }
+    }
+  }
+  
 

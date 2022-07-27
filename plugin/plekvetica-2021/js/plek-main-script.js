@@ -1,5 +1,8 @@
 let plek_main = {
 
+    event_add_page_id: null,
+    event_edit_page_id: null,
+
     construct() {
         jQuery(window).resize();
         jQuery(document).ready(function () {
@@ -10,6 +13,13 @@ let plek_main = {
             plek_main.config_topbar();
             topbar.show();
         });
+
+        //Check for event notification
+        if (!empty(plek_add_event_functions)) {
+            setTimeout(() => {
+                plek_add_event_functions.maybe_display_event_details_reminder();
+            }, 3000)
+        }
     },
 
     config_topbar() {
@@ -248,6 +258,19 @@ let plek_main = {
         window.location.replace(url);
         return;
     },
+    
+    /**
+     * Redirects to another page with an additional timeout
+     * @param {string} url 
+     * @param {int} timeout 
+     * @returns 
+     */
+    redirect_to_url(url, timeout = 0) {
+        setTimeout(() => {
+            window.location.replace(url);
+        }, timeout);
+        return;
+    },
 
     get_ajax_success_object(data) {
         try {
@@ -367,15 +390,26 @@ let plek_main = {
             for (const [id, value] of Object.entries(encoded_data.error)) {
                 if (typeof value == "object") {
                     for (const [sub_id, sub_value] of Object.entries(value)) {
-                        jQuery(sub_value).each(function (i) {
-                            console.log("set " + sub_id);
+                        if(typeof sub_value === 'string'){
                             var field_selector = jQuery('#' + sub_id);
-                            if (field_selector.length === 0) {
-                                var field_selector = jQuery(form); //If field is not found, attach the error at the end of the given form
-                            }
-                            jQuery(field_selector).after(plek_main.format_error_message(sub_value[i]));
-                            error_count++;
-                        });
+                            jQuery(field_selector).after(plek_main.format_error_message(sub_value));
+                        }
+                        else if(typeof sub_value === 'array' || typeof sub_value === 'object'){
+                            jQuery(sub_value).each(function (i) {
+                                console.log("set " + sub_id);
+                                var field_selector = jQuery('#' + sub_id);
+                                if (field_selector.length === 0) {
+                                    var field_selector = jQuery(form); //If field is not found, attach the error at the end of the given form
+                                }
+                                jQuery(field_selector).after(plek_main.format_error_message(sub_value[i]));
+                                error_count++;
+                            });
+                        }
+                        else{
+                            console.log('Unknown type in show_field_errors');
+                            console.log(sub_value);
+                        }
+
                     }
                 }
                 if (typeof value == "string") {
@@ -390,11 +424,18 @@ let plek_main = {
                     console.log(form);
                     error_count++;
                 }
+                //set the error message as a string
+                if(typeof value === 'string'){
+                    jQuery('#' + id).after(plek_main.format_error_message(value));
+                    error_count++;
+                }
                 //Set the error message, but only if array / object
+                if(typeof value === 'array' || typeof value === 'object'){
                 jQuery(value).each(function (i) {
                     jQuery('#' + id).after(plek_main.format_error_message(value[i]));
                     error_count++;
                 });
+                }
             }
             if (error_count === 0) {
                 return false;
@@ -654,9 +695,9 @@ let plek_main = {
      * Removes all the inputs within the given form id.
      * @param {string} form_id 
      */
-    clear_form_inputs(form_id){
-        let form = jQuery('#'+form_id);
-        if(empty(form)){
+    clear_form_inputs(form_id) {
+        let form = jQuery('#' + form_id);
+        if (empty(form)) {
             return false;
         }
         //Clear all the Input fields
@@ -665,8 +706,9 @@ let plek_main = {
         });
         //Clear all the textarea fields
         form.find('textarea').each((id, item) => {
-            if(!empty(tinymce.get(id))){
-                tinymce.get(id).setContent('');
+            let textarea_id = jQuery(item).attr('id');
+            if (!empty(tinymce.get(textarea_id))) {
+                tinymce.get(textarea_id).setContent('');
             }
             jQuery(item).val(''); //Fallback if no wp editor
         });
@@ -676,7 +718,7 @@ let plek_main = {
         });
 
         //On band Inputs
-        if(form_id === 'plek-band-form'){
+        if (form_id === 'plek-band-form') {
             form.find('.video_preview_item').each((id, item) => {
                 plek_band.remove_band_video(item);
             });
@@ -689,18 +731,18 @@ let plek_main = {
      * Resets the file inputs and replaces the selected image with the placeholder.
      * @param {string} form_id 
      */
-    reset_file_inputs(form_id){
+    reset_file_inputs(form_id) {
         //Empty the file input
         jQuery('#'.form_id).find('input[type=file]').each((id, item) => {
             jQuery(item).val(null);
         });
         //Restore the placeholder file
         let placeholder = document.plek_home_url + '/wp-content/plugins/plekvetica-2021/images/placeholder/default_placeholder.jpg';
-        jQuery('#'+form_id).find('.plek-image-upload-container').find('img').first().attr('src', placeholder);
-        
+        jQuery('#' + form_id).find('.plek-image-upload-container').find('img').first().attr('src', placeholder);
+
         //Reset the Button text
-        jQuery('#'+form_id).find('.plek-image-upload-container').find('.plek-button').text(__('Upload','pleklang'));
-        
+        jQuery('#' + form_id).find('.plek-image-upload-container').find('.plek-button').text(__('Upload', 'pleklang'));
+
     },
 
     /**
@@ -709,17 +751,17 @@ let plek_main = {
      * @param {string} format The format to return
      * @returns String The date without timezone or false if not timestamp received
      */
-    get_formated_date(timestamp, format = ''){
+    get_formated_date(timestamp, format = '') {
 
         var length = format.length;
-        if(length === 0){
+        if (length === 0) {
             return '';
         }
-        if(empty(timestamp)){
+        if (empty(timestamp)) {
             return false;
         }
 
-        var formated_date = ''; 
+        var formated_date = '';
         let pieces = Array.from(format);
         jQuery(pieces).each((index, item) => {
             let js_date = new Date(timestamp * 1000);
@@ -754,7 +796,7 @@ let plek_main = {
                 case 'Y':
                     var timepiece = fixed_js_date.getFullYear();
                     break;
-            
+
                 default:
                     timepiece = item;
                     break;
@@ -763,6 +805,28 @@ let plek_main = {
         });
 
         return formated_date;
+    },
+    /**
+     * Checks if the current page contains a edit / add event form 
+     * 
+     * @returns bool True if page contains a even form, false otherwise
+     */
+    page_has_event_form() {
+        if (!empty(jQuery('#edit_event_form')) || !empty(jQuery('#add_event_basic')) || !empty(jQuery('#add_event_login')) || !empty(jQuery('#add_event_details'))) {
+            return true;
+        }
+        return false;
+    },
+    /**
+     * Checks if the current page contains a login / lost-password event form 
+     * 
+     * @returns bool True if page contains a even form, false otherwise
+     */
+     page_has_login_form() {
+        if (!empty(jQuery('#register-new-user-form')) || !empty(jQuery('#loginform')) || !empty(jQuery('#lostpasswordform'))  || !empty(jQuery('#set_new_password_form')) ) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -781,7 +845,7 @@ plek_main.construct();
  * @returns 
  */
 function empty(value) {
-    if(value === null){
+    if (value === null) {
         return true;
     }
     if (typeof value === 'undefined') {

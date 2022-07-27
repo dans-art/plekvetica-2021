@@ -52,7 +52,7 @@ class plekTheme
     public function plek_theme_setup()
     {
         add_theme_support('editor-styles');
-        add_editor_style('css/backend-style.css');
+        add_editor_style('css/backend-style.css'); //This is not the same file as the one in the plugin dir!
         return;
     }
 

@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 
 /**
  * Login Form
@@ -20,9 +23,9 @@ $content = (isset($template_args[1])) ? $template_args[1] : ''; //Content of the
     if (PlekUserHandler::current_user_is_locked()) {
         $message = __('You account is currently locked. Please check your mail for unlock instructions', 'pleklang');
         PlekTemplateHandler::load_template('user-notice', 'system', 'info', $message);
-        ?>
+    ?>
         <div class="logout-link"><a href="<?php echo get_permalink(); ?>?action=logout"><?php echo __('Logout', 'pleklang'); ?></a></div>
-        <?php
+    <?php
         return;
     }
     ?>
@@ -47,6 +50,8 @@ $content = (isset($template_args[1])) ? $template_args[1] : ''; //Content of the
 
     <?php if (is_user_logged_in()) : ?>
         <?php PlekTemplateHandler::load_template('my-plekvetica-page', 'system', $current_user); ?>
+    <?php elseif (isset($_REQUEST['action']) and $_REQUEST['action'] === 'rp') : ?>
+        <?php PlekTemplateHandler::load_template('new-password-form', 'system/login'); ?>
     <?php else : ?>
         <?php PlekTemplateHandler::load_template('login-form', 'system/login'); ?>
     <?php endif; ?>

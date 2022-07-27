@@ -38,31 +38,6 @@ class PlekEvents extends PlekEventHandler
     }
 
     /**
-     * Returns the current loaded Event, formated for the Form fields.
-     *
-     * @return object - Event_Form Object
-     */
-    /*public function get_event_for_form(){
-        s($this -> get_event());
-        //s($plek_event);
-        $event_object  = new stdClass;
-        $event_object -> ID = ''; //String
-        $event_object -> post_title = ''; //String
-        $event_object -> post_content = ''; //String
-        $event_object -> start_date = ''; //String
-        $event_object -> end_date = ''; //String
-        $event_object -> multiday = false; //bool
-        $event_object -> bands_ids = ''; //String - Json
-        $event_object -> venue_id = ''; //String
- 
-        return $event_object;
-    }*/
-    /*
-    public function get_event_for_form_json(){
-        return json_encode($this -> get_event_for_form());
-    }
-*/
-    /**
      * Gets a field by name. Loads the template if specified or returns the value.
      *
      * @param string $name - Name of the field. See WP_Posts, Tribe_Event Object
@@ -81,8 +56,9 @@ class PlekEvents extends PlekEventHandler
                 break;
             case 'post_content':
             case 'text_lead':
-                $content = apply_filters('the_content', $this->get_field_value($name)); //Apply shortcodes in the Content
-                $content = strip_tags($content, $plek_handler -> get_allowed_tags('textarea')); //Removes all the un-allowed tags.
+                $content = apply_filters('the_content', $this->get_field_value($name)); //Apply shortcodes in the 
+                $forbidden_tags = $plek_handler->get_forbidden_tags('textarea');
+                //$content =  $plek_handler->remove_tags($content, $forbidden_tags); //causes more problems that it solves...
                 return $content;
                 break;
             case 'venue_short':
@@ -111,7 +87,7 @@ class PlekEvents extends PlekEventHandler
      * @param string $status - Post status. "All" to get all the posts. Default = publish
      * @return bool true on success, false on error
      */
-    public function load_event(int $event_id = null, string $status = 'publish')
+    public function load_event($event_id = null, string $status = 'publish')
     {
         global $wpdb;
 
@@ -127,7 +103,8 @@ class PlekEvents extends PlekEventHandler
         `posts`.`post_title`,
         `posts`.`post_content`,
         `posts`.`post_status`,
-        `posts`.`post_date`
+        `posts`.`post_date`,
+        `posts`.`post_modified`
         FROM `" . $wpdb->prefix . "posts` `posts`
         WHERE `posts`.ID = '$event_id' AND `posts`.`post_type` = 'tribe_events' 
         $status_query
@@ -138,7 +115,7 @@ class PlekEvents extends PlekEventHandler
             $this->errors[$event_id] = __('No Event found', 'plek');
             return false;
         }
-        
+
         $this->event['data'] = $db_result[0];
         $this->load_event_meta($event_id);
         $this->load_event_terms($event_id);
@@ -166,6 +143,8 @@ class PlekEvents extends PlekEventHandler
         $this->event['data'] = $tribe_event;
         if (is_int($tribe_event->ID)) {
             $this->load_event_meta($tribe_event->ID);
+            $this->load_event_terms($tribe_event->ID);
+            $this->load_band_order_and_timetable();
         }
         return;
     }
@@ -229,10 +208,12 @@ class PlekEvents extends PlekEventHandler
         $band_sort = array();
         $time_format = ($this->is_multiday()) ? 'Y-m-d H:i:s' : 'H:i:s';
         foreach ($sort_obj as $band_id => $item) {
+            //If Order is defined
             if (isset($item->order)) {
                 $band_sort[$item->order] = $band_id;
             }
-            if (isset($item->datetime) and $item->datetime !== '0') {
+            //Check if playtime is defined
+            if (isset($item->datetime) and $item->datetime != '0') {
                 $time = strtotime($item->datetime);
                 $timetable[$band_id] = array(
                     'timestamp' => $time,
@@ -825,6 +806,92 @@ class PlekEvents extends PlekEventHandler
     }
 
     /**
+     * Shortcode for the team calendar
+     *
+     * @return string HTML code of the team calendar
+     * @todo: Translation not working.
+     */
+    public function plek_event_team_calendar_shortcode()
+    {
+        wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery', 'plek-language', 'wp-i18n'], 1);
+        wp_set_script_translations('plek-teamcal-script', 'pleklang', PLEK_PATH . "/languages");
+
+        $meta_query = array();
+        $meta_query['akk_status'] = array('key' => 'akk_status', 'compare' => '!=', 'value' => 'NULL');
+        $meta_query['akkreditiert'] = array('key' => 'akkreditiert', 'compare' => '!=', 'value' => '');
+        $args = [
+            'eventDisplay'   => 'custom',
+            'start_date'     => date('Y-m-d', time() -  172800), // 172800 = Two days in seconds 
+            'end_date'     => date('Y-m-d', time() +  60*60*24*365*5), // Five Years from today 
+            'posts_per_page' => 50,
+            'order'       => 'ASC',
+            'order_by'       => 'start_date',
+            'meta_query' => $meta_query
+        ];
+        $events = tribe_get_events($args);
+        if (empty($events)) {
+            return __('No posts found', 'pleklang');
+        }
+        return PlekTemplateHandler::load_template_to_var('event-team-calendar', 'event/admin', $events);
+    }
+
+    /**
+     * Gets all the Events without confirmed accreditation status (ab)
+     * @todo: Sort by organizer ID...? Group by ID
+     *
+     * @return string The HTML code returend by the event-team-calendar-accredi template
+     */
+    public function plek_event_team_accredi_shortcode()
+    {
+
+        global $wpdb;
+
+        wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery'], 1);
+        wp_set_script_translations('plek-teamcal-script', 'pleklang', PLEK_PATH . "/languages");
+
+        $limit = 100;
+        $from = date('Y-m-d H:i:s');
+        $to = '9999-01-01 00:00:00';
+
+        $query = $wpdb->prepare(
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)  as startdate
+        FROM `{$wpdb->prefix}posts` as posts 
+        LEFT JOIN {$wpdb->prefix}postmeta as date
+        ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
+
+        LEFT JOIN {$wpdb->prefix}postmeta as organizer
+        ON (posts.ID = organizer.post_id AND organizer.meta_key = '_EventOrganizerID')
+
+        LEFT JOIN {$wpdb->prefix}postmeta as akk_status
+        ON (posts.ID = akk_status.post_id AND akk_status.meta_key = 'akk_status')
+
+        LEFT JOIN {$wpdb->prefix}postmeta as cancel_event
+        ON (posts.ID = cancel_event.post_id AND cancel_event.meta_key = 'cancel_event')
+
+   
+        WHERE post_type = 'tribe_events'
+        AND posts.post_status IN ('publish', 'draft')
+        AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
+        AND akk_status.meta_value = 'aw'
+        AND cancel_event.meta_value != '1'
+        
+        ORDER BY organizer.meta_value ASC
+        LIMIT %d OFFSET 0",
+            $from,
+            $to,
+            $limit,
+        );
+        $events = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        $this->total_posts['plek_event_team_accredi'] = $total_posts;
+
+        if (empty($events)) {
+            return __('No posts found', 'pleklang');
+        }
+        return PlekTemplateHandler::load_template_to_var('event-team-calendar-accredi', 'event/admin', $events);
+    }
+
+    /**
      * Loads all the published reviews
      */
 
@@ -1040,7 +1107,8 @@ class PlekEvents extends PlekEventHandler
         $this->enqueue_event_form_styles();
         $plek_handler->enqueue_toastr();
 
-        $event_id = (!empty($_REQUEST['event_id'])) ? htmlspecialchars($_REQUEST['event_id']) : "";
+        //The Event ID. BUT only on add Event. If it is Edit Event, the Variable name is only Edit!
+        $event_id = (!empty($_REQUEST['event_id'])) ? intval($_REQUEST['event_id']) : "";
 
         if (empty($_REQUEST['stage']) and !empty($_REQUEST['action'])) {
             //Hack to allow for password reset
@@ -1050,7 +1118,10 @@ class PlekEvents extends PlekEventHandler
         }
 
         if (isset($_REQUEST['edit'])) {
-            $event->load_event(intval($_REQUEST['edit']));
+            if (!PlekUserHandler::user_can_edit_post($_REQUEST['edit'])) {
+                return __('You are not allowed to edit this Event!', 'pleklang');
+            }
+            $event->load_event(intval($_REQUEST['edit']), 'all');
             return PlekTemplateHandler::load_template_to_var('edit-event-form', 'event/form', $event);
         }
 
@@ -1097,7 +1168,8 @@ class PlekEvents extends PlekEventHandler
         $short_args = shortcode_atts(
             array(
                 'nr_posts' => '25',
-            ), $atts
+            ),
+            $atts
         );
         $post_status = PlekUserHandler::user_is_in_team() ? array('publish', 'draft') : 'publish';
         $events = tribe_get_events([
@@ -1124,14 +1196,15 @@ class PlekEvents extends PlekEventHandler
         $short_args = shortcode_atts(
             array(
                 'nr_posts' => '25',
-            ), $atts
+            ),
+            $atts
         );
         $limit = $short_args['nr_posts'];
         $page_obj = $this->get_pages_object($limit);
 
 
-        $from = date('Y-m-d M:i:s', strtotime('+17 days', time()) ); //17 days from today
-        $to = date('Y-m-d M:i:s', strtotime('+60 days', time()) ); //34 days from today
+        $from = date('Y-m-d M:i:s', strtotime('+17 days', time())); //17 days from today
+        $to = date('Y-m-d M:i:s', strtotime('+60 days', time())); //34 days from today
 
         $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title, posts.post_status, startdate.meta_value as startdate
             FROM `{$wpdb->prefix}posts` as posts
@@ -1151,8 +1224,8 @@ class PlekEvents extends PlekEventHandler
             LIMIT %d OFFSET %d", $from, $to, $limit, $page_obj->offset);
         $posts = $wpdb->get_results($query);
 
-        if(empty($posts)){
-            return __('No Events found','pleklang');
+        if (empty($posts)) {
+            return __('No Events found', 'pleklang');
         }
 
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $posts, 'new_events');
@@ -1181,25 +1254,27 @@ class PlekEvents extends PlekEventHandler
 
             $min = ($plek_handler->is_dev_server()) ? '' : '.min';
 
-            //wp_enqueue_script('flatpickr-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9.js');
-            //wp_enqueue_script('flatpickr-de-script', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr-4.6.9-de.js');
-            wp_enqueue_script('flatpickr-cdn-script', 'https://npmcdn.com/flatpickr/dist/flatpickr.min.js',[], $plek_handler->version);
-            wp_enqueue_script('flatpickr-cdn-de-script', 'https://npmcdn.com/flatpickr/dist/l10n/de.js',[], $plek_handler->version);
-            wp_enqueue_script('manage-plek-events', PLEK_PLUGIN_DIR_URL . "js/manage-event{$min}.js", ['jquery', 'plek-language'], $plek_handler->version);
+            wp_enqueue_script('flatpickr-cdn-script', 'https://npmcdn.com/flatpickr/dist/flatpickr.min.js', [], $plek_handler->version);
+            wp_enqueue_script('flatpickr-cdn-de-script', 'https://npmcdn.com/flatpickr/dist/l10n/de.js', [], $plek_handler->version);
+            wp_enqueue_script('manage-plek-events', PLEK_PLUGIN_DIR_URL . "js/manage-event{$min}.js", ['jquery', 'plek-language', 'wp-i18n'], $plek_handler->version);
             wp_enqueue_script('plek-jquery-ui', "https://code.jquery.com/ui/1.13.0/jquery-ui.js", ['jquery']);
 
             //Load handler
             $handler = array('event', 'error', 'validator', 'search', 'template');
-            $dependencies = array('jquery', 'plek-language', 'manage-plek-events');
+            $dependencies = array('jquery', 'plek-language', 'manage-plek-events', 'wp-i18n');
 
             foreach ($handler as $handler_name) {
                 wp_enqueue_script("plek-{$handler_name}-handler", PLEK_PLUGIN_DIR_URL . "js/components/{$handler_name}-handler{$min}.js", $dependencies);
                 wp_set_script_translations("plek-{$handler_name}-handler", 'pleklang', PLEK_PATH . "/languages");
             }
 
-            wp_enqueue_script('plek-compare-algorithm', PLEK_PLUGIN_DIR_URL . "js/components/compare-algorithm{$min}.js", ['jquery', 'plek-language', 'manage-plek-events']);
+            wp_enqueue_script('plek-compare-algorithm', PLEK_PLUGIN_DIR_URL . "js/components/compare-algorithm{$min}.js", ['jquery', 'plek-language', 'manage-plek-events', 'wp-i18n']);
+            wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler.js', ['jquery', 'plek-language', 'wp-i18n'], $plek_handler->version);
+
+            //Set the script translations, called by Wordpress load_script_translations()
             wp_set_script_translations('plek-compare-algorithm', 'pleklang', PLEK_PATH . "/languages");
-            wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler.js', ['jquery', 'plek-language'], $plek_handler->version);
+            wp_set_script_translations('manage-plek-events', 'pleklang', PLEK_PATH . "/languages");
+            wp_set_script_translations('plek-file-upload-script', 'pleklang', PLEK_PATH . "/languages");
         });
     }
 
@@ -1296,5 +1371,19 @@ class PlekEvents extends PlekEventHandler
             return __('Follow', 'pleklang');
         }
         return false;
+    }
+
+    /**
+     * Confirms a accreditation request
+     *
+     * @param string|int $event_id - The Event ID
+     * @return bool|string True on success, string on error
+     */
+    public function confirm_accreditation($event_id)
+    {
+        if (empty($event_id)) {
+            return __('No Event ID found.', 'pleklang');
+        }
+        return $this->set_akkredi_status(intval($event_id), 'ab');
     }
 }

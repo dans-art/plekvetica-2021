@@ -14,7 +14,7 @@ if(empty($data)){
 }
 
 ?>
-<select id="<?php echo $id; ?>" name="<?php echo $name_mod; ?>" <?php echo $multiple; ?>>
+<select id="<?php echo $id; ?>" name="<?php echo $name_mod; ?>" <?php echo $multiple; ?> autocomplete="off">
 	<?php foreach ($data as $key => $value) : ?>
 		<?php 
 			if(is_object($value)){

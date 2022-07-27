@@ -1,5 +1,5 @@
 {
-    "translation-revision-date": "2022-04-26 07:04+0000",
+    "translation-revision-date": "2022-07-27 12:34+0000",
     "generator": "Loco https://localise.biz/",
     "source": "js/components/gallery-handler.js",
     "domain": "pleklang",
@@ -22,6 +22,9 @@
             "Error while creating album or gallery": [
                 "Fehler beim erstellen des Albums oder Galerie."
             ],
+            "Gallery preview": [
+                "Galerie Vorschaubild"
+            ],
             "Image upload": [
                 "Bilder hochladen"
             ],
@@ -39,6 +42,9 @@
             ],
             "The given File is not a valid image": [
                 "Die Datei ist keine g\u00fcltige Bilddatei"
+            ],
+            "Upload Error": [
+                "Fehler beim Hochladen"
             ],
             "Upload images": [
                 "Bilder hochladen"

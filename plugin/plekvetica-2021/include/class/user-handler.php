@@ -7,8 +7,8 @@ if (!defined('ABSPATH')) {
 class PlekUserHandler
 {
 
-    protected static $team_roles = array('administrator', 'plekmanager', 'cutter', 'eventmanager', 'interviewer', 'photographer', 'reviewwriter', 'videograph'); //All the possible roles of the team members
-    protected static $plek_custom_roles = array();
+    protected static $team_roles = []; //Set by the constructor 
+    protected static $plek_custom_roles = []; //Set by the constructor 
 
     public function __construct()
     {
@@ -17,6 +17,27 @@ class PlekUserHandler
             'plek-band' => __('Band', 'pleklang'),
             'plek-organi' => __('Organizer', 'pleklang'),
             'plek-partner' => __('Partner', 'pleklang'),
+        );
+
+        self::$team_roles = self::get_team_roles();
+    }
+
+    /**
+     * Get the team roles.
+     *
+     * @return void
+     */
+    public static function get_team_roles()
+    {
+        return array(
+            'administrator' => __('Administrator', 'pleklang'),
+            'plekmanager' => __('Plekvetica Manager', 'pleklang'),
+            'cutter' => __('Cutter', 'pleklang'),
+            'eventmanager' => __('Eventmanager', 'pleklang'),
+            'interviewer' => __('Interviewer', 'pleklang'),
+            'photographer' => __('Photographer', 'pleklang'),
+            'reviewwriter' => __('Review writer', 'pleklang'),
+            'videograph' => __('Videograph', 'pleklang')
         );
     }
 
@@ -133,7 +154,8 @@ class PlekUserHandler
      */
     public static function user_is_in_team(object $user = null)
     {
-        return self::search_role(self::$team_roles, $user);
+        $team_roles = self::get_team_roles();
+        return self::search_role($team_roles, $user);
     }
 
     /**
@@ -273,11 +295,21 @@ class PlekUserHandler
             return true;
         }
 
+        //If the event got created by a guest, check if the guest is allowed to edit
+        $guest_hash = (isset($_REQUEST['guest_edit'])) ? $_REQUEST['guest_edit'] : null;
+        if (!empty($guest_hash)) {
+            $guest_author = $event->get_field_value('guest_author', false);
+            $name_obj = (!empty($guest_author)) ? json_decode($guest_author) : null;
+            if (is_object($name_obj) and md5($name_obj->name . $name_obj->email) === $guest_hash) {
+                return true;
+            }
+        }
+
         $user_role = self::get_user_role();
         switch ($user_role) {
             case 'plek-organi':
                 $event_organi = $event->get_field_value('_EventOrganizerID', true);
-                $user_organi_id = (string) PlekUserHandler::get_user_setting('$oid_id');
+                $user_organi_id = (string) PlekUserHandler::get_user_setting('organizer_id');
                 if (!is_array($event_organi)) {
                     return false;
                 }
@@ -444,24 +476,63 @@ class PlekUserHandler
         $first_role = reset($roles);
         return (!empty($first_role)) ? $first_role : null;
     }
+
+    /**
+     * Get the primary role of the user
+     *
+     * @param string|int $login_name - The login name or id of the user. If no value provided, the current user will be returned.
+     * @param array $replace_role - Allows to replace a role. array(role_to_search => $role_to_replace,...)
+     * @return bool false if $login_name is not string nor int, null if no Role found, Otherwise the primary role.
+     */
+    public static function get_user_primary_role($login_name = null, $replace_role = [])
+    {
+        if (empty($login_name)) {
+            $user = wp_get_current_user();
+        }
+        if (is_string($login_name)) {
+            $user = get_user_by('login', $login_name);
+        } elseif (is_int($login_name)) {
+            $user = get_user_by('ID', $login_name);
+        } else {
+            return false;
+        }
+
+        if (!$user or !is_array($user->roles)) {
+            return false;
+        }
+
+        $role_first = array_key_first($user->roles);
+        if (!isset($user->roles[array_key_first($user->roles)])) {
+            return null; //No role found
+        }
+
+        if (isset($replace_role[$user->roles[$role_first]])) {
+            $user->roles[$role_first] = $replace_role[$user->roles[$role_first]]; //Replaces the role
+        }
+        $team_roles = self::get_team_roles();
+        return (isset($team_roles[$user->roles[$role_first]])) ? $team_roles[$user->roles[$role_first]] : $user->roles[$role_first]; //Retruns the translated string if found, otherwise the technical role name
+    }
+
     /**
      * Search for a specific role.
      *
-     * @param string $rolename - name of the role
+     * @param string|array $rolename - name of the role to search for. Can be single role as string or array with roles
      * @param object $user - WP_User object
      * @return bool
      */
     public static function search_role($rolename = '', object $user = null)
     {
         $user = (!is_object($user)) ? wp_get_current_user() : $user;
+        //s($user);
         if (!isset($user->roles)) {
             sj('User not Found!');
             return false;
         }
         $roles = $user->roles;
         $role_to_search = (!is_array($rolename)) ? array($rolename) : $rolename;
-        foreach ($role_to_search as $role) {
-            if (array_search($role, $roles) !== false) {
+        foreach ($role_to_search as $role => $role_name) { //role_slug => Role Nicename
+            //Search by Index or by description (In some cases the $role is the Index instead of the role-slug)
+            if (array_search($role, $roles) !== false OR array_search($role_name, $roles) !== false) {
                 return true;
             }
         }
@@ -471,14 +542,70 @@ class PlekUserHandler
     /**
      * Get the Display name of the user
      *
-     * @param string $login_name
-     * @return void
+     * @param string|int $login_name - The login name or id of the user. If no value provided, the current user will be returned.
+     * @return bool false if $login_name is not string nor int. Otherwise Displayname if found.
      */
-    public static function get_user_display_name(string $login_name)
+    public static function get_user_display_name($login_name = null)
     {
-        $user = get_user_by('login', $login_name);
+        if (empty($login_name)) {
+            $user = wp_get_current_user();
+        } else {
+            if (is_string($login_name)) {
+                $user = get_user_by('login', $login_name);
+            } elseif (is_int($login_name)) {
+                $user = get_user_by('ID', $login_name);
+            } else {
+                return false;
+            }
+        }
         return (isset($user->display_name)) ? $user->display_name : $login_name;
     }
+
+
+    /**
+     * Gets the current user display name or "Guest Author" if not found.
+     *
+     * @param string $prepend - Content to add before the user name
+     * @param string $append - Content to add after the user name
+     * @return string The Username
+     */
+    public static function get_current_user_display_name($prepend = '', $append = '')
+    {
+        $logged_in = self::get_user_display_name();
+        if (!$logged_in) {
+            return $prepend . ' ' . __('Guest Author', 'pleklang') . ' ' . $append;
+        }
+        return  $prepend . ' ' . $logged_in . ' ' . $append;
+    }
+
+    /**
+     * Get the real name (firstname lastname) of the user
+     *
+     * @param string|int $login_name - The login name or id of the user. If no value provided, the current user will be returned.
+     * @return bool false if $login_name is not string nor int. Otherwise Displayname if found.
+     */
+    public static function get_user_real_name($login_name = null)
+    {
+        if (empty($login_name)) {
+            $user = wp_get_current_user();
+        }
+        if (is_string($login_name)) {
+            $user = get_user_by('login', $login_name);
+        } elseif (is_int($login_name)) {
+            $user = get_user_by('ID', $login_name);
+        } else {
+            return false;
+        }
+        if (!$user) {
+            return false;
+        }
+        $user_meta = get_user_meta($user->ID);
+        $first = (isset($user_meta['first_name'][0])) ? $user_meta['first_name'][0] : 'NoFirst';
+        $last = (isset($user_meta['last_name'][0])) ? $user_meta['last_name'][0] : 'NoLast';
+
+        return sprintf('%s %s', $first, $last);
+    }
+
 
     /**
      * Get the ID of the user
@@ -545,9 +672,10 @@ class PlekUserHandler
      * @param boolean $return_only_ids
      * @return WP_User object
      */
-    public function get_users_by_role($rolename, $return_only_ids = false){
+    public function get_users_by_role($rolename, $return_only_ids = false)
+    {
         $rolename = htmlspecialchars($rolename);
-        $fields = ($return_only_ids)?'ID':'all';
+        $fields = ($return_only_ids) ? 'ID' : 'all';
         $search = get_users(['role__in' => $rolename, 'fields' => $fields]);
         return $search;
     }
@@ -792,5 +920,93 @@ class PlekUserHandler
     {
         $users = get_users(array('role' => 'exuser'));
         return $users;
+    }
+
+    /**
+     * Sends the email after password reset request
+     *
+     * @return bool|string True on success, false on error
+     */
+    public function send_password_reset_mail()
+    {
+        $user = (isset($_REQUEST['user_login'])) ? $_REQUEST['user_login'] : '';
+        if (empty($user)) {
+            return __('No username or email provided', 'pleklang');
+        }
+        $send_mail = retrieve_password($user);
+        if (is_wp_error($send_mail)) {
+            return $send_mail->get_error_message();
+        }
+        return true;
+    }
+
+    /**
+     * Sets the new password for the user.
+     *
+     * @return bool|string|array True on success, string or array on error
+     */
+    public function set_new_password()
+    {
+        global $plek_ajax_handler;
+        $validator = new PlekFormValidator();
+        $validator->set('user_login', true, 'default');
+        $validator->set('user_key', true, 'default');
+        $validator->set('new_password', true, 'password');
+        $validator->set('new_password_repeat', true, 'password');
+        $valid = $validator->all_fields_are_valid();
+        if (!$valid) {
+            return $validator->get_errors();
+        }
+
+        $user_login = $plek_ajax_handler->get_ajax_data('user_login');
+        $user_key = $plek_ajax_handler->get_ajax_data('user_key');
+        $new_password = $plek_ajax_handler->get_ajax_data('new_password');
+        $new_password_repeat = $plek_ajax_handler->get_ajax_data('new_password_repeat');
+
+        if ($new_password !== $new_password_repeat) {
+            return __('The passwords have to match', 'pleklang');
+        }
+        //Check for valid key
+        $user = check_password_reset_key($user_key, $user_login);
+        if (is_wp_error($user)) {
+            return $user->get_error_message();
+        }
+
+        reset_password($user, $new_password);
+
+        return true;
+    }
+
+    /**
+     * Prepares the message for the password reset
+     *
+     * @param string $message
+     * @param string $key
+     * @param string $user_login
+     * @param object $user_data
+     * @return string The message
+     */
+    public function retrieve_password_message_filter($message, $key, $user_login, $user_data)
+    {
+        global $plek_handler;
+        $my_plek_id = $plek_handler->get_plek_option('my_plek_page_id');
+        $my_plekvetica_url = (!empty($my_plek_id)) ? get_permalink($my_plek_id) : "https://plekvetica.ch/my-plekvetica";
+        $pw_reset_url = $my_plekvetica_url . '?action=rp&user_key=' . $key . '&user_login=' . rawurlencode($user_login);
+        $plek_message = sprintf(__('Hi, %s', 'pleklang'), $user_data->first_name) . '<br/>';
+        $plek_message .= __('There was a new password requested for your account. If you aware of this action, please continue with the link below and set a new password.', 'pleklang') . '<br/>';
+        $plek_message .= __('Otherwise you can ignore this message.', 'pleklang') . '<br/>';
+        return PlekTemplateHandler::load_template_to_var('default-email', 'email', __('Reset password request', 'pleklang'), [$plek_message, $pw_reset_url]);
+    }
+
+    /**
+     * Adds the html content type to the email
+     *
+     * @param array $defaults
+     * @return array The modified array
+     */
+    public function retrieve_password_notification_email_filter($defaults)
+    {
+        $defaults['headers'] = "Content-Type: text/html; charset=UTF-8";
+        return $defaults;
     }
 }

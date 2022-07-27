@@ -1,1 +1,2 @@
-#plek_options_page .logo_image td{display:flex;flex-direction:column}#plek_options_page .logo_image img{max-width:200px}
+#plek_options_page .logo_image td{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}#plek_options_page .logo_image img{max-width:200px}#adminmenu .toplevel_page_plek-options img{max-width:18px}
+/*# sourceMappingURL=admin-style.min.css.map */

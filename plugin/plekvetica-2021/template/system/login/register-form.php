@@ -8,6 +8,8 @@ if (is_user_logged_in()) {
 	echo __('You have already an account. Please logout first before creating a new account.', 'pleklang');
 	return;
 }
+
+$return_to_edit_event = (isset($_REQUEST['return_to_edit_event'])) ? $_REQUEST['return_to_edit_event'] : '';
 ?>
 <h1><?php echo __('Sign up at Plekvetica', 'pleklang'); ?></h1>
 
@@ -26,7 +28,7 @@ if (is_user_logged_in()) {
 		<input type="password" name="user-pass-repeat" id="user-pass-repeat" class="input" />
 
 		<label for="user-account-type"><?php echo __('Register as...', 'pleklang'); ?></label>
-		<select name="user-account-type" id="user-account-type" class="dropdown">
+		<select name="user-account-type" id="user-account-type" class="dropdown no-select2">
 			<option value="null"><?php echo __('Please select...', 'pleklang'); ?></option>
 			<?php foreach ($plek_user_handler->get_public_user_roles() as $role_id => $role_name) : ?>
 				<?php if ($role_id === 'plek-partner') {
@@ -36,6 +38,9 @@ if (is_user_logged_in()) {
 			<?php endforeach; ?>
 		</select>
 		<button type="submit" class="plek-button full-width" id="plek-submit" data-type="add-user-account"><?php echo __('Sign up', 'pleklang'); ?></button>
+	</fieldset>
+	<fieldset id="redirect">
+		<input type="text" name="return_to_edit_event" id="return_to_edit_event" class="input" style="display: none;" value='<?php echo $return_to_edit_event; ?>' />
 	</fieldset>
 </form>
 <?php PlekTemplateHandler::load_template('js-settings', 'components', null); ?>

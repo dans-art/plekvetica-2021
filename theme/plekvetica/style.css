@@ -277,6 +277,13 @@ input[type="submit"] {
     animation-duration: 2s;
     animation-iteration-count: infinite; }
 
+/* Image Animation*/
+/* Loader */
+img.loader {
+  animation-name: plek-image-loader;
+  animation-duration: 2s;
+  animation-iteration-count: infinite; }
+
 @keyframes plek-button-loader {
   /*0% {width: 0%; left: 0;}
   25% {width: 100%; left: 0;}
@@ -297,6 +304,13 @@ input[type="submit"] {
     transform: rotate(0deg); }
   to {
     transform: rotate(360deg); } }
+@keyframes plek-image-loader {
+  0% {
+    opacity: 1; }
+  50% {
+    opacity: 0.2; }
+  100% {
+    opacity: 1; } }
 .input_loader {
   top: -9px;
   padding: 0; }
@@ -413,6 +427,9 @@ blockquote {
   .tribe-events-calendar-list__event .plek-message.red {
     color: #8C262E;
     border-color: #8C262E; }
+  .plek-message.smaller,
+  .tribe-events-calendar-list__event .plek-message.smaller {
+    font-size: 0.9em; }
 
 input[type="phone"] {
   color: #666666;
@@ -708,7 +725,8 @@ input[type="phone"] {
   right: 0px;
   margin-top: -5em;
   padding-left: 0.5em;
-  box-shadow: -10px 5px 5px #0000003b; }
+  box-shadow: -10px 5px 5px #0000003b;
+  z-index: 99999; }
   #notifications-container .no-notifications {
     text-align: center;
     padding: 2em; }
@@ -774,6 +792,23 @@ input[type="phone"] {
 
 #wpadminbar {
   z-index: 9999999; }
+
+.smaller {
+  font-size: 0.8rem; }
+
+/* Accredi Status Dropdown */
+.plek-event-status-dropdown.no-select2[cstatus="aw"],
+.plek-event-status-dropdown.no-select2 option[cstatus="aw"] {
+  color: #6278d9; }
+.plek-event-status-dropdown.no-select2[cstatus="aa"],
+.plek-event-status-dropdown.no-select2 option[cstatus="aa"] {
+  color: #424242; }
+.plek-event-status-dropdown.no-select2[cstatus="ab"],
+.plek-event-status-dropdown.no-select2 option[cstatus="ab"] {
+  color: #268c37; }
+.plek-event-status-dropdown.no-select2[cstatus="no"],
+.plek-event-status-dropdown.no-select2 option[cstatus="no"] {
+  color: #D9042B; }
 
 .band img {
   vertical-align: sub;
@@ -1586,19 +1621,53 @@ ul.partner-container {
   #plek-search-page .tribe-events-calendar-list__event {
     margin: 0.2em 0; }
 
-body.page-id-24565 #content {
-  width: 100%;
-  max-width: 100%; }
-body.page-id-24565 .eTPoster img {
-  width: 110px; }
-body.page-id-24565 .dataTables_scroll table, body.page-id-24565 .dataTables_scroll td, body.page-id-24565 .dataTables_scroll th {
-  border: 1px solid gray; }
-body.page-id-24565 label,
-body.page-id-24565 .dataTables_info,
-body.page-id-24565 .dataTables_paginate a {
-  color: white !important; }
-body.page-id-24565 td {
-  color: black; }
+.plek-post-type-team-calendar {
+  color: white;
+  color: white;
+  position: relative;
+  left: calc(-49vw + 50%);
+  width: 94vw;
+  margin: 0 2vw; }
+  .plek-post-type-team-calendar table, .plek-post-type-team-calendar td, .plek-post-type-team-calendar th {
+    border-color: #595959; }
+  .plek-post-type-team-calendar td {
+    color: white; }
+  .plek-post-type-team-calendar thead {
+    background-color: #40030E; }
+  .plek-post-type-team-calendar .event_poster {
+    max-width: 150px; }
+  .plek-post-type-team-calendar .event-canceled .event_name {
+    text-decoration: line-through; }
+  .plek-post-type-team-calendar .event-organizer,
+  .plek-post-type-team-calendar .event-location {
+    padding-left: 2rem;
+    position: relative;
+    padding-bottom: 0.5rem; }
+  .plek-post-type-team-calendar .event-organizer::before,
+  .plek-post-type-team-calendar .event-location::before {
+    font-family: 'FontAwesome';
+    left: 0;
+    position: absolute; }
+  .plek-post-type-team-calendar .event-organizer::before {
+    content: '\f0c0'; }
+  .plek-post-type-team-calendar .event-location::before {
+    content: '\f015'; }
+  .plek-post-type-team-calendar .event-organi-and-location {
+    padding-left: 2rem;
+    position: relative;
+    padding-bottom: 0.5rem; }
+    .plek-post-type-team-calendar .event-organi-and-location::before {
+      font-family: 'FontAwesome';
+      left: 0;
+      top: -1rem;
+      position: absolute;
+      content: '\f0c0'; }
+    .plek-post-type-team-calendar .event-organi-and-location::after {
+      font-family: 'FontAwesome';
+      left: 0;
+      top: 1rem;
+      position: absolute;
+      content: '\f015'; }
 
 form .plek-field-error {
   color: #D9042B;
@@ -1941,6 +2010,13 @@ input[type=checkbox] {
     width: 35%; }
   .plek-form #band-genre-loader {
     display: flex; }
+  .plek-form #plek-memeber-perks ul {
+    list-style: ''; }
+  .plek-form #plek-memeber-perks li::before {
+    content: "\f00c";
+    font-family: 'FontAwesome';
+    padding-right: 1rem;
+    color: #268c37; }
 
 .plek-image-upload-container {
   display: flex;
@@ -2045,17 +2121,37 @@ input[type=checkbox] {
   gap: 1rem;
   flex-wrap: wrap;
   position: relative; }
+  #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete {
+    height: 19vw;
+    overflow: hidden;
+    max-height: 207px; }
   #edit_event_review_form div#images-uploaded-container .image_to_upload {
-    flex-basis: 20%; }
+    flex-basis: 20%;
+    max-width: 20%;
+    position: relative; }
     #edit_event_review_form div#images-uploaded-container .image_to_upload::before {
       font-family: "FontAwesome";
       font-size: 1.5rem;
       position: absolute;
-      padding-left: 15%;
-      text-shadow: 2px 2px 7px black; }
+      right: 1rem;
+      text-shadow: 2px 2px 7px black,2px 2px 7px black,2px 2px 7px black,2px 2px 7px black,2px 2px 7px black;
+      font-weight: bold; }
     #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete::before {
       content: "\f058";
       color: #268c37; }
+    #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete:hover {
+      cursor: url("../plekvetica/assets/metalhand.cur"), pointer; }
+      #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete:hover::after {
+        content: "\f302";
+        position: absolute;
+        left: 42%;
+        top: 16%;
+        font-size: 2rem;
+        font-family: "FontAwesome"; }
+    #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete img {
+      object-fit: cover;
+      width: 100%;
+      height: 50%; }
     #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_failed::before {
       content: "\f057";
       color: #D9042B; }
@@ -2901,7 +2997,48 @@ input[type=checkbox] {
     flex-direction: column; }
 
   .event-prices-container .event-price-container {
-    flex-direction: column; } }
+    flex-direction: column; }
+
+  .plek-post-type-team-calendar {
+    color: white;
+    color: white;
+    position: unset;
+    left: 0;
+    width: unset;
+    margin: 0 0vw; }
+    .plek-post-type-team-calendar table, .plek-post-type-team-calendar td, .plek-post-type-team-calendar th {
+      display: flex;
+      border: 0; }
+    .plek-post-type-team-calendar tr {
+      flex-direction: row;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 1rem 0; }
+      .plek-post-type-team-calendar tr:nth-child(2n + 0) {
+        background-color: #424242; }
+    .plek-post-type-team-calendar td {
+      flex-basis: 33%; }
+    .plek-post-type-team-calendar td:nth-child(2) {
+      flex-basis: 20%; }
+    .plek-post-type-team-calendar td:nth-child(3) {
+      flex-basis: 100%; }
+    .plek-post-type-team-calendar td:nth-child(4) {
+      flex-basis: 100%; }
+      .plek-post-type-team-calendar td:nth-child(4) .event-organizer {
+        padding-right: 1rem; }
+    .plek-post-type-team-calendar thead {
+      display: none; }
+    .plek-post-type-team-calendar .event_poster {
+      max-width: unset; }
+
+  /* Review Image uploader */
+  #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete {
+    height: 45vw;
+    max-height: 361px; }
+  #edit_event_review_form div#images-uploaded-container .image_to_upload {
+    flex-basis: 47%;
+    max-width: 47%; } }
 @media (max-width: 599px) {
   .plek-pre-button-seperator {
     height: 0; }

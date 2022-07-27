@@ -67,6 +67,7 @@ class PlekTemplateHandler
      * --target
      * --id
      * --class
+     * -- data
      * - components/text-bar
      * -- text
      */
