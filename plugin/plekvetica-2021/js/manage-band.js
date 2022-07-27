@@ -223,7 +223,10 @@ let plek_band = {
                     }
                 }
                 plek_main.deactivate_button_loader(button, text);
-                plek_main.clear_form_inputs('plek-band-form');
+                if(jQuery('.band-edit').length === 0){
+                    //It is the add Band form
+                    plek_main.clear_form_inputs('plek-band-form');
+                }
                 jQuery('#band-form-cancel').text(__('Back','pleklang'));
                 setTimeout(() => {
                     jQuery('#band-form-submit').text(plek_band.default_button_texts.submit);

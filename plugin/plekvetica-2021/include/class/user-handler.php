@@ -305,12 +305,11 @@ class PlekUserHandler
             }
         }
 
-
         $user_role = self::get_user_role();
         switch ($user_role) {
             case 'plek-organi':
                 $event_organi = $event->get_field_value('_EventOrganizerID', true);
-                $user_organi_id = (string) PlekUserHandler::get_user_setting('$oid_id');
+                $user_organi_id = (string) PlekUserHandler::get_user_setting('organizer_id');
                 if (!is_array($event_organi)) {
                     return false;
                 }
@@ -524,14 +523,16 @@ class PlekUserHandler
     public static function search_role($rolename = '', object $user = null)
     {
         $user = (!is_object($user)) ? wp_get_current_user() : $user;
+        //s($user);
         if (!isset($user->roles)) {
             sj('User not Found!');
             return false;
         }
         $roles = $user->roles;
         $role_to_search = (!is_array($rolename)) ? array($rolename) : $rolename;
-        foreach ($role_to_search as $role => $role_name) {
-            if (array_search($role, $roles) !== false) {
+        foreach ($role_to_search as $role => $role_name) { //role_slug => Role Nicename
+            //Search by Index or by description (In some cases the $role is the Index instead of the role-slug)
+            if (array_search($role, $roles) !== false OR array_search($role_name, $roles) !== false) {
                 return true;
             }
         }

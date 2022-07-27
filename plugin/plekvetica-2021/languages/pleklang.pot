@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plekvetica - 2021\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-25 17:28+0000\n"
+"POT-Creation-Date: 2022-07-27 12:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -67,7 +67,7 @@ msgstr ""
 msgid "A new Organizer \"%s\" has been added."
 msgstr ""
 
-#: include/class/event-handler.php:1889
+#: include/class/event-handler.php:1895
 #, php-format
 msgid "A new Review of the Event \"%s\" got published."
 msgstr ""
@@ -116,7 +116,7 @@ msgstr ""
 msgid "Account is already unlocked."
 msgstr ""
 
-#: include/class/user-form-handler.php:338
+#: include/class/user-form-handler.php:340
 msgid "Account type not selected"
 msgstr ""
 
@@ -175,7 +175,7 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: template/event/form/add-event-form-login.php:13
+#: template/event/form/add-event-form-login.php:37
 msgid "Add as guest"
 msgstr ""
 
@@ -244,7 +244,7 @@ msgstr ""
 msgid "Authors"
 msgstr ""
 
-#: js/manage-band.js:227 js/manage-event.js:347 js/manage-user.js:234
+#: js/manage-band.js:227 js/manage-event.js:347 js/manage-user.js:236
 msgid "Back"
 msgstr ""
 
@@ -291,7 +291,7 @@ msgstr ""
 msgid "Bandpage of &quot;%s&quot;"
 msgstr ""
 
-#: include/class/event-handler.php:2812
+#: include/class/event-handler.php:2818
 #: template/event/form/add-event-form-basic.php:12
 #: template/event/form/edit-event-form.php:24 template/event/meta/bands.php:10
 msgid "Bands"
@@ -319,7 +319,7 @@ msgstr ""
 msgid "Boolean Value"
 msgstr ""
 
-#: include/class/event-handler.php:2801
+#: include/class/event-handler.php:2807
 #: template/event/form/components/price.php:16
 msgid "Boxoffice"
 msgstr ""
@@ -448,7 +448,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: include/class/event-handler.php:2795 template/band/band-form.php:35
+#: include/class/event-handler.php:2801 template/band/band-form.php:35
 #: template/event/form/add-event-form-details.php:15
 #: template/event/form/edit-event-form.php:33
 #: template/event/organizer/organizer-form.php:52
@@ -465,7 +465,7 @@ msgstr ""
 msgid "Dismissed"
 msgstr ""
 
-#: template/system/login/register-form.php:16
+#: template/system/login/register-form.php:18
 #: template/system/user-settings/user-settings-main.php:28
 msgid "Displayname"
 msgstr ""
@@ -505,7 +505,7 @@ msgstr ""
 
 #: include/class/form-validator.php:500
 #: template/event/organizer/organizer-form.php:37
-#: template/system/login/register-form.php:19
+#: template/system/login/register-form.php:21
 #: template/system/userpage/organizer-data.php:20
 msgid "Email"
 msgstr ""
@@ -518,7 +518,7 @@ msgstr ""
 msgid "Email send"
 msgstr ""
 
-#: include/class/event-handler.php:2799
+#: include/class/event-handler.php:2805
 msgid "End Date"
 msgstr ""
 
@@ -550,8 +550,8 @@ msgstr ""
 #: js/main-event-single.js:184 js/main-event-single.js:209
 #: js/main-event-single.js:236 js/main-event-single.js:269
 #: js/main-event-single.js:291 js/manage-band.js:234 js/manage-band.js:270
-#: js/manage-event.js:354 js/manage-user.js:104 js/manage-user.js:152
-#: js/manage-user.js:202 js/manage-user.js:241
+#: js/manage-event.js:354 js/manage-user.js:107 js/manage-user.js:154
+#: js/manage-user.js:204 js/manage-user.js:243
 #: js/components/event-handler.js:475 js/components/event-handler.js:576
 msgid "Error loading data. "
 msgstr ""
@@ -636,7 +636,7 @@ msgstr ""
 msgid "Error: Accreditation could not be confirmed! (%s)"
 msgstr ""
 
-#: include/class/event-handler.php:1972
+#: include/class/event-handler.php:1978
 msgid "Error: Could not update the guest Author!"
 msgstr ""
 
@@ -721,7 +721,7 @@ msgstr ""
 msgid "Event Poster"
 msgstr ""
 
-#: include/class/event-handler.php:1936
+#: include/class/event-handler.php:1942
 #, php-format
 msgid "Event poster of %s"
 msgstr ""
@@ -830,12 +830,12 @@ msgstr ""
 msgid "Failed to save Event"
 msgstr ""
 
-#: include/class/event-handler.php:1825
+#: include/class/event-handler.php:1831
 #, php-format
 msgid "Failed to save meta data for: %s"
 msgstr ""
 
-#: include/class/event-handler.php:1906
+#: include/class/event-handler.php:1912
 msgid "Failed to update the review field(s): "
 msgstr ""
 
@@ -1016,7 +1016,7 @@ msgstr ""
 msgid "Imagesize is to big for: "
 msgstr ""
 
-#: include/class/event-handler.php:2749
+#: include/class/event-handler.php:2755
 msgid "Impression"
 msgstr ""
 
@@ -1142,7 +1142,7 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: template/event/form/add-event-form-login.php:14
+#: template/event/form/add-event-form-login.php:38
 msgid "Login / Signup"
 msgstr ""
 
@@ -1251,6 +1251,10 @@ msgstr ""
 msgid "Name of the Event"
 msgstr ""
 
+#: js/manage-user.js:96 js/manage-user.js:100
+msgid "New account"
+msgstr ""
+
 #: include/class/ajax-handler.php:640
 msgid "New account created! Check your email to complete the sign up."
 msgstr ""
@@ -1259,7 +1263,7 @@ msgstr ""
 msgid "New Band added"
 msgstr ""
 
-#: include/class/event-handler.php:2364
+#: include/class/event-handler.php:2370
 msgid "New Event added, please publish"
 msgstr ""
 
@@ -1287,7 +1291,7 @@ msgstr ""
 msgid "New password set. You can login now with your new password."
 msgstr ""
 
-#: include/class/event-handler.php:1888
+#: include/class/event-handler.php:1894
 msgid "New Review published"
 msgstr ""
 
@@ -1308,7 +1312,7 @@ msgid "News from Plekvetica"
 msgstr ""
 
 #: template/components/pagination-buttons.php:78
-#: template/event/form/add-event-form-login.php:26
+#: template/event/form/add-event-form-login.php:51
 msgid "Next"
 msgstr ""
 
@@ -1444,7 +1448,7 @@ msgstr ""
 msgid "No Team members found."
 msgstr ""
 
-#: include/class/event-handler.php:2518
+#: include/class/event-handler.php:2524
 msgid "No Time defined"
 msgstr ""
 
@@ -1496,7 +1500,7 @@ msgstr ""
 msgid "Oops, something went wrong.... sorry!"
 msgstr ""
 
-#: include/class/event-handler.php:2797 include/class/user-handler.php:18
+#: include/class/event-handler.php:2803 include/class/user-handler.php:18
 #: template/email/event/accreditation-confirmed-admin-info.php:33
 #: template/event/admin/event-team-calendar-accredi.php:14
 #: template/event/form/add-event-form-details.php:18
@@ -1545,7 +1549,7 @@ msgid "Partner"
 msgstr ""
 
 #: include/class/form-validator.php:509
-#: template/system/login/register-form.php:22
+#: template/system/login/register-form.php:24
 msgid "Password"
 msgstr ""
 
@@ -1553,13 +1557,13 @@ msgstr ""
 msgid "Password must contain a letter, a number and a special character."
 msgstr ""
 
-#: js/manage-user.js:137 js/manage-user.js:142 js/manage-user.js:185
-#: js/manage-user.js:196
+#: js/manage-user.js:139 js/manage-user.js:144 js/manage-user.js:187
+#: js/manage-user.js:198
 msgid "Password reset"
 msgstr ""
 
 #: include/class/user-form-handler.php:98
-#: include/class/user-form-handler.php:330
+#: include/class/user-form-handler.php:332
 msgid "Passwords do not match"
 msgstr ""
 
@@ -1588,7 +1592,7 @@ msgstr ""
 msgid "Photos"
 msgstr ""
 
-#: include/class/event-handler.php:2780
+#: include/class/event-handler.php:2786
 #, php-format
 msgid "Photos of %1$s at %2$s by Plekvetica"
 msgstr ""
@@ -1605,7 +1609,7 @@ msgstr ""
 msgid "Please select a country"
 msgstr ""
 
-#: template/system/login/register-form.php:30
+#: template/system/login/register-form.php:32
 #: template/system/user-settings/organizer-settings-form.php:16
 msgid "Please select..."
 msgstr ""
@@ -1623,7 +1627,7 @@ msgstr ""
 msgid "Plekvetica Manager"
 msgstr ""
 
-#: include/class/event-handler.php:2819
+#: include/class/event-handler.php:2825
 #: template/event/admin/event-team-accredi-list.php:16
 #: template/event/admin/event-team-calendar-list-item.php:14
 #: template/event/admin/event-team-calendar.php:15
@@ -1657,7 +1661,7 @@ msgstr ""
 msgid "Posts of  %s"
 msgstr ""
 
-#: include/class/event-handler.php:2800
+#: include/class/event-handler.php:2806
 #: template/event/form/components/price.php:22
 msgid "Presale"
 msgstr ""
@@ -1700,11 +1704,11 @@ msgstr ""
 msgid "Recommended by us"
 msgstr ""
 
-#: template/system/login/register-form.php:28
+#: template/system/login/register-form.php:30
 msgid "Register as..."
 msgstr ""
 
-#: template/system/login/register-form.php:25
+#: template/system/login/register-form.php:27
 #: template/system/user-settings/user-settings-main.php:37
 msgid "Repeat Password"
 msgstr ""
@@ -1769,7 +1773,7 @@ msgstr ""
 msgid "Save event review"
 msgstr ""
 
-#: js/manage-user.js:166
+#: js/manage-user.js:168
 msgid "Save new password..."
 msgstr ""
 
@@ -1828,7 +1832,7 @@ msgstr ""
 msgid "Select Organizer"
 msgstr ""
 
-#: js/manage-user.js:118
+#: js/manage-user.js:121
 msgid "Sending password reset request..."
 msgstr ""
 
@@ -1864,12 +1868,12 @@ msgstr ""
 msgid "Show revision"
 msgstr ""
 
-#: template/system/login/register-form.php:38
+#: template/system/login/register-form.php:40
 msgid "Sign up"
 msgstr ""
 
 #: template/system/login/login-form.php:29
-#: template/system/login/register-form.php:12
+#: template/system/login/register-form.php:14
 msgid "Sign up at Plekvetica"
 msgstr ""
 
@@ -1898,7 +1902,7 @@ msgstr ""
 msgid "Sorry, you are not allowed to edit this post anymore"
 msgstr ""
 
-#: include/class/event-handler.php:2798
+#: include/class/event-handler.php:2804
 msgid "Start Date"
 msgstr ""
 
@@ -1967,7 +1971,7 @@ msgstr ""
 msgid "The Band has been added to the Database"
 msgstr ""
 
-#: include/class/event-handler.php:2365
+#: include/class/event-handler.php:2371
 #, php-format
 msgid ""
 "The Event \"%s\" has been added to the Event Calendar. Please check and "
@@ -2004,8 +2008,12 @@ msgstr ""
 msgid "The following Fields are not filled out yet:"
 msgstr ""
 
-#: js/manage-user.js:135 js/manage-user.js:183
+#: js/manage-user.js:137 js/manage-user.js:185
 msgid "The form contains errors, please fix them"
+msgstr ""
+
+#: js/manage-user.js:95
+msgid "The from has errors, please fix them"
 msgstr ""
 
 #: js/components/gallery-handler.js:360
@@ -2061,7 +2069,7 @@ msgstr ""
 msgid "This Data can only be displayed to team members"
 msgstr ""
 
-#: include/class/user-form-handler.php:344
+#: include/class/user-form-handler.php:346
 msgid "This email address is already registered"
 msgstr ""
 
@@ -2118,7 +2126,7 @@ msgstr ""
 msgid "Timetable"
 msgstr ""
 
-#: include/class/event-handler.php:2794
+#: include/class/event-handler.php:2800
 #: template/event/form/add-event-form-basic.php:18
 #: template/event/form/edit-event-form.php:18
 msgid "Title"
@@ -2246,7 +2254,7 @@ msgstr ""
 msgid "Value is not boolean"
 msgstr ""
 
-#: include/class/event-handler.php:2796
+#: include/class/event-handler.php:2802
 #: template/event/form/add-event-form-basic.php:15
 #: template/event/form/edit-event-form.php:27
 msgid "Venue"
@@ -2375,7 +2383,8 @@ msgstr ""
 msgid "You are not allowed to use this request or function not found"
 msgstr ""
 
-#: include/class/event-handler.php:2064
+#: include/class/event-handler.php:2070
+#: template/event/form/add-event-form-login.php:26
 msgid "You are not authorized to edit this event!"
 msgstr ""
 
@@ -2442,7 +2451,7 @@ msgstr ""
 msgid "Your Name"
 msgstr ""
 
-#: include/class/event-handler.php:1978
+#: include/class/event-handler.php:1984
 msgid "Your new Event at Plekvetica"
 msgstr ""
 

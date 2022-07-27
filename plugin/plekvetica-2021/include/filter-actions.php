@@ -79,6 +79,7 @@ add_filter('retrieve_password_notification_email', [new PlekUserHandler, 'retrie
 //Band Page
 add_filter('pre_get_posts', [new PlekBandHandler, 'bandpage_pagination_hack']);
 
+
 //Backend Login Logo
 /* add_filter('login_headertext', 'my_login_logo_url_title');
 add_filter('login_headerurl', 'my_login_logo_url');
