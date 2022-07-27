@@ -1,4 +1,13 @@
 # plekvetica-2021
+Version 2.3.0
+- Diverse Fehler in user registration und passwort zurücksetzen fuktionen behoben
+- Neue Klasse "Genre" hinzugefügt
+- 66 neue Genres hinzugefügt
+- Neuer Team Kalender
+- Neue Events akkreditieren seite
+- Benachrichtignungen wurden optimiert und fehler behoben
+- Diverse Fehler beim Event hinzufügen Formular behoben
+
 Version 2.1.1
 - Cronjob hinzugefügt um über fehlende Akkreditierungsanfragen zu informiern
 - Neue Genres hinzugefügt (42 -> XX)
