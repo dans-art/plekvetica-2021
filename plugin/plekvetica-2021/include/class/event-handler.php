@@ -1831,6 +1831,9 @@ class PlekEventHandler
             return sprintf(__('Failed to save meta data for: %s', 'pleklang'), $errors);
         }
 
+        //Remove the cookie
+        PlekNotificationHandler::remove_cookie_by_value('added_edit_event',$event_id, (60*60*24*5));
+
         return $event_id;
     }
 

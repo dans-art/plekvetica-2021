@@ -24,14 +24,7 @@ $message .= '<br/>'.PlekUserHandler::get_current_user_display_name(__('Added by'
 $action = get_term_link(3424);
 s(PlekNotificationHandler::push_to_role('eventmanager', __('New Band added', 'pleklang'), $message, $action));*/
 
-global $plek_handler;
-//Setup
-$my_plek_id = $plek_handler->get_plek_option('my_plek_page_id');
-$my_plek_url = get_permalink($my_plek_id);
-$params_arr = explode('?', $_SERVER['REQUEST_URI']);
-if (isset($params_arr[0])) {
-	unset($params_arr[0]);
-}
-$params = implode('?', $params_arr);
-$complete_url = (!empty($params)) ? $my_plek_url . '?' . $params : $my_plek_url;
-s($complete_url);
+/*s(PlekNotificationHandler::set_cookie('added_edit_event', 68700, time()+60*60*24*5)); //Expires after 5 days
+s(PlekNotificationHandler::set_cookie('added_edit_event', 68682, time()+60*60*24*5)); //Expires after 5 days
+s(PlekNotificationHandler::remove_cookie_by_value('added_edit_event', 68682, time()+60*60*24*5));
+*/

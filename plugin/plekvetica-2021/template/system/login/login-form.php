@@ -14,7 +14,10 @@ $event_id = (isset($_REQUEST['event_id']) & !empty($_REQUEST['event_id'])) ? $_R
 <div class='login-messages'>
     <?php if ((isset($_REQUEST['login']) and $_REQUEST['login'] === 'failed')) : ?>
         <div class="loggin-error">
-            <?php echo __('Login failed. Please check your login details.', 'pleklang'); ?>
+
+            <?php
+            PlekTemplateHandler::load_template('user-notice', 'system/', 'error', __('Login failed. Please check your login details.', 'pleklang'));
+            ?>
         </div>
     <?php endif; ?>
 </div>

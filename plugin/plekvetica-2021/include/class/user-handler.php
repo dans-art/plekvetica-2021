@@ -269,9 +269,9 @@ class PlekUserHandler
         if (self::current_user_is_locked()) {
             return false;
         }
-        if (current_user_can('edit_posts')) {
+        /*if (current_user_can('edit_posts')) {
             return true;
-        }
+        }*/
         if (!is_object($event)) {
             $plek_events = new PlekEvents;
             $plek_events->load_event($event, 'all');
