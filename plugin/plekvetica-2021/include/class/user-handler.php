@@ -272,6 +272,11 @@ class PlekUserHandler
         /*if (current_user_can('edit_posts')) {
             return true;
         }*/
+
+        if(PlekUserHandler::user_is_in_team()){
+            return true;
+        }
+        
         if (!is_object($event)) {
             $plek_events = new PlekEvents;
             $plek_events->load_event($event, 'all');
