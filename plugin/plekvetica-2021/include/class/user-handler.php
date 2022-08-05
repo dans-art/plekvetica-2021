@@ -259,10 +259,10 @@ class PlekUserHandler
     }
 
     /**
-     * Undocumented function
+     * Checks if the user is allowed to edit a post/event
      *
      * @param mixed $event PlekEvent Object or event id
-     * @return void
+     * @return bool 
      */
     public static function user_can_edit_post($event)
     {

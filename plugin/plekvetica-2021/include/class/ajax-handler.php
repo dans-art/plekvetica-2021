@@ -806,6 +806,19 @@ class PlekAjaxHandler
         die();
     }
 
+    /**
+     * Action for testing code. Only works with logged in users
+     *
+     * @return mixed
+     */
+    public function plek_ajax_codetester_actions(){
+        $this->set_success('test');
+        setcookie('testcookie_codetester', 'test, 123',0,"/");
+
+        echo $this->get_ajax_return();
+        die();
+    }
+
     public function get_ajax_type()
     {
         return $this->get_ajax_data('type');

@@ -64,6 +64,8 @@ add_action('wp_ajax_nopriv_plek_content_loader',  [new PlekAjaxHandler, 'plek_aj
 
 add_action('wp_ajax_plek_ajax_gallery_actions',  [new PlekAjaxHandler, 'plek_ajax_gallery_actions']);
 
+add_action('wp_ajax_plek_ajax_codetester_actions',  [new PlekAjaxHandler, 'plek_ajax_codetester_actions']);
+
 //JS Debugger
 add_action('plek_js_debug', [$plek_handler, 'set_js_error'], 10, 1);
 add_action('wp_footer', [$plek_handler, 'get_js_errors']);

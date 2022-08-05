@@ -28,3 +28,10 @@ s(PlekNotificationHandler::push_to_role('eventmanager', __('New Band added', 'pl
 s(PlekNotificationHandler::set_cookie('added_edit_event', 68682, time()+60*60*24*5)); //Expires after 5 days
 s(PlekNotificationHandler::remove_cookie_by_value('added_edit_event', 68682, time()+60*60*24*5));
 */
+
+?>
+<script type="text/javascript">
+	jQuery(document).ready(function (){
+		console.log(plek_main.ajax_codetester());
+	});
+</script>
