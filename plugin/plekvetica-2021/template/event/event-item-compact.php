@@ -17,7 +17,7 @@ $currrent_event->load_event($id);
 $permalink = $currrent_event->get_permalink();
 
 //$poster = get_the_post_thumbnail($id, ['150', 'auto']);
-$poster = $currrent_event->get_poster('Event Poster', ['150', 'auto']);
+$poster = $currrent_event->get_poster('Event Poster', [150, 0]);
 $akk_status_name = (isset($event->akk_status) AND $event->akk_status !== null) ? $currrent_event->get_event_status_text($event->akk_status) : null;
 $limit = 10; //Todo: make this as a user-setting
 $class = ($index > $limit) ? "hide-event" : ""; //Not in use?

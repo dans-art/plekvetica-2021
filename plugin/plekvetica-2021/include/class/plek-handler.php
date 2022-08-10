@@ -319,6 +319,8 @@ class PlekHandler
         wp_clear_scheduled_hook("plek_cron_send_unsend_email_notifications");
         wp_clear_scheduled_hook("plek_cron_send_accredi_reminder");
         wp_clear_scheduled_hook("plek_cron_update_all_band_scores");
+        //Update 2.3.0
+        wp_clear_scheduled_hook("plek_cron_weekly_cron");
 
         //Send the email notifications
         if (!wp_next_scheduled('plek_cron_send_unsend_email_notifications')) {
@@ -328,6 +330,10 @@ class PlekHandler
         //Send the akkreditation reminder
         if (!wp_next_scheduled('plek_cron_send_accredi_reminder')) {
             wp_schedule_event(time(), 'weekly', 'plek_cron_send_accredi_reminder');
+        }
+        //Send function that runs once a week
+        if (!wp_next_scheduled('plek_cron_weekly_cron')) {
+            wp_schedule_event(time(), 'weekly', 'plek_cron_weekly_cron');
         }
 
         //Update Bandscores

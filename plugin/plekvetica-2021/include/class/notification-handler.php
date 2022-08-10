@@ -1037,4 +1037,15 @@ class PlekNotificationHandler extends WP_List_Table
             }
         }
     }
+    /**
+     * Cronjob that is executed once a week
+     *
+     * @return void
+     */
+    public function weekly_cron_job()
+    {
+        //Recently added event info to admin
+        $added =  do_shortcode('[plek_event_recently_added nr_posts=15]', false);
+        PlekNotificationHandler::push_to_admin('Recently Added', $added);
+    }
 }

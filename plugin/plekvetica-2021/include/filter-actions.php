@@ -38,6 +38,7 @@ add_action('wp_authenticate', [$plek_login_handler, 'wp_authenticate_action'], 1
 add_action('plek_cron_send_unsend_email_notifications', [new PlekNotificationHandler, 'send_unsend_email_notifications']);
 add_action('plek_cron_send_accredi_reminder', [new PlekNotificationHandler, 'send_accredi_reminder']);
 add_action('plek_cron_update_all_band_scores', [new PlekBandHandler, 'update_all_band_scores']);
+add_action('plek_cron_weekly_cron', [new PlekNotificationHandler, 'weekly_cron_job']);
 add_filter('cron_schedules', [$plek_handler, 'add_cron_schedule'], 1, 1);
 
 //Ajax
