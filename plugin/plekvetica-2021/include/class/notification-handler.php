@@ -1032,7 +1032,7 @@ class PlekNotificationHandler extends WP_List_Table
                 $event_add_id = $plek_handler->get_plek_option('add_event_page_id');
                 $event_add_link = get_permalink($event_add_id) . '?stage=login&event_id=' . $event_id;
                 $event_add_url = "<a href='$event_add_link' target='_self'>$event_name</a>";
-                $message = __('There was a unfinished event found, please add the event details:', 'pleklang') . ' ' . $event_add_url;
+                $message = __('There was an unfinished event found, please add the event details:', 'pleklang') . ' ' . $event_add_url;
                 PlekTemplateHandler::load_template('user-notice', 'system/', 'info', $message);
             }
         }

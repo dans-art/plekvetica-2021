@@ -5,13 +5,13 @@ if (!defined('ABSPATH')) {
 
 $plek_user_handler = new PlekUserHandler;
 if (is_user_logged_in()) {
-	echo __('You have already an account. Please logout first before creating a new account.', 'pleklang');
+	echo __('You already have an account. Please logout first before creating a new account.', 'pleklang');
 	return;
 }
 
 $return_to_edit_event = (isset($_REQUEST['return_to_edit_event'])) ? $_REQUEST['return_to_edit_event'] : '';
 ?>
-<h1><?php echo __('Sign up at Plekvetica', 'pleklang'); ?></h1>
+<h1><?php echo __('Sign-up at Plekvetica', 'pleklang'); ?></h1>
 
 <form id="register-new-user-form" class="plek-form">
 	<fieldset id="register-new-user-fieldset">
@@ -37,7 +37,7 @@ $return_to_edit_event = (isset($_REQUEST['return_to_edit_event'])) ? $_REQUEST['
 				<option value="<?php echo $role_id; ?>"><?php echo $role_name; ?></option>
 			<?php endforeach; ?>
 		</select>
-		<button type="submit" class="plek-button full-width" id="plek-submit" data-type="add-user-account"><?php echo __('Sign up', 'pleklang'); ?></button>
+		<button type="submit" class="plek-button full-width" id="plek-submit" data-type="add-user-account"><?php echo __('Sign-up', 'pleklang'); ?></button>
 	</fieldset>
 	<fieldset id="redirect">
 		<input type="text" name="return_to_edit_event" id="return_to_edit_event" class="input" style="display: none;" value='<?php echo $return_to_edit_event; ?>' />

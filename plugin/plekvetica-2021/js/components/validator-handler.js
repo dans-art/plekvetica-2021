@@ -278,7 +278,7 @@ var plekvalidator = {
             case 'price':
                 reg_patern = new RegExp('^[0-9.-]+$');
                 if (reg_patern.test(value) === false) {
-                    plekvalidator.add_error(field_id, __('Field contains fobidden characters. Only Numbers, dots and dashes are allowed.','pleklang'), form);
+                    plekvalidator.add_error(field_id, __('Field contains forbidden characters. Only Numbers, dots and dashes are allowed.','pleklang'), form);
                     return false;
                 }
                 break;

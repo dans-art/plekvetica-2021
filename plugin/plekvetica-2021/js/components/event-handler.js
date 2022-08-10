@@ -463,7 +463,8 @@ var plekevent = {
                         jQuery(button).data('url', url);
                     }
                     if (type === 'save_basic_event') {
-                        plek_add_event_functions.add_event_details_reminder(event_id, '', 'login');
+                        let event_name = jQuery('input#event_name').val();
+                        plek_add_event_functions.add_event_details_reminder(event_id, event_name, 'login');
                     }
 
                     plek_main.deactivate_button_loader(button, orig_btn_text);

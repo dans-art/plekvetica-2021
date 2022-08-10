@@ -425,7 +425,7 @@ class PlekUserHandler
         }
         switch ($rolename) {
             case 'plek-organi':
-                return (empty(self::get_user_setting('organizer_id'))) ? __('No organizer set. Please select a organizer in the settings menu.', 'pleklang') : true;
+                return (empty(self::get_user_setting('organizer_id'))) ? __('No organizer set. Please select an organizer in the settings menu.', 'pleklang') : true;
                 break;
             case 'plek-band':
                 return (empty(self::get_user_setting('band_id'))) ? __('No Band set. Please select a band in the settings menu.', 'pleklang') : true;

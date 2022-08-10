@@ -186,7 +186,7 @@ class PlekEventHandler
             //@todo: Info to Band followers
             return true;
         } else {
-            return __("Changing Status was unsuccessfully", "pleklang");
+            return __("Changing Status was unsuccessful", "pleklang");
         }
     }
 
