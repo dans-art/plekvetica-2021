@@ -27,8 +27,6 @@ if (PlekUserHandler::user_is_logged_in()) {
     }
 } else {
 
-    //Save event to session in case they have to register / forgot their password
-    PlekNotificationHandler::set_cookie('added_edit_event', $event_id, time() + 60 * 60 * 24 * 5); //Expires after 5 days
 
 ?>
     <div class="plek-add-event-login plek-form">

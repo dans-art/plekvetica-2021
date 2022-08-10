@@ -1740,6 +1740,9 @@ class PlekEventHandler
             apply_filters('simple_history_log', 'Failed to update the Event genres');
         }
 
+        //Save event to session in case they have to register / forgot their password or don't add any event details.
+        PlekNotificationHandler::set_cookie('added_edit_event', $event_id, time() + 60 * 60 * 24 * 5); //Expires after 5 days
+
         if (PlekUserHandler::user_is_logged_in()) {
             //Info to Band follower
             //@todo: Send Info to Band followers.
@@ -1816,12 +1819,12 @@ class PlekEventHandler
 
         //Save Event
         $args = $this->get_event_details_data();
-        
+
         //Set Event status to publish if user is logged in
-        if(PlekUserHandler::user_is_logged_in()){
+        if (PlekUserHandler::user_is_logged_in()) {
             $args['post_status'] = 'publish';
         }
-        
+
         $event_id = tribe_update_event($event_id, $args);
 
         //Save the rest of the Data
@@ -1832,7 +1835,7 @@ class PlekEventHandler
         }
 
         //Remove the cookie
-        PlekNotificationHandler::remove_cookie_by_value('added_edit_event',$event_id, (60*60*24*5));
+        PlekNotificationHandler::remove_cookie_by_value('added_edit_event', $event_id, (60 * 60 * 24 * 5));
 
         return $event_id;
     }
@@ -1852,7 +1855,7 @@ class PlekEventHandler
         }
         $event_id = intval($plek_ajax_handler->get_ajax_data('event_id'));
         $this->load_event($event_id);
- 
+
 
         $acf = array();
         $failed = array();

@@ -813,7 +813,9 @@ class PlekAjaxHandler
      */
     public function plek_ajax_codetester_actions(){
         $this->set_success('test');
-        setcookie('testcookie_codetester', 'test, 123',0,"/");
+        $data = !empty($this->get_ajax_data('data')) ? $this->get_ajax_data('data') : 'No input' ;
+
+        setcookie('testcookie_codetester', $data,0,"/");
 
         echo $this->get_ajax_return();
         die();
