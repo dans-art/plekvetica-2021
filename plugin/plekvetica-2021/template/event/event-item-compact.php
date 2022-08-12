@@ -23,7 +23,7 @@ $limit = 10; //Todo: make this as a user-setting
 $class = ($index > $limit) ? "hide-event" : ""; //Not in use?
 $event_classes = $currrent_event->get_event_classes();
 $is_canceled = $currrent_event->is_canceled();
-$is_postponed = $currrent_event->is_postponed_original_event();
+$is_postponed = $currrent_event->is_postponed_event();
 
 //Add separator
 if($separate_by){
