@@ -259,19 +259,24 @@ class PlekUserHandler
     }
 
     /**
-     * Undocumented function
+     * Checks if the user is allowed to edit a post/event
      *
      * @param mixed $event PlekEvent Object or event id
-     * @return void
+     * @return bool 
      */
     public static function user_can_edit_post($event)
     {
         if (self::current_user_is_locked()) {
             return false;
         }
-        if (current_user_can('edit_posts')) {
+        /*if (current_user_can('edit_posts')) {
+            return true;
+        }*/
+
+        if(PlekUserHandler::user_is_in_team()){
             return true;
         }
+        
         if (!is_object($event)) {
             $plek_events = new PlekEvents;
             $plek_events->load_event($event, 'all');
@@ -420,7 +425,7 @@ class PlekUserHandler
         }
         switch ($rolename) {
             case 'plek-organi':
-                return (empty(self::get_user_setting('organizer_id'))) ? __('No organizer set. Please select a organizer in the settings menu.', 'pleklang') : true;
+                return (empty(self::get_user_setting('organizer_id'))) ? __('No organizer set. Please select an organizer in the settings menu.', 'pleklang') : true;
                 break;
             case 'plek-band':
                 return (empty(self::get_user_setting('band_id'))) ? __('No Band set. Please select a band in the settings menu.', 'pleklang') : true;

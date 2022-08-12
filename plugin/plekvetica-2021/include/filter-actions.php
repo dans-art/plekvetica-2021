@@ -38,6 +38,7 @@ add_action('wp_authenticate', [$plek_login_handler, 'wp_authenticate_action'], 1
 add_action('plek_cron_send_unsend_email_notifications', [new PlekNotificationHandler, 'send_unsend_email_notifications']);
 add_action('plek_cron_send_accredi_reminder', [new PlekNotificationHandler, 'send_accredi_reminder']);
 add_action('plek_cron_update_all_band_scores', [new PlekBandHandler, 'update_all_band_scores']);
+add_action('plek_cron_weekly_cron', [new PlekNotificationHandler, 'weekly_cron_job']);
 add_filter('cron_schedules', [$plek_handler, 'add_cron_schedule'], 1, 1);
 
 //Ajax
@@ -63,6 +64,8 @@ add_action('wp_ajax_plek_content_loader',  [new PlekAjaxHandler, 'plek_ajax_cont
 add_action('wp_ajax_nopriv_plek_content_loader',  [new PlekAjaxHandler, 'plek_ajax_content_loader_nopriv_actions']);
 
 add_action('wp_ajax_plek_ajax_gallery_actions',  [new PlekAjaxHandler, 'plek_ajax_gallery_actions']);
+
+add_action('wp_ajax_plek_ajax_codetester_actions',  [new PlekAjaxHandler, 'plek_ajax_codetester_actions']);
 
 //JS Debugger
 add_action('plek_js_debug', [$plek_handler, 'set_js_error'], 10, 1);

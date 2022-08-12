@@ -21,7 +21,7 @@ $content = (isset($template_args[1])) ? $template_args[1] : ''; //Content of the
 <div id="plek-login-container">
     <?php
     if (PlekUserHandler::current_user_is_locked()) {
-        $message = __('You account is currently locked. Please check your mail for unlock instructions', 'pleklang');
+        $message = __('You account is currently locked. Please check your mail for unlocking instructions', 'pleklang');
         PlekTemplateHandler::load_template('user-notice', 'system', 'info', $message);
     ?>
         <div class="logout-link"><a href="<?php echo get_permalink(); ?>?action=logout"><?php echo __('Logout', 'pleklang'); ?></a></div>

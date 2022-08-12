@@ -634,10 +634,10 @@ class PlekAjaxHandler
 
                 //Send Email
                 if (!$user_handler->send_email_to_new_user($new_user)) {
-                    $error_msg = sprintf(__('Account created but failed to send email. Please contact the IT Support: %s.', 'pleklang'), $plek_handler->get_plek_option('it_support_email'));
+                    $error_msg = sprintf(__('Account created but failed to send an email. Please contact the IT Support: %s.', 'pleklang'), $plek_handler->get_plek_option('it_support_email'));
                     $this->set_error($error_msg);
                 }
-                $this->set_success(__('New account created! Check your email to complete the sign up.', 'pleklang'));
+                $this->set_success(__('New account created! Check your email to complete the sign-up.', 'pleklang'));
                 break;
             case 'save_user_settings':
                 $this->set_error(__('You have to be logged in in order to save the settings.', 'pleklang'));
@@ -802,6 +802,21 @@ class PlekAjaxHandler
                 # code...
                 break;
         }
+        echo $this->get_ajax_return();
+        die();
+    }
+
+    /**
+     * Action for testing code. Only works with logged in users
+     *
+     * @return mixed
+     */
+    public function plek_ajax_codetester_actions(){
+        $this->set_success('test');
+        $data = !empty($this->get_ajax_data('data')) ? $this->get_ajax_data('data') : 'No input' ;
+
+        setcookie('testcookie_codetester', $data,0,"/");
+
         echo $this->get_ajax_return();
         die();
     }

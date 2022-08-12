@@ -1253,7 +1253,6 @@ class PlekEvents extends PlekEventHandler
             $plek_handler->enqueue_select2();
 
             $min = ($plek_handler->is_dev_server()) ? '' : '.min';
-
             wp_enqueue_script('flatpickr-cdn-script', 'https://npmcdn.com/flatpickr/dist/flatpickr.min.js', [], $plek_handler->version);
             wp_enqueue_script('flatpickr-cdn-de-script', 'https://npmcdn.com/flatpickr/dist/l10n/de.js', [], $plek_handler->version);
             wp_enqueue_script('manage-plek-events', PLEK_PLUGIN_DIR_URL . "js/manage-event{$min}.js", ['jquery', 'plek-language', 'wp-i18n'], $plek_handler->version);
@@ -1264,7 +1263,7 @@ class PlekEvents extends PlekEventHandler
             $dependencies = array('jquery', 'plek-language', 'manage-plek-events', 'wp-i18n');
 
             foreach ($handler as $handler_name) {
-                wp_enqueue_script("plek-{$handler_name}-handler", PLEK_PLUGIN_DIR_URL . "js/components/{$handler_name}-handler{$min}.js", $dependencies);
+                wp_enqueue_script("plek-{$handler_name}-handler", PLEK_PLUGIN_DIR_URL . "js/components/{$handler_name}-handler{$min}.js", $dependencies, $plek_handler->version);
                 wp_set_script_translations("plek-{$handler_name}-handler", 'pleklang', PLEK_PATH . "/languages");
             }
 

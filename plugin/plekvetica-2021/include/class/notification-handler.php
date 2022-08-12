@@ -204,14 +204,14 @@ class PlekNotificationHandler extends WP_List_Table
                 $message = PlekTemplateHandler::load_template_to_var('new_event_band_info', 'email/event', $event_id, $user_id, $bands);
                 $link = get_permalink($event_id);
                 echo $message;
-                $this->push_notification($user_id,'event_band_info', __('This Event may interest you','pleklang'), $message, $link);
+                $this->push_notification($user_id, 'event_band_info', __('This Event may interest you', 'pleklang'), $message, $link);
             }
             $nr_info_user = count($follower);
             apply_filters(
                 'simple_history_log',
                 'New Event Info send to ' . $nr_info_user . ' users',
                 array(
-                    'users' => maybe_serialize( $follower ),
+                    'users' => maybe_serialize($follower),
                 )
             );
             return true;
@@ -231,27 +231,28 @@ class PlekNotificationHandler extends WP_List_Table
      * - accredi_request: (array) [event_id,..]
      * @return bool|string True on success, error message on error
      */
-    public function push_to_organizer($organizer_id, $type, $args){
+    public function push_to_organizer($organizer_id, $type, $args)
+    {
         $message = '';
         $subject = '';
         $plek_organi = new PlekOrganizerHandler;
         $organi_contact = $plek_organi->get_organizer_media_contact($organizer_id);
 
-        if(!is_array($organi_contact) OR !isset($organi_contact['email'])){
-            return __('Organizer contact data not found','pleklang');
+        if (!is_array($organi_contact) or !isset($organi_contact['email'])) {
+            return __('Organizer contact data not found', 'pleklang');
         }
 
         switch ($type) {
             case 'accredi_request':
-                if(!isset($args['event_ids']) OR !is_array($args['event_ids']) OR empty($args['event_ids'])){
-                    return __('No Event ID given. Expects an Array with the Event IDs','pleklang');
+                if (!isset($args['event_ids']) or !is_array($args['event_ids']) or empty($args['event_ids'])) {
+                    return __('No Event ID given. Expects an Array with the Event IDs', 'pleklang');
                 }
-                $subject = __('Accreditation request from Plekvetica','pleklang');
+                $subject = __('Accreditation request from Plekvetica', 'pleklang');
                 $message = PlekTemplateHandler::load_template_to_var('organizer-accreditation-request', 'email/organizer', $organi_contact, $args['event_ids'], $organizer_id);
                 break;
-            
+
             default:
-                return __('No type found','pleklang');
+                return __('No type found', 'pleklang');
                 break;
         }
 
@@ -944,5 +945,107 @@ class PlekNotificationHandler extends WP_List_Table
             }
         }
         return $args;
+    }
+
+    /**
+     * Adds a cookie
+     *
+     * @param string $notification_id
+     * @param string|array $value - Any value to pass as a cookie value. Will be converted to a json string
+     * @param integer $expires - When the cooke expires
+     * @param boolean $override
+     * @return void
+     */
+    public static function set_cookie($notification_id, $value, $expires = 0, $override = false)
+    {
+        $value_to_save = [];
+        if (isset($_COOKIE[$notification_id]) and $override === false) {
+            $old_val = $_COOKIE[$notification_id];
+            $value_to_save = unserialize(base64_decode($old_val));
+            if ($value_to_save === null) {
+                //Not a valid string
+                $value_to_save = array();
+                $value_to_save[] = $old_val;
+            }
+            $value_to_save[] = $value;
+        } else {
+            $value_to_save = array($value);
+        }
+        setcookie($notification_id, base64_encode(serialize($value_to_save)), $expires, '/');
+        return;
+    }
+
+    /**
+     * Gets the value saved in the cookie.
+     *
+     * @param string $notification_id
+     * @return array|string String or array. Empty array if noting found
+     */
+    public static function get_cookie($notification_id, $return_string = false)
+    {
+        $value = (isset($_COOKIE[$notification_id])) ? $_COOKIE[$notification_id] : '';
+        $arr = unserialize(base64_decode($value));
+        if (!is_array($arr)) {
+            $arr = array($value);
+        }
+        if ($return_string and isset($arr[array_key_first($arr)])) {
+            return $arr[array_key_first($arr)];
+        }
+        return $arr;
+    }
+
+    /**
+     * Removes a Item stored in the cookies if the value is found
+     *
+     * @param string $notification_id
+     * @param string $value_to_remove
+     * @param integer $expires
+     * @return bool true on success, false on error
+     */
+    public static function remove_cookie_by_value($notification_id, $value_to_remove, $expires = 0)
+    {
+        $cookie_data = self::get_cookie($notification_id);
+        foreach ($cookie_data as $id => $value) {
+            if ($value === $value_to_remove) {
+                unset($cookie_data[$id]);
+            }
+        }
+        return setcookie($notification_id, base64_encode(serialize($cookie_data)), $expires, '/');
+    }
+
+    /**
+     * Checks if there are any unfinished Events saved in a cookie to show
+     *
+     * @return void
+     */
+    public static function maybe_show_unfinished_events()
+    {
+        if (empty(PlekNotificationHandler::get_cookie('added_edit_event'))) {
+            return '';
+        }
+        global $plek_handler;
+        $events = PlekNotificationHandler::get_cookie('added_edit_event');
+        foreach ($events as $event_id) {
+            $pe = new PlekEvents;
+            if ($pe->load_event($event_id, 'all')) {
+                $event_name = $pe->get_name();
+                $event_add_id = $plek_handler->get_plek_option('add_event_page_id');
+                $event_add_link = get_permalink($event_add_id) . '?stage=login&event_id=' . $event_id;
+                $event_add_url = "<a href='$event_add_link' target='_self'>$event_name</a>";
+                $message = __('There was an unfinished event found, please add the event details:', 'pleklang') . ' ' . $event_add_url;
+                PlekTemplateHandler::load_template('user-notice', 'system/', 'info', $message);
+            }
+        }
+    }
+    /**
+     * Cronjob that is executed once a week
+     *
+     * @return void
+     */
+    public function weekly_cron_job()
+    {
+        //Recently added event info to admin
+        $added =  do_shortcode('[plek_event_recently_added nr_posts=15]', false);
+        PlekNotificationHandler::push_to_admin('Recently Added', $added);
     }
 }

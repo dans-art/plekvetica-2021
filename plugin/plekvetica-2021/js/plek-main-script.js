@@ -827,9 +827,38 @@ let plek_main = {
             return true;
         }
         return false;
-    }
+    },
 
+    /**
+     * Sends a ajax request to the codetester ajax function
+     * @param {string} data The data to send for the test
+     */
+    ajax_codetester(data = null) {
 
+        var send_data = new FormData();
+        send_data.append('action', 'plek_ajax_codetester_actions');
+        send_data.append('data', data);
+
+        jQuery.ajax({
+            url: window.ajaxurl,
+            type: 'POST',
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: send_data,
+            success: function success(data) {
+                let errors = plek_main.response_has_errors(data);
+                if (errors === true) {
+                    console.log("Contains Errors: " + plek_main.get_first_error_from_ajax_request(data));
+                } else {
+                    plekerror.display_info('Codetester', plek_main.get_first_success_from_ajax_request(data));
+                }
+            },
+            error: function error(data) {
+                //jQuery(current_item).text('Error loading data.');
+            }
+        });
+    },
 }
 
 plek_main.construct();
