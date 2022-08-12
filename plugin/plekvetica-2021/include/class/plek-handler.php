@@ -13,6 +13,8 @@ class PlekHandler
     public function __construct()
     {
         $this->placeholder_image = PLEK_PLUGIN_DIR_URL . 'images/placeholder/default_placeholder.jpg';
+        $plugin_meta = get_plugin_data(PLEK_PATH . 'plekvetica.php');
+        $this->version = (!empty($plugin_meta['Version']) and $plugin_meta['Version'] !== null) ? $plugin_meta['Version'] : "2.3";
     }
 
     public function set_js_error($msg)

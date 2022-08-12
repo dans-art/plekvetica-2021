@@ -357,6 +357,7 @@ var plekevent = {
     add_remove_item_eventlistener() {
         jQuery('.remove-item').click(function () {
             jQuery(this).closest('.plek-select-item').remove();
+            plekevent.generate_title(); //Regenerate the title
         });
     },
     remove_all_items(selector) {
@@ -861,7 +862,7 @@ var plekevent = {
         var band_order = [];
         jQuery.each(selected_bands, function (index) {
             let id = jQuery(this).data('id');
-            let band_name = bandPreloadedData[id].name;
+            let band_name = bandPreloadedData[id].name.replace('&amp;', '&');
             let band_score = parseInt(bandPreloadedData[id].score);
             band_order.push([band_score, band_name]);
         });
@@ -874,10 +875,16 @@ var plekevent = {
 
         var total_items = band_order.length;
         var event_name_text = "";
+        var max_items = 3;
         jQuery.each(band_order, function (index) {
             if (index === 0) {
                 event_name_text = this[1]; //Name of the Band
                 return;
+            }
+            if(max_items < index + 2){
+                //If the max items are reached. Add 2 to the index to get 3 items max
+                event_name_text += " & " + this[1];
+                return false;
             }
             if ((index + 1) !== total_items) { //Not last item
                 event_name_text += ", " + this[1];

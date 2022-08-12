@@ -46,7 +46,7 @@ button {
   padding-right: 0.5em; }
 
 .main-navigation {
-  z-index: 999999;
+  z-index: 9999;
   /* Make sure that the navi is always on top */ }
 
 .main-navigation .main-nav ul li a {
@@ -1759,7 +1759,7 @@ input[type=checkbox] {
   position: absolute;
   background-color: #595959;
   max-width: 755px;
-  z-index: 10000;
+  z-index: 9998;
   margin-right: 40px;
   width: 100%; }
 
