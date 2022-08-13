@@ -19,7 +19,7 @@ let plek_band = {
             jQuery(document).on("click", '.band-social-icon', function () {
                 plek_band.show_social_input_field(this);
             });
-            
+
             //Check on spotify for additional data
             jQuery(document).on("focusout", '#band-link-spotify', function () {
                 plek_band.check_for_band_on_spotify(this);
@@ -359,32 +359,54 @@ let plek_band = {
      */
     show_social_input_field(item) {
         let form_id = jQuery(item).data('form-id');
-        if(jQuery('#'+form_id+'-container').css('display') !== 'none'){
-            jQuery('#'+form_id+'-container input').addClass('plek-input-highlight');
+        if (jQuery('#' + form_id + '-container').css('display') !== 'none') {
+            jQuery('#' + form_id + '-container input').addClass('plek-input-highlight');
         }
-        jQuery('#'+form_id+'-container').css('display', 'flex');
+        jQuery('#' + form_id + '-container').css('display', 'flex');
     },
     /**
      * Checks if the band is found on spotify and loads data form the api
      * @param {*} item the input field
      */
-    check_for_band_on_spotify(item){
+    check_for_band_on_spotify(item) {
         let input = jQuery(item).val();
-        if(empty(input)){
+        if (empty(input)) {
             return false;
         }
         //Check if input is a ID or URL
-        if(input.includes('/')){
+        if (input.includes('/')) {
             //Its an URL (https://open.spotify.com/artist/1IQ2e1buppatiN1bxUVkrk?si=P07Tx2AlQ5m6ZTsnce6lzQ)
             let input_arr = input.split('/');
-            let artist_index = input_arr.findIndex(element => element ==='artist');
+            let artist_index = input_arr.findIndex(element => element === 'artist');
             input = input_arr[artist_index + 1]; //Get the last item
         }
         //Load data from Spotify
         document.spotify.getArtist(input).then(
             function (data) {
                 //Check if the Artist Name matches, suggest genres and add the data to a hidden field
-                debugger;
+                if(empty(jQuery('#band-name').val())){
+                    jQuery('#band-name').val(data.name);
+                }
+                if (jQuery('#band-name').val() != data.name && !empty(jQuery('#band-name').val())) {
+                    plekerror.display_info(
+                        'Spotify',
+                        sprintf(__('Name missmatch. The Artist ID you provided does not match with the given name.<br/>Band form Spotify: %s', 'pleklang'), data.name));
+                }
+                //Check for Poster and set it.
+                if(empty(jQuery('#band-logo').val())){
+                    let band_image = data.images[0].url;
+                    console.log(band_image);
+                    jQuery('#band-logo-url').val(band_image);
+                    jQuery('#band-logo-image img').attr('src', band_image);
+                }
+                //Set the band infos
+                let band_infos = {
+                    id: data.id,
+                    name: data.name,
+                    popularity: data.popularity,
+                    followers: data.followers.total
+                }
+                jQuery('#band-infos').val(JSON.stringify(band_infos));
             },
             function (error) {
                 console.error(error);

@@ -24,6 +24,7 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
         <fieldset id="band-basic-infos">
             <div class="band-id-container">
                 <input id="band-id" name="band-id" type="text" class='plek-hidden' value="<?php echo $band->get_id(); ?>"></input>
+                <input id="band-infos" name="band-infos" type="text" class="plek-hidden"/><!-- Data fetches by the spotify api, JSON format -->
             </div>
 
             <div class="band-name-container">
@@ -37,8 +38,9 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
             </div>
 
             <div class="band-logo-container">
-                <label for="band-logo"><?php echo __('Logo', 'pleklang'); ?></label>
+                <label for="band-logo"><?php echo __('Logo or Photo', 'pleklang'); ?></label>
                 <?php PlekTemplateHandler::load_template('image-upload-button', 'components', 'band-logo', $band->get_logo()); ?>
+                <input id="band-logo-url" name="band-logo-url" type="text" class="plek-hidden"/>
             </div>
         </fieldset>
         <!-- Genre and Origin -->
