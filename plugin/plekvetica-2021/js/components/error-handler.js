@@ -83,6 +83,30 @@ var plekerror = {
     },
 
     /**
+     * Displays the error message from the spotify api request
+     * @param {*} data XMLHttpRequest
+     */
+    display_spotify_error_message(data){
+        try {
+            let response = JSON.parse(data.responseText);
+            //Try to format the error
+            var message = response.error.message;
+            switch (message) {
+                case 'invalid id': 
+                    message = __('Could not find the artist. Please check the ID or URL again','pleklang'); 
+                    break;
+            
+                default:
+                    break;
+            }
+            plekerror.display_error('', message, __('Spotify request error', 'pleklang'));
+        } catch (error) {
+            console.log(error);
+            console.error(data);
+        }
+    },
+
+    /**
      * Displays a toastr info
      * 
      * @param {string} title The title to display

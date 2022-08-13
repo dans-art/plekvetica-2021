@@ -19,6 +19,11 @@ let plek_band = {
             jQuery(document).on("click", '.band-social-icon', function () {
                 plek_band.show_social_input_field(this);
             });
+            
+            //Check on spotify for additional data
+            jQuery(document).on("focusout", '#band-link-spotify', function () {
+                plek_band.check_for_band_on_spotify(this);
+            });
         } else {
             //Frontend and other functions, which are not on the edit band page
             jQuery(document).on("click", '.plek-follow-band-btn', function () {
@@ -341,25 +346,53 @@ let plek_band = {
         }
         document.spotify.getArtist(artist_id).then(
             function (data) {
-                console.table(data);
-                console.log(data);
-                let link = `<img src="${data.images[0].url}"/>${data.name}`;
-                jQuery('.entry-content').append(link);
             },
             function (error) {
                 console.error(error);
-                plekerror.display_error('', 'Artist not found', __('Spotify request error', 'pleklang'));
+                plekerror.display_spotify_error_message(error);
             }
         );
     },
     /**
      * Displays the input field in the Band form
-     * @param {*} item 
+     * @param {*} item the button
      */
     show_social_input_field(item) {
         let form_id = jQuery(item).data('form-id');
-        jQuery('#'+form_id+'-container').show();
-    }
+        if(jQuery('#'+form_id+'-container').css('display') !== 'none'){
+            jQuery('#'+form_id+'-container input').addClass('plek-input-highlight');
+        }
+        jQuery('#'+form_id+'-container').css('display', 'flex');
+    },
+    /**
+     * Checks if the band is found on spotify and loads data form the api
+     * @param {*} item the input field
+     */
+    check_for_band_on_spotify(item){
+        let input = jQuery(item).val();
+        if(empty(input)){
+            return false;
+        }
+        //Check if input is a ID or URL
+        if(input.includes('/')){
+            //Its an URL (https://open.spotify.com/artist/1IQ2e1buppatiN1bxUVkrk?si=P07Tx2AlQ5m6ZTsnce6lzQ)
+            let input_arr = input.split('/');
+            let artist_index = input_arr.findIndex(element => element ==='artist');
+            input = input_arr[artist_index + 1]; //Get the last item
+        }
+        //Load data from Spotify
+        document.spotify.getArtist(input).then(
+            function (data) {
+                //Check if the Artist Name matches, suggest genres and add the data to a hidden field
+                debugger;
+            },
+            function (error) {
+                console.error(error);
+                plekerror.display_spotify_error_message(error);
+            }
+        );
+    },
+
 
 }
 plek_band.construct();

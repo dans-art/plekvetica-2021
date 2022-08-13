@@ -64,7 +64,7 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
                     $fa_class = (isset($attr['fa_class'])) ? $attr['fa_class'] : '';
                     ?>
                     <div class="band-social-icon" data-form-id="<?php echo $form_id; ?>">
-                        <i class="<?php echo $fa_class; ?>" title="<?php sprintf(__('Add %s Link for the Band', 'pleklang'), $name); ?>"></i>
+                        <span class="<?php echo $fa_class; ?>" title="<?php echo sprintf(__('Add %s Link for the Band', 'pleklang'), $name); ?>"></span>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -81,9 +81,9 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
                 $fa_class = (isset($attr['fa_class'])) ? $attr['fa_class'] : '';
                 ?>
 
-                <div id="<?php echo $form_id; ?>-container" style="display: <?php echo (empty($social_link)) ? 'none' : 'block'; ?>;">
+                <div id="<?php echo $form_id; ?>-container" class="item-con" style="display:<?php echo (empty($social_link)) ? 'none' : 'flex'; ?>;">
                     <label for="<?php echo $form_id; ?>"><?php echo $name; ?></label>
-                    <i class="<?php echo $fa_class; ?>" title="<?php sprintf(__('Add %s Link for the Band', 'pleklang'), $name); ?>"></i>
+                    <span class="<?php echo $fa_class; ?> input-icon"></span>
                     <input id="<?php echo $form_id; ?>" class='band-social-input' name="<?php echo $form_id; ?>" type="text" value="<?php echo $social_link; ?>"></input>
                     <div class="input-instructions"><?php echo $instructions; ?></div>
                 </div>
@@ -104,5 +104,9 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
             <button id="band-form-submit" class="plek-button" type="submit"><?php echo __('Save', 'pleklang'); ?></button>
         </div>
     </form>
-    <?php PlekTemplateHandler::load_template('js-settings', 'components', 'manage_band'); ?>
+    <?php
+    PlekTemplateHandler::load_template('js-settings', 'components', 'manage_band');
+    PlekTemplateHandler::load_template('js-settings', 'components', 'init_spotify');
+    ?>
+
 </div>

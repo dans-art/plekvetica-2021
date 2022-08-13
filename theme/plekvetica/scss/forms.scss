@@ -499,21 +499,64 @@ input[type=checkbox]{
   #band-social-icons{
     .icons{
       display: flex;
+      padding: 0.5em 0;
     }
-    .band-social-icon i{
+    .band-social-icon span{
       font-size: 2em;
       padding: 0 0.2em;
       cursor: url("../plekvetica/assets/metalhand.cur"), pointer; 
     }
 
     .fa-facebook-square{
-      color:blue;
+      color:#3b5998;
+    }
+    .fa-instagram{
+      color:#e95950;
+    }
+    .fa-youtube-square{
+      color:#bb0000;
+    }
+    .fa-spotify{
+      color:#00e461;
+    }
+    .fa-twitter{
+      color:#55acee;
     }
   }
 
   #band-social{
     label{
       display: none;
+    }
+    .input-icon{
+      width: 10%;
+      font-size: 2em;
+      text-align: left;
+      padding-left: 0.2em;
+
+      &::before{
+        position: relative;
+        top: 6px;
+      }
+    }
+    .band-social-input{
+      margin-top: 0.2em;
+      margin-bottom: 0;
+      flex-basis: 90%;
+    }
+
+    .input-instructions{
+      padding-left: 10%;
+      font-size: 0.8em;
+      padding-top: 0.2em;
+    }
+    .band-videos-container{
+      margin-top: 0.5em;
+    }
+    .item-con{
+      justify-content: space-between;
+      flex-wrap: wrap;
+
     }
   }
 

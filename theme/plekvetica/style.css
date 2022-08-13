@@ -311,6 +311,22 @@ img.loader {
     opacity: 0.2; }
   100% {
     opacity: 1; } }
+.plek-input-highlight {
+  animation-name: plek-input-highlighter;
+  animation-duration: 5s;
+  animation-iteration-count: 2; }
+
+@keyframes plek-input-highlighter {
+  0% {
+    opacity: 1; }
+  25% {
+    opacity: 0.2; }
+  50% {
+    opacity: 1; }
+  75% {
+    opacity: 0.2; }
+  100% {
+    opacity: 1; } }
 .input_loader {
   top: -9px;
   padding: 0; }
@@ -2005,15 +2021,45 @@ input[type=checkbox] {
     width: 100%;
     flex: 1; }
   .plek-form #band-social-icons .icons {
-    display: flex; }
-  .plek-form #band-social-icons .band-social-icon i {
+    display: flex;
+    padding: 0.5em 0; }
+  .plek-form #band-social-icons .band-social-icon span {
     font-size: 2em;
     padding: 0 0.2em;
     cursor: url("../plekvetica/assets/metalhand.cur"), pointer; }
   .plek-form #band-social-icons .fa-facebook-square {
-    color: blue; }
+    color: #3b5998; }
+  .plek-form #band-social-icons .fa-instagram {
+    color: #e95950; }
+  .plek-form #band-social-icons .fa-youtube-square {
+    color: #bb0000; }
+  .plek-form #band-social-icons .fa-spotify {
+    color: #00e461; }
+  .plek-form #band-social-icons .fa-twitter {
+    color: #55acee; }
   .plek-form #band-social label {
     display: none; }
+  .plek-form #band-social .input-icon {
+    width: 10%;
+    font-size: 2em;
+    text-align: left;
+    padding-left: 0.2em; }
+    .plek-form #band-social .input-icon::before {
+      position: relative;
+      top: 6px; }
+  .plek-form #band-social .band-social-input {
+    margin-top: 0.2em;
+    margin-bottom: 0;
+    flex-basis: 90%; }
+  .plek-form #band-social .input-instructions {
+    padding-left: 10%;
+    font-size: 0.8em;
+    padding-top: 0.2em; }
+  .plek-form #band-social .band-videos-container {
+    margin-top: 0.5em; }
+  .plek-form #band-social .item-con {
+    justify-content: space-between;
+    flex-wrap: wrap; }
   .plek-form #band-videos {
     display: none; }
   .plek-form #add-band-video {
