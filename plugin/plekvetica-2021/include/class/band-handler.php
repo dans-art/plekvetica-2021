@@ -30,9 +30,22 @@ class PlekBandHandler
 
     protected $bandpic_placeholder = PLEK_PLUGIN_DIR_URL . "images/placeholder/band_logo.jpg";
     public $total_posts = array();
+    public $social_media = array();
 
     public function __construct()
     {
+        //Define the supported social media pages
+        $this->social_media['facebook'] = array(
+            'name' => __('Facebook', 'pleklang'), //The name
+            'fa_class' => 'fab fa-facebook-square', //The class of the font-awesome icon
+            'form_id' => 'band-link-fb', //The ID used in the html form
+            'acf_id' => 'facebook__link' //The ID used in the html form
+        );
+        $this->social_media['instagram'] = array('name' => __('Instagram', 'pleklang'), 'fa_class' => 'fa-brands fa-square-instagram', 'form_id' => 'band-link-insta', 'acf_id' => 'instagram_link');
+        $this->social_media['website'] = array('name' => __('Website', 'pleklang'), 'fa_class' => 'fas fa-globe', 'form_id' => 'band-link-web', 'acf_id' => 'website_link');
+        $this->social_media['youtube'] = array('name' => __('Youtube', 'pleklang'), 'fa_class' => 'fab fa-youtube', 'form_id' => 'band-link-youtube', 'acf_id' => 'youtube_link');
+        $this->social_media['spotify'] = array('name' => __('Spotify', 'pleklang'), 'fa_class' => 'fab fa-spotify', 'form_id' => 'band-link-spotify', 'acf_id' => 'spotify_link', 'instructions' => __('Add Link to Spotify Artist or Artist ID', 'pleklang'));
+        $this->social_media['Twitter'] = array('name' => __('Twitter', 'pleklang'), 'fa_class' => 'fab fa-twitter', 'form_id' => 'band-link-twitter', 'acf_id' => 'twitter_link');
     }
 
     /**
@@ -367,6 +380,16 @@ class PlekBandHandler
     public function get_website_link()
     {
         return (isset($this->band['website_link'])) ? $this->band['website_link'] : '';
+    }
+    /**
+     * Gets the link to the social media site
+     *
+     * @param string $id - The ACF to get. E.g. instagram_link
+     * @return string The Link or empty string if not found
+     */
+    public function get_social_link($id)
+    {
+        return (isset($this->band[$id])) ? $this->band[$id] : '';
     }
 
     /**
@@ -772,7 +795,8 @@ class PlekBandHandler
     {
         global $plek_handler;
         $plek_handler->enqueue_select2();
-        wp_enqueue_script('plek-band-scripts', PLEK_PLUGIN_DIR_URL . 'js/manage-band.min.js', array('jquery', 'select2', 'plek-language'), $plek_handler->version);
+        $min = ($plek_handler->is_dev_server()) ? "" : ".min";
+        wp_enqueue_script('plek-band-scripts', PLEK_PLUGIN_DIR_URL . 'js/manage-band' . $min . '.js', array('jquery', 'select2', 'plek-language'), $plek_handler->version);
     }
 
     /**
@@ -833,7 +857,7 @@ class PlekBandHandler
         if (is_array($add_term) and isset($add_term['term_id'])) {
             //Send Notification to admin
             $message = sprintf(__('A new Band "%s" has been added.', 'pleklang'), $name);
-            $message .= '<br/>'.PlekUserHandler::get_current_user_display_name(__('Added by','pleklang'));
+            $message .= '<br/>' . PlekUserHandler::get_current_user_display_name(__('Added by', 'pleklang'));
             $action = get_term_link((int) $add_term['term_id']);
             PlekNotificationHandler::push_to_role('eventmanager', __('New Band added', 'pleklang'), $message, $action);
             return $this->update_band($add_term['term_id'], true);

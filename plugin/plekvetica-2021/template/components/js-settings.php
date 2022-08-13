@@ -112,3 +112,17 @@ global $plek_handler;
 		});
 	</script>
 <?php endif; ?>
+
+<?php if ($type === 'init_spotify') : ?>
+	<?php
+	global $plek_handler;
+	add_action('wp_footer', [$plek_handler, 'enqueue_spotify']);
+	?>
+	<script type="text/javascript" defer='defer'>
+		const spotify_token = "<?php echo $plek_handler->get_plek_option('plek_spotify_oauth_token'); ?>";
+		jQuery(document).ready(function() {
+			document.spotify = new SpotifyWebApi();
+			document.spotify.setAccessToken(spotify_token);
+		});
+	</script>
+<?php endif; ?>

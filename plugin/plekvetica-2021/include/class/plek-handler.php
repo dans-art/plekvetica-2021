@@ -56,9 +56,10 @@ class PlekHandler
      *
      * @return string URL
      */
-    public function get_my_plekvetica_link(){
+    public function get_my_plekvetica_link()
+    {
         $my_plek_id = $this->get_plek_option('my_plek_page_id');
-        return(!empty($my_plek_id)) ? get_permalink($my_plek_id) : "https://plekvetica.ch/my-plekvetica";
+        return (!empty($my_plek_id)) ? get_permalink($my_plek_id) : "https://plekvetica.ch/my-plekvetica";
     }
 
     public function print_url(string $url)
@@ -208,6 +209,7 @@ class PlekHandler
 
     /**
      * Enqueues the default scripts
+     * Has to be called by the wp_head action
      *
      * @return void
      */
@@ -229,6 +231,16 @@ class PlekHandler
         wp_set_script_translations('plek-language', 'pleklang', PLEK_PATH . "/languages");
     }
 
+    /**
+     * Enqueues the spotify api
+     *
+     * @return void
+     */
+    public function enqueue_spotify()
+    {
+        wp_enqueue_script('plek-spotify', PLEK_PLUGIN_DIR_URL . 'js/spotify/spotify-web-api.js', [], $this->version);
+    }
+
     public function enqueue_select2()
     {
         wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css');
@@ -248,13 +260,16 @@ class PlekHandler
      */
     public function activate_plugin()
     {
+        //Add the user roles and create the db
         PlekUserHandler::add_user_roles();
         PlekNotificationHandler::create_database();
+
         $this->register_cron_jobs();
         //Updates the genres
         $pg = new plekGenres;
         $pg->update_genres();
     }
+
 
     public function load_textdomain()
     {
@@ -527,7 +542,7 @@ class PlekHandler
             return $content;
         }
 
-        if(empty($content)){
+        if (empty($content)) {
             return '';
         }
 

@@ -496,6 +496,27 @@ input[type=checkbox]{
     flex: 1;
   }
 
+  #band-social-icons{
+    .icons{
+      display: flex;
+    }
+    .band-social-icon i{
+      font-size: 2em;
+      padding: 0 0.2em;
+      cursor: url("../plekvetica/assets/metalhand.cur"), pointer; 
+    }
+
+    .fa-facebook-square{
+      color:blue;
+    }
+  }
+
+  #band-social{
+    label{
+      display: none;
+    }
+  }
+
   #band-videos{
     display: none;
   }
@@ -506,8 +527,6 @@ input[type=checkbox]{
 
   #band-genre-loader{
     display: flex;
-
-
   }
 
   #plek-memeber-perks{

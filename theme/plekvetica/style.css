@@ -2004,6 +2004,16 @@ input[type=checkbox] {
   .plek-form .band-edit-container {
     width: 100%;
     flex: 1; }
+  .plek-form #band-social-icons .icons {
+    display: flex; }
+  .plek-form #band-social-icons .band-social-icon i {
+    font-size: 2em;
+    padding: 0 0.2em;
+    cursor: url("../plekvetica/assets/metalhand.cur"), pointer; }
+  .plek-form #band-social-icons .fa-facebook-square {
+    color: blue; }
+  .plek-form #band-social label {
+    display: none; }
   .plek-form #band-videos {
     display: none; }
   .plek-form #add-band-video {

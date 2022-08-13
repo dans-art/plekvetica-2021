@@ -53,22 +53,41 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
                 <?php PlekTemplateHandler::load_template('dropdown', 'components', 'band-origin', $band->get_all_countries(), array($country => '')); ?>
             </div>
         </fieldset>
+        <!-- Social Media Icons -->
+        <fieldset id="band-social-icons">
+            <label for="band-social-icon"><?php echo __('Social Media of the Band', 'pleklang'); ?></label>
+            <div class="icons">
+                <?php foreach ($band->social_media as $slug => $attr) : ?>
+                    <?php
+                    $name = (isset($attr['name'])) ? $attr['name'] : 'Undefined';
+                    $form_id = (isset($attr['form_id'])) ? $attr['form_id'] : 'band-link-' . $slug;
+                    $fa_class = (isset($attr['fa_class'])) ? $attr['fa_class'] : '';
+                    ?>
+                    <div class="band-social-icon" data-form-id="<?php echo $form_id; ?>">
+                        <i class="<?php echo $fa_class; ?>" title="<?php sprintf(__('Add %s Link for the Band', 'pleklang'), $name); ?>"></i>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </fieldset>
         <!-- Facebook, Insta and Web links and Videos -->
         <fieldset id="band-social">
-            <div class="band-fb-container">
-                <label for="band-link-fb"><?php echo __('Facebook', 'pleklang'); ?></label>
-                <input id="band-link-fb" name="band-link-fb" type="text" value="<?php echo $band->get_facebook_link(); ?>"></input>
-            </div>
+            <?php foreach ($band->social_media as $slug => $attr) : ?>
+                <?php
+                $name = (isset($attr['name'])) ? $attr['name'] : 'Undefined';
+                $instructions = (isset($attr['instructions'])) ? $attr['instructions'] : '';
+                $form_id = (isset($attr['form_id'])) ? $attr['form_id'] : 'band-link-' . $slug;
+                $acf_id = (isset($attr['acf_id'])) ? $attr['acf_id'] : '';
+                $social_link =  $band->get_social_link($acf_id);
+                $fa_class = (isset($attr['fa_class'])) ? $attr['fa_class'] : '';
+                ?>
 
-            <div class="band-insta-container">
-                <label for="band-link-insta"><?php echo __('Instagram', 'pleklang'); ?></label>
-                <input id="band-link-insta" name="band-link-insta" type="text" value="<?php echo $band->get_instagram_link(); ?>"></input>
-            </div>
-
-            <div class="band-web-container">
-                <label for="band-link-web"><?php echo __('Website', 'pleklang'); ?></label>
-                <input id="band-link-web" name="band-link-web" type="text" value="<?php echo $band->get_website_link(); ?>"></input>
-            </div>
+                <div id="<?php echo $form_id; ?>-container" style="display: <?php echo (empty($social_link)) ? 'none' : 'block'; ?>;">
+                    <label for="<?php echo $form_id; ?>"><?php echo $name; ?></label>
+                    <i class="<?php echo $fa_class; ?>" title="<?php sprintf(__('Add %s Link for the Band', 'pleklang'), $name); ?>"></i>
+                    <input id="<?php echo $form_id; ?>" class='band-social-input' name="<?php echo $form_id; ?>" type="text" value="<?php echo $social_link; ?>"></input>
+                    <div class="input-instructions"><?php echo $instructions; ?></div>
+                </div>
+            <?php endforeach; ?>
 
             <div class="band-videos-container">
                 <label for="band-videos"><?php echo __('Videos', 'pleklang'); ?></label>

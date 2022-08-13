@@ -28,3 +28,16 @@ s(PlekNotificationHandler::push_to_role('eventmanager', __('New Band added', 'pl
 s(PlekNotificationHandler::set_cookie('added_edit_event', 68682, time()+60*60*24*5)); //Expires after 5 days
 s(PlekNotificationHandler::remove_cookie_by_value('added_edit_event', 68682, time()+60*60*24*5));
 */
+
+$pb = new PlekBandHandler;
+$pb->enqueue_form_scripts();
+
+PlekTemplateHandler::load_template('js-settings', 'components', 'init_spotify');
+?>
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		plek_band.get_spotify_artist('1IQ2e1buppatiN1bxUVkrk');
+		plek_band.get_spotify_artist('1IQ2e1buppatk');
+	});
+</script>
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/artist/1IQ2e1buppatiN1bxUVkrk?utm_source=generator&theme=0" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
