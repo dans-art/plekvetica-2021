@@ -42,7 +42,7 @@ class PlekBandHandler
             'acf_id' => 'facebook__link' //The ID used in the html form
         );
         $this->social_media['instagram'] = array('name' => __('Instagram', 'pleklang'), 'fa_class' => 'fab fa-instagram', 'form_id' => 'band-link-insta', 'acf_id' => 'instagram_link');
-        $this->social_media['youtube'] = array('name' => __('Youtube', 'pleklang'), 'fa_class' => 'fab fa-youtube-square', 'form_id' => 'band-link-youtube', 'acf_id' => 'youtube_link');
+        $this->social_media['youtube'] = array('name' => __('Youtube', 'pleklang'), 'fa_class' => 'fab fa-youtube-square', 'form_id' => 'band-link-youtube', 'acf_id' => 'youtube_link','instructions' => __('Add Link to Youtube Channel or Channel ID', 'pleklang'));
         $this->social_media['spotify'] = array('name' => __('Spotify', 'pleklang'), 'fa_class' => 'fab fa-spotify', 'form_id' => 'band-link-spotify', 'acf_id' => 'spotify_link', 'instructions' => __('Add Link to Spotify Artist or Artist ID', 'pleklang'));
         $this->social_media['Twitter'] = array('name' => __('Twitter', 'pleklang'), 'fa_class' => 'fab fa-twitter', 'form_id' => 'band-link-twitter', 'acf_id' => 'twitter_link');
         $this->social_media['website'] = array('name' => __('Website', 'pleklang'), 'fa_class' => 'fas fa-globe', 'form_id' => 'band-link-web', 'acf_id' => 'website_link');

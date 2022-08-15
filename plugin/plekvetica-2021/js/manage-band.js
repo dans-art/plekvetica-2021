@@ -232,7 +232,7 @@ let plek_band = {
                     }
                 }
                 plek_main.deactivate_button_loader(button, text);
-                if (jQuery('.band-edit').length === 0) {
+                if (jQuery('.band-edit').length === 0 && errors === false) {
                     //It is the add Band form
                     plek_main.clear_form_inputs('plek-band-form');
                 }
@@ -293,7 +293,40 @@ let plek_band = {
         data.append('band-description', tinymce.editors['band-description'].getContent());
         data.append('band-logo-data', file_data);
         data.append('band-logo', '666'); //This is just a placeholder for the validator to validate.
+        data.set('band-link-youtube', this.get_id_from_url(data.get('band-link-youtube'), 'youtube'));
+        data.set('band-link-spotify', this.get_id_from_url(data.get('band-link-spotify'), 'spotify'));
+        debugger;
         return data;
+    },
+
+    get_id_from_url(url, site) {
+        switch (site) {
+            case "youtube-deactivated": //This is not used at the moment.
+                //https://www.youtube.com/channel/UCz87ROWe7X2yiAMeFgOkGMA OR https://www.youtube.com/plekvetica
+                var input_arr = url.split('/');
+                var channel_index = input_arr.findIndex(element => element === 'channel');
+                if (channel_index === -1) {
+                    var yt_index = input_arr.findIndex(ele => ele === 'youtube.com' || ele === 'www.youtube.com');
+                    return (yt_index !== -1) ? input_arr[yt_index + 1] : url;
+                    //No channel found
+                } else {
+                    return input_arr[channel_index + 1]; //Get the item after the channel index 
+                }
+
+                break;
+            case "spotify":
+                //(https://open.spotify.com/artist/1IQ2e1buppatiN1bxUVkrk?si=P07Tx2AlQ5m6ZTsnce6lzQ)
+                var input_arr = url.split('/');
+                var artist_index = input_arr.findIndex(element => element === 'artist');
+                if (artist_index !== -1) {
+                    return input_arr[artist_index + 1]; //Get the item after the artist index 
+                }
+                break;
+
+            default:
+                break;
+        }
+        return url;
     },
 
     toggle_follower() {
@@ -375,16 +408,13 @@ let plek_band = {
         }
         //Check if input is a ID or URL
         if (input.includes('/')) {
-            //Its an URL (https://open.spotify.com/artist/1IQ2e1buppatiN1bxUVkrk?si=P07Tx2AlQ5m6ZTsnce6lzQ)
-            let input_arr = input.split('/');
-            let artist_index = input_arr.findIndex(element => element === 'artist');
-            input = input_arr[artist_index + 1]; //Get the last item
+            input = plek_band.get_id_from_url(input, 'spotify');
         }
         //Load data from Spotify
         document.spotify.getArtist(input).then(
             function (data) {
                 //Check if the Artist Name matches, suggest genres and add the data to a hidden field
-                if(empty(jQuery('#band-name').val())){
+                if (empty(jQuery('#band-name').val())) {
                     jQuery('#band-name').val(data.name);
                 }
                 if (jQuery('#band-name').val() != data.name && !empty(jQuery('#band-name').val())) {
@@ -393,7 +423,7 @@ let plek_band = {
                         sprintf(__('Name missmatch. The Artist ID you provided does not match with the given name.<br/>Band form Spotify: %s', 'pleklang'), data.name));
                 }
                 //Check for Poster and set it.
-                if(empty(jQuery('#band-logo').val())){
+                if (empty(jQuery('#band-logo').val())) {
                     let band_image = data.images[0].url;
                     console.log(band_image);
                     jQuery('#band-logo-url').val(band_image);

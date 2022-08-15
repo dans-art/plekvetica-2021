@@ -599,8 +599,8 @@
         },
         {
             "key": "field_62f75e6909f04",
-            "label": "Spotify Link",
-            "name": "spotify_link",
+            "label": "Spotify Artist ID",
+            "name": "spotify_id",
             "type": "text",
             "instructions": "",
             "required": 0,
@@ -612,6 +612,44 @@
             },
             "default_value": "",
             "placeholder": "Link zum Spotify oder Artist ID",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_62fa2a53bc7ca",
+            "label": "Youtube ID",
+            "name": "youtube_id",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_62fa2a7dbc7cb",
+            "label": "Twitter URL",
+            "name": "twitter_url",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
             "prepend": "",
             "append": "",
             "maxlength": ""
@@ -635,5 +673,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1660378794
+    "modified": 1660562072
 }
