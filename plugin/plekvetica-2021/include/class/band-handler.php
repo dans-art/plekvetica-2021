@@ -42,9 +42,9 @@ class PlekBandHandler
             'acf_id' => 'facebook__link' //The ID used in the html form
         );
         $this->social_media['instagram'] = array('name' => __('Instagram', 'pleklang'), 'fa_class' => 'fab fa-instagram', 'form_id' => 'band-link-insta', 'acf_id' => 'instagram_link');
-        $this->social_media['youtube'] = array('name' => __('Youtube', 'pleklang'), 'fa_class' => 'fab fa-youtube-square', 'form_id' => 'band-link-youtube', 'acf_id' => 'youtube_link','instructions' => __('Add Link to Youtube Channel or Channel ID', 'pleklang'));
-        $this->social_media['spotify'] = array('name' => __('Spotify', 'pleklang'), 'fa_class' => 'fab fa-spotify', 'form_id' => 'band-link-spotify', 'acf_id' => 'spotify_link', 'instructions' => __('Add Link to Spotify Artist or Artist ID', 'pleklang'));
-        $this->social_media['Twitter'] = array('name' => __('Twitter', 'pleklang'), 'fa_class' => 'fab fa-twitter', 'form_id' => 'band-link-twitter', 'acf_id' => 'twitter_link');
+        $this->social_media['youtube'] = array('name' => __('Youtube', 'pleklang'), 'fa_class' => 'fab fa-youtube-square', 'form_id' => 'band-link-youtube', 'acf_id' => 'youtube_url', 'instructions' => __('Add Link to Youtube Channel', 'pleklang'));
+        $this->social_media['spotify'] = array('name' => __('Spotify', 'pleklang'), 'fa_class' => 'fab fa-spotify', 'form_id' => 'band-link-spotify', 'acf_id' => 'spotify_id', 'instructions' => __('Add Link to Spotify Artist or Artist ID', 'pleklang'));
+        $this->social_media['Twitter'] = array('name' => __('Twitter', 'pleklang'), 'fa_class' => 'fab fa-twitter', 'form_id' => 'band-link-twitter', 'acf_id' => 'twitter_url');
         $this->social_media['website'] = array('name' => __('Website', 'pleklang'), 'fa_class' => 'fas fa-globe', 'form_id' => 'band-link-web', 'acf_id' => 'website_link');
     }
 
@@ -385,11 +385,30 @@ class PlekBandHandler
      * Gets the link to the social media site
      *
      * @param string $id - The ACF to get. E.g. instagram_link
+     * @param string $convert_to_url - Converts the link / ID to a valid URL.
      * @return string The Link or empty string if not found
      */
-    public function get_social_link($id)
+    public function get_social_link($id, $convert_to_url = true)
     {
-        return (isset($this->band[$id])) ? $this->band[$id] : '';
+        $url_id = (isset($this->band[$id])) ? $this->band[$id] : ''; //URL or ID of the social media site.
+        if($convert_to_url === false){
+            return $url_id; //Don't modify anything, just take the data as it is.
+        }
+        switch ($id) {
+            case 'spotify_id':
+                return "https://open.spotify.com/artist/" . $url_id;
+                # code...
+                break;
+
+            default:
+                # code...
+                break;
+        }
+        if (strpos($url_id, 'http') !== 0) {
+            //Http should be on index 0
+            return 'https://' . $url_id;
+        }
+        return $url_id;
     }
 
     /**
@@ -954,6 +973,10 @@ class PlekBandHandler
         $facebook = $plek_ajax_handler->get_ajax_data_esc('band-link-fb');
         $insta = $plek_ajax_handler->get_ajax_data_esc('band-link-insta');
         $videos = $plek_ajax_handler->get_ajax_data_esc('band-videos');
+        $spotify = $plek_ajax_handler->get_ajax_data_esc('band-link-spotify');
+        $youtube = $plek_ajax_handler->get_ajax_data_esc('band-link-youtube');
+        $twitter = $plek_ajax_handler->get_ajax_data_esc('band-link-twitter');
+        $fetched_spotify_data = $plek_ajax_handler->get_ajax_data_esc('band-infos');
 
         $acf = array();
         $acf['website_link'] = $web;
@@ -962,6 +985,10 @@ class PlekBandHandler
         $acf['herkunft'] = $origin;
         $acf['videos'] = $videos;
         $acf['band_genre'] = $genre;
+        $acf['spotify_id'] = $spotify;
+        $acf['youtube_url'] = $youtube;
+        $acf['twitter_url'] = $twitter;
+        $acf['fetched_spotify_data'] = $fetched_spotify_data;
 
         //Upload Logo
         if (!empty($plek_ajax_handler->get_ajax_files_data('band-logo'))) {
@@ -1353,5 +1380,30 @@ class PlekBandHandler
         }
         $existing[] = $gallery_id;
         return $plek_handler->update_field('band_galleries', implode(',', $existing), 'term_' . $this->get_id());
+    }
+
+    /**
+     * Gets the data from spotify stored in the band object.
+     * @param string $field - Which field to return. id, name, popularity, follower, image
+     *
+     * @return false|null|string|object - False on error, null when the field is not found, string for the field data and object if the $field is null
+     */
+    public function get_spotify_data($field = null){
+        $spotify_data = (isset($this->band['fetched_spotify_data'])) ? $this->band['fetched_spotify_data'] : '';
+        if(empty($spotify_data)){
+            return false;
+        }
+        $encoded_html = html_entity_decode($spotify_data);
+        if(!$encoded_html){
+            return false;
+        }
+        $object = json_decode($encoded_html);
+        if(!$object){
+            return false;
+        }
+        if(is_string($field)){
+            return (isset($object->{$field})) ? $object->{$field}: null;
+        }
+        return $object;
     }
 }

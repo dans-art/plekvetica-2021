@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH')) {
+	exit; // Exit if accessed directly.
+}
 extract(get_defined_vars());
 $band_object = isset($template_args[0])?$template_args[0]:null;
 $videos = $band_object -> get_videos();

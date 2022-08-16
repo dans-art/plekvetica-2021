@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @todo: make pagination work
  */
@@ -13,8 +14,8 @@ $band->load_band_object();
 
 $genres = PlekTemplateHandler::load_template_to_var('genres', 'band/meta', $band);
 $details = PlekTemplateHandler::load_template_to_var('details', 'band/meta', $band);
-$plek_event_blocks -> set_number_of_posts(5);
-$band_event_block = $plek_event_blocks->get_block('band_events', array('band_id' => $band -> get_id()));
+$plek_event_blocks->set_number_of_posts(5);
+$band_event_block = $plek_event_blocks->get_block('band_events', array('band_id' => $band->get_id()));
 ?>
 
 <div id='band-<?php echo $band->get_id(); ?>' data-band_id='<?php echo $band->get_id(); ?>' class='band-single band-container'>
@@ -24,6 +25,7 @@ $band_event_block = $plek_event_blocks->get_block('band_events', array('band_id'
         </h1>
         <div class='image-con'>
             <?php echo $band->get_logo_formated(); ?>
+            <?php  s($band->get_spotify_data()); ?>
         </div>
         <div class='description-con'>
             <?php echo wpautop($band->get_description()); ?>
@@ -42,6 +44,9 @@ $band_event_block = $plek_event_blocks->get_block('band_events', array('band_id'
             <?php if (!empty($band->has_videos())) : ?>
                 <?php echo  PlekTemplateHandler::load_template_to_var('videos', 'band/meta', $band); ?>
             <?php endif; ?>
+        </div>
+        <div class='spotify-con'>
+            <?php echo  PlekTemplateHandler::load_template_to_var('spotify', 'band/meta', $band); ?>
         </div>
         <div class='events-con'>
             <?php if (!empty($band_event_block)) : ?>

@@ -618,8 +618,8 @@
         },
         {
             "key": "field_62fa2a53bc7ca",
-            "label": "Youtube ID",
-            "name": "youtube_id",
+            "label": "Youtube URL",
+            "name": "youtube_url",
             "type": "text",
             "instructions": "",
             "required": 0,
@@ -653,6 +653,25 @@
             "prepend": "",
             "append": "",
             "maxlength": ""
+        },
+        {
+            "key": "field_62fc01c44d8bd",
+            "label": "Fetched Spotify Data",
+            "name": "fetched_spotify_data",
+            "type": "text",
+            "instructions": "JSON String with Artist data",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
         }
     ],
     "location": [
@@ -673,5 +692,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1660562072
+    "modified": 1660682751
 }

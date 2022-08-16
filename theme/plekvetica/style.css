@@ -1600,17 +1600,26 @@ ul.partner-container {
     .band-single.band-container .mobile-meta-con .band-flag img {
       max-height: 1.2em;
       vertical-align: sub; }
-    .band-single.band-container .meta-container .event-links a,
-    .band-single.band-container .mobile-meta-con .event-links a {
-      color: white; }
-    .band-single.band-container .meta-container .event-links i.far,
-    .band-single.band-container .meta-container .event-links i.fas,
-    .band-single.band-container .meta-container .event-links i.fab,
-    .band-single.band-container .mobile-meta-con .event-links i.far,
-    .band-single.band-container .mobile-meta-con .event-links i.fas,
-    .band-single.band-container .mobile-meta-con .event-links i.fab {
-      font-size: 1.5em;
-      margin: 0.1em 0.3em; }
+    .band-single.band-container .meta-container .event-links,
+    .band-single.band-container .mobile-meta-con .event-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start; }
+      .band-single.band-container .meta-container .event-links span,
+      .band-single.band-container .mobile-meta-con .event-links span {
+        flex-basis: 3em;
+        text-align: center; }
+      .band-single.band-container .meta-container .event-links a,
+      .band-single.band-container .mobile-meta-con .event-links a {
+        color: white; }
+      .band-single.band-container .meta-container .event-links i.far,
+      .band-single.band-container .meta-container .event-links i.fas,
+      .band-single.band-container .meta-container .event-links i.fab,
+      .band-single.band-container .mobile-meta-con .event-links i.far,
+      .band-single.band-container .mobile-meta-con .event-links i.fas,
+      .band-single.band-container .mobile-meta-con .event-links i.fab {
+        font-size: 1.5em;
+        margin: 0.1em 0.3em; }
 
 #plek-search-page {
   padding: 0 1em; }
@@ -1644,7 +1653,9 @@ ul.partner-container {
   left: calc(-49vw + 50%);
   width: 94vw;
   margin: 0 2vw; }
-  .plek-post-type-team-calendar table, .plek-post-type-team-calendar td, .plek-post-type-team-calendar th {
+  .plek-post-type-team-calendar table,
+  .plek-post-type-team-calendar td,
+  .plek-post-type-team-calendar th {
     border-color: #595959; }
   .plek-post-type-team-calendar td {
     color: white; }

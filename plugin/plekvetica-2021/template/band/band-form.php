@@ -79,7 +79,7 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
                 $instructions = (isset($attr['instructions'])) ? $attr['instructions'] : '';
                 $form_id = (isset($attr['form_id'])) ? $attr['form_id'] : 'band-link-' . $slug;
                 $acf_id = (isset($attr['acf_id'])) ? $attr['acf_id'] : '';
-                $social_link =  $band->get_social_link($acf_id);
+                $social_link =  $band->get_social_link($acf_id, false);
                 $fa_class = (isset($attr['fa_class'])) ? $attr['fa_class'] : '';
                 ?>
 

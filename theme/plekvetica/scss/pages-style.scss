@@ -1,21 +1,21 @@
-
 //Startpage ID
-#post-27146{
-    .info-text-line{
+#post-27146 {
+    .info-text-line {
         position: absolute;
         left: 0;
         color: $color-gray-light-two;
     }
+
     .plek-event-type-youtube,
-    .plek-event-type-tribe_events{
+    .plek-event-type-tribe_events {
         margin-left: 5%;
     }
 
-    .wp-block-separator{
-        border-top: 1px solid rgba(0,0,0,.1);
+    .wp-block-separator {
+        border-top: 1px solid rgba(0, 0, 0, .1);
     }
-    
-    .plek-pre-button-seperator{
+
+    .plek-pre-button-seperator {
         flex-basis: 31.33% !important;
     }
 
@@ -23,98 +23,102 @@
         margin-left: 0;
     }
 
-    .wp-block-buttons > .wp-block-button.plek-start-page{
+    .wp-block-buttons>.wp-block-button.plek-start-page {
         width: 30%;
         margin-left: 0;
-    
+
     }
 
 }
 
 //Kalender - Overview
-.tribe-events-view .tribe-common-l-container.tribe-events-l-container{
+.tribe-events-view .tribe-common-l-container.tribe-events-l-container {
     padding-top: 1.8em;
 }
-.post-type-archive-tribe_events .entry-header{
+
+.post-type-archive-tribe_events .entry-header {
     padding: 40px 0 0 40px;
 }
 
 //Single Event
-#tribe-events-pg-template .single-view{
+#tribe-events-pg-template .single-view {
 
-    .info-text-bar{
+    .info-text-bar {
         width: 100%;
     }
 
-    #event-content{
+    #event-content {
         padding: 0 1em 0 0;
         width: 70%;
 
         /* YotuWP*/
-        .yotu-playlist{
-            padding:0;
+        .yotu-playlist {
+            padding: 0;
         }
-        .video-container{
-            display:flex;
+
+        .video-container {
+            display: flex;
             flex-direction: row;
             justify-content: space-between;
             flex-wrap: wrap;
 
- 
 
-            .video-band-container{
-                width:48%;
+
+            .video-band-container {
+                width: 48%;
             }
-            .yotu-videos li{
+
+            .yotu-videos li {
                 //flex: 1;
                 //flex-basis: 100%;
             }
         }
     }
-    
-    #event-meta{
+
+    #event-meta {
         padding: 0 0 0 1em;
         width: 30%;
 
         .date-from,
-        .date-to{
+        .date-to {
             white-space: nowrap;
         }
-        .date-seperator{
+
+        .date-seperator {
             width: 100%;
             display: block;
             padding-left: 0.5em;
         }
-        
-        .meta-content{
+
+        .meta-content {
             padding: 0.5em 0.3em;
 
-            a{
+            a {
                 color: $text-color;
             }
 
-            dl{
+            dl {
                 margin-bottom: 0.5em;
 
             }
 
-            dt{
+            dt {
                 font-weight: bold;
 
-                &::after{
+                &::after {
                     content: ':';
                 }
 
             }
 
-            dd{
+            dd {
                 margin: 0 0 0 0.6em;
             }
 
-        
+
             i.far,
             i.fas,
-            i.fab{
+            i.fab {
                 font-size: 1.5em;
                 margin: 0.5em;
             }
@@ -122,99 +126,102 @@
 
 
             .event-links,
-            .organi-contact{
-                img{
+            .organi-contact {
+                img {
                     max-height: 1.5em;
                 }
-                i:first-child{
-                    margin-left:0;
+
+                i:first-child {
+                    margin-left: 0;
                 }
-     
+
             }
 
-            .author-image{
-                img{
+            .author-image {
+                img {
                     max-width: 3em;
                 }
             }
 
         }
 
-        .band{
+        .band {
             display: flex;
             flex-wrap: nowrap;
             justify-content: flex-start;
             margin-bottom: 0.2em;
         }
 
-        .band-name a{
+        .band-name a {
             color: $text-color;
             font-weight: bold;
         }
-        .band-genre{
+
+        .band-genre {
             font-size: 0.8em;
             color: $color-gray-light-two;
         }
 
-        .band-flag{
+        .band-flag {
             align-self: center;
             width: 1.5em;
             margin-right: 0.5em;
             flex: 0 0 1.5em;
 
-            img{
+            img {
                 width: 100%;
             }
         }
 
-        .info-text-bar{
+        .info-text-bar {
             margin-bottom: 0.1em;
 
-            &:not(:first-child){
+            &:not(:first-child) {
                 margin-top: 1.3em;
             }
         }
 
-        #event-genres{
+        #event-genres {
             padding: 0;
             margin: 0;
 
-            li{
+            li {
                 list-style: none;
             }
 
-            a{
+            a {
                 color: $text-color;
             }
         }
     }
 
-    .event-poster{
+    .event-poster {
         text-align: center;
 
-        .info-text-banner:nth-child(3){
+        .info-text-banner:nth-child(3) {
             top: -42px;
             width: 44%;
-        } 
+        }
 
-        .banner-text a{
+        .banner-text a {
             color: $text-color;
         }
     }
 
-    .event-title-container{
+    .event-title-container {
         margin-bottom: 1.5em;
 
-        .event-title h1{
+        .event-title h1 {
             margin-bottom: 0;
         }
-        .event-venue{
+
+        .event-venue {
             color: $color-gray-light-two;
         }
     }
-    
-    .event-interview-band{
-        span:before{
+
+    .event-interview-band {
+        span:before {
             width: 1.5em;
             display: inline-block;
         }
@@ -223,13 +230,13 @@
 
 /* Win & Partner*/
 
-ul.partner-container{
+ul.partner-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
     margin-left: 0;
 
-    li{
+    li {
         max-width: 200px;
         display: flex;
         flex-direction: column;
@@ -238,136 +245,147 @@ ul.partner-container{
         text-align: center;
         flex-basis: 200px;
     }
-    .wp-block-latest-posts__featured-image.alignleft{
+
+    .wp-block-latest-posts__featured-image.alignleft {
         margin: 0;
     }
 }
 
 /* Author */
-.plek-author-container{
+.plek-author-container {
     padding: 1em;
 
-    .plek-author-meta{
+    .plek-author-meta {
         display: flex;
         justify-content: flex-start;
     }
-    .plek-author-image{
+
+    .plek-author-image {
         padding-right: 1.5em;
         width: 100%;
         max-width: 200px;
     }
 
-    .info-text-bar{
+    .info-text-bar {
         width: 40%
     }
 }
 
 /* Gallery*/
-.page.plek_is_gallery{
+.page.plek_is_gallery {
 
-.site-content{
-    display:flex;
-    flex-direction: column;
-}
+    .site-content {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 //My Plekvetica
 
-#plek-login-container{
+#plek-login-container {
     position: relative;
 }
 
-.my-plek-header{
+.my-plek-header {
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
     margin-bottom: 2em;
-    
-    h1{
+
+    h1 {
         flex-basis: 100%;
     }
 
-    h2{
+    h2 {
         font-size: 1.3em;
     }
 
-    div{
+    div {
         flex-basis: 50%;
     }
-    div:nth-child(3){
+
+    div:nth-child(3) {
         text-align: right;
     }
 
     .logout-link a::after,
-    .settings-link a::after{
+    .settings-link a::after {
         font-family: "FontAwesome";
         padding-left: 0.5em;
     }
-    .logout-link a::after{
+
+    .logout-link a::after {
         content: '\f2f5';
     }
-    .settings-link a::after{
+
+    .settings-link a::after {
         content: '\f013';
     }
 }
-.my-plek-container{
+
+.my-plek-container {
 
     .my-plek-head-container {
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
-  
-        .this-week-posts{
+
+        .this-week-posts {
             margin-bottom: 1em;
         }
 
         .this-week-posts,
         .missing-reviews-posts,
         .organizer-data,
-        .band-data{
+        .band-data {
             flex-basis: 49%;
             flex-grow: 1;
         }
-        .organizer-data{
+
+        .organizer-data {
             dd {
                 margin: 0 1.5em 0.5em;
-            }   
-            .info{
+            }
+
+            .info {
                 color: $color-gray-light;
-            }         
+            }
         }
-        .band-data{
+
+        .band-data {
             text-align: right;
-            dd{
+
+            dd {
                 margin: 0.8em 0;
 
-                a:first-child{
+                a:first-child {
                     color: $text-color;
                     padding-right: 0.8em;
                 }
             }
-            
-            img{
+
+            img {
                 max-height: 1.2em;
                 margin-right: 0.5em;
                 position: relative;
                 top: 0.2em;
             }
-            
+
         }
     }
 
     .my-plek-head-container,
     .followed-bands,
     .watchlist-posts,
-    .all-posts{
+    .all-posts {
         margin-bottom: 1em;
     }
-    .info-text-bar{
+
+    .info-text-bar {
         width: 100%;
     }
 
-    .plek-no-open-reviews:after{
+    .plek-no-open-reviews:after {
         content: '😃';
         margin-left: 0.7em;
     }
@@ -375,43 +393,55 @@ ul.partner-container{
 
 //Bandpage / Tag page
 
-.band-single.band-container{
+.band-single.band-container {
     display: flex;
     column-gap: 5%;
 
-    .info-text-bar{
+    .info-text-bar {
         width: 100%;
         margin: 0.2em 0;
     }
 
-    .band-content{
+    .band-content {
         flex-basis: 70%;
     }
+
     .meta-container,
-    .mobile-meta-con{
+    .mobile-meta-con {
         flex-basis: 30%;
         margin-top: 3.8em;
         padding-right: 1em;
         display: none;
 
-        ul{
+        ul {
             list-style: none;
             margin: 0;
             padding: 0;
         }
 
-        .band-flag img{
+        .band-flag img {
             max-height: 1.2em;
             vertical-align: sub;
         }
-        .event-links{
-            a{
-                color:$text-color;
+
+
+        .event-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+
+            span {
+                flex-basis: 3em;
+                text-align: center;
+            }
+
+            a {
+                color: $text-color;
             }
 
             i.far,
             i.fas,
-            i.fab{
+            i.fab {
                 font-size: 1.5em;
                 margin: 0.1em 0.3em;
             }
@@ -420,117 +450,121 @@ ul.partner-container{
 }
 
 //Search Page
-#plek-search-page{
+#plek-search-page {
 
     padding: 0 1em;
 
-    .info-text-bar{
+    .info-text-bar {
         width: 100%;
         margin: 0.2em 0;
     }
 
-    .plek_album_con{
+    .plek_album_con {
         justify-content: center;
-    
-        .image_container{
+
+        .image_container {
             width: 23.5%;
             min-width: 200px;
         }
     }
 
-    .plek-search-bands{
+    .plek-search-bands {
         display: flex;
         flex-wrap: wrap;
         row-gap: 2%;
 
-        .band-list-item{
+        .band-list-item {
             flex-basis: 49%;
         }
-        .band{
+
+        .band {
             display: flex;
             flex-direction: row;
         }
-        .band-flag{
+
+        .band-flag {
             margin-top: 0.8em;
             margin-right: 1em;
         }
-   }
-   .tribe-events-calendar-list__event{
-       margin:0.2em 0;
-   }
+    }
+
+    .tribe-events-calendar-list__event {
+        margin: 0.2em 0;
+    }
 }
 
 //Team Calendar
-.plek-post-type-team-calendar{
+.plek-post-type-team-calendar {
     color: $text-color;
     color: white;
     position: relative;
     left: calc(-49vw + 50%);
     width: 94vw;
     margin: 0 2vw;
-    
-    table, td, th{
+
+    table,
+    td,
+    th {
         border-color: $color-gray-light;
     }
 
-    td{
-      color: $text-color;
+    td {
+        color: $text-color;
     }
 
-    thead{
+    thead {
         background-color: $color-red-dark;
     }
 
-    .event_poster{
+    .event_poster {
         max-width: 150px;
     }
-    
-    .event-canceled .event_name{
+
+    .event-canceled .event_name {
         text-decoration: line-through;
     }
 
     .event-organizer,
-    .event-location{
+    .event-location {
         padding-left: 2rem;
         position: relative;
         padding-bottom: 0.5rem;
     }
 
     .event-organizer::before,
-    .event-location::before{
+    .event-location::before {
         font-family: 'FontAwesome';
         left: 0;
         position: absolute;
     }
-    
-    .event-organizer::before{
+
+    .event-organizer::before {
         content: '\f0c0';
     }
-    
-    .event-location::before{
+
+    .event-location::before {
         content: '\f015';
     }
 
-    .event-organi-and-location{
+    .event-organi-and-location {
         padding-left: 2rem;
         position: relative;
         padding-bottom: 0.5rem;
 
-        &::before{
+        &::before {
             font-family: 'FontAwesome';
             left: 0;
             top: -1rem;
             position: absolute;
-            content: '\f0c0'; 
+            content: '\f0c0';
         }
-        &::after{
+
+        &::after {
             font-family: 'FontAwesome';
             left: 0;
             top: 1rem;
             position: absolute;
-            content: '\f015'; 
+            content: '\f015';
         }
     }
-  }
-  
-
+}

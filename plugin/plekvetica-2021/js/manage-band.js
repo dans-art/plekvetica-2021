@@ -295,10 +295,15 @@ let plek_band = {
         data.append('band-logo', '666'); //This is just a placeholder for the validator to validate.
         data.set('band-link-youtube', this.get_id_from_url(data.get('band-link-youtube'), 'youtube'));
         data.set('band-link-spotify', this.get_id_from_url(data.get('band-link-spotify'), 'spotify'));
-        debugger;
         return data;
     },
 
+    /**
+     * Gets the ID for an URL
+     * @param {string} url The URL
+     * @param {string} site The Site to extract the ID from the url
+     * @returns string The ID
+     */
     get_id_from_url(url, site) {
         switch (site) {
             case "youtube-deactivated": //This is not used at the moment.
@@ -434,7 +439,8 @@ let plek_band = {
                     id: data.id,
                     name: data.name,
                     popularity: data.popularity,
-                    followers: data.followers.total
+                    followers: data.followers.total,
+                    image: data.images[0].url
                 }
                 jQuery('#band-infos').val(JSON.stringify(band_infos));
             },
