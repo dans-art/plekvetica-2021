@@ -39,9 +39,16 @@ class PlekHandler
         return $debug;
     }
 
-    public function get_plek_option(string $options_name = '')
+    /**
+     * Loads an option form the plekvetica options
+     *
+     * @param string $options_name - The name of the options field
+     * @param string $option_group - The name of the group. (plek_general_options, plek_api_options)
+     * @return string The Option Value
+     */
+    public function get_plek_option(string $options_name = '', $option_group = 'plek_general_options')
     {
-        $options = get_option('plek_general_options');
+        $options = get_option($option_group);
         if (empty($options_name)) {
             return null;
         }

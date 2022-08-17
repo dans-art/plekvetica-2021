@@ -307,13 +307,19 @@ class PlekBandHandler
 
     /**
      * Get the Band logo, wraped in img tags.
+     * If an image from the spotify data is found, it will display it, if no bandlogo is set.
      *
      * @return string Band logo as img tag
      */
     public function get_logo_formated()
     {
-        $img =  (!empty($this->band['bandlogo'])) ? $this->band['bandlogo'] : $this->bandpic_placeholder;
-        return "<img src='$img' alt='" . sprintf(__('Bandlogo of &quot;%s&quot;'), $this->get_name()) . "'/>";
+        if (!empty($this->band['bandlogo'])) {
+            return "<img src='" . $this->band['bandlogo'] . "' alt='" . $this->get_name() . "'/>";
+        }
+        if (!empty($this->get_spotify_data('image'))) {
+            return "<img src='" . $this->get_spotify_data('image') . "' alt='" . $this->get_name() . "'/>";
+        }
+        return "<img src='$this->bandpic_placeholder' alt='" . $this->get_name() . "'/>";
     }
 
     /**
@@ -391,7 +397,7 @@ class PlekBandHandler
     public function get_social_link($id, $convert_to_url = true)
     {
         $url_id = (isset($this->band[$id])) ? $this->band[$id] : ''; //URL or ID of the social media site.
-        if($convert_to_url === false){
+        if ($convert_to_url === false) {
             return $url_id; //Don't modify anything, just take the data as it is.
         }
         switch ($id) {
@@ -1388,21 +1394,22 @@ class PlekBandHandler
      *
      * @return false|null|string|object - False on error, null when the field is not found, string for the field data and object if the $field is null
      */
-    public function get_spotify_data($field = null){
+    public function get_spotify_data($field = null)
+    {
         $spotify_data = (isset($this->band['fetched_spotify_data'])) ? $this->band['fetched_spotify_data'] : '';
-        if(empty($spotify_data)){
+        if (empty($spotify_data)) {
             return false;
         }
         $encoded_html = html_entity_decode($spotify_data);
-        if(!$encoded_html){
+        if (!$encoded_html) {
             return false;
         }
         $object = json_decode($encoded_html);
-        if(!$object){
+        if (!$object) {
             return false;
         }
-        if(is_string($field)){
-            return (isset($object->{$field})) ? $object->{$field}: null;
+        if (is_string($field)) {
+            return (isset($object->{$field})) ? $object->{$field} : null;
         }
         return $object;
     }

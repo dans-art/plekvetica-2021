@@ -74,9 +74,11 @@ class PlekBackend /*extends WP_List_Table*/
 
         //register_setting('plek_facebook_options', 'plek_facebook_options', [$this, 'plek_options_validate']);
         register_setting('plek_general_options', 'plek_general_options', [$this, 'plek_options_validate']);
+        register_setting('plek_api_options', 'plek_api_options', [$this, 'plek_options_validate']);
 
         add_settings_section('plek_event_settings', 'Eventeinstellungen', null, 'plek_general_options');
-        add_settings_section('plek_facebook_settings', 'Facebook', null, 'plek_general_options');
+        add_settings_section('plek_facebook_settings', 'Facebook', null, 'plek_api_options');
+        add_settings_section('plek_spotify_settings', 'Spotify', null, 'plek_api_options');
 
         add_settings_field('plek_seetickets_logo', 'SeeTickets (Starticket) Logo', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'plek_seetickets_logo', 'type' => 'file', 'class' => 'logo_image'));
         add_settings_field('plek_ticketcorner_logo', 'Ticketcorner Logo', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'plek_ticketcorner_logo', 'type' => 'file', 'class' => 'logo_image'));
@@ -96,14 +98,81 @@ class PlekBackend /*extends WP_List_Table*/
         add_settings_field('it_support_email', 'Email vom IT Support', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'it_support_email', 'type' => 'input'));
         add_settings_field('akkredi_user_id', 'ID vom Akkreditations Manager', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'akkredi_user_id', 'type' => 'input'));
 
-        add_settings_field('plek_facebook_enable_autopost', 'Enable Facebook Autopost', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_enable_autopost', 'type' => 'checkbox'));
-        add_settings_field('plek_facebook_page_id', 'Page ID', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_page_id', 'type' => 'input'));
-        add_settings_field('plek_facebook_app_id', 'App ID', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_app_id', 'type' => 'input'));
-        add_settings_field('plek_facebook_app_secret', 'App Secret', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_app_secret', 'type' => 'input'));
-        add_settings_field('plek_facebook_page_token', 'Page Token', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_facebook_page_token', 'type' => 'input'));
+        //Spotify / Facebook API
+        add_settings_field(
+            'plek_facebook_enable_autopost',
+            'Enable Facebook Autopost',
+            [$this, 'get_settings_option'],
+            'plek_api_options',
+            'plek_facebook_settings',
+            array('label_for' => 'plek_facebook_enable_autopost', 'type' => 'checkbox','option_name' => 'plek_api_options')
+        );
+        add_settings_field(
+            'plek_facebook_page_id',
+            'Page ID',
+            [$this, 'get_settings_option'],
+            'plek_api_options',
+            'plek_facebook_settings',
+            array('label_for' => 'plek_facebook_page_id', 'type' => 'input','option_name' => 'plek_api_options')
+        );
+        add_settings_field(
+            'plek_facebook_app_id',
+            'App ID',
+            [$this, 'get_settings_option'],
+            'plek_api_options',
+            'plek_facebook_settings',
+            array('label_for' => 'plek_facebook_app_id', 'type' => 'input','option_name' => 'plek_api_options')
+        );
+        add_settings_field(
+            'plek_facebook_app_secret',
+            'App Secret',
+            [$this, 'get_settings_option'],
+            'plek_api_options',
+            'plek_facebook_settings',
+            array('label_for' => 'plek_facebook_app_secret', 'type' => 'input','option_name' => 'plek_api_options')
+        );
+        add_settings_field(
+            'plek_facebook_app_secret',
+            'App Secret',
+            [$this, 'get_settings_option'],
+            'plek_api_options',
+            'plek_facebook_settings',
+            array('label_for' => 'plek_facebook_app_secret', 'type' => 'input','option_name' => 'plek_api_options')
+        );
 
         //Spotify
-        add_settings_field('plek_spotify_oauth_token', 'Spotify OAuth Token', [$this, 'get_settings_option'], 'plek_general_options', 'plek_facebook_settings', array('label_for' => 'plek_spotify_oauth_token', 'type' => 'input'));
+        add_settings_field(
+            'plek_spotify_client_id',
+            'Spotify Client ID',
+            [$this, 'get_settings_option'],
+            'plek_api_options',
+            'plek_spotify_settings',
+            array('label_for' => 'plek_spotify_client_id', 'type' => 'input', 'option_name' => 'plek_api_options')
+        );
+        add_settings_field(
+            'plek_spotify_client_secret',
+            'Spotify Client Secret',
+            [$this, 'get_settings_option'],
+            'plek_api_options',
+            'plek_spotify_settings',
+            array('label_for' => 'plek_spotify_client_secret', 'type' => 'input', 'option_name' => 'plek_api_options')
+        );
+        add_settings_field(
+            'plek_spotify_redirect_url',
+            'Spotify Redirect URL',
+            [$this, 'get_settings_option'],
+            'plek_api_options',
+            'plek_spotify_settings',
+            array('label_for' => 'plek_spotify_redirect_url', 'type' => 'input', 'option_name' => 'plek_api_options')
+        );
+        add_settings_field(
+            'plek_spotify_oauth_token',
+            'Spotify OAuth Token',
+            [$this, 'get_settings_option'],
+            'plek_api_options',
+            'plek_spotify_settings',
+            array('label_for' => 'plek_spotify_oauth_token', 'type' => 'input', 'option_name' => 'plek_api_options')
+        );
     }
 
     /**
@@ -140,18 +209,19 @@ class PlekBackend /*extends WP_List_Table*/
     public function get_settings_option(array $args)
     {
         extract($args);
-        $options = (array) get_option('plek_general_options');
+        $option_name = (isset($args['option_name'])) ? $args['option_name'] : 'plek_general_options';
+        $options = (array) get_option($option_name);
         $options_val = (isset($options[$label_for])) ? $options[$label_for] : '';
         switch ($type) {
             case 'input':
-                echo "<input id='$label_for' name='plek_general_options[$label_for]' type='text' value='$options_val'/>";
+                echo "<input id='$label_for' name='".$option_name."[$label_for]' type='text' value='$options_val'/>";
                 break;
             case 'textarea':
-                echo "<textarea id='$label_for' name='plek_general_options[$label_for]' type='text'>{$options_val}</textarea>";
+                echo "<textarea id='$label_for' name='".$option_name."[$label_for]' type='text'>{$options_val}</textarea>";
                 break;
             case 'checkbox':
                 $checked = ($options_val === 'yes') ? 'checked' : '';
-                echo "<input id='$label_for' name='plek_general_options[$label_for]' type='checkbox' value='yes' $checked />";
+                echo "<input id='$label_for' name='".$option_name."[$label_for]' type='checkbox' value='yes' $checked />";
                 break;
             case 'file':
                 echo (!empty($options_val)) ? "<img src='$options_val' />" : "No Image uploaded.";

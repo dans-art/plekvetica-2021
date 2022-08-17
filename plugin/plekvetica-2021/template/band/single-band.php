@@ -25,7 +25,6 @@ $band_event_block = $plek_event_blocks->get_block('band_events', array('band_id'
         </h1>
         <div class='image-con'>
             <?php echo $band->get_logo_formated(); ?>
-            <?php  s($band->get_spotify_data()); ?>
         </div>
         <div class='description-con'>
             <?php echo wpautop($band->get_description()); ?>
