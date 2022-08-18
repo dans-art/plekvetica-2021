@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2022-08-18 15:53+0000\n"
+"PO-Revision-Date: 2022-08-18 15:52+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -1306,6 +1306,7 @@ msgid "New account"
 msgstr "Neues Konto"
 
 #: include/class/ajax-handler.php:640
+#, fuzzy
 #| msgid "New account created! Check your email to complete the sign up."
 msgid "New account created! Check your email to complete the sign-up."
 msgstr ""
@@ -1992,7 +1993,7 @@ msgstr "Spotify"
 
 #: js/components/error-handler.js:102
 msgid "Spotify request error"
-msgstr "Fehler bei der Spotify Anfrage"
+msgstr "Fehler bei der Spotify anfrage"
 
 #: include/class/event-handler.php:2810
 msgid "Start Date"
