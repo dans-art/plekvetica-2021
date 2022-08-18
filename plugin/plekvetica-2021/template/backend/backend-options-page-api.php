@@ -31,16 +31,22 @@ $session = new SpotifyWebAPI\Session(
 
 $state = $session->generateState();
 $options = [
-    'scope' => [
-    ],
+    'scope' => [],
     'state' => $state,
 ];
-$spotify_api = new SpotifyWebAPI\SpotifyWebAPI();
-$spotify_api->setAccessToken($oauth_token);
-$spotify_me = $spotify_api->me();
-if(isset($spotify_me->display_name)){
-    echo __('Logged in as:','pleklang') . ' ' .$spotify_me->display_name . '<br/>';
+
+//Display logged in user
+try {
+    $spotify_api = new SpotifyWebAPI\SpotifyWebAPI();
+    $spotify_api->setAccessToken($oauth_token);
+    $spotify_me = $spotify_api->me();
+    if (isset($spotify_me->display_name)) {
+        echo __('Logged in as:', 'pleklang') . ' ' . $spotify_me->display_name . '<br/>';
+    }
+} catch (\Throwable $th) {
+    echo $th;
 }
+
 echo  "<a target='_blank' href='" . $session->getAuthorizeUrl($options) . "'>Authorize</a>";
 
 
