@@ -32,29 +32,7 @@ s(PlekNotificationHandler::remove_cookie_by_value('added_edit_event', 68682, tim
 $pb = new PlekBandHandler;
 $pb->enqueue_form_scripts();
 
-global $plek_handler;
-$client_id = $plek_handler->get_plek_option('plek_spotify_client_id','plek_api_options');
-$client_secret = $plek_handler->get_plek_option('plek_spotify_client_secret','plek_api_options');
 
-require PLEK_PATH.'vendor/autoload.php';
-
-$session = new SpotifyWebAPI\Session(
-    $client_id,
-    $client_secret,
-    'https://2021.plekvetica/codetester/'
-);
-s($session);
-$state = $session->generateState();
-$options = [
-    'scope' => [
-        'playlist-read-private',
-        'user-read-private',
-    ],
-    'state' => $state,
-];
-
-header('Location: ' . $session->getAuthorizeUrl($options));
-die();
 
 PlekTemplateHandler::load_template('js-settings', 'components', 'init_spotify');
 ?>

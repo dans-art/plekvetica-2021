@@ -105,7 +105,7 @@ class PlekBackend /*extends WP_List_Table*/
             [$this, 'get_settings_option'],
             'plek_api_options',
             'plek_facebook_settings',
-            array('label_for' => 'plek_facebook_enable_autopost', 'type' => 'checkbox','option_name' => 'plek_api_options')
+            array('label_for' => 'plek_facebook_enable_autopost', 'type' => 'checkbox', 'option_name' => 'plek_api_options')
         );
         add_settings_field(
             'plek_facebook_page_id',
@@ -113,7 +113,7 @@ class PlekBackend /*extends WP_List_Table*/
             [$this, 'get_settings_option'],
             'plek_api_options',
             'plek_facebook_settings',
-            array('label_for' => 'plek_facebook_page_id', 'type' => 'input','option_name' => 'plek_api_options')
+            array('label_for' => 'plek_facebook_page_id', 'type' => 'input', 'option_name' => 'plek_api_options')
         );
         add_settings_field(
             'plek_facebook_app_id',
@@ -121,7 +121,7 @@ class PlekBackend /*extends WP_List_Table*/
             [$this, 'get_settings_option'],
             'plek_api_options',
             'plek_facebook_settings',
-            array('label_for' => 'plek_facebook_app_id', 'type' => 'input','option_name' => 'plek_api_options')
+            array('label_for' => 'plek_facebook_app_id', 'type' => 'input', 'option_name' => 'plek_api_options')
         );
         add_settings_field(
             'plek_facebook_app_secret',
@@ -129,7 +129,7 @@ class PlekBackend /*extends WP_List_Table*/
             [$this, 'get_settings_option'],
             'plek_api_options',
             'plek_facebook_settings',
-            array('label_for' => 'plek_facebook_app_secret', 'type' => 'input','option_name' => 'plek_api_options')
+            array('label_for' => 'plek_facebook_app_secret', 'type' => 'input', 'option_name' => 'plek_api_options')
         );
         add_settings_field(
             'plek_facebook_app_secret',
@@ -137,7 +137,7 @@ class PlekBackend /*extends WP_List_Table*/
             [$this, 'get_settings_option'],
             'plek_api_options',
             'plek_facebook_settings',
-            array('label_for' => 'plek_facebook_app_secret', 'type' => 'input','option_name' => 'plek_api_options')
+            array('label_for' => 'plek_facebook_app_secret', 'type' => 'input', 'option_name' => 'plek_api_options')
         );
 
         //Spotify
@@ -158,20 +158,12 @@ class PlekBackend /*extends WP_List_Table*/
             array('label_for' => 'plek_spotify_client_secret', 'type' => 'input', 'option_name' => 'plek_api_options')
         );
         add_settings_field(
-            'plek_spotify_redirect_url',
-            'Spotify Redirect URL',
-            [$this, 'get_settings_option'],
-            'plek_api_options',
-            'plek_spotify_settings',
-            array('label_for' => 'plek_spotify_redirect_url', 'type' => 'input', 'option_name' => 'plek_api_options')
-        );
-        add_settings_field(
             'plek_spotify_oauth_token',
             'Spotify OAuth Token',
             [$this, 'get_settings_option'],
             'plek_api_options',
             'plek_spotify_settings',
-            array('label_for' => 'plek_spotify_oauth_token', 'type' => 'input', 'option_name' => 'plek_api_options')
+            array('label_for' => 'plek_spotify_oauth_token', 'type' => 'spotify_token', 'option_name' => 'plek_api_options')
         );
     }
 
@@ -212,16 +204,26 @@ class PlekBackend /*extends WP_List_Table*/
         $option_name = (isset($args['option_name'])) ? $args['option_name'] : 'plek_general_options';
         $options = (array) get_option($option_name);
         $options_val = (isset($options[$label_for])) ? $options[$label_for] : '';
+
         switch ($type) {
+            case 'spotify_token':
+                $new_token = $this->maybe_get_spotify_token();
+                if($new_token){
+                    echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='$new_token'/><br/>";
+                    echo __('The Token got updated. Please save the from.','pleklang');
+                }else{
+                    echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='$options_val'/>";
+                }
+                break;
             case 'input':
-                echo "<input id='$label_for' name='".$option_name."[$label_for]' type='text' value='$options_val'/>";
+                echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='$options_val'/>";
                 break;
             case 'textarea':
-                echo "<textarea id='$label_for' name='".$option_name."[$label_for]' type='text'>{$options_val}</textarea>";
+                echo "<textarea id='$label_for' name='" . $option_name . "[$label_for]' type='text'>{$options_val}</textarea>";
                 break;
             case 'checkbox':
                 $checked = ($options_val === 'yes') ? 'checked' : '';
-                echo "<input id='$label_for' name='".$option_name."[$label_for]' type='checkbox' value='yes' $checked />";
+                echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='checkbox' value='yes' $checked />";
                 break;
             case 'file':
                 echo (!empty($options_val)) ? "<img src='$options_val' />" : "No Image uploaded.";
@@ -237,5 +239,44 @@ class PlekBackend /*extends WP_List_Table*/
     public function enqueue_admin_style()
     {
         wp_enqueue_style('plek-admin-style', PLEK_PLUGIN_DIR_URL . 'css/admin-style.min.css');
+    }
+
+    /**
+     * Get the spotify access token. This must be called on the site where the spotify login screen redirects.
+     *
+     * @return string|false
+     */
+    public function maybe_get_spotify_token()
+    {
+        global $plek_handler;
+        require PLEK_PATH . 'vendor/autoload.php';
+
+        $client_id = $plek_handler->get_plek_option('plek_spotify_client_id', 'plek_api_options');
+        $client_secret = $plek_handler->get_plek_option('plek_spotify_client_secret', 'plek_api_options');
+        $redirect_url = esc_url(admin_url('options.php')) . '?page=plek-options&tab=api';
+
+        $session = new SpotifyWebAPI\Session(
+            $client_id,
+            $client_secret,
+            $redirect_url
+        );
+
+
+        $state = $session->generateState();
+        $options = [
+            'scope' => [],
+            'state' => $state,
+        ];
+
+        if (isset($_GET['code']) AND !isset($_REQUEST['settings-updated'])) {
+            try {
+                $session->requestAccessToken($_GET['code']);
+                return $session->getAccessToken();
+            } catch (\Throwable $th) {
+                return false;
+            }
+        }else{
+            false;
+        }
     }
 }
