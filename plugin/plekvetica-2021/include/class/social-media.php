@@ -135,4 +135,98 @@ class plekSocialMedia
         }
         return false;
     }
+
+    /**
+     * Get the spotify access token. This must be called on the site where the spotify login screen redirects.
+     *
+     * @return string|false
+     */
+    public function maybe_get_spotify_token()
+    {
+        $session = $this->get_spotify_session();
+
+        if (isset($_GET['code']) and !isset($_REQUEST['settings-updated'])) {
+            try {
+                $session->requestAccessToken($_GET['code']);
+                return $session->getAccessToken();
+            } catch (\Throwable $th) {
+                return false;
+            }
+        } else {
+            false;
+        }
+    }
+
+    /**
+     * Tries to get the spotify user name
+     *
+     * @return string|error String on success, error Throwable on error
+     */
+    public function get_spotify_user_name()
+    {
+        //Spotify
+        //Checks if the current token is valid and returns the logged in user
+        global $plek_handler;
+        $oauth_token = $plek_handler->get_plek_option('plek_spotify_oauth_token', 'plek_api_options');
+
+        //do_settings_sections('plek_facebook_options');
+        $session = $this->get_spotify_session();
+
+        $state = $session->generateState();
+        $options = [
+            'scope' => [],
+            'state' => $state,
+        ];
+        //Display logged in user
+        try {
+            $spotify_api = new SpotifyWebAPI\SpotifyWebAPI();
+            $spotify_api->setAccessToken($oauth_token);
+            $spotify_me = $spotify_api->me();
+            if (isset($spotify_me->display_name)) {
+                return __('Logged in as:', 'pleklang') . ' ' . $spotify_me->display_name . '<br/>';
+            }
+        } catch (\Throwable $th) {
+            return $th;
+        }
+    }
+
+    /**
+     * Receives the authentification link to the spotify login
+     *
+     * @return void
+     */
+    public function get_spotify_auth_link()
+    {
+        $session = $this->get_spotify_session();
+
+        $state = $session->generateState();
+        $options = [
+            'scope' => [],
+            'state' => $state,
+        ];
+        return  "<a target='_blank' href='" . $session->getAuthorizeUrl($options) . "'>Authorize</a>";
+    }
+
+    /**
+     * Loads the spotify session
+     *
+     * @return object Spotify session object
+     */
+    public function get_spotify_session($redirect_url = null)
+    {
+        global $plek_handler;
+        $client_id = $plek_handler->get_plek_option('plek_spotify_client_id', 'plek_api_options');
+        $client_secret = $plek_handler->get_plek_option('plek_spotify_client_secret', 'plek_api_options');
+        $redirect_url = (empty($redirect_url)) ? esc_url(admin_url('options.php')) . '?page=plek-options&tab=api' : $redirect_url;
+
+        require PLEK_PATH . 'vendor/autoload.php';
+
+        $session = new SpotifyWebAPI\Session(
+            $client_id,
+            $client_secret,
+            $redirect_url
+        );
+
+        return $session;
+    }
 }
