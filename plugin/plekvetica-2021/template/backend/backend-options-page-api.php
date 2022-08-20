@@ -13,7 +13,6 @@ $page = esc_url(add_query_arg('tab', 'api', admin_url('options.php'))); ?>
 <?php
 $psm = new plekSocialMedia;
 echo $psm->get_spotify_user_name();
-echo $psm->get_spotify_auth_link();
 
 //s($options);
 if (isset($options['plek_facebook_page_id'])) {

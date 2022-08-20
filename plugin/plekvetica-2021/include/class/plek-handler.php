@@ -57,6 +57,23 @@ class PlekHandler
         }
         return $options[$options_name];
     }
+    /**
+     * Updates the option from the given options group
+     *
+     * @param string $options_name
+     * @param mixed $value
+     * @param string $option_group
+     * @return bool True on success, false on error
+     */
+    public function update_plek_option($options_name, $value, $option_group = 'plek_general_options')
+    {
+        $options = get_option($option_group);
+        if (empty($options_name)) {
+            return null; //Name not given
+        }
+        $options[$options_name] = $value; //Update the individual option
+        return update_option($option_group, $options); //Saves the whole options array again.
+    }
 
     /**
      * Get the link to the my-plekvetica page

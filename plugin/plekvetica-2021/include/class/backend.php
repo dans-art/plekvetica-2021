@@ -159,11 +159,19 @@ class PlekBackend /*extends WP_List_Table*/
         );
         add_settings_field(
             'plek_spotify_oauth_token',
-            'Spotify OAuth Token',
+            'Spotify access and refresh token',
             [$this, 'get_settings_option'],
             'plek_api_options',
             'plek_spotify_settings',
             array('label_for' => 'plek_spotify_oauth_token', 'type' => 'spotify_token', 'option_name' => 'plek_api_options')
+        );
+        add_settings_field(
+            'plek_spotify_refresh_token',
+            'Spotify Refresh Token',
+            [$this, 'get_settings_option'],
+            'plek_api_options',
+            'plek_spotify_settings',
+            array('label_for' => 'plek_spotify_refresh_token', 'type' => 'ignore', 'option_name' => 'plek_api_options', 'class' => 'plek-hidden')
         );
     }
 
@@ -200,6 +208,7 @@ class PlekBackend /*extends WP_List_Table*/
      */
     public function get_settings_option(array $args)
     {
+        global $plek_handler;
         extract($args);
         $option_name = (isset($args['option_name'])) ? $args['option_name'] : 'plek_general_options';
         $options = (array) get_option($option_name);
@@ -209,12 +218,19 @@ class PlekBackend /*extends WP_List_Table*/
             case 'spotify_token':
                 $psm = new plekSocialMedia;
                 $new_token = $psm->maybe_get_spotify_token();
-                if($new_token){
-                    echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='$new_token'/><br/>";
-                    echo __('The Token got updated. Please save the from.','pleklang');
-                }else{
-                    echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='$options_val'/>";
+                if (is_array($new_token)) {
+                    //Set the token
+                    $plek_handler->update_plek_option('plek_spotify_oauth_token', $new_token['access_token'], 'plek_api_options');
+                    $plek_handler->update_plek_option('plek_spotify_refresh_token', $new_token['refresh_token'], 'plek_api_options');
                 }
+                if ($new_token) {
+                    echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='" . $new_token['access_token'] . "'/><br/>";
+                    echo "<input id='plek_spotify_refresh_token' name='" . $option_name . "[plek_spotify_refresh_token]' type='text' value='" . $new_token['refresh_token'] . "'/><br/>";
+                } else {
+                    echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='$options_val'/><br/>";
+                    echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='" . $plek_handler->get_plek_option('plek_spotify_refresh_token', 'plek_api_options') . "'/><br/>";
+                }
+                echo __('To get a new token, please authorize via this link:','pleklang') . ' ' . $psm->get_spotify_auth_link();
                 break;
             case 'input':
                 echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='$options_val'/>";
@@ -230,6 +246,9 @@ class PlekBackend /*extends WP_List_Table*/
                 echo (!empty($options_val)) ? "<img src='$options_val' />" : "No Image uploaded.";
                 echo "<input id='$label_for' name='$label_for' type='file'/>";
                 break;
+            case 'ignore':
+                //Do nothing
+                break;
 
             default:
                 # code...
@@ -239,7 +258,8 @@ class PlekBackend /*extends WP_List_Table*/
 
     public function enqueue_admin_style()
     {
-        wp_enqueue_style('plek-admin-style', PLEK_PLUGIN_DIR_URL . 'css/admin-style.min.css');
-    }
+        global $plek_handler;
+        wp_enqueue_style('plek-admin-style', PLEK_PLUGIN_DIR_URL . 'css/admin-style.min.css', [], $plek_handler->version);
 
+    }
 }
