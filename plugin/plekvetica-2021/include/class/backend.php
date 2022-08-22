@@ -58,7 +58,7 @@ class PlekBackend /*extends WP_List_Table*/
             __('Notifications', 'pleklang'),
             __('Notifications', 'pleklang'),
             'manage_options',
-            'plek-options&tab=notifications',
+            'plek-options-notifications',
             [$this, 'render_options'],
         );
 
@@ -67,7 +67,7 @@ class PlekBackend /*extends WP_List_Table*/
             __('Status', 'pleklang'),
             __('Status', 'pleklang'),
             'manage_options',
-            'plek-options&tab=status',
+            'plek-options-status',
             [$this, 'render_options'],
         );
 
@@ -76,7 +76,7 @@ class PlekBackend /*extends WP_List_Table*/
             __('API', 'pleklang'),
             __('API', 'pleklang'),
             'manage_options',
-            'plek-options&tab=api',
+            'plek-options-api',
             [$this, 'render_options'],
         );
     }
@@ -224,6 +224,10 @@ class PlekBackend /*extends WP_List_Table*/
         } else {
             $input['plek_ticketcorner_logo'] =  $plek_handler->get_plek_option('plek_ticketcorner_logo');
         }
+        //Set the refresh token to the last set refresh token
+        if (isset($_GET['tab']) and $_GET['tab'] === 'api'){
+            $input['plek_spotify_refresh_token'] = $plek_handler->get_plek_option('plek_spotify_refresh_token', 'plek_api_options');
+        }
         return $input;
     }
 
@@ -255,7 +259,7 @@ class PlekBackend /*extends WP_List_Table*/
                     echo "<input id='plek_spotify_refresh_token' name='" . $option_name . "[plek_spotify_refresh_token]' type='text' value='" . $new_token['refresh_token'] . "'/><br/>";
                 } else {
                     echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='$options_val'/><br/>";
-                    echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='" . $plek_handler->get_plek_option('plek_spotify_refresh_token', 'plek_api_options') . "'/><br/>";
+                    echo "<input id='plek_spotify_refresh_token' name='" . $option_name . "[plek_spotify_refresh_token]' type='text' value='" . $plek_handler->get_plek_option('plek_spotify_refresh_token', 'plek_api_options') . "'/><br/>";
                 }
                 echo __('To get a new token, please authorize via this link:', 'pleklang') . ' ' . $psm->get_spotify_auth_link();
                 break;

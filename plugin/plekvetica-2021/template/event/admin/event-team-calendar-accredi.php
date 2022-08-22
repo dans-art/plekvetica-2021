@@ -5,6 +5,7 @@ $events = isset($template_args[0]) ?  $template_args[0] : [];
 if (empty($events)) {
     return false;
 }
+$total_open_requests = 0;
 ?>
 
 <div class="tribe-events">
@@ -27,6 +28,9 @@ if (empty($events)) {
                 $loaded_ids[$event->ID] = $event->ID;
                 $list_event = new PlekEvents();
                 $list_event->load_event_from_tribe_events($event);
+                if($list_event->is_canceled()){
+                    continue; //Skip if canceled
+                }
                 //$startDatetime = $list_event->get_field_value('_EventStartDate');
                 //$stime = strtotime($startDatetime);
                 $acc_status = (current_user_can('plekmanager') or current_user_can('administrator')) ? PlekTemplateHandler::load_template_to_var('acc-status-dropdown', 'event/admin/components', $list_event) : $list_event->get_event_status_text();
@@ -35,7 +39,7 @@ if (empty($events)) {
 
                 $organizers = (is_array($organizer_ids)) ? array_map(function ($id) {
                     return PlekOrganizerHandler::get_organizer_name_by_id($id) . '<br/>';
-                }, $organizer_ids) : 'No Array';
+                }, $organizer_ids) : 'No Organizer set';
 
                 /**
                  * The Accreditation buttons.
@@ -82,9 +86,11 @@ if (empty($events)) {
                 </tr>
 
             <?php
+            $total_open_requests++;
             }
             ?>
         </table>
+        Events with missing accreditation requests: <?php echo $total_open_requests; ?>
     </div>
 </div>
 <?php

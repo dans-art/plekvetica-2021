@@ -1438,6 +1438,7 @@ class PlekEventHandler
         }
 
         $current = get_field('akkreditiert', $event_id);
+        $original_crew = $current;
         $event_title = get_the_title($event_id);
 
         if (is_array($current)) {
@@ -1458,6 +1459,12 @@ class PlekEventHandler
                 'simple_history_log',
                 "Accreditation: User {$user_login} added to Event \"{$event_title}\"",
                 ['event_id' => $event_id, 'event_title' => $event_title, 'user' => $user_login]
+            );
+            //Send info to admin if first request
+            PlekNotificationHandler::push_to_admin(
+                __('Teammember added accreditation request', 'pleklang'),
+                __('Please check for missing event accreditation.', 'pleklang'),
+                get_permalink($event_id)
             );
             return true;
         } else {

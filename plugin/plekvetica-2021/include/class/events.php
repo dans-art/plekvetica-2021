@@ -816,6 +816,7 @@ class PlekEvents extends PlekEventHandler
         wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery', 'plek-language', 'wp-i18n'], 1);
         wp_set_script_translations('plek-teamcal-script', 'pleklang', PLEK_PATH . "/languages");
 
+
         $meta_query = array();
         $meta_query['akk_status'] = array('key' => 'akk_status', 'compare' => '!=', 'value' => 'NULL');
         $meta_query['akkreditiert'] = array('key' => 'akkreditiert', 'compare' => '!=', 'value' => '');
@@ -823,7 +824,7 @@ class PlekEvents extends PlekEventHandler
             'eventDisplay'   => 'custom',
             'start_date'     => date('Y-m-d', time() -  172800), // 172800 = Two days in seconds 
             'end_date'     => date('Y-m-d', time() +  60*60*24*365*5), // Five Years from today 
-            'posts_per_page' => 50,
+            'posts_per_page' => 5000,
             'order'       => 'ASC',
             'order_by'       => 'start_date',
             'meta_query' => $meta_query
@@ -873,7 +874,6 @@ class PlekEvents extends PlekEventHandler
         AND posts.post_status IN ('publish', 'draft')
         AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)
         AND akk_status.meta_value = 'aw'
-        AND cancel_event.meta_value != '1'
         
         ORDER BY organizer.meta_value ASC
         LIMIT %d OFFSET 0",

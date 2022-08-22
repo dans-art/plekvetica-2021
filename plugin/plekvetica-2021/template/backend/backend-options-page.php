@@ -4,6 +4,14 @@
 global $backend_class;
 $backend_class->check_plekvetica();
 $current_tab = (isset($_GET['tab'])) ? $_GET['tab'] : null;
+$page = (isset($_GET['page'])) ? $_GET['page'] : '';
+
+//Get the current tab
+$page_parts = explode('-',$page);
+if(isset($page_parts[2])){
+    $current_tab = $page_parts[2];
+}
+
 if (isset($_REQUEST['settings-updated'])) {
     $text = ($_REQUEST['settings-updated'] === 'true') ? __('Settings updated', 'pleklang') : __('Failed to save the Settings', 'pleklang');
     echo PlekTemplateHandler::load_template('plek-message', 'components', $text);
