@@ -296,13 +296,22 @@ class PlekBandHandler
     }
 
     /**
-     * Get the Band logo.
+     * Get the Band logo/image
+     * If no image is uploaded but a spotify image found, the spotify image will be returned
      *
      * @return string Band logo link
      */
     public function get_logo()
     {
-        return (isset($this->band['bandlogo'])) ? $this->band['bandlogo'] : '';
+        if (isset($this->band['bandlogo']) AND !empty($this->band['bandlogo'])) {
+            return $this->band['bandlogo'];
+        }
+        if (!empty($this->get_spotify_data('image'))) {
+            return $this->get_spotify_data('image');
+        }
+        else{
+            return '';
+        }
     }
 
     /**
@@ -397,6 +406,9 @@ class PlekBandHandler
     public function get_social_link($id, $convert_to_url = true)
     {
         $url_id = (isset($this->band[$id])) ? $this->band[$id] : ''; //URL or ID of the social media site.
+        if(empty($url_id)){
+            return '';
+        }
         if ($convert_to_url === false) {
             return $url_id; //Don't modify anything, just take the data as it is.
         }
