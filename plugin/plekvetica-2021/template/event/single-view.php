@@ -14,7 +14,6 @@ $is_postponed = $plek_event->is_postponed();
 $is_postponed_old = $plek_event->is_postponed_event();
 $postponed_id = $plek_event->get_postponed_event_id();
 
-
 $can_edit = PlekUserHandler::user_can_edit_post($plek_event);
 $is_in_team = PlekUserHandler::user_is_in_team();
 $is_review = $plek_event->is_review();

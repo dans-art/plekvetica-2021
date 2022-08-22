@@ -362,6 +362,8 @@ class PlekHandler
         wp_clear_scheduled_hook("plek_cron_update_all_band_scores");
         //Update 2.3.0
         wp_clear_scheduled_hook("plek_cron_weekly_cron");
+        //Update 2.4.0
+        wp_clear_scheduled_hook("plek_cron_hourly_cron");
 
         //Send the email notifications
         if (!wp_next_scheduled('plek_cron_send_unsend_email_notifications')) {
@@ -372,9 +374,13 @@ class PlekHandler
         if (!wp_next_scheduled('plek_cron_send_accredi_reminder')) {
             wp_schedule_event(time(), 'weekly', 'plek_cron_send_accredi_reminder');
         }
-        //Send function that runs once a week
+        //Function that runs once a week
         if (!wp_next_scheduled('plek_cron_weekly_cron')) {
             wp_schedule_event(time(), 'weekly', 'plek_cron_weekly_cron');
+        }
+        //Function that runs once every hour
+        if (!wp_next_scheduled('plek_cron_hourly_cron')) {
+            wp_schedule_event(time(), 'hourly', 'plek_cron_hourly_cron');
         }
 
         //Update Bandscores
@@ -642,5 +648,15 @@ class PlekHandler
                 return __('Action not found or not supported', 'pleklang');
                 break;
         }
+    }
+    /**
+     * Cronjob that runs every hour.
+     *
+     * @return void
+     */
+    public function hourly_cron_job(){
+        //Update the spotify token
+        $psm = new plekSocialMedia;
+        $psm->refresh_spotify_token();
     }
 }

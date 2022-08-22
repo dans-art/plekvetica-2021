@@ -138,6 +138,10 @@ class PlekNotificationHandler extends WP_List_Table
 
         $admin = get_user_by('email', $plek_handler->get_plek_option('admin_email'));
         if (!isset($admin->ID)) {
+            apply_filters(
+                'simple_history_log',
+                'Failed to push notification to admin. No admin found.'
+            );
             return false;
         }
         $notify = new PlekNotificationHandler;

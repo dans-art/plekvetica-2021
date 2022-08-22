@@ -52,6 +52,33 @@ class PlekBackend /*extends WP_List_Table*/
             $icon_url,
             58
         );
+
+        add_submenu_page(
+            'plek-options',
+            __('Notifications', 'pleklang'),
+            __('Notifications', 'pleklang'),
+            'manage_options',
+            'plek-options&tab=notifications',
+            [$this, 'render_options'],
+        );
+
+        add_submenu_page(
+            'plek-options',
+            __('Status', 'pleklang'),
+            __('Status', 'pleklang'),
+            'manage_options',
+            'plek-options&tab=status',
+            [$this, 'render_options'],
+        );
+
+        add_submenu_page(
+            'plek-options',
+            __('API', 'pleklang'),
+            __('API', 'pleklang'),
+            'manage_options',
+            'plek-options&tab=api',
+            [$this, 'render_options'],
+        );
     }
 
     /**
@@ -94,11 +121,11 @@ class PlekBackend /*extends WP_List_Table*/
         add_settings_field('my_plek_page_id', 'ID der "My Plekvetica" Seite', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'my_plek_page_id', 'type' => 'input'));
         add_settings_field('plek_ex_actions_page', 'ID der Seite mit dem plek_external_actions Shortcode', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'plek_ex_actions_page', 'type' => 'input'));
 
-        add_settings_field('admin_email', 'Email vom Seiten Admin', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'admin_email', 'type' => 'input'));
+        add_settings_field('admin_email', 'Email vom Seiten Admin (Muss registrierter User sein)', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'admin_email', 'type' => 'input'));
         add_settings_field('it_support_email', 'Email vom IT Support', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'it_support_email', 'type' => 'input'));
         add_settings_field('akkredi_user_id', 'ID vom Akkreditations Manager', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'akkredi_user_id', 'type' => 'input'));
 
-        //Spotify / Facebook API
+        //Facebook API
         add_settings_field(
             'plek_facebook_enable_autopost',
             'Enable Facebook Autopost',
@@ -230,7 +257,7 @@ class PlekBackend /*extends WP_List_Table*/
                     echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='$options_val'/><br/>";
                     echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='" . $plek_handler->get_plek_option('plek_spotify_refresh_token', 'plek_api_options') . "'/><br/>";
                 }
-                echo __('To get a new token, please authorize via this link:','pleklang') . ' ' . $psm->get_spotify_auth_link();
+                echo __('To get a new token, please authorize via this link:', 'pleklang') . ' ' . $psm->get_spotify_auth_link();
                 break;
             case 'input':
                 echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='$options_val'/>";
@@ -260,6 +287,5 @@ class PlekBackend /*extends WP_List_Table*/
     {
         global $plek_handler;
         wp_enqueue_style('plek-admin-style', PLEK_PLUGIN_DIR_URL . 'css/admin-style.min.css', [], $plek_handler->version);
-
     }
 }

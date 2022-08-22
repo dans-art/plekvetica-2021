@@ -32,7 +32,8 @@ s(PlekNotificationHandler::remove_cookie_by_value('added_edit_event', 68682, tim
 $pb = new PlekBandHandler;
 $pb->enqueue_form_scripts();
 
-
+$psm = new plekSocialMedia;
+s($psm -> refresh_spotify_token());
 
 PlekTemplateHandler::load_template('js-settings', 'components', 'init_spotify');
 ?>

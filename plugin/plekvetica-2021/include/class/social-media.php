@@ -167,7 +167,7 @@ class plekSocialMedia
     {
         //Spotify
         //Checks if the current token is valid and returns the logged in user
-        
+
 
         //do_settings_sections('plek_facebook_options');
         $session = $this->get_spotify_session();
@@ -229,11 +229,32 @@ class plekSocialMedia
             $redirect_url
         );
 
-        if(!empty($oauth_token)){
+        if (!empty($oauth_token)) {
             $session->setAccessToken($oauth_token);
             $session->setRefreshToken($refresh_token);
         }
 
         return $session;
+    }
+
+    /**
+     * Cron function to get a new token from spotify.
+     * Saves the new token to the plek_api_options
+     *
+     * @return bool
+     */
+    public function refresh_spotify_token()
+    {
+        global $plek_handler;
+        $session = $this->get_spotify_session();
+        $old_oauth_token = $plek_handler->get_plek_option('plek_spotify_oauth_token', 'plek_api_options');
+        $old_refresh_token = $plek_handler->get_plek_option('plek_spotify_refresh_token', 'plek_api_options');
+
+        if (!$session->refreshAccessToken($old_refresh_token)) {
+            return false;
+        }
+        //Save the new access token.
+        $new_token = $session->getAccessToken();
+        return $plek_handler->update_plek_option('plek_spotify_oauth_token', $new_token, 'plek_api_options');
     }
 }
