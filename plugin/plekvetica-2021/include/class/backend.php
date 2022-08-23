@@ -224,10 +224,6 @@ class PlekBackend /*extends WP_List_Table*/
         } else {
             $input['plek_ticketcorner_logo'] =  $plek_handler->get_plek_option('plek_ticketcorner_logo');
         }
-        //Set the refresh token to the last set refresh token
-        if (isset($_GET['tab']) and $_GET['tab'] === 'api'){
-            $input['plek_spotify_refresh_token'] = $plek_handler->get_plek_option('plek_spotify_refresh_token', 'plek_api_options');
-        }
         return $input;
     }
 

@@ -11,11 +11,18 @@ $page = esc_url(add_query_arg('tab', 'api', admin_url('options.php'))); ?>
     ?>
 </form>
 <?php
+//Spotify Check
 $psm = new plekSocialMedia;
-echo $psm->get_spotify_user_name();
+?>
+<h3><?php echo __('Spotify', 'pleklang'); ?></h3>
+<?php echo $psm->get_spotify_user_name(); ?>
 
+<h3><?php echo __('Facebook', 'pleklang'); ?></h3>
+<?php
 //s($options);
-if (isset($options['plek_facebook_page_id'])) {
+global $plek_handler;
+
+if (!empty($plek_handler->get_plek_option('plek_facebook_page_id','plek_api_options'))) {
     $poster = new plekSocialMedia;
     $poster->facebook_login();
     try { ?>
@@ -26,5 +33,7 @@ if (isset($options['plek_facebook_page_id'])) {
         echo $th;
         echo '</div>';
     }
+}else{
+    echo __('No Facebook page ID set','pleklang');
 }
 ?>
