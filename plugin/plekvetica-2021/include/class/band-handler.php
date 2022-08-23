@@ -303,13 +303,12 @@ class PlekBandHandler
      */
     public function get_logo()
     {
-        if (isset($this->band['bandlogo']) AND !empty($this->band['bandlogo'])) {
+        if (isset($this->band['bandlogo']) and !empty($this->band['bandlogo'])) {
             return $this->band['bandlogo'];
         }
         if (!empty($this->get_spotify_data('image'))) {
             return $this->get_spotify_data('image');
-        }
-        else{
+        } else {
             return '';
         }
     }
@@ -396,6 +395,22 @@ class PlekBandHandler
     {
         return (isset($this->band['website_link'])) ? $this->band['website_link'] : '';
     }
+
+    /**
+     * Check if a band has social media links
+     *
+     * @return boolean
+     */
+    public function has_social_links()
+    {
+        foreach ($this->social_media as $slug => $attr) {
+            $acf_id = (isset($attr['acf_id'])) ? $attr['acf_id'] : '';
+            if(!empty($this->get_social_link($acf_id))){
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * Gets the link to the social media site
      *
@@ -406,7 +421,7 @@ class PlekBandHandler
     public function get_social_link($id, $convert_to_url = true)
     {
         $url_id = (isset($this->band[$id])) ? $this->band[$id] : ''; //URL or ID of the social media site.
-        if(empty($url_id)){
+        if (empty($url_id)) {
             return '';
         }
         if ($convert_to_url === false) {

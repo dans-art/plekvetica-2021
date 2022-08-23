@@ -29,6 +29,9 @@ $follower_count = $band_object->get_follower_count();
     <?php endif; ?>
     <dt><?php echo __('Social & Links', 'pleklang'); ?></dt>
     <dd class="event-links">
+      <?php if (!$band_class->has_social_links()) : ?>
+        <?php echo __('No Social links found', 'pleklang'); ?>
+      <?php endif; ?>
       <?php foreach ($band_class->social_media as $slug => $attr) : ?>
         <?php
         $link_name = (isset($attr['name'])) ? $attr['name'] : 'Undefined';
@@ -36,11 +39,11 @@ $follower_count = $band_object->get_follower_count();
         $acf_id = (isset($attr['acf_id'])) ? $attr['acf_id'] : '';
         $social_link =  $band_class->get_social_link($acf_id);
         ?>
-        <span>
-          <?php if (!empty($social_link)) : ?>
+        <?php if (!empty($social_link)) : ?>
+          <span>
             <a href="<?php echo $social_link; ?>" target="_blank" title="<?php echo sprintf(__('To the %s page of %s', 'pleklang'), $link_name, $name); ?>"><i class="<?php echo $fa_class; ?>"></i></a>
-          <?php endif; ?>
-        </span>
+          </span>
+        <?php endif; ?>
       <?php endforeach; ?>
     </dd>
     <?php if ($user->user_is_in_team()) : ?>

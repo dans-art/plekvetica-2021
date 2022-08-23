@@ -2,6 +2,9 @@
 extract(get_defined_vars());
 $band_object = isset($template_args[0])?$template_args[0]:null;
 $genres = $band_object -> get_genres();
+if(empty($genres)){
+  return null;
+}
 ?>
 
 <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Genres', 'pleklang')); ?>
