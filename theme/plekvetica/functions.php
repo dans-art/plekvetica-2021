@@ -11,7 +11,6 @@ add_filter('disable_wp_rest_api_post_var', [$plek_theme, 'disable_wp_rest_api_po
 
 add_filter('auth_cookie_expiration', [$plek_theme, 'keep_me_logged_in']);
 
-
 class plekTheme
 {
 
