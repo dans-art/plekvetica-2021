@@ -175,6 +175,7 @@ input[type="submit"]{
     }
   }
 
+
   /* Image Animation*/
 /* Loader */
 img.loader {
@@ -202,6 +203,20 @@ img.loader {
   @keyframes plek-image-loader {
     0% { opacity: 1 }
     50% { opacity: 0.2 }
+    100% { opacity: 1 }
+  }
+ 
+  .plek-input-highlight{
+    animation-name: plek-input-highlighter;
+    animation-duration: 5s;
+    animation-iteration-count: 2;
+  }
+
+  @keyframes plek-input-highlighter {
+    0% { opacity: 1;}
+    25% { opacity: 0.2 }
+    50% { opacity: 1 }
+    75% { opacity: 0.2 }
     100% { opacity: 1 }
   }
 

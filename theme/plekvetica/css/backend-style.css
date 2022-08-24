@@ -1,2 +1,10 @@
 .block-editor__container .editor-styles-wrapper {
   background-color: #424242; }
+
+.toplevel_page_plek-options img {
+  max-width: 18px; }
+
+.plek-hidden {
+  display: none; }
+
+/*# sourceMappingURL=backend-style.css.map */

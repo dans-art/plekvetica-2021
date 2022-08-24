@@ -3,19 +3,28 @@
  */
 let plek_band = {
 
-    default_button_texts  = {},
+    default_button_texts: {},
 
 
     construct() {
-        if(jQuery('#plek-band-form').length > 0){
-            if(empty(jQuery('#band-id').val())){
+        if (jQuery('#plek-band-form').length > 0) {
+            if (empty(jQuery('#band-id').val())) {
                 this.on_band_add(); //Load specific functions only applying to new bands
                 this.on_edit_band(); //Also add the functions for the edit band.
-            }else{
+            } else {
                 //Page is Edit Band page
                 this.on_edit_band();
             }
-        }else{
+            //Register events
+            jQuery(document).on("click", '.band-social-icon', function () {
+                plek_band.show_social_input_field(this);
+            });
+
+            //Check on spotify for additional data
+            jQuery(document).on("focusout", '#band-link-spotify', function () {
+                plek_band.check_for_band_on_spotify(this);
+            });
+        } else {
             //Frontend and other functions, which are not on the edit band page
             jQuery(document).on("click", '.plek-follow-band-btn', function () {
                 plek_band.toggle_follower(this);
@@ -39,7 +48,7 @@ let plek_band = {
         }
         );
 
-        default_button_texts.submit = jQuery('#band-form-submit').text();
+        plek_band.default_button_texts.submit = jQuery('#band-form-submit').text();
 
 
         //on Band submit input click
@@ -47,13 +56,13 @@ let plek_band = {
             e.preventDefault();
             //Check if cancel button
             if (e.currentTarget.id === 'band-form-cancel') {
-                if(jQuery('#band-form-cancel').closest(".overlay_content").length === 0){
+                if (jQuery('#band-form-cancel').closest(".overlay_content").length === 0) {
                     //Not in overlay, go back to previous site and reload
-                    window.location=document.referrer;
-                }else{
+                    window.location = document.referrer;
+                } else {
                     //Form is in a overlay, close overlay
                     let overlay_id = jQuery('#band-form-cancel').closest(".overlay_content").parent().prop("id");
-                    overlay_id = overlay_id.replace("_overlay","");
+                    overlay_id = overlay_id.replace("_overlay", "");
                     plektemplate.hide_overlay(overlay_id);
                 }
                 return;
@@ -85,7 +94,7 @@ let plek_band = {
         });
 
         //Check for existing bands on name change.
-        jQuery('#band-name').on('change', (e)=>{
+        jQuery('#band-name').on('change', (e) => {
             plek_band.check_existing_band();
         });
     },
@@ -93,7 +102,7 @@ let plek_band = {
     /**
      * Functions only for the new band form 
      */
-    on_band_add(){
+    on_band_add() {
 
     },
 
@@ -194,7 +203,7 @@ let plek_band = {
      * @param {*} data 
      */
     save_band(data) {
-        plek_main.activate_button_loader('#band-form-submit', __('Save Band...','pleklang'));
+        plek_main.activate_button_loader('#band-form-submit', __('Save Band...', 'pleklang'));
         plek_main.remove_field_errors();
 
         let button = jQuery('#band-form-submit');
@@ -216,36 +225,36 @@ let plek_band = {
                 } else {
                     text = plek_main.get_first_success_from_ajax_request(data);
                     let band_obj = plek_main.get_ajax_success_object(data);
-                    if(typeof band_obj[1] !== 'undefined' && typeof band_obj[2] !== 'undefined'){
-                        if(typeof plekevent !== 'undefined'){
+                    if (typeof band_obj[1] !== 'undefined' && typeof band_obj[2] !== 'undefined') {
+                        if (typeof plekevent !== 'undefined') {
                             //plekevent.add_new_band_to_selection(band_obj[1], band_obj[2]); //Not needed for save_band only!?
                         }
                     }
                 }
                 plek_main.deactivate_button_loader(button, text);
-                if(jQuery('.band-edit').length === 0){
+                if (jQuery('.band-edit').length === 0 && errors === false) {
                     //It is the add Band form
                     plek_main.clear_form_inputs('plek-band-form');
                 }
-                jQuery('#band-form-cancel').text(__('Back','pleklang'));
+                jQuery('#band-form-cancel').text(__('Back', 'pleklang'));
                 setTimeout(() => {
                     jQuery('#band-form-submit').text(plek_band.default_button_texts.submit);
                 }, 5000);
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
 
             }
         });
     },
-    
+
     /**
      * Checks for existing band. If found, it will display an notification.
      */
     check_existing_band() {
 
-        if(empty(jQuery('#band-name').val())){
+        if (empty(jQuery('#band-name').val())) {
             return;
         }
         var data = new FormData();
@@ -263,20 +272,20 @@ let plek_band = {
             data: data,
             success: function success(data) {
                 let error = plek_main.get_first_error_from_ajax_request(data);
-                if(!empty(error)){
+                if (!empty(error)) {
                     plekerror.set_toastr(0, true);
-                    plekerror.display_info(__('Info','pleklang'), error);
+                    plekerror.display_info(__('Info', 'pleklang'), error);
                     plekerror.reset_toastr();
                 }
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ","pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
 
             }
         });
     },
 
-    prepare_band_data(form){
+    prepare_band_data(form) {
         var data = new FormData(form);
         data.append('action', 'plek_band_actions');
         data.append('do', 'save_band');
@@ -284,7 +293,45 @@ let plek_band = {
         data.append('band-description', tinymce.editors['band-description'].getContent());
         data.append('band-logo-data', file_data);
         data.append('band-logo', '666'); //This is just a placeholder for the validator to validate.
+        data.set('band-link-youtube', this.get_id_from_url(data.get('band-link-youtube'), 'youtube'));
+        data.set('band-link-spotify', this.get_id_from_url(data.get('band-link-spotify'), 'spotify'));
         return data;
+    },
+
+    /**
+     * Gets the ID for an URL
+     * @param {string} url The URL
+     * @param {string} site The Site to extract the ID from the url
+     * @returns string The ID
+     */
+    get_id_from_url(url, site) {
+        switch (site) {
+            case "youtube-deactivated": //This is not used at the moment.
+                //https://www.youtube.com/channel/UCz87ROWe7X2yiAMeFgOkGMA OR https://www.youtube.com/plekvetica
+                var input_arr = url.split('/');
+                var channel_index = input_arr.findIndex(element => element === 'channel');
+                if (channel_index === -1) {
+                    var yt_index = input_arr.findIndex(ele => ele === 'youtube.com' || ele === 'www.youtube.com');
+                    return (yt_index !== -1) ? input_arr[yt_index + 1] : url;
+                    //No channel found
+                } else {
+                    return input_arr[channel_index + 1]; //Get the item after the channel index 
+                }
+
+                break;
+            case "spotify":
+                //(https://open.spotify.com/artist/1IQ2e1buppatiN1bxUVkrk?si=P07Tx2AlQ5m6ZTsnce6lzQ)
+                var input_arr = url.split('/');
+                var artist_index = input_arr.findIndex(element => element === 'artist');
+                if (artist_index !== -1) {
+                    return input_arr[artist_index + 1]; //Get the item after the artist index 
+                }
+                break;
+
+            default:
+                break;
+        }
+        return url;
     },
 
     toggle_follower() {
@@ -328,7 +375,82 @@ let plek_band = {
                 jQuery('.plek-follow-band-btn .label').text('Error loading data.');
             }
         });
-    }
+    },
+
+    get_spotify_artist(artist_id) {
+        if (empty(document.spotify)) {
+            console.log("Spotify not loaded");
+            return false;
+        }
+        document.spotify.getArtist(artist_id).then(
+            function (data) {
+            },
+            function (error) {
+                console.error(error);
+                plekerror.display_spotify_error_message(error);
+            }
+        );
+    },
+    /**
+     * Displays the input field in the Band form
+     * @param {*} item the button
+     */
+    show_social_input_field(item) {
+        let form_id = jQuery(item).data('form-id');
+        if (jQuery('#' + form_id + '-container').css('display') !== 'none') {
+            jQuery('#' + form_id + '-container input').addClass('plek-input-highlight');
+        }
+        jQuery('#' + form_id + '-container').css('display', 'flex');
+    },
+    /**
+     * Checks if the band is found on spotify and loads data form the api
+     * @param {*} item the input field
+     */
+    check_for_band_on_spotify(item) {
+        let input = jQuery(item).val();
+        if (empty(input)) {
+            return false;
+        }
+        //Check if input is a ID or URL
+        if (input.includes('/')) {
+            input = plek_band.get_id_from_url(input, 'spotify');
+        }
+        //Load data from Spotify
+        document.spotify.getArtist(input).then(
+            function (data) {
+                //Check if the Artist Name matches, suggest genres and add the data to a hidden field
+                if (empty(jQuery('#band-name').val())) {
+                    jQuery('#band-name').val(data.name);
+                }
+                if (jQuery('#band-name').val() != data.name && !empty(jQuery('#band-name').val())) {
+                    plekerror.display_info(
+                        'Spotify',
+                        sprintf(__('Name missmatch. The Artist ID you provided does not match with the given name.<br/>Band form Spotify: %s', 'pleklang'), data.name));
+                }
+                //Check for Poster and set it.
+                if (empty(jQuery('#band-logo').val())) {
+                    let band_image = data.images[0].url;
+                    console.log(band_image);
+                    jQuery('#band-logo-url').val(band_image);
+                    jQuery('#band-logo-image img').attr('src', band_image);
+                }
+                //Set the band infos
+                let band_infos = {
+                    id: data.id,
+                    name: data.name,
+                    popularity: data.popularity,
+                    followers: data.followers.total,
+                    image: data.images[0].url
+                }
+                jQuery('#band-infos').val(JSON.stringify(band_infos));
+            },
+            function (error) {
+                console.error(error);
+                plekerror.display_spotify_error_message(error);
+            }
+        );
+    },
+
 
 }
 plek_band.construct();

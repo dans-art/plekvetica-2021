@@ -1,4 +1,11 @@
 # plekvetica-2021
+
+Version 2.4.0
+- Spotify integriert
+- Fehler im Team-Kalender und Accreditations Tool behoben
+- Added Spotify, Youtube and Twitter link support for Bands
+- Changed the Menu in the Backend
+
 Version 2.3.0
 - Diverse Fehler in user registration und passwort zurücksetzen fuktionen behoben
 - Neue Klasse "Genre" hinzugefügt

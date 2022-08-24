@@ -297,7 +297,7 @@ class PlekFormValidator
         }
 
         //Check if the value is allowed
-        if(!empty($this->not_value[$fieldname])){
+        if(isset($this->not_value[$fieldname]) AND !empty($this->not_value[$fieldname])){
             foreach($this->not_value[$fieldname] as $not_allowed_value){
                 if($not_allowed_value === $value){
                     $this->set_error($fieldname, __('The given value is not allowed. Please choose something different.','pleklang'));
@@ -327,21 +327,25 @@ class PlekFormValidator
         }
 
         //Check for min_length
-        if ($this->min_length[$fieldname] !== 0 and !empty($value) and $this->min_length[$fieldname] > strlen($value)) {
-            $calc_length = (int)($this->min_length[$fieldname] - strlen($value));
-            $msg = sprintf(__('Input is %d characters too short.', 'pleklang'), $calc_length);
-            $this->set_error($fieldname, $msg);
+        if(isset($this->min_length[$fieldname])){
+            if ($this->min_length[$fieldname] !== 0 and !empty($value) and $this->min_length[$fieldname] > strlen($value)) {
+                $calc_length = (int)($this->min_length[$fieldname] - strlen($value));
+                $msg = sprintf(__('Input is %d characters too short.', 'pleklang'), $calc_length);
+                $this->set_error($fieldname, $msg);
+            }
         }
 
         //Check for max_length
-        if ($this->max_length[$fieldname] !== 0 and !empty($value) and strlen($value) > $this->max_length[$fieldname]) {
-            $calc_length = (int)(strlen($value) - $this->max_length[$fieldname]);
-            $msg = sprintf(__('Entry is %d characters too long.', 'pleklang'), $calc_length);
-            $this->set_error($fieldname, $msg);
+        if(isset($this->max_lenght[$fieldname])){
+            if ($this->max_length[$fieldname] !== 0 and !empty($value) and strlen($value) > $this->max_length[$fieldname]) {
+                $calc_length = (int)(strlen($value) - $this->max_length[$fieldname]);
+                $msg = sprintf(__('Entry is %d characters too long.', 'pleklang'), $calc_length);
+                $this->set_error($fieldname, $msg);
+            }
         }
 
         //Check for regex pattern
-        if ($this->pattern[$fieldname] !== false) {
+        if (isset($this->pattern[$fieldname]) AND $this->pattern[$fieldname] !== false) {
             if (preg_match($this->pattern[$fieldname], $value, $out) !== 1) {
                 if (!empty($this->hint[$fieldname])) {
                     $this->set_error($fieldname, sprintf(__('Wrong Format. Notice: %s', 'pleklang'), $this->hint[$fieldname]));

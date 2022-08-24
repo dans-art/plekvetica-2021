@@ -39,9 +39,16 @@ class PlekHandler
         return $debug;
     }
 
-    public function get_plek_option(string $options_name = '')
+    /**
+     * Loads an option form the plekvetica options
+     *
+     * @param string $options_name - The name of the options field
+     * @param string $option_group - The name of the group. (plek_general_options, plek_api_options)
+     * @return string The Option Value
+     */
+    public function get_plek_option(string $options_name = '', $option_group = 'plek_general_options')
     {
-        $options = get_option('plek_general_options');
+        $options = get_option($option_group);
         if (empty($options_name)) {
             return null;
         }
@@ -50,15 +57,33 @@ class PlekHandler
         }
         return $options[$options_name];
     }
+    /**
+     * Updates the option from the given options group
+     *
+     * @param string $options_name
+     * @param mixed $value
+     * @param string $option_group
+     * @return bool True on success, false on error
+     */
+    public function update_plek_option($options_name, $value, $option_group = 'plek_general_options')
+    {
+        $options = get_option($option_group);
+        if (empty($options_name)) {
+            return null; //Name not given
+        }
+        $options[$options_name] = $value; //Update the individual option
+        return update_option($option_group, $options); //Saves the whole options array again.
+    }
 
     /**
      * Get the link to the my-plekvetica page
      *
      * @return string URL
      */
-    public function get_my_plekvetica_link(){
+    public function get_my_plekvetica_link()
+    {
         $my_plek_id = $this->get_plek_option('my_plek_page_id');
-        return(!empty($my_plek_id)) ? get_permalink($my_plek_id) : "https://plekvetica.ch/my-plekvetica";
+        return (!empty($my_plek_id)) ? get_permalink($my_plek_id) : "https://plekvetica.ch/my-plekvetica";
     }
 
     public function print_url(string $url)
@@ -208,6 +233,7 @@ class PlekHandler
 
     /**
      * Enqueues the default scripts
+     * Has to be called by the wp_head action
      *
      * @return void
      */
@@ -229,6 +255,16 @@ class PlekHandler
         wp_set_script_translations('plek-language', 'pleklang', PLEK_PATH . "/languages");
     }
 
+    /**
+     * Enqueues the spotify api
+     *
+     * @return void
+     */
+    public function enqueue_spotify()
+    {
+        wp_enqueue_script('plek-spotify', PLEK_PLUGIN_DIR_URL . 'js/spotify/spotify-web-api.js', [], $this->version);
+    }
+
     public function enqueue_select2()
     {
         wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css');
@@ -248,13 +284,16 @@ class PlekHandler
      */
     public function activate_plugin()
     {
+        //Add the user roles and create the db
         PlekUserHandler::add_user_roles();
         PlekNotificationHandler::create_database();
+
         $this->register_cron_jobs();
         //Updates the genres
         $pg = new plekGenres;
         $pg->update_genres();
     }
+
 
     public function load_textdomain()
     {
@@ -323,6 +362,8 @@ class PlekHandler
         wp_clear_scheduled_hook("plek_cron_update_all_band_scores");
         //Update 2.3.0
         wp_clear_scheduled_hook("plek_cron_weekly_cron");
+        //Update 2.4.0
+        wp_clear_scheduled_hook("plek_cron_hourly_cron");
 
         //Send the email notifications
         if (!wp_next_scheduled('plek_cron_send_unsend_email_notifications')) {
@@ -333,9 +374,13 @@ class PlekHandler
         if (!wp_next_scheduled('plek_cron_send_accredi_reminder')) {
             wp_schedule_event(time(), 'weekly', 'plek_cron_send_accredi_reminder');
         }
-        //Send function that runs once a week
+        //Function that runs once a week
         if (!wp_next_scheduled('plek_cron_weekly_cron')) {
             wp_schedule_event(time(), 'weekly', 'plek_cron_weekly_cron');
+        }
+        //Function that runs once every hour
+        if (!wp_next_scheduled('plek_cron_hourly_cron')) {
+            wp_schedule_event(time(), 'hourly', 'plek_cron_hourly_cron');
         }
 
         //Update Bandscores
@@ -527,7 +572,7 @@ class PlekHandler
             return $content;
         }
 
-        if(empty($content)){
+        if (empty($content)) {
             return '';
         }
 
@@ -603,5 +648,15 @@ class PlekHandler
                 return __('Action not found or not supported', 'pleklang');
                 break;
         }
+    }
+    /**
+     * Cronjob that runs every hour.
+     *
+     * @return void
+     */
+    public function hourly_cron_job(){
+        //Update the spotify token
+        $psm = new plekSocialMedia;
+        $psm->refresh_spotify_token();
     }
 }

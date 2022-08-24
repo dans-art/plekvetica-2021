@@ -311,6 +311,22 @@ img.loader {
     opacity: 0.2; }
   100% {
     opacity: 1; } }
+.plek-input-highlight {
+  animation-name: plek-input-highlighter;
+  animation-duration: 5s;
+  animation-iteration-count: 2; }
+
+@keyframes plek-input-highlighter {
+  0% {
+    opacity: 1; }
+  25% {
+    opacity: 0.2; }
+  50% {
+    opacity: 1; }
+  75% {
+    opacity: 0.2; }
+  100% {
+    opacity: 1; } }
 .input_loader {
   top: -9px;
   padding: 0; }
@@ -1584,17 +1600,26 @@ ul.partner-container {
     .band-single.band-container .mobile-meta-con .band-flag img {
       max-height: 1.2em;
       vertical-align: sub; }
-    .band-single.band-container .meta-container .event-links a,
-    .band-single.band-container .mobile-meta-con .event-links a {
-      color: white; }
-    .band-single.band-container .meta-container .event-links i.far,
-    .band-single.band-container .meta-container .event-links i.fas,
-    .band-single.band-container .meta-container .event-links i.fab,
-    .band-single.band-container .mobile-meta-con .event-links i.far,
-    .band-single.band-container .mobile-meta-con .event-links i.fas,
-    .band-single.band-container .mobile-meta-con .event-links i.fab {
-      font-size: 1.5em;
-      margin: 0.1em 0.3em; }
+    .band-single.band-container .meta-container .event-links,
+    .band-single.band-container .mobile-meta-con .event-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start; }
+      .band-single.band-container .meta-container .event-links span,
+      .band-single.band-container .mobile-meta-con .event-links span {
+        flex-basis: 3em;
+        text-align: center; }
+      .band-single.band-container .meta-container .event-links a,
+      .band-single.band-container .mobile-meta-con .event-links a {
+        color: white; }
+      .band-single.band-container .meta-container .event-links i.far,
+      .band-single.band-container .meta-container .event-links i.fas,
+      .band-single.band-container .meta-container .event-links i.fab,
+      .band-single.band-container .mobile-meta-con .event-links i.far,
+      .band-single.band-container .mobile-meta-con .event-links i.fas,
+      .band-single.band-container .mobile-meta-con .event-links i.fab {
+        font-size: 1.5em;
+        margin: 0.1em 0.3em; }
 
 #plek-search-page {
   padding: 0 1em; }
@@ -1628,7 +1653,9 @@ ul.partner-container {
   left: calc(-49vw + 50%);
   width: 94vw;
   margin: 0 2vw; }
-  .plek-post-type-team-calendar table, .plek-post-type-team-calendar td, .plek-post-type-team-calendar th {
+  .plek-post-type-team-calendar table,
+  .plek-post-type-team-calendar td,
+  .plek-post-type-team-calendar th {
     border-color: #595959; }
   .plek-post-type-team-calendar td {
     color: white; }
@@ -2004,6 +2031,46 @@ input[type=checkbox] {
   .plek-form .band-edit-container {
     width: 100%;
     flex: 1; }
+  .plek-form #band-social-icons .icons {
+    display: flex;
+    padding: 0.5em 0; }
+  .plek-form #band-social-icons .band-social-icon span {
+    font-size: 2em;
+    padding: 0 0.2em;
+    cursor: url("../plekvetica/assets/metalhand.cur"), pointer; }
+  .plek-form #band-social-icons .fa-facebook-square {
+    color: #3b5998; }
+  .plek-form #band-social-icons .fa-instagram {
+    color: #e95950; }
+  .plek-form #band-social-icons .fa-youtube-square {
+    color: #bb0000; }
+  .plek-form #band-social-icons .fa-spotify {
+    color: #00e461; }
+  .plek-form #band-social-icons .fa-twitter {
+    color: #55acee; }
+  .plek-form #band-social label {
+    display: none; }
+  .plek-form #band-social .input-icon {
+    width: 10%;
+    font-size: 2em;
+    text-align: left;
+    padding-left: 0.2em; }
+    .plek-form #band-social .input-icon::before {
+      position: relative;
+      top: 6px; }
+  .plek-form #band-social .band-social-input {
+    margin-top: 0.2em;
+    margin-bottom: 0;
+    flex-basis: 90%; }
+  .plek-form #band-social .input-instructions {
+    padding-left: 10%;
+    font-size: 0.8em;
+    padding-top: 0.2em; }
+  .plek-form #band-social .band-videos-container {
+    margin-top: 0.5em; }
+  .plek-form #band-social .item-con {
+    justify-content: space-between;
+    flex-wrap: wrap; }
   .plek-form #band-videos {
     display: none; }
   .plek-form #add-band-video {
