@@ -1,10 +1,15 @@
 # plekvetica-2021
 
+Version 2.4.1
+- Fix: Style des Social media Formulars auf Mobilgeräten
+- Fix: Bandbild wurde ersetzt nach dem laden der Spotify Daten
+- Übersetzungen für Spotify Meldungen hinzugefügt.
+
 Version 2.4.0
 - Spotify integriert
 - Fehler im Team-Kalender und Accreditations Tool behoben
-- Added Spotify, Youtube and Twitter link support for Bands
-- Changed the Menu in the Backend
+- Spotify, Youtube und Twitter Link für die Bands hinzugefügt
+- Menü im Backend wurde neu strukturiert
 
 Version 2.3.0
 - Diverse Fehler in user registration und passwort zurücksetzen fuktionen behoben
