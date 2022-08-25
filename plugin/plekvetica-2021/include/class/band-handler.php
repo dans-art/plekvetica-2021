@@ -843,12 +843,20 @@ class PlekBandHandler
     {
         //wp_enqueue_style('flatpickr-style', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr.min.css');
     }
+
+    /**
+     * Enqueues the scripts for the band from.
+     * Scripts to load: manage-band.js, select2
+     *
+     * @return void
+     */
     public function enqueue_form_scripts()
-    {
+    { 
         global $plek_handler;
         $plek_handler->enqueue_select2();
         $min = ($plek_handler->is_dev_server()) ? "" : ".min";
         wp_enqueue_script('plek-band-scripts', PLEK_PLUGIN_DIR_URL . 'js/manage-band' . $min . '.js', array('jquery', 'select2', 'plek-language'), $plek_handler->version);
+        wp_set_script_translations('plek-band-scripts', 'pleklang', PLEK_PATH . "/languages");
     }
 
     /**

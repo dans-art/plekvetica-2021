@@ -2754,13 +2754,18 @@ input[type=checkbox] {
   .main-navigation .startpage {
     display: none; } }
 @media (max-width: 1040px) {
-  .main-navigation .menu-toggle, .sidebar-nav-mobile:not(#sticky-placeholder) {
+  .main-navigation .menu-toggle,
+  .sidebar-nav-mobile:not(#sticky-placeholder) {
     display: block; }
 
-  .main-navigation ul, .gen-sidebar-nav, .main-navigation:not(.slideout-navigation):not(.toggled) .main-nav > ul, .has-inline-mobile-toggle #site-navigation .inside-navigation > *:not(.navigation-search):not(.main-nav) {
+  .main-navigation ul,
+  .gen-sidebar-nav,
+  .main-navigation:not(.slideout-navigation):not(.toggled) .main-nav > ul,
+  .has-inline-mobile-toggle #site-navigation .inside-navigation > *:not(.navigation-search):not(.main-nav) {
     display: none; }
 
-  .nav-align-right .inside-navigation, .nav-align-center .inside-navigation {
+  .nav-align-right .inside-navigation,
+  .nav-align-center .inside-navigation {
     justify-content: space-between; }
 
   .has-inline-mobile-toggle .mobile-menu-control-wrapper {
@@ -2773,7 +2778,8 @@ input[type=checkbox] {
     text-align: left;
     flex-wrap: wrap; }
 
-  .has-inline-mobile-toggle .header-widget, .has-inline-mobile-toggle #site-navigation {
+  .has-inline-mobile-toggle .header-widget,
+  .has-inline-mobile-toggle #site-navigation {
     flex-basis: 100%; }
 
   .nav-float-left .has-inline-mobile-toggle #site-navigation {
@@ -3038,7 +3044,8 @@ input[type=checkbox] {
       max-width: none;
       font-size: 1.2em; }
 
-  .tribe-events .tribe-events-calendar-list__event-datetime-wrapper, .tribe-events .tribe-events-calendar-list__event-title {
+  .tribe-events .tribe-events-calendar-list__event-datetime-wrapper,
+  .tribe-events .tribe-events-calendar-list__event-title {
     font-size: 1.2em; }
 
   #tribe-events-pg-template #event-container.single-view {
@@ -3073,7 +3080,9 @@ input[type=checkbox] {
     left: 0;
     width: unset;
     margin: 0 0vw; }
-    .plek-post-type-team-calendar table, .plek-post-type-team-calendar td, .plek-post-type-team-calendar th {
+    .plek-post-type-team-calendar table,
+    .plek-post-type-team-calendar td,
+    .plek-post-type-team-calendar th {
       display: flex;
       border: 0; }
     .plek-post-type-team-calendar tr {
@@ -3293,7 +3302,15 @@ input[type=checkbox] {
 
   .plek-event-form-container {
     width: 100%;
-    padding-right: 0; } }
+    padding-right: 0; }
+
+  /*Band Edit page*/
+  .plek-form #band-social .item-con {
+    flex-direction: column; }
+    .plek-form #band-social .item-con .band-social-input {
+      margin-top: 0.5em; }
+    .plek-form #band-social .item-con .input-icon {
+      min-height: 1.2em; } }
 @media (max-width: 400px) {
   .tribe-events-calendar-list__event,
   .tribe-common--breakpoint-medium.tribe-events .tribe-events-calendar-list__event {

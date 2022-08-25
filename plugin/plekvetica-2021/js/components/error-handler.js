@@ -8,24 +8,7 @@ var plekerror = {
      */
     reset_toastr() {
         try {
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": false,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": true,
-                "onclick": null,
-                "showDuration": "3000",
-                "hideDuration": "1000",
-                "timeOut": "0",
-                "extendedTimeOut": "0",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut",
-                'onCloseClick' : null
-            }
+            this.set_toastr(); //Set the toastr with the default values
         } catch (error) {
             console.log(error);
         }
@@ -47,8 +30,8 @@ var plekerror = {
                 "positionClass": positionClass,
                 "preventDuplicates": true,
                 "onclick": null,
-                "showDuration": "3000",
-                "hideDuration": "1000",
+                "showDuration": "7000",
+                "hideDuration": "2000",
                 "timeOut": timeOut,
                 "extendedTimeOut": "0",
                 "showEasing": "swing",
@@ -150,3 +133,5 @@ var plekerror = {
         }
     }
 }
+
+plekerror.set_toastr(); //Set the toastr to the default values
