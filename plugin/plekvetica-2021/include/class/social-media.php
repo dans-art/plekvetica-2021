@@ -5,6 +5,10 @@
  * Facebook API functions
  * Youtube functions
  */
+
+use Facebook\FacebookApp;
+use Facebook\FacebookClient;
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
@@ -24,10 +28,10 @@ class plekSocialMedia
     public function __construct()
     {
         global $plek_handler;
-        $this->page_id = $plek_handler->get_plek_option('plek_facebook_page_id');
-        $this->page_token = $plek_handler->get_plek_option('plek_facebook_page_token');
-        $this->app_secret = $plek_handler->get_plek_option('plek_facebook_app_secret');
-        $this->app_id = $plek_handler->get_plek_option('plek_facebook_app_id');
+        $this->page_id = $plek_handler->get_plek_option('plek_facebook_page_id', 'plek_api_options');
+        $this->page_token = $plek_handler->get_plek_option('plek_facebook_page_token', 'plek_api_options');
+        $this->app_secret = $plek_handler->get_plek_option('plek_facebook_app_secret', 'plek_api_options');
+        $this->app_id = $plek_handler->get_plek_option('plek_facebook_app_id', 'plek_api_options');
 
         $this->facebook_object = $this->facebook_login();
     }
@@ -96,16 +100,50 @@ class plekSocialMedia
             return false;
         }
         try {
+            //curl -i -X GET \
             $fb = new Facebook\Facebook([
                 'app_id' => $this->app_id,
                 'app_secret' => $this->app_secret,
                 'default_graph_version' => 'v10.0',
+                //'default_access_token' => '' //Set the default access token here...
             ]);
+
         } catch (\Throwable $th) {
             echo $th;
         }
 
         return $fb;
+    }
+
+    /**
+     * Get a new token from facebook.
+     * Make sure that a valid token is set before trying to get a new one.
+     * The new token will be saved in the plek_api_options option
+     *
+     * @return bool true on success, false on error. Message will be echoed out.
+     */
+    public function refresh_facebook_token(){
+        try {
+            //curl -i -X GET \
+            $url = "https://graph.facebook.com/v14.0/oauth/access_token?grant_type=fb_exchange_token&client_id=". $this->app_id ."&client_secret=". $this->app_secret ."&fb_exchange_token=". $this->page_token ."&access_token=". $this->page_token;
+            $curl_handle = curl_init($url);
+            curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER , true);
+            $fb_response = curl_exec($curl_handle);
+            $fb_obj = json_decode($fb_response);
+            if(isset($fb_obj -> access_token)){
+                global $plek_handler;
+                $plek_handler->update_plek_option('plek_facebook_page_token', $fb_obj->access_token, 'plek_api_options');
+                return true;
+            }
+            if(!empty(curl_error($curl_handle))){
+                echo curl_error($curl_handle);
+            }
+            echo $fb_response; //Contains errors
+
+        } catch (\Throwable $th) {
+            echo $th;
+        }
+        return false;
     }
 
     /**

@@ -159,12 +159,12 @@ class PlekBackend /*extends WP_List_Table*/
             array('label_for' => 'plek_facebook_app_secret', 'type' => 'input', 'option_name' => 'plek_api_options')
         );
         add_settings_field(
-            'plek_facebook_app_secret',
-            'App Secret',
+            'plek_facebook_page_token',
+            'Page token',
             [$this, 'get_settings_option'],
             'plek_api_options',
             'plek_facebook_settings',
-            array('label_for' => 'plek_facebook_app_secret', 'type' => 'input', 'option_name' => 'plek_api_options')
+            array('label_for' => 'plek_facebook_page_token', 'type' => 'input', 'option_name' => 'plek_api_options')
         );
 
         //Spotify

@@ -18,6 +18,17 @@ $psm = new plekSocialMedia;
 <?php echo $psm->get_spotify_user_name(); ?>
 
 <h3><?php echo __('Facebook', 'pleklang'); ?></h3>
+
+<?php 
+//Refresh the facebook token
+if($psm->refresh_facebook_token() === true){
+    echo __('Facebook token updated','pleklang');
+}
+?>
+<br/>
+Authorize: <?php 
+//$fb_auth = new \Facebook\Authentication\OAuth2Client()
+?>
 <?php
 //s($options);
 global $plek_handler;
