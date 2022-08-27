@@ -1294,13 +1294,18 @@ class PlekEvents extends PlekEventHandler
         });
     }
 
+    /**
+     * Promotes an event to Facebook
+     *
+     * @return mixed — True on success, String on error 
+     */
     public function promote_on_facebook()
 
     {
         $social = new plekSocialMedia();
         $message = $this->get_event_promo_text();
-        $url = $this->get_poster_url();
-        return $social->post_photo_to_facebook($message, $url);
+        $path = $this->get_poster_path();
+        return $social->post_photo_to_facebook($message, $path);
     }
 
     /**

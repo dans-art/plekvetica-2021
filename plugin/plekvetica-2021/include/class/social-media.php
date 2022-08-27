@@ -62,15 +62,15 @@ class plekSocialMedia
      * Create a new post with an image in the facebook site feed.
      *
      * @param string $msg - Message to send with the Photo
-     * @param string $url - URL to the Photo
+     * @param string $path - Path to the Photo
      * @return mixed True on success, String on error
      */
-    public function post_photo_to_facebook(string $msg, string $url)
+    public function post_photo_to_facebook(string $msg, string $path)
     {
         $fb = (!$this->facebook_object) ? $this->facebook_login() : (object) $this->facebook_object;
         $photo_data = [
             'message' => htmlspecialchars($msg),
-            'source' => $fb->fileToUpload($url)
+            'source' => $fb->fileToUpload($path)
         ];
         try {
             $response = $fb->post($this->facebook_data->page_id . '/photos', $photo_data,  $this->facebook_data->page_token);

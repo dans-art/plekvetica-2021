@@ -17,6 +17,7 @@ if(wp_is_mobile()){
 
 $pn = new PlekNotificationHandler;
 $pe = new PlekEvents;
-
+$pe->load_event(75448);
+s($pe->get_poster_path());
 ?>
 

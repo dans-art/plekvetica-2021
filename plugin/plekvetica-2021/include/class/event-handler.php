@@ -578,6 +578,16 @@ class PlekEventHandler
     }
 
     /**
+     * Returns the path to the poster. Returns the original file
+     *
+     * @return string The Poster path.
+     */
+    public function get_poster_path(){
+        $poster_path = get_attached_file(intval($this->get_field_value('_thumbnail_id')));
+        return $poster_path;
+    }
+
+    /**
      * Loads the image / attachment of the current event.
      *
      * @param string $size - Size of the image. Default: medium
