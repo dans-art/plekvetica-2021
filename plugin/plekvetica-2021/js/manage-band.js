@@ -39,7 +39,7 @@ let plek_band = {
      */
     on_edit_band() {
         jQuery(document).ready(function () {
-            jQuery('select').select2({
+            jQuery('select:not(.no-select2)').select2({
                 theme: "plek"
             });
             plek_band.show_youtube_videos();

@@ -20,7 +20,6 @@ jQuery(document).ready(function () {
     jQuery('select:not(.no-select2)').select2({
         theme: "plek"
     });
-
     /** Avoid Reload on enter button press */
     /**
      * @todo: make the submit button work on select band / organi / venue item
@@ -440,6 +439,7 @@ let plek_manage_event = {
             //@toto: add the form id
             if (form === 'edit_event_form') {
                 plekvalidator.add_field('event_ticket_raffle', 'url', true, form);
+                plekvalidator.add_field('event_ticket_raffle_conditions', 'int', true, form);
                 plekvalidator.add_field('event_status', 'text', false, form);
                 plekvalidator.add_field('event_featured', 'bool', true, form);
                 plekvalidator.add_field('event_promote', 'bool', true, form);

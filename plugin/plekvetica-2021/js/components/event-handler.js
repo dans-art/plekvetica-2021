@@ -652,6 +652,7 @@ var plekevent = {
         }
         if (type === 'save_edit_event') {
             datab.append('event_ticket_raffle', this.get_field_value('event_ticket_raffle'));
+            datab.append('event_ticket_raffle_conditions', this.get_field_value('event_ticket_raffle_conditions'));
             datab.append('event_status', this.get_field_value('event_status'));
             datab.append('event_featured', this.get_field_value('event_featured'));
             datab.append('event_promote', this.get_field_value('event_promote'));

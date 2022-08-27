@@ -36,7 +36,7 @@ $plek_handler->enqueue_select2();
 
 <script type="text/javascript" defer='defer'>
 jQuery(document).ready(function () {
-    jQuery('select').select2({
+    jQuery('select:not(.no-select2)').select2({
         theme: "plek"
     });
 }

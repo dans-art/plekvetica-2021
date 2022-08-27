@@ -26,7 +26,7 @@ $organi_id = PlekUserHandler::get_user_setting('organizer_id', $user->ID)
         ?>
         <script type="text/javascript" defer='defer'>
             jQuery(document).ready(function() {
-                jQuery('select').select2({
+                jQuery('select:not(.no-select2)').select2({
                     theme: "plek"
                 });
             });

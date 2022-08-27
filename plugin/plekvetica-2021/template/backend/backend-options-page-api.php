@@ -34,10 +34,9 @@ Authorize: <?php
 global $plek_handler;
 
 if (!empty($plek_handler->get_plek_option('plek_facebook_page_id','plek_api_options'))) {
-    $poster = new plekSocialMedia;
-    $poster->facebook_login();
+    $psm->facebook_login();
     try { ?>
-        <div>Connected with: <?php echo $poster->get_page_name(); ?></div>
+        <div>Connected with: <?php echo $psm->get_page_name(); ?></div>
 <?php
     } catch (\Throwable $th) {
         echo "Error while connecting to Facebook.";

@@ -2281,6 +2281,7 @@ class PlekEventHandler
         if ($type === 'save_edit_event') {
             $acf['is_win'] = 'is_win';
             $acf['win_url'] = 'event_ticket_raffle';
+            $acf['win_conditions'] = 'event_ticket_raffle_conditions';
             $acf['promote_event'] = 'event_promote';
             $acf['cancel_event'] = 'cancel_event';
             //$acf['postponed_event'] = 'postpone_event'; //This is saved by the save_event_postponed() function

@@ -16,11 +16,8 @@ if (!defined('ABSPATH')) {
 class plekSocialMedia
 {
 
-    protected $page_id = false;
-    protected $page_token = false;
-    protected $app_secret = false;
-    protected $app_id = false;
     protected $facebook_object = false;
+    protected $facebook_data = null;
 
     /**
      * Loads the data from Wordpress options to the class property. Loads the Facebook object 
@@ -28,12 +25,11 @@ class plekSocialMedia
     public function __construct()
     {
         global $plek_handler;
-        $this->page_id = $plek_handler->get_plek_option('plek_facebook_page_id', 'plek_api_options');
-        $this->page_token = $plek_handler->get_plek_option('plek_facebook_page_token', 'plek_api_options');
-        $this->app_secret = $plek_handler->get_plek_option('plek_facebook_app_secret', 'plek_api_options');
-        $this->app_id = $plek_handler->get_plek_option('plek_facebook_app_id', 'plek_api_options');
-
-        $this->facebook_object = $this->facebook_login();
+        $this->facebook_data = new stdClass();
+        $this->facebook_data->page_id = $plek_handler->get_plek_option('plek_facebook_page_id', 'plek_api_options');
+        $this->facebook_data->page_token = $plek_handler->get_plek_option('plek_facebook_page_token', 'plek_api_options');
+        $this->facebook_data->app_secret = $plek_handler->get_plek_option('plek_facebook_app_secret', 'plek_api_options');
+        $this->facebook_data->app_id = $plek_handler->get_plek_option('plek_facebook_app_id', 'plek_api_options');
     }
 
     /**
@@ -50,14 +46,14 @@ class plekSocialMedia
             'message' => htmlspecialchars($msg)
         ];
         try {
-            $fb = (object) $this->facebook_object;
-            $response = $fb->post($this->page_id . '/feed', $link_data,  $this->page_token);
+            $fb = (!$this->facebook_object) ? $this->facebook_login() : (object) $this->facebook_object;
+            $response = $fb->post($this->facebook_data->page_id . '/feed', $link_data,  $this->facebook_data->page_token);
         } catch (\Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
-            return 'Graph returned an error: ' . $e->getMessage();
+            return $this->facebook_catch_error($e, 'graph');
         } catch (\Facebook\Exceptions\FacebookSDKException $e) {
-            // When validation fails or other local issues
-            return 'Facebook SDK returned an error: ' . $e->getMessage();
+            // When SDK returns an error
+            return $this->facebook_catch_error($e);
         }
         return true;
     }
@@ -76,16 +72,48 @@ class plekSocialMedia
             'url' => $url
         ];
         try {
-            $fb = (object) $this->facebook_object;
-            $response = $fb->post($this->page_id . '/photos', $photo_data,  $this->page_token);
+            $fb = (!$this->facebook_object) ? $this->facebook_login() : (object) $this->facebook_object;
+            $response = $fb->post($this->facebook_data->page_id . '/photos', $photo_data,  $this->facebook_data->page_token);
         } catch (\Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
-            return 'Graph returned an error: ' . $e->getMessage();
+            return $this->facebook_catch_error($e, 'graph');
         } catch (\Facebook\Exceptions\FacebookSDKException $e) {
-            // When validation fails or other local issues
-            return 'Facebook SDK returned an error: ' . $e->getMessage();
+            // When SDK returns an error
+            return $this->facebook_catch_error($e);
         }
         return true;
+    }
+
+    /**
+     * Formats the error from facebook request
+     *
+     * @param object $exception - FacebookResponseException
+     * @param string $type - The type for formatting. Supported are: sdk, graph
+     * @return void
+     */
+    public function facebook_catch_error($exception, $type = 'sdk')
+    {
+        global $plek_handler;
+        switch ($type) {
+            case 'sdk':
+                // When validation fails or other local issues
+                $msg = ($plek_handler->is_dev_server())
+                    ? __('Facebook SDK returned an error on DEV server', 'pleklang')
+                    : __('Facebook SDK returned an error', 'pleklang');
+                return $msg . ' - ' . $exception->getMessage();
+                break;
+
+            case 'graph':
+                $msg = ($plek_handler->is_dev_server())
+                    ? __('Facebook Graph returned an error on DEV server', 'pleklang')
+                    : __('Facebook Graph returned an error', 'pleklang');
+                return $msg  . ' - ' .  $exception->getMessage();
+                break;
+
+            default:
+                return $exception->getMessage();
+                break;
+        }
     }
 
 
@@ -96,22 +124,19 @@ class plekSocialMedia
      */
     public function facebook_login()
     {
-        if (empty($this->app_id) or empty($this->app_secret)) {
+        if (empty($this->facebook_data->app_id) or empty($this->facebook_data->app_secret)) {
             return false;
         }
         try {
-            //curl -i -X GET \
             $fb = new Facebook\Facebook([
-                'app_id' => $this->app_id,
-                'app_secret' => $this->app_secret,
-                'default_graph_version' => 'v10.0',
-                //'default_access_token' => '' //Set the default access token here...
+                'app_id' => $this->facebook_data->app_id,
+                'app_secret' => $this->facebook_data->app_secret,
+                'default_graph_version' => 'v14.0',
+                'default_access_token' => $this->facebook_data->page_token
             ]);
-
         } catch (\Throwable $th) {
             echo $th;
         }
-
         return $fb;
     }
 
@@ -122,20 +147,21 @@ class plekSocialMedia
      *
      * @return bool true on success, false on error. Message will be echoed out.
      */
-    public function refresh_facebook_token(){
+    public function refresh_facebook_token()
+    {
         try {
             //curl -i -X GET \
-            $url = "https://graph.facebook.com/v14.0/oauth/access_token?grant_type=fb_exchange_token&client_id=". $this->app_id ."&client_secret=". $this->app_secret ."&fb_exchange_token=". $this->page_token ."&access_token=". $this->page_token;
+            $url = "https://graph.facebook.com/v14.0/oauth/access_token?grant_type=fb_exchange_token&client_id=" . $this->facebook_data->app_id . "&client_secret=" . $this->facebook_data->app_secret . "&fb_exchange_token=" . $this->facebook_data->page_token . "&access_token=" . $this->facebook_data->page_token;
             $curl_handle = curl_init($url);
-            curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER , true);
+            curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
             $fb_response = curl_exec($curl_handle);
             $fb_obj = json_decode($fb_response);
-            if(isset($fb_obj -> access_token)){
+            if (isset($fb_obj->access_token)) {
                 global $plek_handler;
                 $plek_handler->update_plek_option('plek_facebook_page_token', $fb_obj->access_token, 'plek_api_options');
                 return true;
             }
-            if(!empty(curl_error($curl_handle))){
+            if (!empty(curl_error($curl_handle))) {
                 echo curl_error($curl_handle);
             }
             echo $fb_response; //Contains errors
@@ -154,11 +180,11 @@ class plekSocialMedia
     public function get_page_name()
     {
         try {
-            $fb = (object) $this->facebook_object;
+            $fb = (!$this->facebook_object) ? $this->facebook_login() : (object) $this->facebook_object;
             if (!$fb) {
                 return false;
             }
-            $response = $fb->get($this->page_id,  $this->page_token);
+            $response = $fb->get($this->facebook_data->page_id,  $this->facebook_data->page_token);
         } catch (\Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
             return 'Graph returned an error: ' . $e->getMessage();
