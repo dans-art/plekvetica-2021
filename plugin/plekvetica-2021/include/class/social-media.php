@@ -67,12 +67,12 @@ class plekSocialMedia
      */
     public function post_photo_to_facebook(string $msg, string $url)
     {
+        $fb = (!$this->facebook_object) ? $this->facebook_login() : (object) $this->facebook_object;
         $photo_data = [
             'message' => htmlspecialchars($msg),
-            'url' => $url
+            'source' => $fb->fileToUpload($url)
         ];
         try {
-            $fb = (!$this->facebook_object) ? $this->facebook_login() : (object) $this->facebook_object;
             $response = $fb->post($this->facebook_data->page_id . '/photos', $photo_data,  $this->facebook_data->page_token);
         } catch (\Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error

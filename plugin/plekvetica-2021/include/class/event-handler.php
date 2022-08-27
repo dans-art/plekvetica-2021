@@ -2907,4 +2907,19 @@ class PlekEventHandler
         }
         return $follower;
     }
+
+    /**
+     * Get the count of social media posts for a event and posttype
+     *
+     * @param string $site - Supported: facebook
+     * @param string $type - Name of the field. E.g. 'promote_post', 'ticket_raffle_post'
+     * @return int|false
+     */
+    public function get_social_media_post_count($site, $type)
+    {
+        $postings = $this->get_field_value_decoded('post_share_count');
+        return (isset($postings[$site][$type])) ? intval($postings[$site][$type]) : false;
+    }
+
+    
 }
