@@ -56,6 +56,9 @@ define('PLEK_THEME_TEMPLATE_PATH', 'plekvetica/');
 require_once(PLEK_PATH . 'include/redirect.php');
 
  //Error Handling
+ if(!class_exists('WP_Error')){
+  require_once(ABSPATH.'wp-includes/class-wp-error.php');
+ }
  $plek_ajax_errors = new WP_Error();
 
  require_once(PLEK_PATH . 'include/filter-actions.php');

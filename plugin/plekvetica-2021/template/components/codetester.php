@@ -17,7 +17,12 @@ if(wp_is_mobile()){
 
 $pn = new PlekNotificationHandler;
 $pe = new PlekEvents;
-$pe->load_event(75448);
-s($pe->get_poster_path());
+$pf = new PlekFileHandler;
+
+$orig_photo = ABSPATH.'wp-content\uploads\photo-gallery\_DSC0010.JPG';
+$save_path = ABSPATH.'wp-content\uploads\photo-gallery\_DSC0010_marked.JPG';
+$watermark = PLEK_PATH.'images\watermarks\ticketraffle-2-2.png';
+$pf -> create_watermarked_image($orig_photo, $watermark, $save_path);
+
 ?>
 
