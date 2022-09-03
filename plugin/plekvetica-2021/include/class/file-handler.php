@@ -15,7 +15,8 @@ class PlekFileHandler
 
     public function __construct()
     {
-        $errors = new WP_Error();
+        $this-> errors = new WP_Error();
+        s($this->errors);
     }
     public function upload_image()
     {
@@ -114,19 +115,19 @@ class PlekFileHandler
     /**
      * Creates a new image with a watermark on top.
      *
-     * @param [type] $image_path
-     * @param [type] $watermark_path
-     * @param [type] $new_image_path
-     * @return void
+     * @param string $image_path - The Path to the base image
+     * @param string $watermark_path - Watermark file to use. Has to be a PNG file
+     * @param string $new_image_path - Path to the new image
+     * @return bool True on success, false on error
      */
     public function create_watermarked_image($image_path, $watermark_path, $new_image_path)
     {
         if (!file_exists($image_path) or !file_exists($watermark_path)) {
-            $this->error->add('create_watermarked_image_no_image', __('No Image found', 'pleklang') . ' Image: ' . $image_path . ' Watermark:' . $watermark_path);
+            $this->errors->add('create_watermarked_image_no_image', __('No Image found', 'pleklang') . ' Image: ' . $image_path . ' Watermark:' . $watermark_path);
             return false;
         }
         $orig_image = getimagesize($image_path);
-        list($width, $height, $type) = $orig_image;
+        list($width, $height) = $orig_image;
         $mime = (isset($orig_image['mime'])) ? $orig_image['mime'] : 'null';
 
         //Set the new Image
@@ -138,7 +139,7 @@ class PlekFileHandler
                 break;
 
             default:
-                $this->error->add('create_watermarked_image_unsupported', __('Filetype not supported', 'pleklang'));
+                $this->errors->add('create_watermarked_image_unsupported', __('Filetype not supported', 'pleklang'));
                 return false;
                 break;
         }
@@ -146,9 +147,19 @@ class PlekFileHandler
         imagealphablending($new_img, true);
         imagesavealpha($new_img, true);
 
+        //Adjust the watermark image to fit the base image
+        $watermark_orig_width = imagesx($watermark_img);
+        $watermark_orig_height = imagesY($watermark_img);
+        $watermark_new_height = ($width / $watermark_orig_width * $watermark_orig_height);
+
+        $watermark_img_scaled = imagescale($watermark_img, $width,$watermark_new_height); 
+
+        $watermark_height = imagesy($watermark_img_scaled);
+        $watermark_y_pos = ($height - $watermark_height) / 2; //Align to the center
+
         //Copy the images
-        imagecopymerge($new_img, $image_base, 0, 0, 0, 0, $width, $height, 100);
-        imagecopymerge($new_img, $watermark_img, 0, 0, 0, 0, $width, $height, 50);
+        imagecopy($new_img, $image_base, 0, 0, 0, 0, $width, $height);
+        imagecopy($new_img, $watermark_img_scaled, 0, $watermark_y_pos, 0, 0, $width, $width);
 
         //Save the new image
         return imagejpeg($new_img, $new_image_path);
