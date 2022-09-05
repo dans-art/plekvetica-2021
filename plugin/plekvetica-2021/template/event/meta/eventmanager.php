@@ -51,7 +51,20 @@ $missing_details = $plek_event->get_missing_event_details();
     <?php
     //Promote on Facebook Button    
     if (PlekUserHandler::current_user_can_edit($plek_event) and !$plek_event->is_review() and !$plek_event->is_past_event() and PlekUserHandler::user_is_in_team()) : ?>
-        <a id="promoteEvent" name="promoteEvent" class="plek-button full-width blue" data-eventid="<?php echo $event_id; ?>"><i class="fab fa-facebook-square"></i> <?php echo __('Promote Event', 'pleklang'); ?></a>
+        <a id="promoteEvent" name="promoteEvent" class="plek-button full-width blue" data-eventid="<?php echo $event_id; ?>">
+            <i class="fab fa-facebook-square"></i>&nbsp;
+            <?php echo __('Promote Event', 'pleklang'); ?>&nbsp;
+            (<span class="count"><?php echo $plek_event->get_social_media_post_count('facebook', 'promote_event') ?: 0; ?></span>)
+        </a>
+    <?php endif; ?>
+    <?php
+    //Post ticket raffle on Facebook Button    
+    if (PlekUserHandler::current_user_can_edit($plek_event) and !$plek_event->is_past_event() and PlekUserHandler::user_is_in_team()) : ?>
+        <a id="raffleEvent" name="raffleEvent" class="plek-button full-width blue" data-eventid="<?php echo $event_id; ?>">
+            <i class="fab fa-facebook-square"></i>&nbsp;
+            <?php echo __('Post ticket raffle', 'pleklang'); ?>&nbsp;
+            (<span class="count"><?php echo $plek_event->get_social_media_post_count('facebook', 'ticket_raffle') ?: 0; ?></span>)
+        </a>
     <?php endif; ?>
     <?php
     //Revision Event Button    

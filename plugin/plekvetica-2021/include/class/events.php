@@ -1289,7 +1289,7 @@ class PlekEvents extends PlekEventHandler
             $plek_handler->enqueue_select2();
 
             $min = ($plek_handler->is_dev_server()) ? '' : '.min';
-            wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler.js', ['jquery', 'plek-language'], $this->version);
+            wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler'.$min.'.js', ['jquery', 'plek-language'], $this->version);
             wp_enqueue_script('plek-jquery-ui', "https://code.jquery.com/ui/1.13.0/jquery-ui.js", ['jquery']);
         });
     }
@@ -1305,7 +1305,11 @@ class PlekEvents extends PlekEventHandler
         $social = new plekSocialMedia();
         $message = $this->get_event_promo_text();
         $path = $this->get_poster_path();
-        return $social->post_photo_to_facebook($message, $path);
+        $post = $social->post_photo_to_facebook($message, $path);
+        if($post === true){
+            $this->increment_social_media_post_count('facebook','promote_event');
+        }
+        return $post;
     }
 
     /**

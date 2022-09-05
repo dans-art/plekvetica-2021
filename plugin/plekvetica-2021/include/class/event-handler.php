@@ -582,7 +582,8 @@ class PlekEventHandler
      *
      * @return string The Poster path.
      */
-    public function get_poster_path(){
+    public function get_poster_path()
+    {
         $poster_path = get_attached_file(intval($this->get_field_value('_thumbnail_id')));
         return $poster_path;
     }
@@ -2923,7 +2924,7 @@ class PlekEventHandler
      *
      * @param string $site - Supported: facebook
      * @param string $type - Name of the field. E.g. 'promote_post', 'ticket_raffle_post'
-     * @return int|false
+     * @return int|false The post count or false if not found
      */
     public function get_social_media_post_count($site, $type)
     {
@@ -2931,5 +2932,24 @@ class PlekEventHandler
         return (isset($postings[$site][$type])) ? intval($postings[$site][$type]) : false;
     }
 
-    
+
+    /**
+     * Increments the social media post count by one
+     *
+     * @param string $site Name of the site Eg. facebook
+     * @param string $type The type or action to save. Eg. ticket_raffle_post
+     * @return bool True on success, false on error
+     */
+    public function increment_social_media_post_count($site, $type)
+    {
+        global $plek_handler;
+        if (!$this->is_event_loaded()) {
+            return false;
+        }
+        //Get the old count
+        $postings = $this->get_field_value_decoded('post_share_count');
+        $old_count = (isset($postings[$site][$type])) ? intval($postings[$site][$type]) : 0;
+        $postings[$site][$type] = ++$old_count; //Increment by 1
+        return $plek_handler->update_field('post_share_count', json_encode($postings), $this->get_ID());
+    }
 }

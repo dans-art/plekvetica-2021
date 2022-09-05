@@ -19,15 +19,20 @@ $pn = new PlekNotificationHandler;
 $pe = new PlekEvents;
 $pf = new PlekFileHandler;
 
-$orig_photo = ABSPATH.'wp-content\uploads\photo-gallery\Cellar_Darling_-_Plekvetica_-__DSC5911.jpg';
-$save_path = ABSPATH.'wp-content\uploads\photo-gallery\Cellar_Darling_-_Plekvetica_-__DSC5911_marked.JPG';
-$save_url = 'https://localhost/plekvetica/wp-content/uploads/photo-gallery/Cellar_Darling_-_Plekvetica_-__DSC5911_marked.JPG';
-$watermark = PLEK_PATH.'images\watermarks\ticketraffle-1-2.png';
+$orig_photo = ABSPATH.'wp-content\uploads\2022\Plakat_GNP_OBSCURA_420x594_web.jpg';
+$save_path = ABSPATH.'wp-content\uploads\2022\Plakat_GNP_OBSCURA_420x594_web_marked.jpg';
+$save_url = 'https://localhost/plekvetica/wp-content/uploads/2022/Plakat_GNP_OBSCURA_420x594_web_marked.jpg';
+$watermark = PLEK_PATH.'images\watermarks\ticketraffle-2-2.png';
 
-if(!$pf -> create_watermarked_image($orig_photo, $watermark, $save_path)){
+/*if(!$pf -> create_watermarked_image($orig_photo, $watermark, $save_path)){
 	s($pf->errors->get_error_messages());
 }else{
 
 	echo '<img src="'.$save_url.'"/>';
-}
+}*/
+
+$pe->load_event(77108);
+s($pe->get_social_media_post_count('facebook', 'ticket_raffle'));
+s($pe->increment_social_media_post_count('facebook', 'ticket_raffle'));
+s($pe->get_social_media_post_count('facebook', 'ticket_raffle'));
 
