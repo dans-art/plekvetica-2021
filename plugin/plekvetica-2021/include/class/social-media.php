@@ -18,6 +18,7 @@ class plekSocialMedia
 
     protected $facebook_object = false;
     protected $facebook_data = null;
+    public $last_fb_response = null;
 
     /**
      * Loads the data from Wordpress options to the class property. Loads the Facebook object 
@@ -48,6 +49,7 @@ class plekSocialMedia
         try {
             $fb = (!$this->facebook_object) ? $this->facebook_login() : (object) $this->facebook_object;
             $response = $fb->post($this->facebook_data->page_id . '/feed', $link_data,  $this->facebook_data->page_token);
+            $this -> last_fb_response = $response;
         } catch (\Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
             return $this->facebook_catch_error($e, 'graph');
@@ -74,6 +76,7 @@ class plekSocialMedia
         ];
         try {
             $response = $fb->post($this->facebook_data->page_id . '/photos', $photo_data,  $this->facebook_data->page_token);
+            $this -> last_fb_response = $response;
         } catch (\Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
             return $this->facebook_catch_error($e, 'graph');

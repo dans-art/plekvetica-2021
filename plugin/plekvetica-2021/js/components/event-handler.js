@@ -216,7 +216,11 @@ var plekevent = {
 
         if (!empty(jQuery('#event-band-selection #band-time-' + item_id))) {
             plek_manage_event.flatpickr_band_options.defaultDate = plekevent.get_band_default_date(`#event-band-selection .plek-select-item[data-id='${item_id}']`);
-            jQuery('#event-band-selection #band-time-' + item_id).flatpickr(plek_manage_event.flatpickr_band_options); //Load the Flatpickr
+            try {
+                jQuery('#event-band-selection #band-time-' + item_id).flatpickr(plek_manage_event.flatpickr_band_options); //Load the Flatpickr
+            } catch (error) {
+                console.error("Flatpickr not loaded");
+            }
             plekevent.update_band_playtime_button_text(`#event-band-selection .plek-select-item[data-id='${item_id}']`);
             return;
         }

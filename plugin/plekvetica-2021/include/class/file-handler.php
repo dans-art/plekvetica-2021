@@ -16,7 +16,6 @@ class PlekFileHandler
     public function __construct()
     {
         $this-> errors = new WP_Error();
-        s($this->errors);
     }
     public function upload_image()
     {
@@ -166,6 +165,27 @@ class PlekFileHandler
 
     }
 
+    /**
+     * Returns the path to the watermark file.
+     *
+     * @param string $condition - Supported are 22, 12
+     * @return string|false False if $condition not supported
+     */
+    public function get_watermak_file($condition){
+        switch ($condition) {
+            case '22':
+                $watermark = PLEK_PATH.'images\watermarks\ticketraffle-2-2.png';
+                break;
+            case '12':
+                $watermark = PLEK_PATH.'images\watermarks\ticketraffle-1-2.png';
+                break;
+            
+            default:
+                return false;
+                break;
+        }
+        return $watermark;
+    }
     /**
      * Sets the Options for the image
      * If this options are set, uploaded files will may be resized on upload.

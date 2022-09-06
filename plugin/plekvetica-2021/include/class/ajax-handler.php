@@ -205,8 +205,14 @@ class PlekAjaxHandler
                 }
                 break;
                 case 'ticket_raffle':
-                    $this->set_success('test');  //Error Message from Facebook SDK
-                
+                    $event_id = $this->get_ajax_data('id');
+                    $plek_event->load_event($event_id);
+                    $post = $plek_event->post_ticket_raffle_on_facebook();
+                    if ($post === true) {
+                        $this->set_success(__('Ticket raffle successfully posted on facebook', 'pleklang'));
+                    } else {
+                        $this->set_error($post);  //Error Message from Facebook SDK
+                    }
                 break;
             case 'remove_akkredi_member':
                 $event_id = (int) $this->get_ajax_data('id');

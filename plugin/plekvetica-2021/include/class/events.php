@@ -72,6 +72,11 @@ class PlekEvents extends PlekEventHandler
             case 'details':
                 return PlekTemplateHandler::load_template($name, 'event/meta', $this);
                 break;
+            case 'win_conditions':
+                $win_conditions = $this->get_field_value('win_conditions');
+                $raffle_condition_options = $plek_handler->get_acf_choices('win_conditions', '', $this->get_id());
+                return (isset($raffle_condition_options[$win_conditions])) ? $raffle_condition_options[$win_conditions] : 'Win condition not Supported';
+                break;
             default:
                 return ($template === null) ? $this->get_field_value($name) : PlekTemplateHandler::load_template($template, 'event/meta');
                 break;
@@ -823,7 +828,7 @@ class PlekEvents extends PlekEventHandler
         $args = [
             'eventDisplay'   => 'custom',
             'start_date'     => date('Y-m-d', time() -  172800), // 172800 = Two days in seconds 
-            'end_date'     => date('Y-m-d', time() +  60*60*24*365*5), // Five Years from today 
+            'end_date'     => date('Y-m-d', time() +  60 * 60 * 24 * 365 * 5), // Five Years from today 
             'posts_per_page' => 5000,
             'order'       => 'ASC',
             'order_by'       => 'start_date',
@@ -1289,7 +1294,7 @@ class PlekEvents extends PlekEventHandler
             $plek_handler->enqueue_select2();
 
             $min = ($plek_handler->is_dev_server()) ? '' : '.min';
-            wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler'.$min.'.js', ['jquery', 'plek-language'], $this->version);
+            wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler' . $min . '.js', ['jquery', 'plek-language'], $this->version);
             wp_enqueue_script('plek-jquery-ui', "https://code.jquery.com/ui/1.13.0/jquery-ui.js", ['jquery']);
         });
     }
@@ -1306,8 +1311,58 @@ class PlekEvents extends PlekEventHandler
         $message = $this->get_event_promo_text();
         $path = $this->get_poster_path();
         $post = $social->post_photo_to_facebook($message, $path);
-        if($post === true){
-            $this->increment_social_media_post_count('facebook','promote_event');
+        if ($post === true) {
+            $this->increment_social_media_post_count('facebook', 'promote_event');
+        }
+        return $post;
+    }
+
+    /**
+     * Posts the ticket raffle on facebook
+     * Creates a new image with the watermark
+     * increments the social media post count
+     * 
+     * @return string|bool true on success, string on error
+     */
+    public function post_ticket_raffle_on_facebook()
+    {
+        global $plek_handler;
+        $social = new plekSocialMedia();
+        $pf = new PlekFileHandler;
+        $message = $this->get_ticket_raffle_text();
+
+        $win_conditions = $this->get_field_value('win_conditions');
+        if (!$message) {
+            return __('Failed to load Text for the Facebook ticket raffle', 'pleklang');
+        }
+        if(empty($win_conditions)){
+            return __('Win conditions not set', 'pleklang');
+
+        }
+        //Get the poster paths
+        $poster = $this->get_poster_path();
+        $raffle_poster = $plek_handler->add_to_filename($poster, '_raffle'); //This will override existing posters with the same name.
+
+        //Create the new Poster
+        $watermark = $pf->get_watermak_file($win_conditions);
+        if (!$watermark) {
+            return __('Win condition not supported', 'pleklang');
+        }
+        if (!$pf->create_watermarked_image($poster, $watermark, $raffle_poster)) {
+            return $pf->errors->get_error_messages();
+        }
+
+        //Make the post
+        $post = $social->post_photo_to_facebook($message, $raffle_poster);
+        if ($post === true) {
+            $this->increment_social_media_post_count('facebook', 'ticket_raffle');
+        }
+
+        //Add the link to the acf for the ticket raffle
+        if (is_object($social->last_fb_response) and method_exists($social->last_fb_response, 'getDecodedBody')) {
+            $response_body = $social->last_fb_response->getDecodedBody();
+            $raffle_link = (isset($response_body['id'])) ? "https://www.facebook.com/" . $response_body['id'] : "";
+            $plek_handler->update_field('win_url', $raffle_link, $this->get_ID());
         }
         return $post;
     }

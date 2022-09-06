@@ -625,6 +625,23 @@ class PlekEventHandler
     }
 
     /**
+     * Returns all the organizers with their facebook id. 
+     *
+     * @return array ['facebook_page_id' => OrganizerName,..]
+     */
+    public function get_organizers_as_facebook_id(){
+        $organizers = $this->get_field_value('_EventOrganizerID', true);
+        if (!is_array($organizers)) {
+            return $organizers; //Returns probably a string with the name.
+        }
+        $fb_organizers = array();
+        foreach($organizers as $index => $organi_id){
+            $fb_id = get_field('facebook_page_id', $organi_id) ?: $index;
+            $fb_organizers[$fb_id] = tribe_get_organizer($organi_id);
+        }
+        return $fb_organizers;
+    }
+    /**
      * Returns the thumbnail object
      *
      * @param string $size - The size. Accepts small, medium, maxres and default.
@@ -664,6 +681,11 @@ class PlekEventHandler
         return $text . $event_url;
     }
 
+    public function get_ticket_raffle_text()
+    {
+        $event_url = $this->get_permalink();
+        return PlekTemplateHandler::load_template_to_var('ticket-raffle', 'socialmedia/facebook', $this);
+    }
     /**
      * Returns all Users, who put the Event on their watchlist.
      *
@@ -2949,7 +2971,7 @@ class PlekEventHandler
         //Get the old count
         $postings = $this->get_field_value_decoded('post_share_count');
         $old_count = (isset($postings[$site][$type])) ? intval($postings[$site][$type]) : 0;
-        $postings[$site][$type] = ++$old_count; //Increment by 1
+        $postings[$site][$type] = $old_count + 1; //Increment by 1
         return $plek_handler->update_field('post_share_count', json_encode($postings), $this->get_ID());
     }
 }

@@ -31,8 +31,7 @@ $watermark = PLEK_PATH.'images\watermarks\ticketraffle-2-2.png';
 	echo '<img src="'.$save_url.'"/>';
 }*/
 
-$pe->load_event(77108);
-s($pe->get_social_media_post_count('facebook', 'ticket_raffle'));
-s($pe->increment_social_media_post_count('facebook', 'ticket_raffle'));
-s($pe->get_social_media_post_count('facebook', 'ticket_raffle'));
+$pe->load_event(68110);
+//s($pe->increment_social_media_post_count('facebook', 'ticket_raffle'));
+s($plek_handler->add_to_filename(ABSPATH.'wp-content\uploads\2022\Plakat_GNP_OBSCURA_420x594_web.jpg', '_marked', true));
 

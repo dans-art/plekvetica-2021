@@ -72,8 +72,12 @@ let plek_manage_event = {
             plekvalidator.monitor_fields();
 
             //Load the Flatpicker
-            flatpickr("#event_start_date", flatpickr_options);
-            flatpickr("#event_end_date", flatpickr_options);
+            try {
+                flatpickr("#event_start_date", flatpickr_options);
+                flatpickr("#event_end_date", flatpickr_options);
+            } catch (error) {
+                console.error("Flatpickr not loaded");
+            }
 
             //Populate the existing vob data
             plek_manage_event.add_vob_to_current_selection('bands');
@@ -165,7 +169,11 @@ let plek_manage_event = {
                 jQuery('#event_end_date').val(''); //Reset the Enddate
             }
             end_options['minDate'] = start_date;
-            flatpickr("#event_end_date", end_options);
+            try {
+                flatpickr("#event_end_date", end_options);
+            } catch (error) {
+                console.error("Flatpickr not loaded");
+            }
             //Show checkbox if date was changed and edit event
             if (plek_manage_event.is_edit_event) {
                 jQuery('.event-date-postponed-check-container').show();
