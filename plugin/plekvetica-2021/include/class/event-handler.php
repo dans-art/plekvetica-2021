@@ -1837,6 +1837,8 @@ class PlekEventHandler
         } else {
             return;
         }
+        //Reset the accreditation status to aw (Wunsch)
+        $plek_handler->update_field('akk_status', 'aw', $event_id); 
 
         return $plek_handler->update_field('postponed_event_dates', json_encode($prev_postponed_dates), $event_id);
     }

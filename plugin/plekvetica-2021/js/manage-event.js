@@ -335,6 +335,7 @@ let plek_manage_event = {
                 } else {
                     text = plek_main.get_first_success_from_ajax_request(data);
                     let return_obj = plek_main.get_ajax_success_object(data);
+                    
                     if (typeof return_obj === 'undefined') {
                         plekerror.display_error(null, __('Oops, something went wrong.... sorry!', 'pleklang'), __('Invalid Response', 'pleklang'));
                     } else {
@@ -360,7 +361,6 @@ let plek_manage_event = {
                 setTimeout(() => {
                     jQuery('#' + type).text(default_submit_btn_text);
                 }, 5000);
-
             },
             error: function error(data) {
                 plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));

@@ -83,7 +83,7 @@ var plekevent = {
                 this.add_item_to_selection(ele_v);
                 plekerror.display_info(__('Add Venue', 'pleklang'), __('The Venue has been added to the Database', 'pleklang'));
                 break;
-            case 'orgnaizer-form-submit':
+            case 'organizer-form-submit':
                 window.organizerPreloadedData = data;
                 let organizer = window.organizerPreloadedData[vob_id];
                 let ele_o = plektemplate.load_organizer_item_template(organizer);
@@ -361,7 +361,9 @@ var plekevent = {
     add_remove_item_eventlistener() {
         jQuery('.remove-item').click(function () {
             jQuery(this).closest('.plek-select-item').remove();
-            plekevent.generate_title(); //Regenerate the title
+            if(!plekevent.is_edit_event()){
+                plekevent.generate_title(); //Regenerate the title
+            }
         });
     },
     remove_all_items(selector) {

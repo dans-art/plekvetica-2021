@@ -35,8 +35,7 @@ if ($is_review) {
 $min = ($plek_handler->is_dev_server()) ? '' : '.min';
 wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-single'.$min.'.js', ['jquery', 'plek-language'], $plek_handler -> version);
 ?>
-
-<?php if ($is_postponed and $plek_event->is_public($postponed_id) AND intval($plek_event-> get_ID()) !== $postponed_id) : ?>
+<?php if ($is_postponed and $postponed_id !== false AND $plek_event->is_public($postponed_id) AND intval($plek_event-> get_ID()) !== $postponed_id) : ?>
     <h1><?php echo $plek_event->get_field('post_title'); ?></h1>
     <div><?php echo __('This event has been postponed', 'pleklang'); ?></div>
     <a href="<?php echo get_permalink($postponed_id); ?>"><?php echo __('To the new event', 'pleklang'); ?></a>
