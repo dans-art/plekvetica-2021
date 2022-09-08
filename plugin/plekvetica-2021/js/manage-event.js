@@ -20,6 +20,7 @@ jQuery(document).ready(function () {
     jQuery('select:not(.no-select2)').select2({
         theme: "plek"
     });
+
     /** Avoid Reload on enter button press */
     /**
      * @todo: make the submit button work on select band / organi / venue item
@@ -83,6 +84,10 @@ let plek_manage_event = {
             plek_manage_event.add_vob_to_current_selection('bands');
             plek_manage_event.add_vob_to_current_selection('venue');
             plek_manage_event.add_vob_to_current_selection('organizers');
+
+            //Load the error class
+            plekerror.set_toastr();
+            console.log("toaster set");
         });
 
 

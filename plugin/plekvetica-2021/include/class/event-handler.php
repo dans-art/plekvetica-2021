@@ -629,13 +629,14 @@ class PlekEventHandler
      *
      * @return array ['facebook_page_id' => OrganizerName,..]
      */
-    public function get_organizers_as_facebook_id(){
+    public function get_organizers_as_facebook_id()
+    {
         $organizers = $this->get_field_value('_EventOrganizerID', true);
         if (!is_array($organizers)) {
             return $organizers; //Returns probably a string with the name.
         }
         $fb_organizers = array();
-        foreach($organizers as $index => $organi_id){
+        foreach ($organizers as $index => $organi_id) {
             $fb_id = get_field('facebook_page_id', $organi_id) ?: $index;
             $fb_organizers[$fb_id] = tribe_get_organizer($organi_id);
         }
@@ -1494,9 +1495,11 @@ class PlekEventHandler
                 ['event_id' => $event_id, 'event_title' => $event_title, 'user' => $user_login]
             );
             //Send info to admin if first request
+            $message = sprintf(__('Team Member <b>%s</b> added a accreditation request.', 'pleklang'), PlekUserHandler::get_current_user_display_name()) . '</br>';
+            $message .= __('Please check for missing event accreditation.', 'pleklang');
             PlekNotificationHandler::push_to_admin(
                 __('Teammember added accreditation request', 'pleklang'),
-                __('Please check for missing event accreditation.', 'pleklang'),
+                $message,
                 get_permalink($event_id)
             );
             return true;

@@ -1264,7 +1264,7 @@ class PlekEvents extends PlekEventHandler
             wp_enqueue_script('plek-jquery-ui', "https://code.jquery.com/ui/1.13.0/jquery-ui.js", ['jquery']);
 
             //Load handler
-            $handler = array('event', 'error', 'validator', 'search', 'template');
+            $handler = array('error', 'validator', 'search', 'template', 'event');
             $dependencies = array('jquery', 'plek-language', 'manage-plek-events', 'wp-i18n');
 
             foreach ($handler as $handler_name) {
@@ -1335,9 +1335,8 @@ class PlekEvents extends PlekEventHandler
         if (!$message) {
             return __('Failed to load Text for the Facebook ticket raffle', 'pleklang');
         }
-        if(empty($win_conditions)){
+        if (empty($win_conditions)) {
             return __('Win conditions not set', 'pleklang');
-
         }
         //Get the poster paths
         $poster = $this->get_poster_path();

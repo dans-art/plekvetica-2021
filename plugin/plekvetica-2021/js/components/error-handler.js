@@ -96,6 +96,10 @@ var plekerror = {
      * @param {string} message The message to show
      */
     display_info(title, message) {
+        if(empty(message)){
+            message = title;
+            title = '';
+        }
         console.log(title);
         console.log(message);
         toastr.info(message, title);
