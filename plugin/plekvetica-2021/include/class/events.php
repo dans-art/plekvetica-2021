@@ -536,7 +536,7 @@ class PlekEvents extends PlekEventHandler
         $to = $to ?: '9999-01-01 00:00:00';
 
         $query = $wpdb->prepare(
-            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME)  as startdate
+            "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title, posts.post_status, CAST(date.meta_value AS DATETIME)  as startdate
         FROM `{$wpdb->prefix}posts` as posts 
         LEFT JOIN {$wpdb->prefix}postmeta as date
         ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
@@ -1011,7 +1011,12 @@ class PlekEvents extends PlekEventHandler
             LEFT JOIN {$wpdb->prefix}postmeta as startdate
             ON posts.ID = startdate.post_id
             AND startdate.meta_key = '_EventStartDate'
+            LEFT JOIN {$wpdb->prefix}postmeta as cancel_event
+            ON posts.ID = cancel_event.post_id
+            AND cancel_event.meta_key = 'cancel_event'
             WHERE meta.`meta_key` LIKE 'win_url'
+            AND (cancel_event.meta_value IS NULL OR cancel_event.meta_value = '')
+            AND meta.`meta_value` > ''
             AND posts.post_status IN ('publish', 'draft')
             AND meta.`meta_value` > ''
             AND posts.ID IS NOT NULL
