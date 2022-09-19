@@ -392,7 +392,10 @@ let plek_main = {
                     for (const [sub_id, sub_value] of Object.entries(value)) {
                         if(typeof sub_value === 'string'){
                             var field_selector = jQuery('#' + sub_id);
-                            jQuery(field_selector).after(plek_main.format_error_message(sub_value));
+                            //Only add if value does not exist yet.
+                            if(!jQuery(field_selector).parent().find('.plek-error:contains("'+sub_value+'")').length === 0){
+                                jQuery(field_selector).after(plek_main.format_error_message(sub_value));
+                            }
                         }
                         else if(typeof sub_value === 'array' || typeof sub_value === 'object'){
                             jQuery(sub_value).each(function (i) {
@@ -401,7 +404,9 @@ let plek_main = {
                                 if (field_selector.length === 0) {
                                     var field_selector = jQuery(form); //If field is not found, attach the error at the end of the given form
                                 }
-                                jQuery(field_selector).after(plek_main.format_error_message(sub_value[i]));
+                                if(jQuery(field_selector).parent().find('.plek-error:contains("'+sub_value[i]+'")').length === 0){
+                                    jQuery(field_selector).after(plek_main.format_error_message(sub_value[i]));
+                                }
                                 error_count++;
                             });
                         }

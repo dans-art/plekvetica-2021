@@ -361,7 +361,7 @@ var plekevent = {
     add_remove_item_eventlistener() {
         jQuery('.remove-item').click(function () {
             jQuery(this).closest('.plek-select-item').remove();
-            if(!plekevent.is_edit_event()){
+            if (!plekevent.is_edit_event()) {
                 plekevent.generate_title(); //Regenerate the title
             }
         });
@@ -569,7 +569,8 @@ var plekevent = {
                 let errors = plek_main.show_field_errors(data, form);
                 if (errors === true) {
                     console.log("Contains Errors");
-                    text = "Das Formular enthält Fehler, bitte korrigieren";
+                    text = __("The Review contains errors, please fix them.", 'pleklang');
+                    plekerror.display_error('', text, __('Review status', 'pleklang'));
                     plek_main.deactivate_button_loader(button, orig_btn_text);
                     jQuery(button).prop("disabled", false); //Enable the button again.
                 } else {
@@ -577,6 +578,8 @@ var plekevent = {
                     plekerror.display_info(__('Review status', 'pleklang'), message);
                     plek_main.deactivate_button_loader(button, orig_btn_text);
                     jQuery(button).prop("disabled", false); //Enable the button again.
+                    //remove all errors
+                    plekerror.clear_field_errors();
                     return;
                 }
             },
@@ -685,7 +688,7 @@ var plekevent = {
      * @param add_to_form If the value should be added to the form.
      * @returns Event ID
      */
-    get_event_id(add_to_form = true){
+    get_event_id(add_to_form = true) {
         let event_id = this.get_field_value('event_id');
         if (empty(event_id)) {
             //Get the event_id from storage
@@ -698,7 +701,7 @@ var plekevent = {
                 console.log(error);
             }
         }
-        if(add_to_form){
+        if (add_to_form) {
             jQuery('input#event_id').val(event_id);
         }
         return parseInt(event_id);
@@ -888,7 +891,7 @@ var plekevent = {
                 event_name_text = this[1]; //Name of the Band
                 return;
             }
-            if(max_items < index + 2){
+            if (max_items < index + 2) {
                 //If the max items are reached. Add 2 to the index to get 3 items max
                 event_name_text += " & " + this[1];
                 return false;

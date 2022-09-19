@@ -805,6 +805,9 @@ input[type=checkbox]{
         color: $color-red;
       }
 
+      .gallery-preview{
+        border: $color-green 3px solid;
+      }
     }
   }
 

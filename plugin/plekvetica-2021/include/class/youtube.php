@@ -144,11 +144,21 @@ class plekYoutube
         return false;
     }
 
+    /**
+     * Displays the youtube video player for a single or multiple Youtube Video ids.
+     *
+     * @param array $id_arr An array with one ore more youtube video ids
+     * @return bool|string false if no id is found, string with html code on success
+     */
     public function videos_do_shortcode(array $id_arr){
         $videos = implode(',',$id_arr);
         $per_page = $this -> videos_per_page;
         $columns = $this -> grid_columns;
-        return do_shortcode("[yotuwp type='videos' id='$videos' column='$columns' per_page='$per_page']");
+        $video_html = do_shortcode("[yotuwp type='videos' id='$videos' column='$columns' per_page='$per_page']");
+        if(!strpos($video_html, 'yotu-video-thumb-wrp')){
+            return false;
+        }
+        return $video_html;
     }
 
     /**

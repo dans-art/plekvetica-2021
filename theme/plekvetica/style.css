@@ -794,6 +794,7 @@ input[type=checkbox] { margin: 1rem 0 0 0; height: 1.5rem; width: 1.5rem; filter
 #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete:hover::after { content: "\f302"; position: absolute; left: 42%; top: 16%; font-size: 2rem; font-family: "FontAwesome"; }
 #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete img { object-fit: cover; width: 100%; height: 50%; }
 #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_failed::before { content: "\f057"; color: #D9042B; }
+#edit_event_review_form div#images-uploaded-container .image_to_upload .gallery-preview { border: #268c37 3px solid; }
 
 .submit-event-edit-review-from, .submit-event-edit-from { display: flex; justify-content: flex-end; gap: 1rem; }
 .submit-event-edit-review-from #back_to_event_btn, .submit-event-edit-from #back_to_event_btn { background-color: #424242; }

@@ -1838,7 +1838,7 @@ class PlekEventHandler
             return;
         }
         //Reset the accreditation status to aw (Wunsch)
-        $plek_handler->update_field('akk_status', 'aw', $event_id); 
+        $plek_handler->update_field('akk_status', 'aw', $event_id);
 
         return $plek_handler->update_field('postponed_event_dates', json_encode($prev_postponed_dates), $event_id);
     }
@@ -2573,7 +2573,13 @@ class PlekEventHandler
             $playtime = (isset($this->event['timetable'][$band_id]['playtime_formated'])) ? $this->event['timetable'][$band_id]['playtime_formated'] : '';
             $playtime = (!empty($playtime)) ? date('H:i', strtotime($playtime))  : 'tbd';
 
-            $day = ($is_multiday and $timestamp > 0) ? date('d. F', $timestamp) : __('No Time defined', 'pleklang');
+            $day = __('No Time defined', 'pleklang');
+            if ($is_multiday and $timestamp > 0) {
+                //Check if the time is before 6AM. If so, assign it to the previous day
+                $day = (date('H', $timestamp) < 6) ? date('d. F', $timestamp - (60 * 60 * 24)) : date('d. F', $timestamp);
+            }
+
+            //Set empty value to avoid errors
             if (!isset($formated[$day][$timestamp])) {
                 $formated[$day][$timestamp] = '';
             }
@@ -2613,7 +2619,7 @@ class PlekEventHandler
      * @param string $format - The Format of the playtime
      * @return null|string The formated playtime on success, null if not found
      */
-    public function get_band_playtime($band_id, $format = 'd. m - H:i')
+    public function get_band_playtime($band_id, $format = 'd. m - H:i', $fix_playtime = false)
     {
         if (empty($this->event['timetable'])) {
             return null;
@@ -2622,7 +2628,11 @@ class PlekEventHandler
         if ($timestamp === 0) {
             return null;
         }
-        return ($timestamp === 0) ? null : date($format, $timestamp);
+        //Modify the date to the previous day if the band plays before 6AM
+        if ($this->is_multiday() and intval(date('H', $timestamp)) < 6) {
+            return date($format, $timestamp - 60 * 60 * 24);
+        }
+        return date($format, $timestamp);
     }
     /**
      * HOOK: This adds the timetable and order to the Band.
@@ -2776,7 +2786,7 @@ class PlekEventHandler
 
         if ($this->is_multiday()) {
             //Check the day the band is playing, if multiday and timetable defined.
-            $playday = $this->get_band_playtime($band_id, 'Y.m.d');
+            $playday = $this->get_band_playtime($band_id, 'Y.m.d', true);
             $date = ($playday === null) ? $date : $playday;
         }
         return $date . ' - ' . $name;
@@ -2810,7 +2820,8 @@ class PlekEventHandler
         $band_handler = new PlekBandHandler;
         $band_handler->load_band_object_by_id($band_id);
 
-        $playday = $this->get_band_playtime($band_id, 'd.m.Y');
+        $playday = $this->get_band_playtime($band_id, 'd.m.Y', true);
+
         $date = ($playday === null) ? $this->get_start_date('d.m.Y') : $playday;
 
         return $band_handler->get_name() . ' @ ' . $venue . ' - ' . $date;
