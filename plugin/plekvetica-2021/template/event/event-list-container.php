@@ -4,7 +4,6 @@ extract(get_defined_vars());
 $events = $template_args[0]; //Plek_events object
 $type = (isset($template_args[1])) ? $template_args[1] : null; //featured, reviews, youtube
 $prev_month = null;
-
 ?>
 <div class="tribe-events">
 	<div class="tribe-common-g-row tribe-events-calendar-list__event-row plek-post-type-<?php echo $type; ?>">
@@ -35,8 +34,9 @@ $prev_month = null;
 					case 'raffle_events':
 						if (isset($event->ID)) {
 							$list_event->load_event($event->ID);
-							echo PlekTemplateHandler::load_template_to_var('event-list-item', 'event', $list_event);
+							echo PlekTemplateHandler::load_template_to_var('event-raffle-item', 'event', $list_event);
 						}
+						break;
 					case 'new_events':
 						$list_event->load_event($event->ID, 'all');
 						echo PlekTemplateHandler::load_template_to_var('event-list-item-recently-added', 'event', $list_event);

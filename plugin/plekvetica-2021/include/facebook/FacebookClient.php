@@ -202,7 +202,6 @@ class FacebookClient
         }
 
         list($url, $method, $headers, $body) = $this->prepareRequestMessage($request);
-
         // Since file uploads can take a while, we need to give more time for uploads
         $timeOut = static::DEFAULT_REQUEST_TIMEOUT;
         if ($request->containsFileUploads()) {

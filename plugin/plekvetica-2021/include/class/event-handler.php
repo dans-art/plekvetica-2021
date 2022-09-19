@@ -578,6 +578,17 @@ class PlekEventHandler
     }
 
     /**
+     * Returns the path to the poster. Returns the original file
+     *
+     * @return string The Poster path.
+     */
+    public function get_poster_path()
+    {
+        $poster_path = get_attached_file(intval($this->get_field_value('_thumbnail_id')));
+        return $poster_path;
+    }
+
+    /**
      * Loads the image / attachment of the current event.
      *
      * @param string $size - Size of the image. Default: medium
@@ -613,6 +624,24 @@ class PlekEventHandler
         return $organizers;
     }
 
+    /**
+     * Returns all the organizers with their facebook id. 
+     *
+     * @return array ['facebook_page_id' => OrganizerName,..]
+     */
+    public function get_organizers_as_facebook_id()
+    {
+        $organizers = $this->get_field_value('_EventOrganizerID', true);
+        if (!is_array($organizers)) {
+            return $organizers; //Returns probably a string with the name.
+        }
+        $fb_organizers = array();
+        foreach ($organizers as $index => $organi_id) {
+            $fb_id = get_field('facebook_page_id', $organi_id) ?: $index;
+            $fb_organizers[$fb_id] = tribe_get_organizer($organi_id);
+        }
+        return $fb_organizers;
+    }
     /**
      * Returns the thumbnail object
      *
@@ -653,6 +682,11 @@ class PlekEventHandler
         return $text . $event_url;
     }
 
+    public function get_ticket_raffle_text()
+    {
+        $event_url = $this->get_permalink();
+        return PlekTemplateHandler::load_template_to_var('ticket-raffle', 'socialmedia/facebook', $this);
+    }
     /**
      * Returns all Users, who put the Event on their watchlist.
      *
@@ -1461,9 +1495,11 @@ class PlekEventHandler
                 ['event_id' => $event_id, 'event_title' => $event_title, 'user' => $user_login]
             );
             //Send info to admin if first request
+            $message = sprintf(__('Team Member <b>%s</b> added a accreditation request.', 'pleklang'), PlekUserHandler::get_current_user_display_name()) . '</br>';
+            $message .= __('Please check for missing event accreditation.', 'pleklang');
             PlekNotificationHandler::push_to_admin(
                 __('Teammember added accreditation request', 'pleklang'),
-                __('Please check for missing event accreditation.', 'pleklang'),
+                $message,
                 get_permalink($event_id)
             );
             return true;
@@ -1801,6 +1837,8 @@ class PlekEventHandler
         } else {
             return;
         }
+        //Reset the accreditation status to aw (Wunsch)
+        $plek_handler->update_field('akk_status', 'aw', $event_id);
 
         return $plek_handler->update_field('postponed_event_dates', json_encode($prev_postponed_dates), $event_id);
     }
@@ -2281,6 +2319,7 @@ class PlekEventHandler
         if ($type === 'save_edit_event') {
             $acf['is_win'] = 'is_win';
             $acf['win_url'] = 'event_ticket_raffle';
+            $acf['win_conditions'] = 'event_ticket_raffle_conditions';
             $acf['promote_event'] = 'event_promote';
             $acf['cancel_event'] = 'cancel_event';
             //$acf['postponed_event'] = 'postpone_event'; //This is saved by the save_event_postponed() function
@@ -2534,7 +2573,13 @@ class PlekEventHandler
             $playtime = (isset($this->event['timetable'][$band_id]['playtime_formated'])) ? $this->event['timetable'][$band_id]['playtime_formated'] : '';
             $playtime = (!empty($playtime)) ? date('H:i', strtotime($playtime))  : 'tbd';
 
-            $day = ($is_multiday and $timestamp > 0) ? date('d. F', $timestamp) : __('No Time defined', 'pleklang');
+            $day = __('No Time defined', 'pleklang');
+            if ($is_multiday and $timestamp > 0) {
+                //Check if the time is before 6AM. If so, assign it to the previous day
+                $day = (date('H', $timestamp) < 6) ? date('d. F', $timestamp - (60 * 60 * 24)) : date('d. F', $timestamp);
+            }
+
+            //Set empty value to avoid errors
             if (!isset($formated[$day][$timestamp])) {
                 $formated[$day][$timestamp] = '';
             }
@@ -2574,7 +2619,7 @@ class PlekEventHandler
      * @param string $format - The Format of the playtime
      * @return null|string The formated playtime on success, null if not found
      */
-    public function get_band_playtime($band_id, $format = 'd. m - H:i')
+    public function get_band_playtime($band_id, $format = 'd. m - H:i', $fix_playtime = false)
     {
         if (empty($this->event['timetable'])) {
             return null;
@@ -2583,7 +2628,11 @@ class PlekEventHandler
         if ($timestamp === 0) {
             return null;
         }
-        return ($timestamp === 0) ? null : date($format, $timestamp);
+        //Modify the date to the previous day if the band plays before 6AM
+        if ($this->is_multiday() and intval(date('H', $timestamp)) < 6) {
+            return date($format, $timestamp - 60 * 60 * 24);
+        }
+        return date($format, $timestamp);
     }
     /**
      * HOOK: This adds the timetable and order to the Band.
@@ -2737,7 +2786,7 @@ class PlekEventHandler
 
         if ($this->is_multiday()) {
             //Check the day the band is playing, if multiday and timetable defined.
-            $playday = $this->get_band_playtime($band_id, 'Y.m.d');
+            $playday = $this->get_band_playtime($band_id, 'Y.m.d', true);
             $date = ($playday === null) ? $date : $playday;
         }
         return $date . ' - ' . $name;
@@ -2771,7 +2820,8 @@ class PlekEventHandler
         $band_handler = new PlekBandHandler;
         $band_handler->load_band_object_by_id($band_id);
 
-        $playday = $this->get_band_playtime($band_id, 'd.m.Y');
+        $playday = $this->get_band_playtime($band_id, 'd.m.Y', true);
+
         $date = ($playday === null) ? $this->get_start_date('d.m.Y') : $playday;
 
         return $band_handler->get_name() . ' @ ' . $venue . ' - ' . $date;
@@ -2905,5 +2955,39 @@ class PlekEventHandler
             }
         }
         return $follower;
+    }
+
+    /**
+     * Get the count of social media posts for a event and posttype
+     *
+     * @param string $site - Supported: facebook
+     * @param string $type - Name of the field. E.g. 'promote_post', 'ticket_raffle_post'
+     * @return int|false The post count or false if not found
+     */
+    public function get_social_media_post_count($site, $type)
+    {
+        $postings = $this->get_field_value_decoded('post_share_count');
+        return (isset($postings[$site][$type])) ? intval($postings[$site][$type]) : false;
+    }
+
+
+    /**
+     * Increments the social media post count by one
+     *
+     * @param string $site Name of the site Eg. facebook
+     * @param string $type The type or action to save. Eg. ticket_raffle_post
+     * @return bool True on success, false on error
+     */
+    public function increment_social_media_post_count($site, $type)
+    {
+        global $plek_handler;
+        if (!$this->is_event_loaded()) {
+            return false;
+        }
+        //Get the old count
+        $postings = $this->get_field_value_decoded('post_share_count');
+        $old_count = (isset($postings[$site][$type])) ? intval($postings[$site][$type]) : 0;
+        $postings[$site][$type] = $old_count + 1; //Increment by 1
+        return $plek_handler->update_field('post_share_count', json_encode($postings), $this->get_ID());
     }
 }

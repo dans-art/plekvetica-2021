@@ -152,6 +152,7 @@ class PlekVenueHandler
         //Insert successfully
         //Send Notification to admin
         $message = sprintf(__('A new Venue "%s" has been added.', 'pleklang'), $name);
+        $message .= '<br/>' . PlekUserHandler::get_current_user_display_name(__('Added by', 'pleklang'));
         $action = admin_url('post.php?post=' . $create . '&action=edit');
         PlekNotificationHandler::push_to_admin(__('New Venue added', 'pleklang'), $message, $action);
 

@@ -266,12 +266,12 @@ var plek_gallery_handler = {
         //Add the button loader
         plek_main.activate_button_loader('#review_images_upload_btn', __('Uploading images...', 'pleklang'));
 
-        jQuery.each(files, function (index, upload) {
+        for(let index = 0; index < files.length; index++){
+            let upload = files[index];
             if(upload.size > plek_gallery_handler.max_upload_size){
                 //Skip item if filesize to big
                 return;
             }
-
             let formdata = new FormData();
             formdata.append('file_data', upload);
 
@@ -283,9 +283,8 @@ var plek_gallery_handler = {
             jQuery(item).addClass('upload_in_progress');
             jQuery(item).addClass('current_upload');
 
-            plek_gallery_handler.upload_image(index, formdata, gallery_id);
+            await plek_gallery_handler.upload_image(index, formdata, gallery_id);
         }
-        );
     },
 
     /**
@@ -319,6 +318,10 @@ var plek_gallery_handler = {
                     plekerror.display_error('', plek_main.get_first_error_from_ajax_request(data),__('Upload Error','pleklang'));
                 }else{
                     plekerror.display_info(__('Gallery preview', 'pleklang'), plek_main.get_first_success_from_ajax_request(data));
+                    //Remove the gallery preview class from all other image containers
+                    jQuery('.image_to_upload.upload_complete img').removeClass('gallery-preview');
+                    //Mark the Image as title image
+                    jQuery(img_element).addClass('gallery-preview');
                 }
                 plek_main.deactivate_loader_style(img_element);
             },
@@ -368,13 +371,13 @@ var plek_gallery_handler = {
      * @param {formdata} formdata 
      * @param {int} gallery_id 
      */
-    upload_image(index, formdata, gallery_id) {
+    async upload_image(index, formdata, gallery_id) {
 
         formdata.append('action', 'plek_ajax_gallery_actions');
         formdata.append('do', 'add_image');
         formdata.append('gallery_id', gallery_id);
 
-        jQuery.ajax({
+        return jQuery.ajax({
             url: ajaxurl,
             data: formdata,
             type: 'POST',
@@ -392,6 +395,7 @@ var plek_gallery_handler = {
                 }
                 let image_id = (success) ? plek_main.get_first_success_from_ajax_request(data): 0;
                 plek_gallery_handler.upload_image_progess_update(index, gallery_id, success, image_id);
+                return true;
             },
             error: function error(data) {
 

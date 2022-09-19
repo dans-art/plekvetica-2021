@@ -1,0 +1,303 @@
+{
+    "key": "group_5ba2afb217397",
+    "title": "Plekvetica Event Settings (Sidebar)",
+    "fields": [
+        {
+            "key": "field_5b15ba29d505e",
+            "label": "Bericht & Fotos",
+            "name": "is_review",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "Ist Review",
+            "default_value": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_5deb7d6b29260",
+            "label": "Promote Event",
+            "name": "promote_event",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "Diesen Event Promoten",
+            "default_value": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_5deb7d8229261",
+            "label": "Event abgesagt",
+            "name": "cancel_event",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "Dieser Event wurde Abgesagt",
+            "default_value": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_5b15ba63d5060",
+            "label": "Ticketverlosung",
+            "name": "is_win",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "Tickets zum Verlosen",
+            "default_value": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_5deb7dac29263",
+            "label": "Gewinnspiel Post",
+            "name": "win_url",
+            "type": "url",
+            "instructions": "URL zum Facebook-Gewinnspiel Post",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5b15ba63d5060",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_5b15bf88134ab",
+            "label": "Akkreditierungs Status",
+            "name": "akk_status",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": "akkrediSelect"
+            },
+            "choices": {
+                "aw": "Wunsch",
+                "aa": "Angefragt",
+                "ab": "Bestätigt",
+                "no": "Abgelehnt"
+            },
+            "default_value": [],
+            "allow_null": 1,
+            "multiple": 0,
+            "ui": 0,
+            "return_format": "value",
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_5b15ba8cd5061",
+            "label": "Akkreditiert",
+            "name": "akkreditiert",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "null": "Keiner",
+                "dansart": "Dänu",
+                "dnm.stalder": "Dänu Stalder",
+                "marcfuhrer": "Marc",
+                "cveti": "Cveti",
+                "myrkrahrafn": "Zoé",
+                "riccomat": "Eric",
+                "soltiyr": "Solti",
+                "troesch": "Christoph",
+                "natigrund": "Natalie",
+                "cellar13": "Roli",
+                "gorkar": "Gorka",
+                "jarikm": "Jarik",
+                "petizu": "Peti",
+                "eyluly": "Eylül",
+                "patb": "Pat Bebie",
+                "anwaerter": "Anwärter"
+            },
+            "default_value": [],
+            "allow_null": 1,
+            "multiple": 1,
+            "ui": 0,
+            "return_format": "value",
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_5deb7e4029264",
+            "label": "Abweichende Event Crew",
+            "name": "event_crew_custom",
+            "type": "textarea",
+            "instructions": "Format:\r\nBenutzername | Funktion | url\r\nFunktionen:\r\nphotographer, cutter, videograph, translator, interviewer, reviewwriter, eventmanager, Guest Author, Guest Photographer\r\nBenutzername und Funktion müssen angegeben werden, URL ist optional. Mehrere Autoren mit einem , (Komma) trennen.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_5b15bfce134ac",
+            "label": "Interview Status",
+            "name": "interview_status",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "iw": "Wunsch",
+                "ia": "Angefragt",
+                "ib": "Bestätigt",
+                "no": "Abgelehnt"
+            },
+            "default_value": [],
+            "allow_null": 1,
+            "multiple": 0,
+            "ui": 0,
+            "return_format": "value",
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_5b15bac3d5062",
+            "label": "Interview mit",
+            "name": "interview_with",
+            "type": "textarea",
+            "instructions": "Bands sind mit folgenden Codes zu bezeichenen:\r\nIA: Interview angefragt\r\nIB: Interview bestätigt\r\nBeispiel: IB:Trivium",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": 4,
+            "new_lines": "br"
+        },
+        {
+            "key": "field_6309f1f3f04c0",
+            "label": "Gewinnspiel Konditionen",
+            "name": "win_conditions",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "0": "None",
+                "11": "1x1",
+                "12": "1x2",
+                "22": "2x2"
+            },
+            "default_value": false,
+            "allow_null": 0,
+            "multiple": 0,
+            "ui": 0,
+            "return_format": "value",
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_6309fce81fa74",
+            "label": "Post Share count",
+            "name": "post_share_count",
+            "type": "text",
+            "instructions": "JSON Data from the Facebook autoposter. This is used to determent how often a post got published on Facebook.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "tribe_events"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "side",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1661599031
+}

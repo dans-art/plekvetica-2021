@@ -39,7 +39,7 @@ let plek_band = {
      */
     on_edit_band() {
         jQuery(document).ready(function () {
-            jQuery('select').select2({
+            jQuery('select:not(.no-select2)').select2({
                 theme: "plek"
             });
             plek_band.show_youtube_videos();
@@ -299,6 +299,19 @@ let plek_band = {
     },
 
     /**
+     * Checks if the image displayed on the edit band form is a placeholder or not.
+     * @returns bool
+     */
+    band_image_is_placeholder(){
+        let image_url = jQuery('#band-logo-image img').attr('src');
+        let image_parts = image_url.split('/');
+        if(image_parts[image_parts.length - 1] === 'default_placeholder.jpg'){
+            return true;
+        }
+        return false;
+    },
+
+    /**
      * Gets the ID for an URL
      * @param {string} url The URL
      * @param {string} site The Site to extract the ID from the url
@@ -428,7 +441,7 @@ let plek_band = {
                         sprintf(__('Name missmatch. The Artist ID you provided does not match with the given name.<br/>Band form Spotify: %s', 'pleklang'), data.name));
                 }
                 //Check for Poster and set it.
-                if (empty(jQuery('#band-logo').val())) {
+                if (empty(jQuery('#band-logo').val()) && plek_band.band_image_is_placeholder() === true) {
                     let band_image = data.images[0].url;
                     console.log(band_image);
                     jQuery('#band-logo-url').val(band_image);

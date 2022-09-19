@@ -654,9 +654,36 @@ class PlekHandler
      *
      * @return void
      */
-    public function hourly_cron_job(){
+    public function hourly_cron_job()
+    {
         //Update the spotify token
         $psm = new plekSocialMedia;
         $psm->refresh_spotify_token();
+    }
+
+    /**
+     * Adds a string to the end of the filename
+     *
+     * @param string $filename - The Filename with path and extension
+     * @param string $add - The part to add
+     * @param bool $create_unique_name - If the filename should be unique
+     * @return string The new string
+     */
+    public function add_to_filename($filename, $add, $create_unique_name = false)
+    {
+        //Separate the extension
+        $parts = explode('.', $filename); //path/file.jpg => ["path/file", "jpg"]
+        $last = array_key_last($parts);
+        //Add the part
+        $parts[$last - 1] .= $add;
+        $added_filename = $parts[$last - 1];
+        if ($create_unique_name) {
+            $i = 0;
+            while(file_exists(implode('.', $parts)) AND $i < 100){
+                $parts[$last - 1] = $added_filename . $i;
+                $i++;
+            }
+        }
+        return implode('.', $parts);
     }
 }

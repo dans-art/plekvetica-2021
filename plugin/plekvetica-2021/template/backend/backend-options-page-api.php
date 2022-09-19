@@ -18,15 +18,25 @@ $psm = new plekSocialMedia;
 <?php echo $psm->get_spotify_user_name(); ?>
 
 <h3><?php echo __('Facebook', 'pleklang'); ?></h3>
+
+<?php 
+//Refresh the facebook token
+if($psm->refresh_facebook_token() === true){
+    echo __('Facebook token updated','pleklang');
+}
+?>
+<br/>
+Authorize: <?php 
+//$fb_auth = new \Facebook\Authentication\OAuth2Client()
+?>
 <?php
 //s($options);
 global $plek_handler;
 
 if (!empty($plek_handler->get_plek_option('plek_facebook_page_id','plek_api_options'))) {
-    $poster = new plekSocialMedia;
-    $poster->facebook_login();
+    $psm->facebook_login();
     try { ?>
-        <div>Connected with: <?php echo $poster->get_page_name(); ?></div>
+        <div>Connected with: <?php echo $psm->get_page_name(); ?></div>
 <?php
     } catch (\Throwable $th) {
         echo "Error while connecting to Facebook.";

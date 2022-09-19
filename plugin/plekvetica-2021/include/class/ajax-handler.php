@@ -204,6 +204,16 @@ class PlekAjaxHandler
                     $this->set_error($promote);  //Error Message from Facebook SDK
                 }
                 break;
+                case 'ticket_raffle':
+                    $event_id = $this->get_ajax_data('id');
+                    $plek_event->load_event($event_id);
+                    $post = $plek_event->post_ticket_raffle_on_facebook();
+                    if ($post === true) {
+                        $this->set_success(__('Ticket raffle successfully posted on facebook', 'pleklang'));
+                    } else {
+                        $this->set_error($post);  //Error Message from Facebook SDK
+                    }
+                break;
             case 'remove_akkredi_member':
                 $event_id = (int) $this->get_ajax_data('id');
                 $user = $this->get_ajax_data('user');
@@ -657,9 +667,9 @@ class PlekAjaxHandler
                 if ($reset_pass === true) {
                     $this->set_success(__('New password set. You can login now with your new password.', 'pleklang'));
                 } else {
-                    if(is_array($reset_pass)){
+                    if (is_array($reset_pass)) {
                         $this->set_error_array($reset_pass);
-                    }else{
+                    } else {
                         $this->set_error($reset_pass);
                     }
                 }
@@ -811,11 +821,12 @@ class PlekAjaxHandler
      *
      * @return mixed
      */
-    public function plek_ajax_codetester_actions(){
+    public function plek_ajax_codetester_actions()
+    {
         $this->set_success('test');
-        $data = !empty($this->get_ajax_data('data')) ? $this->get_ajax_data('data') : 'No input' ;
+        $data = !empty($this->get_ajax_data('data')) ? $this->get_ajax_data('data') : 'No input';
 
-        setcookie('testcookie_codetester', $data,0,"/");
+        setcookie('testcookie_codetester', $data, 0, "/");
 
         echo $this->get_ajax_return();
         die();

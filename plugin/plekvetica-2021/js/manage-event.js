@@ -73,13 +73,21 @@ let plek_manage_event = {
             plekvalidator.monitor_fields();
 
             //Load the Flatpicker
-            flatpickr("#event_start_date", flatpickr_options);
-            flatpickr("#event_end_date", flatpickr_options);
+            try {
+                flatpickr("#event_start_date", flatpickr_options);
+                flatpickr("#event_end_date", flatpickr_options);
+            } catch (error) {
+                console.error("Flatpickr not loaded");
+            }
 
             //Populate the existing vob data
             plek_manage_event.add_vob_to_current_selection('bands');
             plek_manage_event.add_vob_to_current_selection('venue');
             plek_manage_event.add_vob_to_current_selection('organizers');
+
+            //Load the error class
+            plekerror.set_toastr();
+            console.log("toaster set");
         });
 
 
@@ -166,7 +174,11 @@ let plek_manage_event = {
                 jQuery('#event_end_date').val(''); //Reset the Enddate
             }
             end_options['minDate'] = start_date;
-            flatpickr("#event_end_date", end_options);
+            try {
+                flatpickr("#event_end_date", end_options);
+            } catch (error) {
+                console.error("Flatpickr not loaded");
+            }
             //Show checkbox if date was changed and edit event
             if (plek_manage_event.is_edit_event) {
                 jQuery('.event-date-postponed-check-container').show();
@@ -323,6 +335,7 @@ let plek_manage_event = {
                 } else {
                     text = plek_main.get_first_success_from_ajax_request(data);
                     let return_obj = plek_main.get_ajax_success_object(data);
+                    
                     if (typeof return_obj === 'undefined') {
                         plekerror.display_error(null, __('Oops, something went wrong.... sorry!', 'pleklang'), __('Invalid Response', 'pleklang'));
                     } else {
@@ -348,7 +361,6 @@ let plek_manage_event = {
                 setTimeout(() => {
                     jQuery('#' + type).text(default_submit_btn_text);
                 }, 5000);
-
             },
             error: function error(data) {
                 plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
@@ -440,6 +452,7 @@ let plek_manage_event = {
             //@toto: add the form id
             if (form === 'edit_event_form') {
                 plekvalidator.add_field('event_ticket_raffle', 'url', true, form);
+                plekvalidator.add_field('event_ticket_raffle_conditions', 'int', true, form);
                 plekvalidator.add_field('event_status', 'text', false, form);
                 plekvalidator.add_field('event_featured', 'bool', true, form);
                 plekvalidator.add_field('event_promote', 'bool', true, form);

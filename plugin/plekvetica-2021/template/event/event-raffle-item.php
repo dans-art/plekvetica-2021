@@ -39,6 +39,11 @@ $poster = $event->get_poster();
             <?php if (!$event->is_public()) : ?>
                 <div class="plek-message"><?php echo __('Unpublished Event', 'pleklang'); ?></div>
             <?php endif; ?>
+            <div class="win-conditions">
+                <?php if ($event->get_field_value('win_conditions') !== null) : ?>
+                    <?php echo sprintf(__('Win %s Tickets for','pleklang'), $event->get_field('win_conditions')); ?>
+                <?php endif; ?>
+            </div>
             <h3 class="tribe-events-calendar-list__event-title tribe-common-h6 tribe-common-h4--min-medium">
                 <a href="<?php echo $event->get_permalink(); ?>" title="<?php echo $event->get_name(); ?>" rel="bookmark" class="tribe-events-calendar-list__event-title-link tribe-common-anchor-thin"><?php echo $event->get_name(); ?></a>
             </h3>
