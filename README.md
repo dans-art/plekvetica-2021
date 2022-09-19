@@ -1,5 +1,15 @@
 # plekvetica-2021
 
+Version 2.5.0
+- Fix: Facebook publisher
+- Facebook API integration optimiert
+- Fix: Zu viele Events bei der Ticketverlosung-Seite
+- Fix: Timetable wird richtig angezeigt, wenn eine Band nach Mitternacht spielt
+- Diverse kleine Optimierungen
+- Ticket Verlosung in Website integriert
+- WIP: Automatische Ticketverlosung auf Facebook via Website
+
+
 Version 2.4.1
 - Fix: Style des Social media Formulars auf Mobilgeräten
 - Fix: Bandbild wurde ersetzt nach dem laden der Spotify Daten
