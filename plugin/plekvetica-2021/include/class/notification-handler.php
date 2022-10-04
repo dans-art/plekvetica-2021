@@ -1052,4 +1052,19 @@ class PlekNotificationHandler extends WP_List_Table
         $added =  do_shortcode('[plek_event_recently_added nr_posts=15]', false);
         PlekNotificationHandler::push_to_admin('Recently Added', $added);
     }
+    /**
+     * Cronjob that is executed once a day
+     *
+     * @return void
+     */
+    public function daily_cron_job()
+    {
+        //Send reminder to do the ticket raffle
+        $from = date('Y-m-d', time() + 60 * 60 * 24 * 2) . ' 06:00:00'; //Two day from now
+        $to = date('Y-m-d', time() + 60 * 60 * 24 * 3) . ' 06:00:00'; //Three day from now
+        $raffle =  do_shortcode("[plek_get_all_raffle from='$from' to='$to']", false);
+        if(!empty($raffle)){
+            PlekNotificationHandler::push_to_admin('Tickets to raffle', $raffle);
+        }
+    }
 }

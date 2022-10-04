@@ -1086,12 +1086,12 @@ class PlekEventHandler
      * Make sure that the field you like to get returns a valid json string
      *
      * @param string $name - Name of the field
-     * @return array The decoded values
+     * @return array The decoded values, or an empty array if no value found
      */
     public function get_field_value_decoded($name = 'post_title')
     {
         $value = $this->get_field_value($name);
-        return json_decode($value, true);
+        return ($value) ? json_decode($value, true) : array();
     }
 
     public function get_event_revisions()

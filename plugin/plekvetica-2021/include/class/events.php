@@ -989,9 +989,17 @@ class PlekEvents extends PlekEventHandler
      *
      * @return string Formated HTML
      */
-    public function plek_get_all_raffle_shortcode()
+    public function plek_get_all_raffle_shortcode($atts)
     {
         global $wpdb;
+        $short_atts = shortcode_atts(
+            array(
+                'from' => date('Y-m-d H:i:s'),
+                'to' => '9999-01-01 00:00:00',
+                'return_bool' => false
+            ),
+            $atts
+        );
         $meta_query = array();
         $result_html = "";
         $meta_query['win_url'] = array('key' => 'win_url', 'compare' => '!=', 'value' => '0');
@@ -999,10 +1007,6 @@ class PlekEvents extends PlekEventHandler
         $page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
         $offset =  ($page > 1) ? ($page - 1) * $posts_per_page : 0;
         $load_more = '';
-
-        $from = date('Y-m-d H:i:s');
-        $to = '9999-01-01 00:00:00';
-
         $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title, meta.meta_value as win_url, startdate.meta_value as startdate
             FROM `{$wpdb->prefix}postmeta` as meta
             LEFT JOIN {$wpdb->prefix}posts as posts
@@ -1023,7 +1027,7 @@ class PlekEvents extends PlekEventHandler
             AND startdate.meta_value > '%s'
             AND startdate.meta_value < '%s'
             ORDER BY startdate.meta_value ASC
-            LIMIT %d OFFSET %d", $from, $to, $posts_per_page, $offset);
+            LIMIT %d OFFSET %d", $short_atts['from'], $short_atts['to'], $posts_per_page, $offset);
         $posts = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
 
@@ -1031,7 +1035,7 @@ class PlekEvents extends PlekEventHandler
             $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page + 1), __('Load more events', 'pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
         }
         if (empty($posts)) {
-            return __('No raffles found', 'pleklang');
+            return ($short_atts['return_bool'] !== true AND $short_atts['return_bool'] !== 'true') ? __('No raffles found', 'pleklang') : false;
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $posts, 'raffle_events') . $load_more;
     }

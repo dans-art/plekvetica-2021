@@ -261,7 +261,7 @@ msgstr "Buchstabe & Zahl"
 
 #: template/event/form/components/ticket-raffle.php:13
 msgid "Amount of tickets to give away"
-msgstr "Anzahl tickets zum verlosen"
+msgstr "Anzahl tickets zum Verlosen"
 
 #: include/class/backend.php:76 include/class/backend.php:77
 #: template/backend/backend-options-page.php:33

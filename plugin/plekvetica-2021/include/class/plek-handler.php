@@ -365,6 +365,9 @@ class PlekHandler
         //Update 2.4.0
         wp_clear_scheduled_hook("plek_cron_hourly_cron");
 
+        //Update 2.6.0
+        wp_clear_scheduled_hook("plek_cron_daily_cron");
+
         //Send the email notifications
         if (!wp_next_scheduled('plek_cron_send_unsend_email_notifications')) {
             wp_schedule_event(time(), 'plekeverysixmin', 'plek_cron_send_unsend_email_notifications');
@@ -381,6 +384,11 @@ class PlekHandler
         //Function that runs once every hour
         if (!wp_next_scheduled('plek_cron_hourly_cron')) {
             wp_schedule_event(time(), 'hourly', 'plek_cron_hourly_cron');
+        }
+
+        //Function that runs once every day
+        if (!wp_next_scheduled('plek_cron_daily_cron')) {
+            wp_schedule_event(time(), 'daily', 'plek_cron_daily_cron');
         }
 
         //Update Bandscores

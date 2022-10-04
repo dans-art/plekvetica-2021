@@ -31,4 +31,6 @@ $watermark = PLEK_PATH.'images\watermarks\ticketraffle-2-2.png';
 	echo '<img src="'.$save_url.'"/>';
 }*/
 $event_id = 78471;
+
+$pn -> daily_cron_job();
 ?>
