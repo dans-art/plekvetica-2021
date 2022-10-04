@@ -911,8 +911,18 @@ class PlekAjaxHandler
         return $data;
     }
 
-    public function set_error(string $message, string $field = "")
+    /**
+     * Sets an error message for the ajax handler
+     *
+     * @param mixed $message - The message to display. If not string, the value will be serialized
+     * @param string $field - The ID of the input field to address. 
+     * @return void
+     */
+    public function set_error(mixed $message, string $field = "")
     {
+        if(!is_string($message)){
+            $message = serialize($message);
+        }
         if (!empty($field)) {
             $this->error[$field][] = $message;
             return;

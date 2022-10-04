@@ -1943,7 +1943,11 @@ class PlekEventHandler
             $notify = new PlekNotificationHandler;
             $notify->push_to_admin(
                 __('New Review published', 'pleklang'),
-                sprintf(__('A new Review of the Event "%s" got published.', 'pleklang'), get_the_title($event_id)),
+                sprintf(
+                    __('A new Review of the Event "%s" got published by %s.', 'pleklang'),
+                    get_the_title($event_id),
+                    PlekUserHandler::get_current_user_display_name()
+                ),
                 get_permalink($event_id)
             );
         }

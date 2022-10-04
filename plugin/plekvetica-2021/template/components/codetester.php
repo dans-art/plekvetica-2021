@@ -30,5 +30,5 @@ $watermark = PLEK_PATH.'images\watermarks\ticketraffle-2-2.png';
 
 	echo '<img src="'.$save_url.'"/>';
 }*/
-
-echo do_shortcode('[plek_event_recently_added]' );
+$event_id = 78471;
+?>
