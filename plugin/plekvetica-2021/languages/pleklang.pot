@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plekvetica - 2021\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-04 12:19+0000\n"
+"POT-Creation-Date: 2022-11-02 15:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -65,6 +65,11 @@ msgstr ""
 #: include/class/organizer-handler.php:170
 #, php-format
 msgid "A new Organizer \"%s\" has been added."
+msgstr ""
+
+#: include/class/notification-handler.php:1104
+#: template/email/organizer/organizer-new-review-info.php:12
+msgid "A new review has ben published at Plekvetica"
 msgstr ""
 
 #: include/class/event-handler.php:1947
@@ -240,6 +245,10 @@ msgstr ""
 msgid "Administrator"
 msgstr ""
 
+#: template/email/organizer/organizer-new-review-info.php:23
+msgid "Ahoy!"
+msgstr ""
+
 #: include/class/gallery-handler.php:347
 msgid "Album not found"
 msgstr ""
@@ -335,6 +344,7 @@ msgid "Bandscore"
 msgstr ""
 
 #: template/email/organizer/organizer-accreditation-request.php:51
+#: template/email/organizer/organizer-new-review-info.php:29
 #, php-format
 msgid "Best regards, %s"
 msgstr ""
@@ -373,6 +383,10 @@ msgstr ""
 
 #: include/class/event-handler.php:189
 msgid "Changing Status was unsuccessful"
+msgstr ""
+
+#: template/email/organizer/organizer-new-review-info.php:27
+msgid "Check it out here:"
 msgstr ""
 
 #: template/event/venue/venue-form.php:42
@@ -1340,6 +1354,10 @@ msgstr ""
 msgid "New Event added, please publish"
 msgstr ""
 
+#: template/email/organizer/organizer-new-review-info.php:21
+msgid "New Event Review!"
+msgstr ""
+
 #: include/class/organizer-handler.php:173
 msgid "New Organizer added"
 msgstr ""
@@ -2191,6 +2209,10 @@ msgstr ""
 
 #: include/class/event-handler.php:1527
 msgid "There are no registered Members"
+msgstr ""
+
+#: template/email/organizer/organizer-new-review-info.php:24
+msgid "There has ben a new Review published at plekvetica.ch:"
 msgstr ""
 
 #: include/class/user-handler.php:1001

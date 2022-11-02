@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2022-10-04 12:27+0000\n"
+"PO-Revision-Date: 2022-11-02 15:13+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -68,11 +68,16 @@ msgstr "Ein neuer Event deiner Lieblingsband wurde bei Plekvetica hinzugefügt!"
 msgid "A new Organizer \"%s\" has been added."
 msgstr "Ein neuer Veranstalter \"%s\" wurde hinzugefügt."
 
+#: include/class/notification-handler.php:1104
+#: template/email/organizer/organizer-new-review-info.php:12
+msgid "A new review has ben published at Plekvetica"
+msgstr "Ein neues Review wurde auf Plekvetica veröffentlicht"
+
 #: include/class/event-handler.php:1947
-#, fuzzy, php-format
+#, php-format
 #| msgid "A new Review of the Event \"%s\" got published."
 msgid "A new Review of the Event \"%s\" got published by %s."
-msgstr "Ein neues Review vom Event \"%s\" wurde veröffentlicht."
+msgstr "Ein neues Review vom Event \"%s\" wurde veröffentlicht von %s."
 
 #: template/email/user/new-user-admin-info.php:26
 msgid "A new user has been created and unlocked."
@@ -244,6 +249,10 @@ msgstr "Hinzugefügte Events werden automatisch veröffentlicht / überprüft"
 msgid "Administrator"
 msgstr "Administrator"
 
+#: template/email/organizer/organizer-new-review-info.php:23
+msgid "Ahoy!"
+msgstr ""
+
 #: include/class/gallery-handler.php:347
 msgid "Album not found"
 msgstr "Album nicht gefunden"
@@ -261,7 +270,7 @@ msgstr "Buchstabe & Zahl"
 
 #: template/event/form/components/ticket-raffle.php:13
 msgid "Amount of tickets to give away"
-msgstr "Anzahl tickets zum Verlosen"
+msgstr "Anzahl tickets zum verlosen"
 
 #: include/class/backend.php:76 include/class/backend.php:77
 #: template/backend/backend-options-page.php:33
@@ -339,6 +348,7 @@ msgid "Bandscore"
 msgstr "Bandscore"
 
 #: template/email/organizer/organizer-accreditation-request.php:51
+#: template/email/organizer/organizer-new-review-info.php:29
 #, php-format
 msgid "Best regards, %s"
 msgstr "Beste Grüsse, %s"
@@ -380,6 +390,10 @@ msgstr "Ändere Event Status"
 #: include/class/event-handler.php:189
 msgid "Changing Status was unsuccessful"
 msgstr "Konnte den Status nicht ändern"
+
+#: template/email/organizer/organizer-new-review-info.php:27
+msgid "Check it out here:"
+msgstr ""
 
 #: template/event/venue/venue-form.php:42
 msgid "City or Village"
@@ -1358,6 +1372,10 @@ msgstr "Neue Band hinzugefügt"
 msgid "New Event added, please publish"
 msgstr "Neuer Event eingetragen, bitte veröffentlichen"
 
+#: template/email/organizer/organizer-new-review-info.php:21
+msgid "New Event Review!"
+msgstr ""
+
 #: include/class/organizer-handler.php:173
 msgid "New Organizer added"
 msgstr "Neuer Veranstalter hinzugefügt"
@@ -2245,6 +2263,10 @@ msgstr "Für die nächsten 7 Tage gibt es keine Events!"
 #: include/class/event-handler.php:1527
 msgid "There are no registered Members"
 msgstr "Es gibt keine registrierten Mitglieder"
+
+#: template/email/organizer/organizer-new-review-info.php:24
+msgid "There has ben a new Review published at plekvetica.ch:"
+msgstr ""
 
 #: include/class/user-handler.php:1001
 msgid ""
