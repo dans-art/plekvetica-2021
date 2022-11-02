@@ -56,13 +56,14 @@ class PlekOrganizerHandler
      * @param string|int $organizer_id
      * @return string|false Name of the Organizer, "Undefined" or false if not found.
      */
-    public static function get_organizer_name_by_id($organizer_id){
+    public static function get_organizer_name_by_id($organizer_id)
+    {
 
         $organizer_object = tribe_get_organizer_object($organizer_id, 'OBJECT', null);
         if ($organizer_object === null or $organizer_object->post_type !== 'tribe_organizer') {
             return false;
         }
-        return (isset($organizer_object->post_title)) ? $organizer_object->post_title : __('Undefined','pleklang');
+        return (isset($organizer_object->post_title)) ? $organizer_object->post_title : __('Undefined', 'pleklang');
     }
 
     /**
@@ -76,7 +77,7 @@ class PlekOrganizerHandler
         if (!empty($organizer_id)) {
             $this->load_organizer($organizer_id);
         }
-        if (!isset($this->organizer['media_email']) OR !isset($this->organizer['media_name'])) {
+        if (!isset($this->organizer['media_email']) or !isset($this->organizer['media_name'])) {
             return false;
         }
         return ['name' => $this->organizer['media_name'], 'email' => $this->organizer['media_email']];
@@ -314,5 +315,37 @@ class PlekOrganizerHandler
             return $organizers;
         }
         return [];
+    }
+
+    /**
+     * Adds the email of the organizer to the column of the organizer
+     *
+     * @param string $columns
+     * @param int $post_id
+     * @return void
+     */
+    public function filter_manage_tribe_organizer_posts_custom_column($columns, $post_id)
+    {
+        //$columns['email'] = 'Akkredi Email';
+        if ($columns === 'plekinfo') {
+            $accredi_name = get_field('name_organi_akkredi', $post_id);
+            $accredi_email = get_field('email_organi_akkredi', $post_id);
+            $promo = get_field('email_organi_promoter', $post_id);
+            echo ($accredi_email or $accredi_name) ? '<br/> Akkredi person: ' . $accredi_name . ' - ' . $accredi_email : '';
+            echo ($promo) ? '<br/>Promo: ' . $promo : '';
+        }
+        //return $columns;
+    }
+
+    /**
+     * Adds a new column to the tribe organizer page
+     *
+     * @param array $columns
+     * @return void
+     */
+    public function filter_manage_tribe_organizer_posts_custom_columns($columns)
+    {
+        $columns['plekinfo'] = __('Organizer Info','pleklang');
+        return $columns;
     }
 }

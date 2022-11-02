@@ -1082,7 +1082,7 @@ class PlekNotificationHandler extends WP_List_Table
         $meta_query['is_review'] = array('key' => 'is_review', 'compare' => '=', 'value' => '1');
         $args = [
             'eventDisplay'   => 'custom',
-            'start_date'     => date('Y-m-d', time() -  60 * 60 * 24 * 3), // Last 3 days 
+            'start_date'     => date('Y-m-d', time() -  60 * 60 * 24 * 60), // Last 3 days 
             'end_date'     => date('Y-m-d', time()), // One day today 
             'order'       => 'ASC',
             'order_by'       => 'start_date',
@@ -1094,7 +1094,8 @@ class PlekNotificationHandler extends WP_List_Table
             return null;
         }
         foreach ($events as $event) {
-            if (get_field('organizer_review_promo_sent', $event->ID) === '1') {
+            $promo_set = get_field('organizer_review_promo_sent', $event->ID);
+            if ($promo_set === '1' OR $promo_set === true) {
                 continue; //Skip if already sent
             }
             //Load the Event
@@ -1111,8 +1112,14 @@ class PlekNotificationHandler extends WP_List_Table
             foreach ($organizer as $organi_id) {
                 //Get the promoter email (ACF)
                 $promo_email = get_field('email_organi_promoter', $organi_id);
+
                 if (empty($promo_email)) {
-                    continue; //Skip if no email found
+                    //Fallback, try to get the regular email
+                    $promo_email = get_post_meta($organi_id, '_OrganizerEmail', true);
+                }
+                if (empty($promo_email)) {
+                    //No email found, skip organizer
+                    continue;
                 }
                 if (is_email($promo_email)) {
                     $emailer = new PlekEmailSender;

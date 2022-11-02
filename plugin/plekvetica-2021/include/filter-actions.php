@@ -84,8 +84,23 @@ add_filter('retrieve_password_notification_email', [new PlekUserHandler, 'retrie
 //Band Page
 add_filter('pre_get_posts', [new PlekBandHandler, 'bandpage_pagination_hack']);
 
+//Organizer page
+add_filter('manage_tribe_organizer_posts_columns', [new PlekOrganizerHandler, 'filter_manage_tribe_organizer_posts_custom_columns'], 10, 2); //Add columns to the organizer page
+add_filter('manage_tribe_organizer_posts_custom_column', [new PlekOrganizerHandler, 'filter_manage_tribe_organizer_posts_custom_column'], 10, 2); //Add content to custom column
+//add_action('manage_shop_order_posts_custom_column', [$lischenMenu, 'action_shop_order_columns'], 10, 2);
+
 
 //Backend Login Logo
 /* add_filter('login_headertext', 'my_login_logo_url_title');
 add_filter('login_headerurl', 'my_login_logo_url');
 add_filter('login_headertext', 'my_login_logo_url_title'); */
+
+
+//Display all filters
+add_filter('all', function($hookname){
+  $match = 'manage'; //The filter to search for
+  if(strpos($hookname, $match) !== false){
+    //echo '&nbsp;&nbsp;'.$hookname.'&nbsp;&nbsp;';
+  }
+  return $hookname;
+});
