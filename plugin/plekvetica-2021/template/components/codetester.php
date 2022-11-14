@@ -33,5 +33,6 @@ $watermark = PLEK_PATH.'images\watermarks\ticketraffle-2-2.png';
 $event_id = 78471;
 
 //$pn -> daily_cron_job();
-$pn::send_new_reviews_to_promoter();
+
+
 ?>
