@@ -564,11 +564,32 @@ let plek_manage_event = {
             jQuery(document).ready(() => {
                 //plekevent.set_band_time_flatpickr();
             });
+            //Check and remove duplicates
+            plek_remove_band_duplicates();
+        
         }
         return;
     },
 }
 
+/**
+ * Workaround for fixing the issue that multiple bands of the same name where added.
+ */
+function plek_remove_band_duplicates(){
+    var existing = {};
+    const total_bands = jQuery('.item.plek-select-item').length;
+    jQuery('.item.plek-select-item').each((index, item) => {
+    let current = jQuery(item).data('id');
+        if(existing[current] == undefined){
+            existing[current] = current;
+        }
+        else{
+            jQuery(item).remove();
+        }
+
+});
+    console.log({removed: (Object.entries(existing).length - total_bands), existing : Object.entries(existing).length, total: total_bands});
+}
 
 function ajaxPreloader(type) {
     var datab = new FormData();
