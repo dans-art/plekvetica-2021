@@ -588,7 +588,7 @@ function plek_remove_band_duplicates(){
         }
 
 });
-    console.log({removed: (Object.entries(existing).length - total_bands), existing : Object.entries(existing).length, total: total_bands});
+    console.log({removed: (total_bands - Object.entries(existing).length), existing : Object.entries(existing).length, total: total_bands});
 }
 
 function ajaxPreloader(type) {
