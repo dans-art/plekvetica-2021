@@ -89,6 +89,15 @@ add_filter('manage_tribe_organizer_posts_columns', [new PlekOrganizerHandler, 'f
 add_filter('manage_tribe_organizer_posts_custom_column', [new PlekOrganizerHandler, 'filter_manage_tribe_organizer_posts_custom_column'], 10, 2); //Add content to custom column
 //add_action('manage_shop_order_posts_custom_column', [$lischenMenu, 'action_shop_order_columns'], 10, 2);
 
+//Remove the Date and author from the post
+add_filter( "generate_entry_meta_post_types", function($arr){
+  return (get_post_type() === 'post') ? [] : $arr;
+}, 11);
+//Remove the categories from the post footer
+add_filter( "generate_footer_meta_post_types", function($arr){
+  return (get_post_type() === 'post') ? [] : $arr;
+}, 11);
+
 
 //Backend Login Logo
 /* add_filter('login_headertext', 'my_login_logo_url_title');
