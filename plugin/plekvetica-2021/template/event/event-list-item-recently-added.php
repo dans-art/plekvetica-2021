@@ -28,7 +28,7 @@ $missing_event_details = $event->get_missing_event_details();
             <?php endif; ?>
             <?php echo $poster; ?>
             <?php if (empty($poster)) : ?>
-                <img src="<?php echo $event->poster_placeholder; ?>" />
+                <img src="<?php echo $event->poster_placeholder; ?>" width="200px"/>
             <?php endif; ?>
         </a>
     </div>

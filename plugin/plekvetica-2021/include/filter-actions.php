@@ -39,6 +39,7 @@ add_action('plek_cron_send_unsend_email_notifications', [new PlekNotificationHan
 add_action('plek_cron_send_accredi_reminder', [new PlekNotificationHandler, 'send_accredi_reminder']);
 add_action('plek_cron_update_all_band_scores', [new PlekBandHandler, 'update_all_band_scores']);
 add_action('plek_cron_weekly_cron', [new PlekNotificationHandler, 'weekly_cron_job']);
+add_action('plek_cron_daily_cron', [new PlekNotificationHandler, 'daily_cron_job']);
 add_action('plek_cron_hourly_cron', [$plek_handler, 'hourly_cron_job']);
 add_filter('cron_schedules', [$plek_handler, 'add_cron_schedule'], 1, 1);
 
@@ -83,8 +84,32 @@ add_filter('retrieve_password_notification_email', [new PlekUserHandler, 'retrie
 //Band Page
 add_filter('pre_get_posts', [new PlekBandHandler, 'bandpage_pagination_hack']);
 
+//Organizer page
+add_filter('manage_tribe_organizer_posts_columns', [new PlekOrganizerHandler, 'filter_manage_tribe_organizer_posts_custom_columns'], 10, 2); //Add columns to the organizer page
+add_filter('manage_tribe_organizer_posts_custom_column', [new PlekOrganizerHandler, 'filter_manage_tribe_organizer_posts_custom_column'], 10, 2); //Add content to custom column
+//add_action('manage_shop_order_posts_custom_column', [$lischenMenu, 'action_shop_order_columns'], 10, 2);
+
+//Remove the Date and author from the post
+add_filter( "generate_entry_meta_post_types", function($arr){
+  return (get_post_type() === 'post') ? [] : $arr;
+}, 11);
+//Remove the categories from the post footer
+add_filter( "generate_footer_meta_post_types", function($arr){
+  return (get_post_type() === 'post') ? [] : $arr;
+}, 11);
+
 
 //Backend Login Logo
 /* add_filter('login_headertext', 'my_login_logo_url_title');
 add_filter('login_headerurl', 'my_login_logo_url');
 add_filter('login_headertext', 'my_login_logo_url_title'); */
+
+
+//Display all filters
+add_filter('all', function($hookname){
+  $match = 'manage'; //The filter to search for
+  if(strpos($hookname, $match) !== false){
+    //echo '&nbsp;&nbsp;'.$hookname.'&nbsp;&nbsp;';
+  }
+  return $hookname;
+});

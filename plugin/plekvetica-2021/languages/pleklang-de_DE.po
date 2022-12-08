@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2022-08-24 14:47+0000\n"
+"PO-Revision-Date: 2022-11-02 15:14+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "\"%s\" is playing at this Event."
 msgstr "\"%s\" spielt an diesem Event."
 
-#: include/class/event-handler.php:1627
+#: include/class/event-handler.php:1663
 #, php-format
 msgid "\"%s\" needs an update"
 msgstr "\"%s\" braucht eine Überarbeitung"
@@ -45,7 +45,7 @@ msgstr "[BAND] Managen deiner Bands"
 msgid "[BAND] Overview of all Band events"
 msgstr "[BAND] Übersicht all deiner Band-Events"
 
-#: include/class/band-handler.php:956
+#: include/class/band-handler.php:964
 #, php-format
 msgid ""
 "A Band with the Name \"%s\" was found.<br/>%s<br/>Please check if the Band "
@@ -54,7 +54,7 @@ msgstr ""
 "Eine Band mit dem Namen \"%s\" wurde gefunden.<br/>%s<br/>Bitte überprüfe, "
 "ob die Band welche du hinzufügen willst nicht existiert."
 
-#: include/class/band-handler.php:911
+#: include/class/band-handler.php:919
 #, php-format
 msgid "A new Band \"%s\" has been added."
 msgstr "Eine neue Band \"%s\" wurde hinzugefügt."
@@ -68,10 +68,16 @@ msgstr "Ein neuer Event deiner Lieblingsband wurde bei Plekvetica hinzugefügt!"
 msgid "A new Organizer \"%s\" has been added."
 msgstr "Ein neuer Veranstalter \"%s\" wurde hinzugefügt."
 
-#: include/class/event-handler.php:1908
+#: include/class/notification-handler.php:1104
+#: template/email/organizer/organizer-new-review-info.php:12
+msgid "A new review has ben published at Plekvetica"
+msgstr "Ein neues Review wurde auf Plekvetica veröffentlicht"
+
+#: include/class/event-handler.php:1947
 #, php-format
-msgid "A new Review of the Event \"%s\" got published."
-msgstr "Ein neues Review vom Event \"%s\" wurde veröffentlicht."
+#| msgid "A new Review of the Event \"%s\" got published."
+msgid "A new Review of the Event \"%s\" got published by %s."
+msgstr "Ein neues Review vom Event \"%s\" wurde veröffentlicht von %s."
 
 #: template/email/user/new-user-admin-info.php:26
 msgid "A new user has been created and unlocked."
@@ -107,7 +113,7 @@ msgstr "Konto aktiviert! Willkommen bei Plekvetica!"
 msgid "Account could not be activated."
 msgstr "Konto konnte nicht aktiviert werden."
 
-#: include/class/ajax-handler.php:637
+#: include/class/ajax-handler.php:647
 #, php-format
 msgid ""
 "Account created but failed to send an email. Please contact the IT Support: "
@@ -132,7 +138,7 @@ msgstr "Accredi Action"
 msgid "Accreditate Event for: "
 msgstr "Akkreditiere Event für:"
 
-#: include/class/plek-handler.php:638
+#: include/class/plek-handler.php:646
 msgid "Accreditation confirmed"
 msgstr "Akkreditation bestätigt"
 
@@ -141,7 +147,7 @@ msgstr "Akkreditation bestätigt"
 msgid "Accreditation request"
 msgstr "Akkreditationsanfrage"
 
-#: include/class/ajax-handler.php:222
+#: include/class/ajax-handler.php:232
 msgid "Accreditation request added"
 msgstr "Akkreditierungsanfrage wurde hinzugefügt"
 
@@ -150,28 +156,28 @@ msgstr "Akkreditierungsanfrage wurde hinzugefügt"
 msgid "Accreditation request from Plekvetica"
 msgstr "Akkreditationsanfrage von Plekvetica"
 
-#: include/class/ajax-handler.php:212
+#: include/class/ajax-handler.php:222
 msgid "Accreditation request removed"
 msgstr "Akkreditierungsanfrage entfernt"
 
-#: include/class/ajax-handler.php:302
+#: include/class/ajax-handler.php:312
 msgid "Accreditation request sent to organizer"
 msgstr "Akkreditationsanfrage an den Veranstalter geschickt."
 
-#: template/event/meta/eventmanager.php:73
+#: template/event/meta/eventmanager.php:96
 msgid "Accreditation status"
 msgstr "Akkreditierungsstatus"
 
-#: include/class/event-handler.php:1535
+#: include/class/event-handler.php:1571
 #, php-format
 msgid "Accreditation status of \"%s\" changed to \"%s\""
 msgstr "Akkreditierungsstatus von \"%s\" wurde auf \"%s\" geändert"
 
-#: template/event/meta/eventmanager.php:83
+#: template/event/meta/eventmanager.php:106
 msgid "Accredited members"
 msgstr "Akkreditierte Mitglieder"
 
-#: include/class/plek-handler.php:648
+#: include/class/plek-handler.php:656
 msgid "Action not found or not supported"
 msgstr "Aktion nicht gefunden oder nicht unterstützt"
 
@@ -193,7 +199,7 @@ msgstr "Als Gast hinzufügen"
 msgid "Add Band"
 msgstr "Band hinzufügen"
 
-#: js/components/event-handler.js:463
+#: js/components/event-handler.js:469
 msgid "Add Event details"
 msgstr "Event details hinzufügen"
 
@@ -230,7 +236,8 @@ msgstr "Diesen Veranstalter hinzufügen"
 msgid "Add Venue"
 msgstr "Ort hinzufügen"
 
-#: include/class/band-handler.php:912
+#: include/class/band-handler.php:920 include/class/organizer-handler.php:171
+#: include/class/venue-handler.php:155
 msgid "Added by"
 msgstr "Hinzugefügt von"
 
@@ -241,6 +248,10 @@ msgstr "Hinzugefügte Events werden automatisch veröffentlicht / überprüft"
 #: include/class/user-handler.php:33
 msgid "Administrator"
 msgstr "Administrator"
+
+#: template/email/organizer/organizer-new-review-info.php:23
+msgid "Ahoy!"
+msgstr "Ahoy!"
 
 #: include/class/gallery-handler.php:347
 msgid "Album not found"
@@ -257,6 +268,10 @@ msgstr "Alle deine Events"
 msgid "Alpha Number"
 msgstr "Buchstabe & Zahl"
 
+#: template/event/form/components/ticket-raffle.php:13
+msgid "Amount of tickets to give away"
+msgstr "Anzahl tickets zum verlosen"
+
 #: include/class/backend.php:76 include/class/backend.php:77
 #: template/backend/backend-options-page.php:33
 msgid "API"
@@ -266,7 +281,7 @@ msgstr "API"
 msgid "Authors"
 msgstr "Autoren"
 
-#: js/manage-band.js:239 js/manage-event.js:347 js/manage-user.js:236
+#: js/manage-band.js:239 js/manage-event.js:360 js/manage-user.js:236
 msgid "Back"
 msgstr "Zurück"
 
@@ -283,15 +298,15 @@ msgstr "Band"
 msgid "Band Events"
 msgstr "Band-Events"
 
-#: include/class/ajax-handler.php:774
+#: include/class/ajax-handler.php:784
 msgid "Band ID or Event ID not provided"
 msgstr "Band ID oder Event ID nicht übergeben"
 
-#: include/class/ajax-handler.php:388 include/class/ajax-handler.php:441
+#: include/class/ajax-handler.php:398 include/class/ajax-handler.php:451
 msgid "Band is unique"
 msgstr "Band ist einzigartig"
 
-#: include/class/ajax-handler.php:377 include/class/ajax-handler.php:419
+#: include/class/ajax-handler.php:387 include/class/ajax-handler.php:429
 msgid "Band saved"
 msgstr "Band gespeichert"
 
@@ -299,7 +314,7 @@ msgstr "Band gespeichert"
 msgid "Band settings"
 msgstr "Band Einstellungen"
 
-#: include/class/band-handler.php:1029
+#: include/class/band-handler.php:1037
 #, php-format
 msgid "Bandlogo of %s"
 msgstr "Bandlogo von %s"
@@ -313,7 +328,7 @@ msgstr "Band-Name"
 msgid "Bandpage of &quot;%s&quot;"
 msgstr "Bandseite von &quot;%s&quot;"
 
-#: include/class/event-handler.php:2831
+#: include/class/event-handler.php:2885
 #: template/event/form/add-event-form-basic.php:12
 #: template/event/form/edit-event-form.php:24 template/event/meta/bands.php:10
 msgid "Bands"
@@ -333,6 +348,7 @@ msgid "Bandscore"
 msgstr "Bandscore"
 
 #: template/email/organizer/organizer-accreditation-request.php:51
+#: template/email/organizer/organizer-new-review-info.php:29
 #, php-format
 msgid "Best regards, %s"
 msgstr "Beste Grüsse, %s"
@@ -341,7 +357,7 @@ msgstr "Beste Grüsse, %s"
 msgid "Boolean Value"
 msgstr "Booleanischer Wert"
 
-#: include/class/event-handler.php:2820
+#: include/class/event-handler.php:2874
 #: template/event/form/components/price.php:16
 msgid "Boxoffice"
 msgstr "Abendkasse"
@@ -375,6 +391,10 @@ msgstr "Ändere Event Status"
 msgid "Changing Status was unsuccessful"
 msgstr "Konnte den Status nicht ändern"
 
+#: template/email/organizer/organizer-new-review-info.php:27
+msgid "Check it out here:"
+msgstr "Schau es dir hier an:"
+
 #: template/event/venue/venue-form.php:42
 msgid "City or Village"
 msgstr "Stadt oder Dorf"
@@ -392,11 +412,11 @@ msgstr "Community / Fan"
 msgid "Confirm accreditation for %s"
 msgstr "Bestätige die Akkreditierung für %s"
 
-#: include/class/event-handler.php:1355
+#: include/class/event-handler.php:1389
 msgid "Confirmed"
 msgstr "Bestätigt"
 
-#: js/manage-event.js:746
+#: js/manage-event.js:759
 msgid "Continue with adding the Event"
 msgstr "Mit dem hinzufügen des Events fortfahren"
 
@@ -404,7 +424,7 @@ msgstr "Mit dem hinzufügen des Events fortfahren"
 msgid "Copy link to Photo"
 msgstr "Link zum Foto kopieren"
 
-#: js/components/error-handler.js:96
+#: js/components/error-handler.js:79
 msgid "Could not find the artist. Please check the ID or URL again"
 msgstr "Konnte den Künstler nicht finden. Bitte prüfe die ID oder die URL"
 
@@ -432,7 +452,7 @@ msgstr "Videobearbeiter"
 msgid "Daniel Spycher"
 msgstr "Daniel Spycher"
 
-#: js/components/event-handler.js:457
+#: js/components/event-handler.js:463
 msgid "Data saved!"
 msgstr "Daten gespeichert!"
 
@@ -460,7 +480,7 @@ msgstr "Datum der Bestätigung"
 msgid "deactivated, is already managed"
 msgstr "deaktiviert, wird bereits verwaltet"
 
-#: include/class/event-handler.php:1362
+#: include/class/event-handler.php:1396
 msgid "Declined"
 msgstr "Abgelehnt"
 
@@ -476,7 +496,7 @@ msgstr "Setze neues Passwort"
 msgid "Delete"
 msgstr "Löschen"
 
-#: include/class/event-handler.php:2814 template/band/band-form.php:36
+#: include/class/event-handler.php:2868 template/band/band-form.php:36
 #: template/event/form/add-event-form-details.php:15
 #: template/event/form/edit-event-form.php:33
 #: template/event/organizer/organizer-form.php:52
@@ -511,7 +531,7 @@ msgstr "Willst du die Akkreditierungsanfrage senden an:"
 msgid "Edit Band"
 msgstr "Band bearbeiten"
 
-#: template/event/meta/eventmanager.php:25 js/manage-event.js:746
+#: template/event/meta/eventmanager.php:25 js/manage-event.js:759
 msgid "Edit Event"
 msgstr "Event bearbeiten"
 
@@ -546,7 +566,7 @@ msgstr "eMail ist nicht eingestellt"
 msgid "Email send"
 msgstr "E-Mail gesendet"
 
-#: include/class/event-handler.php:2818
+#: include/class/event-handler.php:2872
 msgid "End Date"
 msgstr "Enddatum"
 
@@ -555,7 +575,7 @@ msgstr "Enddatum"
 msgid "Entry is %d characters too long."
 msgstr "Eintrag ist %d Zeichen zu lang."
 
-#: js/plek-main-script.js:418 js/components/gallery-handler.js:141
+#: js/plek-main-script.js:423 js/components/gallery-handler.js:141
 msgid "Error"
 msgstr "Fehler"
 
@@ -563,7 +583,7 @@ msgstr "Fehler"
 msgid "Error 404: Gallery not found"
 msgstr "Fehler 404: Galerie nicht gefunden"
 
-#: include/class/file-handler.php:51 include/class/file-handler.php:153
+#: include/class/file-handler.php:56
 msgid "Error adding the image to the database."
 msgstr "Fehler beim Hinzufügen des Bildes zur Datenbank."
 
@@ -571,16 +591,17 @@ msgstr "Fehler beim Hinzufügen des Bildes zur Datenbank."
 msgid "Error in reset key"
 msgstr "Fehler im Schlüssel zum zurücksetzen"
 
-#: js/manage-event.js:573 js/manage-event.js:594
+#: js/manage-event.js:586 js/manage-event.js:607
 msgid "Error loading data"
 msgstr "Fehler bei laden der Daten"
 
-#: js/main-event-single.js:184 js/main-event-single.js:209
-#: js/main-event-single.js:236 js/main-event-single.js:269
-#: js/main-event-single.js:291 js/manage-band.js:246 js/manage-band.js:282
-#: js/manage-event.js:354 js/manage-user.js:107 js/manage-user.js:154
-#: js/manage-user.js:204 js/manage-user.js:243
-#: js/components/event-handler.js:477 js/components/event-handler.js:578
+#: js/main-event-single.js:189 js/main-event-single.js:214
+#: js/main-event-single.js:244 js/main-event-single.js:271
+#: js/main-event-single.js:304 js/main-event-single.js:326
+#: js/manage-band.js:246 js/manage-band.js:282 js/manage-event.js:366
+#: js/manage-user.js:107 js/manage-user.js:154 js/manage-user.js:204
+#: js/manage-user.js:243 js/components/event-handler.js:483
+#: js/components/event-handler.js:587
 msgid "Error loading data. "
 msgstr "Fehler beim laden der Daten."
 
@@ -588,7 +609,7 @@ msgstr "Fehler beim laden der Daten."
 msgid "Error saving account information"
 msgstr "Fehler beim Speichern der Kontoinformationen"
 
-#: include/class/band-handler.php:1044
+#: include/class/band-handler.php:1052
 #, php-format
 msgid "Error saving Band (%s)"
 msgstr "Fehler beim Speichern der Band (%s)"
@@ -597,7 +618,7 @@ msgstr "Fehler beim Speichern der Band (%s)"
 msgid "Error uploading file"
 msgstr "Fehler beim hochladen der Datei"
 
-#: include/class/ajax-handler.php:248 include/class/ajax-handler.php:432
+#: include/class/ajax-handler.php:258 include/class/ajax-handler.php:442
 msgid "Error while changing the following status"
 msgstr "Fehler beim ändern des \"folgen\" status"
 
@@ -609,7 +630,7 @@ msgstr "Fehler beim erstellen eines neuen Albums"
 msgid "Error while creating a new gallery"
 msgstr "Fehler beim erstellen einer neuen Galerie"
 
-#: include/class/ajax-handler.php:630
+#: include/class/ajax-handler.php:640
 msgid "Error while creating a new user"
 msgstr "Fehler während des erstellen des neuen Benutzer"
 
@@ -617,11 +638,11 @@ msgstr "Fehler während des erstellen des neuen Benutzer"
 msgid "Error while creating album or gallery"
 msgstr "Fehler beim erstellen des Albums oder Galerie."
 
-#: include/class/ajax-handler.php:257 include/class/ajax-handler.php:335
+#: include/class/ajax-handler.php:267 include/class/ajax-handler.php:345
 msgid "Error while loading the data"
 msgstr "Fehler beim laden der Daten"
 
-#: include/class/file-handler.php:57
+#: include/class/file-handler.php:62
 #, php-format
 msgid "Error while resizing the image: %s."
 msgstr "Fehler beim ändern der Grösse des Bildes: %s."
@@ -642,15 +663,15 @@ msgstr "Fehler beim Speichern der Veranstalter-Einstellungen."
 msgid "Error while sending accreditation request"
 msgstr "Fehler beim senden der akkreditations Anfrage"
 
-#: include/class/event-handler.php:1454 include/class/event-handler.php:1498
+#: include/class/event-handler.php:1488 include/class/event-handler.php:1534
 msgid "Error while updating the accreditation field"
 msgstr "Fehler beim Aktualisieren des Akkreditierungsfelds"
 
-#: include/class/event-handler.php:1553
+#: include/class/event-handler.php:1589
 msgid "Error while updating the accreditation status"
 msgstr "Fehler beim aktualisieren des Akkreditierungsstatus"
 
-#: include/class/event-handler.php:1550
+#: include/class/event-handler.php:1586
 msgid "Error while updating the event featured status"
 msgstr "Fehler beim aktualisieren des hervorgehoben Status."
 
@@ -659,12 +680,12 @@ msgstr "Fehler beim aktualisieren des hervorgehoben Status."
 msgid "Error: %s "
 msgstr "Fehler: %s "
 
-#: include/class/plek-handler.php:644
+#: include/class/plek-handler.php:652
 #, php-format
 msgid "Error: Accreditation could not be confirmed! (%s)"
 msgstr "Fehler: Akkreditierung konnte nicht bestätigt werden (%s)"
 
-#: include/class/event-handler.php:1991
+#: include/class/event-handler.php:2033
 msgid "Error: Could not update the guest Author!"
 msgstr "Fehler: Konnte den Gast Autor nicht updaten!"
 
@@ -672,11 +693,11 @@ msgstr "Fehler: Konnte den Gast Autor nicht updaten!"
 msgid "Error: Event Object not found"
 msgstr "Fehler: Event Objekt nicht gefunden"
 
-#: template/components/dropdown.php:12
+#: template/components/dropdown.php:13
 msgid "Error: No options found!"
 msgstr "Fehler: Keine Optionen gefunden!"
 
-#: include/class/event-handler.php:1519
+#: include/class/event-handler.php:1555
 msgid "Error: Status code not allowed"
 msgstr "Fehler: Status code nicht erlaubt"
 
@@ -716,7 +737,7 @@ msgstr "Event wurde erfolgreich auf Facebook veröffentlicht"
 msgid "Event has ben canceled"
 msgstr "Dieser Event wurde abgesagt"
 
-#: template/event/meta/eventmanager.php:79
+#: template/event/meta/eventmanager.php:102
 msgid "Event has not yet been accredited by any team member."
 msgstr "Der Event wurde noch von keinem Team-Mitglied akkreditiert."
 
@@ -749,16 +770,16 @@ msgstr "Eventfotos"
 msgid "Event Poster"
 msgstr "Event Poster"
 
-#: include/class/event-handler.php:1955
+#: include/class/event-handler.php:1997
 #, php-format
 msgid "Event poster of %s"
 msgstr "Event Poster von %s"
 
-#: include/class/ajax-handler.php:281
+#: include/class/ajax-handler.php:291
 msgid "Event published"
 msgstr "Event veröffentlicht"
 
-#: include/class/ajax-handler.php:263 include/class/ajax-handler.php:341
+#: include/class/ajax-handler.php:273 include/class/ajax-handler.php:351
 msgid "Event reported"
 msgstr "Event gemeldet"
 
@@ -766,8 +787,8 @@ msgstr "Event gemeldet"
 msgid "Event Review saved"
 msgstr "Event Review gespeichert"
 
-#: js/components/event-handler.js:427 js/components/event-handler.js:447
-#: js/components/event-handler.js:452
+#: js/components/event-handler.js:433 js/components/event-handler.js:453
+#: js/components/event-handler.js:458
 msgid "Event saved!"
 msgstr "Event gespeichert!"
 
@@ -810,7 +831,7 @@ msgstr "Event wird stattfinden wie geplant."
 msgid "Eventmanager"
 msgstr "Eventmanager"
 
-#: js/manage-event.js:757
+#: js/manage-event.js:770
 msgid "Eventmanager Tipp"
 msgstr "Eventmanager Tipp"
 
@@ -818,12 +839,12 @@ msgstr "Eventmanager Tipp"
 msgid "Events"
 msgstr "Events"
 
-#: include/class/events.php:978 template/components/pagination-buttons.php:73
+#: include/class/events.php:983 template/components/pagination-buttons.php:73
 #, php-format
 msgid "Events %d to %d of %d"
 msgstr "Events %d bis %d von %d"
 
-#: include/class/plek-handler.php:426
+#: include/class/plek-handler.php:434
 msgid "Every 6 Minutes"
 msgstr "Alle 6 Minuten"
 
@@ -832,19 +853,40 @@ msgstr "Alle 6 Minuten"
 msgid "Facebook"
 msgstr "Facebook"
 
+#: include/class/social-media.php:112
+msgid "Facebook Graph returned an error"
+msgstr "Facebook Graph hat einen Fehler zurückgegeben"
+
+#: include/class/social-media.php:111
+msgid "Facebook Graph returned an error on DEV server"
+msgstr ""
+"Facebook Graph hat einen Fehler zurückgegeben auf dem Entwicklungsserver"
+
+#: include/class/social-media.php:105
+msgid "Facebook SDK returned an error"
+msgstr "Facebook SDK hat einen Fehler zurückgegeben"
+
+#: include/class/social-media.php:104
+msgid "Facebook SDK returned an error on DEV server"
+msgstr "Facebook SDK hat einen Fehler zurückgegeben auf dem Entwicklungsserver"
+
+#: template/backend/backend-options-page-api.php:25
+msgid "Facebook token updated"
+msgstr "Facebook token wurde aktualisiert"
+
 #: include/class/form-validator.php:510
 msgid "Facebook URL"
 msgstr "Facebook URL"
 
-#: include/class/ajax-handler.php:729
+#: include/class/ajax-handler.php:739
 msgid "Failed to add the album to the event"
 msgstr "Album konnte nicht zum Event hinzugefügt werden"
 
-#: include/class/ajax-handler.php:766
+#: include/class/ajax-handler.php:776
 msgid "Failed to add the gallery to the band"
 msgstr "Galerie konnte nicht zur Band hinzugefügt werden"
 
-#: include/class/ajax-handler.php:762
+#: include/class/ajax-handler.php:772
 msgid "Failed to add the gallery to the event"
 msgstr "Galerie konnte nicht zum Event hinzugefügt werden"
 
@@ -857,11 +899,15 @@ msgstr "Fehler beim erstellen eines neuen Galerie Verzeichnis."
 msgid "Failed to create new user (%s)"
 msgstr "Neuer Benutzer konnte nicht angelegt werden (%s)"
 
-#: include/class/event-handler.php:1738
+#: include/class/events.php:1345
+msgid "Failed to load Text for the Facebook ticket raffle"
+msgstr "Konnte den Text für die Facebook Ticket Verlosung nicht laden."
+
+#: include/class/event-handler.php:1774
 msgid "Failed to save Event"
 msgstr "Konnte den Event nicht speichern."
 
-#: include/class/event-handler.php:1841
+#: include/class/event-handler.php:1879
 #, php-format
 msgid "Failed to save meta data for: %s"
 msgstr "Fehler beim speichern der Metadaten für: %s"
@@ -870,7 +916,7 @@ msgstr "Fehler beim speichern der Metadaten für: %s"
 msgid "Failed to save the Settings"
 msgstr "Speichern der Einstellungen fehlgeschlagen"
 
-#: include/class/event-handler.php:1925
+#: include/class/event-handler.php:1967
 msgid "Failed to update the review field(s): "
 msgstr "Aktualisierung folgender Review Felder fehlgeschlagen:"
 
@@ -915,6 +961,10 @@ msgstr "Datei ist zu gross (max. %d MB)"
 msgid "File selected"
 msgstr "Datei gewählt"
 
+#: include/class/file-handler.php:141
+msgid "Filetype not supported"
+msgstr "Dateityp nicht unterstützt"
+
 #: include/class/notification-handler.php:418
 #: template/components/review-search-bar.php:16
 msgid "Find"
@@ -924,7 +974,7 @@ msgstr "Finden"
 msgid "First Name"
 msgstr "Vorname"
 
-#: include/class/band-handler.php:1250 include/class/events.php:1370
+#: include/class/band-handler.php:1258 include/class/events.php:1442
 #: template/band/meta/details.php:19 template/event/meta/details.php:7
 msgid "Follow"
 msgstr "Folgen"
@@ -937,11 +987,11 @@ msgstr "Folge Bands und Events um nie wieder einen Event zu verpassen"
 msgid "Follower"
 msgstr "Follower"
 
-#: js/components/event-handler.js:411
+#: js/components/event-handler.js:417
 msgid "Form error"
 msgstr "Formular Fehler"
 
-#: include/class/event-handler.php:857
+#: include/class/event-handler.php:891
 msgid "Free"
 msgstr "Kostenlos/Kollekte"
 
@@ -961,7 +1011,7 @@ msgstr "Künftige Events"
 msgid "Gallery not found"
 msgstr "Galerie nicht gefunden"
 
-#: js/components/gallery-handler.js:321
+#: js/components/gallery-handler.js:320
 msgid "Gallery preview"
 msgstr "Galerie Vorschaubild"
 
@@ -1026,7 +1076,7 @@ msgstr "https://www.dev.dans-art.ch/"
 msgid "https://www.plekvetica.ch/"
 msgstr "https://www.plekvetica.ch/"
 
-#: include/class/event-handler.php:1610
+#: include/class/event-handler.php:1646
 msgid "ID of Event not found!"
 msgstr "ID des Events nicht gefunden."
 
@@ -1034,7 +1084,7 @@ msgstr "ID des Events nicht gefunden."
 msgid "Image"
 msgstr "Bild"
 
-#: js/components/gallery-handler.js:452
+#: js/components/gallery-handler.js:456
 msgid "Image upload"
 msgstr "Bilder hochladen"
 
@@ -1042,7 +1092,7 @@ msgstr "Bilder hochladen"
 msgid "Images"
 msgstr "Bilder"
 
-#: js/components/gallery-handler.js:452
+#: js/components/gallery-handler.js:456
 msgid "Images uploaded: "
 msgstr "Bilder hochgeladen:"
 
@@ -1051,11 +1101,11 @@ msgstr "Bilder hochgeladen:"
 msgid "Images:"
 msgstr "Bilder:"
 
-#: js/components/gallery-handler.js:352
+#: js/components/gallery-handler.js:355
 msgid "Imagesize is to big for: "
 msgstr "Bildgrösse ist zu gross für:"
 
-#: include/class/event-handler.php:2768
+#: include/class/event-handler.php:2821
 msgid "Impression"
 msgstr "Impression"
 
@@ -1109,7 +1159,7 @@ msgstr "Interviewer"
 #: template/event/admin/event-team-accredi-list.php:21
 #: template/event/admin/event-team-calendar-list-item.php:19
 #: template/event/admin/event-team-calendar.php:21
-#: template/event/meta/eventmanager.php:89
+#: template/event/meta/eventmanager.php:112
 msgid "Interviews"
 msgstr "Interviews"
 
@@ -1117,7 +1167,7 @@ msgstr "Interviews"
 msgid "Intro Text"
 msgstr "Intro Text"
 
-#: js/manage-event.js:327
+#: js/manage-event.js:340
 msgid "Invalid Response"
 msgstr "Ungültige Antwort"
 
@@ -1141,19 +1191,19 @@ msgstr "Link"
 msgid "Link to Facebook event or organizers page"
 msgstr "Link zum Facebook Event oder der Seite des Veranstalters"
 
-#: include/class/event-handler.php:1106
+#: include/class/event-handler.php:1140
 msgid "Link to the Facebook event"
 msgstr "Link zum Facebook-Event"
 
-#: include/class/event-handler.php:1097
+#: include/class/event-handler.php:1131
 msgid "Link to the raffle"
 msgstr "Link zum Gewinnspiel"
 
-#: template/event/form/components/ticket-raffle.php:10
+#: template/event/form/components/ticket-raffle.php:9
 msgid "Link to the ticket raffle"
 msgstr "Link zur Ticketverlosung"
 
-#: include/class/event-handler.php:1106
+#: include/class/event-handler.php:1140
 msgid "Link to the website"
 msgstr "Link zur Webseite"
 
@@ -1161,7 +1211,7 @@ msgstr "Link zur Webseite"
 msgid "Links"
 msgstr "Links"
 
-#: include/class/events.php:1021 template/posts/author-single.php:54
+#: include/class/events.php:1035 template/posts/author-single.php:54
 msgid "Load more events"
 msgstr "Weitere Events laden"
 
@@ -1177,7 +1227,7 @@ msgstr "Lade Video"
 msgid "Location"
 msgstr "Ort"
 
-#: include/class/social-media.php:185
+#: include/class/social-media.php:252
 msgid "Logged in as:"
 msgstr "Eingeloggt als:"
 
@@ -1222,11 +1272,11 @@ msgstr "Markiere den Event als verschoben"
 msgid "Media contact"
 msgstr "Medien Kontakt"
 
-#: include/class/event-handler.php:1495
+#: include/class/event-handler.php:1531
 msgid "Member is already removed"
 msgstr "Mitglied ist bereits entfernt"
 
-#: include/class/event-handler.php:1447
+#: include/class/event-handler.php:1481
 msgid "Member is already set"
 msgstr "Mitglied ist bereits eingetragen"
 
@@ -1234,7 +1284,7 @@ msgstr "Mitglied ist bereits eingetragen"
 msgid "Missing accreditation requests"
 msgstr "Fehlende Akkreditations anfragen"
 
-#: template/event/meta/eventmanager.php:110
+#: template/event/meta/eventmanager.php:133
 msgid "Missing Event Details"
 msgstr "Fehlende Event Details"
 
@@ -1242,7 +1292,7 @@ msgstr "Fehlende Event Details"
 msgid "Missing Event Details:"
 msgstr "Fehlende Event Details:"
 
-#: js/manage-event.js:468 js/manage-event.js:487
+#: js/manage-event.js:481 js/manage-event.js:500
 msgid "Missing Event ID"
 msgstr "Event ID fehlt"
 
@@ -1290,7 +1340,7 @@ msgstr "Meine Watchlist"
 msgid "Name"
 msgstr "Name"
 
-#: js/manage-band.js:428
+#: js/manage-band.js:441
 #, javascript-format
 msgid ""
 "Name missmatch. The Artist ID you provided does not match with the given "
@@ -1307,22 +1357,26 @@ msgstr "Name des Events"
 msgid "New account"
 msgstr "Neues Konto"
 
-#: include/class/ajax-handler.php:640
+#: include/class/ajax-handler.php:650
 #| msgid "New account created! Check your email to complete the sign up."
 msgid "New account created! Check your email to complete the sign-up."
 msgstr ""
 "Neues Konto erstellt. Bitte prüfe deine E-Mails um die Anmeldung "
 "abzuschliessen."
 
-#: include/class/band-handler.php:914
+#: include/class/band-handler.php:922
 msgid "New Band added"
 msgstr "Neue Band hinzugefügt"
 
-#: include/class/event-handler.php:2383
+#: include/class/event-handler.php:2426
 msgid "New Event added, please publish"
 msgstr "Neuer Event eingetragen, bitte veröffentlichen"
 
-#: include/class/organizer-handler.php:172
+#: template/email/organizer/organizer-new-review-info.php:21
+msgid "New Event Review!"
+msgstr "Neues Event Review!"
+
+#: include/class/organizer-handler.php:173
 msgid "New Organizer added"
 msgstr "Neuer Veranstalter hinzugefügt"
 
@@ -1338,18 +1392,18 @@ msgstr "Neues Passwort"
 msgid "New password repeat"
 msgstr "Wiederhole neues Passwort"
 
-#: include/class/ajax-handler.php:649
+#: include/class/ajax-handler.php:659
 msgid "New password request sent. Please check your email."
 msgstr ""
 "Passwort zurücksetzen anfrage wurde versendet. Bitte überprüfe deine E-Mail"
 
-#: include/class/ajax-handler.php:658
+#: include/class/ajax-handler.php:668
 msgid "New password set. You can login now with your new password."
 msgstr ""
 "Passwort wurde gespeichert. Du kannst dich nun mit deinem neuen Passwort "
 "einloggen."
 
-#: include/class/event-handler.php:1907
+#: include/class/event-handler.php:1945
 msgid "New Review published"
 msgstr "Neues Review veröffentlicht"
 
@@ -1361,7 +1415,7 @@ msgstr "Neues Konto aktiviert"
 msgid "New user unlocked!"
 msgstr "Neuer Benutzer entsperrt!"
 
-#: include/class/venue-handler.php:156
+#: include/class/venue-handler.php:157
 msgid "New Venue added"
 msgstr "Neuer Ort hinzugefügt"
 
@@ -1416,12 +1470,12 @@ msgstr "Keine Bands gefunden."
 msgid "No data received"
 msgstr "Keine Daten erhalten"
 
-#: include/class/events.php:1157
+#: include/class/events.php:1171
 #: template/event/organizer/accredi_confirm_message.php:14
 msgid "No Event ID found"
 msgstr "Keine Event ID gefunden"
 
-#: include/class/events.php:1384
+#: include/class/events.php:1456
 msgid "No Event ID found."
 msgstr "Keine Event ID gefunden."
 
@@ -1429,7 +1483,7 @@ msgstr "Keine Event ID gefunden."
 msgid "No Event ID given. Expects an Array with the Event IDs"
 msgstr "Keine Event ID übergeben. Erwartet ein Array mit Event ID's"
 
-#: include/class/events.php:1228
+#: include/class/events.php:1242
 msgid "No Events found"
 msgstr "Keine Events gefunden"
 
@@ -1442,11 +1496,11 @@ msgstr "Keine Events gefunden."
 msgid "No events were found with the search term &quot;%s&quot; found."
 msgstr "Es wurden keine Events mit dem Suchbegriff &quot;%s&quot; gefunden."
 
-#: template/backend/backend-options-page-api.php:37
+#: template/backend/backend-options-page-api.php:47
 msgid "No Facebook page ID set"
 msgstr "Keine Facebook Seiten ID definiert"
 
-#: include/class/events.php:756
+#: include/class/events.php:761
 msgid "No Featured Events found"
 msgstr "Keine hervorgehobenen Events gefunden"
 
@@ -1468,11 +1522,15 @@ msgstr ""
 "Es wurde keine Galerie gefunden. Möglicherweise wurde diese gelöscht oder "
 "verschoben."
 
+#: include/class/file-handler.php:125
+msgid "No Image found"
+msgstr "Kein Bild gefunden"
+
 #: js/components/gallery-handler.js:259
 msgid "No Images selected!"
 msgstr "Keine Bilder gewählt"
 
-#: template/event/meta/eventmanager.php:101
+#: template/event/meta/eventmanager.php:124
 msgid "No interviews have yet been registered for this event."
 msgstr "Für diesen Event sind noch keine Interviews registriert."
 
@@ -1484,7 +1542,7 @@ msgstr "Kein Medien Kontakt für diesen Veranstalter definiert"
 msgid "No message defined"
 msgstr "Nachricht undefiniert"
 
-#: include/class/events.php:1182
+#: include/class/events.php:1196
 msgid "No new Events found"
 msgstr "Keine neuen Events gefunden"
 
@@ -1502,15 +1560,15 @@ msgstr ""
 msgid "No photos found for this event."
 msgstr "Für dieses Event wurden keine Fotos gefunden."
 
-#: include/class/events.php:834 include/class/events.php:889
+#: include/class/events.php:839 include/class/events.php:894
 msgid "No posts found"
 msgstr "Keine Beiträge gefunden"
 
-#: include/class/events.php:1024
+#: include/class/events.php:1038
 msgid "No raffles found"
 msgstr "Keine Verlosungen gefunden"
 
-#: include/class/events.php:780 include/class/events.php:802
+#: include/class/events.php:785 include/class/events.php:807
 msgid "No reviews found"
 msgstr "Keine Reviews gefunden"
 
@@ -1522,7 +1580,7 @@ msgstr "Keine Social Media Links gefunden"
 msgid "No Team members found."
 msgstr "Keine Team-Mitglieder gefunden."
 
-#: include/class/event-handler.php:2537
+#: include/class/event-handler.php:2580
 msgid "No Time defined"
 msgstr "Keine Zeit definiert"
 
@@ -1534,11 +1592,11 @@ msgstr "Kein Typ gefunden"
 msgid "No username or email provided"
 msgstr "Kein Benutzername oder Passwort angegeben."
 
-#: include/class/events.php:1090 include/class/search-handler.php:23
+#: include/class/events.php:1104 include/class/search-handler.php:23
 msgid "No videos found."
 msgstr "Keine Videos gefunden."
 
-#: include/class/youtube.php:252
+#: include/class/youtube.php:262
 msgid "No Youtube Video ID found"
 msgstr "Keine YouTube-Video-ID gefunden"
 
@@ -1548,6 +1606,10 @@ msgstr "Keine YouTube-Video-ID gefunden"
 #: template/event/admin/event-team-calendar.php:35
 msgid "Nobody"
 msgstr "Keiner"
+
+#: template/components/dropdown.php:30
+msgid "None"
+msgstr "Keine"
 
 #: template/backend/backend-options-page-status.php:17
 msgid "Not all user roles exist!"
@@ -1573,11 +1635,11 @@ msgstr "Nummer"
 msgid "Only one step left for your account at plekvetica!"
 msgstr "Nur noch ein Schritt für dein Konto bei Plekvetica!"
 
-#: js/manage-event.js:327
+#: js/manage-event.js:340
 msgid "Oops, something went wrong.... sorry!"
 msgstr "Hoppala, irgendwas hat nicht geklappt. Sorry!"
 
-#: include/class/event-handler.php:2816 include/class/user-handler.php:18
+#: include/class/event-handler.php:2870 include/class/user-handler.php:18
 #: template/email/event/accreditation-confirmed-admin-info.php:33
 #: template/event/admin/event-team-calendar-accredi.php:15
 #: template/event/form/add-event-form-details.php:18
@@ -1598,11 +1660,11 @@ msgstr ""
 msgid "Organizer contact data not found"
 msgstr "Veranstalter Kontaktdaten nicht gefunden"
 
-#: include/class/organizer-handler.php:195
+#: include/class/organizer-handler.php:196
 msgid "Organizer could not be updated"
 msgstr "Veranstalter konnte nicht aktualisiert werden"
 
-#: include/class/ajax-handler.php:521 include/class/ajax-handler.php:549
+#: include/class/ajax-handler.php:531 include/class/ajax-handler.php:559
 msgid "Organizer saved"
 msgstr "Veranstalter gespeichert"
 
@@ -1675,13 +1737,13 @@ msgstr "Fotograf"
 msgid "Photos"
 msgstr "Fotos"
 
-#: include/class/event-handler.php:2799
+#: include/class/event-handler.php:2853
 #, php-format
 #| msgid "Photos of %s at %s by Plekvetica"
 msgid "Photos of %1$s at %2$s by Plekvetica"
 msgstr "Alle Fotos von %1$s @ %2$s von Plekvetica"
 
-#: include/class/event-handler.php:1466
+#: include/class/event-handler.php:1499
 msgid "Please check for missing event accreditation."
 msgstr "Bitte prüfe ob Akkreditierungsanfragen fehlen."
 
@@ -1694,7 +1756,7 @@ msgstr "Bitte gib eine valide URL an. Muss mit https:// oder www. beginnen"
 msgid "Please select a Album"
 msgstr "Bitte Album wählen"
 
-#: js/manage-event.js:416 js/manage-event.js:436
+#: js/manage-event.js:428 js/manage-event.js:448
 msgid "Please select a country"
 msgstr "Bitte wähle ein Land"
 
@@ -1716,7 +1778,11 @@ msgstr "Plekvetica"
 msgid "Plekvetica Manager"
 msgstr "Plekvetica Manager"
 
-#: include/class/event-handler.php:2838
+#: template/event/meta/eventmanager.php:75
+msgid "Post ticket raffle"
+msgstr "Poste Ticketverlosung"
+
+#: include/class/event-handler.php:2892
 #: template/event/admin/event-team-accredi-list.php:16
 #: template/event/admin/event-team-calendar-list-item.php:14
 #: template/event/admin/event-team-calendar.php:15
@@ -1736,6 +1802,10 @@ msgstr "Poster von Event"
 msgid "Poster placeholder"
 msgstr "Poster Platzhalter"
 
+#: js/main-event-single.js:134
+msgid "Posting ticket raffle..."
+msgstr "Poste Ticketverlosung..."
+
 #: template/event/single-view.php:56
 msgid "Postponed"
 msgstr "Verschoben"
@@ -1750,7 +1820,7 @@ msgstr "Verschoben am %s auf ein unbekanntes Datum"
 msgid "Posts of  %s"
 msgstr "Beiträge von %s"
 
-#: include/class/event-handler.php:2819
+#: include/class/event-handler.php:2873
 #: template/event/form/components/price.php:22
 msgid "Presale"
 msgstr "Vorverkauf"
@@ -1765,13 +1835,17 @@ msgstr "Zurück"
 msgid "Price"
 msgstr "Preis"
 
-#: template/event/meta/eventmanager.php:54
+#: template/event/meta/eventmanager.php:61
 msgid "Promote Event"
 msgstr "Event promoten"
 
 #: template/event/form/components/attributes.php:27
 msgid "Promote this event"
 msgstr "Promote diesen Event"
+
+#: js/main-event-single.js:129
+msgid "Promoting Event..."
+msgstr "Promote Event..."
 
 #: template/event/form/components/organizer.php:23
 msgid "Proposals"
@@ -1810,7 +1884,7 @@ msgstr "Ersetzen"
 msgid "Request new password"
 msgstr "Fordere ein neues Passwort an"
 
-#: include/class/event-handler.php:1359
+#: include/class/event-handler.php:1393
 msgid "Requested"
 msgstr "Angefragt"
 
@@ -1827,7 +1901,7 @@ msgstr "Passwort zurücksetzen"
 msgid "Review"
 msgstr "Review"
 
-#: js/components/event-handler.js:571
+#: js/components/event-handler.js:573 js/components/event-handler.js:578
 msgid "Review status"
 msgstr "Review Status"
 
@@ -1874,7 +1948,7 @@ msgstr "Speichere Foto"
 msgid "Save settings"
 msgstr "Einstellungen speichern"
 
-#: js/manage-event.js:294
+#: js/manage-event.js:306
 msgid "Save..."
 msgstr "Speichern..."
 
@@ -1937,7 +2011,7 @@ msgstr "Einstellungen"
 msgid "Settings check passed"
 msgstr "Einstellungen sind ok"
 
-#: include/class/ajax-handler.php:579
+#: include/class/ajax-handler.php:589
 msgid "Settings saved"
 msgstr "Einstellungen gespeichert"
 
@@ -1957,7 +2031,7 @@ msgstr "Teile Foto"
 msgid "Short number"
 msgstr "Kurze Nummer"
 
-#: template/event/meta/eventmanager.php:65
+#: template/event/meta/eventmanager.php:88
 msgid "Show revision"
 msgstr "Überarbeitung anzeigen"
 
@@ -1978,7 +2052,7 @@ msgstr "Social & Links"
 msgid "Social Media of the Band"
 msgstr "Social Media der Band"
 
-#: include/class/band-handler.php:954
+#: include/class/band-handler.php:962
 #, php-format
 msgid ""
 "Some Bands with the Name \"%s\" where found.<br/>%s<br/>Please check if the "
@@ -1991,13 +2065,13 @@ msgstr ""
 msgid "Some Events are not requested yet..."
 msgstr "Einige Events wurden noch nicht angefragt..."
 
-#: include/class/ajax-handler.php:167 include/class/event-handler.php:1824
+#: include/class/ajax-handler.php:167 include/class/event-handler.php:1862
 #: template/event/form/edit-event-form.php:7
 #: template/event/form/edit-event-review-form.php:7
 msgid "Sorry, you are not allowed to edit this Event!"
 msgstr "Sorry, aber du bist nicht berechtigt, diesen Event zu bearbeiten."
 
-#: include/class/events.php:1132
+#: include/class/events.php:1146
 msgid "Sorry, you are not allowed to edit this post anymore"
 msgstr "Sorry, aber du bist nicht mehr berechtigt, diesen Event zu bearbeiten "
 
@@ -2007,11 +2081,11 @@ msgstr "Sorry, aber du bist nicht mehr berechtigt, diesen Event zu bearbeiten "
 msgid "Spotify"
 msgstr "Spotify"
 
-#: js/components/error-handler.js:102
+#: js/components/error-handler.js:85
 msgid "Spotify request error"
 msgstr "Fehler bei der Spotify Anfrage"
 
-#: include/class/event-handler.php:2817
+#: include/class/event-handler.php:2871
 msgid "Start Date"
 msgstr "Startdatum"
 
@@ -2021,7 +2095,7 @@ msgstr "Startdatum"
 msgid "Status"
 msgstr "Status"
 
-#: include/class/ajax-handler.php:233
+#: include/class/ajax-handler.php:243
 msgid "Status updated"
 msgstr "Status aktualisiert"
 
@@ -2033,7 +2107,7 @@ msgstr "Strasse und Nummer"
 msgid "Subject and Message"
 msgstr "Betreff und Nachricht"
 
-#: include/class/ajax-handler.php:692
+#: include/class/ajax-handler.php:702
 msgid "Super! No missing Reviews."
 msgstr "Super! Keine fehlenden Reviews."
 
@@ -2041,7 +2115,12 @@ msgstr "Super! Keine fehlenden Reviews."
 msgid "Switzerland"
 msgstr "Schweiz"
 
-#: include/class/event-handler.php:1465
+#: include/class/event-handler.php:1498
+#, php-format
+msgid "Team Member <b>%s</b> added a accreditation request."
+msgstr "Teammitglied %s hat eine Akkreditierungsanfrage gestellt."
+
+#: include/class/event-handler.php:1501
 msgid "Teammember added accreditation request"
 msgstr "Team-Mitglied hat eine Akkreditierungsanfrage hinzugefügt"
 
@@ -2058,7 +2137,7 @@ msgstr ""
 "Danke vielmals für deinen Beitrag im Plekvetica Eventkalender. Unsere "
 "Eventmanager werden die Veranstaltung prüfen und freigeben."
 
-#: js/components/event-handler.js:447
+#: js/components/event-handler.js:453
 #| msgid ""
 #| "Event saved, thanks a lot!<br/>Our Eventmanager will check and publish "
 #| "the Event"
@@ -2083,7 +2162,7 @@ msgstr "Danke für deinen Beitrag"
 msgid "Thanks in advance and have a great Day!"
 msgstr "Danke im voraus und einen schönen Tag wünschen wir!"
 
-#: include/class/event-handler.php:1540
+#: include/class/event-handler.php:1576
 #, php-format
 msgid "The accreditation status or the Event \"%s\" has been changed to \"%s\""
 msgstr "Der Akkreditierungsstatus von Event \"%s\" wurde geändert nach \"%s\""
@@ -2092,7 +2171,7 @@ msgstr "Der Akkreditierungsstatus von Event \"%s\" wurde geändert nach \"%s\""
 msgid "The Band has been added to the Database"
 msgstr "Die Band wurde zur Datenbank hinzugefügt"
 
-#: include/class/event-handler.php:2384
+#: include/class/event-handler.php:2427
 #, php-format
 msgid ""
 "The Event \"%s\" has been added to the Event Calendar. Please check and "
@@ -2128,7 +2207,7 @@ msgstr ""
 "Für die folgenden Plekvetica Mitglieder ist der Event %s nun als "
 "akkreditiert bestätigt"
 
-#: js/manage-event.js:757
+#: js/manage-event.js:770
 msgid "The Event you added misses some details. Please add them here:"
 msgstr ""
 "Einige Details deines hinzugefügten Events fehlen. Bitte ergänze diese hier:"
@@ -2145,7 +2224,7 @@ msgstr "Das Formular enthält Fehler, bitte beheben"
 msgid "The from has errors, please fix them"
 msgstr "Das Formular enthält Fehler, bitte beheben"
 
-#: js/components/gallery-handler.js:360
+#: js/components/gallery-handler.js:363
 msgid "The given File is not a valid image"
 msgstr "Die Datei ist keine gültige Bilddatei"
 
@@ -2166,6 +2245,10 @@ msgstr "Die Passwörter müssen übereinstimmen"
 msgid "The provided value is not allowed, please change"
 msgstr "Der angegebene Wert ist nicht erlaubt, bitte ändern"
 
+#: js/components/event-handler.js:572
+msgid "The Review contains errors, please fix them."
+msgstr "Das Review hat Fehler, bitte behebe diese."
+
 #: js/components/event-handler.js:84
 msgid "The Venue has been added to the Database"
 msgstr "Der Ort wurde zur Datenbank hinzugefügt"
@@ -2177,9 +2260,13 @@ msgstr "Der Ort wurde zur Datenbank hinzugefügt"
 msgid "There are no events for the next 7 days!"
 msgstr "Für die nächsten 7 Tage gibt es keine Events!"
 
-#: include/class/event-handler.php:1491
+#: include/class/event-handler.php:1527
 msgid "There are no registered Members"
 msgstr "Es gibt keine registrierten Mitglieder"
+
+#: template/email/organizer/organizer-new-review-info.php:24
+msgid "There has ben a new Review published at plekvetica.ch:"
+msgstr "Auf plekvetica.ch wurde ein neues Review veröffentlicht:"
 
 #: include/class/user-handler.php:1001
 msgid ""
@@ -2211,7 +2298,7 @@ msgstr "Diese Daten können nur für Team-Mitglieder angezeigt werden"
 msgid "This email address is already registered"
 msgstr "Diese Email Adresse ist bereits registriert"
 
-#: template/event/meta/eventmanager.php:101
+#: template/event/meta/eventmanager.php:124
 msgid "This event did not have any interviews."
 msgstr "Bei diesem Event gab es keine Interviews."
 
@@ -2244,7 +2331,7 @@ msgstr "Dieser Event wurde vom %s auf den %s verschoben."
 msgid "This file type is not allowed. (Only %s)"
 msgstr "Dieser Dateityp ist nicht zulässig. (Nur %s)"
 
-#: js/components/event-handler.js:411
+#: js/components/event-handler.js:417
 msgid "This form contains errors, please fix them."
 msgstr "Das Formular enthält noch Fehler, bitte korrigiere diese."
 
@@ -2256,6 +2343,10 @@ msgstr "Ticket link"
 msgid "Ticket raffle"
 msgstr "Ticketverlosung"
 
+#: include/class/ajax-handler.php:212
+msgid "Ticket raffle successfully posted on facebook"
+msgstr "Ticketverlosung auf Facebook geteilt."
+
 #: include/class/form-validator.php:507 template/event/meta/datetime.php:20
 msgid "Time"
 msgstr "Zeit"
@@ -2264,7 +2355,7 @@ msgstr "Zeit"
 msgid "Timetable"
 msgstr "Timetable"
 
-#: include/class/event-handler.php:2813
+#: include/class/event-handler.php:2867
 #: template/event/form/add-event-form-basic.php:18
 #: template/event/form/edit-event-form.php:18
 msgid "Title"
@@ -2289,7 +2380,7 @@ msgstr ""
 msgid "To many Bands selected! Are you sure you have more than 5 Bands!?"
 msgstr "Zu viele Bands gewählt! Bist du sicher, das du mehr als 5 Bands hast!?"
 
-#: js/components/event-handler.js:450
+#: js/components/event-handler.js:456
 msgid "To my Event"
 msgstr "Zu meinem Event"
 
@@ -2312,7 +2403,7 @@ msgstr "Zur Galerie: %s"
 msgid "To the new event"
 msgstr "Zum neuen Event"
 
-#: include/class/events.php:1337
+#: include/class/events.php:1409
 msgid "Today"
 msgstr "Heute"
 
@@ -2328,17 +2419,18 @@ msgstr "Twitter"
 msgid "Type"
 msgstr "Typ"
 
-#: include/class/event-handler.php:1365 include/class/organizer-handler.php:65
+#: include/class/event-handler.php:1399 include/class/organizer-handler.php:65
 msgid "Undefined"
 msgstr "Undefiniert"
 
-#: include/class/band-handler.php:1248 include/class/events.php:1368
+#: include/class/band-handler.php:1256 include/class/events.php:1440
 #: template/band/meta/details.php:19 template/event/meta/details.php:7
 msgid "Unfollow"
 msgstr "Entfolgen"
 
 #: template/event/event-list-item-recently-added.php:42
 #: template/event/event-list-item.php:40
+#: template/event/event-raffle-item.php:40
 msgid "Unpublished Event"
 msgstr "Event zum veröffentlichen"
 
@@ -2346,20 +2438,20 @@ msgstr "Event zum veröffentlichen"
 msgid "Update failed!"
 msgstr "Update fehlgeschlagen!"
 
-#: template/components/image-upload-button.php:13 js/plek-main-script.js:744
+#: template/components/image-upload-button.php:13 js/plek-main-script.js:749
 msgid "Upload"
 msgstr "Hochladen"
 
-#: js/components/gallery-handler.js:319 js/components/gallery-handler.js:391
+#: js/components/gallery-handler.js:318 js/components/gallery-handler.js:394
 msgid "Upload Error"
 msgstr "Fehler beim Hochladen"
 
 #: template/event/form/components/review-images.php:49
-#: js/components/gallery-handler.js:450
+#: js/components/gallery-handler.js:454
 msgid "Upload images"
 msgstr "Bilder hochladen"
 
-#: js/components/gallery-handler.js:433
+#: js/components/gallery-handler.js:437
 msgid "Upload: "
 msgstr "Hochladen:"
 
@@ -2391,7 +2483,7 @@ msgstr "Benutzerrollen vorhanden."
 msgid "Value is not boolean"
 msgstr "Wert ist nicht boolesch"
 
-#: include/class/event-handler.php:2815
+#: include/class/event-handler.php:2869
 #: template/event/form/add-event-form-basic.php:15
 #: template/event/form/edit-event-form.php:27
 msgid "Venue"
@@ -2401,11 +2493,11 @@ msgstr "Ort"
 msgid "Venue and Organizer"
 msgstr "Ort und Veranstalter"
 
-#: include/class/venue-handler.php:183
+#: include/class/venue-handler.php:184
 msgid "Venue could not be updated"
 msgstr "Der Ort konnte nicht aktualisiert werden "
 
-#: include/class/ajax-handler.php:466 include/class/ajax-handler.php:494
+#: include/class/ajax-handler.php:476 include/class/ajax-handler.php:504
 msgid "Venue saved"
 msgstr "Ort gespeichert"
 
@@ -2417,7 +2509,7 @@ msgstr "Videograf"
 msgid "Videos"
 msgstr "Videos"
 
-#: template/event/meta/videos.php:8
+#: template/event/meta/videos.php:30
 msgid "Videos & Interviews"
 msgstr "Videos & Interviews"
 
@@ -2446,7 +2538,20 @@ msgstr "Webseite"
 msgid "Welcome to Plekvetica!"
 msgstr "Willkommen bei Plekvetica!"
 
-#: include/class/event-handler.php:1351
+#: template/event/event-raffle-item.php:44
+#, php-format
+msgid "Win %s Tickets for"
+msgstr "Gewinne %s Ticket für"
+
+#: include/class/events.php:1357
+msgid "Win condition not supported"
+msgstr "Gewinnkonditionen nicht unterstützt"
+
+#: include/class/events.php:1348
+msgid "Win conditions not set"
+msgstr "Gewinnkonditionen nicht definiert"
+
+#: include/class/event-handler.php:1385
 msgid "Wish"
 msgstr "Wunsch"
 
@@ -2483,7 +2588,7 @@ msgstr ""
 "Du hast bereits ein Konto. Bitte logge dich zuerst aus, bevor du ein neues "
 "Konto erstellst."
 
-#: js/manage-event.js:698
+#: js/manage-event.js:711
 msgid ""
 "You are deleting this Notification permanently. You will probably not be "
 "able to Edit this Event afterwards.\n"
@@ -2501,15 +2606,15 @@ msgstr ""
 "Du bekommst diese eMail, weil du den oben genannten Bands auf www.plekvetica."
 "ch folgst."
 
-#: include/class/event-handler.php:1437
+#: include/class/event-handler.php:1471
 msgid "You are not allowed to access this function!"
 msgstr "Du bist nicht berechtigt diese Funktion zu nutzen!"
 
-#: include/class/band-handler.php:871 template/band/band-form.php:11
+#: include/class/band-handler.php:879 template/band/band-form.php:11
 msgid "You are not allowed to edit this band!"
 msgstr "Du darfst diese Band nicht bearbeiten!"
 
-#: include/class/events.php:1122
+#: include/class/events.php:1136
 msgid "You are not allowed to edit this Event!"
 msgstr "Du hast keine Erlaubnis, diesen Event zu bearbeiten!"
 
@@ -2522,22 +2627,22 @@ msgstr "Du bist nicht berechtigt, diesen Veranstalter zu bearbeiten!"
 msgid "You are not allowed to edit this venue!"
 msgstr "Du bist nicht berechtigt, diesen Ort zu bearbeiten!"
 
-#: include/class/plek-handler.php:631
+#: include/class/plek-handler.php:639
 msgid "You are not allowed to run this action"
 msgstr "Du hast keine Berechtigung diese Aktion durchzuführen."
 
-#: include/class/ajax-handler.php:271 include/class/ajax-handler.php:290
-#: include/class/ajax-handler.php:348
+#: include/class/ajax-handler.php:281 include/class/ajax-handler.php:300
+#: include/class/ajax-handler.php:358
 msgid "You are not allowed to use this function"
 msgstr "Du bist nicht berechtigt diese Funktion zu nutzen."
 
-#: include/class/ajax-handler.php:309
+#: include/class/ajax-handler.php:319
 msgid "You are not allowed to use this request or function not found"
 msgstr ""
 "Du bist nicht berechtigt diese Anfrage zu nutzen oder die Funktion wurde "
 "nicht gefunden"
 
-#: include/class/event-handler.php:2083
+#: include/class/event-handler.php:2125
 #: template/event/form/add-event-form-login.php:26
 msgid "You are not authorized to edit this event!"
 msgstr "Du bist nicht berechtigt, diesen Event zu bearbeiten!"
@@ -2564,11 +2669,11 @@ msgstr ""
 "Du kannst dich Anmelden / Registrieren, um den Event später wieder zu "
 "bearbeiten."
 
-#: include/class/ajax-handler.php:643
+#: include/class/ajax-handler.php:653
 msgid "You have to be logged in in order to save the settings."
 msgstr "Du musst eingeloggt sein, um die Einstellungen zu speichern."
 
-#: include/class/ajax-handler.php:327 include/class/ajax-handler.php:371
+#: include/class/ajax-handler.php:337 include/class/ajax-handler.php:381
 msgid "You have to be logged in to perform this action"
 msgstr "Du musst eingeloggt sein, um diese Aktion auszuführen"
 
@@ -2589,7 +2694,7 @@ msgstr "Deine Daten"
 msgid "Your Email"
 msgstr "Deine Email"
 
-#: include/class/event-handler.php:1628
+#: include/class/event-handler.php:1664
 #, php-format
 msgid ""
 "Your Event \"%s\" has been reported as outdated. Please have a look and "
@@ -2607,7 +2712,7 @@ msgstr "Dein Event \"%s\" wurde hinzugefügt."
 msgid "Your Name"
 msgstr "Dein Name"
 
-#: include/class/event-handler.php:1997
+#: include/class/event-handler.php:2039
 msgid "Your new Event at Plekvetica"
 msgstr "Dein neuer Event auf Plekvetica"
 

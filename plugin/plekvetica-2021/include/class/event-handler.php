@@ -1086,12 +1086,12 @@ class PlekEventHandler
      * Make sure that the field you like to get returns a valid json string
      *
      * @param string $name - Name of the field
-     * @return array The decoded values
+     * @return array The decoded values, or an empty array if no value found
      */
     public function get_field_value_decoded($name = 'post_title')
     {
         $value = $this->get_field_value($name);
-        return json_decode($value, true);
+        return ($value) ? json_decode($value, true) : array();
     }
 
     public function get_event_revisions()
@@ -1943,7 +1943,11 @@ class PlekEventHandler
             $notify = new PlekNotificationHandler;
             $notify->push_to_admin(
                 __('New Review published', 'pleklang'),
-                sprintf(__('A new Review of the Event "%s" got published.', 'pleklang'), get_the_title($event_id)),
+                sprintf(
+                    __('A new Review of the Event "%s" got published by %s.', 'pleklang'),
+                    get_the_title($event_id),
+                    PlekUserHandler::get_current_user_display_name()
+                ),
                 get_permalink($event_id)
             );
         }

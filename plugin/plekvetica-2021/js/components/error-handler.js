@@ -38,7 +38,7 @@ var plekerror = {
                 "hideEasing": "linear",
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut",
-                "onCloseClick" : onCloseClick
+                "onCloseClick": onCloseClick
             }
         } catch (error) {
             console.log(error);
@@ -55,7 +55,7 @@ var plekerror = {
     display_error(field, message, title = '') {
         console.log('Error in Field: ' + field);
         console.log('Message: ' + message);
-        
+
         if (jQuery('#' + field).length > 0) {
             //Error is field error
             this.add_error_to_field(field, message);
@@ -69,16 +69,16 @@ var plekerror = {
      * Displays the error message from the spotify api request
      * @param {*} data XMLHttpRequest
      */
-    display_spotify_error_message(data){
+    display_spotify_error_message(data) {
         try {
             let response = JSON.parse(data.responseText);
             //Try to format the error
             var message = response.error.message;
             switch (message) {
-                case 'invalid id': 
-                    message = __('Could not find the artist. Please check the ID or URL again','pleklang'); 
+                case 'invalid id':
+                    message = __('Could not find the artist. Please check the ID or URL again', 'pleklang');
                     break;
-            
+
                 default:
                     break;
             }
@@ -96,7 +96,7 @@ var plekerror = {
      * @param {string} message The message to show
      */
     display_info(title, message) {
-        if(empty(message)){
+        if (empty(message)) {
             message = title;
             title = '';
         }
@@ -117,10 +117,34 @@ var plekerror = {
         toastr.success(message, title);
     },
 
+    /**
+     * Adds a message below the input field as a plek-field-error
+     * @param {string} field The Field ID
+     * @param {string} message The message to display
+     */
     add_error_to_field(field, message) {
-        jQuery('#' + field).parent().append(`<div id='plek-field-error-${field}' class='plek-field-error'>
-        ${message}
-        </div>`);
+        //Check if message does not exist
+        const existing_errors = jQuery('#' + field).parent().find('.plek-field-error');
+        const error_message_formated = `<div id='plek-field-error-${field}' class='plek-field-error'>${message}</div>`;
+
+        if (empty(existing_errors)) {
+            jQuery('#' + field).parent().append(error_message_formated);
+            return;
+        }
+        //There are some errors. Check to not add a duplicate
+        var error_found = false;
+        existing_errors.each((index, err) => {
+            const msg = jQuery(err).text();
+            if (msg === message) {
+                error_found = true;
+                return; //Skip this item if the message already exists
+            }
+        });
+        if(!error_found){
+            jQuery('#' + field).parent().append(error_message_formated);
+        }
+
+
     },
 
     clear_field_errors() {

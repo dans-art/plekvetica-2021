@@ -174,13 +174,13 @@ class PlekFileHandler
     public function get_watermak_file($condition){
         switch ($condition) {
             case '22':
-                $watermark = PLEK_PATH.'images\watermarks\ticketraffle-2-2.png';
+                $watermark = PLEK_PATH.'images/watermarks/ticketraffle-2-2.png';
                 break;
             case '12':
-                $watermark = PLEK_PATH.'images\watermarks\ticketraffle-1-2.png';
+                $watermark = PLEK_PATH.'images/watermarks/ticketraffle-1-2.png';
                 break;
             case '11':
-                $watermark = PLEK_PATH.'images\watermarks\ticketraffle-1-1.png';
+                $watermark = PLEK_PATH.'images/watermarks/ticketraffle-1-1.png';
                 break;
             
             default:
