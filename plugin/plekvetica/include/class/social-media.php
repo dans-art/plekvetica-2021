@@ -332,8 +332,11 @@ class plekSocialMedia
      * @return void
      */
     public function post_ticketraffle_to_facebook($event_id){
-        //$message = $this->get_event_promo_text();
-        //$path = $this->get_poster_path();
+        $message = $this->get_event_promo_text();
+        $path = $this->get_poster_path();
         return $this->post_photo_to_facebook($message, $path);
     }
+
+    
+
 }
