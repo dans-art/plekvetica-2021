@@ -7,7 +7,7 @@ if (empty($bands)) {
 }
 ?>
 
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Bands', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Bands', 'plekvetica')); ?>
 <div class="meta-content">
     <?php foreach ($bands as $id => $band) :  ?>
 

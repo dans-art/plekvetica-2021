@@ -6,7 +6,7 @@ $event_link_label = __('Back to the Band');
 
 $gallery_object = PlekGalleryHandler::get_gallery_from_url();
 if (!is_object($gallery_object)) {
-    echo PlekTemplateHandler::load_template('404', 'system', __('Error 404: Gallery not found', 'pleklang'), $gallery_object);
+    echo PlekTemplateHandler::load_template('404', 'system', __('Error 404: Gallery not found', 'plekvetica'), $gallery_object);
     return;
 }
 ?>

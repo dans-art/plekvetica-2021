@@ -11,7 +11,7 @@ $organizer_id = (isset($template_args[2])) ? $template_args[2] : 0; //The ID of 
 
 $user_name = PlekUserHandler::get_user_display_name();
 
-$subject = __('Accreditation request from Plekvetica', 'pleklang');
+$subject = __('Accreditation request from Plekvetica', 'plekvetica');
 $organi_name = (isset($organizer_contact['name'])) ? $organizer_contact['name'] : '';
 
 include(PLEK_PATH . 'template/email/email-styles.php');
@@ -21,12 +21,12 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
 <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo $email_bg_dark; ?>" color="<?php echo $text_color; ?>" style="padding:10px; margin: 0; color:<?php echo $text_color; ?>;">
     <tr>
         <td id="email-content" style="color: <?php echo $text_color; ?>;">
-            <h1><?php echo sprintf(__('Accreditation request', 'pleklang'), $organi_name); ?></h1>
+            <h1><?php echo sprintf(__('Accreditation request', 'plekvetica'), $organi_name); ?></h1>
             <div>
-                <?php echo sprintf(__('Hi, %s', 'pleklang'), $organi_name); ?><br />
+                <?php echo sprintf(__('Hi, %s', 'plekvetica'), $organi_name); ?><br />
                 <?php echo (is_array($event_ids) and count($event_ids) === 1)
-                    ? __('We like to ask for an accreditation of the following Event', 'pleklang')
-                    : __('We like to ask for an accreditation for the following Events', 'pleklang'); ?>
+                    ? __('We like to ask for an accreditation of the following Event', 'plekvetica')
+                    : __('We like to ask for an accreditation for the following Events', 'plekvetica'); ?>
                 <br />
                 <br />
                 <?php if (is_array($event_ids) and !empty($event_ids)) : ?>
@@ -42,13 +42,13 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
                         <?php echo $pe->get_event_date('d.m.Y'); ?><br/>
                         <?php echo $pe->get_event_akkredi_crew_formated('<br/>');
                         ?><br />
-                        <?php PlekTemplateHandler::load_template('button', 'components', $confirm_accredi_button_link, sprintf(__('Confirm accreditation for %s', 'pleklang'), $event_name), '_blank'); ?><br />
+                        <?php PlekTemplateHandler::load_template('button', 'components', $confirm_accredi_button_link, sprintf(__('Confirm accreditation for %s', 'plekvetica'), $event_name), '_blank'); ?><br />
                         <br />
                     <?php endforeach; ?>
                 <?php endif; ?>
-                <?php echo __('Thanks in advance and have a great Day!', 'pleklang'); ?>
+                <?php echo __('Thanks in advance and have a great Day!', 'plekvetica'); ?>
                 <br />
-                <?php echo sprintf(__('Best regards, %s', 'pleklang'), $user_name); ?>
+                <?php echo sprintf(__('Best regards, %s', 'plekvetica'), $user_name); ?>
             </div>
         </td>
     </tr>

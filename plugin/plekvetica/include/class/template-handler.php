@@ -123,7 +123,7 @@ class PlekTemplateHandler
         if (!is_array($countries)) {
             return false;
         }
-        $return_options = "<option value='null' >".__('Select Country','pleklang')."</option>";
+        $return_options = "<option value='null' >".__('Select Country','plekvetica')."</option>";
         foreach ($countries as $code => $name) {
             $selected = ($current_country === $code OR $current_country === $name) ? 'selected' : '';
             $return_options .= "<option value='{$code}' {$selected}>{$name}</option>";

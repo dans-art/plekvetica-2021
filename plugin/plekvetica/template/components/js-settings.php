@@ -51,7 +51,7 @@ global $plek_handler;
 	<script type="text/javascript" defer='defer'>
 		jQuery(document).ready(function() {
 			let url = plek_main.url_replace_param('stage', 'details');
-			let title = __("Add Event Details", "pleklang") + " - Plekvetica";
+			let title = __("Add Event Details", "plekvetica") + " - Plekvetica";
 			plek_main.update_browser_url(url, title);
 			plek_manage_event.__construct();
 		});
@@ -62,7 +62,7 @@ global $plek_handler;
 	<script type="text/javascript" defer='defer'>
 		jQuery(document).ready(function() {
 			let url = plek_main.url_replace_param('stage', 'login');
-			let title = __("Login", "pleklang") + " - Plekvetica";
+			let title = __("Login", "plekvetica") + " - Plekvetica";
 			plek_main.update_browser_url(url, title);
 			plek_manage_event.add_event_listeners();
 			//Add the validator fields

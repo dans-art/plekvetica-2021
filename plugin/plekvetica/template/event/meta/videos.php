@@ -27,7 +27,7 @@ if(!$videos){
     return;
 }
 ?>
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Videos & Interviews', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Videos & Interviews', 'plekvetica')); ?>
 <div class='video-container'>
     <?php
     echo $videos;

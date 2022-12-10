@@ -4,7 +4,7 @@ $events = isset($template_args[0])?$template_args[0]:null;
 
 ?>
 
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Band Events', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Band Events', 'plekvetica')); ?>
 <div class='events-container'>
         <?php echo $events; ?>
     </div>

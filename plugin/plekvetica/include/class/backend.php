@@ -25,7 +25,7 @@ class PlekBackend /*extends WP_List_Table*/
         global $plek_handler;
         $errors = 0;
         if (!defined('SMTP_HOST')) {
-            echo __('eMail not configured', 'pleklang');
+            echo __('eMail not configured', 'plekvetica');
             $errors++;
         }
         if ($errors === 0) {
@@ -44,8 +44,8 @@ class PlekBackend /*extends WP_List_Table*/
     {
         $icon_url = PLEK_PLUGIN_DIR_URL . '/images/icon/plek-icon-2022.png';
         add_menu_page(
-            __('Plekvetica', 'pleklang'),
-            __('Plekvetica', 'pleklang'),
+            __('Plekvetica', 'plekvetica'),
+            __('Plekvetica', 'plekvetica'),
             'manage_options',
             'plek-options',
             [$this, 'render_options'],
@@ -55,8 +55,8 @@ class PlekBackend /*extends WP_List_Table*/
 
         add_submenu_page(
             'plek-options',
-            __('Notifications', 'pleklang'),
-            __('Notifications', 'pleklang'),
+            __('Notifications', 'plekvetica'),
+            __('Notifications', 'plekvetica'),
             'manage_options',
             'plek-options-notifications',
             [$this, 'render_options'],
@@ -64,8 +64,8 @@ class PlekBackend /*extends WP_List_Table*/
 
         add_submenu_page(
             'plek-options',
-            __('Status', 'pleklang'),
-            __('Status', 'pleklang'),
+            __('Status', 'plekvetica'),
+            __('Status', 'plekvetica'),
             'manage_options',
             'plek-options-status',
             [$this, 'render_options'],
@@ -73,8 +73,8 @@ class PlekBackend /*extends WP_List_Table*/
 
         add_submenu_page(
             'plek-options',
-            __('API', 'pleklang'),
-            __('API', 'pleklang'),
+            __('API', 'plekvetica'),
+            __('API', 'plekvetica'),
             'manage_options',
             'plek-options-api',
             [$this, 'render_options'],
@@ -257,7 +257,7 @@ class PlekBackend /*extends WP_List_Table*/
                     echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='$options_val'/><br/>";
                     echo "<input id='plek_spotify_refresh_token' name='" . $option_name . "[plek_spotify_refresh_token]' type='text' value='" . $plek_handler->get_plek_option('plek_spotify_refresh_token', 'plek_api_options') . "'/><br/>";
                 }
-                echo __('To get a new token, please authorize via this link:', 'pleklang') . ' ' . $psm->get_spotify_auth_link();
+                echo __('To get a new token, please authorize via this link:', 'plekvetica') . ' ' . $psm->get_spotify_auth_link();
                 break;
             case 'input':
                 echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='text' value='$options_val'/>";

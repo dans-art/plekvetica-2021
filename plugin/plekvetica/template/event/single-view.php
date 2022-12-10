@@ -7,7 +7,7 @@ global $plek_event;
 global $plek_handler;
 
 if (!is_object($plek_event)) {
-    echo __('Error: Event Object not found', 'pleklang');
+    echo __('Error: Event Object not found', 'plekvetica');
     return;
 }
 $is_postponed = $plek_event->is_postponed();
@@ -37,8 +37,8 @@ wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-sing
 ?>
 <?php if ($is_postponed and $postponed_id !== false AND $plek_event->is_public($postponed_id) AND intval($plek_event-> get_ID()) !== $postponed_id) : ?>
     <h1><?php echo $plek_event->get_field('post_title'); ?></h1>
-    <div><?php echo __('This event has been postponed', 'pleklang'); ?></div>
-    <a href="<?php echo get_permalink($postponed_id); ?>"><?php echo __('To the new event', 'pleklang'); ?></a>
+    <div><?php echo __('This event has been postponed', 'plekvetica'); ?></div>
+    <a href="<?php echo get_permalink($postponed_id); ?>"><?php echo __('To the new event', 'plekvetica'); ?></a>
     <?php return; ?>
 <?php endif; ?>
 
@@ -50,19 +50,19 @@ wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-sing
             <div class="event-poster">
                 <?php PlekTemplateHandler::load_template('poster', 'event/meta'); ?>
                 <?php if ($is_review) {
-                    PlekTemplateHandler::load_template('image-banner', 'components', __('Review', 'pleklang'));
+                    PlekTemplateHandler::load_template('image-banner', 'components', __('Review', 'plekvetica'));
                 } ?>
                 <?php if ($is_postponed) {
-                    PlekTemplateHandler::load_template('image-banner', 'components', __('Postponed', 'pleklang'));
+                    PlekTemplateHandler::load_template('image-banner', 'components', __('Postponed', 'plekvetica'));
                 } ?>
                 <?php if ($is_canceled) {
-                    PlekTemplateHandler::load_template('image-banner', 'components', __('Canceled', 'pleklang'));
+                    PlekTemplateHandler::load_template('image-banner', 'components', __('Canceled', 'plekvetica'));
                 } ?>
                 <?php if (!$is_review AND $is_featured) {
-                    PlekTemplateHandler::load_template('image-banner', 'components', __('Recommended by us', 'pleklang'));
+                    PlekTemplateHandler::load_template('image-banner', 'components', __('Recommended by us', 'plekvetica'));
                 } ?>
                 <?php if ($event_raffle) {
-                    PlekTemplateHandler::load_template('image-banner', 'components', __('Ticket raffle', 'pleklang'), $event_raffle ,array('plek-raffle') );
+                    PlekTemplateHandler::load_template('image-banner', 'components', __('Ticket raffle', 'plekvetica'), $event_raffle ,array('plek-raffle') );
                 } ?>
             </div>
             <div class="event-title-container">
@@ -72,7 +72,7 @@ wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-sing
                 <div class="event-venue"><?php echo $plek_event->get_field('venue_short'); ?></div>
             </div>
             <?php if ($is_canceled) : ?>
-                <div class="plek-message red"><?php echo __('This event has been canceled', 'pleklang'); ?></div>
+                <div class="plek-message red"><?php echo __('This event has been canceled', 'plekvetica'); ?></div>
             <?php endif; ?>
             <?php if ($is_postponed) : ?>
                 <div class="plek-message"><?php echo $plek_event->get_postponed_event_text(); ?></div>
@@ -99,7 +99,7 @@ wp_enqueue_script('main-event-single', PLEK_PLUGIN_DIR_URL . 'js/main-event-sing
         <?php PlekTemplateHandler::load_template('organizer', 'event/meta'); ?>
         <?php PlekTemplateHandler::load_template('authors', 'event/meta'); ?>
         <?php if (!$can_edit) : ?>
-            <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Event', 'pleklang')); ?>
+            <?php PlekTemplateHandler::load_template('text-bar', 'components', __('Event', 'plekvetica')); ?>
             <?php PlekTemplateHandler::load_template('button', 'components', '#', 'Fehlerhaften Event melden', null, 'plek-report-incorrect-event'); ?>
         <?php endif; ?>
     </div>

@@ -76,13 +76,13 @@ var plekerror = {
             var message = response.error.message;
             switch (message) {
                 case 'invalid id':
-                    message = __('Could not find the artist. Please check the ID or URL again', 'pleklang');
+                    message = __('Could not find the artist. Please check the ID or URL again', 'plekvetica');
                     break;
 
                 default:
                     break;
             }
-            plekerror.display_error('', message, __('Spotify request error', 'pleklang'));
+            plekerror.display_error('', message, __('Spotify request error', 'plekvetica'));
         } catch (error) {
             console.log(error);
             console.error(data);

@@ -27,7 +27,7 @@ $plek_event -> load_event_from_tribe_events($event);
 
 if ( ! $event->thumbnail->exists ) { ?>
     <div class="tribe-events-calendar-list__event-featured-image-wrapper tribe-common-g-col plek-missing-poster">
-    <img src="<?php echo $plek_event->poster_placeholder; ?>" alt="<?php echo __('Poster placeholder', 'pleklang'); ?>" />
+    <img src="<?php echo $plek_event->poster_placeholder; ?>" alt="<?php echo __('Poster placeholder', 'plekvetica'); ?>" />
     </div>
     <?php return;
 }
@@ -54,11 +54,11 @@ if ( ! $event->thumbnail->exists ) { ?>
 			class="tribe-events-calendar-list__event-featured-image"
 		/>
 	<?php if ($event->featured) {
-		PlekTemplateHandler::load_template('image-banner', 'components', __('Recommended by us', 'pleklang'));
+		PlekTemplateHandler::load_template('image-banner', 'components', __('Recommended by us', 'plekvetica'));
 	}
 	?>
 	<?php if ($plek_event-> get_raffle()) {
-		PlekTemplateHandler::load_template('image-banner', 'components', __('Ticket raffle', 'pleklang'));
+		PlekTemplateHandler::load_template('image-banner', 'components', __('Ticket raffle', 'plekvetica'));
 	}
 	?>
 	</a>

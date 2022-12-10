@@ -17,12 +17,12 @@ if($start_date === date_i18n('Y-m-d') AND $start_date_time === date_i18n('H:i:s'
 ?>
 <div class="event-basic-container plek-event-form-container">
 	<div class="event-date-container">
-		<label for="event_start_date"><?php echo __('Date & Time','pleklang'); ?></label>
+		<label for="event_start_date"><?php echo __('Date & Time','plekvetica'); ?></label>
 		<div class="event-date-picker">
 			<span class="date-input-container">
 				<input type="datetime-local" name="event_start_date" id="event_start_date" class="input" value="<?php echo $start_date . ' ' .$start_date_time; ?>" autocomplete="off"/>
 			</span>
-			<span class="date-to-seperator plek-multi-date" style="display: none;"><?php echo __('to', 'pleklang'); ?></span>
+			<span class="date-to-seperator plek-multi-date" style="display: none;"><?php echo __('to', 'plekvetica'); ?></span>
 			<span class="date-input-container plek-multi-date" style="display: none;">
 				<input type="datetime-local" name="event_end_date" id="event_end_date" class="input" value="<?php echo $end_date . ' ' .$end_date_time; ?>" autocomplete="off"/>
 			</span>
@@ -30,10 +30,10 @@ if($start_date === date_i18n('Y-m-d') AND $start_date_time === date_i18n('H:i:s'
 	</div>
 	<div class="event-date-multi-check-container">
 		<input type="checkbox" name="is_multiday" id="is_multiday" class="input" value="<?php echo ($event_object->is_multiday()) ? '1' : ''; ?>" <?php echo ($event_object->is_multiday()) ? 'checked' : ''; ?> autocomplete="off"/>
-		<label class="checkbox-label" for="is_multiday"><?php echo __('Define End Date/Time', 'pleklang'); ?></label>
+		<label class="checkbox-label" for="is_multiday"><?php echo __('Define End Date/Time', 'plekvetica'); ?></label>
 	</div>
 	<div class="event-date-postponed-check-container">
 		<input type="checkbox" name="is_postponed_check" id="is_postponed_check" class="input" value="1" autocomplete="off"/>
-		<label class="checkbox-label" for="is_postponed_check"><?php echo __('Mark this event as postponed', 'pleklang'); ?></label>
+		<label class="checkbox-label" for="is_postponed_check"><?php echo __('Mark this event as postponed', 'plekvetica'); ?></label>
 	</div>
 </div>

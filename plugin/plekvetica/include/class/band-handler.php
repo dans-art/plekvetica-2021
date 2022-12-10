@@ -36,16 +36,16 @@ class PlekBandHandler
     {
         //Define the supported social media pages
         $this->social_media['facebook'] = array(
-            'name' => __('Facebook', 'pleklang'), //The name
+            'name' => __('Facebook', 'plekvetica'), //The name
             'fa_class' => 'fab fa-facebook-square', //The class of the font-awesome icon
             'form_id' => 'band-link-fb', //The ID used in the html form
             'acf_id' => 'facebook__link' //The ID used in the html form
         );
-        $this->social_media['instagram'] = array('name' => __('Instagram', 'pleklang'), 'fa_class' => 'fab fa-instagram', 'form_id' => 'band-link-insta', 'acf_id' => 'instagram_link');
-        $this->social_media['youtube'] = array('name' => __('Youtube', 'pleklang'), 'fa_class' => 'fab fa-youtube-square', 'form_id' => 'band-link-youtube', 'acf_id' => 'youtube_url', 'instructions' => __('Add Link to Youtube Channel', 'pleklang'));
-        $this->social_media['spotify'] = array('name' => __('Spotify', 'pleklang'), 'fa_class' => 'fab fa-spotify', 'form_id' => 'band-link-spotify', 'acf_id' => 'spotify_id', 'instructions' => __('Add Link to Spotify Artist or Artist ID', 'pleklang'));
-        $this->social_media['Twitter'] = array('name' => __('Twitter', 'pleklang'), 'fa_class' => 'fab fa-twitter', 'form_id' => 'band-link-twitter', 'acf_id' => 'twitter_url');
-        $this->social_media['website'] = array('name' => __('Website', 'pleklang'), 'fa_class' => 'fas fa-globe', 'form_id' => 'band-link-web', 'acf_id' => 'website_link');
+        $this->social_media['instagram'] = array('name' => __('Instagram', 'plekvetica'), 'fa_class' => 'fab fa-instagram', 'form_id' => 'band-link-insta', 'acf_id' => 'instagram_link');
+        $this->social_media['youtube'] = array('name' => __('Youtube', 'plekvetica'), 'fa_class' => 'fab fa-youtube-square', 'form_id' => 'band-link-youtube', 'acf_id' => 'youtube_url', 'instructions' => __('Add Link to Youtube Channel', 'plekvetica'));
+        $this->social_media['spotify'] = array('name' => __('Spotify', 'plekvetica'), 'fa_class' => 'fab fa-spotify', 'form_id' => 'band-link-spotify', 'acf_id' => 'spotify_id', 'instructions' => __('Add Link to Spotify Artist or Artist ID', 'plekvetica'));
+        $this->social_media['Twitter'] = array('name' => __('Twitter', 'plekvetica'), 'fa_class' => 'fab fa-twitter', 'form_id' => 'band-link-twitter', 'acf_id' => 'twitter_url');
+        $this->social_media['website'] = array('name' => __('Website', 'plekvetica'), 'fa_class' => 'fas fa-globe', 'form_id' => 'band-link-web', 'acf_id' => 'website_link');
     }
 
     /**
@@ -67,7 +67,7 @@ class PlekBandHandler
     {
         global $plek_handler;
         $add_band_page_id = $plek_handler->get_plek_option('add_band_page_id');
-        return PlekTemplateHandler::load_template_to_var('button', 'components', get_permalink($add_band_page_id), __('Add new Band', 'pleklang'));
+        return PlekTemplateHandler::load_template_to_var('button', 'components', get_permalink($add_band_page_id), __('Add new Band', 'plekvetica'));
     }
 
     /**
@@ -348,7 +348,7 @@ class PlekBandHandler
         }
         if (file_exists(PLEK_PATH . 'images/flags/no-flag.png')) {
             $flag = PLEK_PLUGIN_DIR_URL  . 'images/flags/no-flag.png';
-            return "<img src='$flag' alt='" .  __('This Band has no origin information', 'pleklang') . "'/>";
+            return "<img src='$flag' alt='" .  __('This Band has no origin information', 'plekvetica') . "'/>";
         }
         return strtoupper($country_code);
     }
@@ -856,7 +856,7 @@ class PlekBandHandler
         $plek_handler->enqueue_select2();
         $min = ($plek_handler->is_dev_server()) ? "" : ".min";
         wp_enqueue_script('plek-band-scripts', PLEK_PLUGIN_DIR_URL . 'js/manage-band' . $min . '.js', array('jquery', 'select2', 'plek-language'), $plek_handler->version);
-        wp_set_script_translations('plek-band-scripts', 'pleklang', PLEK_PATH . "/languages");
+        wp_set_script_translations('plek-band-scripts', 'plekvetica', PLEK_PATH . "/languages");
     }
 
     /**
@@ -876,7 +876,7 @@ class PlekBandHandler
         }
         $this->load_band_object_by_id($band_id);
         if (PlekUserHandler::user_can_edit_band($this) !== true) {
-            $plek_ajax_errors->add('save_band', __('You are not allowed to edit this band!', 'pleklang'));
+            $plek_ajax_errors->add('save_band', __('You are not allowed to edit this band!', 'plekvetica'));
             return false;
         }
         $validate = $this->validate_band_data();
@@ -916,10 +916,10 @@ class PlekBandHandler
         $add_term = wp_insert_term($name, 'post_tag', $term_args);
         if (is_array($add_term) and isset($add_term['term_id'])) {
             //Send Notification to admin
-            $message = sprintf(__('A new Band "%s" has been added.', 'pleklang'), $name);
-            $message .= '<br/>' . PlekUserHandler::get_current_user_display_name(__('Added by', 'pleklang'));
+            $message = sprintf(__('A new Band "%s" has been added.', 'plekvetica'), $name);
+            $message .= '<br/>' . PlekUserHandler::get_current_user_display_name(__('Added by', 'plekvetica'));
             $action = get_term_link((int) $add_term['term_id']);
-            PlekNotificationHandler::push_to_role('eventmanager', __('New Band added', 'pleklang'), $message, $action);
+            PlekNotificationHandler::push_to_role('eventmanager', __('New Band added', 'plekvetica'), $message, $action);
             return $this->update_band($add_term['term_id'], true);
         }
 
@@ -959,9 +959,9 @@ class PlekBandHandler
             return false;
         }
         if (count($bands) > 1) {
-            return sprintf(__('Some Bands with the Name "%s" where found.<br/>%s<br/>Please check if the Band you like to add does not exist.', 'pleklang'), $name, implode('<br/>', $bands));
+            return sprintf(__('Some Bands with the Name "%s" where found.<br/>%s<br/>Please check if the Band you like to add does not exist.', 'plekvetica'), $name, implode('<br/>', $bands));
         } else {
-            return sprintf(__('A Band with the Name "%s" was found.<br/>%s<br/>Please check if the Band you like to add does not exist', 'pleklang'), $name, $bands[0]);
+            return sprintf(__('A Band with the Name "%s" was found.<br/>%s<br/>Please check if the Band you like to add does not exist', 'plekvetica'), $name, $bands[0]);
         }
     }
     /**
@@ -1034,7 +1034,7 @@ class PlekBandHandler
         //Upload Logo
         if (!empty($plek_ajax_handler->get_ajax_files_data('band-logo'))) {
             //Save resized File
-            $title = sprintf(__('Bandlogo of %s', 'pleklang'), $name);
+            $title = sprintf(__('Bandlogo of %s', 'plekvetica'), $name);
             $fh = new PlekFileHandler;
             $fh->set_image_options(680, 680, 'jpeg', 70);
 
@@ -1049,7 +1049,7 @@ class PlekBandHandler
         $update_term = wp_update_term($id, 'post_tag', $term_args);
         if (is_wp_error($update_term)) {
             $ut_error = $update_term->get_error_message();
-            $plek_ajax_errors->add('save_band', sprintf(__('Error saving Band (%s)', 'pleklang'), $ut_error));
+            $plek_ajax_errors->add('save_band', sprintf(__('Error saving Band (%s)', 'plekvetica'), $ut_error));
         }
         //update the acf / term meta
         foreach ($acf as $afc_name => $value) {
@@ -1253,9 +1253,9 @@ class PlekBandHandler
             return false;
         }
         if ($toggle === 'add') {
-            return __('Unfollow', 'pleklang');
+            return __('Unfollow', 'plekvetica');
         } else {
-            return __('Follow', 'pleklang');
+            return __('Follow', 'plekvetica');
         }
     }
 

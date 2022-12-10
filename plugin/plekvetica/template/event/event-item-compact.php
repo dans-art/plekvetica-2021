@@ -44,7 +44,7 @@ if($separate_by){
 ?>
 <article id="item_<?php echo $index; ?>" class="plek-event-item-compact <?php echo $class; ?> <?php echo $event_classes; ?>">
     <div class="event-icons">
-        <span class="<?php echo (isset($event->akk_status))?$event->akk_status:""; ?>" title="<?php echo sprintf(__('Event Status: %s', 'pleklang'), $akk_status_name); ?>"></span>
+        <span class="<?php echo (isset($event->akk_status))?$event->akk_status:""; ?>" title="<?php echo sprintf(__('Event Status: %s', 'plekvetica'), $akk_status_name); ?>"></span>
         <?php if ($currrent_event->has_photos()) : ?>
             <span class="plek-photo-icon"><i class="fas fa-camera"></i></span>
         <?php endif; ?>
@@ -56,7 +56,7 @@ if($separate_by){
         <?php endif; ?>
     </div>
     <div class="poster">
-        <a href="<?php echo $permalink; ?>" title="<?php echo __('See the Event details', 'pleklang'); ?>">
+        <a href="<?php echo $permalink; ?>" title="<?php echo __('See the Event details', 'plekvetica'); ?>">
             <?php echo $poster; ?>
             <?php if (empty($poster)) : ?>
                 <img src="<?php echo $currrent_event->poster_placeholder; ?>" />
@@ -66,15 +66,15 @@ if($separate_by){
     <div class="details">
         <div class="date"><?php echo $currrent_event->get_start_date('d. F Y'); ?></div>
         <div class="title">
-            <a href="<?php echo $permalink; ?>" title="<?php echo __('See the Event details', 'pleklang'); ?>">
+            <a href="<?php echo $permalink; ?>" title="<?php echo __('See the Event details', 'plekvetica'); ?>">
                 <?php echo $event->post_title; ?>
             </a>
         </div>
         <?php if ($is_canceled) : ?>
-            <div class="plek-message red"><?php echo __('This event has been canceled', 'pleklang'); ?></div>
+            <div class="plek-message red"><?php echo __('This event has been canceled', 'plekvetica'); ?></div>
         <?php endif; ?>
         <?php if ($is_postponed) : ?>
-            <div class="plek-message"><?php echo __('This event has been postponed', 'pleklang'); ?></div>
+            <div class="plek-message"><?php echo __('This event has been postponed', 'plekvetica'); ?></div>
         <?php endif; ?>
     </div>
 </article>

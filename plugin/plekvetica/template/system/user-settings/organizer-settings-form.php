@@ -5,15 +5,15 @@ $band_handler = new PlekBandHandler;
 $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user object
 $organi_id = PlekUserHandler::get_user_setting('organizer_id', $user->ID)
 ?>
-<h2><?php echo __('Organizer Settings', 'pleklang'); ?></h2>
+<h2><?php echo __('Organizer Settings', 'plekvetica'); ?></h2>
 <div id="organizer-settings">
     <?php if (empty($organi_id)) : ?>
         <?php
         $organi = tribe_get_organizers(false, -1, true, $args);
         ?>
-        <label for="organizer-id"><?php echo __('Select Organizer', 'pleklang'); ?></label>
+        <label for="organizer-id"><?php echo __('Select Organizer', 'plekvetica'); ?></label>
         <select id="organizer-id" name="organizer-id">
-            <option value="null"><?php echo __('Please select...', 'pleklang'); ?></option>
+            <option value="null"><?php echo __('Please select...', 'plekvetica'); ?></option>
             <?php foreach ($organi as $org) : ?>
                 <option value="<?php echo $org->ID ?>"><?php echo $org->post_title; ?></option>
             <?php endforeach; ?>

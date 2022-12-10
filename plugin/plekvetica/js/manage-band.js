@@ -142,7 +142,7 @@ let plek_band = {
         data.append('action', 'plek_band_actions');
         data.append('do', 'get_youtube_video');
         data.append('video_id', video_id);
-        let loading = '<div class="loading-youtube">' + __('Loading Video', 'pleklang') + '</div>';
+        let loading = '<div class="loading-youtube">' + __('Loading Video', 'plekvetica') + '</div>';
         jQuery('#video_preview_con').append('<div class="video_preview_item" id="video_' + item_id + '" data-videoid="' + video_id + '">' + loading + '</div>');
 
 
@@ -203,7 +203,7 @@ let plek_band = {
      * @param {*} data 
      */
     save_band(data) {
-        plek_main.activate_button_loader('#band-form-submit', __('Save Band...', 'pleklang'));
+        plek_main.activate_button_loader('#band-form-submit', __('Save Band...', 'plekvetica'));
         plek_main.remove_field_errors();
 
         let button = jQuery('#band-form-submit');
@@ -236,14 +236,14 @@ let plek_band = {
                     //It is the add Band form
                     plek_main.clear_form_inputs('plek-band-form');
                 }
-                jQuery('#band-form-cancel').text(__('Back', 'pleklang'));
+                jQuery('#band-form-cancel').text(__('Back', 'plekvetica'));
                 setTimeout(() => {
                     jQuery('#band-form-submit').text(plek_band.default_button_texts.submit);
                 }, 5000);
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
 
             }
         });
@@ -274,12 +274,12 @@ let plek_band = {
                 let error = plek_main.get_first_error_from_ajax_request(data);
                 if (!empty(error)) {
                     plekerror.set_toastr(0, true);
-                    plekerror.display_info(__('Info', 'pleklang'), error);
+                    plekerror.display_info(__('Info', 'plekvetica'), error);
                     plekerror.reset_toastr();
                 }
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
 
             }
         });
@@ -438,7 +438,7 @@ let plek_band = {
                 if (jQuery('#band-name').val() != data.name && !empty(jQuery('#band-name').val())) {
                     plekerror.display_info(
                         'Spotify',
-                        sprintf(__('Name missmatch. The Artist ID you provided does not match with the given name.<br/>Band form Spotify: %s', 'pleklang'), data.name));
+                        sprintf(__('Name missmatch. The Artist ID you provided does not match with the given name.<br/>Band form Spotify: %s', 'plekvetica'), data.name));
                 }
                 //Check for Poster and set it.
                 if (empty(jQuery('#band-logo').val()) && plek_band.band_image_is_placeholder() === true) {

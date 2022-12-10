@@ -10,7 +10,7 @@ $multiple = (isset($template_args[3]) AND $template_args[3] === true) ? 'multipl
 $name_mod = ($multiple)? $id.'[]': $id;
 $class = (isset($template_args[4])) ? $template_args[4] : ''; //The class to set
 if(empty($data)){
-	echo __('Error: No options found!','pleklang');
+	echo __('Error: No options found!','plekvetica');
 	return;
 }
 if(!is_array($selected)){
@@ -27,7 +27,7 @@ if(!is_array($selected)){
 			//Convert the value (Option name) in some special cases.
 			switch ($value) {
 				case 'None':
-					$value = __('None','pleklang');
+					$value = __('None','plekvetica');
 					break;
 			}
 			?>

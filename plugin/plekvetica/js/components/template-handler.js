@@ -65,7 +65,7 @@ var plektemplate = {
         </button>`;
     },
     load_search_overlay_header(count, content = "") {
-        var found = __('Items found:', 'pleklang');
+        var found = __('Items found:', 'plekvetica');
         return `<div class="overlay-header">
         ${content}
         <span class="count">${found} ${count}</span>

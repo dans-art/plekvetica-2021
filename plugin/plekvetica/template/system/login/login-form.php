@@ -16,7 +16,7 @@ $event_id = (isset($_REQUEST['event_id']) & !empty($_REQUEST['event_id'])) ? $_R
         <div class="loggin-error">
 
             <?php
-            PlekTemplateHandler::load_template('user-notice', 'system/', 'error', __('Login failed. Please check your login details.', 'pleklang'));
+            PlekTemplateHandler::load_template('user-notice', 'system/', 'error', __('Login failed. Please check your login details.', 'plekvetica'));
             ?>
         </div>
     <?php endif; ?>
@@ -26,9 +26,9 @@ $event_id = (isset($_REQUEST['event_id']) & !empty($_REQUEST['event_id'])) ? $_R
 </div>
 <div class="link-container">
     <div class="lostpassword-link">
-        <a href="<?php echo $my_plekvetica_url; ?>?action=reset_password<?php echo ($event_id) ? "&return_to_edit_event=" . $event_id : ''; ?>"><?php echo __('Reset password', 'pleklang'); ?></a>
+        <a href="<?php echo $my_plekvetica_url; ?>?action=reset_password<?php echo ($event_id) ? "&return_to_edit_event=" . $event_id : ''; ?>"><?php echo __('Reset password', 'plekvetica'); ?></a>
     </div>
     <div class="register-link">
-        <a href="<?php echo $my_plekvetica_url; ?>?action=sign_up<?php echo ($event_id) ? "&return_to_edit_event=" . $event_id : ''; ?>"><?php echo __('Sign-up at Plekvetica', 'pleklang'); ?></a>
+        <a href="<?php echo $my_plekvetica_url; ?>?action=sign_up<?php echo ($event_id) ? "&return_to_edit_event=" . $event_id : ''; ?>"><?php echo __('Sign-up at Plekvetica', 'plekvetica'); ?></a>
     </div>
 </div>

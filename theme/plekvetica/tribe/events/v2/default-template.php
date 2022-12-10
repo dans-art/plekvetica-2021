@@ -22,7 +22,7 @@ get_header();
 
 <main id="tribe-events-pg-template" class="tribe-events-pg-template">
     <header class="entry-header">
-    	<h1 class="entry-title" itemprop="headline"><?php echo ($review)?__('Review','pleklang'):__('Calendar','pleklang'); ?></h1>
+    	<h1 class="entry-title" itemprop="headline"><?php echo ($review)?__('Review','plekvetica'):__('Calendar','plekvetica'); ?></h1>
     </header>
 	<?php
     if(PlekGalleryHandler::is_gallery()){

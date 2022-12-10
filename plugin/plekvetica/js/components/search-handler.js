@@ -76,13 +76,13 @@ var pleksearch = {
     });
     var add_button = false;
     if (type === 'event_band') {
-      add_button = "<span><button type='button' id='add-new-band' class='plek-button add-new-vob-button'>" + __('Add new Band', 'pleklang') + "</button></span>";
+      add_button = "<span><button type='button' id='add-new-band' class='plek-button add-new-vob-button'>" + __('Add new Band', 'plekvetica') + "</button></span>";
     }
     if (type === 'event_venue') {
-      add_button = "<span><button type='button' id='add-new-venue' class='plek-button add-new-vob-button'>" + __('Add new Venue', 'pleklang') + "</button></span>";
+      add_button = "<span><button type='button' id='add-new-venue' class='plek-button add-new-vob-button'>" + __('Add new Venue', 'plekvetica') + "</button></span>";
     }
     if (type === 'event_organizer') {
-      add_button = "<span><button type='button' id='add-new-organizer' class='plek-button add-new-vob-button'>" + __('Add new Organizer', 'pleklang') + "</button></span>";
+      add_button = "<span><button type='button' id='add-new-organizer' class='plek-button add-new-vob-button'>" + __('Add new Organizer', 'plekvetica') + "</button></span>";
     }
     if (add_button !== false) {
       header = plektemplate.load_search_overlay_header(total, add_button);

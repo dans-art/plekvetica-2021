@@ -16,21 +16,21 @@ $website = $band_object->get_website_link();
 
 $score = $band_class->update_band_score($band_object->get_id());
 
-$follow_text = (!$band_object->user_is_follower()) ? __('Follow', 'pleklang') : __('Unfollow', 'pleklang');
+$follow_text = (!$band_object->user_is_follower()) ? __('Follow', 'plekvetica') : __('Unfollow', 'plekvetica');
 $follower_count = $band_object->get_follower_count();
 ?>
 
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Details', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Details', 'plekvetica')); ?>
 <div class="meta-content">
   <dl class='event-details-container'>
     <?php if (!empty($country)) : ?>
-      <dt><?php echo __('Origin', 'pleklang'); ?></dt>
+      <dt><?php echo __('Origin', 'plekvetica'); ?></dt>
       <dd class="band-flag"><?php echo $band_object->get_flag_formated(); ?> <?php echo $country; ?></dd>
     <?php endif; ?>
-    <dt><?php echo __('Social & Links', 'pleklang'); ?></dt>
+    <dt><?php echo __('Social & Links', 'plekvetica'); ?></dt>
     <dd class="event-links">
       <?php if (!$band_class->has_social_links()) : ?>
-        <?php echo __('No Social links found', 'pleklang'); ?>
+        <?php echo __('No Social links found', 'plekvetica'); ?>
       <?php endif; ?>
       <?php foreach ($band_class->social_media as $slug => $attr) : ?>
         <?php
@@ -41,13 +41,13 @@ $follower_count = $band_object->get_follower_count();
         ?>
         <?php if (!empty($social_link)) : ?>
           <span>
-            <a href="<?php echo $social_link; ?>" target="_blank" title="<?php echo sprintf(__('To the %s page of %s', 'pleklang'), $link_name, $name); ?>"><i class="<?php echo $fa_class; ?>"></i></a>
+            <a href="<?php echo $social_link; ?>" target="_blank" title="<?php echo sprintf(__('To the %s page of %s', 'plekvetica'), $link_name, $name); ?>"><i class="<?php echo $fa_class; ?>"></i></a>
           </span>
         <?php endif; ?>
       <?php endforeach; ?>
     </dd>
     <?php if ($user->user_is_in_team()) : ?>
-      <dt><?php echo __('Score', 'pleklang'); ?></dt>
+      <dt><?php echo __('Score', 'plekvetica'); ?></dt>
       <dd class="band-score"><?php echo $score; ?> Spotify: <?php echo $band_class->get_spotify_data('popularity'); ?></dd>
     <?php endif; ?>
   </dl>

@@ -1,94 +1,93 @@
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Plekvetica\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-24 14:49+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: \n"
-"Language: \n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"PO-Revision-Date: 2022-12-09 20:16+0000\n"
+"Last-Translator: Dänu\n"
+"Language-Team: Deutsch\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.6.2; wp-6.0.1\n"
-"X-Domain: pleklang"
+"X-Loco-Version: 2.6.3; wp-6.1.1\n"
+"X-Domain: plekvetica"
 
 #: tribe/events/v2/components/events-bar/views/list.php:22
 #: tribe/events/v2/components/events-bar/views/list/item.php:18
 msgid "Add event"
-msgstr ""
+msgstr "Event hinzufügen"
 
 #: search.php:46
 msgid "Bands"
-msgstr ""
+msgstr "Bands"
 
 #: tribe/events/v2/default-template.php:25
 msgid "Calendar"
-msgstr ""
+msgstr "Kalender"
 
 #. Description of the theme
 msgid "Child theme for Generatepress theme"
-msgstr ""
+msgstr "Kind-Theme für Generatepress"
 
 #. Author of the theme
 msgid "Daniel Spycher"
-msgstr ""
+msgstr "Daniel Spycher"
 
 #: search.php:59
 msgid "Events"
-msgstr ""
+msgstr "Events"
 
 #. Name of the template
 msgid "Konzertfotos"
-msgstr ""
+msgstr "Konzertfotos"
 
 #: search.php:68
 msgid "No Events found"
-msgstr ""
+msgstr "Keine Events gefunden"
 
 #: search.php:51
 msgid "Photos"
-msgstr ""
+msgstr "Fotos"
 
 #. Name of the theme
 msgid "Plekvetica"
-msgstr ""
+msgstr "Plekvetica"
 
 #: tribe/events/v2/list/event/featured-image.php:30
 msgid "Poster placeholder"
-msgstr ""
+msgstr "Poster Platzhalter"
 
 #: tribe/events/v2/list/event/featured-image.php:57
 msgid "Recommended by us"
-msgstr ""
+msgstr "Empfohlen von uns"
 
 #: tribe/events/v2/default-template.php:25
 msgid "Review"
-msgstr ""
+msgstr "Review"
 
 #: search.php:29
 msgid "Search for: Rick Astley"
-msgstr ""
+msgstr "Suche nach: Rick Astley"
 
 #: functions.php:24
 msgid "Search..."
-msgstr ""
+msgstr "Suche..."
 
 #: tribe/events/v2/list/event.php:53
 msgid "This event has been canceled."
-msgstr ""
+msgstr "Dieser Event wurde abgesagt."
 
 #: tribe/events/v2/list/event.php:56
 msgid "This event has been postponed."
-msgstr ""
+msgstr "Dieser Event wurde verschoben."
 
 #: tribe/events/v2/list/event/featured-image.php:61
 msgid "Ticket raffle"
-msgstr ""
+msgstr "Ticketverlosung"
 
 #: search.php:55
 msgid "Videos"
-msgstr ""
+msgstr "Videos"

@@ -3,38 +3,38 @@ extract(get_defined_vars());
 
 $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user object
 ?>
-<h1><?php echo __('Your Settings','pleklang'); ?></h1>
+<h1><?php echo __('Your Settings','plekvetica'); ?></h1>
 <?php 
 $user = PlekUserHandler::get_all_user_settings();
 if(!isset($user -> meta['nickname'])){
-    echo __('Error: User object could not be loaded.','pleklang');
+    echo __('Error: User object could not be loaded.','plekvetica');
     return false;
 }
 $gravatar_link = "<a href='https://de.gravatar.com' target='_blank'>gravatar.com</a>";
 ?>
 <div id="plek-user-avatar">
     <?php echo get_avatar($user); ?>
-    <span><?php echo sprintf(__('To change your avatar, you have to set or replace it via %s','pleklang'), $gravatar_link); ?></span>
+    <span><?php echo sprintf(__('To change your avatar, you have to set or replace it via %s','plekvetica'), $gravatar_link); ?></span>
 </div>
 <form id='plek-user-settings-form' class="plek-form">
     <input id="user-id" name="user-id" type="text" class='plek-hidden' value="<?php echo $user -> ID; ?>"></input>
 
-    <label for="first-name"><?php echo __('First Name','pleklang'); ?></label>
+    <label for="first-name"><?php echo __('First Name','plekvetica'); ?></label>
     <input id="first-name" name="first-name" type="text" value="<?php echo $user -> meta['first_name'][0]; ?>"></input>
     
-    <label for="last-name"><?php echo __('Last Name','pleklang'); ?></label>
+    <label for="last-name"><?php echo __('Last Name','plekvetica'); ?></label>
     <input id="last-name" name="last-name" type="text" value="<?php echo $user -> meta['last_name'][0]; ?>"></input>
     
-    <label for="display-name"><?php echo __('Displayname','pleklang'); ?></label>
+    <label for="display-name"><?php echo __('Displayname','plekvetica'); ?></label>
     <input id="display-name" name="display-name" type="text" value="<?php echo $user -> display_name; ?>"></input>
     
-    <label for="description"><?php echo __('Description','pleklang'); ?></label>
+    <label for="description"><?php echo __('Description','plekvetica'); ?></label>
     <textarea id="description" name="description" type="text"><?php echo htmlspecialchars_decode($user -> meta['description'][0]); ?></textarea>
     
-    <label for="new-password"><?php echo __('New Password','pleklang'); ?></label>
+    <label for="new-password"><?php echo __('New Password','plekvetica'); ?></label>
     <input id="new-password" name="new-password" type="password" value=""></input>
     
-    <label for="new-password-repeat"><?php echo __('Repeat Password','pleklang'); ?></label>
+    <label for="new-password-repeat"><?php echo __('Repeat Password','plekvetica'); ?></label>
     <input id="new-password-repeat" name="new-password-repeat" type="password" value=""></input>
     
     <?php 
@@ -48,8 +48,8 @@ $gravatar_link = "<a href='https://de.gravatar.com' target='_blank'>gravatar.com
     
     ?>
     <div class="buttons">
-        <button id="user-settings-cancel" class="plek-button plek-button-cancel" type="button"><?php echo __('Cancel','pleklang'); ?></button>
-        <button id="user-settings-submit" class="plek-button" type="submit"><?php echo __('Save settings','pleklang'); ?></button>
+        <button id="user-settings-cancel" class="plek-button plek-button-cancel" type="button"><?php echo __('Cancel','plekvetica'); ?></button>
+        <button id="user-settings-submit" class="plek-button" type="submit"><?php echo __('Save settings','plekvetica'); ?></button>
     </div>
 </form>
 <?php PlekTemplateHandler::load_template('js-settings', 'components', null); ?>

@@ -9,7 +9,7 @@ if(empty($genres)){
 $band_class = new PlekBandHandler;
 ?>
 
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Genres', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Genres', 'plekvetica')); ?>
 <div class="meta-content">
   <ul id="event-genres">
     <?php foreach ($genres as $slug => $name) : ?>

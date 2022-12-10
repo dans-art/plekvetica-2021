@@ -9,7 +9,7 @@ if (empty($organizer_ids)) {
 
 ?>
 
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Organizer', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Organizer', 'plekvetica')); ?>
 <div class="meta-content">
     <div id="organizer-container">
         <?php foreach ($organizer_ids as $organi) : ?>

@@ -197,7 +197,7 @@ let plek_main = {
      */
 
     image_upload_button_change(item) {
-        let text = (!empty(jQuery(item).data('selected-text'))) ? jQuery(item).data('selected-text') : __('File selected', "pleklang");
+        let text = (!empty(jQuery(item).data('selected-text'))) ? jQuery(item).data('selected-text') : __('File selected', "plekvetica");
         var upload = jQuery(item).prop("files")[0];
         var id = jQuery(item).attr("id");
         if (typeof upload === "object") {
@@ -420,7 +420,7 @@ let plek_main = {
                 if (typeof value == "string") {
                     //Error not assigned to field
                     if (display_unassigned_as_toastr) {
-                        plekerror.display_error(false, value, __('Error', 'pleklang'));
+                        plekerror.display_error(false, value, __('Error', 'plekvetica'));
                     } else {
                         //Attach after form end
                         jQuery(form).after(plek_main.format_error_message(value));
@@ -746,7 +746,7 @@ let plek_main = {
         jQuery('#' + form_id).find('.plek-image-upload-container').find('img').first().attr('src', placeholder);
 
         //Reset the Button text
-        jQuery('#' + form_id).find('.plek-image-upload-container').find('.plek-button').text(__('Upload', 'pleklang'));
+        jQuery('#' + form_id).find('.plek-image-upload-container').find('.plek-button').text(__('Upload', 'plekvetica'));
 
     },
 

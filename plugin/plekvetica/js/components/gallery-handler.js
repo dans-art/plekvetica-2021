@@ -126,7 +126,7 @@ var plek_gallery_handler = {
         plek_main.activate_button_loader(button);
 
         if(plek_gallery_handler.lock_add_images_button === true){
-            plekerror.display_error(null, __('Please wait for the album and galleries to be created.','pleklang'));
+            plekerror.display_error(null, __('Please wait for the album and galleries to be created.','plekvetica'));
             return;
         }
         plek_gallery_handler.lock_add_images_button = true;
@@ -138,7 +138,7 @@ var plek_gallery_handler = {
         let album_gallery_created = await plek_gallery_handler.check_album_and_gallery_ids(button);
 
         if (!album_gallery_created) {
-            plekerror.display_error(null, __('Error while creating album or gallery', 'pleklang'), __('Error', 'pleklang'));
+            plekerror.display_error(null, __('Error while creating album or gallery', 'plekvetica'), __('Error', 'plekvetica'));
         }
 
         //deactivate the loader button after gallery / album creation
@@ -192,7 +192,7 @@ var plek_gallery_handler = {
                 //No album set so far
                 let new_album_id = await plek_gallery_handler.create_album(event_id, band_id);
                 if (new_album_id === false) {
-                    console.log(__('Error while creating a new album', 'pleklang'));
+                    console.log(__('Error while creating a new album', 'plekvetica'));
                     return false;
                 }
                 album_id = new_album_id;
@@ -202,7 +202,7 @@ var plek_gallery_handler = {
             if (empty(gallery_id)) {
                 let new_gallery_id = await plek_gallery_handler.create_gallery(event_id, band_id, album_id);
                 if (new_gallery_id === false) {
-                    console.log(__('Error while creating a new gallery', 'pleklang'));
+                    console.log(__('Error while creating a new gallery', 'plekvetica'));
                     return false;
                 }
                 jQuery(button).attr('data-gallery_id', new_gallery_id);
@@ -256,7 +256,7 @@ var plek_gallery_handler = {
         let files = jQuery('#review_images').prop('files');
 
         if(files.length === 0){
-            plekerror.display_error(null, __('No Images selected!', 'pleklang'), 'Image upload error');
+            plekerror.display_error(null, __('No Images selected!', 'plekvetica'), 'Image upload error');
             return;
         }
 
@@ -264,7 +264,7 @@ var plek_gallery_handler = {
         //jQuery(`.image_upload_add_btn[data-gallery_id='${gallery_id}']`).find('.image_upload_status').addClass('status-uploading');
         this.update_gallery_button_status(gallery_id, 'uploading');
         //Add the button loader
-        plek_main.activate_button_loader('#review_images_upload_btn', __('Uploading images...', 'pleklang'));
+        plek_main.activate_button_loader('#review_images_upload_btn', __('Uploading images...', 'plekvetica'));
 
         for(let index = 0; index < files.length; index++){
             let upload = files[index];
@@ -315,9 +315,9 @@ var plek_gallery_handler = {
                 console.log("uploaded");
                 //Check for errors
                 if(plek_main.response_has_errors(data)){
-                    plekerror.display_error('', plek_main.get_first_error_from_ajax_request(data),__('Upload Error','pleklang'));
+                    plekerror.display_error('', plek_main.get_first_error_from_ajax_request(data),__('Upload Error','plekvetica'));
                 }else{
-                    plekerror.display_info(__('Gallery preview', 'pleklang'), plek_main.get_first_success_from_ajax_request(data));
+                    plekerror.display_info(__('Gallery preview', 'plekvetica'), plek_main.get_first_success_from_ajax_request(data));
                     //Remove the gallery preview class from all other image containers
                     jQuery('.image_to_upload.upload_complete img').removeClass('gallery-preview');
                     //Mark the Image as title image
@@ -352,7 +352,7 @@ var plek_gallery_handler = {
             //Display the preview
             index = existing_count + index;
             if(upload.size > plek_gallery_handler.max_upload_size){
-                plekerror.display_error(null, __('Imagesize is to big for: ', 'pleklang') + upload.name, 'Image upload error');
+                plekerror.display_error(null, __('Imagesize is to big for: ', 'plekvetica') + upload.name, 'Image upload error');
                 return;
             }
             jQuery(image_container).append(`<div id='image_${index}' class='image_to_upload'><img/>${upload.name}</div>`);
@@ -360,7 +360,7 @@ var plek_gallery_handler = {
 
             let image = plek_main.get_preview_image(insert_image, upload);
             if (!image) {
-                plekerror.display_error(null, __('The given File is not a valid image', 'pleklang'), 'Image upload error');
+                plekerror.display_error(null, __('The given File is not a valid image', 'plekvetica'), 'Image upload error');
                 return;
             }
         });
@@ -391,7 +391,7 @@ var plek_gallery_handler = {
                 let success = true;
                 if(plek_main.response_has_errors(data)){
                     success = false;
-                    plekerror.display_error('', plek_main.get_first_error_from_ajax_request(data),__('Upload Error','pleklang'));
+                    plekerror.display_error('', plek_main.get_first_error_from_ajax_request(data),__('Upload Error','plekvetica'));
                 }
                 let image_id = (success) ? plek_main.get_first_success_from_ajax_request(data): 0;
                 plek_gallery_handler.upload_image_progess_update(index, gallery_id, success, image_id);
@@ -434,7 +434,7 @@ var plek_gallery_handler = {
         let percentage_complete = ((items_done + items_failed) / items_total * 100);
 
         //Set the submit button text
-        let btn_text = __('Upload: ', 'pleklang') + Math.round(percentage_complete) + '%';
+        let btn_text = __('Upload: ', 'plekvetica') + Math.round(percentage_complete) + '%';
         jQuery('#review_images_upload_btn').text(btn_text);
 
         //Update picture count
@@ -451,9 +451,9 @@ var plek_gallery_handler = {
 
             jQuery(container).find('.image_to_upload').removeClass('current_upload');
 
-            plek_main.deactivate_button_loader('#review_images_upload_btn', __('Upload images', 'pleklang'));
+            plek_main.deactivate_button_loader('#review_images_upload_btn', __('Upload images', 'plekvetica'));
 
-            plekerror.display_info(__('Image upload', 'pleklang'), __('Images uploaded: ', 'pleklang') + items_done);
+            plekerror.display_info(__('Image upload', 'plekvetica'), __('Images uploaded: ', 'plekvetica') + items_done);
             
         }
         return;

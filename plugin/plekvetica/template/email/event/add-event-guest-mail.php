@@ -10,7 +10,7 @@ $user_email = (isset($template_args[2])) ? $template_args[2] : 'unbekannt@plekve
 
 $missing_details = $event->get_missing_event_details_formated(true, 'list');
 
-$subject = __('Thanks for your contribution', 'pleklang');
+$subject = __('Thanks for your contribution', 'plekvetica');
 $edit_link = $event->get_edit_event_link($event->get_ID()) . '&guest_edit=' . md5($user_name . $user_email);
 
 include(PLEK_PATH . 'template/email/email-styles.php');
@@ -21,21 +21,21 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
 <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo $email_bg_dark; ?>" color="<?php echo $text_color; ?>" style="padding:10px; margin: 0; color:<?php echo $text_color; ?>;">
     <tr>
         <td id="email-content" style="color: <?php echo $text_color; ?>;">
-            <h1><?php echo sprintf(__('Your Event "%s", has ben added!', 'pleklang'), $event->get_name()); ?></h1>
+            <h1><?php echo sprintf(__('Your Event "%s", has ben added!', 'plekvetica'), $event->get_name()); ?></h1>
             <div>
-                <?php echo __('Thanks a lot for your contribution to the Plekvetica Eventcalendar. Our Eventmanager will check the Event and publish it.', 'pleklang'); ?>
+                <?php echo __('Thanks a lot for your contribution to the Plekvetica Eventcalendar. Our Eventmanager will check the Event and publish it.', 'plekvetica'); ?>
                 <br />
                 <?php if (!empty($missing_details)) : ?>
                     <p>
-                        <?php echo __('You can improve your Event by adding more details. This way it will get more publicity and is easier to find.', 'pleklang'); ?>
+                        <?php echo __('You can improve your Event by adding more details. This way it will get more publicity and is easier to find.', 'plekvetica'); ?>
                         <br />
-                        <?php echo __('The following Fields are not filled out yet:', 'pleklang'); ?>
+                        <?php echo __('The following Fields are not filled out yet:', 'plekvetica'); ?>
                     </p>
                     <?php
                     echo $missing_details;
                     ?>
                     <p>
-                        <?php echo __('Use this link to update the Event: ', 'pleklang'); ?>
+                        <?php echo __('Use this link to update the Event: ', 'plekvetica'); ?>
                         <a href="<?php echo $edit_link; ?>"> <?php echo $edit_link; ?></a>
                     </p>
                 <?php endif; ?>

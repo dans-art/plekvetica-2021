@@ -5,7 +5,7 @@ $event_object = isset($template_args[0]) ? $template_args[0] : new PlekEvents; /
 
 
 if (!$event_object->is_event_loaded()) {
-    return __('Event not loaded', 'pleklang');
+    return __('Event not loaded', 'plekvetica');
 }
 
 $gallery_handler = new PlekGalleryHandler;
@@ -42,8 +42,8 @@ if (!empty($impression_gallery_id)) {
         </span>
         <span class='playtime'></span>
         <span class='band_origin'></span>
-        <span class='band_name'><?php echo __('Impressions','pleklang') . ' - ' . $date; ?></span>
-        <span class='image_count'><?php echo __('Images:', 'pleklang'); ?> <span class="nr"><?php echo $image_count; ?></span></span>
+        <span class='band_name'><?php echo __('Impressions','plekvetica') . ' - ' . $date; ?></span>
+        <span class='image_count'><?php echo __('Images:', 'plekvetica'); ?> <span class="nr"><?php echo $image_count; ?></span></span>
         <div class='sort-button plek-button'><i class="fas fa-arrows-alt-v"></i></div>
     </div>
 <?php endforeach; ?>

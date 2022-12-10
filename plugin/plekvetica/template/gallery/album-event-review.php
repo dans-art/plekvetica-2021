@@ -9,7 +9,7 @@ if ($album_id === 0) {
 $gallery_class = new PlekGalleryHandler;
 ?>
 
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Event Photos', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Event Photos', 'plekvetica')); ?>
 <?php if (is_array($album_id)) : ?>
     <?php foreach ($album_id as $aid) : ?>
         <?php if ($plek_event->is_multiday()) : ?>

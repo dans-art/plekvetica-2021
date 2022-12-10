@@ -9,7 +9,7 @@ $plek_youtube = new plekYoutube;
 $ids = $plek_youtube -> extract_video_ids($videos);
 ?>
 
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Videos', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Videos', 'plekvetica')); ?>
 <div class='video-container'>
         <?php echo $plek_youtube -> videos_do_shortcode($ids); ?>
         <div style="clear:both"></div>

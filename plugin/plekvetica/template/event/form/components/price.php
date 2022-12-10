@@ -13,19 +13,19 @@ $currencies_options = $event_object->get_currencies(true, $event_currency);
 <div class="event-prices-container plek-event-form-container">
 	<div class="event-price-container">
 		<div class="event_price_boxoffice_container">
-			<label for="event_price_boxoffice"><?php echo __('Boxoffice', 'pleklang'); ?></label>
+			<label for="event_price_boxoffice"><?php echo __('Boxoffice', 'plekvetica'); ?></label>
 			<div class="price-box">
 				<input type="text" name="event_price_boxoffice" id="event_price_boxoffice" class="input" value="<?php echo $event_price_boxoffice; ?>" />
 			</div>
 		</div>
 		<div class="event_price_presale_container">
-			<label for="event_price_presale"><?php echo __('Presale', 'pleklang'); ?></label>
+			<label for="event_price_presale"><?php echo __('Presale', 'plekvetica'); ?></label>
 			<div class="price-box">
 				<input type="text" name="event_price_presale" id="event_price_presale" class="input" value="<?php echo $event_price_presale; ?>" />
 			</div>
 		</div>
 		<div class="event_price_currency_container">
-			<label for="event_currency"><?php echo __('Currency', 'pleklang'); ?></label>
+			<label for="event_currency"><?php echo __('Currency', 'plekvetica'); ?></label>
 			<div class="price-box">
 				<select id="event_currency" autocomplete="off">
 					<?php echo $currencies_options; ?>
@@ -34,7 +34,7 @@ $currencies_options = $event_object->get_currencies(true, $event_currency);
 		</div>
 	</div>
 	<div class="event-price-link-container event-default-container">
-		<label for="event_price_link"><?php echo __('Ticket Link', 'pleklang'); ?></label>
+		<label for="event_price_link"><?php echo __('Ticket Link', 'plekvetica'); ?></label>
 		<input type="url" name="event_price_link" id="event_price_link" class="input" value="<?php echo $event_price_ticket_url; ?>" />
 	</div>
 </div>

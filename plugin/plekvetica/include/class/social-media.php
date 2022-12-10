@@ -101,15 +101,15 @@ class plekSocialMedia
             case 'sdk':
                 // When validation fails or other local issues
                 $msg = ($plek_handler->is_dev_server())
-                    ? __('Facebook SDK returned an error on DEV server', 'pleklang')
-                    : __('Facebook SDK returned an error', 'pleklang');
+                    ? __('Facebook SDK returned an error on DEV server', 'plekvetica')
+                    : __('Facebook SDK returned an error', 'plekvetica');
                 return $msg . ' - ' . $exception->getMessage();
                 break;
 
             case 'graph':
                 $msg = ($plek_handler->is_dev_server())
-                    ? __('Facebook Graph returned an error on DEV server', 'pleklang')
-                    : __('Facebook Graph returned an error', 'pleklang');
+                    ? __('Facebook Graph returned an error on DEV server', 'plekvetica')
+                    : __('Facebook Graph returned an error', 'plekvetica');
                 return $msg  . ' - ' .  $exception->getMessage();
                 break;
 
@@ -249,7 +249,7 @@ class plekSocialMedia
             $spotify_api = new SpotifyWebAPI\SpotifyWebAPI(['auto_refresh' => true], $session);
             $spotify_me = $spotify_api->me();
             if (isset($spotify_me->display_name)) {
-                return __('Logged in as:', 'pleklang') . ' ' . $spotify_me->display_name . '<br/>';
+                return __('Logged in as:', 'plekvetica') . ' ' . $spotify_me->display_name . '<br/>';
             }
         } catch (\Throwable $th) {
             return $th;

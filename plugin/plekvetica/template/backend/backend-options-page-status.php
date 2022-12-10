@@ -6,15 +6,15 @@ global $backend_class;
 
 <?php
 if ($backend_class->check_plekvetica()) {
-    echo __('Settings check passed', 'pleklang');
+    echo __('Settings check passed', 'plekvetica');
 }
 ?>
 <br />
 <?php
 if (PlekUserHandler::check_user_roles()) {
-    echo __("User roles exists.", "pleklang");
+    echo __("User roles exists.", "plekvetica");
 } else {
-    echo __("Not all user roles exist!", "pleklang");
+    echo __("Not all user roles exist!", "plekvetica");
 }
 ?>
 <h2>Cron Jobs</h2>

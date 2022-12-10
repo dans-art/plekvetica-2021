@@ -20,7 +20,7 @@ if(isset($_REQUEST['event_id']) AND isset($_REQUEST['stage'])){
 <div class="event-organizer-container plek-event-form-container">
     <div id="event-organizer-proposal">
         <?php if (!empty($propose_organi)) : ?>
-            <h4><?php echo __('Proposals', 'pleklang'); ?></h4>
+            <h4><?php echo __('Proposals', 'plekvetica'); ?></h4>
         <?php endif; ?>
         <?php foreach ($propose_organi as $organi) : ?>
             <div class="item plek-add-item event-organizer-proposal-item" data-for="event-organizer-selection" data-type="event_organizer" data-id="<?php echo $organi->organi_id; ?>">
@@ -34,13 +34,13 @@ if(isset($_REQUEST['event_id']) AND isset($_REQUEST['stage'])){
                     </div>
                 </div>
                 <div class="organi-apply-proposal-btn">
-                    <?php echo __('Add this Organizer', 'pleklang'); ?>
+                    <?php echo __('Add this Organizer', 'plekvetica'); ?>
                 </div>
             </div>
         <?php endforeach; ?>
     </div>
     <div id="organizer-search-bar-container" class="event-search-bar-container">
-        <input type="text" name="event_organizer" id="event_organizer" class="input plek-search-input" autocomplete="off" placeholder="<?php echo __('Search a Organizer', 'pleklang'); ?>" />
+        <input type="text" name="event_organizer" id="event_organizer" class="input plek-search-input" autocomplete="off" placeholder="<?php echo __('Search a Organizer', 'plekvetica'); ?>" />
     </div>
     <?php PlekTemplateHandler::load_template('search-overlay', 'event/form/components', 'event_organizer_overlay'); ?>
 

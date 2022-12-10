@@ -126,12 +126,12 @@ let plek_single_event_main = {
     add_event_listener() {
         //Promote Event Button
         jQuery('#promoteEvent').click(() => {
-            plek_main.activate_button_loader('#promoteEvent', __('Promoting Event...', 'pleklang'));
+            plek_main.activate_button_loader('#promoteEvent', __('Promoting Event...', 'plekvetica'));
             plek_single_event_main.do_ajax_promote_event();
         });
         //Ticket raffle Event Button
         jQuery('#raffleEvent').click(() => {
-            plek_main.activate_button_loader('#raffleEvent', __('Posting ticket raffle...', 'pleklang'));
+            plek_main.activate_button_loader('#raffleEvent', __('Posting ticket raffle...', 'plekvetica'));
             plek_single_event_main.do_ajax_social_media_post_event('ticket_raffle', 'raffleEvent');
         });
         //Add Accreditation Button
@@ -186,7 +186,7 @@ let plek_single_event_main = {
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
 
             }
         });
@@ -211,7 +211,7 @@ let plek_single_event_main = {
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
 
             }
         });
@@ -241,7 +241,7 @@ let plek_single_event_main = {
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
 
             }
         });
@@ -268,7 +268,7 @@ let plek_single_event_main = {
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
 
             }
         });
@@ -301,7 +301,7 @@ let plek_single_event_main = {
                 }
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
             }
         });
         return;
@@ -323,7 +323,7 @@ let plek_single_event_main = {
                 plek_main.deactivate_button(button);
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
             }
         });
         return;

@@ -7,7 +7,7 @@ if(empty($genres)){
 }
 ?>
 
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Genres', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Genres', 'plekvetica')); ?>
 <div class="meta-content">
   <ul>
     <?php foreach ($genres as $slug => $name) : ?>

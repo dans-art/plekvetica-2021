@@ -6,6 +6,6 @@ $editor_options = array('media_buttons' => false, 'textarea_rows' => 10, 'teeny'
 $description_value = $event_object->get_field_value('post_content');
 ?>
 <div class="event-description-container plek-event-form-container">
-		<label for="event_description"><?php echo __('Event Description','pleklang'); ?></label>
+		<label for="event_description"><?php echo __('Event Description','plekvetica'); ?></label>
 		<?php wp_editor( wpautop($description_value), 'event_description', $editor_options ); ?>
 </div>

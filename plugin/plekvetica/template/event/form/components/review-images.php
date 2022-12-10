@@ -8,7 +8,7 @@ $current_album = $event_object->get_field_value('gallery_id');
 
 ?>
 <div id="event-review-images-container" class="plek-event-form-container">
-	<label for="event_review_images"><?php echo __('Event Images', 'pleklang'); ?></label>
+	<label for="event_review_images"><?php echo __('Event Images', 'plekvetica'); ?></label>
 	<?php if ($has_photos and empty($event_object->get_event_gallery_array())) : ?>
 		<?php
 		//Old Event with existing photos. Just show the dropdown.
@@ -17,7 +17,7 @@ $current_album = $event_object->get_field_value('gallery_id');
 		$all_albums = $nggdb->find_all_album('id', 'DESC');
 		if (is_array($all_albums)) { ?>
 			<select id="review_old_album_id" name="review_old_album_id">
-				<option value="null"><?php echo __('Please select a Album', 'pleklang'); ?></option>
+				<option value="null"><?php echo __('Please select a Album', 'plekvetica'); ?></option>
 			<?php
 			foreach ($all_albums as $album) {
 				$selected = (intval($current_album) === intval($album->id)) ? 'selected' : '';
@@ -44,11 +44,11 @@ $current_album = $event_object->get_field_value('gallery_id');
 	<div class='upload-box'>
 		<div class="gallery_title"></div>
 		<div class="icon"><i class="fas fa-camera"></i></div>
-		<div class="info"><?php echo sprintf(__('Select all the images of the Band. Max filesize %s mb ', 'pleklang'), number_format(wp_max_upload_size() / 1048576, 0)); ?></div>
+		<div class="info"><?php echo sprintf(__('Select all the images of the Band. Max filesize %s mb ', 'plekvetica'), number_format(wp_max_upload_size() / 1048576, 0)); ?></div>
 	</div>
-	<input type="file" multiple='multiple' id="review_images" name="review_images[]" data-selected-text="<?php echo __('Upload images','pleklang') ?>" />
+	<input type="file" multiple='multiple' id="review_images" name="review_images[]" data-selected-text="<?php echo __('Upload images','plekvetica') ?>" />
 	<button class='plek-button' type="button" id="review_images_upload_btn" name="review_images_upload_btn" data-gallery_id='null' data-album_id='null'>
-		<?php echo __('Select images', 'pleklang') ?>
+		<?php echo __('Select images', 'plekvetica') ?>
 	</button>
 </div>
 <div id='images-uploaded-container' class="plek-event-form-container">

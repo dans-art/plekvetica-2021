@@ -159,7 +159,7 @@ class PlekEventBlocks extends PlekEvents
                 if ($user->user_is_in_team()) {
                     $ret['data'] =  $plek_event->get_user_missing_review_events();
                 } else {
-                    $ret['data'] = __('This Data can only be displayed to team members', 'pleklang');
+                    $ret['data'] = __('This Data can only be displayed to team members', 'plekvetica');
                     $ret['error'] = true;
                 }
                 break;

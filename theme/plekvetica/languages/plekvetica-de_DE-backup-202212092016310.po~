@@ -1,0 +1,93 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Plekvetica\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-24 14:49+0000\n"
+"PO-Revision-Date: 2022-12-09 20:14+0000\n"
+"Last-Translator: Dänu\n"
+"Language-Team: Deutsch\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.3; wp-6.1.1\n"
+"X-Domain: plekvetica"
+
+#: tribe/events/v2/components/events-bar/views/list.php:22
+#: tribe/events/v2/components/events-bar/views/list/item.php:18
+msgid "Add event"
+msgstr "Event hinzufügen"
+
+#: search.php:46
+msgid "Bands"
+msgstr "Bands"
+
+#: tribe/events/v2/default-template.php:25
+msgid "Calendar"
+msgstr "Kalender"
+
+#. Description of the theme
+msgid "Child theme for Generatepress theme"
+msgstr "Kind-Theme für Generatepress"
+
+#. Author of the theme
+msgid "Daniel Spycher"
+msgstr "Daniel Spycher"
+
+#: search.php:59
+msgid "Events"
+msgstr "Events"
+
+#. Name of the template
+msgid "Konzertfotos"
+msgstr ""
+
+#: search.php:68
+msgid "No Events found"
+msgstr ""
+
+#: search.php:51
+msgid "Photos"
+msgstr ""
+
+#. Name of the theme
+msgid "Plekvetica"
+msgstr ""
+
+#: tribe/events/v2/list/event/featured-image.php:30
+msgid "Poster placeholder"
+msgstr ""
+
+#: tribe/events/v2/list/event/featured-image.php:57
+msgid "Recommended by us"
+msgstr ""
+
+#: tribe/events/v2/default-template.php:25
+msgid "Review"
+msgstr ""
+
+#: search.php:29
+msgid "Search for: Rick Astley"
+msgstr ""
+
+#: functions.php:24
+msgid "Search..."
+msgstr ""
+
+#: tribe/events/v2/list/event.php:53
+msgid "This event has been canceled."
+msgstr ""
+
+#: tribe/events/v2/list/event.php:56
+msgid "This event has been postponed."
+msgstr ""
+
+#: tribe/events/v2/list/event/featured-image.php:61
+msgid "Ticket raffle"
+msgstr ""
+
+#: search.php:55
+msgid "Videos"
+msgstr ""

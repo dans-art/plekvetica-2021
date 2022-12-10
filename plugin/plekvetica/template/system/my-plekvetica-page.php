@@ -11,9 +11,9 @@ $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user 
 
 ?>
 <div class="my-plek-header">
-    <h1><?php echo __('My Plekvetica', 'pleklang'); ?></h1>
+    <h1><?php echo __('My Plekvetica', 'plekvetica'); ?></h1>
     <div>
-        <h2><?php echo sprintf(__('Hello %s', 'pleklang'), $user->display_name); ?></h2>
+        <h2><?php echo sprintf(__('Hello %s', 'plekvetica'), $user->display_name); ?></h2>
     </div>
     <div>
         <div class="notifications-button-container">
@@ -22,8 +22,8 @@ $user = (isset($template_args[0])) ? $template_args[0] : ''; //the current user 
                 <i id="notifications-button-counter"></i>
             </div>
         </div>
-        <div class="logout-link"><a href="<?php echo $current_url; ?>?action=logout"><?php echo __('Logout', 'pleklang'); ?></a></div>
-        <div class="settings-link"><a href="<?php echo $current_url; ?>?action=settings"><?php echo __('Settings', 'pleklang'); ?></a></div>
+        <div class="logout-link"><a href="<?php echo $current_url; ?>?action=logout"><?php echo __('Logout', 'plekvetica'); ?></a></div>
+        <div class="settings-link"><a href="<?php echo $current_url; ?>?action=settings"><?php echo __('Settings', 'plekvetica'); ?></a></div>
     </div>
 </div>
 

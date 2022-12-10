@@ -14,15 +14,15 @@ $page = esc_url(add_query_arg('tab', 'api', admin_url('options.php'))); ?>
 //Spotify Check
 $psm = new plekSocialMedia;
 ?>
-<h3><?php echo __('Spotify', 'pleklang'); ?></h3>
+<h3><?php echo __('Spotify', 'plekvetica'); ?></h3>
 <?php echo $psm->get_spotify_user_name(); ?>
 
-<h3><?php echo __('Facebook', 'pleklang'); ?></h3>
+<h3><?php echo __('Facebook', 'plekvetica'); ?></h3>
 
 <?php 
 //Refresh the facebook token
 if($psm->refresh_facebook_token() === true){
-    echo __('Facebook token updated','pleklang');
+    echo __('Facebook token updated','plekvetica');
 }
 ?>
 <br/>
@@ -44,6 +44,6 @@ if (!empty($plek_handler->get_plek_option('plek_facebook_page_id','plek_api_opti
         echo '</div>';
     }
 }else{
-    echo __('No Facebook page ID set','pleklang');
+    echo __('No Facebook page ID set','plekvetica');
 }
 ?>

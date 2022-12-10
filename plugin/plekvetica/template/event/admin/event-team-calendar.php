@@ -12,14 +12,14 @@ $total_events = count($events);
     <div class="tribe-common-g-row tribe-events-calendar-list__event-row plek-post-type-team-calendar">
         <table>
             <thead>
-                <td><?php echo __('Poster', 'pleklang'); ?></td>
-                <td><?php echo __('Date', 'pleklang'); ?></td>
-                <td><?php echo __('Name', 'pleklang'); ?></td>
-                <td><?php echo __('Venue and Organizer', 'pleklang'); ?></td>
-                <td><?php echo __('Acc Status', 'pleklang'); ?></td>
-                <td><?php echo __('Acc Team', 'pleklang'); ?></td>
-                <td><?php echo __('Interviews', 'pleklang'); ?></td>
-                <td><?php echo __('Event Status', 'pleklang'); //Marks if Event is Postponed, canceled, has missing event details, has review, ect. 
+                <td><?php echo __('Poster', 'plekvetica'); ?></td>
+                <td><?php echo __('Date', 'plekvetica'); ?></td>
+                <td><?php echo __('Name', 'plekvetica'); ?></td>
+                <td><?php echo __('Venue and Organizer', 'plekvetica'); ?></td>
+                <td><?php echo __('Acc Status', 'plekvetica'); ?></td>
+                <td><?php echo __('Acc Team', 'plekvetica'); ?></td>
+                <td><?php echo __('Interviews', 'plekvetica'); ?></td>
+                <td><?php echo __('Event Status', 'plekvetica'); //Marks if Event is Postponed, canceled, has missing event details, has review, ect. 
                     ?></td>
             </thead>
             <?php
@@ -32,12 +32,12 @@ $total_events = count($events);
                 $organizer = $list_event->get_organizers('<br/>');
                 $location = tribe_get_venue($list_event->get_ID());
 
-                $acc_crew = ($list_event->get_event_akkredi_crew()) ? $list_event->get_event_akkredi_crew_formated('<br/>') : __('Nobody', 'pleklang');
+                $acc_crew = ($list_event->get_event_akkredi_crew()) ? $list_event->get_event_akkredi_crew_formated('<br/>') : __('Nobody', 'plekvetica');
                 $acc_status = (current_user_can('plekmanager') or current_user_can('administrator')) ? PlekTemplateHandler::load_template_to_var('acc-status-dropdown', 'event/admin/components', $list_event) : $list_event->get_event_status_text();
-                $canceled = ($list_event->is_canceled()) ? '<i title = "' . __('Event has ben canceled', 'pleklang') . '" class="fas fa-calendar-times"></i>' : false;
-                $featured = ($list_event->is_featured()) ? '<i  title = "' . __('Event is featured event', 'pleklang') . '" class="fas fa-star"></i>' : false;
-                $featured_missing = (!$list_event->is_featured() and $list_event->get_field_value('akk_status') === 'ab') ? '<i  title = "' . __('Event should be featured event, but isn\'t!', 'pleklang') . '" class="fas fa-star-half"></i>' : false;
-                $missing_details = ($list_event->get_missing_event_details()) ? __('Missing:', 'pleklang') . '<br/>' . $list_event->get_missing_event_details_formated(true, 'br', '<i class="far fa-times-circle"></i>') : false;
+                $canceled = ($list_event->is_canceled()) ? '<i title = "' . __('Event has ben canceled', 'plekvetica') . '" class="fas fa-calendar-times"></i>' : false;
+                $featured = ($list_event->is_featured()) ? '<i  title = "' . __('Event is featured event', 'plekvetica') . '" class="fas fa-star"></i>' : false;
+                $featured_missing = (!$list_event->is_featured() and $list_event->get_field_value('akk_status') === 'ab') ? '<i  title = "' . __('Event should be featured event, but isn\'t!', 'plekvetica') . '" class="fas fa-star-half"></i>' : false;
+                $missing_details = ($list_event->get_missing_event_details()) ? __('Missing:', 'plekvetica') . '<br/>' . $list_event->get_missing_event_details_formated(true, 'br', '<i class="far fa-times-circle"></i>') : false;
             ?>
                 <tr class='event-list-item <?php echo ($list_event->is_canceled()) ? 'event-canceled' : ''; ?> <?php echo ($featured_missing) ? 'event-missing-featured' : ''; ?> <?php echo ($missing_details) ? 'event-missing-details' : ''; ?>'>
                     <td class="event_poster"><?php echo $poster; ?></td>
@@ -70,7 +70,7 @@ $total_events = count($events);
         </table>
     </div>
     <div>
-        <?php echo __('Total Posts:','pleklang') . $total_events; ?>
+        <?php echo __('Total Posts:','plekvetica') . $total_events; ?>
     </div>
 </div>
 <?php

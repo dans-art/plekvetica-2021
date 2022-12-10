@@ -22,16 +22,16 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
 <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo $email_bg_dark; ?>" color="<?php echo $text_color; ?>" style="padding:10px; margin: 0; color:<?php echo $text_color; ?>;">
     <tr>
         <td id="email-content" style="color: <?php echo $text_color; ?>;">
-            <h1><?php echo __('Welcome to Plekvetica!','pleklang'); ?></h1>
+            <h1><?php echo __('Welcome to Plekvetica!','plekvetica'); ?></h1>
             <div>
-                <?php echo sprintf(__('Hello, %s','pleklang'),$name); ?>
+                <?php echo sprintf(__('Hello, %s','plekvetica'),$name); ?>
                 <br />
-                <?php echo __('Your account has been successfully created. Please confirm your registration with the link below.','pleklang'); ?>
+                <?php echo __('Your account has been successfully created. Please confirm your registration with the link below.','plekvetica'); ?>
                 <br />
                 <a  style="color: <?php echo $link_color; ?>;" href="<?php echo $unlock_url; ?>"><?php echo $unlock_url; ?></a>
                 <br />
                 <br />
-                <?php echo __('Thanks for being a part of our Community!','pleklang'); ?>
+                <?php echo __('Thanks for being a part of our Community!','plekvetica'); ?>
             </div>
         </td>
     </tr>

@@ -186,7 +186,7 @@ class PlekEventHandler
             //@todo: Info to Band followers
             return true;
         } else {
-            return __("Changing Status was unsuccessful", "pleklang");
+            return __("Changing Status was unsuccessful", "plekvetica");
         }
     }
 
@@ -368,18 +368,18 @@ class PlekEventHandler
                 $moddate = key($postponed_history);
                 if (!is_object($postponed_history->{$moddate})) {
                     //Date is not set
-                    return sprintf(__('Postponed at %s to undefined date', 'pleklang'), date_i18n('d. F Y', $moddate));
+                    return sprintf(__('Postponed at %s to undefined date', 'plekvetica'), date_i18n('d. F Y', $moddate));
                 } else {
                     $old_start_date = date_i18n('d. F Y', strtotime($postponed_history->{$moddate}->old_date));
                     $new_start_date = date_i18n('d. F Y', strtotime($postponed_history->{$moddate}->new_date));
-                    return sprintf(__('This event has been postponed from %s to %s', 'pleklang'), $old_start_date, $new_start_date);
+                    return sprintf(__('This event has been postponed from %s to %s', 'plekvetica'), $old_start_date, $new_start_date);
                 }
             }
             return false;
         }
         //Old Events
         $postponed_event_old_date = $this->get_postponed_original_event_date('d. F Y');
-        return sprintf(__('This event was moved from %s to %s.', 'pleklang'), $postponed_event_old_date, $this->get_start_date('d. F Y'));
+        return sprintf(__('This event was moved from %s to %s.', 'plekvetica'), $postponed_event_old_date, $this->get_start_date('d. F Y'));
     }
 
     /**
@@ -401,7 +401,7 @@ class PlekEventHandler
         //Support for the old album_id
         $album_id = $this->get_field_value('gallery_id');
         if (empty($album_id)) {
-            return __('No photos found for this event.', 'pleklang');
+            return __('No photos found for this event.', 'plekvetica');
         }
         return   $album_id;
     }
@@ -888,7 +888,7 @@ class PlekEventHandler
     public function get_price_formated(string $cost, $with_currency = true)
     {
         if ($cost === "0000") {
-            return __('Free', 'pleklang');
+            return __('Free', 'plekvetica');
         }
         if ($with_currency) {
             $currency = (!empty($this->get_field_value('_EventCurrencySymbol'))) ? $this->get_field_value('_EventCurrencySymbol') : $this->default_event_currency;
@@ -1128,7 +1128,7 @@ class PlekEventHandler
     public function get_raffle_link()
     {
         $link = $this->get_field_value('win_url');
-        $title =  __('Link to the raffle', 'pleklang');
+        $title =  __('Link to the raffle', 'plekvetica');
         $icon = 'fas fa-trophy';
         return "<a href='$link' title='$title' target='_blank'><i class='$icon'></i></a>";
     }
@@ -1137,7 +1137,7 @@ class PlekEventHandler
     {
         $link = $this->get_field_value('_EventURL');
         $fb = (strpos($link, 'facebook.com')) ? true : false;
-        $title = ($fb) ? __('Link to the Facebook event', 'pleklang') : __('Link to the website', 'pleklang');
+        $title = ($fb) ? __('Link to the Facebook event', 'plekvetica') : __('Link to the website', 'plekvetica');
         $icon = ($fb) ? 'fab fa-facebook-square' : 'fas fa-globe';
         return "<a href='$link' title='$title' target='_blank'><i class='$icon'></i></a>";
     }
@@ -1382,21 +1382,21 @@ class PlekEventHandler
         switch ($status_code) {
             case 'aw':
             case 'iw':
-                return __('Wish', 'pleklang');
+                return __('Wish', 'plekvetica');
                 break;
             case 'ab':
             case 'ib':
-                return __('Confirmed', 'pleklang');
+                return __('Confirmed', 'plekvetica');
                 break;
             case 'aa':
             case 'ia':
-                return __('Requested', 'pleklang');
+                return __('Requested', 'plekvetica');
                 break;
             case 'no':
-                return __('Declined', 'pleklang');
+                return __('Declined', 'plekvetica');
                 break;
             case 'null':
-                return __('Undefined', 'pleklang');
+                return __('Undefined', 'plekvetica');
                 break;
             default:
                 return false;
@@ -1468,7 +1468,7 @@ class PlekEventHandler
         global $plek_handler;
 
         if (!PlekUserHandler::user_is_in_team()) {
-            die(__("You are not allowed to access this function!", "pleklang"));
+            die(__("You are not allowed to access this function!", "plekvetica"));
         }
 
         $current = get_field('akkreditiert', $event_id);
@@ -1478,14 +1478,14 @@ class PlekEventHandler
         if (is_array($current)) {
             $find = array_search($user_login, $current);
             if ($find === true) {
-                return __('Member is already set', 'pleklang');
+                return __('Member is already set', 'plekvetica');
             }
         } else {
             $current = array();
         }
         $current[] = $user_login;
 
-        $update_akkredi = ($plek_handler->update_field('akkreditiert', $current, $event_id) !== false) ? true : __('Error while updating the accreditation field', 'pleklang');
+        $update_akkredi = ($plek_handler->update_field('akkreditiert', $current, $event_id) !== false) ? true : __('Error while updating the accreditation field', 'plekvetica');
         $update_status = $this->set_akkredi_status($event_id, 'aw');
 
         if ($update_akkredi === true and $update_status === true) {
@@ -1495,10 +1495,10 @@ class PlekEventHandler
                 ['event_id' => $event_id, 'event_title' => $event_title, 'user' => $user_login]
             );
             //Send info to admin if first request
-            $message = sprintf(__('Team Member <b>%s</b> added a accreditation request.', 'pleklang'), PlekUserHandler::get_current_user_display_name()) . '</br>';
-            $message .= __('Please check for missing event accreditation.', 'pleklang');
+            $message = sprintf(__('Team Member <b>%s</b> added a accreditation request.', 'plekvetica'), PlekUserHandler::get_current_user_display_name()) . '</br>';
+            $message .= __('Please check for missing event accreditation.', 'plekvetica');
             PlekNotificationHandler::push_to_admin(
-                __('Teammember added accreditation request', 'pleklang'),
+                __('Teammember added accreditation request', 'plekvetica'),
                 $message,
                 get_permalink($event_id)
             );
@@ -1524,14 +1524,14 @@ class PlekEventHandler
         $current = get_field('akkreditiert', $event_id);
         $event_title = get_the_title($event_id);
         if (empty($current)) {
-            return __('There are no registered Members', 'pleklang');
+            return __('There are no registered Members', 'plekvetica');
         }
         $find = array_search($user_login, $current);
         if ($find === false) {
-            return __('Member is already removed', 'pleklang');
+            return __('Member is already removed', 'plekvetica');
         }
         unset($current[$find]);
-        $update = ($plek_handler->update_field('akkreditiert', $current, $event_id) !== false) ? true : __('Error while updating the accreditation field', 'pleklang');
+        $update = ($plek_handler->update_field('akkreditiert', $current, $event_id) !== false) ? true : __('Error while updating the accreditation field', 'plekvetica');
         apply_filters(
             'simple_history_log',
             "Accreditation: User {$user_login} removed from Event \"{$event_title}\"",
@@ -1552,7 +1552,7 @@ class PlekEventHandler
         global $plek_handler;
         $allowed_codes = array('aw', 'ab', 'aa', 'no');
         if (array_search($status_code, $allowed_codes) === false) {
-            return __('Error: Status code not allowed', 'pleklang');
+            return __('Error: Status code not allowed', 'plekvetica');
         }
         //Check if Event exists
         $pe = new PlekEvents;
@@ -1568,12 +1568,12 @@ class PlekEventHandler
         if ($update === true) {
             $notify = new PlekNotificationHandler;
             $subject = sprintf(
-                __('Accreditation status of "%s" changed to "%s"', 'pleklang'),
+                __('Accreditation status of "%s" changed to "%s"', 'plekvetica'),
                 get_the_title($event_id),
                 $this->get_event_status_text($status_code)
             );
             $message =  sprintf(
-                __('The accreditation status or the Event "%s" has been changed to "%s"', 'pleklang'),
+                __('The accreditation status or the Event "%s" has been changed to "%s"', 'plekvetica'),
                 get_the_title($event_id),
                 $this->get_event_status_text($status_code)
             );
@@ -1583,10 +1583,10 @@ class PlekEventHandler
 
         //Set Event to featured if status code is ab (accreditation confirmed)
         if ($status_code === 'ab') {
-            return ($this->update_event_meta($event_id, '_tribe_featured', '1') === false) ? __('Error while updating the event featured status', 'pleklang') : true;
+            return ($this->update_event_meta($event_id, '_tribe_featured', '1') === false) ? __('Error while updating the event featured status', 'plekvetica') : true;
         }
 
-        return ($update !== false) ? true : __('Error while updating the accreditation status', 'pleklang');
+        return ($update !== false) ? true : __('Error while updating the accreditation status', 'plekvetica');
     }
 
     /**
@@ -1603,7 +1603,7 @@ class PlekEventHandler
             return false;
         }
         /*  if ($plek_event->is_review()) {
-            return __('This post can no longer be edited because a review already exists', 'pleklang');
+            return __('This post can no longer be edited because a review already exists', 'plekvetica');
         } */
         return true;
     }
@@ -1643,7 +1643,7 @@ class PlekEventHandler
         global $plek_handler;
         $this->load_event_from_ajax();
         if ($this->get_ID() === null) {
-            return __('ID of Event not found!', 'pleklang');
+            return __('ID of Event not found!', 'plekvetica');
         }
         $reported_on = get_field('incorrect_event_reported_at', $this->get_ID());
         $reported_time = (!empty($reported_on)) ? strtotime($reported_on) : null;
@@ -1660,8 +1660,8 @@ class PlekEventHandler
 
             //Send notification to the users
             $notify = new PlekNotificationHandler;
-            $subject = sprintf(__('"%s" needs an update', 'pleklang'), $this->get_name());
-            $message =  sprintf(__('Your Event "%s" has been reported as outdated. Please have a look and update the Event. Thanks!', 'pleklang'), $this->get_name());
+            $subject = sprintf(__('"%s" needs an update', 'plekvetica'), $this->get_name());
+            $message =  sprintf(__('Your Event "%s" has been reported as outdated. Please have a look and update the Event. Thanks!', 'plekvetica'), $this->get_name());
             $action = $this->get_edit_event_link($this->get_ID());
             $notify->push_notification($users, 'event', $subject, $message, $action);
 
@@ -1771,7 +1771,7 @@ class PlekEventHandler
         }
 
         if (!is_int($event_id)) {
-            $validator->set_system_error(__('Failed to save Event', 'pleklang'));
+            $validator->set_system_error(__('Failed to save Event', 'plekvetica'));
             return $validator->get_errors();
         }
 
@@ -1859,7 +1859,7 @@ class PlekEventHandler
         $event_id = intval($plek_ajax_handler->get_ajax_data('event_id'));
         //Check if Event exists and user is allowed to edit
         if (!PlekUserHandler::user_can_edit_post($event_id)) {
-            return __('Sorry, you are not allowed to edit this Event!', 'pleklang');
+            return __('Sorry, you are not allowed to edit this Event!', 'plekvetica');
         }
 
         //Save Event
@@ -1876,7 +1876,7 @@ class PlekEventHandler
         $save_meta = $this->save_event_meta($event_id);
         if ($save_meta !== true) {
             $errors = implode(', ', $save_meta);
-            return sprintf(__('Failed to save meta data for: %s', 'pleklang'), $errors);
+            return sprintf(__('Failed to save meta data for: %s', 'plekvetica'), $errors);
         }
 
         //Remove the cookie
@@ -1942,9 +1942,9 @@ class PlekEventHandler
         if ($old_event_review_status !== true) {
             $notify = new PlekNotificationHandler;
             $notify->push_to_admin(
-                __('New Review published', 'pleklang'),
+                __('New Review published', 'plekvetica'),
                 sprintf(
-                    __('A new Review of the Event "%s" got published by %s.', 'pleklang'),
+                    __('A new Review of the Event "%s" got published by %s.', 'plekvetica'),
                     get_the_title($event_id),
                     PlekUserHandler::get_current_user_display_name()
                 ),
@@ -1964,7 +1964,7 @@ class PlekEventHandler
 
 
         if (!empty($failed)) {
-            return __('Failed to update the review field(s): ', 'pleklang') . implode(', ', $failed);
+            return __('Failed to update the review field(s): ', 'plekvetica') . implode(', ', $failed);
         }
 
         apply_filters(
@@ -1994,7 +1994,7 @@ class PlekEventHandler
 
         if (!empty($plek_ajax_handler->get_ajax_files_data($field_id))) {
             //Save resized File
-            $title = sprintf(__('Event poster of %s', 'pleklang'), $name);
+            $title = sprintf(__('Event poster of %s', 'plekvetica'), $name);
             $fh = new PlekFileHandler;
             $fh->set_image_options(999, 999, 'jpeg', 70);
 
@@ -2030,13 +2030,13 @@ class PlekEventHandler
             $guest_email = $plek_ajax_handler->get_ajax_data('guest_email');
             $guest_author = array('name' => $guest_name, 'email' => $guest_email);
             if (!$plek_handler->update_field('guest_author', json_encode($guest_author, JSON_UNESCAPED_UNICODE), $event_id)) {
-                return __('Error: Could not update the guest Author!', 'pleklang');
+                return __('Error: Could not update the guest Author!', 'plekvetica');
             }
             //Set the guest author ID
             $login = (int) $plek_handler->get_plek_option('guest_author_id');
             //Send mail to user
             $pn = new PlekNotificationHandler;
-            $pn->push_to_role('guest', __('Your new Event at Plekvetica', 'pleklang'), maybe_serialize([$event_id, $guest_name, $guest_email]), null, 'added_event_guest_info');
+            $pn->push_to_role('guest', __('Your new Event at Plekvetica', 'plekvetica'), maybe_serialize([$event_id, $guest_name, $guest_email]), null, 'added_event_guest_info');
         } else {
             //Try to login the user
             $user_name = $plek_ajax_handler->get_ajax_data('user_login');
@@ -2122,7 +2122,7 @@ class PlekEventHandler
             $validator->set_required('event_id');
             $validator->set_type('event_id', 'int');
             if (!PlekUserHandler::current_user_can_edit($event_id)) {
-                $validator->set_system_error(__('You are not authorized to edit this event!', 'pleklang'));
+                $validator->set_system_error(__('You are not authorized to edit this event!', 'plekvetica'));
             }
         }
         return $validator;
@@ -2423,8 +2423,8 @@ class PlekEventHandler
         $notify = new PlekNotificationHandler;
         $post = get_post($event_id);
         $title = (isset($post->post_title)) ? $post->post_title : 'NULL';
-        $subject = __('New Event added, please publish', 'pleklang');
-        $message = sprintf(__('The Event "%s" has been added to the Event Calendar. Please check and publish the Event.', 'pleklang'), $title);
+        $subject = __('New Event added, please publish', 'plekvetica');
+        $message = sprintf(__('The Event "%s" has been added to the Event Calendar. Please check and publish the Event.', 'plekvetica'), $title);
         $action = get_permalink($event_id);
 
         return $notify->push_to_role('eventmanager', $subject, $message, $action);
@@ -2577,7 +2577,7 @@ class PlekEventHandler
             $playtime = (isset($this->event['timetable'][$band_id]['playtime_formated'])) ? $this->event['timetable'][$band_id]['playtime_formated'] : '';
             $playtime = (!empty($playtime)) ? date('H:i', strtotime($playtime))  : 'tbd';
 
-            $day = __('No Time defined', 'pleklang');
+            $day = __('No Time defined', 'plekvetica');
             if ($is_multiday and $timestamp > 0) {
                 //Check if the time is before 6AM. If so, assign it to the previous day
                 $day = (date('H', $timestamp) < 6) ? date('d. F', $timestamp - (60 * 60 * 24)) : date('d. F', $timestamp);
@@ -2818,7 +2818,7 @@ class PlekEventHandler
             $name_part = explode('_', $band_id); //impression_DATE eg: impression_13.01.2022
             $name_date = isset($name_part[1]) ? $name_part[1] : $this->get_start_date('d.m.Y');
             $date_converted = date('d.m.Y', strtotime($name_date)); //Convert the date
-            return __('Impression', 'pleklang') . ' @ ' . $venue . ' - ' . $date_converted;
+            return __('Impression', 'plekvetica') . ' @ ' . $venue . ' - ' . $date_converted;
         }
 
         $band_handler = new PlekBandHandler;
@@ -2850,7 +2850,7 @@ class PlekEventHandler
         $venue = $this->get_venue_name();
         $band = $band_handler->get_name();
 
-        return sprintf(__('Photos of %1$s at %2$s by Plekvetica', 'pleklang'), $band, $venue);
+        return sprintf(__('Photos of %1$s at %2$s by Plekvetica', 'plekvetica'), $band, $venue);
     }
 
     /**
@@ -2864,14 +2864,14 @@ class PlekEventHandler
         $missing = array();
         $fields_to_check = ($all)
             ? [
-                'post_title' => __('Title', 'pleklang'),
-                'post_content' => __('Description', 'pleklang'),
-                '_EventVenueID' => __('Venue', 'pleklang'),
-                '_EventOrganizerID' => __('Organizer', 'pleklang'),
-                '_EventStartDate' => __('Start Date', 'pleklang'),
-                '_EventEndDate' => __('End Date', 'pleklang'),
-                'vorverkauf-preis' => __('Presale', 'pleklang'),
-                '_EventCost' => __('Boxoffice', 'pleklang')
+                'post_title' => __('Title', 'plekvetica'),
+                'post_content' => __('Description', 'plekvetica'),
+                '_EventVenueID' => __('Venue', 'plekvetica'),
+                '_EventOrganizerID' => __('Organizer', 'plekvetica'),
+                '_EventStartDate' => __('Start Date', 'plekvetica'),
+                '_EventEndDate' => __('End Date', 'plekvetica'),
+                'vorverkauf-preis' => __('Presale', 'plekvetica'),
+                '_EventCost' => __('Boxoffice', 'plekvetica')
             ] //All the fields to check
             : []; //Only the most important ones (default)
 
@@ -2882,14 +2882,14 @@ class PlekEventHandler
         }
         //Check some extra fields
         if (empty($this->get_bands())) {
-            $missing['bands'] = __('Bands', 'pleklang');
+            $missing['bands'] = __('Bands', 'plekvetica');
         }
         //Check some extra fields
         /*if (empty($this->get_timetable())) {
-            $missing['timetable'] = __('Timetable', 'pleklang');
+            $missing['timetable'] = __('Timetable', 'plekvetica');
         }*/
         if (empty($this->get_poster())) {
-            $missing['poster'] = __('Poster', 'pleklang');
+            $missing['poster'] = __('Poster', 'plekvetica');
         }
         if (empty($missing)) {
             return false;

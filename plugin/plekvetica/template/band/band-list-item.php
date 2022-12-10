@@ -17,7 +17,7 @@ $genres = $plek_band -> get_genres();
         </div>
         <div>
             <div class="band-name">
-                <a href='<?php echo $plek_band->get_band_link(); ?>' title='<?php echo sprintf(__('Bandpage of &quot;%s&quot;', 'pleklang'), htmlspecialchars($plek_band->get_name(), ENT_QUOTES)); ?>'><?php echo $plek_band->get_name(); ?></a>
+                <a href='<?php echo $plek_band->get_band_link(); ?>' title='<?php echo sprintf(__('Bandpage of &quot;%s&quot;', 'plekvetica'), htmlspecialchars($plek_band->get_name(), ENT_QUOTES)); ?>'><?php echo $plek_band->get_name(); ?></a>
             </div>
             <div class="band-genre"><?php echo implode(', ', $genres); ?></div>
         </div>

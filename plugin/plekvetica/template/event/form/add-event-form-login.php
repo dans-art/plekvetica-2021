@@ -23,7 +23,7 @@ if (PlekUserHandler::user_is_logged_in()) {
         wp_redirect($event_add_url);
     } else {
         $plek_event->set_event_author(27, false);
-        echo '<div class="plek-message error">' . __('You are not authorized to edit this event!', 'pleklang') . '</div>';
+        echo '<div class="plek-message error">' . __('You are not authorized to edit this event!', 'plekvetica') . '</div>';
     }
 } else {
 
@@ -34,8 +34,8 @@ if (PlekUserHandler::user_is_logged_in()) {
 
         <form name="add_event_login" id="add_event_login" action="" method="post">
             <div id="select-login-type">
-                <?php PlekTemplateHandler::load_template('button', 'components', '', __('Add as guest', 'pleklang'), '', 'add_as_guest'); ?>
-                <?php PlekTemplateHandler::load_template('button', 'components', '', __('Login / Signup', 'pleklang'), '', 'add_login'); ?>
+                <?php PlekTemplateHandler::load_template('button', 'components', '', __('Add as guest', 'plekvetica'), '', 'add_as_guest'); ?>
+                <?php PlekTemplateHandler::load_template('button', 'components', '', __('Login / Signup', 'plekvetica'), '', 'add_login'); ?>
             </div>
 
             <?php //The Forms 
@@ -48,7 +48,7 @@ if (PlekUserHandler::user_is_logged_in()) {
             </div>
 
             <div id="submit-add-event-login-from">
-                <input type="submit" name="plek-submit" id="plek-add-login-submit" class='plek-button' data-type="save_add_event_login" value="<?php echo __('Next', 'pleklang'); ?>">
+                <input type="submit" name="plek-submit" id="plek-add-login-submit" class='plek-button' data-type="save_add_event_login" value="<?php echo __('Next', 'plekvetica'); ?>">
             </div>
         </form>
     </div>

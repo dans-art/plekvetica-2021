@@ -37,11 +37,11 @@ $poster = $event->get_poster();
                 <span class="plek-events-date"><?php echo date_i18n('D, d F Y', $stime); ?></span>
             </time>
             <?php if (!$event->is_public()) : ?>
-                <div class="plek-message"><?php echo __('Unpublished Event', 'pleklang'); ?></div>
+                <div class="plek-message"><?php echo __('Unpublished Event', 'plekvetica'); ?></div>
             <?php endif; ?>
             <div class="win-conditions">
                 <?php if ($event->get_field_value('win_conditions') !== null) : ?>
-                    <?php echo sprintf(__('Win %s Tickets for','pleklang'), $event->get_field('win_conditions')); ?>
+                    <?php echo sprintf(__('Win %s Tickets for','plekvetica'), $event->get_field('win_conditions')); ?>
                 <?php endif; ?>
             </div>
             <h3 class="tribe-events-calendar-list__event-title tribe-common-h6 tribe-common-h4--min-medium">

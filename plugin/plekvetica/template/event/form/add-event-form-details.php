@@ -9,17 +9,17 @@ $event_class->load_event($event_id);
 ?>
 <div class="plek-add-event add-details plek-form">
 	<form name="add_event_details" id="add_event_details" action="" method="post">
-		<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Poster & Links', 'pleklang')); ?>
+		<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Poster & Links', 'plekvetica')); ?>
 		<?php PlekTemplateHandler::load_template('poster-links', 'event/form/components', $event_class); ?>
 
-		<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Description', 'pleklang')); ?>
+		<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Description', 'plekvetica')); ?>
 		<?php PlekTemplateHandler::load_template('description', 'event/form/components', $event_class); ?>
 		
-		<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Organizer', 'pleklang')); ?>
+		<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Organizer', 'plekvetica')); ?>
 		<?php PlekTemplateHandler::load_template('organizer', 'event/form/components', $event_class); ?>
 		
 		
-		<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Price', 'pleklang')); ?>
+		<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Price', 'plekvetica')); ?>
 		<?php PlekTemplateHandler::load_template('price', 'event/form/components', $event_class); ?>
 
 		<div id="event-id-field">
@@ -27,7 +27,7 @@ $event_class->load_event($event_id);
         </div>
 
 		<div class="submit-event-details-from">
-			<input type="submit" name="plek-submit" id="plek-submit-event-details" class='plek-button plek-main-submit-button' data-type = "save_event_details" value="<?php echo __('Save event details','pleklang');?>">
+			<input type="submit" name="plek-submit" id="plek-submit-event-details" class='plek-button plek-main-submit-button' data-type = "save_event_details" value="<?php echo __('Save event details','plekvetica');?>">
 		</div>
 	</form>
 </div>

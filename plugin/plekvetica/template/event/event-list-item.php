@@ -37,7 +37,7 @@ $poster = $event->get_poster();
                 <span class="plek-events-date"><?php echo date_i18n('D, d F Y', $stime); ?></span>
             </time>
             <?php if (!$event->is_public()) : ?>
-                <div class="plek-message"><?php echo __('Unpublished Event', 'pleklang'); ?></div>
+                <div class="plek-message"><?php echo __('Unpublished Event', 'plekvetica'); ?></div>
             <?php endif; ?>
             <h3 class="tribe-events-calendar-list__event-title tribe-common-h6 tribe-common-h4--min-medium">
                 <a href="<?php echo $event->get_permalink(); ?>" title="<?php echo $event->get_name(); ?>" rel="bookmark" class="tribe-events-calendar-list__event-title-link tribe-common-anchor-thin"><?php echo $event->get_name(); ?></a>

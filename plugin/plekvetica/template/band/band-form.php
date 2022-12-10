@@ -8,7 +8,7 @@ $editor_options = array('media_buttons' => false, 'textarea_rows' => 10, 'teeny'
 $country = $band->get_country() ?: 'NULL';
 
 if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
-    echo __('You are not allowed to edit this band!', 'pleklang');
+    echo __('You are not allowed to edit this band!', 'plekvetica');
     return;
 }
 /**
@@ -18,7 +18,7 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
 ?>
 
 <div id='band-<?php echo $type; ?>-<?php echo $band->get_id() ?: 'new'; ?>' class='band-<?php echo $type; ?> band-<?php echo $type; ?>-container'>
-    <h1><?php echo ($type === 'add') ? __('Add Band', 'pleklang') : __('Edit Band', 'pleklang'); ?></h1>
+    <h1><?php echo ($type === 'add') ? __('Add Band', 'plekvetica') : __('Edit Band', 'plekvetica'); ?></h1>
     <form id='plek-band-form' class="plek-form">
         <!-- Name, Description and image-->
         <fieldset id="band-basic-infos">
@@ -28,17 +28,17 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
             </div>
 
             <div class="band-name-container">
-                <label for="band-name"><?php echo __('Name', 'pleklang'); ?></label>
+                <label for="band-name"><?php echo __('Name', 'plekvetica'); ?></label>
                 <input id="band-name" name="band-name" type="text" value="<?php echo $band->get_name(); ?>"></input>
             </div>
 
             <div class="band-description-container">
-                <label for="band-description"><?php echo __('Description', 'pleklang'); ?></label>
+                <label for="band-description"><?php echo __('Description', 'plekvetica'); ?></label>
                 <?php wp_editor(wpautop($band->get_description()), 'band-description', $editor_options); ?>
             </div>
 
             <div class="band-logo-container">
-                <label for="band-logo"><?php echo __('Logo or Photo', 'pleklang'); ?></label>
+                <label for="band-logo"><?php echo __('Logo or Photo', 'plekvetica'); ?></label>
                 <?php PlekTemplateHandler::load_template('image-upload-button', 'components', 'band-logo', $band->get_logo()); ?>
                 <input id="band-logo-url" name="band-logo-url" type="text" class="plek-hidden"/>
             </div>
@@ -46,18 +46,18 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
         <!-- Genre and Origin -->
         <fieldset id="band-secondary-infos">
             <div class="band-genre-container">
-                <label for="band-genre"><?php echo __('Genre', 'pleklang'); ?></label>
+                <label for="band-genre"><?php echo __('Genre', 'plekvetica'); ?></label>
                 <?php PlekTemplateHandler::load_template('dropdown', 'components', 'band-genre', $band->get_all_genres(), $band->get_genres(), true); ?>
             </div>
 
             <div class="band-origin-container">
-                <label for="band-origin"><?php echo __('Origin', 'pleklang'); ?></label>
+                <label for="band-origin"><?php echo __('Origin', 'plekvetica'); ?></label>
                 <?php PlekTemplateHandler::load_template('dropdown', 'components', 'band-origin', $band->get_all_countries(), array($country => '')); ?>
             </div>
         </fieldset>
         <!-- Social Media Icons -->
         <fieldset id="band-social-icons">
-            <label for="band-social-icon"><?php echo __('Social Media of the Band', 'pleklang'); ?></label>
+            <label for="band-social-icon"><?php echo __('Social Media of the Band', 'plekvetica'); ?></label>
             <div class="icons">
                 <?php foreach ($band->social_media as $slug => $attr) : ?>
                     <?php
@@ -66,7 +66,7 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
                     $fa_class = (isset($attr['fa_class'])) ? $attr['fa_class'] : '';
                     ?>
                     <div class="band-social-icon" data-form-id="<?php echo $form_id; ?>">
-                        <span class="<?php echo $fa_class; ?>" title="<?php echo sprintf(__('Add %s Link for the Band', 'pleklang'), $name); ?>"></span>
+                        <span class="<?php echo $fa_class; ?>" title="<?php echo sprintf(__('Add %s Link for the Band', 'plekvetica'), $name); ?>"></span>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -92,18 +92,18 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
             <?php endforeach; ?>
 
             <div class="band-videos-container">
-                <label for="band-videos"><?php echo __('Videos', 'pleklang'); ?></label>
+                <label for="band-videos"><?php echo __('Videos', 'plekvetica'); ?></label>
                 <div id="band-genre-loader">
                     <input id="add-band-video-input" type="text" value=""></input>
-                    <button id="add-band-video" class="plek-button" type="button"><?php echo __('Add', 'pleklang'); ?></button>
+                    <button id="add-band-video" class="plek-button" type="button"><?php echo __('Add', 'plekvetica'); ?></button>
                 </div>
                 <textarea id="band-videos" name="band-videos" type="text"><?php echo $band->get_videos(false); ?></textarea>
             </div>
         </fieldset>
 
         <div class="buttons">
-            <button id="band-form-cancel" class="plek-button plek-button-cancel" type="button"><?php echo __('Cancel', 'pleklang'); ?></button>
-            <button id="band-form-submit" class="plek-button" type="submit"><?php echo __('Save', 'pleklang'); ?></button>
+            <button id="band-form-cancel" class="plek-button plek-button-cancel" type="button"><?php echo __('Cancel', 'plekvetica'); ?></button>
+            <button id="band-form-submit" class="plek-button" type="submit"><?php echo __('Save', 'plekvetica'); ?></button>
         </div>
     </form>
     <?php

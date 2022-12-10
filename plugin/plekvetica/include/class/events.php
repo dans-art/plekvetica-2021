@@ -758,7 +758,7 @@ class PlekEvents extends PlekEventHandler
         ]);
 
         if (empty($events)) {
-            return __('No Featured Events found', 'pleklang');
+            return __('No Featured Events found', 'plekvetica');
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'featured');
     }
@@ -782,7 +782,7 @@ class PlekEvents extends PlekEventHandler
             'meta_query' => $meta_query
         ]);
         if (empty($events)) {
-            return __('No reviews found', 'pleklang');
+            return __('No reviews found', 'plekvetica');
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'reviews');
     }
@@ -804,7 +804,7 @@ class PlekEvents extends PlekEventHandler
         $events = $plek_event_blocks->get_block('all_reviews');
 
         if (empty($events)) {
-            return __('No reviews found', 'pleklang');
+            return __('No reviews found', 'plekvetica');
         } else {
             return $events;
         }
@@ -819,7 +819,7 @@ class PlekEvents extends PlekEventHandler
     public function plek_event_team_calendar_shortcode()
     {
         wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery', 'plek-language', 'wp-i18n'], 1);
-        wp_set_script_translations('plek-teamcal-script', 'pleklang', PLEK_PATH . "/languages");
+        wp_set_script_translations('plek-teamcal-script', 'plekvetica', PLEK_PATH . "/languages");
 
 
         $meta_query = array();
@@ -836,7 +836,7 @@ class PlekEvents extends PlekEventHandler
         ];
         $events = tribe_get_events($args);
         if (empty($events)) {
-            return __('No posts found', 'pleklang');
+            return __('No posts found', 'plekvetica');
         }
         return PlekTemplateHandler::load_template_to_var('event-team-calendar', 'event/admin', $events);
     }
@@ -853,7 +853,7 @@ class PlekEvents extends PlekEventHandler
         global $wpdb;
 
         wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery'], 1);
-        wp_set_script_translations('plek-teamcal-script', 'pleklang', PLEK_PATH . "/languages");
+        wp_set_script_translations('plek-teamcal-script', 'plekvetica', PLEK_PATH . "/languages");
 
         $limit = 100;
         $from = date('Y-m-d H:i:s');
@@ -891,7 +891,7 @@ class PlekEvents extends PlekEventHandler
         $this->total_posts['plek_event_team_accredi'] = $total_posts;
 
         if (empty($events)) {
-            return __('No posts found', 'pleklang');
+            return __('No posts found', 'plekvetica');
         }
         return PlekTemplateHandler::load_template_to_var('event-team-calendar-accredi', 'event/admin', $events);
     }
@@ -980,7 +980,7 @@ class PlekEvents extends PlekEventHandler
     {
         $page_obj = $this->get_pages_object($number_of_posts);
         $to_posts = (($page_obj->offset + $page_obj->posts_per_page) <= $total_posts) ? ($page_obj->offset + $page_obj->posts_per_page) : $total_posts;
-        return '<div class="total_posts">' . sprintf(__('Events %d to %d of %d', 'pleklang'), $page_obj->offset + 1, $to_posts, $total_posts) . '</div>';
+        return '<div class="total_posts">' . sprintf(__('Events %d to %d of %d', 'plekvetica'), $page_obj->offset + 1, $to_posts, $total_posts) . '</div>';
     }
 
     /**
@@ -1032,10 +1032,10 @@ class PlekEvents extends PlekEventHandler
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
 
         if ($this->display_more_events_button($total_posts)) {
-            $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page + 1), __('Load more events', 'pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
+            $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page + 1), __('Load more events', 'plekvetica'), '_self', 'load_more_reviews', 'ajax-loader-button');
         }
         if (empty($posts)) {
-            return ($short_atts['return_bool'] !== true AND $short_atts['return_bool'] !== 'true') ? __('No raffles found', 'pleklang') : false;
+            return ($short_atts['return_bool'] !== true AND $short_atts['return_bool'] !== 'true') ? __('No raffles found', 'plekvetica') : false;
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $posts, 'raffle_events') . $load_more;
     }
@@ -1101,7 +1101,7 @@ class PlekEvents extends PlekEventHandler
         $yt = new plekYoutube;
         $vids = $yt->get_youtube_videos_from_channel(4);
         if (empty($vids)) {
-            return __('No videos found.', 'pleklang');
+            return __('No videos found.', 'plekvetica');
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $vids, 'youtube');
     }
@@ -1133,7 +1133,7 @@ class PlekEvents extends PlekEventHandler
 
         if (isset($_REQUEST['edit'])) {
             if (!PlekUserHandler::user_can_edit_post($_REQUEST['edit'])) {
-                return __('You are not allowed to edit this Event!', 'pleklang');
+                return __('You are not allowed to edit this Event!', 'plekvetica');
             }
             $event->load_event(intval($_REQUEST['edit']), 'all');
             return PlekTemplateHandler::load_template_to_var('edit-event-form', 'event/form', $event);
@@ -1143,7 +1143,7 @@ class PlekEvents extends PlekEventHandler
             return PlekTemplateHandler::load_template_to_var('add-event-form-login', 'event/form', $event, $event_id);
         }
         if (isset($_REQUEST['stage']) and $_REQUEST['stage'] === "details" and !PlekUserHandler::user_can_edit_post($event_id)) {
-            return __('Sorry, you are not allowed to edit this post anymore', 'pleklang');
+            return __('Sorry, you are not allowed to edit this post anymore', 'plekvetica');
         }
         if (isset($_REQUEST['stage']) and $_REQUEST['stage'] === "details") {
             return PlekTemplateHandler::load_template_to_var('add-event-form-details', 'event/form', $event, $event_id);
@@ -1168,7 +1168,7 @@ class PlekEvents extends PlekEventHandler
             $event->load_event(intval($_REQUEST['edit']));
             return PlekTemplateHandler::load_template_to_var('edit-event-review-form', 'event/form', $event);
         } else {
-            return __('No Event ID found', 'pleklang');
+            return __('No Event ID found', 'plekvetica');
         }
     }
 
@@ -1193,7 +1193,7 @@ class PlekEvents extends PlekEventHandler
             'post_status' => $post_status
         ]);
         if (empty($events)) {
-            return __('No new Events found', 'pleklang');
+            return __('No new Events found', 'plekvetica');
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'new_events');
     }
@@ -1239,7 +1239,7 @@ class PlekEvents extends PlekEventHandler
         $posts = $wpdb->get_results($query);
 
         if (empty($posts)) {
-            return __('No Events found', 'pleklang');
+            return __('No Events found', 'plekvetica');
         }
 
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $posts, 'new_events');
@@ -1278,16 +1278,16 @@ class PlekEvents extends PlekEventHandler
 
             foreach ($handler as $handler_name) {
                 wp_enqueue_script("plek-{$handler_name}-handler", PLEK_PLUGIN_DIR_URL . "js/components/{$handler_name}-handler{$min}.js", $dependencies, $plek_handler->version);
-                wp_set_script_translations("plek-{$handler_name}-handler", 'pleklang', PLEK_PATH . "/languages");
+                wp_set_script_translations("plek-{$handler_name}-handler", 'plekvetica', PLEK_PATH . "/languages");
             }
 
             wp_enqueue_script('plek-compare-algorithm', PLEK_PLUGIN_DIR_URL . "js/components/compare-algorithm{$min}.js", ['jquery', 'plek-language', 'manage-plek-events', 'wp-i18n']);
             wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler.js', ['jquery', 'plek-language', 'wp-i18n'], $plek_handler->version);
 
             //Set the script translations, called by Wordpress load_script_translations()
-            wp_set_script_translations('plek-compare-algorithm', 'pleklang', PLEK_PATH . "/languages");
-            wp_set_script_translations('manage-plek-events', 'pleklang', PLEK_PATH . "/languages");
-            wp_set_script_translations('plek-file-upload-script', 'pleklang', PLEK_PATH . "/languages");
+            wp_set_script_translations('plek-compare-algorithm', 'plekvetica', PLEK_PATH . "/languages");
+            wp_set_script_translations('manage-plek-events', 'plekvetica', PLEK_PATH . "/languages");
+            wp_set_script_translations('plek-file-upload-script', 'plekvetica', PLEK_PATH . "/languages");
         });
     }
 
@@ -1342,10 +1342,10 @@ class PlekEvents extends PlekEventHandler
 
         $win_conditions = $this->get_field_value('win_conditions');
         if (!$message) {
-            return __('Failed to load Text for the Facebook ticket raffle', 'pleklang');
+            return __('Failed to load Text for the Facebook ticket raffle', 'plekvetica');
         }
         if (empty($win_conditions)) {
-            return __('Win conditions not set', 'pleklang');
+            return __('Win conditions not set', 'plekvetica');
         }
         //Get the poster paths
         $poster = $this->get_poster_path();
@@ -1354,7 +1354,7 @@ class PlekEvents extends PlekEventHandler
         //Create the new Poster
         $watermark = $pf->get_watermak_file($win_conditions);
         if (!$watermark) {
-            return __('Win condition not supported', 'pleklang');
+            return __('Win condition not supported', 'plekvetica');
         }
         if (!$pf->create_watermarked_image($poster, $watermark, $raffle_poster)) {
             return $pf->errors->get_error_messages();
@@ -1406,7 +1406,7 @@ class PlekEvents extends PlekEventHandler
     {
         $current_date = strtotime(date('Y-m-d H:m:s'));
         if (!empty($date_prev) and $current_date < strtotime($date_prev) and $current_date > strtotime($date_next)) {
-            return "<div class='plek-event-data-separator'>" . __('Today', 'pleklang') . "</div>";
+            return "<div class='plek-event-data-separator'>" . __('Today', 'plekvetica') . "</div>";
         }
         return "";
     }
@@ -1437,9 +1437,9 @@ class PlekEvents extends PlekEventHandler
             }
         }
         if ($toggle === 'add') {
-            return __('Unfollow', 'pleklang');
+            return __('Unfollow', 'plekvetica');
         } else {
-            return __('Follow', 'pleklang');
+            return __('Follow', 'plekvetica');
         }
         return false;
     }
@@ -1453,7 +1453,7 @@ class PlekEvents extends PlekEventHandler
     public function confirm_accreditation($event_id)
     {
         if (empty($event_id)) {
-            return __('No Event ID found.', 'pleklang');
+            return __('No Event ID found.', 'plekvetica');
         }
         return $this->set_akkredi_status(intval($event_id), 'ab');
     }

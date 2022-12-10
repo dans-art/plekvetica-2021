@@ -4,11 +4,11 @@ extract(get_defined_vars());
 $event_class = $template_args[0]; //Plek_events_form Object
 
 if (!PlekUserHandler::user_can_edit_post($event_class->get_id())) {
-	echo __('Sorry, you are not allowed to edit this Event!', 'pleklang');
+	echo __('Sorry, you are not allowed to edit this Event!', 'plekvetica');
 	return false;
 }
 if (empty($event_class->get_event())) {
-	echo __('Event not found. Please check the Event ID.', 'pleklang');
+	echo __('Event not found. Please check the Event ID.', 'plekvetica');
 	return false;
 }
 
@@ -45,13 +45,13 @@ s(C_Album_Mapper::get_instance()->save($album));
 ?>
 <form name="edit_event_review_form" id="edit_event_review_form" action="" method="post">
 
-	<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Intro Text', 'pleklang')); ?>
+	<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Intro Text', 'plekvetica')); ?>
 	<?php PlekTemplateHandler::load_template('review-intro', 'event/form/components', $event_class); ?>
 	
-	<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Images', 'pleklang')); ?>
+	<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Images', 'plekvetica')); ?>
 	<?php PlekTemplateHandler::load_template('review-images', 'event/form/components', $event_class); ?>
 
-	<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Full Review Text', 'pleklang')); ?>
+	<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Full Review Text', 'plekvetica')); ?>
 	<?php PlekTemplateHandler::load_template('review-text', 'event/form/components', $event_class); ?>
 
 	<div id="event-id-field">
@@ -61,9 +61,9 @@ s(C_Album_Mapper::get_instance()->save($album));
 	<input type="text" name="hp-password" id="hp-password" style="display: none;" tabindex="-1" autocomplete="false" />
 
 	<div class="submit-event-edit-review-from">
-		<?php PlekTemplateHandler::load_template('button', 'components', get_permalink( $event_class->get_id()), __('Back to the Event','pleklang'), '_self', 'back_to_event_btn'); ?>
+		<?php PlekTemplateHandler::load_template('button', 'components', get_permalink( $event_class->get_id()), __('Back to the Event','plekvetica'), '_self', 'back_to_event_btn'); ?>
 		<div class="submit-button-container">
-			<input type="submit" name="plek-submit" id="plek-submit-event-edit-review" class='plek-button plek-main-submit-button' data-type="save_edit_event_review" value="<?php echo __('Save event review', 'pleklang'); ?>">
+			<input type="submit" name="plek-submit" id="plek-submit-event-edit-review" class='plek-button plek-main-submit-button' data-type="save_edit_event_review" value="<?php echo __('Save event review', 'plekvetica'); ?>">
 		</div>
 	</div>
 </form>

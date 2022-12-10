@@ -92,19 +92,19 @@ let plek_user = {
                     let errors = plek_main.show_field_errors(data, '#register-new-user-form');
                     if (errors === true) {
                         plek_user.reset_button_text_after_input_focus(button, button_cta);
-                        text = (empty(text)) ? __('The from has errors, please fix them', 'pleklang') : text;
-                        plekerror.display_error(false, text, __('New account', 'pleklang'))
+                        text = (empty(text)) ? __('The from has errors, please fix them', 'plekvetica') : text;
+                        plekerror.display_error(false, text, __('New account', 'plekvetica'))
                     } else {
                         plek_main.deactivate_button(button);
                         jQuery('#register-new-user input[type!="submit"]').val(''); //Reset Fields
-                        plekerror.display_success(__('New account', 'pleklang'), text);
+                        plekerror.display_success(__('New account', 'plekvetica'), text);
 
                     }
                     plek_main.deactivate_button_loader(button, button_cta);
 
                 },
                 error: function error(data) {
-                    plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                    plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
 
                 }
             });
@@ -118,7 +118,7 @@ let plek_user = {
         let button = jQuery('#plek-submit');
         let button_cta = button.val();
 
-        plek_main.activate_button_loader('#plek-submit', __('Sending password reset request...', 'pleklang'));
+        plek_main.activate_button_loader('#plek-submit', __('Sending password reset request...', 'plekvetica'));
         plek_main.remove_field_errors();
         let data = jQuery('#lostpasswordform').serialize();
 
@@ -134,14 +134,14 @@ let plek_user = {
                 let text = plek_main.get_text_from_ajax_request(data, true);
                 let errors = plek_main.show_field_errors(data, '#lostpasswordform');
                 if (errors === true) {
-                    text = __('The form contains errors, please fix them', 'pleklang');
+                    text = __('The form contains errors, please fix them', 'plekvetica');
                     plek_user.reset_button_text_after_input_focus(button, button_cta);
-                    plekerror.display_error(false, text, __('Password reset', 'pleklang'))
+                    plekerror.display_error(false, text, __('Password reset', 'plekvetica'))
                 } else {
                     //Success
                     plek_main.deactivate_button(button);
                     jQuery('#lostpasswordform input[type!="submit"]').val(''); //Reset Fields
-                    plekerror.display_success(__('Password reset', 'pleklang'), text);
+                    plekerror.display_success(__('Password reset', 'plekvetica'), text);
                     //Redirect to the edit event on success.
                     if (!empty(jQuery('#redirect_to').attr('value'))) {
                         plek_main.redirect_to_url(jQuery('#redirect_to').attr('value'), 4000);
@@ -151,7 +151,7 @@ let plek_user = {
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
 
             }
         });
@@ -165,7 +165,7 @@ let plek_user = {
     set_new_password() {
         let button = jQuery('#plek-submit');
         let button_cta = button.val();
-        plek_main.activate_button_loader('#plek-submit', __('Save new password...', 'pleklang'));
+        plek_main.activate_button_loader('#plek-submit', __('Save new password...', 'plekvetica'));
         plek_main.remove_field_errors();
 
         let data = jQuery('#set_new_password_form').serialize();
@@ -182,9 +182,9 @@ let plek_user = {
                 let text = plek_main.get_text_from_ajax_request(data, true);
                 let errors = plek_main.show_field_errors(data, '#set_new_password_form');
                 if (errors === true) {
-                    text = __('The form contains errors, please fix them', 'pleklang');
+                    text = __('The form contains errors, please fix them', 'plekvetica');
                     plek_user.reset_button_text_after_input_focus(button, button_cta);
-                    plekerror.display_error(__('Password reset', 'pleklang'), text);
+                    plekerror.display_error(__('Password reset', 'plekvetica'), text);
                 } else {
                     //Success
                     plek_main.deactivate_button(button);
@@ -195,13 +195,13 @@ let plek_user = {
                     //show the to login link
                     jQuery('#to-my-plek-page-button').show();
                     //Display the message
-                    plekerror.display_success(__('Password reset', 'pleklang'), text);
+                    plekerror.display_success(__('Password reset', 'plekvetica'), text);
                 }
                 plek_main.deactivate_button_loader(button, button_cta);
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
 
             }
         });
@@ -233,14 +233,14 @@ let plek_user = {
                     text = plek_main.get_text_from_ajax_request(data, true);
                 }
                 plek_main.deactivate_button_loader(button, text);
-                jQuery('#user-settings-cancel').text(__('Back', 'pleklang'));
+                jQuery('#user-settings-cancel').text(__('Back', 'plekvetica'));
                 setTimeout(() => {
                     jQuery('#user-settings-submit').text(plek_user.default_button_texts.submit);
                 }, 5000);
 
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
 
             }
         });

@@ -10,7 +10,7 @@ if (!$authors) {
   return;
 }
 ?>
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Authors', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Authors', 'plekvetica')); ?>
 <div class="meta-content">
   <div class='event-author-container'>
     <?php foreach ($authors as $id => $name) : ?>

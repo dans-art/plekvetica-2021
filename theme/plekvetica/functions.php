@@ -21,7 +21,7 @@ class plekTheme
             //Replace the sub-menu
             $items = str_replace('class="sub-menu"', 'class="plek-sub-menu"', $items);
             //Add Search Bar
-            $placeholder = __('Search...', 'pleklang');;
+            $placeholder = __('Search...', 'plekvetica');;
             $items .= "<li class='plek-menu-search'>
             <a class='icon' href='#'><i class='fas fa-search'></i></a>
             <ul>

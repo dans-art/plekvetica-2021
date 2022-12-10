@@ -12,12 +12,12 @@ $total_open_requests = 0;
     <div class="tribe-common-g-row tribe-events-calendar-list__event-row plek-post-type-team-calendar">
         <table>
             <thead>
-                <td><?php echo __('Organizer', 'pleklang'); ?></td>
-                <td><?php echo __('Date', 'pleklang'); ?></td>
-                <td><?php echo __('Name', 'pleklang'); ?></td>
-                <td><?php echo __('Acc Team', 'pleklang'); ?></td>
-                <td><?php echo __('Status', 'pleklang'); ?></td>
-                <td><?php echo __('Accredi Action', 'pleklang'); ?></td>
+                <td><?php echo __('Organizer', 'plekvetica'); ?></td>
+                <td><?php echo __('Date', 'plekvetica'); ?></td>
+                <td><?php echo __('Name', 'plekvetica'); ?></td>
+                <td><?php echo __('Acc Team', 'plekvetica'); ?></td>
+                <td><?php echo __('Status', 'plekvetica'); ?></td>
+                <td><?php echo __('Accredi Action', 'plekvetica'); ?></td>
             </thead>
             <?php
             $loaded_ids = [];
@@ -54,11 +54,11 @@ $total_open_requests = 0;
                             continue; //Skip if not media contact found
                         }
                         $button_data = ['organizer_id' => $id, 'event_id' => $event->ID, 'organizer_media_name' => $media['name'], 'organizer_media_email' => $media['email']];
-                        $organizer_accredi_buttons[] = PlekTemplateHandler::load_template_to_var('button', 'components', '', __('Accreditate Event for: ', 'pleklang') . $organi_name, '', '', 'accredi_single_event', $button_data);
+                        $organizer_accredi_buttons[] = PlekTemplateHandler::load_template_to_var('button', 'components', '', __('Accreditate Event for: ', 'plekvetica') . $organi_name, '', '', 'accredi_single_event', $button_data);
                     }
                 }
 
-                $acc_crew = ($list_event->get_event_akkredi_crew()) ? $list_event->get_event_akkredi_crew_formated('<br/>') : __('Nobody', 'pleklang');
+                $acc_crew = ($list_event->get_event_akkredi_crew()) ? $list_event->get_event_akkredi_crew_formated('<br/>') : __('Nobody', 'plekvetica');
                 $canceled = ($list_event->is_canceled()) ? '<i>X</i>' : false;
                 $featured = ($list_event->is_featured()) ? '<i>F</i>' : false;
                 $missing_details = ($list_event->get_missing_event_details()) ? '<i>M</i>' : false;
@@ -70,7 +70,7 @@ $total_open_requests = 0;
                     <td><?php echo $acc_crew; ?></td>
                     <td><?php echo $acc_status; ?></td>
                     <td>
-                        <?php echo (is_array($organizer_accredi_buttons) and !empty($organizer_accredi_buttons[0])) ? implode('', $organizer_accredi_buttons) :  __('No media contact defined for this organizer', 'pleklang'); ?>
+                        <?php echo (is_array($organizer_accredi_buttons) and !empty($organizer_accredi_buttons[0])) ? implode('', $organizer_accredi_buttons) :  __('No media contact defined for this organizer', 'plekvetica'); ?>
                         <?php if (is_array($organizer_ids) and count($organizer_ids) === 1) : ?>
                             <?php
                             $organizer = (isset($organizer_ids[0])) ? $organizer_ids[0] : '0';

@@ -184,10 +184,10 @@ class PlekHandler
             foreach ($items as $index => $nav) {
                 if ($nav->post_name === 'login-logout') {
                     if (is_user_logged_in()) {
-                        $items[$index]->title = __('My Plekvetica', 'pleklang');
+                        $items[$index]->title = __('My Plekvetica', 'plekvetica');
                         $items[$index]->classes[] = 'member-area-nav';
                     } else {
-                        $items[$index]->title = __('Login', 'pleklang');
+                        $items[$index]->title = __('Login', 'plekvetica');
                         $items[$index]->classes[] = 'not-logged-in-nav';
                     }
                 }
@@ -252,7 +252,7 @@ class PlekHandler
             wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js', ['jquery', 'plek-language'], $this->version);
         }
 
-        wp_set_script_translations('plek-language', 'pleklang', PLEK_PATH . "/languages");
+        wp_set_script_translations('plek-language', 'plekvetica', PLEK_PATH . "/languages");
     }
 
     /**
@@ -276,7 +276,7 @@ class PlekHandler
         global $plek_handler;
         wp_enqueue_style('plek-contextMenu-style', PLEK_PLUGIN_DIR_URL . 'css/jquery.contextMenu.min.css', array('generate-child'));
         wp_enqueue_script('plek-contextMenu-script',  PLEK_PLUGIN_DIR_URL . 'js/components/context-menu.min.js', array('jquery', 'plek-script', 'plek-language'), $plek_handler->version);
-        wp_set_script_translations('plek-contextMenu-script', 'pleklang', PLEK_PATH . "/languages");
+        wp_set_script_translations('plek-contextMenu-script', 'plekvetica', PLEK_PATH . "/languages");
     }
 
     /**
@@ -297,7 +297,11 @@ class PlekHandler
 
     public function load_textdomain()
     {
-        load_textdomain('pleklang', PLEK_PATH . 'languages/pleklang-' . determine_locale() . '.mo');
+        //Plugin
+        load_textdomain('plekvetica', PLEK_PATH . 'languages/plekvetica-' . get_user_locale() . '.mo');
+        
+        //Theme
+        load_textdomain('plekvetica', get_stylesheet_directory() . '/languages/plekvetica-' . get_user_locale() . '.mo');
     }
 
     /**
@@ -431,7 +435,7 @@ class PlekHandler
     {
         $schedules['plekeverysixmin'] = array(
             'interval' => 360,
-            'display' => __('Every 6 Minutes', 'pleklang')
+            'display' => __('Every 6 Minutes', 'plekvetica')
         );
         return $schedules;
     }
@@ -636,24 +640,24 @@ class PlekHandler
                 $event_id = (isset($_GET['event_id'])) ? $_GET['event_id'] : null;
                 $security_key = (isset($_GET['key'])) ? $_GET['key'] : null;
                 if ($security_key !== md5($event_id . 'confirm_accreditation')) {
-                    return __('You are not allowed to run this action', 'pleklang');
+                    return __('You are not allowed to run this action', 'plekvetica');
                 }
                 $confirm = $pe->confirm_accreditation($event_id);
                 if ($confirm === true) {
                     //Send info to accredi Manager
                     $pn->push_to_role(
                         'accredi_manager',
-                        __('Accreditation confirmed', 'pleklang'),
+                        __('Accreditation confirmed', 'plekvetica'),
                         PlekTemplateHandler::load_template_to_var('accreditation-confirmed-admin-info', 'email/event'),
                         get_permalink($event_id)
                     );
                     return PlekTemplateHandler::load_template_to_var('accredi_confirm_message', 'event/organizer', $event_id);
                 } else {
-                    return sprintf(__('Error: Accreditation could not be confirmed! (%s)', 'pleklang'), $confirm);
+                    return sprintf(__('Error: Accreditation could not be confirmed! (%s)', 'plekvetica'), $confirm);
                 }
                 break;
             default:
-                return __('Action not found or not supported', 'pleklang');
+                return __('Action not found or not supported', 'plekvetica');
                 break;
         }
     }

@@ -208,7 +208,7 @@ class PlekNotificationHandler extends WP_List_Table
                 $message = PlekTemplateHandler::load_template_to_var('new_event_band_info', 'email/event', $event_id, $user_id, $bands);
                 $link = get_permalink($event_id);
                 echo $message;
-                $this->push_notification($user_id, 'event_band_info', __('This Event may interest you', 'pleklang'), $message, $link);
+                $this->push_notification($user_id, 'event_band_info', __('This Event may interest you', 'plekvetica'), $message, $link);
             }
             $nr_info_user = count($follower);
             apply_filters(
@@ -243,20 +243,20 @@ class PlekNotificationHandler extends WP_List_Table
         $organi_contact = $plek_organi->get_organizer_media_contact($organizer_id);
 
         if (!is_array($organi_contact) or !isset($organi_contact['email'])) {
-            return __('Organizer contact data not found', 'pleklang');
+            return __('Organizer contact data not found', 'plekvetica');
         }
 
         switch ($type) {
             case 'accredi_request':
                 if (!isset($args['event_ids']) or !is_array($args['event_ids']) or empty($args['event_ids'])) {
-                    return __('No Event ID given. Expects an Array with the Event IDs', 'pleklang');
+                    return __('No Event ID given. Expects an Array with the Event IDs', 'plekvetica');
                 }
-                $subject = __('Accreditation request from Plekvetica', 'pleklang');
+                $subject = __('Accreditation request from Plekvetica', 'plekvetica');
                 $message = PlekTemplateHandler::load_template_to_var('organizer-accreditation-request', 'email/organizer', $organi_contact, $args['event_ids'], $organizer_id);
                 break;
 
             default:
-                return __('No type found', 'pleklang');
+                return __('No type found', 'plekvetica');
                 break;
         }
 
@@ -415,7 +415,7 @@ class PlekNotificationHandler extends WP_List_Table
 
         $this->process_bulk_action();
 
-        $this->search_box(__('Find', 'pleklang'), 'search_id');
+        $this->search_box(__('Find', 'plekvetica'), 'search_id');
     }
 
 
@@ -447,7 +447,7 @@ class PlekNotificationHandler extends WP_List_Table
             case 'dismissed':
             case 'email_send':
                 $light = ($item->$column === '1') ? 'green' : 'red';
-                $status = ($item->$column === '1') ? __('Yes', 'pleklang') : __('No', 'pleklang');
+                $status = ($item->$column === '1') ? __('Yes', 'plekvetica') : __('No', 'plekvetica');
                 return "<span class='plek-light {$light}'>{$status}</span>";
                 break;
             case 'cb':
@@ -512,13 +512,13 @@ class PlekNotificationHandler extends WP_List_Table
     {
         $columns = array(
             'cb' => '<input type="checkbox"/>',
-            'pushed_on' => __('Created', 'pleklang'),
-            'user_ids' => __('User', 'pleklang'),
-            'notify_type' => __('Type', 'pleklang'),
-            'subject' => __('Subject and Message', 'pleklang'),
-            'action_link' => __('Link', 'pleklang'),
-            'dismissed' => __('Dismissed', 'pleklang'),
-            'email_send' => __('Email send', 'pleklang'),
+            'pushed_on' => __('Created', 'plekvetica'),
+            'user_ids' => __('User', 'plekvetica'),
+            'notify_type' => __('Type', 'plekvetica'),
+            'subject' => __('Subject and Message', 'plekvetica'),
+            'action_link' => __('Link', 'plekvetica'),
+            'dismissed' => __('Dismissed', 'plekvetica'),
+            'email_send' => __('Email send', 'plekvetica'),
         );
         return $columns;
     }
@@ -550,10 +550,10 @@ class PlekNotificationHandler extends WP_List_Table
     public function get_bulk_actions()
     {
         $actions = array(
-            'delete' => __('Delete', 'pleklang'),
-            'push_again' => __('Push again', 'pleklang'),
-            //'activate_email' => __('Activate Email', 'pleklang'),
-            //'deactivate_email' => __('Deactivate Email', 'pleklang'),
+            'delete' => __('Delete', 'plekvetica'),
+            'push_again' => __('Push again', 'plekvetica'),
+            //'activate_email' => __('Activate Email', 'plekvetica'),
+            //'deactivate_email' => __('Deactivate Email', 'plekvetica'),
         );
         return $actions;
     }
@@ -570,10 +570,10 @@ class PlekNotificationHandler extends WP_List_Table
     {
         $notifications = $this->get_user_notifications($user_id);
         if (is_string($notifications)) {
-            return sprintf(__('Error: %s ', 'pleklang'), $notifications);
+            return sprintf(__('Error: %s ', 'plekvetica'), $notifications);
         }
         if (!is_array($notifications) or empty($notifications)) {
-            return '<div class="no-notifications">' . __('No Notifications to show', 'pleklang') . '</div>';
+            return '<div class="no-notifications">' . __('No Notifications to show', 'plekvetica') . '</div>';
         }
         $result = "";
         foreach ($notifications as $notify_arr) {
@@ -781,7 +781,7 @@ class PlekNotificationHandler extends WP_List_Table
             }
             $emailer = new PlekEmailSender;
             $emailer->set_default();
-            $subject = (isset($notify->subject)) ? $notify->subject : __('News from Plekvetica', 'pleklang');
+            $subject = (isset($notify->subject)) ? $notify->subject : __('News from Plekvetica', 'plekvetica');
             $message = (isset($notify->message)) ? $notify->message : '';
             $action = (isset($notify->action_link)) ? $notify->action_link : '';
             $emailer->set_to($user->user_email);
@@ -836,8 +836,8 @@ class PlekNotificationHandler extends WP_List_Table
         $user_id = $plek_handler->get_plek_option('akkredi_user_id');
         $user_id = (empty($user_id) or $user_id === '0') ? '1' :  $user_id; //Set it to the user 1 if no user found
 
-        $subject = __('Missing accreditation requests', 'pleklang');
-        $message = __('Some Events are not requested yet...', 'pleklang') . $plek_event->plek_event_upcoming_no_akkredi_shortcode();
+        $subject = __('Missing accreditation requests', 'plekvetica');
+        $message = __('Some Events are not requested yet...', 'plekvetica') . $plek_event->plek_event_upcoming_no_akkredi_shortcode();
         $action = 'none';
         return $this->push_notification([$user_id], 'akkredi_notify', $subject, $message, $action);
     }
@@ -1036,7 +1036,7 @@ class PlekNotificationHandler extends WP_List_Table
                 $event_add_id = $plek_handler->get_plek_option('add_event_page_id');
                 $event_add_link = get_permalink($event_add_id) . '?stage=login&event_id=' . $event_id;
                 $event_add_url = "<a href='$event_add_link' target='_self'>$event_name</a>";
-                $message = __('There was an unfinished event found, please add the event details:', 'pleklang') . ' ' . $event_add_url;
+                $message = __('There was an unfinished event found, please add the event details:', 'plekvetica') . ' ' . $event_add_url;
                 PlekTemplateHandler::load_template('user-notice', 'system/', 'info', $message);
             }
         }
@@ -1107,7 +1107,7 @@ class PlekNotificationHandler extends WP_List_Table
                 continue; //Skip if no organizer found
             }
             //Craft the email
-            $email_subject = __('A new review has ben published at Plekvetica', 'pleklang');
+            $email_subject = __('A new review has ben published at Plekvetica', 'plekvetica');
             $email_message = PlekTemplateHandler::load_template_to_var('organizer-new-review-info', 'email/organizer', $pe);
             foreach ($organizer as $organi_id) {
                 //Get the promoter email (ACF)

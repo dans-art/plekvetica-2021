@@ -303,7 +303,7 @@ let plek_manage_event = {
                 return false;
                 break;
         }
-        plek_main.activate_button_loader('#' + type, __('Save...', 'pleklang'));
+        plek_main.activate_button_loader('#' + type, __('Save...', 'plekvetica'));
         plek_main.remove_field_errors();
 
         let button = jQuery('#' + type);
@@ -337,7 +337,7 @@ let plek_manage_event = {
                     let return_obj = plek_main.get_ajax_success_object(data);
                     
                     if (typeof return_obj === 'undefined') {
-                        plekerror.display_error(null, __('Oops, something went wrong.... sorry!', 'pleklang'), __('Invalid Response', 'pleklang'));
+                        plekerror.display_error(null, __('Oops, something went wrong.... sorry!', 'plekvetica'), __('Invalid Response', 'plekvetica'));
                     } else {
                         /**
                          * return_obj[0] = success text
@@ -357,13 +357,13 @@ let plek_manage_event = {
                     }
                 }
                 plek_main.deactivate_button_loader(button, text);
-                jQuery('#' + type + ' .plek-button-cancel').text(__('Back', 'pleklang'));
+                jQuery('#' + type + ' .plek-button-cancel').text(__('Back', 'plekvetica'));
                 setTimeout(() => {
                     jQuery('#' + type).text(default_submit_btn_text);
                 }, 5000);
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
 
             }
         });
@@ -425,7 +425,7 @@ let plek_manage_event = {
                 plekvalidator.add_field('band-videos', 'text', true, 'add_band');
                 plekvalidator.add_field(['band-link-insta', 'band-link-fb', 'band-link-web'], 'url', true, 'add_band');
                 plekvalidator.add_invalid_field_values('band-origin', ['null'], 'add_band');
-                plekvalidator.add_error_messages('band-origin', 'add_band', null, null, null, null, null, __('Please select a country', 'pleklang'));
+                plekvalidator.add_error_messages('band-origin', 'add_band', null, null, null, null, null, __('Please select a country', 'plekvetica'));
             }
             //Add Organizer form
             if (form === 'plek-organizer-form') {
@@ -445,7 +445,7 @@ let plek_manage_event = {
                 plekvalidator.add_field('venue-phone', 'phone', true, 'add_venue');
                 plekvalidator.add_field('venue-web', 'url', true, 'add_venue');
                 plekvalidator.add_invalid_field_values('venue-country', ['null'], 'add_venue');
-                plekvalidator.add_error_messages('venue-country', 'add_venue', null, null, null, null, null, __('Please select a country', 'pleklang'));
+                plekvalidator.add_error_messages('venue-country', 'add_venue', null, null, null, null, null, __('Please select a country', 'plekvetica'));
             }
 
             //Event
@@ -478,7 +478,7 @@ let plek_manage_event = {
                 plekvalidator.add_field('event_currency', 'simpletext', false, form);
                 plekvalidator.add_field('event_price_link', 'url', true, form);
                 plekvalidator.add_field('event_id', 'int', false, form);
-                plekvalidator.add_error_messages('event_id', form, __("Missing Event ID", "pleklang"));
+                plekvalidator.add_error_messages('event_id', form, __("Missing Event ID", "plekvetica"));
             }
 
             //Add the fields to the validator
@@ -497,7 +497,7 @@ let plek_manage_event = {
                 plekvalidator.add_field('guest_email', 'email', allow_empty_guest, form);
 
                 plekvalidator.add_field('event_id', 'int', false, form);
-                plekvalidator.add_error_messages('event_id', form, __("Missing Event ID", "pleklang"));
+                plekvalidator.add_error_messages('event_id', form, __("Missing Event ID", "plekvetica"));
             }
 
         });
@@ -604,7 +604,7 @@ function ajaxPreloader(type) {
         contentType: false,
         success: function success(data) {
             if (data.length < 2) {
-                toastr["error"](__("Error loading data", "pleklang") + ': ' + type, "Error");
+                toastr["error"](__("Error loading data", "plekvetica") + ': ' + type, "Error");
                 return false;
             } else {
                 var jdata = JSON.parse(data);
@@ -625,7 +625,7 @@ function ajaxPreloader(type) {
             }
         },
         error: function error(data) {
-            window.plekerror.display_info(__("Error loading data", "pleklang") + ': ' + data, "Error");
+            window.plekerror.display_info(__("Error loading data", "plekvetica") + ': ' + data, "Error");
             return false;
         }
     });
@@ -729,7 +729,7 @@ let plek_add_event_functions = {
             jQuery.each(reminder_obj, (index, obj) => {
                 if (obj.event_id == event_id) {
                     if (prompt) {
-                        let button_text = __('You are deleting this Notification permanently. You will probably not be able to Edit this Event afterwards.\nAre your sure?', 'pleklang');
+                        let button_text = __('You are deleting this Notification permanently. You will probably not be able to Edit this Event afterwards.\nAre your sure?', 'plekvetica');
                         if (confirm(button_text) === true) {
                             //Only remove if confirmed
                             delete reminder_obj[index];
@@ -777,7 +777,7 @@ let plek_add_event_functions = {
                 }
                 //Display if it is still valid
                 let url = (!empty(obj.stage)) ? plek_main.event_add_page_id : plek_main.event_edit_page_id;
-                let link_text = (!empty(obj.stage)) ? __('Continue with adding the Event', 'pleklang') : __('Edit Event', 'pleklang');
+                let link_text = (!empty(obj.stage)) ? __('Continue with adding the Event', 'plekvetica') : __('Edit Event', 'plekvetica');
                 let link_name = (!empty(obj.name)) ? link_text + ': ' + obj.name : link_text;
                 let link = (!empty(obj.stage))
                     ? '<a class="fix_event_link" data-event_id= "' + obj.event_id + '" href="' + url + '?event_id=' + obj.event_id + '&stage=' + obj.stage + '">' + link_name + '</a>'
@@ -788,7 +788,7 @@ let plek_add_event_functions = {
                     'toast-bottom-full-width',
                     () => { plek_add_event_functions.remove_event_details_reminder(obj.event_id, true); }
                 );
-                plekerror.display_info(__('Eventmanager Tipp', 'pleklang'), __('The Event you added misses some details. Please add them here:', 'pleklang') + '<br/>' + link);
+                plekerror.display_info(__('Eventmanager Tipp', 'plekvetica'), __('The Event you added misses some details. Please add them here:', 'plekvetica') + '<br/>' + link);
                 plekerror.reset_toastr();
             });
 

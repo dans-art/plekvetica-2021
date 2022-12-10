@@ -45,11 +45,11 @@ let plek_team_cal = {
                 } else {
                     text = plek_main.get_text_from_ajax_request(data, true);
                 }
-                plekerror.display_info(__('Change Event Status', 'pleklang'), event_name + ': ' + text);
+                plekerror.display_info(__('Change Event Status', 'plekvetica'), event_name + ': ' + text);
             },
             error: function error(data) {
                 console.log(data);
-                plekerror.display_error('', __('Update failed!', 'pleklang'), __('Change Event Status', 'pleklang'));
+                plekerror.display_error('', __('Update failed!', 'plekvetica'), __('Change Event Status', 'plekvetica'));
             }
         });
         return;
@@ -66,7 +66,7 @@ let plek_team_cal = {
         const organizer_id = jQuery(item).data('organizer_id');
         const media_name = jQuery(item).data('organizer_media_name');
         const media_email = jQuery(item).data('organizer_media_email');
-        const confirm_message = __('Do you wanna send a accreditation request to:', 'pleklang') + `\r\n${media_name} (${media_email})?`;
+        const confirm_message = __('Do you wanna send a accreditation request to:', 'plekvetica') + `\r\n${media_name} (${media_email})?`;
         if (!empty(media_email) && confirm(confirm_message) == false) {
             return false;
         }
@@ -87,7 +87,7 @@ let plek_team_cal = {
         const media_name = jQuery(item).data('organizer_media_name');
         const media_email = jQuery(item).data('organizer_media_email');
         const count = jQuery(`.accredi-event-item[data-organizer_id*="${organizer_id}"]`).length;
-        let confirm_message =__('Do you wanna send %d accreditation requests to:', 'pleklang') + `\r\n${media_name} (${media_email})?`;
+        let confirm_message =__('Do you wanna send %d accreditation requests to:', 'plekvetica') + `\r\n${media_name} (${media_email})?`;
         confirm_message = confirm_message.replace('%d', count);
         if (confirm(confirm_message) == false) {
             return false;
@@ -133,11 +133,11 @@ let plek_team_cal = {
                     //Remove the dropdown
                     jQuery(button).parent().prev().find('select').hide();
                 }
-                plekerror.display_info(__('Accreditation request', 'pleklang'), text);
+                plekerror.display_info(__('Accreditation request', 'plekvetica'), text);
             },
             error: function error(data) {
                 console.log(data);
-                plekerror.display_error('', __('Error while sending accreditation request', 'pleklang'), __('Accreditation request', 'pleklang'));
+                plekerror.display_error('', __('Error while sending accreditation request', 'plekvetica'), __('Accreditation request', 'plekvetica'));
             }
         });
     }

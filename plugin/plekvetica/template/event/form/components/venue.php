@@ -8,7 +8,7 @@ $event_venue_json = $venue_handler->get_venue_json($event_object->get_ID());
 ?>
 <div class="event-venue-container plek-event-form-container">
     <div id="venue-search-bar-container" class="event-search-bar-container">
-        <input type="text" name="event_venue" id="event_venue" class="input plek-search-input" autocomplete="off" placeholder="<?php echo __('Search a location', 'pleklang'); ?>" />
+        <input type="text" name="event_venue" id="event_venue" class="input plek-search-input" autocomplete="off" placeholder="<?php echo __('Search a location', 'plekvetica'); ?>" />
     </div>
     <?php PlekTemplateHandler::load_template('search-overlay', 'event/form/components', "event_venue_overlay"); ?>
     <div id="event-venue-selection">

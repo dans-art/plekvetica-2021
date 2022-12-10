@@ -40,7 +40,7 @@ var plekevent = {
                     var jdata = JSON.parse(data);
                     if (jdata.error.length > 0) {
                         window.plekerror.set_toastr(0, true, 'toast-bottom-full-width');
-                        window.plekerror.display_info(__('Event already exists', 'pleklang'), jdata.error);
+                        window.plekerror.display_info(__('Event already exists', 'plekvetica'), jdata.error);
                         window.plekerror.reset_toastr();
                         plekevent.existing_event = true;
                         console.log("Event Existiert bereits");
@@ -52,7 +52,7 @@ var plekevent = {
                     }
                 },
                 error: function error(data) {
-                    window.plekerror.display_info(window.pleklang.loaderror + ': ' + data, "Error");
+                    window.plekerror.display_info(window.plekvetica.loaderror + ': ' + data, "Error");
                     return false;
                 }
             });
@@ -74,21 +74,21 @@ var plekevent = {
                 let band = window.bandPreloadedData[vob_id];
                 let ele_b = plektemplate.load_band_item_template(band);
                 this.add_item_to_selection(ele_b);
-                plekerror.display_info(__('Add Band', 'pleklang'), __('The Band has been added to the Database', 'pleklang'));
+                plekerror.display_info(__('Add Band', 'plekvetica'), __('The Band has been added to the Database', 'plekvetica'));
                 break;
             case 'venue-form-submit':
                 window.venuePreloadedData = data;
                 let venue = window.venuePreloadedData[vob_id];
                 let ele_v = plektemplate.load_venue_item_template(venue);
                 this.add_item_to_selection(ele_v);
-                plekerror.display_info(__('Add Venue', 'pleklang'), __('The Venue has been added to the Database', 'pleklang'));
+                plekerror.display_info(__('Add Venue', 'plekvetica'), __('The Venue has been added to the Database', 'plekvetica'));
                 break;
             case 'organizer-form-submit':
                 window.organizerPreloadedData = data;
                 let organizer = window.organizerPreloadedData[vob_id];
                 let ele_o = plektemplate.load_organizer_item_template(organizer);
                 this.add_item_to_selection(ele_o);
-                plekerror.display_info(__('Add Organizer', 'pleklang'), __('The Organizer has been added to the Database', 'pleklang'));
+                plekerror.display_info(__('Add Organizer', 'plekvetica'), __('The Organizer has been added to the Database', 'plekvetica'));
                 break;
             default:
                 return false;
@@ -414,7 +414,7 @@ var plekevent = {
                 let errors = plek_main.show_field_errors(data, form);
                 if (errors === true) {
                     console.log("Contains Errors");
-                    plekerror.display_error(null, __('This form contains errors, please fix them.', 'pleklang'), __('Form error', 'pleklang'));
+                    plekerror.display_error(null, __('This form contains errors, please fix them.', 'plekvetica'), __('Form error', 'plekvetica'));
                     plek_main.deactivate_button_loader(button, orig_btn_text);
                     jQuery(button).prop("disabled", false); //Enable the button again.
                 } else {
@@ -430,7 +430,7 @@ var plekevent = {
 
                     //It is a edit event. Do not redirect or change the url in anyway
                     if (type === 'save_edit_event') {
-                        plekerror.display_info(__('Event saved!', 'pleklang'));
+                        plekerror.display_info(__('Event saved!', 'plekvetica'));
                         plek_main.deactivate_button_loader(button, orig_btn_text);
                         jQuery(button).prop("disabled", false); //Enable the button again.
                         return;
@@ -450,23 +450,23 @@ var plekevent = {
 
                     if (type === 'save_event_details') {
                         if (user_id === 0) {
-                            plekerror.display_info(__('Event saved!', 'pleklang'), __('Thanks a lot!<br/>Our Eventmanager will check and publish the Event', 'pleklang'));
+                            plekerror.display_info(__('Event saved!', 'plekvetica'), __('Thanks a lot!<br/>Our Eventmanager will check and publish the Event', 'plekvetica'));
                         } else {
                             //User is a logged in user
-                            let event_url_label = __('To my Event', 'pleklang')
+                            let event_url_label = __('To my Event', 'plekvetica')
                             let event_url_html = `<a href='${event_url}'>${event_url_label}</a>`;
-                            plekerror.display_info(__('Event saved!', 'pleklang'), __('Check it out here: ' + event_url_html, 'pleklang'));
+                            plekerror.display_info(__('Event saved!', 'plekvetica'), __('Check it out here: ' + event_url_html, 'plekvetica'));
                         }
                         plek_add_event_functions.remove_event_details_reminder(event_id);
                     } else {
                         //Show success message
-                        plekerror.display_info(__('Data saved!', 'pleklang'));
+                        plekerror.display_info(__('Data saved!', 'plekvetica'));
                         setTimeout(() => {
                             window.location = url;
                         }, 6000); //Auto redirect after 6 seconds
                         //Modifies the Button to direct to the next page
                         jQuery(button).data('type', 'new_event_next_page');
-                        orig_btn_text = __('Add Event details', 'pleklang');
+                        orig_btn_text = __('Add Event details', 'plekvetica');
                         jQuery(button).data('url', url);
                     }
                     if (type === 'save_basic_event') {
@@ -480,7 +480,7 @@ var plekevent = {
                 }
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
 
             }
         });
@@ -540,7 +540,7 @@ var plekevent = {
                 }
             },
             error: function error(data) {
-                window.plekerror.display_info(window.pleklang.loaderror + ': ' + data, "Error");
+                window.plekerror.display_info(window.plekvetica.loaderror + ': ' + data, "Error");
                 return false;
             }
         });
@@ -569,13 +569,13 @@ var plekevent = {
                 let errors = plek_main.show_field_errors(data, form);
                 if (errors === true) {
                     console.log("Contains Errors");
-                    text = __("The Review contains errors, please fix them.", 'pleklang');
-                    plekerror.display_error('', text, __('Review status', 'pleklang'));
+                    text = __("The Review contains errors, please fix them.", 'plekvetica');
+                    plekerror.display_error('', text, __('Review status', 'plekvetica'));
                     plek_main.deactivate_button_loader(button, orig_btn_text);
                     jQuery(button).prop("disabled", false); //Enable the button again.
                 } else {
                     let message = plek_main.get_first_success_from_ajax_request(data);
-                    plekerror.display_info(__('Review status', 'pleklang'), message);
+                    plekerror.display_info(__('Review status', 'plekvetica'), message);
                     plek_main.deactivate_button_loader(button, orig_btn_text);
                     jQuery(button).prop("disabled", false); //Enable the button again.
                     //remove all errors
@@ -584,7 +584,7 @@ var plekevent = {
                 }
             },
             error: function error(data) {
-                plek_main.deactivate_button_loader(button, __("Error loading data. ", "pleklang"));
+                plek_main.deactivate_button_loader(button, __("Error loading data. ", "plekvetica"));
 
             }
         });

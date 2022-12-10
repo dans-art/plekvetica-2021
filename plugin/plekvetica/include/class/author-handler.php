@@ -22,7 +22,7 @@ class PlekAuthorHandler
         $authors = $wpdb->get_results($query);
 
         if(empty($authors)){
-            return __('No Team members found.','pleklang');
+            return __('No Team members found.','plekvetica');
         }
         
         foreach($authors as $user){
@@ -52,14 +52,14 @@ class PlekAuthorHandler
         $guest_author = str_replace("'", "\'", $guest_author); //Escape the single quote to avoid json_decode errors
         if(empty($guest_author)){
             if($event_author_id === $this -> get_guest_author_id()){
-                return __('Guest Author','pleklang');
+                return __('Guest Author','plekvetica');
             }
-            return __('No Author found','pleklang'); //This should never happen, but just in case.
+            return __('No Author found','plekvetica'); //This should never happen, but just in case.
         }
         $guest_object = json_decode($guest_author);
         if(isset($guest_object -> name)){
             $guest_name = str_replace("\'", "'", $guest_object -> name); //de-escape the single quote again for display.
-            return  $guest_name . ' - ' . __('Guest Author','pleklang'); ;
+            return  $guest_name . ' - ' . __('Guest Author','plekvetica'); ;
         }
         return false;
     }

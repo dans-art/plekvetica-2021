@@ -119,7 +119,7 @@ class PlekVenueHandler
         }
         //Check if user is allowed to edit the venue
         if (PlekUserHandler::user_can_edit_venue($venue_id) !== true) {
-            $plek_ajax_errors->add('save_venue', __('You are not allowed to edit this venue!', 'pleklang'));
+            $plek_ajax_errors->add('save_venue', __('You are not allowed to edit this venue!', 'plekvetica'));
             return false;
         }
         return $this->update_venue($venue_id);
@@ -144,17 +144,17 @@ class PlekVenueHandler
         );
         $create = tribe_create_venue($args);
         if ($create == false) {
-            $error_msg =  sprintf(__('Insert new Venue "%s" failed', 'pleklang'), $name);
+            $error_msg =  sprintf(__('Insert new Venue "%s" failed', 'plekvetica'), $name);
             $plek_ajax_errors->add('save_venue_validator', $error_msg);
             apply_filters('simple_history_log', $error_msg);
             return false;
         }
         //Insert successfully
         //Send Notification to admin
-        $message = sprintf(__('A new Venue "%s" has been added.', 'pleklang'), $name);
-        $message .= '<br/>' . PlekUserHandler::get_current_user_display_name(__('Added by', 'pleklang'));
+        $message = sprintf(__('A new Venue "%s" has been added.', 'plekvetica'), $name);
+        $message .= '<br/>' . PlekUserHandler::get_current_user_display_name(__('Added by', 'plekvetica'));
         $action = admin_url('post.php?post=' . $create . '&action=edit');
-        PlekNotificationHandler::push_to_admin(__('New Venue added', 'pleklang'), $message, $action);
+        PlekNotificationHandler::push_to_admin(__('New Venue added', 'plekvetica'), $message, $action);
 
         //Saves the rest of the data
         return $this->update_venue($create, true);
@@ -181,7 +181,7 @@ class PlekVenueHandler
         }
         $update = tribe_update_venue($venue_id, $args);
         if ($update == false) {
-            $error_msg =  __('Venue could not be updated', 'pleklang');
+            $error_msg =  __('Venue could not be updated', 'plekvetica');
             $plek_ajax_errors->add('save_venue_validator', $error_msg);
             return false;
         }

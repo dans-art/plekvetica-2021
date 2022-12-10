@@ -33,7 +33,7 @@ $page_obj = $plek_event -> get_pages_object();
 
 if($plek_event -> display_more_events_button($total_posts)){
 	echo $plek_event -> get_pages_count_formated($total_posts);
-	echo PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj -> page + 1), __('Load more reviews','pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
+	echo PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj -> page + 1), __('Load more reviews','plekvetica'), '_self', 'load_more_reviews', 'ajax-loader-button');
 }
 
 

@@ -26,6 +26,6 @@ if (is_int($band_gallery)) {
     <span class='playtime'><?php echo $playtime; ?></span>
     <span class='band_origin'><?php echo $band_origin_formated; ?></span>
     <span class='band_name'><?php echo $band_name; ?></span>
-    <span class='image_count'><?php echo __('Images:', 'pleklang'); ?> <span class="nr"><?php echo $image_count; ?></span></span>
+    <span class='image_count'><?php echo __('Images:', 'plekvetica'); ?> <span class="nr"><?php echo $image_count; ?></span></span>
     <div class='sort-button plek-button'><i class="fas fa-arrows-alt-v"></i></div>
 </div>

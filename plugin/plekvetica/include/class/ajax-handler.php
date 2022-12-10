@@ -80,7 +80,7 @@ class PlekAjaxHandler
                 $plek_event = new PlekEvents;
                 $save_review = $plek_event->save_event_review();
                 if (is_int($save_review)) {
-                    $this->set_success(__('Event Review saved', 'pleklang'));
+                    $this->set_success(__('Event Review saved', 'plekvetica'));
                 } else {
                     $plek_ajax_errors->add('save_event_details', $save_review); //Error message
                 }
@@ -164,7 +164,7 @@ class PlekAjaxHandler
                 break;
             case 'save_edit_event':
                 //Users have to be logged it in order to edit events
-                $this->set_error(__('Sorry, you are not allowed to edit this Event!', 'pleklang'));
+                $this->set_error(__('Sorry, you are not allowed to edit this Event!', 'plekvetica'));
                 break;
             case 'check_event_duplicate':
                 $plek_event = new PlekEvents;
@@ -199,7 +199,7 @@ class PlekAjaxHandler
                 $plek_event->load_event($event_id);
                 $promote = $plek_event->promote_on_facebook();
                 if ($promote === true) {
-                    $this->set_success(__('Event has been successfully published on facebook', 'pleklang'));
+                    $this->set_success(__('Event has been successfully published on facebook', 'plekvetica'));
                 } else {
                     $this->set_error($promote);  //Error Message from Facebook SDK
                 }
@@ -209,7 +209,7 @@ class PlekAjaxHandler
                     $plek_event->load_event($event_id);
                     $post = $plek_event->post_ticket_raffle_on_facebook();
                     if ($post === true) {
-                        $this->set_success(__('Ticket raffle successfully posted on facebook', 'pleklang'));
+                        $this->set_success(__('Ticket raffle successfully posted on facebook', 'plekvetica'));
                     } else {
                         $this->set_error($post);  //Error Message from Facebook SDK
                     }
@@ -219,7 +219,7 @@ class PlekAjaxHandler
                 $user = $this->get_ajax_data('user');
                 $remove = $plek_event->remove_akkredi_member($user, $event_id);
                 if ($remove === true) {
-                    $this->set_success(__('Accreditation request removed', 'pleklang'));
+                    $this->set_success(__('Accreditation request removed', 'plekvetica'));
                 } else {
                     $this->set_error($remove); //Error Message from function
                 }
@@ -229,7 +229,7 @@ class PlekAjaxHandler
                 $user = $this->get_ajax_data('user');
                 $add = $plek_event->add_akkredi_member($user, $event_id);
                 if ($add === true) {
-                    $this->set_success(__('Accreditation request added', 'pleklang'));
+                    $this->set_success(__('Accreditation request added', 'plekvetica'));
                 } else {
                     $this->set_error($add); //Error Message from function
                 }
@@ -240,7 +240,7 @@ class PlekAjaxHandler
                 $code = $this->get_ajax_data('status_code');
                 $change = $plek_event->set_akkredi_status($event_id, $code);
                 if ($change === true) {
-                    $this->set_success(__('Status updated', 'pleklang'));
+                    $this->set_success(__('Status updated', 'plekvetica'));
                 } else {
                     $this->set_error($change); //Error Message from function
                 }
@@ -255,7 +255,7 @@ class PlekAjaxHandler
                     $this->set_success($counter);
                     $this->set_success($toggle);
                 } else {
-                    $this->set_error(__('Error while changing the following status', 'pleklang'));
+                    $this->set_error(__('Error while changing the following status', 'plekvetica'));
                 }
                 break;
             case 'load_block_content':
@@ -264,13 +264,13 @@ class PlekAjaxHandler
                 if ($content) {
                     $this->set_success($content);
                 } else {
-                    $this->set_error(__('Error while loading the data', 'pleklang'));
+                    $this->set_error(__('Error while loading the data', 'plekvetica'));
                 }
                 break;
             case 'report_incorrect_event':
                 $report = $plek_event->report_incorrect_event();
                 if ($report === true) {
-                    $this->set_success(__('Event reported', 'pleklang'));
+                    $this->set_success(__('Event reported', 'plekvetica'));
                 } else {
                     $this->set_error($report);
                 }
@@ -278,7 +278,7 @@ class PlekAjaxHandler
             case 'publish_event':
                 $user = new PlekUserHandler;
                 if (!$user->user_is_in_team()) {
-                    $this->set_error(__('You are not allowed to use this function', 'pleklang'));
+                    $this->set_error(__('You are not allowed to use this function', 'plekvetica'));
                     break;
                 }
                 $event_id = $this->get_ajax_data('id');
@@ -288,7 +288,7 @@ class PlekAjaxHandler
                 $pn = new PlekNotificationHandler;
                 $pn->push_to_band_follower($event_id);
                 if ($publish === true) {
-                    $this->set_success(__('Event published', 'pleklang'));
+                    $this->set_success(__('Event published', 'plekvetica'));
                 } else {
                     $this->set_error($publish);
                 }
@@ -297,7 +297,7 @@ class PlekAjaxHandler
                 $user = new PlekUserHandler;
                 $pe = new PlekEvents;
                 if (!$user->user_is_in_team()) {
-                    $this->set_error(__('You are not allowed to use this function', 'pleklang'));
+                    $this->set_error(__('You are not allowed to use this function', 'plekvetica'));
                     break;
                 }
                 $organizer_id = $this->get_ajax_data('organizer_id');
@@ -309,14 +309,14 @@ class PlekAjaxHandler
                     foreach ($event_ids as $event_id) {
                         $pe->set_akkredi_status($event_id, 'aa');
                     }
-                    $this->set_success(__('Accreditation request sent to organizer', 'pleklang'));
+                    $this->set_success(__('Accreditation request sent to organizer', 'plekvetica'));
                 } else {
                     $this->set_error($send_mail);
                 }
                 break;
             default:
                 # code...
-                $this->set_error(__('You are not allowed to use this request or function not found', 'pleklang'));
+                $this->set_error(__('You are not allowed to use this request or function not found', 'plekvetica'));
                 break;
         }
         echo $this->get_ajax_return();
@@ -334,7 +334,7 @@ class PlekAjaxHandler
         $do = $this->get_ajax_do();
         switch ($do) {
             case 'toggle_watchlist':
-                $this->set_error(__('You have to be logged in to perform this action', 'pleklang'));
+                $this->set_error(__('You have to be logged in to perform this action', 'plekvetica'));
                 break;
             case 'load_block_content':
                 global $plek_event_blocks;
@@ -342,20 +342,20 @@ class PlekAjaxHandler
                 if ($content) {
                     $this->set_success($content);
                 } else {
-                    $this->set_error(__('Error while loading the data', 'pleklang'));
+                    $this->set_error(__('Error while loading the data', 'plekvetica'));
                 }
                 break;
             case 'report_incorrect_event':
                 $report = $plek_event->report_incorrect_event();
                 if ($report === true) {
-                    $this->set_success(__('Event reported', 'pleklang'));
+                    $this->set_success(__('Event reported', 'plekvetica'));
                 } else {
                     $this->set_error($report);
                 }
                 break;
             default:
                 # code...
-                $this->set_error(__('You are not allowed to use this function', 'pleklang'));
+                $this->set_error(__('You are not allowed to use this function', 'plekvetica'));
                 break;
         }
         echo $this->get_ajax_return();
@@ -378,13 +378,13 @@ class PlekAjaxHandler
                 die();
                 break;
             case 'follow_band_toggle':
-                $this->set_error(__('You have to be logged in to perform this action', 'pleklang'));
+                $this->set_error(__('You have to be logged in to perform this action', 'plekvetica'));
                 break;
             case 'save_band':
                 $plek_band = new PlekBandHandler;
                 $saved = $plek_band->save_band();
                 if ($saved) {
-                    $this->set_success(__('Band saved', 'pleklang'));
+                    $this->set_success(__('Band saved', 'plekvetica'));
                     $this->set_success($plek_band->last_updated_id);
                     $this->set_success($saved);
                 }
@@ -395,7 +395,7 @@ class PlekAjaxHandler
                 if ($exists) {
                     $this->set_error($exists);
                 } else {
-                    $this->set_success(__('Band is unique', 'pleklang'));
+                    $this->set_success(__('Band is unique', 'plekvetica'));
                 }
                 break;
             default:
@@ -426,7 +426,7 @@ class PlekAjaxHandler
                 $plek_band = new PlekBandHandler;
                 $saved = $plek_band->save_band();
                 if ($saved) {
-                    $this->set_success(__('Band saved', 'pleklang'));
+                    $this->set_success(__('Band saved', 'plekvetica'));
                     $this->set_success($plek_band->last_updated_id);
                     $this->set_success($saved);
                 }
@@ -439,7 +439,7 @@ class PlekAjaxHandler
                     $this->set_success($counter);
                     $this->set_success($toggle);
                 } else {
-                    $this->set_error(__('Error while changing the following status', 'pleklang'));
+                    $this->set_error(__('Error while changing the following status', 'plekvetica'));
                 }
                 break;
             case 'check_existing_band':
@@ -448,7 +448,7 @@ class PlekAjaxHandler
                 if ($exists) {
                     $this->set_error($exists);
                 } else {
-                    $this->set_success(__('Band is unique', 'pleklang'));
+                    $this->set_success(__('Band is unique', 'plekvetica'));
                 }
                 break;
             default:
@@ -473,7 +473,7 @@ class PlekAjaxHandler
                 $plek_venue = new PlekVenueHandler;
                 $saved = $plek_venue->save_venue();
                 if ($saved) {
-                    $this->set_success(__('Venue saved', 'pleklang'));
+                    $this->set_success(__('Venue saved', 'plekvetica'));
                     $this->set_success($plek_venue->last_updated_id);
                     $this->set_success($saved);
                 }
@@ -501,7 +501,7 @@ class PlekAjaxHandler
                 $plek_venue = new PlekVenueHandler;
                 $saved = $plek_venue->save_venue();
                 if ($saved) {
-                    $this->set_success(__('Venue saved', 'pleklang'));
+                    $this->set_success(__('Venue saved', 'plekvetica'));
                     $this->set_success($plek_venue->last_updated_id);
                     $this->set_success($saved);
                 }
@@ -528,7 +528,7 @@ class PlekAjaxHandler
                 $plek_organizer = new PlekOrganizerHandler;
                 $saved = $plek_organizer->save_organizer();
                 if ($saved) {
-                    $this->set_success(__('Organizer saved', 'pleklang'));
+                    $this->set_success(__('Organizer saved', 'plekvetica'));
                     $this->set_success($plek_organizer->last_updated_id);
                     $this->set_success($saved);
                 }
@@ -556,7 +556,7 @@ class PlekAjaxHandler
                 $plek_organizer = new PlekOrganizerHandler;
                 $saved = $plek_organizer->save_organizer();
                 if ($saved) {
-                    $this->set_success(__('Organizer saved', 'pleklang'));
+                    $this->set_success(__('Organizer saved', 'plekvetica'));
                     $this->set_success($plek_organizer->last_updated_id);
                     $this->set_success($saved);
                 }
@@ -586,7 +586,7 @@ class PlekAjaxHandler
                 if ($validate === true) {
                     $save = $user_form_handler->save_user_settings();
                     if ($save === true) {
-                        $this->set_success(__('Settings saved', 'pleklang'));
+                        $this->set_success(__('Settings saved', 'plekvetica'));
                     }
                 } else {
                     //$this->set_error_array($validate);
@@ -637,26 +637,26 @@ class PlekAjaxHandler
                 $new_user = $user_handler->save_new_user();
 
                 if ($new_user === false) {
-                    $this->set_error(__('Error while creating a new user', 'pleklang'));
+                    $this->set_error(__('Error while creating a new user', 'plekvetica'));
                     echo $this->get_ajax_return();
                     die();
                 }
 
                 //Send Email
                 if (!$user_handler->send_email_to_new_user($new_user)) {
-                    $error_msg = sprintf(__('Account created but failed to send an email. Please contact the IT Support: %s.', 'pleklang'), $plek_handler->get_plek_option('it_support_email'));
+                    $error_msg = sprintf(__('Account created but failed to send an email. Please contact the IT Support: %s.', 'plekvetica'), $plek_handler->get_plek_option('it_support_email'));
                     $this->set_error($error_msg);
                 }
-                $this->set_success(__('New account created! Check your email to complete the sign-up.', 'pleklang'));
+                $this->set_success(__('New account created! Check your email to complete the sign-up.', 'plekvetica'));
                 break;
             case 'save_user_settings':
-                $this->set_error(__('You have to be logged in in order to save the settings.', 'pleklang'));
+                $this->set_error(__('You have to be logged in in order to save the settings.', 'plekvetica'));
                 break;
             case 'reset_password':
                 $pu = new PlekUserHandler;
                 $send_mail = $pu->send_password_reset_mail();
                 if ($send_mail === true) {
-                    $this->set_success(__('New password request sent. Please check your email.', 'pleklang'));
+                    $this->set_success(__('New password request sent. Please check your email.', 'plekvetica'));
                 } else {
                     $this->set_error($send_mail);
                 }
@@ -665,7 +665,7 @@ class PlekAjaxHandler
                 $pu = new PlekUserHandler;
                 $reset_pass = $pu->set_new_password();
                 if ($reset_pass === true) {
-                    $this->set_success(__('New password set. You can login now with your new password.', 'pleklang'));
+                    $this->set_success(__('New password set. You can login now with your new password.', 'plekvetica'));
                 } else {
                     if (is_array($reset_pass)) {
                         $this->set_error_array($reset_pass);
@@ -699,7 +699,7 @@ class PlekAjaxHandler
                 $plek_event_blocks = new PlekEventBlocks;
                 $return_arr['content'] = $plek_event_blocks->get_block('my_missing_reviews');
                 if ($return_arr['content'] === false or empty($return_arr['content'])) {
-                    $return_arr['content'] = "<span class='plek-no-open-reviews'>" . __('Super! No missing Reviews.', 'pleklang') . "</span>";
+                    $return_arr['content'] = "<span class='plek-no-open-reviews'>" . __('Super! No missing Reviews.', 'plekvetica') . "</span>";
                 }
                 $return_arr['count'] = 0;
                 echo json_encode($return_arr, JSON_UNESCAPED_UNICODE);
@@ -736,7 +736,7 @@ class PlekAjaxHandler
                 if (is_int($new_album)) {
                     //Add the album to the event gallery relationship
                     if ($event_handler->add_album_to_event($event_id, $new_album) === false) {
-                        $this->set_error(__('Failed to add the album to the event', 'pleklang'));
+                        $this->set_error(__('Failed to add the album to the event', 'plekvetica'));
                     }
                     $this->set_success($new_album); //Album ID
                     $this->set_success($album_name); //Album Name
@@ -769,11 +769,11 @@ class PlekAjaxHandler
                         }
                         //Add the gallery to the event gallery relationship
                         if (!$event_handler->add_band_gallery_to_event($event_id, $band_id, $new_gallery, $album_id)) {
-                            $this->set_error(__('Failed to add the gallery to the event', 'pleklang'));
+                            $this->set_error(__('Failed to add the gallery to the event', 'plekvetica'));
                         }
                         //Add the gallery to the band, but only if the gallery is a band gallery
                         if ((strpos($band_id, 'impression') === false) and !$band_handler->update_band_galleries($new_gallery)) {
-                            $this->set_error(__('Failed to add the gallery to the band', 'pleklang'));
+                            $this->set_error(__('Failed to add the gallery to the band', 'plekvetica'));
                         }
                         $this->set_success($new_gallery);
                         $this->set_success($gallery_name);
@@ -781,7 +781,7 @@ class PlekAjaxHandler
                         $this->set_error($new_gallery);
                     }
                 } else {
-                    $this->set_error(__('Band ID or Event ID not provided', 'pleklang'));
+                    $this->set_error(__('Band ID or Event ID not provided', 'plekvetica'));
                 }
 
                 break;

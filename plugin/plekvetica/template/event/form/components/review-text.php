@@ -6,6 +6,6 @@ $editor_options = array('media_buttons' => false, 'textarea_rows' => 10,'teeny' 
 $text_review = $event_object->get_field_value('text_review');
 ?>
 <div class="event-text_review-container plek-event-form-container">
-		<label for="event_text_review"><?php echo __('Full Review','pleklang'); ?></label>
+		<label for="event_text_review"><?php echo __('Full Review','plekvetica'); ?></label>
 		<?php wp_editor( wpautop($text_review), 'event_text_review', $editor_options ); ?>
 </div>

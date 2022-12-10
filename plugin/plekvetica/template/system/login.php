@@ -21,10 +21,10 @@ $content = (isset($template_args[1])) ? $template_args[1] : ''; //Content of the
 <div id="plek-login-container">
     <?php
     if (PlekUserHandler::current_user_is_locked()) {
-        $message = __('You account is currently locked. Please check your mail for unlocking instructions', 'pleklang');
+        $message = __('You account is currently locked. Please check your mail for unlocking instructions', 'plekvetica');
         PlekTemplateHandler::load_template('user-notice', 'system', 'info', $message);
     ?>
-        <div class="logout-link"><a href="<?php echo get_permalink(); ?>?action=logout"><?php echo __('Logout', 'pleklang'); ?></a></div>
+        <div class="logout-link"><a href="<?php echo get_permalink(); ?>?action=logout"><?php echo __('Logout', 'plekvetica'); ?></a></div>
     <?php
         return;
     }
@@ -32,16 +32,16 @@ $content = (isset($template_args[1])) ? $template_args[1] : ''; //Content of the
     <?php if (PlekUserHandler::is_user_unlock_page()) : ?>
         <?php
         if (isset($_GET['user_unlocked'])) {
-            $activate_ok = __('Account activated! Welcome to Plekvetica!', 'pleklang');
+            $activate_ok = __('Account activated! Welcome to Plekvetica!', 'plekvetica');
             PlekTemplateHandler::load_template('user-notice', 'system', 'info', $activate_ok);
         } elseif (isset($_GET['user_already_unlocked'])) {
-            $activate_error = __('Account is already unlocked.', 'pleklang');
+            $activate_error = __('Account is already unlocked.', 'plekvetica');
             PlekTemplateHandler::load_template('user-notice', 'system', 'warning', $activate_error);
         } else {
             //If user unlock page but user is not locked
             //This can happen, when user is not logged in, or user is not locked.
             if (PlekUserHandler::current_user_is_locked() === false) {
-                $activate_error = __('Account could not be activated.', 'pleklang');
+                $activate_error = __('Account could not be activated.', 'plekvetica');
                 PlekTemplateHandler::load_template('user-notice', 'system', 'error', $activate_error);
             }
         }

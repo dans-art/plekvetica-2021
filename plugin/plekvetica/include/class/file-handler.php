@@ -53,13 +53,13 @@ class PlekFileHandler
         ), $uploaded_file);
 
         if (!$attachment_id) {
-            $plek_ajax_errors->add('upload_file', __('Error adding the image to the database.', 'pleklang'));
+            $plek_ajax_errors->add('upload_file', __('Error adding the image to the database.', 'plekvetica'));
         }
 
         //Resize the file
         $resize = $this->resize_uploaded_image($uploaded_file);
         if (is_string($resize)) {
-            $plek_ajax_errors->add('upload_file', sprintf(__('Error while resizing the image: %s.', 'pleklang'), $resize));
+            $plek_ajax_errors->add('upload_file', sprintf(__('Error while resizing the image: %s.', 'plekvetica'), $resize));
         }
 
         wp_generate_attachment_metadata($attachment_id, $uploaded_file);
@@ -122,7 +122,7 @@ class PlekFileHandler
     public function create_watermarked_image($image_path, $watermark_path, $new_image_path)
     {
         if (!file_exists($image_path) or !file_exists($watermark_path)) {
-            $this->errors->add('create_watermarked_image_no_image', __('No Image found', 'pleklang') . ' Image: ' . $image_path . ' Watermark:' . $watermark_path);
+            $this->errors->add('create_watermarked_image_no_image', __('No Image found', 'plekvetica') . ' Image: ' . $image_path . ' Watermark:' . $watermark_path);
             return false;
         }
         $orig_image = getimagesize($image_path);
@@ -138,7 +138,7 @@ class PlekFileHandler
                 break;
 
             default:
-                $this->errors->add('create_watermarked_image_unsupported', __('Filetype not supported', 'pleklang'));
+                $this->errors->add('create_watermarked_image_unsupported', __('Filetype not supported', 'plekvetica'));
                 return false;
                 break;
         }

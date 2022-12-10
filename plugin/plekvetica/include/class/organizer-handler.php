@@ -63,7 +63,7 @@ class PlekOrganizerHandler
         if ($organizer_object === null or $organizer_object->post_type !== 'tribe_organizer') {
             return false;
         }
-        return (isset($organizer_object->post_title)) ? $organizer_object->post_title : __('Undefined', 'pleklang');
+        return (isset($organizer_object->post_title)) ? $organizer_object->post_title : __('Undefined', 'plekvetica');
     }
 
     /**
@@ -136,7 +136,7 @@ class PlekOrganizerHandler
         }
         //Check if user is allowed to edit the organizer
         if (PlekUserHandler::user_can_edit_organizer($organizer_id) !== true) {
-            $plek_ajax_errors->add('save_organizer', __('You are not allowed to edit this organizer!', 'pleklang'));
+            $plek_ajax_errors->add('save_organizer', __('You are not allowed to edit this organizer!', 'plekvetica'));
             return false;
         }
         return $this->update_organizer($organizer_id);
@@ -161,17 +161,17 @@ class PlekOrganizerHandler
         );
         $create = tribe_create_organizer($args);
         if ($create == false) {
-            $error_msg =  sprintf(__('Insert new Organizer "%s" failed', 'pleklang'), $name);
+            $error_msg =  sprintf(__('Insert new Organizer "%s" failed', 'plekvetica'), $name);
             $plek_ajax_errors->add('save_organizer_validator', $error_msg);
             apply_filters('simple_history_log', $error_msg);
             return false;
         }
         //Insert successfully
         //Send Notification to admin
-        $message = sprintf(__('A new Organizer "%s" has been added.', 'pleklang'), $name);
-        $message .= '<br/>' . PlekUserHandler::get_current_user_display_name(__('Added by', 'pleklang'));
+        $message = sprintf(__('A new Organizer "%s" has been added.', 'plekvetica'), $name);
+        $message .= '<br/>' . PlekUserHandler::get_current_user_display_name(__('Added by', 'plekvetica'));
         $action = admin_url('post.php?post=' . $create . '&action=edit');
-        PlekNotificationHandler::push_to_admin(__('New Organizer added', 'pleklang'), $message, $action);
+        PlekNotificationHandler::push_to_admin(__('New Organizer added', 'plekvetica'), $message, $action);
 
         //Saves the rest of the data
         return $this->update_organizer($create, true);
@@ -194,7 +194,7 @@ class PlekOrganizerHandler
         //Save the Organizer content (for some reason, the post_content does not get saved with the tribe_update function)
         $content_update = wp_update_post(array('ID' => $id, 'post_content' => $plek_ajax_handler->get_ajax_data_esc('organizer-description')));
         if ($update === false or !is_int($content_update)) {
-            $error_msg =  __('Organizer could not be updated', 'pleklang');
+            $error_msg =  __('Organizer could not be updated', 'plekvetica');
             $plek_ajax_errors->add('save_organizer_validator', $error_msg);
             return false;
         }
@@ -345,7 +345,7 @@ class PlekOrganizerHandler
      */
     public function filter_manage_tribe_organizer_posts_custom_columns($columns)
     {
-        $columns['plekinfo'] = __('Organizer Info','pleklang');
+        $columns['plekinfo'] = __('Organizer Info','plekvetica');
         return $columns;
     }
 }

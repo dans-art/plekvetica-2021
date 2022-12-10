@@ -50,10 +50,10 @@ if(class_exists('PlekEvents')){
 					<?php $this->template( 'list/event/venue', [ 'event' => $event ] ); ?>
 				</header>
 				<?php if ($is_canceled) : ?>
-                <div class="plek-message red"><?php echo __('This event has been canceled.', 'pleklang'); ?></div>
+                <div class="plek-message red"><?php echo __('This event has been canceled.', 'plekvetica'); ?></div>
 	            <?php endif; ?>
 				<?php if ($is_postponed) : ?>
-                <div class="plek-message red"><?php echo __('This event has been postponed.', 'pleklang'); ?></div>
+                <div class="plek-message red"><?php echo __('This event has been postponed.', 'plekvetica'); ?></div>
 	            <?php endif; ?>
 				<?php //$this->template( 'list/event/cost', [ 'event' => $event ] ); ?>
 				<?php $this->template( 'list/event/bands', [ 'event' => $event ] ); ?>

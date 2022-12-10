@@ -13,10 +13,10 @@ class PlekUserHandler
     public function __construct()
     {
         self::$plek_custom_roles = array(
-            'plek-community' => __('Community / Fan', 'pleklang'),
-            'plek-band' => __('Band', 'pleklang'),
-            'plek-organi' => __('Organizer', 'pleklang'),
-            'plek-partner' => __('Partner', 'pleklang'),
+            'plek-community' => __('Community / Fan', 'plekvetica'),
+            'plek-band' => __('Band', 'plekvetica'),
+            'plek-organi' => __('Organizer', 'plekvetica'),
+            'plek-partner' => __('Partner', 'plekvetica'),
         );
 
         self::$team_roles = self::get_team_roles();
@@ -30,14 +30,14 @@ class PlekUserHandler
     public static function get_team_roles()
     {
         return array(
-            'administrator' => __('Administrator', 'pleklang'),
-            'plekmanager' => __('Plekvetica Manager', 'pleklang'),
-            'cutter' => __('Cutter', 'pleklang'),
-            'eventmanager' => __('Eventmanager', 'pleklang'),
-            'interviewer' => __('Interviewer', 'pleklang'),
-            'photographer' => __('Photographer', 'pleklang'),
-            'reviewwriter' => __('Review writer', 'pleklang'),
-            'videograph' => __('Videograph', 'pleklang')
+            'administrator' => __('Administrator', 'plekvetica'),
+            'plekmanager' => __('Plekvetica Manager', 'plekvetica'),
+            'cutter' => __('Cutter', 'plekvetica'),
+            'eventmanager' => __('Eventmanager', 'plekvetica'),
+            'interviewer' => __('Interviewer', 'plekvetica'),
+            'photographer' => __('Photographer', 'plekvetica'),
+            'reviewwriter' => __('Review writer', 'plekvetica'),
+            'videograph' => __('Videograph', 'plekvetica')
         );
     }
 
@@ -425,16 +425,16 @@ class PlekUserHandler
         }
         switch ($rolename) {
             case 'plek-organi':
-                return (empty(self::get_user_setting('organizer_id'))) ? __('No organizer set. Please select an organizer in the settings menu.', 'pleklang') : true;
+                return (empty(self::get_user_setting('organizer_id'))) ? __('No organizer set. Please select an organizer in the settings menu.', 'plekvetica') : true;
                 break;
             case 'plek-band':
-                return (empty(self::get_user_setting('band_id'))) ? __('No Band set. Please select a band in the settings menu.', 'pleklang') : true;
+                return (empty(self::get_user_setting('band_id'))) ? __('No Band set. Please select a band in the settings menu.', 'plekvetica') : true;
                 break;
             case 'plek-community':
                 return true; //No setup for community user
                 break;
             default:
-                return __('Role not found in setup function.', 'pleklang');
+                return __('Role not found in setup function.', 'plekvetica');
                 break;
         }
     }
@@ -578,7 +578,7 @@ class PlekUserHandler
     {
         $logged_in = self::get_user_display_name();
         if (!$logged_in) {
-            return $prepend . ' ' . __('Guest Author', 'pleklang') . ' ' . $append;
+            return $prepend . ' ' . __('Guest Author', 'plekvetica') . ' ' . $append;
         }
         return  $prepend . ' ' . $logged_in . ' ' . $append;
     }
@@ -781,13 +781,13 @@ class PlekUserHandler
         if (is_wp_error($new_user)) {
             $error_code = array_key_first($new_user->errors);
             $error_message = $new_user->errors[$error_code][0];
-            $plek_ajax_errors->add('save_user', sprintf(__('Failed to create new user (%s)', 'pleklang'), $error_message));
+            $plek_ajax_errors->add('save_user', sprintf(__('Failed to create new user (%s)', 'plekvetica'), $error_message));
             return false;
         }
 
         //Save the Meta data
         if ($plek_handler->update_field('plek_user_lock_key', $user_lock_key, 'user_' . $new_user) === false) {
-            $plek_ajax_errors->add('save_user', __('Failed to write meta for new user', 'pleklang'));
+            $plek_ajax_errors->add('save_user', __('Failed to write meta for new user', 'plekvetica'));
             return false;
         }
 
@@ -829,7 +829,7 @@ class PlekUserHandler
 
         $email = sanitize_email($request_data['user-email']);
 
-        $subject = __('Only one step left for your account at plekvetica!', 'pleklang');
+        $subject = __('Only one step left for your account at plekvetica!', 'plekvetica');
         $my_plek_id = $plek_handler->get_plek_option('my_plek_page_id');
         $my_plekvetica_url = (!empty($my_plek_id)) ? get_permalink($my_plek_id) : "https://plekvetica.ch/my-plekvetica";
 
@@ -884,7 +884,7 @@ class PlekUserHandler
 
                 //Send Info to Admin
                 $admin_email = $plek_handler->get_plek_option('admin_email');
-                $subject = __('New user account activated', 'pleklang');
+                $subject = __('New user account activated', 'plekvetica');
                 $emailer = new PlekEmailSender;
                 $emailer->set_to($admin_email);
                 $emailer->set_subject($subject);
@@ -936,7 +936,7 @@ class PlekUserHandler
     {
         $user = (isset($_REQUEST['user_login'])) ? $_REQUEST['user_login'] : '';
         if (empty($user)) {
-            return __('No username or email provided', 'pleklang');
+            return __('No username or email provided', 'plekvetica');
         }
         $send_mail = retrieve_password($user);
         if (is_wp_error($send_mail)) {
@@ -969,7 +969,7 @@ class PlekUserHandler
         $new_password_repeat = $plek_ajax_handler->get_ajax_data('new_password_repeat');
 
         if ($new_password !== $new_password_repeat) {
-            return __('The passwords have to match', 'pleklang');
+            return __('The passwords have to match', 'plekvetica');
         }
         //Check for valid key
         $user = check_password_reset_key($user_key, $user_login);
@@ -997,10 +997,10 @@ class PlekUserHandler
         $my_plek_id = $plek_handler->get_plek_option('my_plek_page_id');
         $my_plekvetica_url = (!empty($my_plek_id)) ? get_permalink($my_plek_id) : "https://plekvetica.ch/my-plekvetica";
         $pw_reset_url = $my_plekvetica_url . '?action=rp&user_key=' . $key . '&user_login=' . rawurlencode($user_login);
-        $plek_message = sprintf(__('Hi, %s', 'pleklang'), $user_data->first_name) . '<br/>';
-        $plek_message .= __('There was a new password requested for your account. If you aware of this action, please continue with the link below and set a new password.', 'pleklang') . '<br/>';
-        $plek_message .= __('Otherwise you can ignore this message.', 'pleklang') . '<br/>';
-        return PlekTemplateHandler::load_template_to_var('default-email', 'email', __('Reset password request', 'pleklang'), [$plek_message, $pw_reset_url]);
+        $plek_message = sprintf(__('Hi, %s', 'plekvetica'), $user_data->first_name) . '<br/>';
+        $plek_message .= __('There was a new password requested for your account. If you aware of this action, please continue with the link below and set a new password.', 'plekvetica') . '<br/>';
+        $plek_message .= __('Otherwise you can ignore this message.', 'plekvetica') . '<br/>';
+        return PlekTemplateHandler::load_template_to_var('default-email', 'email', __('Reset password request', 'plekvetica'), [$plek_message, $pw_reset_url]);
     }
 
     /**

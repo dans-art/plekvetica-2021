@@ -11,7 +11,7 @@ if (empty($spotify_id)) {
 }
 ?>
 
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Spotify', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Spotify', 'plekvetica')); ?>
 <div class='spotify-container'>
     <iframe style="border-radius:12px" src="https://open.spotify.com/embed/artist/<?php echo $spotify_id; ?>?utm_source=generator&theme=0" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
 </div>

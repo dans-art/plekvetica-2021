@@ -123,13 +123,13 @@ var plekvalidator = {
      */
     default_error_messages() {
         return {
-            'empty': __('Field cannot be empty', 'pleklang'),
-            'invalid_type': __('Input is not the correct type', 'pleklang'),
-            'nan': __('Input is not a Number', 'pleklang'),
-            'to_long': __('Input is to long', 'pleklang'),
-            'to_short': __('Input is to short', 'pleklang'),
-            'not_allowed': __('The provided value is not allowed, please change', 'pleklang'),
-            'nice_try': __('Nice try! No Robots allowed here!', 'pleklang')
+            'empty': __('Field cannot be empty', 'plekvetica'),
+            'invalid_type': __('Input is not the correct type', 'plekvetica'),
+            'nan': __('Input is not a Number', 'plekvetica'),
+            'to_long': __('Input is to long', 'plekvetica'),
+            'to_short': __('Input is to short', 'plekvetica'),
+            'not_allowed': __('The provided value is not allowed, please change', 'plekvetica'),
+            'nice_try': __('Nice try! No Robots allowed here!', 'plekvetica')
         }
     },
 
@@ -186,7 +186,7 @@ var plekvalidator = {
         plekerror.clear_field_errors();
 
         if (this.fields.length === 0) {
-            plekerror.display_error('Validator', __('No fields set', 'pleklang'));
+            plekerror.display_error('Validator', __('No fields set', 'plekvetica'));
             return false;
         }
         for (var dataset of data.entries()) {
@@ -203,7 +203,7 @@ var plekvalidator = {
             }
         }
         if (Object.keys(this.errors).length > 0) {
-            plekerror.display_error('Validator', __('Cannot save because of errors. Please check the fields again.', 'pleklang'));
+            plekerror.display_error('Validator', __('Cannot save because of errors. Please check the fields again.', 'plekvetica'));
             return this.errors;
         }
         return true;
@@ -278,7 +278,7 @@ var plekvalidator = {
             case 'price':
                 reg_patern = new RegExp('^[0-9.-]+$');
                 if (reg_patern.test(value) === false) {
-                    plekvalidator.add_error(field_id, __('Field contains forbidden characters. Only Numbers, dots and dashes are allowed.','pleklang'), form);
+                    plekvalidator.add_error(field_id, __('Field contains forbidden characters. Only Numbers, dots and dashes are allowed.','plekvetica'), form);
                     return false;
                 }
                 break;
@@ -291,7 +291,7 @@ var plekvalidator = {
                 break;
             case 'url':
                 if (value.indexOf('https://') === -1 && value.indexOf('http://') === -1 && value.indexOf('www.') === -1) {
-                    plekvalidator.add_error(field_id, __('Please provide a valid URL. Must start with https:// or www.','pleklang'), form);
+                    plekvalidator.add_error(field_id, __('Please provide a valid URL. Must start with https:// or www.','plekvetica'), form);
                     return false;
                 }
                 break;

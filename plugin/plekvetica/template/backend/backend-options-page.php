@@ -13,7 +13,7 @@ if(isset($page_parts[2])){
 }
 
 if (isset($_REQUEST['settings-updated'])) {
-    $text = ($_REQUEST['settings-updated'] === 'true') ? __('Settings updated', 'pleklang') : __('Failed to save the Settings', 'pleklang');
+    $text = ($_REQUEST['settings-updated'] === 'true') ? __('Settings updated', 'plekvetica') : __('Failed to save the Settings', 'plekvetica');
     echo PlekTemplateHandler::load_template('plek-message', 'components', $text);
 }
 
@@ -21,16 +21,16 @@ if (isset($_REQUEST['settings-updated'])) {
 <nav class="nav-tab-wrapper">
     <a href="?page=plek-options" class="nav-tab <?php if ($current_tab === null) {
                                                     echo 'nav-tab-active';
-                                                } ?>"><?php echo __('General', 'pleklang'); ?></a>
+                                                } ?>"><?php echo __('General', 'plekvetica'); ?></a>
     <a href="?page=plek-options&tab=notifications" class="nav-tab <?php if ($current_tab === 'notifications') {
                                                                         echo 'nav-tab-active';
-                                                                    } ?>"><?php echo __('Notifications', 'pleklang'); ?></a>
+                                                                    } ?>"><?php echo __('Notifications', 'plekvetica'); ?></a>
     <a href="?page=plek-options&tab=status" class="nav-tab <?php if ($current_tab === 'status') {
                                                                 echo 'nav-tab-active';
-                                                            } ?>"><?php echo __('Status', 'pleklang'); ?></a>
+                                                            } ?>"><?php echo __('Status', 'plekvetica'); ?></a>
     <a href="?page=plek-options&tab=api" class="nav-tab <?php if ($current_tab === 'api') {
                                                             echo 'nav-tab-active';
-                                                        } ?>"><?php echo __('API', 'pleklang'); ?></a>
+                                                        } ?>"><?php echo __('API', 'plekvetica'); ?></a>
 </nav>
 
 <div class="tab-content">

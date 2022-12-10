@@ -11,7 +11,7 @@ $band_id_array = explode(',', $band_ids);
 
 <dl>
     <dt>
-        <?php echo __('Managed Bands', 'pleklang'); ?>
+        <?php echo __('Managed Bands', 'plekvetica'); ?>
     </dt>
     <?php foreach($band_id_array as $band): ?>
         <?php 

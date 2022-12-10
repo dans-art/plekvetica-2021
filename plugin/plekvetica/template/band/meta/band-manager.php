@@ -11,7 +11,7 @@ if (!PlekUserHandler::user_can_edit_band($band_object)) {
 }
 ?>
 
-<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Manage Band', 'pleklang')); ?>
+<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Manage Band', 'plekvetica')); ?>
 <div class="meta-content">
   <div class="band-edit-buttons">
     <?php //Allow everyone to suggest changes to band. 
@@ -30,7 +30,7 @@ if (!PlekUserHandler::user_can_edit_band($band_object)) {
  
   ?>
   <?php if(is_array($users)): ?>
-    <?php echo __('Managed by:','pleklang'); ?>
+    <?php echo __('Managed by:','plekvetica'); ?>
     <ul>
       <?php foreach($users as $user_object): ?>
         <li>

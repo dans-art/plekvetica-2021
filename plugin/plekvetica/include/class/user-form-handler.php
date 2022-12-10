@@ -95,7 +95,7 @@ class PlekUserFormHandler extends PlekUserHandler
 
             //Check if password matches
             if ($pass !== $pass_rep) {
-                $validator->set_error('new-password-repeat', __('Passwords do not match', 'pleklang'));
+                $validator->set_error('new-password-repeat', __('Passwords do not match', 'plekvetica'));
             }
         } else {
             $validator->set_min_length('new-password', 0);
@@ -103,7 +103,7 @@ class PlekUserFormHandler extends PlekUserHandler
         }
 
         if ((int)$plek_ajax_handler->get_ajax_data('user-id') !== (int) $user_id) {
-            $validator->set_system_error(__('You are not authorized to edit this user!', 'pleklang'));
+            $validator->set_system_error(__('You are not authorized to edit this user!', 'plekvetica'));
         }
         return $validator;
     }
@@ -160,7 +160,7 @@ class PlekUserFormHandler extends PlekUserHandler
         }
         $save = wp_update_user($userdata);
         if (is_object($save)) {
-            $plek_ajax_errors->add('save_user_settings', __('Error saving account information', 'pleklang'), $save);
+            $plek_ajax_errors->add('save_user_settings', __('Error saving account information', 'plekvetica'), $save);
             return false;
         }
         return true;
@@ -185,7 +185,7 @@ class PlekUserFormHandler extends PlekUserHandler
         if (empty($old_organi_id)) {
             $user = wp_get_current_user();
             if ($plek_handler->update_field('organizer_id', $organi_id, 'user_' . $user->ID) === false) {
-                $plek_ajax_errors->add('save_user', __('Failed to write organizer meta', 'pleklang'));
+                $plek_ajax_errors->add('save_user', __('Failed to write organizer meta', 'plekvetica'));
                 return false;
             }
         } else {
@@ -198,7 +198,7 @@ class PlekUserFormHandler extends PlekUserHandler
             $organi_data['Website'] = htmlspecialchars($request_data['organizer-web']);
             $organi_data['Description'] = htmlspecialchars($request_data['organizer-description']);
             if (tribe_update_organizer($organi_data['ID'], $organi_data) === false) {
-                $plek_ajax_errors->add('save_user_settings', __('Error while saving the organizer settings.', 'pleklang'));
+                $plek_ajax_errors->add('save_user_settings', __('Error while saving the organizer settings.', 'plekvetica'));
                 return false;
             }
         }
@@ -224,7 +224,7 @@ class PlekUserFormHandler extends PlekUserHandler
         $band_ids_imploded = implode(',', $band_ids);
 
         if ($plek_handler->update_field('band_id', $band_ids_imploded, 'user_' . $user->ID) === false) {
-            $plek_ajax_errors->add('save_user', __('Failed to write band meta', 'pleklang'));
+            $plek_ajax_errors->add('save_user', __('Failed to write band meta', 'plekvetica'));
             return false;
         }
 
@@ -259,7 +259,7 @@ class PlekUserFormHandler extends PlekUserHandler
         $validator->set_type('organizer-description', 'textlong');
 
         if ((!empty($user_organi_setting)) and (int)$plek_ajax_handler->get_ajax_data('organizer-id') !== (int) $user_organi_setting) {
-            $validator->set_system_error(__('Organizer already set. Please contact the site owner to change the organizer.', 'pleklang'));
+            $validator->set_system_error(__('Organizer already set. Please contact the site owner to change the organizer.', 'plekvetica'));
         }
 
         if ($validator->all_fields_are_valid() !== true) {
@@ -283,13 +283,13 @@ class PlekUserFormHandler extends PlekUserHandler
         $validator->set_type('band-ids', 'int');
 
         if (!$plek_ajax_handler->get_ajax_data('band-ids')) {
-            $validator->set_error('band-ids', __('No Band selected', 'pleklang'));
+            $validator->set_error('band-ids', __('No Band selected', 'plekvetica'));
         }
 
         //Check if band is managed by the current user
         $band_ids = $plek_ajax_handler->get_ajax_data('band-ids');
         if (is_array($band_ids) and count($band_ids) > 5) {
-            $validator->set_error('band-ids', __('To many Bands selected! Are you sure you have more than 5 Bands!?', 'pleklang'));
+            $validator->set_error('band-ids', __('To many Bands selected! Are you sure you have more than 5 Bands!?', 'plekvetica'));
         }
 
         if ($validator->all_fields_are_valid() !== true) {
@@ -329,7 +329,7 @@ class PlekUserFormHandler extends PlekUserHandler
         $pass_rep = $plek_ajax_handler->get_ajax_data('user-pass-repeat');
 
         if ($pass !== $pass_rep) {
-            $validator->set_error('user-pass-repeat', __('Passwords do not match', 'pleklang'));
+            $validator->set_error('user-pass-repeat', __('Passwords do not match', 'plekvetica'));
         }
 
         //Check if the account type is valid
@@ -337,13 +337,13 @@ class PlekUserFormHandler extends PlekUserHandler
         $account_type = $plek_ajax_handler->get_ajax_data('user-account-type');
         $roles = $plek_user_handler->get_public_user_roles();
         if (!isset($roles[$account_type])) {
-            $validator->set_error('user-account-type', __('Account type not selected', 'pleklang'));
+            $validator->set_error('user-account-type', __('Account type not selected', 'plekvetica'));
         }
 
         //Check if email already exists
         $user_email = $plek_ajax_handler->get_ajax_data('user-email');
         if (email_exists($user_email)) {
-            $validator->set_error('user-email', __('This email address is already registered', 'pleklang'));
+            $validator->set_error('user-email', __('This email address is already registered', 'plekvetica'));
         }
 
         if ($validator->all_fields_are_valid() !== true) {

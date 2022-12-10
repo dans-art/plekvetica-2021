@@ -38,7 +38,7 @@ class PlekGalleryHandler
         }
 
         if (!isset($db_result) or empty($db_result[0])) {
-            return __("No gallery was found. It may have been deleted or moved.", "pleklang");
+            return __("No gallery was found. It may have been deleted or moved.", "plekvetica");
         }
 
         return $db_result[0];
@@ -204,7 +204,7 @@ class PlekGalleryHandler
     public function create_album($album_name = null)
     {
         if (empty($album_name)) {
-            return __('No Album name provided', 'pleklang');
+            return __('No Album name provided', 'plekvetica');
         }
 
         //Check if the album name already exists
@@ -219,7 +219,7 @@ class PlekGalleryHandler
         if (is_int($new_album)) {
             return $new_album;
         }
-        return __('Error while saving the new Album.', 'pleklang');
+        return __('Error while saving the new Album.', 'plekvetica');
     }
 
     /**
@@ -234,7 +234,7 @@ class PlekGalleryHandler
     {
         global $nggdb;
         if (empty($gallery_name)) {
-            return __('No Gallery name provided', 'pleklang');
+            return __('No Gallery name provided', 'plekvetica');
         }
         $path = '/wp-content/gallery/' . date('Y') . '/' . sanitize_title($gallery_name) . '/';
         $author = get_current_user_id();
@@ -244,7 +244,7 @@ class PlekGalleryHandler
         if (is_int($new_gallery)) {
             return $new_gallery;
         }
-        return __('Error while saving the new Gallery.', 'pleklang');
+        return __('Error while saving the new Gallery.', 'plekvetica');
     }
 
     /**
@@ -280,7 +280,7 @@ class PlekGalleryHandler
 
 
         if ($file['error'] !== 0) {
-            return __('Error uploading file', 'pleklang');
+            return __('Error uploading file', 'plekvetica');
         }
 
         $temp_file = $file['tmp_name'];
@@ -290,7 +290,7 @@ class PlekGalleryHandler
         $filename = $filepart['basename'];
 
         if ($filepart['extension'] !== 'jpg' || !@getimagesize($temp_file)) {
-            return __('File is not a valid Image. Only JPG\'s are allowed!.', 'pleklang');
+            return __('File is not a valid Image. Only JPG\'s are allowed!.', 'plekvetica');
         }
         //check for existing files
         $filename = $this->get_unique_file_name($gallery_path, $file_name);
@@ -298,7 +298,7 @@ class PlekGalleryHandler
         //Create dir if not exists
         if (!file_exists($gallery_path)) {
             if (!wp_mkdir_p($gallery_path)) {
-                return __('Failed to create new gallery dir: ', 'pleklang') . esc_html($gallery_path);
+                return __('Failed to create new gallery dir: ', 'plekvetica') . esc_html($gallery_path);
             }
         }
         //Check if the dir is writable.
@@ -339,18 +339,18 @@ class PlekGalleryHandler
     public function add_gallery_to_album($album_id, $galleries = array())
     {
         if (empty($album_id) or $album_id === 0 or empty($galleries)) {
-            return __('No Album ID or Gallery IDs provided', 'pleklang');
+            return __('No Album ID or Gallery IDs provided', 'plekvetica');
         }
         $album_mapper = C_Album_Mapper::get_instance();
         $album = $album_mapper->find($album_id);
         if ($album === null) {
-            return __('Album not found', 'pleklang');
+            return __('Album not found', 'plekvetica');
         }
         $album->sortorder = array_merge($album->sortorder, $galleries);
         if (is_int(C_Album_Mapper::get_instance()->save($album))) {
             return true;
         }
-        return __('Could not save the albums galleries.', 'pleklang');
+        return __('Could not save the albums galleries.', 'plekvetica');
     }
 
     /**
@@ -472,16 +472,16 @@ class PlekGalleryHandler
         $gallery_mapper = C_Gallery_Mapper::get_instance();
         $gallery = $gallery_mapper->find($gallery_id);
 	    if (!$gallery) {
-            return __('Gallery not found','pleklang');
+            return __('Gallery not found','plekvetica');
 
 	    }
         if($gallery->previewpic !== $image_id){
             $gallery->previewpic = $image_id;
             if(!$gallery_mapper->save($gallery)){
-                return __('Gallery preview not set because of unknown error','pleklang');
+                return __('Gallery preview not set because of unknown error','plekvetica');
             }
         }
 
-        return __('Gallery preview successfully set','pleklang');
+        return __('Gallery preview successfully set','plekvetica');
     }
 }

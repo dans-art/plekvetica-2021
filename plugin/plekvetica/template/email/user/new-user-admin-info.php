@@ -21,9 +21,9 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
 <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo $email_bg_dark; ?>" color="<?php echo $text_color; ?>" style="padding:10px; margin: 0; color:<?php echo $text_color; ?>;">
     <tr>
         <td id="email-content" style="color: <?php echo $text_color; ?>;">
-            <h1><?php echo __('New user unlocked!','pleklang'); ?></h1>
+            <h1><?php echo __('New user unlocked!','plekvetica'); ?></h1>
             <div>
-                <?php echo __('A new user has been created and unlocked.','pleklang'); ?>
+                <?php echo __('A new user has been created and unlocked.','plekvetica'); ?>
                 <br />
                 <a href="<?php echo $user_account_link; ?>"> <?php echo $name; ?> (<?php echo $email; ?>)</a>
                 <br />

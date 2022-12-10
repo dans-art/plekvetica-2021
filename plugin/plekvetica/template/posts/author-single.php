@@ -20,12 +20,12 @@ $page_obj = $plek_event->get_pages_object();
         </div>
         <div class="plek-author-data">
             <dl>
-                <dt><?php echo __('Involved since:', 'pleklang'); ?></dt>
+                <dt><?php echo __('Involved since:', 'plekvetica'); ?></dt>
                 <?php if (isset($author_acf['since'])) : ?>
                     <dd><?php echo date_i18n('d F Y', strtotime($author_acf['since'])); ?></dd>
                 <?php endif; ?>
-                <dt><?php echo __('About', 'pleklang'); ?></dt>
-                <dd><?php echo (!empty($author_description)) ? htmlspecialchars_decode($author_description) : __('This Author has no description.', 'pleklang'); ?></dd>
+                <dt><?php echo __('About', 'plekvetica'); ?></dt>
+                <dd><?php echo (!empty($author_description)) ? htmlspecialchars_decode($author_description) : __('This Author has no description.', 'plekvetica'); ?></dd>
             </dl>
         </div>
 
@@ -33,7 +33,7 @@ $page_obj = $plek_event->get_pages_object();
     <?php if ($author_posts and is_array($author_posts)) : ?>
         <div class="plek-author-posts">
             <?php
-            $text =  sprintf(__('Posts of  %s', 'pleklang'), $author->display_name);
+            $text =  sprintf(__('Posts of  %s', 'plekvetica'), $author->display_name);
             echo PlekTemplateHandler::load_template_to_var('text-bar', 'components', $text);
             ?>
             <div class="tribe-common tribe-events tribe-events-view tribe-events-view--list tribe-common--breakpoint-xsmall tribe-common--breakpoint-medium tribe-common--breakpoint-full">
@@ -51,7 +51,7 @@ $page_obj = $plek_event->get_pages_object();
                                 if ($total_posts !== null) {
                                     echo $plek_event->get_pages_count_formated($total_posts);
                                     if ($plek_event->display_more_events_button($total_posts)) {
-                                        echo $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj->page + 1), __('Load more events', 'pleklang'), '_self', 'load_more_reviews', 'ajax-loader-button');
+                                        echo $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj->page + 1), __('Load more events', 'plekvetica'), '_self', 'load_more_reviews', 'ajax-loader-button');
                                     }
                                 }
                                 ?>
