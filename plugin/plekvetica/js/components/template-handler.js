@@ -81,6 +81,7 @@ var plektemplate = {
         if (typeof id_name === 'undefined') {
             id_name = input;
         }
+
         console.log(id_name);
         jQuery('#' + id_name + '_overlay').show();
         //Reposition of the content, if overlay_content exists

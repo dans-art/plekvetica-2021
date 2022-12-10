@@ -683,8 +683,19 @@ let plek_add_event_functions = {
     show_vob_form(type) {
         plektemplate.hide_overlay();
         plektemplate.show_overlay(type);
+        this.after_show_vob_form(type);
     },
 
+    /**
+     * Action after the vob form is displayed
+     * @param {string} type The type of the vob
+     */
+    after_show_vob_form(type){
+        if(type === 'add-new-band'){
+            //Set the band origin to null
+            jQuery('#band-origin').val('NULL').trigger('change'); 
+        }
+    },
     /**
      * Sets a reminder in the localStorage.
      * 

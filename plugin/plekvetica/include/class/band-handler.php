@@ -984,7 +984,11 @@ class PlekBandHandler
         $validator->set('band-link-fb', false, 'url');
         $validator->set('band-link-web', false, 'url');
         $validator->set('band-link-insta', false, 'url');
+        $validator->set('band-link-spotify', false, 'url');
+        $validator->set('band-link-youtube', false, 'url');
+        $validator->set('band-link-twitter', false, 'url');
         $validator->set('band-videos', false, 'text');
+        $validator->set('band-infos', false, 'text');
         $validator->set_ignore('band-logo-data');
 
         if ($validator->all_fields_are_valid() !== true) {

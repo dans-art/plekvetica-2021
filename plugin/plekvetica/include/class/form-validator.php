@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) {
 class PlekFormValidator
 {
 
+    protected $fieldname = array(); //The field to validate
     protected $name = array(); //DisplayName of the field 
     protected $type = array(); //Type of the field to validate
     protected $require = array(); //Defines if the field is required and cannot be empty
@@ -67,6 +68,7 @@ class PlekFormValidator
         if ($hint !== null) {
             $this->set_hint($fieldname, $hint);
         }
+        $this -> fieldname[] = $fieldname; //Set the current fieldname
     }
 
     /**
@@ -408,14 +410,19 @@ class PlekFormValidator
      */
     public function all_fields_are_valid(array $input = null, $ignore_unset_fields = false)
     {
-        $input = ($input === null) ? $_REQUEST : $input;
+        $input = ($input === null) ? $_REQUEST : $input; //The input to check
+        $fields = $this -> fieldname; //Contains all the fields set by the set function
         if (!is_array($input)) {
             $this->set_system_error('all_fields_are_valid() - Input has to be array');
             return false;
         }
-
-        
+        // check all the fields given by the request or input variable
         foreach ($input as $fkey => $fvalue) {
+ 
+            if(false !== $found_key = array_search($fkey,$fields)){
+                unset($fields[$found_key]);
+            }
+
             if($ignore_unset_fields AND !isset($this -> type[$fkey])){
                 continue;
             }
@@ -424,6 +431,13 @@ class PlekFormValidator
             }
             foreach ($fvalue as $value) {
                 $this->field_is_valid($fkey, $value);
+            }
+        }
+        //Checks if there are fields set in the validator but not delivered by the input
+        if(!empty($fields)){
+            //Some of the fields are not delivered by the input. Those fields are invalid
+            foreach($fields as $fieldname){
+                $this -> set_error($fieldname, __('Value cannot be empty','plekvetica'));
             }
         }
         if (count($this->errors) !== 0) {

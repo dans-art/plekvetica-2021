@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plekvetica - 2021\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-10 16:33+0000\n"
+"POT-Creation-Date: 2022-12-10 15:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -260,7 +260,7 @@ msgstr ""
 msgid "All your events"
 msgstr ""
 
-#: include/class/form-validator.php:518
+#: include/class/form-validator.php:504
 msgid "Alpha Number"
 msgstr ""
 
@@ -310,7 +310,7 @@ msgstr ""
 msgid "Band settings"
 msgstr ""
 
-#: include/class/band-handler.php:1041
+#: include/class/band-handler.php:1037
 #, php-format
 msgid "Bandlogo of %s"
 msgstr ""
@@ -349,7 +349,7 @@ msgstr ""
 msgid "Best regards, %s"
 msgstr ""
 
-#: include/class/form-validator.php:533
+#: include/class/form-validator.php:519
 msgid "Boolean Value"
 msgstr ""
 
@@ -358,7 +358,7 @@ msgstr ""
 msgid "Boxoffice"
 msgstr ""
 
-#: include/class/form-validator.php:529
+#: include/class/form-validator.php:515
 msgid "Can only contain numbers, periods and minus"
 msgstr ""
 
@@ -410,7 +410,7 @@ msgstr ""
 msgid "Confirmed"
 msgstr ""
 
-#: js/manage-event.js:791
+#: js/manage-event.js:780
 msgid "Continue with adding the Event"
 msgstr ""
 
@@ -450,7 +450,7 @@ msgstr ""
 msgid "Data saved!"
 msgstr ""
 
-#: include/class/form-validator.php:525
+#: include/class/form-validator.php:511
 #: template/event/admin/event-team-accredi-list.php:17
 #: template/event/admin/event-team-calendar-accredi.php:16
 #: template/event/admin/event-team-calendar-list-item.php:15
@@ -461,7 +461,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: include/class/form-validator.php:532 template/event/meta/datetime.php:9
+#: include/class/form-validator.php:518 template/event/meta/datetime.php:9
 #: template/event/form/components/date.php:20
 msgid "Date & Time"
 msgstr ""
@@ -525,7 +525,7 @@ msgstr ""
 msgid "Edit Band"
 msgstr ""
 
-#: template/event/meta/eventmanager.php:25 js/manage-event.js:791
+#: template/event/meta/eventmanager.php:25 js/manage-event.js:780
 msgid "Edit Event"
 msgstr ""
 
@@ -545,7 +545,7 @@ msgstr ""
 msgid "Editing function for your events"
 msgstr ""
 
-#: include/class/form-validator.php:521
+#: include/class/form-validator.php:507
 #: template/event/organizer/organizer-form.php:37
 #: template/system/login/register-form.php:21
 #: template/system/userpage/organizer-data.php:20
@@ -564,7 +564,7 @@ msgstr ""
 msgid "End Date"
 msgstr ""
 
-#: include/class/form-validator.php:344
+#: include/class/form-validator.php:342
 #, php-format
 msgid "Entry is %d characters too long."
 msgstr ""
@@ -603,7 +603,7 @@ msgstr ""
 msgid "Error saving account information"
 msgstr ""
 
-#: include/class/band-handler.php:1056
+#: include/class/band-handler.php:1052
 #, php-format
 msgid "Error saving Band (%s)"
 msgstr ""
@@ -823,7 +823,7 @@ msgstr ""
 msgid "Eventmanager"
 msgstr ""
 
-#: js/manage-event.js:802
+#: js/manage-event.js:791
 msgid "Eventmanager Tipp"
 msgstr ""
 
@@ -865,7 +865,7 @@ msgstr ""
 msgid "Facebook token updated"
 msgstr ""
 
-#: include/class/form-validator.php:527
+#: include/class/form-validator.php:513
 msgid "Facebook URL"
 msgstr ""
 
@@ -941,7 +941,7 @@ msgstr ""
 msgid "File is not a valid Image. Only JPG's are allowed!."
 msgstr ""
 
-#: include/class/form-validator.php:475
+#: include/class/form-validator.php:461
 #, php-format
 msgid "File is too big (Max %d MB)"
 msgstr ""
@@ -963,7 +963,7 @@ msgstr ""
 msgid "First Name"
 msgstr ""
 
-#: include/class/band-handler.php:1262 include/class/events.php:1442
+#: include/class/band-handler.php:1258 include/class/events.php:1442
 #: template/band/meta/details.php:19 template/event/meta/details.php:7
 msgid "Follow"
 msgstr ""
@@ -1067,7 +1067,7 @@ msgstr ""
 msgid "ID of Event not found!"
 msgstr ""
 
-#: include/class/form-validator.php:531
+#: include/class/form-validator.php:517
 msgid "Image"
 msgstr ""
 
@@ -1104,7 +1104,7 @@ msgstr ""
 msgid "Info"
 msgstr ""
 
-#: include/class/form-validator.php:335
+#: include/class/form-validator.php:333
 #, php-format
 msgid "Input is %d characters too short."
 msgstr ""
@@ -1295,7 +1295,7 @@ msgstr ""
 msgid "Modifikationen und spezielle Funktionen für die Plekvetica Seite."
 msgstr ""
 
-#: include/class/form-validator.php:322
+#: include/class/form-validator.php:320
 msgid "Must not be empty."
 msgstr ""
 
@@ -1403,7 +1403,7 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: include/class/form-validator.php:380 js/components/validator-handler.js:132
+#: include/class/form-validator.php:378 js/components/validator-handler.js:132
 msgid "Nice try! No Robots allowed here!"
 msgstr ""
 
@@ -1596,7 +1596,7 @@ msgid ""
 "Notifications of changes to followed bands / events (feature coming soon)"
 msgstr ""
 
-#: include/class/form-validator.php:519
+#: include/class/form-validator.php:505
 msgid "Number"
 msgstr ""
 
@@ -1660,12 +1660,12 @@ msgstr ""
 msgid "Partner"
 msgstr ""
 
-#: include/class/form-validator.php:530
+#: include/class/form-validator.php:516
 #: template/system/login/register-form.php:24
 msgid "Password"
 msgstr ""
 
-#: include/class/form-validator.php:368
+#: include/class/form-validator.php:366
 msgid "Password must contain a letter and a number."
 msgstr ""
 
@@ -1685,7 +1685,7 @@ msgid ""
 "coming soon)"
 msgstr ""
 
-#: include/class/form-validator.php:520
+#: include/class/form-validator.php:506
 #: template/event/organizer/organizer-form.php:42
 #: template/event/venue/venue-form.php:60
 #: template/system/userpage/organizer-data.php:26
@@ -1794,7 +1794,7 @@ msgstr ""
 msgid "Previous"
 msgstr ""
 
-#: include/class/form-validator.php:529
+#: include/class/form-validator.php:515
 #: template/event/form/add-event-form-details.php:22
 #: template/event/form/edit-event-form.php:39
 msgid "Price"
@@ -1992,7 +1992,7 @@ msgstr ""
 msgid "Share Photo"
 msgstr ""
 
-#: include/class/form-validator.php:528
+#: include/class/form-validator.php:514
 msgid "Short number"
 msgstr ""
 
@@ -2087,8 +2087,8 @@ msgstr ""
 msgid "Teammember added accreditation request"
 msgstr ""
 
-#: include/class/form-validator.php:514 include/class/form-validator.php:515
-#: include/class/form-validator.php:522 include/class/form-validator.php:523
+#: include/class/form-validator.php:500 include/class/form-validator.php:501
+#: include/class/form-validator.php:508 include/class/form-validator.php:509
 msgid "Text"
 msgstr ""
 
@@ -2156,7 +2156,7 @@ msgid ""
 "Members"
 msgstr ""
 
-#: js/manage-event.js:802
+#: js/manage-event.js:791
 msgid "The Event you added misses some details. Please add them here:"
 msgstr ""
 
@@ -2176,7 +2176,7 @@ msgstr ""
 msgid "The given File is not a valid image"
 msgstr ""
 
-#: include/class/form-validator.php:305
+#: include/class/form-validator.php:303
 msgid "The given value is not allowed. Please choose something different."
 msgstr ""
 
@@ -2269,7 +2269,7 @@ msgstr ""
 msgid "This event was moved from %s to %s."
 msgstr ""
 
-#: include/class/form-validator.php:479
+#: include/class/form-validator.php:465
 #, php-format
 msgid "This file type is not allowed. (Only %s)"
 msgstr ""
@@ -2290,7 +2290,7 @@ msgstr ""
 msgid "Ticket raffle successfully posted on facebook"
 msgstr ""
 
-#: include/class/form-validator.php:524 template/event/meta/datetime.php:20
+#: include/class/form-validator.php:510 template/event/meta/datetime.php:20
 msgid "Time"
 msgstr ""
 
@@ -2365,7 +2365,7 @@ msgstr ""
 msgid "Undefined"
 msgstr ""
 
-#: include/class/band-handler.php:1260 include/class/events.php:1440
+#: include/class/band-handler.php:1256 include/class/events.php:1440
 #: template/band/meta/details.php:19 template/event/meta/details.php:7
 msgid "Unfollow"
 msgstr ""
@@ -2397,7 +2397,7 @@ msgstr ""
 msgid "Upload: "
 msgstr ""
 
-#: include/class/form-validator.php:461
+#: include/class/form-validator.php:447
 msgid "Uploaded file not found"
 msgstr ""
 
@@ -2405,7 +2405,7 @@ msgstr ""
 msgid "Uploading images..."
 msgstr ""
 
-#: include/class/form-validator.php:526
+#: include/class/form-validator.php:512
 msgid "URL"
 msgstr ""
 
@@ -2421,11 +2421,7 @@ msgstr ""
 msgid "User roles exists."
 msgstr ""
 
-#: include/class/form-validator.php:440
-msgid "Value cannot be empty"
-msgstr ""
-
-#: include/class/form-validator.php:386
+#: include/class/form-validator.php:384
 msgid "Value is not boolean"
 msgstr ""
 
@@ -2505,11 +2501,11 @@ msgstr ""
 msgid "Write Review"
 msgstr ""
 
-#: include/class/form-validator.php:355
+#: include/class/form-validator.php:353
 msgid "Wrong Format."
 msgstr ""
 
-#: include/class/form-validator.php:353
+#: include/class/form-validator.php:351
 #, php-format
 msgid "Wrong Format. Notice: %s"
 msgstr ""
@@ -2530,7 +2526,7 @@ msgid ""
 "account."
 msgstr ""
 
-#: js/manage-event.js:743
+#: js/manage-event.js:732
 msgid ""
 "You are deleting this Notification permanently. You will probably not be "
 "able to Edit this Event afterwards.\n"
@@ -2666,7 +2662,7 @@ msgstr ""
 msgid "Youtube Video"
 msgstr ""
 
-#: include/class/form-validator.php:516
+#: include/class/form-validator.php:502
 msgid "Youtube Videos"
 msgstr ""
 
