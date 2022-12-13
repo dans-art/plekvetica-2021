@@ -59,7 +59,7 @@ class PlekOrganizerHandler
     public static function get_organizer_name_by_id($organizer_id)
     {
 
-        $organizer_object = tribe_get_organizer_object($organizer_id, 'OBJECT', null);
+        $organizer_object = tribe_get_organizer_object($organizer_id, 'OBJECT');
         if ($organizer_object === null or $organizer_object->post_type !== 'tribe_organizer') {
             return false;
         }
