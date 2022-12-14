@@ -363,7 +363,7 @@ class PlekFormValidator
                 if (!empty($value)) {
                     //if (preg_match('/^[A-z]{1,}[0-9]{1,}$/m', $value) !== 1) {
                         //Check for at least one number and one a-z character
-                        $match_password = preg_match('/^([0-9]{1,}[a-z]{1,})|([a-z]{1,}[0-9]{1,})$/mi', $value);
+                        $match_password = preg_match('/([0-9]{1,}.*[A-z]{1,})|([A-z]{1,}.*[0-9]{1,})/', $value);
                     if ($match_password === 0 OR $match_password === false) {
                         $this->set_error($fieldname, __('Password must contain a letter and a number.', 'plekvetica'));
                     }
