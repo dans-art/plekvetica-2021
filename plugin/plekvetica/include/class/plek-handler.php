@@ -178,8 +178,27 @@ class PlekHandler
         return PlekTemplateHandler::load_template_to_var('author-post-items', 'posts', $authors);
     }
 
+    /**
+     * Changes the title of the My Plekvetica menu item
+     *
+     * @param [type] $items
+     * @param [type] $menu
+     * @param [type] $args
+     * @return void
+     */
     public function wp_get_nav_menu_items_filter($items, $menu, $args)
     {
+
+        //Adds the team calendar if user is in team
+        if (PlekUserHandler::user_is_in_team()) {
+            $team_calendar = new WP_Post(new stdClass);
+            $team_calendar->title = __('Team-Calendar', 'plekvetica');
+            $team_calendar->menu_order = 6;
+            $team_calendar->menu_item_parent = ($items[1]->ID) ?: 0;
+            $team_calendar->url = home_url('/team-kalender');
+            $items[] = $team_calendar;
+        }
+
         if ($menu->slug === 'oberes-menue') {
             foreach ($items as $index => $nav) {
                 if ($nav->post_name === 'login-logout') {
@@ -196,6 +215,24 @@ class PlekHandler
         return $items;
     }
 
+    /**
+     * Disables the password requirement for certain pages
+     *
+     * @param bool $required
+     * @return bool
+     */
+    public function post_password_required_filter($required)
+    {
+        //Don't display the password protection if user is in team
+        global $post;
+        $whitelist = array('team-kalender');
+        if (array_search($post->post_name, $whitelist) !== false) {
+            if (PlekUserHandler::user_is_in_team()) {
+                return false;
+            }
+        }
+        return $required;
+    }
     /**
      * Updates a ACF and checks.
      * This function will give Null, if no change
@@ -299,7 +336,7 @@ class PlekHandler
     {
         //Plugin
         load_textdomain('plekvetica', PLEK_PATH . 'languages/plekvetica-' . get_user_locale() . '.mo');
-        
+
         //Theme
         load_textdomain('plekvetica', get_stylesheet_directory() . '/languages/plekvetica-' . get_user_locale() . '.mo');
     }
@@ -635,26 +672,10 @@ class PlekHandler
              * Confirms the accreditation by the organizer
              */
             case 'confirm_accreditation':
-                $pe = new PlekEvents;
-                $pn = new PlekNotificationHandler;
-                $event_id = (isset($_GET['event_id'])) ? $_GET['event_id'] : null;
-                $security_key = (isset($_GET['key'])) ? $_GET['key'] : null;
-                if ($security_key !== md5($event_id . 'confirm_accreditation')) {
-                    return __('You are not allowed to run this action', 'plekvetica');
-                }
-                $confirm = $pe->confirm_accreditation($event_id);
-                if ($confirm === true) {
-                    //Send info to accredi Manager
-                    $pn->push_to_role(
-                        'accredi_manager',
-                        __('Accreditation confirmed', 'plekvetica'),
-                        PlekTemplateHandler::load_template_to_var('accreditation-confirmed-admin-info', 'email/event'),
-                        get_permalink($event_id)
-                    );
-                    return PlekTemplateHandler::load_template_to_var('accredi_confirm_message', 'event/organizer', $event_id);
-                } else {
-                    return sprintf(__('Error: Accreditation could not be confirmed! (%s)', 'plekvetica'), $confirm);
-                }
+                return $this->handle_organizer_accreditation_confirmation();
+                break;
+            case 'reject_accreditation':
+                return $this->handle_organizer_accreditation_reject();
                 break;
             default:
                 return __('Action not found or not supported', 'plekvetica');
@@ -691,11 +712,90 @@ class PlekHandler
         $added_filename = $parts[$last - 1];
         if ($create_unique_name) {
             $i = 0;
-            while(file_exists(implode('.', $parts)) AND $i < 100){
+            while (file_exists(implode('.', $parts)) and $i < 100) {
                 $parts[$last - 1] = $added_filename . $i;
                 $i++;
             }
         }
         return implode('.', $parts);
+    }
+
+    /**
+     * Handles the accreditation reject
+     *
+     * @return string The Form or success message
+     */
+    public function handle_organizer_accreditation_reject()
+    {
+        $pe = new PlekEvents;
+        $event_id = (isset($_GET['event_id'])) ? $_GET['event_id'] : null;
+
+        $pn = new PlekNotificationHandler;
+        $security_key = (isset($_GET['key'])) ? $_GET['key'] : null;
+        if ($security_key !== md5($event_id . 'confirm_accreditation')) {
+            return __('You are not allowed to run this action', 'plekvetica');
+        }
+        $pe->load_event($event_id);
+        //Ask for the reason first
+        if (isset($_REQUEST['rejection_reason'])) {
+            //Saves the rejection reason
+            update_field('accreditation_note', htmlspecialchars($_REQUEST['rejection_reason']), $event_id);
+            return PlekTemplateHandler::load_template_to_var('accredi_reject_message', 'event/organizer', $event_id);
+        }
+
+        $reject = $pe->reject_accreditation($event_id);
+
+        if ($reject === true) {
+            //Send info to accredi Manager
+            $pn->push_to_role(
+                'accredi_manager',
+                __('Accreditation rejected', 'plekvetica'),
+                PlekTemplateHandler::load_template_to_var('accreditation-rejected-admin-info', 'email/event'),
+                get_permalink($event_id)
+            );
+            return PlekTemplateHandler::load_template_to_var('accreditation-rejection-reason-form', 'event/organizer', $pe);
+        } else {
+            return sprintf(__('Error: Accreditation could not be rejected! (%s)', 'plekvetica'), $reject);
+        }
+    }
+
+    /**
+     * Handles the confirmation of the accreditation request
+     *
+     * @return void
+     */
+    public function handle_organizer_accreditation_confirmation()
+    {
+        $pe = new PlekEvents;
+        $pn = new PlekNotificationHandler;
+        $attach = "";
+        $event_id = (isset($_GET['event_id'])) ? $_GET['event_id'] : null;
+        $security_key = (isset($_GET['key'])) ? $_GET['key'] : null;
+        if ($security_key !== md5($event_id . 'confirm_accreditation')) {
+            return __('You are not allowed to run this action', 'plekvetica');
+        }
+
+        if (!isset($_REQUEST['confirmation_note'])) {
+            $pe -> load_event($event_id);
+            $attach .=  PlekTemplateHandler::load_template_to_var('accreditation-confirmation-note-form', 'event/organizer', $pe);
+        }else{
+            //Save note and skip reconfirmation
+            update_field('accreditation_note', htmlspecialchars($_REQUEST['confirmation_note']), $event_id);
+            return __('Note saved. Thanks!','plekvetica');
+        }
+
+        $confirm = $pe->confirm_accreditation($event_id);
+        if ($confirm === true) {
+            //Send info to accredi Manager
+            $pn->push_to_role(
+                'accredi_manager',
+                __('Accreditation confirmed', 'plekvetica'),
+                PlekTemplateHandler::load_template_to_var('accreditation-confirmed-admin-info', 'email/event'),
+                get_permalink($event_id)
+            );
+            return PlekTemplateHandler::load_template_to_var('accredi_confirm_message', 'event/organizer', $event_id) . $attach;
+        } else {
+            return sprintf(__('Error: Accreditation could not be confirmed! (%s)', 'plekvetica'), $confirm);
+        }
     }
 }

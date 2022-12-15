@@ -33,6 +33,8 @@ $watermark = PLEK_PATH.'images\watermarks\ticketraffle-2-2.png';
 $event_id = 78471;
 
 //$pn -> daily_cron_job();
-
+$plek_organi = new PlekOrganizerHandler;
+$organi_contact = $plek_organi->get_organizer_media_contact(24384);
+echo PlekTemplateHandler::load_template_to_var('organizer-accreditation-request', 'email/organizer', $organi_contact, [83446], 24384);
 
 ?>

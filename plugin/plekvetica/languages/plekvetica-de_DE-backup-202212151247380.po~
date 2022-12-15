@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2022-12-15 12:47+0000\n"
+"PO-Revision-Date: 2022-12-15 12:23+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -138,15 +138,11 @@ msgstr "Accredi Action"
 msgid "Accreditate Event for: "
 msgstr "Akkreditiere Event für:"
 
-#: include/class/plek-handler.php:791
+#: include/class/plek-handler.php:687
 msgid "Accreditation confirmed"
 msgstr "Akkreditation bestätigt"
 
-#: template/event/organizer/accreditation-confirmation-note-form.php:22
-msgid "Accreditation note"
-msgstr "Akkreditierungs Hinweis"
-
-#: include/class/plek-handler.php:751
+#: include/class/plek-handler.php:765
 msgid "Accreditation rejected"
 msgstr "Akkreditierung abgelehnt"
 
@@ -185,7 +181,7 @@ msgstr "Akkreditierungsstatus von \"%s\" wurde auf \"%s\" geändert"
 msgid "Accredited members"
 msgstr "Akkreditierte Mitglieder"
 
-#: include/class/plek-handler.php:681
+#: include/class/plek-handler.php:700
 msgid "Action not found or not supported"
 msgstr "Aktion nicht gefunden oder nicht unterstützt"
 
@@ -197,10 +193,6 @@ msgstr "Hinzufügen"
 #, php-format
 msgid "Add %s Link for the Band"
 msgstr "Link für %s hinzufügen"
-
-#: template/event/organizer/accreditation-confirmation-note-form.php:16
-msgid "Add a note?"
-msgstr "Du hast ein Hinweis für die Akkreditierung?"
 
 #: template/event/form/add-event-form-login.php:37
 msgid "Add as guest"
@@ -704,12 +696,12 @@ msgstr "Fehler, keine Events gefunden"
 msgid "Error: %s "
 msgstr "Fehler: %s "
 
-#: include/class/plek-handler.php:797
+#: include/class/plek-handler.php:693
 #, php-format
 msgid "Error: Accreditation could not be confirmed! (%s)"
 msgstr "Fehler: Akkreditierung konnte nicht bestätigt werden (%s)"
 
-#: include/class/plek-handler.php:757
+#: include/class/plek-handler.php:771
 #, php-format
 msgid "Error: Accreditation could not be rejected! (%s)"
 msgstr "Fehler: Akkreditierung konnte nicht abgelehnt werden (%s)"
@@ -1650,10 +1642,6 @@ msgstr "Keine"
 msgid "Not all user roles exist!"
 msgstr "Es sind nicht alle Benutzerrollen vorhanden!"
 
-#: include/class/plek-handler.php:783
-msgid "Note saved. Thanks!"
-msgstr "Hinweis gespeichert. Danke!"
-
 #: include/class/backend.php:58 include/class/backend.php:59
 #: template/backend/backend-options-page.php:27
 msgid "Notifications"
@@ -1975,10 +1963,6 @@ msgstr "Rolle nicht gefunden in der Einstellungsfunktion."
 msgid "Save"
 msgstr "Speichern"
 
-#: template/event/organizer/accreditation-confirmation-note-form.php:24
-msgid "Save accreditation note"
-msgstr "Speichere Hinweis zur Akkreditierung"
-
 #: js/manage-band.js:206
 msgid "Save Band..."
 msgstr "Speichere Band..."
@@ -2134,13 +2118,6 @@ msgstr "Sorry, aber du bist nicht berechtigt, diesen Event zu bearbeiten."
 #: include/class/events.php:1146
 msgid "Sorry, you are not allowed to edit this post anymore"
 msgstr "Sorry, aber du bist nicht mehr berechtigt, diesen Event zu bearbeiten "
-
-#: template/event/organizer/accreditation-confirmation-note-form.php:18
-#, php-format
-msgid "Special rules for the Event <b>%s</b> can be added below"
-msgstr ""
-"Spezielle Regeln oder Hinweise für den Event <b>%s</b> können unten "
-"eingefügt werden"
 
 #: include/class/band-handler.php:46
 #: template/backend/backend-options-page-api.php:17
@@ -2721,7 +2698,7 @@ msgstr "Du bist nicht berechtigt, diesen Veranstalter zu bearbeiten!"
 msgid "You are not allowed to edit this venue!"
 msgstr "Du bist nicht berechtigt, diesen Ort zu bearbeiten!"
 
-#: include/class/plek-handler.php:736 include/class/plek-handler.php:774
+#: include/class/plek-handler.php:680 include/class/plek-handler.php:750
 msgid "You are not allowed to run this action"
 msgstr "Du hast keine Berechtigung diese Aktion durchzuführen."
 

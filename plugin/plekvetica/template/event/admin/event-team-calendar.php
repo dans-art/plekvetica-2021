@@ -44,9 +44,9 @@ $total_events = count($events);
                     <td><?php echo $list_event->get_event_date('d-m-Y'); ?></td>
                     <td class="event_name"><a href="<?php echo get_permalink($list_event->get_ID()); ?>"><?php echo $list_event->get_name(); ?></a></td>
                     <td class='event-organi-and-location-container'>
-                        <?php if($location === $organizer): ?>
+                        <?php if ($location === $organizer) : ?>
                             <div class="event-organi-and-location"><?php echo $organizer; ?></div>
-                        <?php else: ?>
+                        <?php else : ?>
                             <div class="event-organizer">
                                 <?php echo $organizer; ?>
                             </div>
@@ -54,8 +54,14 @@ $total_events = count($events);
                                 <?php echo $location; ?>
                             </div>
                         <?php endif; ?>
-                </td>
-                    <td><?php echo $acc_status; ?></td>
+                    </td>
+                    <td>
+                        <?php
+                        echo $acc_status;
+                        echo '<br/>';
+                        echo $list_event -> get_accreditation_note();
+                        ?>
+                        </td>
                     <td><?php echo $acc_crew; ?></td>
                     <td><?php echo $list_event->get_event_interviews(true); ?></td>
                     <td>
@@ -70,7 +76,7 @@ $total_events = count($events);
         </table>
     </div>
     <div>
-        <?php echo __('Total Posts:','plekvetica') . $total_events; ?>
+        <?php echo __('Total Posts:', 'plekvetica') . $total_events; ?>
     </div>
 </div>
 <?php

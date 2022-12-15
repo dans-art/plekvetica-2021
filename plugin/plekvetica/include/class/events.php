@@ -1035,7 +1035,7 @@ class PlekEvents extends PlekEventHandler
             $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page + 1), __('Load more events', 'plekvetica'), '_self', 'load_more_reviews', 'ajax-loader-button');
         }
         if (empty($posts)) {
-            return ($short_atts['return_bool'] !== true AND $short_atts['return_bool'] !== 'true') ? __('No raffles found', 'plekvetica') : false;
+            return ($short_atts['return_bool'] !== true and $short_atts['return_bool'] !== 'true') ? __('No raffles found', 'plekvetica') : false;
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $posts, 'raffle_events') . $load_more;
     }
@@ -1456,5 +1456,52 @@ class PlekEvents extends PlekEventHandler
             return __('No Event ID found.', 'plekvetica');
         }
         return $this->set_akkredi_status(intval($event_id), 'ab');
+    }
+
+    /**
+     * Rejects a accreditation request
+     *
+     * @param string|int $event_id - The Event ID
+     * @return bool|string True on success, string on error
+     */
+    public function reject_accreditation($event_id)
+    {
+        if (empty($event_id)) {
+            return __('No Event ID found.', 'plekvetica');
+        }
+        return $this->set_akkredi_status(intval($event_id), 'no');
+    }
+
+    /**
+     * Returns reason for the accreditation rejection 
+     * @param bool $return_all
+     * @param bool $return_last
+     * @return array|string|false
+     */
+    public function get_accreditation_note($return_all = false, $return_last = true)
+    {
+        $notes = $this->get_field_value('accreditation_note', true);
+        if ($return_all) {
+            return $notes;
+        }
+        if(empty($notes) OR !is_array($notes)){
+            return false;
+        }
+        //Returns the last only or all separated by comma.
+        return ($return_last) ? $notes[count($notes) - 1] : implode(', ', $notes);
+    }
+
+    /**
+     * Sets an accreditation note
+     * @todo: Allow for multiple messages
+     * @param [type] $note
+     * @return void
+     */
+    public function set_accreditation_note($note)
+    {
+        if (!$this->get_ID()) {
+            return false;
+        }
+        return add_post_meta($this->get_ID(), 'accreditation_note', htmlspecialchars($note), true);
     }
 }

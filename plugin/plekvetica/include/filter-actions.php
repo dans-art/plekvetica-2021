@@ -29,7 +29,11 @@ add_action('admin_init', [$backend_class, 'plek_register_settings']);
 
 add_action('admin_init', [$backend_class, 'enqueue_admin_style']);
 
+//Navigation
 add_filter('wp_get_nav_menu_items', [$plek_handler, 'wp_get_nav_menu_items_filter'], 10, 3);
+
+//Password protected areas
+add_filter('post_password_required', [$plek_handler, 'post_password_required_filter']);
 
 add_action('wp_login_failed', [$plek_login_handler, 'wp_login_failed_action']);
 add_action('wp_authenticate', [$plek_login_handler, 'wp_authenticate_action'], 1, 2);
@@ -88,6 +92,8 @@ add_filter('pre_get_posts', [new PlekBandHandler, 'bandpage_pagination_hack']);
 add_filter('manage_tribe_organizer_posts_columns', [new PlekOrganizerHandler, 'filter_manage_tribe_organizer_posts_custom_columns'], 10, 2); //Add columns to the organizer page
 add_filter('manage_tribe_organizer_posts_custom_column', [new PlekOrganizerHandler, 'filter_manage_tribe_organizer_posts_custom_column'], 10, 2); //Add content to custom column
 //add_action('manage_shop_order_posts_custom_column', [$lischenMenu, 'action_shop_order_columns'], 10, 2);
+
+
 
 //Remove the Date and author from the post
 add_filter( "generate_entry_meta_post_types", function($arr){

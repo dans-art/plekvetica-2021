@@ -35,16 +35,40 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
                         $pe = new PlekEvents;
                         $pe->load_event($event_id);
                         $event_name =  $pe->get_name();
-                        $security_key = md5($event_id.'confirm_accreditation');
-                        $confirm_accredi_button_link = get_permalink( $plek_handler->get_plek_option('plek_ex_actions_page') ). '?action=confirm_accreditation&event_id='.$event_id.'&organizer_id='.$organizer_id.'&key='.$security_key;
+                        $security_key = md5($event_id . 'confirm_accreditation');
+                        $confirm_accredi_button_link = get_permalink(
+                            $plek_handler->get_plek_option('plek_ex_actions_page')
+                        ) . '?action=confirm_accreditation&event_id=' . $event_id . '&organizer_id=' . $organizer_id . '&key=' . $security_key;
+                        $reject_accredi_button_link = get_permalink(
+                            $plek_handler->get_plek_option('plek_ex_actions_page')
+                        ) . '?action=reject_accreditation&event_id=' . $event_id . '&organizer_id=' . $organizer_id . '&key=' . $security_key;
                         ?>
                         <a href="<?php echo get_permalink($pe->get_ID()); ?>" target="_blank"><?php echo $event_name; ?></a><br />
-                        <?php echo $pe->get_event_date('d.m.Y'); ?><br/>
+                        <?php echo $pe->get_event_date('d.m.Y'); ?><br />
                         <?php echo $pe->get_event_akkredi_crew_formated('<br/>');
                         ?><br />
-                        <?php PlekTemplateHandler::load_template('button', 'components', $confirm_accredi_button_link, sprintf(__('Confirm accreditation for %s', 'plekvetica'), $event_name), '_blank'); ?><br />
+                        <?php PlekTemplateHandler::load_template(
+                            'button',
+                            'components',
+                            $reject_accredi_button_link,
+                            sprintf(__('Reject accreditation for %s', 'plekvetica'), $event_name),
+                            '_blank'
+                        ); ?><br />
+                        <?php PlekTemplateHandler::load_template(
+                            'button',
+                            'components',
+                            $confirm_accredi_button_link,
+                            sprintf(__('Confirm accreditation for %s', 'plekvetica'), $event_name),
+                            '_blank',
+                            '',
+                            '',
+                            '',
+                            'background-color:' . $color_green_light, //From email-styles.php
+                        ); ?><br />
                         <br />
                     <?php endforeach; ?>
+                <?php else: ?>
+                    <?php echo __('Error, no Events found','plekvetica'); ?>
                 <?php endif; ?>
                 <?php echo __('Thanks in advance and have a great Day!', 'plekvetica'); ?>
                 <br />

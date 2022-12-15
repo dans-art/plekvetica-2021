@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plekvetica - 2021\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-10 16:33+0000\n"
+"POT-Creation-Date: 2022-12-15 12:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -134,8 +134,16 @@ msgstr ""
 msgid "Accreditate Event for: "
 msgstr ""
 
-#: include/class/plek-handler.php:650
+#: include/class/plek-handler.php:791
 msgid "Accreditation confirmed"
+msgstr ""
+
+#: template/event/organizer/accreditation-confirmation-note-form.php:22
+msgid "Accreditation note"
+msgstr ""
+
+#: include/class/plek-handler.php:751
+msgid "Accreditation rejected"
 msgstr ""
 
 #: template/email/organizer/organizer-accreditation-request.php:24
@@ -173,7 +181,7 @@ msgstr ""
 msgid "Accredited members"
 msgstr ""
 
-#: include/class/plek-handler.php:660
+#: include/class/plek-handler.php:681
 msgid "Action not found or not supported"
 msgstr ""
 
@@ -184,6 +192,10 @@ msgstr ""
 #: template/band/band-form.php:69
 #, php-format
 msgid "Add %s Link for the Band"
+msgstr ""
+
+#: template/event/organizer/accreditation-confirmation-note-form.php:16
+msgid "Add a note?"
 msgstr ""
 
 #: template/event/form/add-event-form-login.php:37
@@ -343,7 +355,7 @@ msgstr ""
 msgid "Bandscore"
 msgstr ""
 
-#: template/email/organizer/organizer-accreditation-request.php:51
+#: template/email/organizer/organizer-accreditation-request.php:75
 #: template/email/organizer/organizer-new-review-info.php:31
 #, php-format
 msgid "Best regards, %s"
@@ -401,9 +413,13 @@ msgstr ""
 msgid "Community / Fan"
 msgstr ""
 
-#: template/email/organizer/organizer-accreditation-request.php:45
+#: template/email/organizer/organizer-accreditation-request.php:61
 #, php-format
 msgid "Confirm accreditation for %s"
+msgstr ""
+
+#: template/event/organizer/accreditation-rejection-reason-form.php:25
+msgid "Confirm Accreditation rejection"
 msgstr ""
 
 #: include/class/event-handler.php:1389
@@ -468,6 +484,10 @@ msgstr ""
 
 #: template/email/event/accreditation-confirmed-admin-info.php:35
 msgid "Date of confirmation"
+msgstr ""
+
+#: template/email/event/accreditation-rejected-admin-info.php:36
+msgid "Date of rejection"
 msgstr ""
 
 #: template/system/user-settings/band-settings-form.php:18
@@ -669,14 +689,23 @@ msgstr ""
 msgid "Error while updating the event featured status"
 msgstr ""
 
+#: template/email/organizer/organizer-accreditation-request.php:71
+msgid "Error, no Events found"
+msgstr ""
+
 #: include/class/notification-handler.php:573
 #, php-format
 msgid "Error: %s "
 msgstr ""
 
-#: include/class/plek-handler.php:656
+#: include/class/plek-handler.php:797
 #, php-format
 msgid "Error: Accreditation could not be confirmed! (%s)"
+msgstr ""
+
+#: include/class/plek-handler.php:757
+#, php-format
+msgid "Error: Accreditation could not be rejected! (%s)"
 msgstr ""
 
 #: include/class/event-handler.php:2033
@@ -836,7 +865,7 @@ msgstr ""
 msgid "Events %d to %d of %d"
 msgstr ""
 
-#: include/class/plek-handler.php:438
+#: include/class/plek-handler.php:475
 msgid "Every 6 Minutes"
 msgstr ""
 
@@ -1162,6 +1191,12 @@ msgstr ""
 msgid "Involved since:"
 msgstr ""
 
+#: template/event/organizer/accreditation-rejection-reason-form.php:19
+msgid ""
+"It would be helpful for us to have a reason for the rejection, If you can, "
+"please provide us some additional information. (optional)"
+msgstr ""
+
 #: js/components/template-handler.js:68
 msgid "Items found:"
 msgstr ""
@@ -1218,7 +1253,7 @@ msgstr ""
 msgid "Logged in as:"
 msgstr ""
 
-#: include/class/plek-handler.php:190
+#: include/class/plek-handler.php:209
 msgid "Login"
 msgstr ""
 
@@ -1256,6 +1291,7 @@ msgid "Mark this event as postponed"
 msgstr ""
 
 #: template/email/event/accreditation-confirmed-admin-info.php:34
+#: template/email/event/accreditation-rejected-admin-info.php:35
 msgid "Media contact"
 msgstr ""
 
@@ -1306,7 +1342,7 @@ msgstr ""
 msgid "My followed Bands"
 msgstr ""
 
-#: include/class/plek-handler.php:187 template/system/my-plekvetica-page.php:14
+#: include/class/plek-handler.php:206 template/system/my-plekvetica-page.php:14
 msgid "My Plekvetica"
 msgstr ""
 
@@ -1447,10 +1483,11 @@ msgstr ""
 
 #: include/class/events.php:1171
 #: template/event/organizer/accredi_confirm_message.php:14
+#: template/event/organizer/accredi_reject_message.php:14
 msgid "No Event ID found"
 msgstr ""
 
-#: include/class/events.php:1456
+#: include/class/events.php:1456 include/class/events.php:1470
 msgid "No Event ID found."
 msgstr ""
 
@@ -1586,6 +1623,10 @@ msgstr ""
 msgid "Not all user roles exist!"
 msgstr ""
 
+#: include/class/plek-handler.php:783
+msgid "Note saved. Thanks!"
+msgstr ""
+
 #: include/class/backend.php:58 include/class/backend.php:59
 #: template/backend/backend-options-page.php:27
 msgid "Notifications"
@@ -1610,6 +1651,7 @@ msgstr ""
 
 #: include/class/event-handler.php:2870 include/class/user-handler.php:18
 #: template/email/event/accreditation-confirmed-admin-info.php:33
+#: template/email/event/accreditation-rejected-admin-info.php:34
 #: template/event/admin/event-team-calendar-accredi.php:15
 #: template/event/form/add-event-form-details.php:18
 #: template/event/form/edit-event-form.php:36
@@ -1828,12 +1870,26 @@ msgstr ""
 msgid "Push again"
 msgstr ""
 
+#: template/email/event/accreditation-rejected-admin-info.php:37
+#: template/event/organizer/accreditation-rejection-reason-form.php:23
+msgid "Reason"
+msgstr ""
+
 #: template/event/single-view.php:62
 msgid "Recommended by us"
 msgstr ""
 
 #: template/system/login/register-form.php:30
 msgid "Register as..."
+msgstr ""
+
+#: template/email/organizer/organizer-accreditation-request.php:54
+#, php-format
+msgid "Reject accreditation for %s"
+msgstr ""
+
+#: template/event/organizer/accreditation-rejection-reason-form.php:16
+msgid "Rejection of the accreditation request"
 msgstr ""
 
 #: template/system/login/register-form.php:27
@@ -1882,6 +1938,10 @@ msgstr ""
 #: template/event/organizer/organizer-form.php:58
 #: template/event/venue/venue-form.php:71
 msgid "Save"
+msgstr ""
+
+#: template/event/organizer/accreditation-confirmation-note-form.php:24
+msgid "Save accreditation note"
 msgstr ""
 
 #: js/manage-band.js:206
@@ -2038,6 +2098,11 @@ msgstr ""
 msgid "Sorry, you are not allowed to edit this post anymore"
 msgstr ""
 
+#: template/event/organizer/accreditation-confirmation-note-form.php:18
+#, php-format
+msgid "Special rules for the Event <b>%s</b> can be added below"
+msgstr ""
+
 #: include/class/band-handler.php:46
 #: template/backend/backend-options-page-api.php:17
 #: template/band/meta/spotify.php:14
@@ -2083,6 +2148,10 @@ msgstr ""
 msgid "Team Member <b>%s</b> added a accreditation request."
 msgstr ""
 
+#: include/class/plek-handler.php:195
+msgid "Team-Calendar"
+msgstr ""
+
 #: include/class/event-handler.php:1501
 msgid "Teammember added accreditation request"
 msgstr ""
@@ -2114,8 +2183,17 @@ msgstr ""
 msgid "Thanks for your contribution"
 msgstr ""
 
-#: template/email/organizer/organizer-accreditation-request.php:49
+#: template/event/organizer/accredi_reject_message.php:28
+msgid "Thanks for your feedback"
+msgstr ""
+
+#: template/email/organizer/organizer-accreditation-request.php:73
 msgid "Thanks in advance and have a great Day!"
+msgstr ""
+
+#: template/event/organizer/accredi_reject_message.php:30
+#, php-format
+msgid "The accreditation request for the Event <b>%s</b> got rejected"
 msgstr ""
 
 #: include/class/event-handler.php:1576
@@ -2142,6 +2220,11 @@ msgstr ""
 #: template/email/event/accreditation-confirmed-admin-info.php:30
 #, php-format
 msgid "The Event %s got confirmed by the organizer."
+msgstr ""
+
+#: template/email/event/accreditation-rejected-admin-info.php:31
+#, php-format
+msgid "The Event %s got rejected by the organizer."
 msgstr ""
 
 #: template/event/organizer/accredi_confirm_message.php:48
@@ -2309,6 +2392,11 @@ msgstr ""
 msgid "to"
 msgstr ""
 
+#: template/event/organizer/accreditation-rejection-reason-form.php:18
+#, php-format
+msgid "To bad, we where exited to got to <b>%s</b> at %s."
+msgstr ""
+
 #: template/system/user-settings/user-settings-main.php:17
 #, php-format
 msgid "To change your avatar, you have to set or replace it via %s"
@@ -2349,7 +2437,7 @@ msgstr ""
 msgid "Today"
 msgstr ""
 
-#: template/event/admin/event-team-calendar.php:73
+#: template/event/admin/event-team-calendar.php:79
 msgid "Total Posts:"
 msgstr ""
 
@@ -2564,7 +2652,7 @@ msgstr ""
 msgid "You are not allowed to edit this venue!"
 msgstr ""
 
-#: include/class/plek-handler.php:643
+#: include/class/plek-handler.php:736 include/class/plek-handler.php:774
 msgid "You are not allowed to run this action"
 msgstr ""
 
