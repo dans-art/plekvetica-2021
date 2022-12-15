@@ -193,7 +193,6 @@ class PlekHandler
         if (PlekUserHandler::user_is_in_team()) {
             $team_calendar = new WP_Post(new stdClass);
             $team_calendar->title = __('Team-Calendar', 'plekvetica');
-            $team_calendar->menu_order = 6;
             $team_calendar->menu_item_parent = ($items[1]->ID) ?: 0;
             $team_calendar->url = home_url('/team-kalender');
             $items[] = $team_calendar;
