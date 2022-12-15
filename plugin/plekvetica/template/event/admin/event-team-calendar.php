@@ -59,9 +59,9 @@ $total_events = count($events);
                         <?php
                         echo $acc_status;
                         echo '<br/>';
-                        echo $list_event -> get_accreditation_note();
+                        echo $list_event->get_accreditation_note(false, true);
                         ?>
-                        </td>
+                    </td>
                     <td><?php echo $acc_crew; ?></td>
                     <td><?php echo $list_event->get_event_interviews(true); ?></td>
                     <td>

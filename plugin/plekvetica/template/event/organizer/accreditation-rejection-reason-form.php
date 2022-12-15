@@ -16,11 +16,12 @@ $page = get_permalink(
 <h1><?php echo __('Rejection of the accreditation request', 'plekvetica') ?></h1>
 <div>
     <?php echo sprintf(__('To bad, we where exited to got to <b>%s</b> at %s.', 'plekvetica'), $event_name, $event_date); ?><br />
+    <?php echo __('The Event accreditation status got updated as rejected', 'plekvetica'); ?><br />
     <?php echo __('It would be helpful for us to have a reason for the rejection, If you can, please provide us some additional information. (optional)', 'plekvetica') ?>
 </div>
 <br />
 <form action="<?php echo  $page; ?>" method="post">
     <label for="rejection_reason"><?php echo __('Reason', 'plekvetica'); ?></label>
     <textarea name="rejection_reason" id="rejection_reason" cols="5" rows="10"></textarea>
-    <button class="plek-button" type="submit"><?php echo __('Confirm Accreditation rejection', 'plekvetica') ?></button>
+    <button class="plek-button" type="submit"><?php echo __('Save accreditation rejection note', 'plekvetica') ?></button>
 </form>

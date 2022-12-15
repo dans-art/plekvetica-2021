@@ -109,6 +109,13 @@ $missing_details = $plek_event->get_missing_event_details();
                     <?php echo PlekUserHandler::get_user_display_name($member); ?>
                 </dd>
             <?php endforeach; ?>
+            <dt><?php echo __('Accreditation note', 'plekvetica'); ?></dt>
+            <dd class="event-akkredi-note">
+                <?php
+                $notes =  $plek_event->get_accreditation_note(false, false);
+                echo (!empty($notes)) ? implode('<br/>', $notes) : '-';
+                ?>
+            </dd>
             <dt><?php echo __('Interviews', 'plekvetica'); ?></dt>
             <dd class="event-interview-status">
                 <?php if (!empty($interviews)) {

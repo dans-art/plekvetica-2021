@@ -25,8 +25,6 @@ $event_name = $pe -> get_name();
 ?>
 
 <div>
-    <h2><?php echo __('Thanks for your feedback', 'plekvetica'); ?></h2>
-    
-    <?php echo sprintf(__('The accreditation request for the Event <b>%s</b> got rejected', 'plekvetica'), $event_name); ?>
+    <h2><?php echo __('Thanks for your feedback', 'plekvetica'); ?></h2>  
   
 </div>

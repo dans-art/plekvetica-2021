@@ -739,7 +739,7 @@ class PlekHandler
         //Ask for the reason first
         if (isset($_REQUEST['rejection_reason'])) {
             //Saves the rejection reason
-            update_field('accreditation_note', htmlspecialchars($_REQUEST['rejection_reason']), $event_id);
+            $pe -> set_accreditation_note($_REQUEST['rejection_reason']);
             return PlekTemplateHandler::load_template_to_var('accredi_reject_message', 'event/organizer', $event_id);
         }
 
@@ -775,12 +775,12 @@ class PlekHandler
             return __('You are not allowed to run this action', 'plekvetica');
         }
 
+        $pe -> load_event($event_id);
         if (!isset($_REQUEST['confirmation_note'])) {
-            $pe -> load_event($event_id);
             $attach .=  PlekTemplateHandler::load_template_to_var('accreditation-confirmation-note-form', 'event/organizer', $pe);
         }else{
             //Save note and skip reconfirmation
-            update_field('accreditation_note', htmlspecialchars($_REQUEST['confirmation_note']), $event_id);
+            $pe -> set_accreditation_note($_REQUEST['confirmation_note']);
             return __('Note saved. Thanks!','plekvetica');
         }
 

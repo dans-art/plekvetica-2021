@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2022-12-15 17:58+0000\n"
+"PO-Revision-Date: 2022-12-15 17:13+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -360,7 +360,7 @@ msgstr "Bands zum verwalten"
 msgid "Bandscore"
 msgstr "Bandscore"
 
-#: template/email/organizer/organizer-accreditation-request.php:79
+#: template/email/organizer/organizer-accreditation-request.php:75
 #: template/email/organizer/organizer-new-review-info.php:31
 #, php-format
 msgid "Best regards, %s"
@@ -420,7 +420,7 @@ msgstr "Schliessen"
 msgid "Community / Fan"
 msgstr "Community / Fan"
 
-#: template/email/organizer/organizer-accreditation-request.php:65
+#: template/email/organizer/organizer-accreditation-request.php:61
 #, php-format
 msgid "Confirm accreditation for %s"
 msgstr "Bestätige die Akkreditierung für %s"
@@ -692,7 +692,7 @@ msgstr "Fehler beim aktualisieren des Akkreditierungsstatus"
 msgid "Error while updating the event featured status"
 msgstr "Fehler beim aktualisieren des hervorgehoben Status."
 
-#: template/email/organizer/organizer-accreditation-request.php:75
+#: template/email/organizer/organizer-accreditation-request.php:71
 msgid "Error, no Events found"
 msgstr "Fehler, keine Events gefunden"
 
@@ -1919,7 +1919,7 @@ msgstr "Von uns empfohlen"
 msgid "Register as..."
 msgstr "Registrieren als..."
 
-#: template/email/organizer/organizer-accreditation-request.php:56
+#: template/email/organizer/organizer-accreditation-request.php:54
 #, php-format
 msgid "Reject accreditation for %s"
 msgstr "Akkreditierung für %s ablehnen"
@@ -2238,9 +2238,14 @@ msgstr "Danke für deinen Beitrag"
 msgid "Thanks for your feedback"
 msgstr "Danke für deine Rückmeldung"
 
-#: template/email/organizer/organizer-accreditation-request.php:77
+#: template/email/organizer/organizer-accreditation-request.php:73
 msgid "Thanks in advance and have a great Day!"
 msgstr "Danke im voraus und einen schönen Tag wünschen wir!"
+
+#: template/event/organizer/accredi_reject_message.php:30
+#, php-format
+msgid "The accreditation request for the Event <b>%s</b> got rejected"
+msgstr "Die Akkreditierungsanfrage für den Event <b>%s</b> wurde abgelehnt."
 
 #: include/class/event-handler.php:1576
 #, php-format

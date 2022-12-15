@@ -311,7 +311,8 @@ class PlekAjaxHandler
                     }
                     $this->set_success(__('Accreditation request sent to organizer', 'plekvetica'));
                 } else {
-                    $this->set_error($send_mail);
+                    $error_msg = ($send_mail === false) ? __('Failed to send mail.','plekvetica') : $send_mail;
+                    $this->set_error($error_msg);
                 }
                 break;
             default:

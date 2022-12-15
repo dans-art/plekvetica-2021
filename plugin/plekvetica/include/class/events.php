@@ -1474,21 +1474,35 @@ class PlekEvents extends PlekEventHandler
 
     /**
      * Returns reason for the accreditation rejection 
-     * @param bool $return_all
+     * @param bool $raw
      * @param bool $return_last
      * @return array|string|false
      */
-    public function get_accreditation_note($return_all = false, $return_last = true)
+    public function get_accreditation_note($raw = false, $return_last = true)
     {
-        $notes = $this->get_field_value('accreditation_note', true);
-        if ($return_all) {
+        $notes = $this->get_field_value('accreditation_note');
+        $notes =  maybe_unserialize($notes);
+        if (!is_array($notes)) {
+            $notes = array($notes);
+        }
+        if ($raw) {
             return $notes;
         }
-        if(empty($notes) OR !is_array($notes)){
-            return false;
+        if (empty($notes)) {
+            return '';
         }
         //Returns the last only or all separated by comma.
-        return ($return_last) ? $notes[count($notes) - 1] : implode(', ', $notes);
+        if($return_last){
+            $last_key = array_key_last($notes);
+            return $notes[$last_key];
+        }
+        $return = array();
+        foreach($notes as $time => $message){
+            if(!empty($message)){
+                $return[] = date('d-m-Y H:i', $time) . ' - ' . $message;
+            } 
+        }
+        return $return;
     }
 
     /**
@@ -1502,6 +1516,9 @@ class PlekEvents extends PlekEventHandler
         if (!$this->get_ID()) {
             return false;
         }
-        return add_post_meta($this->get_ID(), 'accreditation_note', htmlspecialchars($note), true);
+        $existing_note = $this->get_accreditation_note(true);
+        $existing_note[time()] = $note;
+
+        return update_field('accreditation_note', $existing_note, $this->get_ID());
     }
 }
