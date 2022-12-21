@@ -223,6 +223,10 @@ class PlekNotificationHandler extends WP_List_Table
         return false;
     }
 
+    public static function push_to_band_user($band_id){
+
+    }
+
     /**
      * Pushes a notification to the Organizer.
      * This is function expects a Tribe_Events Organizer ID!
@@ -1067,8 +1071,6 @@ class PlekNotificationHandler extends WP_List_Table
             PlekNotificationHandler::push_to_admin('Tickets to raffle', $raffle);
         }
 
-        //Send info about new reviews to organizer
-        self::send_new_reviews_to_promoter();
     }
 
     /**
@@ -1076,27 +1078,29 @@ class PlekNotificationHandler extends WP_List_Table
      *
      * @return void
      */
-    public static function send_new_reviews_to_promoter()
+    public static function send_review_to_promoter($event_id = null)
     {
         //Get the Reviews from the past 2 days
         $meta_query['is_review'] = array('key' => 'is_review', 'compare' => '=', 'value' => '1');
         $args = [
             'eventDisplay'   => 'custom',
-            'start_date'     => date('Y-m-d', time() -  60 * 60 * 24 * 60), // Last 3 days 
-            'end_date'     => date('Y-m-d', time()), // One day today 
             'order'       => 'ASC',
-            'order_by'       => 'start_date',
-            'meta_query' => $meta_query
+            'meta_query' => $meta_query,
+            'ID' => intval($event_id)
         ];
         $events = tribe_get_events($args);
-
+ 
         if (empty($events)) {
-            return null;
+            return __('No Event found, or Event is not a Review','plekvetica');
         }
+        if(count($events) > 1){
+            return __('More than one Event found. This should not happen!','plekvetica');
+        }
+
         foreach ($events as $event) {
             $promo_set = get_field('organizer_review_promo_sent', $event->ID);
             if ($promo_set === '1' OR $promo_set === true) {
-                continue; //Skip if already sent
+                return __('Email already sent!','plekvetica');
             }
             //Load the Event
             $pe = new PlekEvents;
@@ -1104,7 +1108,7 @@ class PlekNotificationHandler extends WP_List_Table
             //Load the organizers
             $organizer = $pe->get_field_value('_EventOrganizerID', true);
             if (!is_array($organizer)) {
-                continue; //Skip if no organizer found
+                return __('No Organizer found!','plekvetica');
             }
             //Craft the email
             $email_subject = __('A new review has ben published at Plekvetica', 'plekvetica');
@@ -1112,14 +1116,15 @@ class PlekNotificationHandler extends WP_List_Table
             foreach ($organizer as $organi_id) {
                 //Get the promoter email (ACF)
                 $promo_email = get_field('email_organi_promoter', $organi_id);
-
+ 
+                //Fallback, try to get the regular email
                 if (empty($promo_email)) {
-                    //Fallback, try to get the regular email
                     $promo_email = get_post_meta($organi_id, '_OrganizerEmail', true);
                 }
+                //No promo and no regular email found
                 if (empty($promo_email)) {
                     //No email found, skip organizer
-                    continue;
+                    return __('No Organizer email found!','plekvetica');
                 }
                 if (is_email($promo_email)) {
                     $emailer = new PlekEmailSender;
@@ -1138,6 +1143,11 @@ class PlekNotificationHandler extends WP_List_Table
                     );
                 }
             }
+
+            // @todo Send Info to Band users as well
+            //Get Bands
+            //Loop
+            //self::push_to_band_user($band);
         }
         return true;
     }

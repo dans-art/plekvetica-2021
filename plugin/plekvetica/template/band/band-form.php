@@ -84,7 +84,7 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
                 ?>
 
                 <div id="<?php echo $form_id; ?>-container" class="item-con" style="display:<?php echo (empty($social_link)) ? 'none' : 'flex'; ?>;">
-                    <label for="<?php echo $form_id; ?>"><?php echo $name; ?></label>
+                    <label class="social_media_label" for="<?php echo $form_id; ?>"><?php echo $name; ?></label>
                     <span class="<?php echo $fa_class; ?> input-icon"></span>
                     <input id="<?php echo $form_id; ?>" class='band-social-input' name="<?php echo $form_id; ?>" type="text" value="<?php echo $social_link; ?>"></input>
                     <div class="input-instructions"><?php echo $instructions; ?></div>
@@ -97,6 +97,7 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
                     <input id="add-band-video-input" type="text" value=""></input>
                     <button id="add-band-video" class="plek-button" type="button"><?php echo __('Add', 'plekvetica'); ?></button>
                 </div>
+                <div class="input-instructions"><?php echo __('Add a Video URL from Youtube and click on "Add"','plekvetica'); ?></div>
                 <textarea id="band-videos" name="band-videos" type="text"><?php echo $band->get_videos(false); ?></textarea>
             </div>
         </fieldset>

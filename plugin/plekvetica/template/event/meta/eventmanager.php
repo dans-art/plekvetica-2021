@@ -88,6 +88,19 @@ $missing_details = $plek_event->get_missing_event_details();
             <a name="revisionEvent" class="plek-button full-width <?php echo ''; ?> plekRevision" data-eventid="<?php echo $event_id . "," . $rev_id; ?>"><?php echo __("Show revision", "plekvetica"); ?><div class='smallText'><?php echo $plek_event->get_revision_modified_date($rev_id); ?></div></a>
         <?php endforeach; ?>
     <?php endif; ?>
+    <?php
+    //Review info email Button  
+    $sent = get_field('organizer_review_promo_sent', $event->ID); 
+    if (PlekUserHandler::current_user_can_edit($plek_event) and $plek_event->is_review() AND !($sent === '1' OR $sent === true)) : ?>
+        <?php
+        global $plek_handler;
+        $plek_handler->enqueue_toastr();
+        $rev = $plek_event->get_event_revisions();
+        ?>
+        <a id="sendEventReview" name="sendEventReview" class="plek-button full-width blue" data-eventid="<?php echo $event_id; ?>">
+            <?php echo __('Send Review Mail to Organizer', 'plekvetica'); ?>
+        </a>
+    <?php endif; ?>
 
     <?php
     //Accreditations & Interview status and crew

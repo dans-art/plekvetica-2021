@@ -134,6 +134,11 @@ let plek_single_event_main = {
             plek_main.activate_button_loader('#raffleEvent', __('Posting ticket raffle...', 'plekvetica'));
             plek_single_event_main.do_ajax_social_media_post_event('ticket_raffle', 'raffleEvent');
         });
+        //Event review sender Button
+        jQuery('#sendEventReview').click(() => {
+            plek_main.activate_button_loader('#sendEventReview', __('Sending email...', 'plekvetica'));
+            plek_single_event_main.do_ajax_social_media_post_event('send_event_review', 'sendEventReview');
+        });
         //Add Accreditation Button
         jQuery("#plekSetAkkreiCrewBtn").click(() => {
             plek_main.activate_button_loader('#plekSetAkkreiCrewBtn', 'Registriere akkreditierung...');

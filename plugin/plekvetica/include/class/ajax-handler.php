@@ -204,15 +204,25 @@ class PlekAjaxHandler
                     $this->set_error($promote);  //Error Message from Facebook SDK
                 }
                 break;
-                case 'ticket_raffle':
-                    $event_id = $this->get_ajax_data('id');
-                    $plek_event->load_event($event_id);
-                    $post = $plek_event->post_ticket_raffle_on_facebook();
-                    if ($post === true) {
-                        $this->set_success(__('Ticket raffle successfully posted on facebook', 'plekvetica'));
-                    } else {
-                        $this->set_error($post);  //Error Message from Facebook SDK
-                    }
+            case 'ticket_raffle':
+                $event_id = $this->get_ajax_data('id');
+                $plek_event->load_event($event_id);
+                $post = $plek_event->post_ticket_raffle_on_facebook();
+                if ($post === true) {
+                    $this->set_success(__('Ticket raffle successfully posted on facebook', 'plekvetica'));
+                } else {
+                    $this->set_error($post);  //Error Message from Facebook SDK
+                }
+                break;
+            case 'send_event_review':
+                $event_id = $this->get_ajax_data('id');
+                $plek_event->load_event($event_id);
+                $send = PlekNotificationHandler::send_review_to_promoter($event_id);
+                if($send === true){
+                    $this->set_success(__('Email sent!', 'plekvetica'));
+                } else {
+                    $this->set_error($send); //Error Message from function
+                }
                 break;
             case 'remove_akkredi_member':
                 $event_id = (int) $this->get_ajax_data('id');
@@ -311,7 +321,7 @@ class PlekAjaxHandler
                     }
                     $this->set_success(__('Accreditation request sent to organizer', 'plekvetica'));
                 } else {
-                    $error_msg = ($send_mail === false) ? __('Failed to send mail.','plekvetica') : $send_mail;
+                    $error_msg = ($send_mail === false) ? __('Failed to send mail.', 'plekvetica') : $send_mail;
                     $this->set_error($error_msg);
                 }
                 break;
@@ -921,7 +931,7 @@ class PlekAjaxHandler
      */
     public function set_error(mixed $message, string $field = "")
     {
-        if(!is_string($message)){
+        if (!is_string($message)) {
             $message = serialize($message);
         }
         if (!empty($field)) {

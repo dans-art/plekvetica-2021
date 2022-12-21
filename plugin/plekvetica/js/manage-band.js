@@ -1,3 +1,4 @@
+"use strict"
 /**
  * Load this script on the Bandpage as well.
  */
@@ -128,13 +129,30 @@ let plek_band = {
         } else {
             var videos = jQuery('#band-videos').val().split("\n");
         }
-        console.log(videos);
         jQuery(videos).each(function (i, val) {
             plek_band.load_youtube_video(val, i);
         });
     },
 
-    load_youtube_video(video_id, item_id) {
+    /**
+     * Strips the URL from a Video and returns the ID
+     * @param {string} url The url or id of a youtube video
+     * @returns {string} Youtube Video ID
+     */
+    get_youtube_video_id(url){
+        //Extract the ID from the url
+        let parms = new URLSearchParams(url);
+        let video_id = url; //Fallback if url is already the ID
+
+        for (const[key, value] of parms.entries()){
+            if(key.search('watch') > -1){
+                video_id = value;
+            }
+        }
+        return video_id
+    },
+
+    async load_youtube_video(video_id, item_id) {
         var data = new FormData();
         if (video_id.length === 0) {
             return false;
@@ -146,7 +164,7 @@ let plek_band = {
         jQuery('#video_preview_con').append('<div class="video_preview_item" id="video_' + item_id + '" data-videoid="' + video_id + '">' + loading + '</div>');
 
 
-        jQuery.ajax({
+        return jQuery.ajax({
             url: window.ajaxurl,
             type: 'POST',
             cache: false,
@@ -156,24 +174,47 @@ let plek_band = {
             success: function success(data) {
                 console.log('success');
                 let cancel_btn = '<span class="remove_video" data-videoid="' + video_id + '" data-itemid="' + item_id + '"><i class="fas fa-times"></i></span>';
+                //Empty response. Remove Preview item
+                if(data.length === 0){
+                    jQuery('#video_preview_con .video_preview_item').last().remove();
+                    plekerror.display_info(__('Info', 'plekvetica'), __('Video not found. Maybe the Video is private or the ID is incorrect','plekvetica'));
+                    return false;
+                }
                 jQuery('#video_' + item_id).html(cancel_btn + data);
-                //console.log(data);
+                return true;
             },
             error: function error(data) {
                 console.log(data);
+                return false;
             }
         });
     },
 
-    add_band_video() {
+    /**
+     * Adds a Band video to the band-videos textarea
+     * @returns {bool}
+     */
+    async add_band_video() {
         let new_vid = jQuery('#add-band-video-input').val();
+        const new_vid_yt_id = plek_band.get_youtube_video_id(new_vid);
         jQuery('#add-band-video-input').val(''); //Set Value to null again
-        var videos = jQuery('#band-videos').val().split("\n");
+        const videos = jQuery('#band-videos').val();
+        if(videos.search(new_vid_yt_id) > -1){
+            plekerror.display_info(__('Info', 'plekvetica'), __('Youtube Video already added','plekvetica'));
+            return false;
+        }
+        let videos_arr = videos.split("\n");
         var item_id = videos.length; //This gives the length before adding. Will be the position in the array for the new element.
-        videos.push(new_vid);
-        let vid_join = videos.join('\n');
-        jQuery('#band-videos').val(vid_join);
-        plek_band.load_youtube_video(new_vid, item_id);
+
+        //Wait if the adding was successful
+        const loaded_video = await plek_band.load_youtube_video(new_vid_yt_id, item_id);
+        if(loaded_video.length > 0){
+            //Add it to the list
+            videos_arr.push(new_vid_yt_id);
+            let vid_join = videos_arr.join('\n');
+            jQuery('#band-videos').val(vid_join);
+        }
+        return true;
     },
 
     /**

@@ -91,7 +91,6 @@ add_filter('pre_get_posts', [new PlekBandHandler, 'bandpage_pagination_hack']);
 //Organizer page
 add_filter('manage_tribe_organizer_posts_columns', [new PlekOrganizerHandler, 'filter_manage_tribe_organizer_posts_custom_columns'], 10, 2); //Add columns to the organizer page
 add_filter('manage_tribe_organizer_posts_custom_column', [new PlekOrganizerHandler, 'filter_manage_tribe_organizer_posts_custom_column'], 10, 2); //Add content to custom column
-//add_action('manage_shop_order_posts_custom_column', [$lischenMenu, 'action_shop_order_columns'], 10, 2);
 
 
 

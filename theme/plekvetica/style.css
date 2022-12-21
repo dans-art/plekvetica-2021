@@ -5,7 +5,7 @@ Description: Child theme for Generatepress theme
 Author: Daniel Spycher
 Author URI: 
 Template: generatepress
-Version: 1.0
+Version: 1.1
 Text Domain:  plekvetica
 */
 body { color: white; }
@@ -575,7 +575,7 @@ ul.partner-container .wp-block-latest-posts__featured-image.alignleft { margin: 
 .my-plek-container .info-text-bar { width: 100%; }
 .my-plek-container .plek-no-open-reviews:after { content: '😃'; margin-left: 0.7em; }
 
-.band-single.band-container { display: flex; column-gap: 5%; }
+.band-single.band-container { display: flex; column-gap: 5%; width: 100%; }
 .band-single.band-container .info-text-bar { width: 100%; margin: 0.2em 0; }
 .band-single.band-container .band-content { flex-basis: 70%; }
 .band-single.band-container .meta-container, .band-single.band-container .mobile-meta-con { flex-basis: 30%; margin-top: 3.8em; padding-right: 1em; display: none; }
@@ -736,7 +736,7 @@ input[type=checkbox] { margin: 1rem 0 0 0; height: 1.5rem; width: 1.5rem; filter
 .plek-form #band-social-icons .fa-youtube-square { color: #bb0000; }
 .plek-form #band-social-icons .fa-spotify { color: #00e461; }
 .plek-form #band-social-icons .fa-twitter { color: #55acee; }
-.plek-form #band-social label { display: none; }
+.plek-form #band-social .social_media_label { display: none; }
 .plek-form #band-social .input-icon { width: 10%; font-size: 2em; text-align: left; padding-left: 0.2em; }
 .plek-form #band-social .input-icon::before { position: relative; top: 6px; }
 .plek-form #band-social .band-social-input { margin-top: 0.2em; margin-bottom: 0; flex-basis: 90%; }
@@ -744,6 +744,7 @@ input[type=checkbox] { margin: 1rem 0 0 0; height: 1.5rem; width: 1.5rem; filter
 .plek-form #band-social .band-videos-container { margin-top: 0.5em; }
 .plek-form #band-social .item-con { justify-content: space-between; flex-wrap: wrap; }
 .plek-form #band-videos { display: none; }
+.plek-form #band-social .band-videos-container .input-instructions { padding-left: 0; }
 .plek-form #add-band-video { width: 35%; }
 .plek-form #band-genre-loader { display: flex; }
 .plek-form #plek-memeber-perks ul { list-style: ''; }

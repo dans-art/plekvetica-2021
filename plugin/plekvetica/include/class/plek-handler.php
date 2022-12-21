@@ -188,16 +188,6 @@ class PlekHandler
      */
     public function wp_get_nav_menu_items_filter($items, $menu, $args)
     {
-
-        //Adds the team calendar if user is in team
-        if (PlekUserHandler::user_is_in_team()) {
-            $team_calendar = new WP_Post(new stdClass);
-            $team_calendar->title = __('Team-Calendar', 'plekvetica');
-            $team_calendar->menu_item_parent = ($items[1]->ID) ?: 0;
-            $team_calendar->url = home_url('/team-kalender');
-            $items[] = $team_calendar;
-        }
-
         if ($menu->slug === 'oberes-menue') {
             foreach ($items as $index => $nav) {
                 if ($nav->post_name === 'login-logout') {
@@ -209,6 +199,15 @@ class PlekHandler
                         $items[$index]->classes[] = 'not-logged-in-nav';
                     }
                 }
+            }
+
+            //Adds the team calendar if user is in team
+            if (PlekUserHandler::user_is_in_team() AND !is_admin()) {
+                $team_calendar = new WP_Post(new stdClass);
+                $team_calendar->title = __('Team-Calendar', 'plekvetica');
+                $team_calendar->menu_item_parent = ($items[1]->ID) ?: 0;
+                $team_calendar->url = home_url('/team-kalender');
+                $items[] = $team_calendar;
             }
         }
         return $items;
@@ -738,7 +737,7 @@ class PlekHandler
         //Ask for the reason first
         if (isset($_REQUEST['rejection_reason'])) {
             //Saves the rejection reason
-            $pe -> set_accreditation_note($_REQUEST['rejection_reason']);
+            $pe->set_accreditation_note($_REQUEST['rejection_reason']);
             return PlekTemplateHandler::load_template_to_var('accredi_reject_message', 'event/organizer', $event_id);
         }
 
@@ -774,13 +773,13 @@ class PlekHandler
             return __('You are not allowed to run this action', 'plekvetica');
         }
 
-        $pe -> load_event($event_id);
+        $pe->load_event($event_id);
         if (!isset($_REQUEST['confirmation_note'])) {
             $attach .=  PlekTemplateHandler::load_template_to_var('accreditation-confirmation-note-form', 'event/organizer', $pe);
-        }else{
+        } else {
             //Save note and skip reconfirmation
-            $pe -> set_accreditation_note($_REQUEST['confirmation_note']);
-            return __('Note saved. Thanks!','plekvetica');
+            $pe->set_accreditation_note($_REQUEST['confirmation_note']);
+            return __('Note saved. Thanks!', 'plekvetica');
         }
 
         $confirm = $pe->confirm_accreditation($event_id);
