@@ -569,3 +569,12 @@ ul.partner-container {
         }
     }
 }
+
+#team-cal-navi {
+    display: flex;
+    gap: 2em;
+
+    a {
+        width: 50%;
+    }
+}

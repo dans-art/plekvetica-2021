@@ -610,6 +610,9 @@ ul.partner-container .wp-block-latest-posts__featured-image.alignleft { margin: 
 .plek-post-type-team-calendar .event-organi-and-location::before { font-family: 'FontAwesome'; left: 0; top: -1rem; position: absolute; content: '\f0c0'; }
 .plek-post-type-team-calendar .event-organi-and-location::after { font-family: 'FontAwesome'; left: 0; top: 1rem; position: absolute; content: '\f015'; }
 
+#team-cal-navi { display: flex; gap: 2em; }
+#team-cal-navi a { width: 50%; }
+
 form .plek-field-error { color: #D9042B; display: block; }
 
 div.plek-review-search { margin-bottom: 1em; }

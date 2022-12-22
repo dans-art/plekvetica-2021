@@ -139,17 +139,76 @@ let plek_band = {
      * @param {string} url The url or id of a youtube video
      * @returns {string} Youtube Video ID
      */
-    get_youtube_video_id(url){
+    get_youtube_video_id(url) {
         //Extract the ID from the url
+        const video_id_length = 11;
         let parms = new URLSearchParams(url);
         let video_id = url; //Fallback if url is already the ID
-
-        for (const[key, value] of parms.entries()){
-            if(key.search('watch') > -1){
+        for (const [key, value] of parms.entries()) {
+            //URL has "watch" keyword //http://www.youtube.com/watch?v=0zM3nApSvM
+            if (key.indexOf('watch') > -1 && url.indexOf('watch?v=') > -1) {
                 video_id = value;
+                break;
+            }
+            if (key.indexOf('watch') > -1 && url.indexOf('watch?vi=') > -1) {
+                video_id = value;
+                break;
+            }
+            if (key === 'http://youtube.com/?v') {
+                video_id = value;
+                break;
+            }
+            if (key === 'https://youtube.com/?v') {
+                video_id = value;
+                break;
+            }
+            if (key === 'http://www.youtube.com/?v') {
+                video_id = value;
+                break;
+            }
+            if (key === 'http://youtube.com/?vi') {
+                video_id = value;
+                break;
+            }
+            if (key.indexOf('ytscreeningroom') > -1) {
+                video_id = value;
+                break;
+            }
+            if (key === 'v') {
+                video_id = value;
+                break;
             }
         }
-        return video_id
+
+        //If the lenght is 11, it is probably a ID, return then
+        if(video_id.length === video_id_length){
+            return video_id;
+        }
+
+        //Try to split the URL //http://www.youtube.com/v/0zM3nApSvMg?version
+        const url_parts = video_id.split('/');
+        if(url_parts.length > 1){
+            for (let i = 0; i < url_parts.length; i++) {
+                const value = url_parts[i];
+                if (value === 'v' || value === 'vi' || value === 'youtu.be' || value === 'embed' || value === 'e') {
+                    video_id = url_parts[i + 1]; //Can be 0zM3nApSvMg?version
+                }
+            }
+        }
+        //Clean up the id
+        const split_id = video_id.split('?');
+        //Check for hashtags
+        const split_hash = split_id[0].split('#');
+        //Check for &
+        let clean_id = split_hash[0].split('&');
+
+
+        //Do a last check for the length
+        if(clean_id[0].length === video_id_length){
+            return clean_id[0];
+        }
+        //No valid ID found
+        return false;
     },
 
     async load_youtube_video(video_id, item_id) {
@@ -175,9 +234,9 @@ let plek_band = {
                 console.log('success');
                 let cancel_btn = '<span class="remove_video" data-videoid="' + video_id + '" data-itemid="' + item_id + '"><i class="fas fa-times"></i></span>';
                 //Empty response. Remove Preview item
-                if(data.length === 0){
+                if (data.length === 0) {
                     jQuery('#video_preview_con .video_preview_item').last().remove();
-                    plekerror.display_info(__('Info', 'plekvetica'), __('Video not found. Maybe the Video is private or the ID is incorrect','plekvetica'));
+                    plekerror.display_info(__('Info', 'plekvetica'), __('Video not found. Maybe the Video is private or the ID is incorrect', 'plekvetica'));
                     return false;
                 }
                 jQuery('#video_' + item_id).html(cancel_btn + data);
@@ -199,8 +258,8 @@ let plek_band = {
         const new_vid_yt_id = plek_band.get_youtube_video_id(new_vid);
         jQuery('#add-band-video-input').val(''); //Set Value to null again
         const videos = jQuery('#band-videos').val();
-        if(videos.search(new_vid_yt_id) > -1){
-            plekerror.display_info(__('Info', 'plekvetica'), __('Youtube Video already added','plekvetica'));
+        if (videos.search(new_vid_yt_id) > -1) {
+            plekerror.display_info(__('Info', 'plekvetica'), __('Youtube Video already added', 'plekvetica'));
             return false;
         }
         let videos_arr = videos.split("\n");
@@ -208,7 +267,7 @@ let plek_band = {
 
         //Wait if the adding was successful
         const loaded_video = await plek_band.load_youtube_video(new_vid_yt_id, item_id);
-        if(loaded_video.length > 0){
+        if (loaded_video.length > 0) {
             //Add it to the list
             videos_arr.push(new_vid_yt_id);
             let vid_join = videos_arr.join('\n');
@@ -343,10 +402,10 @@ let plek_band = {
      * Checks if the image displayed on the edit band form is a placeholder or not.
      * @returns bool
      */
-    band_image_is_placeholder(){
+    band_image_is_placeholder() {
         let image_url = jQuery('#band-logo-image img').attr('src');
         let image_parts = image_url.split('/');
-        if(image_parts[image_parts.length - 1] === 'default_placeholder.jpg'){
+        if (image_parts[image_parts.length - 1] === 'default_placeholder.jpg') {
             return true;
         }
         return false;

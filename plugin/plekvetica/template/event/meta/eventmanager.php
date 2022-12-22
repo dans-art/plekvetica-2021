@@ -90,7 +90,7 @@ $missing_details = $plek_event->get_missing_event_details();
     <?php endif; ?>
     <?php
     //Review info email Button  
-    $sent = get_field('organizer_review_promo_sent', $event->ID); 
+    $sent = get_field('organizer_review_promo_sent', $plek_event->get_ID()); 
     if (PlekUserHandler::current_user_can_edit($plek_event) and $plek_event->is_review() AND !($sent === '1' OR $sent === true)) : ?>
         <?php
         global $plek_handler;

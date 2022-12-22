@@ -2,12 +2,26 @@
 
 extract(get_defined_vars());
 $events = isset($template_args[0]) ?  $template_args[0] : [];
+
+$date_from = isset($template_args[1]) ?  $template_args[1] : date('Y-m-d'); //The start date. The current date or the date from the "from parameter"
+$time_from = strtotime($date_from); //The basis for the calculations
+$oneMonth = 2592000; //30 Days
+
+$navi_next_date = ($date_from === date('Y-m-d')) ? false : date('Y-m-d', $time_from + $oneMonth);
+$navi_prev_date = date('Y-m-d', $time_from - $oneMonth);
+
+
 if (empty($events)) {
     return false;
 }
 $total_events = count($events);
 ?>
-
+<div id="team-cal-navi">
+    <a href="<?php echo get_permalink() ?>?from=<?php echo $navi_prev_date ?>" class="plek-button"><?php echo __('Show previous Events', 'plekvetica'); ?></a>
+    <?php if($navi_next_date): ?>
+        <a href="<?php echo get_permalink() ?>?from=<?php echo $navi_next_date; ?>" class="plek-button"><?php echo __('Show recent Events', 'plekvetica'); ?></a>
+        <?php endif; ?>
+</div>
 <div class="tribe-events">
     <div class="tribe-common-g-row tribe-events-calendar-list__event-row plek-post-type-team-calendar">
         <table>

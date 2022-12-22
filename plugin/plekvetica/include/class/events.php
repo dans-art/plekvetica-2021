@@ -814,20 +814,20 @@ class PlekEvents extends PlekEventHandler
      * Shortcode for the team calendar
      *
      * @return string HTML code of the team calendar
-     * @todo: Translation not working.
      */
     public function plek_event_team_calendar_shortcode()
     {
         wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery', 'plek-language', 'wp-i18n'], 1);
         wp_set_script_translations('plek-teamcal-script', 'plekvetica', PLEK_PATH . "/languages");
 
+        $date_from = (isset($_REQUEST['from'])) ? htmlspecialchars($_REQUEST['from']) : date('Y-m-d');
 
         $meta_query = array();
         $meta_query['akk_status'] = array('key' => 'akk_status', 'compare' => '!=', 'value' => 'NULL');
         $meta_query['akkreditiert'] = array('key' => 'akkreditiert', 'compare' => '!=', 'value' => '');
         $args = [
             'eventDisplay'   => 'custom',
-            'start_date'     => date('Y-m-d', time() -  172800), // 172800 = Two days in seconds 
+            'start_date'     => $date_from, // 172800 = Two days in seconds 
             'end_date'     => date('Y-m-d', time() +  60 * 60 * 24 * 365 * 5), // Five Years from today 
             'posts_per_page' => 5000,
             'order'       => 'ASC',
@@ -838,7 +838,7 @@ class PlekEvents extends PlekEventHandler
         if (empty($events)) {
             return __('No posts found', 'plekvetica');
         }
-        return PlekTemplateHandler::load_template_to_var('event-team-calendar', 'event/admin', $events);
+        return PlekTemplateHandler::load_template_to_var('event-team-calendar', 'event/admin', $events, $date_from);
     }
 
     /**
@@ -1493,15 +1493,15 @@ class PlekEvents extends PlekEventHandler
             return '';
         }
         //Returns the last only or all separated by comma.
-        if($return_last){
+        if ($return_last) {
             $last_key = array_key_last($notes);
             return $notes[$last_key];
         }
         $return = array();
-        foreach($notes as $time => $message){
-            if(!empty($message)){
+        foreach ($notes as $time => $message) {
+            if (!empty($message)) {
                 $return[] = date('d-m-Y H:i', $time) . ' - ' . $message;
-            } 
+            }
         }
         return $return;
     }

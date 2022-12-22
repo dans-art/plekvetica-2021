@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2022-12-22 08:13+0000\n"
+"PO-Revision-Date: 2022-12-21 19:56+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -94,14 +94,14 @@ msgstr "Über"
 
 #: template/event/admin/event-team-accredi-list.php:19
 #: template/event/admin/event-team-calendar-list-item.php:17
-#: template/event/admin/event-team-calendar.php:33
+#: template/event/admin/event-team-calendar.php:19
 msgid "Acc Status"
 msgstr "Acc Status"
 
 #: template/event/admin/event-team-accredi-list.php:20
 #: template/event/admin/event-team-calendar-accredi.php:18
 #: template/event/admin/event-team-calendar-list-item.php:18
-#: template/event/admin/event-team-calendar.php:34
+#: template/event/admin/event-team-calendar.php:20
 msgid "Acc Team"
 msgstr "Acc Team"
 
@@ -477,7 +477,7 @@ msgstr "Daten gespeichert!"
 #: template/event/admin/event-team-accredi-list.php:17
 #: template/event/admin/event-team-calendar-accredi.php:16
 #: template/event/admin/event-team-calendar-list-item.php:15
-#: template/event/admin/event-team-calendar.php:30
+#: template/event/admin/event-team-calendar.php:16
 #: template/event/form/add-event-form-basic.php:9
 #: template/event/form/edit-event-form.php:21
 #: template/event/meta/datetime.php:12
@@ -771,7 +771,7 @@ msgstr "Event wurde verschoben ohne neues Datum"
 msgid "Event has been successfully published on facebook"
 msgstr "Event wurde erfolgreich auf Facebook veröffentlicht"
 
-#: template/event/admin/event-team-calendar.php:51
+#: template/event/admin/event-team-calendar.php:37
 msgid "Event has ben canceled"
 msgstr "Dieser Event wurde abgesagt"
 
@@ -783,7 +783,7 @@ msgstr "Der Event wurde noch von keinem Team-Mitglied akkreditiert."
 msgid "Event Images"
 msgstr "Event Bilder"
 
-#: template/event/admin/event-team-calendar.php:52
+#: template/event/admin/event-team-calendar.php:38
 msgid "Event is featured event"
 msgstr "Dieser Event ist hervorgehoben"
 
@@ -837,13 +837,13 @@ msgstr ""
 "Event gespeichert, besten Dank! Unsere Eventmanager werden den Eintrag "
 "prüfen und dann veröffentlichen."
 
-#: template/event/admin/event-team-calendar.php:53
+#: template/event/admin/event-team-calendar.php:39
 msgid "Event should be featured event, but isn't!"
 msgstr "Event sollte hervorgehoben sein, ist es aber nicht!"
 
 #: template/event/admin/event-team-accredi-list.php:22
 #: template/event/admin/event-team-calendar-list-item.php:20
-#: template/event/admin/event-team-calendar.php:36
+#: template/event/admin/event-team-calendar.php:22
 msgid "Event Status"
 msgstr "Event Status"
 
@@ -877,7 +877,7 @@ msgstr "Eventmanager Tipp"
 msgid "Events"
 msgstr "Events"
 
-#: include/class/events.php:984 template/components/pagination-buttons.php:73
+#: include/class/events.php:983 template/components/pagination-buttons.php:73
 #, php-format
 msgid "Events %d to %d of %d"
 msgstr "Events %d bis %d von %d"
@@ -937,7 +937,7 @@ msgstr "Fehler beim erstellen eines neuen Galerie Verzeichnis."
 msgid "Failed to create new user (%s)"
 msgstr "Neuer Benutzer konnte nicht angelegt werden (%s)"
 
-#: include/class/events.php:1347
+#: include/class/events.php:1346
 msgid "Failed to load Text for the Facebook ticket raffle"
 msgstr "Konnte den Text für die Facebook Ticket Verlosung nicht laden."
 
@@ -1016,7 +1016,7 @@ msgstr "Finden"
 msgid "First Name"
 msgstr "Vorname"
 
-#: include/class/band-handler.php:1262 include/class/events.php:1444
+#: include/class/band-handler.php:1262 include/class/events.php:1443
 #: template/band/meta/details.php:19 template/event/meta/details.php:7
 msgid "Follow"
 msgstr "Folgen"
@@ -1200,7 +1200,7 @@ msgstr "Interviewer"
 
 #: template/event/admin/event-team-accredi-list.php:21
 #: template/event/admin/event-team-calendar-list-item.php:19
-#: template/event/admin/event-team-calendar.php:35
+#: template/event/admin/event-team-calendar.php:21
 #: template/event/meta/eventmanager.php:132
 msgid "Interviews"
 msgstr "Interviews"
@@ -1261,7 +1261,7 @@ msgstr "Link zur Webseite"
 msgid "Links"
 msgstr "Links"
 
-#: include/class/events.php:1036 template/posts/author-single.php:54
+#: include/class/events.php:1035 template/posts/author-single.php:54
 msgid "Load more events"
 msgstr "Weitere Events laden"
 
@@ -1351,7 +1351,7 @@ msgstr "Event ID fehlt"
 msgid "Missing Reviews"
 msgstr "Fehlende Reviews"
 
-#: template/event/admin/event-team-calendar.php:54
+#: template/event/admin/event-team-calendar.php:40
 msgid "Missing:"
 msgstr "Fehlend:"
 
@@ -1389,7 +1389,7 @@ msgstr "Meine Watchlist"
 #: template/event/admin/event-team-accredi-list.php:18
 #: template/event/admin/event-team-calendar-accredi.php:17
 #: template/event/admin/event-team-calendar-list-item.php:16
-#: template/event/admin/event-team-calendar.php:31
+#: template/event/admin/event-team-calendar.php:17
 #: template/event/organizer/organizer-form.php:32
 #: template/event/venue/venue-form.php:27
 msgid "Name"
@@ -1525,13 +1525,13 @@ msgstr "Keine Daten erhalten"
 msgid "No Event found, or Event is not a Review"
 msgstr "Kein Event gefunden, oder Event ist kein Review"
 
-#: include/class/events.php:1172
+#: include/class/events.php:1171
 #: template/event/organizer/accredi_confirm_message.php:14
 #: template/event/organizer/accredi_reject_message.php:14
 msgid "No Event ID found"
 msgstr "Keine Event ID gefunden"
 
-#: include/class/events.php:1458 include/class/events.php:1472
+#: include/class/events.php:1457 include/class/events.php:1471
 msgid "No Event ID found."
 msgstr "Keine Event ID gefunden."
 
@@ -1539,7 +1539,7 @@ msgstr "Keine Event ID gefunden."
 msgid "No Event ID given. Expects an Array with the Event IDs"
 msgstr "Keine Event ID übergeben. Erwartet ein Array mit Event ID's"
 
-#: include/class/events.php:1244
+#: include/class/events.php:1243
 msgid "No Events found"
 msgstr "Keine Events gefunden"
 
@@ -1598,7 +1598,7 @@ msgstr "Kein Medien Kontakt für diesen Veranstalter definiert"
 msgid "No message defined"
 msgstr "Nachricht undefiniert"
 
-#: include/class/events.php:1198
+#: include/class/events.php:1197
 msgid "No new Events found"
 msgstr "Keine neuen Events gefunden"
 
@@ -1624,11 +1624,11 @@ msgstr ""
 msgid "No photos found for this event."
 msgstr "Für dieses Event wurden keine Fotos gefunden."
 
-#: include/class/events.php:840 include/class/events.php:895
+#: include/class/events.php:839 include/class/events.php:894
 msgid "No posts found"
 msgstr "Keine Beiträge gefunden"
 
-#: include/class/events.php:1039
+#: include/class/events.php:1038
 msgid "No raffles found"
 msgstr "Keine Verlosungen gefunden"
 
@@ -1656,7 +1656,7 @@ msgstr "Kein Typ gefunden"
 msgid "No username or email provided"
 msgstr "Kein Benutzername oder Passwort angegeben."
 
-#: include/class/events.php:1105 include/class/search-handler.php:23
+#: include/class/events.php:1104 include/class/search-handler.php:23
 msgid "No videos found."
 msgstr "Keine Videos gefunden."
 
@@ -1667,7 +1667,7 @@ msgstr "Keine YouTube-Video-ID gefunden"
 #: template/event/admin/event-team-accredi-list.php:32
 #: template/event/admin/event-team-calendar-accredi.php:61
 #: template/event/admin/event-team-calendar-list-item.php:30
-#: template/event/admin/event-team-calendar.php:49
+#: template/event/admin/event-team-calendar.php:35
 msgid "Nobody"
 msgstr "Keiner"
 
@@ -1856,7 +1856,7 @@ msgstr "Poste Ticketverlosung"
 #: include/class/event-handler.php:2892
 #: template/event/admin/event-team-accredi-list.php:16
 #: template/event/admin/event-team-calendar-list-item.php:14
-#: template/event/admin/event-team-calendar.php:29
+#: template/event/admin/event-team-calendar.php:15
 msgid "Poster"
 msgstr "Poster"
 
@@ -2132,14 +2132,6 @@ msgstr "Teile Foto"
 msgid "Short number"
 msgstr "Kurze Nummer"
 
-#: template/event/admin/event-team-calendar.php:20
-msgid "Show previous Events"
-msgstr "Zeige vorherige Events"
-
-#: template/event/admin/event-team-calendar.php:22
-msgid "Show recent Events"
-msgstr "Zeige neuere Events"
-
 #: template/event/meta/eventmanager.php:88
 msgid "Show revision"
 msgstr "Überarbeitung anzeigen"
@@ -2180,7 +2172,7 @@ msgstr "Einige Events wurden noch nicht angefragt..."
 msgid "Sorry, you are not allowed to edit this Event!"
 msgstr "Sorry, aber du bist nicht berechtigt, diesen Event zu bearbeiten."
 
-#: include/class/events.php:1147
+#: include/class/events.php:1146
 msgid "Sorry, you are not allowed to edit this post anymore"
 msgstr "Sorry, aber du bist nicht mehr berechtigt, diesen Event zu bearbeiten "
 
@@ -2541,11 +2533,11 @@ msgstr "Zur Galerie: %s"
 msgid "To the new event"
 msgstr "Zum neuen Event"
 
-#: include/class/events.php:1411
+#: include/class/events.php:1410
 msgid "Today"
 msgstr "Heute"
 
-#: template/event/admin/event-team-calendar.php:93
+#: template/event/admin/event-team-calendar.php:79
 msgid "Total Posts:"
 msgstr "Total Einträge:"
 
@@ -2561,7 +2553,7 @@ msgstr "Typ"
 msgid "Undefined"
 msgstr "Undefiniert"
 
-#: include/class/band-handler.php:1260 include/class/events.php:1442
+#: include/class/band-handler.php:1260 include/class/events.php:1441
 #: template/band/meta/details.php:19 template/event/meta/details.php:7
 msgid "Unfollow"
 msgstr "Entfolgen"
@@ -2631,7 +2623,7 @@ msgstr "Wert ist nicht boolesch"
 msgid "Venue"
 msgstr "Ort"
 
-#: template/event/admin/event-team-calendar.php:32
+#: template/event/admin/event-team-calendar.php:18
 msgid "Venue and Organizer"
 msgstr "Ort und Veranstalter"
 
@@ -2691,11 +2683,11 @@ msgstr "Willkommen bei Plekvetica!"
 msgid "Win %s Tickets for"
 msgstr "Gewinne %s Ticket für"
 
-#: include/class/events.php:1359
+#: include/class/events.php:1358
 msgid "Win condition not supported"
 msgstr "Gewinnkonditionen nicht unterstützt"
 
-#: include/class/events.php:1350
+#: include/class/events.php:1349
 msgid "Win conditions not set"
 msgstr "Gewinnkonditionen nicht definiert"
 
@@ -2762,7 +2754,7 @@ msgstr "Du bist nicht berechtigt diese Funktion zu nutzen!"
 msgid "You are not allowed to edit this band!"
 msgstr "Du darfst diese Band nicht bearbeiten!"
 
-#: include/class/events.php:1137
+#: include/class/events.php:1136
 msgid "You are not allowed to edit this Event!"
 msgstr "Du hast keine Erlaubnis, diesen Event zu bearbeiten!"
 
