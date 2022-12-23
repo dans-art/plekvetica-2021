@@ -494,7 +494,7 @@ class PlekBandHandler
     {
         $ret_arr = array();
         if (!is_array($genres)) {
-            $genres = unserialize($genres);
+            $genres = maybe_unserialize($genres);
         }
         if (empty($genres)) {
             return array();

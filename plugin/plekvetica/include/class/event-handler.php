@@ -1185,7 +1185,8 @@ class PlekEventHandler
         }
         foreach ($injectAttr as $site => $items_to_add) {
             //Check if Site has removable items
-            if (false !== stripos($url_split['host'], $site)) {
+            $host = (isset($url_split['host']) and $url_split['host'] !== null) ? $url_split['host'] : '';
+            if (false !== stripos($host, $site)) {
                 if (isset($url_split['query'])) {
                     parse_str($url_split['query'], $query_split);
                 } else {

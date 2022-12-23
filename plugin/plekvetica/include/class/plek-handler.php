@@ -202,7 +202,7 @@ class PlekHandler
             }
 
             //Adds the team calendar if user is in team
-            if (PlekUserHandler::user_is_in_team() AND !is_admin()) {
+            if (PlekUserHandler::user_is_in_team() and !is_admin()) {
                 $team_calendar = new WP_Post(new stdClass);
                 $team_calendar->title = __('Team-Calendar', 'plekvetica');
                 $team_calendar->menu_item_parent = ($items[1]->ID) ?: 0;
@@ -499,7 +499,8 @@ class PlekHandler
         foreach ($removeAttr as $site => $items_to_remove) {
 
             //Check if Site has removable items
-            if (false !== stripos($url_split['host'], $site)) {
+            $host = (isset($url_split['host']) and $url_split['host'] !== null) ? $url_split['host'] : '';
+            if (false !== stripos($host, $site)) {
                 parse_str($url_split['query'], $query_split);
                 //Remove the Item from the URL
                 foreach ($query_split as $key => $value) {
