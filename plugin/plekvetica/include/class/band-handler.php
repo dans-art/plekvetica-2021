@@ -231,7 +231,9 @@ class PlekBandHandler
      */
     public function get_description()
     {
-        return (isset($this->band['description'])) ? $this->band['description'] : '';
+        $desc = (isset($this->band['description'])) ? $this->band['description'] : '';
+        $bio = (isset($this->band['bio_text'])) ? $this->band['bio_text'] : '';
+        return (!empty($bio)) ? $bio : $desc;
     }
 
     /**
@@ -405,7 +407,7 @@ class PlekBandHandler
     {
         foreach ($this->social_media as $slug => $attr) {
             $acf_id = (isset($attr['acf_id'])) ? $attr['acf_id'] : '';
-            if(!empty($this->get_social_link($acf_id))){
+            if (!empty($this->get_social_link($acf_id))) {
                 return true;
             }
         }
@@ -851,7 +853,7 @@ class PlekBandHandler
      * @return void
      */
     public function enqueue_form_scripts()
-    { 
+    {
         global $plek_handler;
         $plek_handler->enqueue_select2();
         $min = ($plek_handler->is_dev_server()) ? "" : ".min";
@@ -1006,12 +1008,13 @@ class PlekBandHandler
      */
     public function update_band($id = null, $return_all_bands = false)
     {
+        global $plek_handler;
         global $plek_ajax_handler;
         global $plek_ajax_errors;
 
         $id = (int) (!is_int($id)) ? $plek_ajax_handler->get_ajax_data_esc('band-id') : $id;
         $name = $plek_ajax_handler->get_ajax_data_esc('band-name');
-        $description = $plek_ajax_handler->get_ajax_data('band-description');
+        $description = $this->get_band_form_value('band-description', $plek_handler->get_forbidden_tags('textarea'));
         $genre = $plek_ajax_handler->get_ajax_data_esc('band-genre');
         $origin = $plek_ajax_handler->get_ajax_data_esc('band-origin');
         $web = $plek_ajax_handler->get_ajax_data_esc('band-link-web');
@@ -1034,6 +1037,7 @@ class PlekBandHandler
         $acf['youtube_url'] = $youtube;
         $acf['twitter_url'] = $twitter;
         $acf['fetched_spotify_data'] = $fetched_spotify_data;
+        $acf['bio_text'] = $description;
 
         //Upload Logo
         if (!empty($plek_ajax_handler->get_ajax_files_data('band-logo'))) {
@@ -1047,7 +1051,8 @@ class PlekBandHandler
                 $acf['bandlogo'] = $attachment_id;
             }
         }
-        $term_args = array('name' => $name, 'description' => $description);
+
+        $term_args = array('name' => $name);
 
         //Update the Term
         $update_term = wp_update_term($id, 'post_tag', $term_args);
@@ -1069,6 +1074,42 @@ class PlekBandHandler
             return $this->get_all_bands_json();
         }
         return $this->load_band_object_by_id($id);
+    }
+
+
+    /**
+     * Loads an value from ajax request and filters the data
+     *
+     * @param string $form_field_name - Name/ID of the input field
+     * @param boolean $strip_tags
+     * @return string The filtered data
+     */
+    public function get_band_form_value($form_field_name, $strip_tags = true)
+    {
+        global $plek_ajax_handler;
+        global $plek_handler;
+
+        switch ($form_field_name) {
+            case 'band-description':
+                $data = $plek_ajax_handler->get_ajax_data($form_field_name);
+                $data = stripcslashes($data);
+                //strip the tags
+                if (is_array($strip_tags)) {
+                    $data = $plek_handler->remove_tags($data, $strip_tags, 'textarea');
+                    $data = $plek_handler->strip_tags($data, $plek_handler->get_allowed_tags('textarea'));
+                    return $data;
+                }
+                break;
+            default:
+                $data = $plek_ajax_handler->get_ajax_data($form_field_name);
+                //strip the tags
+                if (is_array($strip_tags)) {
+                    $data = $plek_handler->remove_tags($data, $strip_tags);
+                }
+                return  $data;
+                break;
+        }
+        return false;
     }
 
     /**

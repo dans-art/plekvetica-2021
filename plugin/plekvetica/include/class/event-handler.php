@@ -2880,9 +2880,7 @@ class PlekEventHandler
                 '_EventVenueID' => __('Venue', 'plekvetica'),
                 '_EventOrganizerID' => __('Organizer', 'plekvetica'),
                 '_EventStartDate' => __('Start Date', 'plekvetica'),
-                '_EventEndDate' => __('End Date', 'plekvetica'),
-                'vorverkauf-preis' => __('Presale', 'plekvetica'),
-                '_EventCost' => __('Boxoffice', 'plekvetica')
+                '_EventEndDate' => __('End Date', 'plekvetica')
             ] //All the fields to check
             : []; //Only the most important ones (default)
 
@@ -2901,6 +2899,10 @@ class PlekEventHandler
         }*/
         if (empty($this->get_poster())) {
             $missing['poster'] = __('Poster', 'plekvetica');
+        }
+        //Check if any price is set
+        if(empty($this -> get_price_boxoffice(false)) AND empty($this -> get_price_vvk(false))){
+            $missing['price'] = __('Price', 'plekvetica');
         }
         if (empty($missing)) {
             return false;

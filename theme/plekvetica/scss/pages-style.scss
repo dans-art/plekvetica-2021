@@ -397,6 +397,7 @@ ul.partner-container {
     display: flex;
     column-gap: 5%;
     width: 100%;
+    flex-wrap: wrap;
 
     .info-text-bar {
         width: 100%;
@@ -404,7 +405,7 @@ ul.partner-container {
     }
 
     .band-content {
-        flex-basis: 70%;
+        flex-basis: 65%;
     }
 
     .meta-container,

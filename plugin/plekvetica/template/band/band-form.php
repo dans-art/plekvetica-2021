@@ -3,7 +3,7 @@ $band = new PlekBandHandler();
 $band->enqueue_form_scripts();
 $band->load_band_object(); //Loads the current band object. If not on Band page, this returns false
 $type = (isset($template_args[0]) and $template_args[0] === 'edit') ? 'edit' : 'add';
-$editor_options = array('media_buttons' => false, 'textarea_rows' => 10, 'teeny' => true);
+$editor_options = array('media_buttons' => false, 'textarea_rows' => 10, 'teeny' => true, 'tinymce' => ['plugins' => 'lists,image,wordpress,wplink, paste']);
 
 $country = $band->get_country() ?: 'NULL';
 
@@ -11,9 +11,6 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
     echo __('You are not allowed to edit this band!', 'plekvetica');
     return;
 }
-/**
- * @todo: Add WYSIWYG Editor
- */
 
 ?>
 
@@ -24,7 +21,7 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
         <fieldset id="band-basic-infos">
             <div class="band-id-container">
                 <input id="band-id" name="band-id" type="text" class='plek-hidden' value="<?php echo $band->get_id(); ?>"></input>
-                <input id="band-infos" name="band-infos" type="text" class="plek-hidden"/><!-- Data fetches by the spotify api, JSON format -->
+                <input id="band-infos" name="band-infos" type="text" class="plek-hidden" /><!-- Data fetches by the spotify api, JSON format -->
             </div>
 
             <div class="band-name-container">
@@ -40,7 +37,7 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
             <div class="band-logo-container">
                 <label for="band-logo"><?php echo __('Logo or Photo', 'plekvetica'); ?></label>
                 <?php PlekTemplateHandler::load_template('image-upload-button', 'components', 'band-logo', $band->get_logo()); ?>
-                <input id="band-logo-url" name="band-logo-url" type="text" class="plek-hidden"/>
+                <input id="band-logo-url" name="band-logo-url" type="text" class="plek-hidden" />
             </div>
         </fieldset>
         <!-- Genre and Origin -->
@@ -97,7 +94,7 @@ if ($type === 'edit' and PlekUserHandler::user_can_edit_band($band) !== true) {
                     <input id="add-band-video-input" type="text" value=""></input>
                     <button id="add-band-video" class="plek-button" type="button"><?php echo __('Add', 'plekvetica'); ?></button>
                 </div>
-                <div class="input-instructions"><?php echo __('Add a Video URL from Youtube and click on "Add"','plekvetica'); ?></div>
+                <div class="input-instructions"><?php echo __('Add a Video URL from Youtube and click on "Add"', 'plekvetica'); ?></div>
                 <textarea id="band-videos" name="band-videos" type="text"><?php echo $band->get_videos(false); ?></textarea>
             </div>
         </fieldset>

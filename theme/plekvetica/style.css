@@ -5,7 +5,7 @@ Description: Child theme for Generatepress theme
 Author: Daniel Spycher
 Author URI: 
 Template: generatepress
-Version: 1.1
+Version: 1.1.1
 Text Domain:  plekvetica
 */
 body { color: white; }
@@ -575,9 +575,9 @@ ul.partner-container .wp-block-latest-posts__featured-image.alignleft { margin: 
 .my-plek-container .info-text-bar { width: 100%; }
 .my-plek-container .plek-no-open-reviews:after { content: '😃'; margin-left: 0.7em; }
 
-.band-single.band-container { display: flex; column-gap: 5%; width: 100%; }
+.band-single.band-container { display: flex; column-gap: 5%; width: 100%; flex-wrap: wrap; }
 .band-single.band-container .info-text-bar { width: 100%; margin: 0.2em 0; }
-.band-single.band-container .band-content { flex-basis: 70%; }
+.band-single.band-container .band-content { flex-basis: 65%; }
 .band-single.band-container .meta-container, .band-single.band-container .mobile-meta-con { flex-basis: 30%; margin-top: 3.8em; padding-right: 1em; display: none; }
 .band-single.band-container .meta-container ul, .band-single.band-container .mobile-meta-con ul { list-style: none; margin: 0; padding: 0; }
 .band-single.band-container .meta-container .band-flag img, .band-single.band-container .mobile-meta-con .band-flag img { max-height: 1.2em; vertical-align: sub; }

@@ -817,7 +817,8 @@ class PlekEvents extends PlekEventHandler
      */
     public function plek_event_team_calendar_shortcode()
     {
-        wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery', 'plek-language', 'wp-i18n'], 1);
+        global $plek_handler;
+        wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery', 'plek-language', 'wp-i18n'], $plek_handler->version);
         wp_set_script_translations('plek-teamcal-script', 'plekvetica', PLEK_PATH . "/languages");
 
         $date_from = (isset($_REQUEST['from'])) ? htmlspecialchars($_REQUEST['from']) : date('Y-m-d');
@@ -851,8 +852,9 @@ class PlekEvents extends PlekEventHandler
     {
 
         global $wpdb;
+        global $plek_handler;
 
-        wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery'], 1);
+        wp_enqueue_script('plek-teamcal-script', PLEK_PLUGIN_DIR_URL . 'js/plek-teamcal-script.js', ['jquery'], $plek_handler->version);
         wp_set_script_translations('plek-teamcal-script', 'plekvetica', PLEK_PATH . "/languages");
 
         $limit = 100;

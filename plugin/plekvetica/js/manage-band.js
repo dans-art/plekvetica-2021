@@ -136,6 +136,9 @@ let plek_band = {
             var videos = jQuery('#band-videos').val().split("\n");
         }
         jQuery(videos).each(function (i, val) {
+            if(plek_main.empty(val)){
+                return;
+            }
             plek_band.load_youtube_video(val, i);
         });
     },
@@ -396,6 +399,7 @@ let plek_band = {
         data.append('action', 'plek_band_actions');
         data.append('do', 'save_band');
         var file_data = jQuery('#band-logo').prop('files')[0];
+        data.delete('band-description'); //Remove if existing
         data.append('band-description', tinymce.editors['band-description'].getContent());
         data.append('band-logo-data', file_data);
         data.append('band-logo', '666'); //This is just a placeholder for the validator to validate.
