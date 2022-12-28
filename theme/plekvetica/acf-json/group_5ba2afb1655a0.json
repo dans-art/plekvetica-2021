@@ -122,7 +122,8 @@
                 "stoner-rock": "Stoner Rock",
                 "symphonic-metal": "Symphonic Metal",
                 "true-metal": "True Metal",
-                "zombiecore": "Zombiecore"
+                "zombiecore": "Zombiecore",
+                "pagan": "Pagan"
             },
             "default_value": [],
             "allow_null": 0,
@@ -728,5 +729,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1672256423
+    "modified": 1672259403
 }
