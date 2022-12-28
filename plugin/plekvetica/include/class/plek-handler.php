@@ -548,7 +548,7 @@ class PlekHandler
         if (strlen($text) > $max_len) {
             $text = substr($text, 0, $max_len) . "...";
         }
-        return strip_tags($text);
+        return $this->strip_tags($text);
     }
 
     /**
@@ -577,7 +577,26 @@ class PlekHandler
     {
         switch ($type) {
             case 'textarea':
-                return ['strong', 'b', 'i', 'br', 'p', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'img'];
+                return ['strong', 'del', 'span', 'a', 'b', 'i', 'br', 'p', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'img', 'blockquote', 'em', 'ul', 'li', 'ol'];
+                break;
+
+            default:
+                return ['strong', 'del', 'span', 'a', 'b', 'i', 'br', 'p', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'img', 'blockquote', 'em', 'ul', 'li', 'ol'];
+                break;
+        }
+    }
+
+    /**
+     * Returns the allowed html styles as an array
+     *
+     * @param string $type - The type of content.
+     * @return array array with the allowed styles. Can be empty
+     */
+    public function get_allowed_styles($type = null)
+    {
+        switch ($type) {
+            case 'textarea':
+                return ['text-decoration', 'text-align'];
                 break;
 
             default:
@@ -597,7 +616,7 @@ class PlekHandler
     {
         switch ($type) {
             case 'textarea':
-                return ['script'];
+                return ['script', 'iframe'];
                 break;
 
             default:
@@ -613,9 +632,8 @@ class PlekHandler
      * @param array $tags_to_remove - The tags to remove as an array.
      * @return string The clean string
      */
-    public function remove_tags($content, $tags_to_remove = ['script'])
+    public function remove_tags($content, $tags_to_remove = ['script'], $type = 'textarea')
     {
-
         if (empty($tags_to_remove) or !is_array($tags_to_remove)) {
             return $content;
         }
@@ -626,6 +644,7 @@ class PlekHandler
 
         $content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
         $dom = new DOMDocument();
+        //$dom -> preserveWhiteSpace = false;
         libxml_use_internal_errors(true); //Catch errors
         $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOWARNING);
 
@@ -643,8 +662,77 @@ class PlekHandler
         foreach ($remove as $item_to_remove) {
             $item_to_remove->parentNode->removeChild($item_to_remove);
         }
+        //Remove the styles and classes for all the allowed tags
+        $allowed_tags = $this->get_allowed_tags($type);
+        foreach ($allowed_tags as $tag) {
+            foreach ($dom->getElementsByTagName($tag) as $items) {
+                //Remove the styles
+                $this->clear_style_tags($items, $this->get_allowed_styles($type));
+                //Remove the classes
+                $this -> clear_classes($items);
+            }
+        }
+
         libxml_clear_errors(); //Clear errors catched before
         return $dom->saveHTML();
+    }
+
+    /**
+     * Strips all the tags except for the allowed ones.
+     * Does not remove the content
+     *
+     * @param string $content - HTML
+     * @param array $allowed_tags
+     * @return string The stripped content
+     */
+    public function strip_tags($content, $allowed_tags = [])
+    {
+
+        return strip_tags($content, $allowed_tags);
+    }
+
+    /**
+     * Removes all un-allowed styles
+     *
+     * @param DOM_Element $dom_element
+     * @param array $allowed_styles The allowed styles. E.g. color, text-decoration,...
+     * @return void
+     */
+    public function clear_style_tags($dom_element, $allowed_styles)
+    {
+        if ($dom_element->nodeType != XML_TEXT_NODE) {
+            if ($dom_element->hasAttribute('style')) {
+                $style = strtolower(trim($dom_element->getAttribute('style')));
+                preg_match_all('/(?<names>[a-z\-]+):/', $style, $matches);
+                for ($i = 0; $i < sizeof($matches['names']); $i++) {
+                    $style_property = $matches['names'][$i];
+                    if (!in_array($style_property, $allowed_styles)) {
+                        $dom_element->removeAttribute('style');
+                        continue;
+                    }
+                }
+            }
+            if ($dom_element->childNodes)
+                foreach ($dom_element->childNodes as $child)
+                    $this->clear_style_tags($child, $allowed_styles);
+        }
+    }
+    /**
+     * Remove class attributes
+     *
+     * @param DOM_Element $dom_element
+     * @return void
+     */
+    public function clear_classes($dom_element)
+    {
+        if ($dom_element->nodeType != XML_TEXT_NODE) {
+            if ($dom_element->hasAttribute('class')) {
+                $dom_element->removeAttribute('class');
+            }
+        }
+        if ($dom_element->childNodes)
+            foreach ($dom_element->childNodes as $child)
+                $this->clear_classes($child);
     }
 
     /**

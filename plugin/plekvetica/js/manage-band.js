@@ -21,6 +21,12 @@ let plek_band = {
                 plek_band.show_social_input_field(this);
             });
 
+            //@todo: Make this work
+            //If a link is dropped to the social icon
+           /* jQuery('#band-social-icons .band-social-icon span').on('drop', function (event) {
+                plek_band.drop_the_link_like_its_hot(event);
+            });*/
+
             //Check on spotify for additional data
             jQuery(document).on("focusout", '#band-link-spotify', function () {
                 plek_band.check_for_band_on_spotify(this);
@@ -181,13 +187,13 @@ let plek_band = {
         }
 
         //If the lenght is 11, it is probably a ID, return then
-        if(video_id.length === video_id_length){
+        if (video_id.length === video_id_length) {
             return video_id;
         }
 
         //Try to split the URL //http://www.youtube.com/v/0zM3nApSvMg?version
         const url_parts = video_id.split('/');
-        if(url_parts.length > 1){
+        if (url_parts.length > 1) {
             for (let i = 0; i < url_parts.length; i++) {
                 const value = url_parts[i];
                 if (value === 'v' || value === 'vi' || value === 'youtu.be' || value === 'embed' || value === 'e') {
@@ -204,7 +210,7 @@ let plek_band = {
 
 
         //Do a last check for the length
-        if(clean_id[0].length === video_id_length){
+        if (clean_id[0].length === video_id_length) {
             return clean_id[0];
         }
         //No valid ID found
@@ -514,6 +520,14 @@ let plek_band = {
             jQuery('#' + form_id + '-container input').addClass('plek-input-highlight');
         }
         jQuery('#' + form_id + '-container').css('display', 'flex');
+    },
+
+    drop_the_link_like_its_hot(event){
+        event.preventDefault();
+        const button = event.currentTarget;
+        //const linkUrl = event.dataTransfer.getData('text/plain');
+        debugger;
+
     },
     /**
      * Checks if the band is found on spotify and loads data form the api

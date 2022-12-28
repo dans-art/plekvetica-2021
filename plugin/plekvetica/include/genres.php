@@ -119,7 +119,10 @@ class plekGenres
         'stoner-rock' => 'Stoner Rock',
         'symphonic-metal' => 'Symphonic Metal',
         'true-metal' => 'True Metal',
-        'zombiecore' => 'Zombiecore'
+        'zombiecore' => 'Zombiecore',
+        //Update 2.8.0 
+        'pagan' => 'Pagan',
+
 
     ];
     public $errors = array(); //A collection of errors since initialization

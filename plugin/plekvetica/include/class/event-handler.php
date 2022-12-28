@@ -2401,7 +2401,15 @@ class PlekEventHandler
                 }
                 return $this->upload_event_image($event_id, $form_field_name);
                 break;
-
+            case 'event_description':
+            case 'band-description':
+                $data = $plek_ajax_handler->get_ajax_data($form_field_name);
+                //strip the tags
+                if (is_array($strip_tags)) {
+                    $data = $plek_handler->remove_tags($data, $strip_tags);
+                    return $plek_handler->strip_tags($data, $plek_handler->get_allowed_tags('textarea'));
+                }
+                break;
             default:
                 $data = $plek_ajax_handler->get_ajax_data($form_field_name);
                 //strip the tags
