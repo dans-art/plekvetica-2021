@@ -2404,10 +2404,12 @@ class PlekEventHandler
             case 'event_description':
             case 'band-description':
                 $data = $plek_ajax_handler->get_ajax_data($form_field_name);
+                $data = stripcslashes($data);
                 //strip the tags
                 if (is_array($strip_tags)) {
-                    $data = $plek_handler->remove_tags($data, $strip_tags);
-                    return $plek_handler->strip_tags($data, $plek_handler->get_allowed_tags('textarea'));
+                    $data = $plek_handler->remove_tags($data, $strip_tags, 'textarea');
+                    $data = $plek_handler->strip_tags($data, $plek_handler->get_allowed_tags('textarea'));
+                    return $data;
                 }
                 break;
             default:

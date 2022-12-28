@@ -717,6 +717,7 @@ class PlekHandler
                     $this->clear_style_tags($child, $allowed_styles);
         }
     }
+
     /**
      * Remove class attributes
      *
