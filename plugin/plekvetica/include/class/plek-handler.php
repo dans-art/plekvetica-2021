@@ -701,7 +701,7 @@ class PlekHandler
     public function clear_style_tags($dom_element, $allowed_styles)
     {
         if ($dom_element->nodeType != XML_TEXT_NODE) {
-            if ($dom_element->hasAttribute('style')) {
+            if (method_exists($dom_element, 'hasAttribute') && $dom_element->hasAttribute('style')) {
                 $style = strtolower(trim($dom_element->getAttribute('style')));
                 preg_match_all('/(?<names>[a-z\-]+):/', $style, $matches);
                 for ($i = 0; $i < sizeof($matches['names']); $i++) {
@@ -727,7 +727,7 @@ class PlekHandler
     public function clear_classes($dom_element)
     {
         if ($dom_element->nodeType != XML_TEXT_NODE) {
-            if ($dom_element->hasAttribute('class')) {
+            if (method_exists($dom_element, 'hasAttribute') && $dom_element->hasAttribute('class')) {
                 $dom_element->removeAttribute('class');
             }
         }

@@ -136,6 +136,9 @@ class PlekFileHandler
             case 'image/jpeg':
                 $image_base = imagecreatefromjpeg($image_path);
                 break;
+            case 'png':
+                $image_base = imagecreatefrompng($image_path);
+                break;
 
             default:
                 $this->errors->add('create_watermarked_image_unsupported', __('Filetype not supported', 'plekvetica'));
