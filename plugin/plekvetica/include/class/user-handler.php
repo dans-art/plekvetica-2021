@@ -749,6 +749,17 @@ class PlekUserHandler
     {
         return self::$plek_custom_roles;
     }
+    
+    /**
+     * Returns all the available roles
+     *
+     * @return array The roles
+     */
+    public static function get_all_user_roles(){
+        $user = self::$plek_custom_roles;
+        $team = self::$team_roles;
+        return array_merge($team, $user);
+    }
 
     /**
      * Saves a new user with the metadata to the database

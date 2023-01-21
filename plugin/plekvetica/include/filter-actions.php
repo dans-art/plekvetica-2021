@@ -11,6 +11,7 @@ add_filter('tribe_get_event', [$plek_event, 'plek_tribe_add_terms'], 10, 1);
 
 /**
  * Add the caps for the co-authors.
+ * @deprecated 2.9 - Not used anymore since the coauthors plugin got replaced
  */
 add_filter('coauthors_edit_author_cap', function ($caps) {
   return 'edit_tribe_events';

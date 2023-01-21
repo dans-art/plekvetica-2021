@@ -798,7 +798,7 @@ class PlekEventHandler
      */
     public function get_start_date(string $format = 'd m Y', $return_sec = false)
     {
-        $seconds = strtotime($this->get_field_value('_EventStartDate'));
+        $seconds = (!empty($this->get_field_value('_EventStartDate'))) ? strtotime($this->get_field_value('_EventStartDate')) : time();
         if ($return_sec) {
             return $seconds;
         }
@@ -814,7 +814,7 @@ class PlekEventHandler
      */
     public function get_end_date(string $format = 'd m Y',  $return_sec = false)
     {
-        $seconds = strtotime($this->get_field_value('_EventEndDate'));
+        $seconds = (!empty($this->get_field_value('_EventEndDate'))) ? strtotime($this->get_field_value('_EventEndDate')) : time();
         if ($return_sec) {
             return $seconds;
         }
@@ -1240,34 +1240,33 @@ class PlekEventHandler
     /**
      * Loads all the Event authors.
      *
-     * @return array The Authors (user_id => display_name, ...)
+     * @return array The Authors (user_id => display_name (Main Role), ...)
      */
     public function get_event_authors($only_ids = false)
     {
-        $authors_handler = new PlekAuthorHandler;
-        $guest_author = $authors_handler->get_guest_author_id();
-        $page_id = (isset($this->event['data']) and is_object($this->event['data'])) ? $this->event['data']->ID : 0;
-        if (function_exists('get_coauthors')) {
-            $post_authors = get_coauthors($page_id);
-        } else {
-            //No Coautors Plugin installed
-            error_log("Co-Authors Plus plugin not installed.");
-            return false;
+        $post_author = array($this->get_field_value('post_author'));
+        $co_authors = $this->get_field_value('event_coauthor_id', true);
+        $authors_id = (!is_array($co_authors)) ? $post_author : array_merge($post_author, $co_authors);
+
+        if ($only_ids) {
+            return $authors_id;
         }
         $authors = array();
-        foreach ($post_authors as $user) {
+        $authors_handler = new PlekAuthorHandler;
+        $guest_author = $authors_handler->get_guest_author_id();
+
+
+        foreach ($authors_id as $user_id) {
+            $user = get_user_by('id', $user_id);
+            if (!is_object($user) or $user->ID === 0) {
+                continue; //Skip if no user found
+            }
             if ($user->ID === $guest_author) {
-                $authors[$user->ID] = $authors_handler->get_event_guest_author($page_id, $user->ID);
+                $authors[$user->ID] = $authors_handler->get_event_guest_author($this->get_ID(), $user->ID);
                 continue;
             }
-            $authors[$user->ID] = $user->display_name;
-        }
-        if ($only_ids) {
-            $stripped_authors = array();
-            foreach ($authors as $author_id => $author_name) {
-                $stripped_authors[] = $author_id;
-            }
-            $authors = $stripped_authors;
+            $roles = PlekUserHandler::get_all_user_roles();
+            $authors[$user->ID] = (isset($roles[$user->roles[0]])) ? $user->display_name . ' (' . $roles[$user->roles[0]] . ')' : $user->display_name;
         }
         return $authors;
     }
@@ -1277,19 +1276,35 @@ class PlekEventHandler
      *
      * @param int $user_id - The ID of the user, or current user if not set
      * @param bool $append_user -If true, all other authors are removed. 
-     * @return bool True on success, false on error.
+     * @return int|WP_Error|false Int if update / insert was successfully, false or WP_Error on error
      */
     public function set_event_author($user_id, $append_user = true)
     {
         if (!is_int($this->get_ID())) {
             return false;
         }
-        $co_authors = new CoAuthors_Plus();
 
         $user_id = (!empty($user_id)) ? $user_id : get_current_user_id();
-        $user = get_user_by('id', $user_id);
+        $meta_key = 'event_coauthor_id';
 
-        return $co_authors->add_coauthors($this->get_ID(), [$user->user_nicename], $append_user);
+        if ($append_user === false) {
+            //Remove existing coauthors
+            delete_post_meta($this->get_ID(), $meta_key);
+            //Set the user as event author
+            $arg = array(
+                'ID' => $this->get_ID(),
+                'post_author' => $user_id,
+            );
+            return wp_update_post($arg);
+        }
+
+        //If appending, add it to the post meta
+        //Check if meta does not exist yet
+        $existing_users = get_post_meta($this->get_ID(), $meta_key);
+        if (in_array($user_id, $existing_users)) {
+            return true; //User already exists as coauthor
+        }
+        return add_post_meta($this->get_ID(), $meta_key, $user_id);
     }
 
     /**
@@ -2901,7 +2916,7 @@ class PlekEventHandler
             $missing['poster'] = __('Poster', 'plekvetica');
         }
         //Check if any price is set
-        if(empty($this -> get_price_boxoffice(false)) AND empty($this -> get_price_vvk(false))){
+        if (empty($this->get_price_boxoffice(false)) and empty($this->get_price_vvk(false))) {
             $missing['price'] = __('Price', 'plekvetica');
         }
         if (empty($missing)) {

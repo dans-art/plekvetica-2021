@@ -30,11 +30,29 @@ $watermark = PLEK_PATH . 'images\watermarks\ticketraffle-2-2.png';
 
 	echo '<img src="'.$save_url.'"/>';
 }*/
-$time = strtotime('2023-02-02');
 
-$from = date('Y-m-d', $time + 60 * 60 * 24 * 2) . ' 06:00:00'; //Two day from now
-$to = date('Y-m-d', $time + 60 * 60 * 24 * 3) . ' 06:00:00'; //Three day from now
-$raffle =  do_shortcode("[plek_get_all_raffle from='$from' to='$to' return_bool=true]", false);
-if (!empty($raffle)) {
-	PlekNotificationHandler::push_to_admin('Tickets to raffle', $raffle);
+function update_coauthors()
+{
+	$pe = new PlekEvents;
+	$events = tribe_get_events(['fields' => 'ids', 'posts_per_page' => -1]);
+	$updated_events = array();
+	$added_authors = 0;
+
+	foreach ($events as $event_id) {
+		$pe->load_event($event_id);
+		$co_authors = get_coauthors($event_id);
+		if (!empty($co_authors)) {
+			foreach ($co_authors as $user) {
+				if (intval($user->ID) === intval($pe->get_field_value('post_author'))) {
+					continue;
+				}
+				$updated_events[$event_id][] = $pe -> set_event_author($user -> ID);
+				$added_authors++;
+			}
+		}
+	}
+	s($added_authors);
+	s($updated_events);
+	return true;
 }
+update_coauthors();

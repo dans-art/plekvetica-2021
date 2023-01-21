@@ -127,7 +127,7 @@
                 "ab": "Bestätigt",
                 "no": "Abgelehnt"
             },
-            "default_value": [],
+            "default_value": false,
             "allow_null": 1,
             "multiple": 0,
             "ui": 0,
@@ -166,13 +166,16 @@
                 "petizu": "Peti",
                 "eyluly": "Eylül",
                 "patb": "Pat Bebie",
+                "Melumnia": "Melissa Mangold",
+                "Mischu": "Michel Varrin",
+                "sofiar": "Sofia Ricar",
                 "anwaerter": "Anwärter"
             },
             "default_value": [],
-            "allow_null": 1,
-            "multiple": 1,
-            "ui": 0,
             "return_format": "value",
+            "multiple": 1,
+            "allow_null": 1,
+            "ui": 0,
             "ajax": 0,
             "placeholder": ""
         },
@@ -216,7 +219,7 @@
                 "ib": "Bestätigt",
                 "no": "Abgelehnt"
             },
-            "default_value": [],
+            "default_value": false,
             "allow_null": 1,
             "multiple": 0,
             "ui": 0,
@@ -331,5 +334,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1667399462
+    "modified": 1674324755
 }

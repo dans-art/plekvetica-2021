@@ -358,14 +358,9 @@ class PlekEvents extends PlekEventHandler
             ON posts.ID = postponed.post_id
             AND postponed.meta_key = 'postponed_event'
             
-            LEFT JOIN `plek_term_relationships` as oid
-            ON oid.object_id = posts.ID
-            LEFT JOIN `plek_term_taxonomy` as term
-            ON term.term_id = oid.term_taxonomy_id
-            
             WHERE (meta.`meta_key` LIKE 'akkreditiert'
             AND meta.`meta_value` LIKE '%s')
-             OR (post_author = %d OR (term.taxonomy = 'author'AND term.description LIKE '%s'))
+            OR (post_author = %d OR (meta.meta_key = 'event_coauthor' AND meta.meta_value = %d))
             AND posts.ID IS NOT NULL
             AND startdate.meta_value > '%s'
             AND startdate.meta_value < '%s'
@@ -375,7 +370,8 @@ class PlekEvents extends PlekEventHandler
             
             GROUP BY posts.ID
             ORDER BY startdate.meta_value DESC
-            LIMIT %d OFFSET %d", $like, $user_id, $like, $from, $to, $limit, $page_obj->offset);
+            LIMIT %d OFFSET %d", $like, $user_id, $user_id, $from, $to, $limit, $page_obj->offset);
+
         $posts = $wpdb->get_results($query);
         $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
         $this->total_posts['get_user_akkredi_event'] = $total_posts;
