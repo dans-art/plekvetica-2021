@@ -1352,7 +1352,7 @@ class PlekEvents extends PlekEventHandler
                 wp_set_script_translations("plek-{$handler_name}-handler", 'plekvetica', PLEK_PATH . "/languages");
             }
 
-            wp_enqueue_script('plek-compare-algorithm', PLEK_PLUGIN_DIR_URL . "js/components/compare-algorithm{$min}.js", ['jquery', 'plek-language', 'manage-plek-events', 'wp-i18n']);
+            wp_enqueue_script('plek-compare-algorithm', PLEK_PLUGIN_DIR_URL . "js/components/compare-algorithm{$min}.js", ['jquery', 'plek-language', 'manage-plek-events', 'wp-i18n'], $plek_handler->version);
             wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler.js', ['jquery', 'plek-language', 'wp-i18n'], $plek_handler->version);
 
             //Set the script translations, called by Wordpress load_script_translations()
