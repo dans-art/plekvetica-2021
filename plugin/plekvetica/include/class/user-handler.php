@@ -7,8 +7,8 @@ if (!defined('ABSPATH')) {
 class PlekUserHandler
 {
 
-    protected static $team_roles = []; //Set by the constructor 
-    protected static $plek_custom_roles = []; //Set by the constructor 
+    protected static array $team_roles = []; //Set by the constructor 
+    protected static array $plek_custom_roles = []; //Set by the constructor 
 
     public function __construct()
     {
@@ -39,6 +39,18 @@ class PlekUserHandler
             'reviewwriter' => __('Review writer', 'plekvetica'),
             'videograph' => __('Videograph', 'plekvetica')
         );
+    }
+
+    /**
+     * Gets all the members considered team members
+     * All of the users who have a role defined in $team_roles will be returned
+     *
+     * @return array Array with WP_User objects
+     */
+    public static function get_team_members(){
+        $args = ['role__in' => array_flip(self::$team_roles)];
+        $users = get_users($args);
+        return $users;
     }
 
     /**

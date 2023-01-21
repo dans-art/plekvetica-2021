@@ -192,6 +192,9 @@ class PlekEvents extends PlekEventHandler
     public function load_event_meta(int $event_id)
     {
         $this->event['meta'] = tribe_get_event_meta($event_id);
+
+        //Add custom meta fields
+        $this -> event['meta']['event_coauthor_id'] = get_post_meta($event_id, 'event_coauthor_id');
         return;
     }
 

@@ -1,5 +1,4 @@
 <?php
-
 extract(get_defined_vars());
 $event_object = $template_args[0]; //Plek_events object
 $featured = ($event_object->is_featured()) ? 'checked' : '';

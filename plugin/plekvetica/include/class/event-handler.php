@@ -2178,6 +2178,7 @@ class PlekEventHandler
             $validator->set_type('event_featured', 'bool');
             $validator->set_type('event_promote', 'bool');
             $validator->set_type('event_ticket_raffle', 'url');
+            $validator->set_type('event_team', 'int');
         }
 
         return $validator;
@@ -2366,6 +2367,20 @@ class PlekEventHandler
             }
             if (!update_metadata('post', $event_id, $meta_name, $value)) {
                 $failed[] = $meta_name;
+            }
+        }
+
+        //Update the users
+        $team = $this->get_event_form_value('event_team');
+        if (!empty($team)) {
+            $members = explode(',', $team);
+            $count = 0;
+            foreach ($members as $user_id) {
+                $set = ($count === 0) ? $this->set_event_author($user_id, false) : $this->set_event_author($user_id, true);
+                if (!$set) {
+                    $failed[] = __('Failed to update post author', 'plekvetica');
+                }
+                $count++;
             }
         }
 

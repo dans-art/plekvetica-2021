@@ -42,6 +42,9 @@ if (empty($event_class->get_event())) {
 	<?php if (PlekUserHandler::user_is_in_team()) : ?>
 		<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Ticket raffle', 'plekvetica')); ?>
 		<?php PlekTemplateHandler::load_template('ticket-raffle', 'event/form/components', $event_class); ?>
+
+		<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Team', 'plekvetica')); ?>
+		<?php PlekTemplateHandler::load_template('authors', 'event/form/components', $event_class); ?>
 	<?php endif; ?>
 
 	<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Event attributes', 'plekvetica')); ?>
