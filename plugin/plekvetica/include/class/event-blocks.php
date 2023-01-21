@@ -146,7 +146,8 @@ class PlekEventBlocks extends PlekEvents
             case 'my_events':
                 //Load the data
                 if ($user->user_is_in_team()) {
-                    $ret['data'] = $this->get_user_akkredi_event(null, null, $limit);
+                    //Loads all events. The one the user created and the ones he is accreditaded
+                    $ret['data'] = $this->get_team_user_events(null, null, $limit);
                     $this->block_total_posts = (isset($this->total_posts['get_user_akkredi_event'])) ? $this->total_posts['get_user_akkredi_event'] : 0;
                 } else {
                     $ret['data'] = $this->get_user_events();
@@ -247,6 +248,7 @@ class PlekEventBlocks extends PlekEvents
 
         $this->set_block_paged($block_id);
         $page_obj = $this->get_pages_object($this->number_of_posts);
+        // Loading the data for the block
         $load = $this->load_block($block_id, $data);
         $total_posts = $this->block_total_posts;
         $this->block_total_posts = null; //Reset the total posts

@@ -1070,7 +1070,11 @@ class PlekNotificationHandler extends WP_List_Table
         if (!empty($raffle)) {
             PlekNotificationHandler::push_to_admin('Tickets to raffle', $raffle);
         }
-
+        // This is for debug. Check later, if this runs every day!
+        apply_filters(
+            'simple_history_log',
+            'plek daily cron job fired'
+        );
     }
 
     /**

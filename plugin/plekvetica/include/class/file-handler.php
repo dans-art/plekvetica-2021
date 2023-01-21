@@ -136,7 +136,7 @@ class PlekFileHandler
             case 'image/jpeg':
                 $image_base = imagecreatefromjpeg($image_path);
                 break;
-            case 'png':
+            case 'png': //@todo Not working. 
                 $image_base = imagecreatefrompng($image_path);
                 break;
 

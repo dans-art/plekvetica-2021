@@ -30,24 +30,11 @@ $watermark = PLEK_PATH . 'images\watermarks\ticketraffle-2-2.png';
 
 	echo '<img src="'.$save_url.'"/>';
 }*/
-$event_id = 78471;
+$time = strtotime('2023-02-02');
 
-$args = array();
-$args['post_title'] = 'Testevent';
-$args['EventShowMap'] = true;
-$args['EventShowMapLink'] = true;
-
-$start_time = time();
-$end_time = time();
-
-$args['EventStartDate'] = date('Y-m-d', $start_time);
-$args['EventStartHour'] = date('H', $start_time);
-$args['EventStartMinute'] = date('i', $start_time);
-
-$args['EventEndDate'] = date('Y-m-d', $end_time);
-$args['EventEndHour'] = date('H', $end_time);
-$args['EventEndMinute'] = date('i', $end_time);
-
-
-$args['post_status'] = 'draft';
-s(tribe_create_event($args));
+$from = date('Y-m-d', $time + 60 * 60 * 24 * 2) . ' 06:00:00'; //Two day from now
+$to = date('Y-m-d', $time + 60 * 60 * 24 * 3) . ' 06:00:00'; //Three day from now
+$raffle =  do_shortcode("[plek_get_all_raffle from='$from' to='$to' return_bool=true]", false);
+if (!empty($raffle)) {
+	PlekNotificationHandler::push_to_admin('Tickets to raffle', $raffle);
+}

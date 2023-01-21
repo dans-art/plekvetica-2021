@@ -324,6 +324,65 @@ class PlekEvents extends PlekEventHandler
         }
     }
     /**
+     * Get all events with a accreditation status and all the events created by a certain user
+     *
+     * @todo: Add support for co-authors (term.taxonomy) to the other event fetching functions. E.g. get_events_of_band_user
+     * @param string $from - date('Y-m-d H:i:s')
+     * @param string $to - date('Y-m-d H:i:s')
+     * @return object Result form the database. 
+     */
+    public function get_team_user_events(string $from = null, string $to = null,  $limit = 0)
+    {
+        global $wpdb;
+        $user = PlekUserHandler::get_user_login_name();
+        $user_id = PlekUserHandler::get_user_id();
+        $page_obj = $this->get_pages_object($limit);
+        //$limit = $limit ?: $page_obj->posts_per_page;
+
+        $wild = '%';
+        $like = $wild . $wpdb->esc_like($user) . $wild; //User login name
+
+        $from = $from ?: '1970-01-01 00:00:00';
+        $to = $to ?: '9999-01-01 00:00:00';
+
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS meta.meta_value as akk_team, posts.ID, posts.post_title , status.meta_value as akk_status, startdate.meta_value as startdate
+            FROM `{$wpdb->prefix}postmeta` as meta
+            LEFT JOIN {$wpdb->prefix}posts as posts
+            ON posts.ID = meta.post_id AND posts.post_type = 'tribe_events'
+            LEFT JOIN {$wpdb->prefix}postmeta as status
+            ON posts.ID = status.post_id AND status.meta_key = 'akk_status'
+            LEFT JOIN {$wpdb->prefix}postmeta as startdate
+            ON posts.ID = startdate.post_id AND startdate.meta_key = '_EventStartDate'
+            
+            LEFT JOIN {$wpdb->prefix}postmeta as postponed
+            ON posts.ID = postponed.post_id
+            AND postponed.meta_key = 'postponed_event'
+            
+            LEFT JOIN `plek_term_relationships` as oid
+            ON oid.object_id = posts.ID
+            LEFT JOIN `plek_term_taxonomy` as term
+            ON term.term_id = oid.term_taxonomy_id
+            
+            WHERE (meta.`meta_key` LIKE 'akkreditiert'
+            AND meta.`meta_value` LIKE '%s')
+             OR (post_author = %d OR (term.taxonomy = 'author'AND term.description LIKE '%s'))
+            AND posts.ID IS NOT NULL
+            AND startdate.meta_value > '%s'
+            AND startdate.meta_value < '%s'
+            AND posts.post_status IN ('publish', 'draft')
+
+            AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
+            
+            GROUP BY posts.ID
+            ORDER BY startdate.meta_value DESC
+            LIMIT %d OFFSET %d", $like, $user_id, $like, $from, $to, $limit, $page_obj->offset);
+        $posts = $wpdb->get_results($query);
+        $total_posts = $wpdb->get_var("SELECT FOUND_ROWS()");
+        $this->total_posts['get_user_akkredi_event'] = $total_posts;
+        return $posts;
+    }
+
+    /**
      * Get all the posts from the user with organizer role.
      * This is only working, when the logged in user has the role "plek-organi"
      * @todo: also search for posts which the user is co-author
@@ -379,6 +438,14 @@ class PlekEvents extends PlekEventHandler
         return $events;
     }
 
+    /**
+     * Gets the events for a band user
+     *
+     * @param string $from
+     * @param string $to
+     * @param integer $limit
+     * @return array The events found
+     */
     public function get_events_of_band_user($from, $to, $limit = 0)
     {
         global $wpdb;
@@ -619,6 +686,7 @@ class PlekEvents extends PlekEventHandler
 
         AND review.meta_value NOT LIKE '1'
         AND enddate.meta_value < '%s'
+        GROUP BY posts.ID
         ORDER BY startdate.meta_value DESC", $like, $today);
         $posts = $wpdb->get_results($query);
         return $posts;
@@ -1037,7 +1105,8 @@ class PlekEvents extends PlekEventHandler
             $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page + 1), __('Load more events', 'plekvetica'), '_self', 'load_more_reviews', 'ajax-loader-button');
         }
         if (empty($posts)) {
-            return ($short_atts['return_bool'] !== true and $short_atts['return_bool'] !== 'true') ? __('No raffles found', 'plekvetica') : false;
+            // If this function is called via shortcode, false will be an empty string
+            return ($short_atts['return_bool'] === true or $short_atts['return_bool'] === 'true') ? false : __('No raffles found', 'plekvetica');
         }
         return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $posts, 'raffle_events') . $load_more;
     }
