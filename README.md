@@ -1,5 +1,10 @@
 # plekvetica-2021
 
+Version 2.9.0
+- Redesigned co-authors and removed the plugin coauthors plus
+- Optimized code
+- Various fixed
+
 Version 2.5.0
 - Fix: Facebook publisher
 - Facebook API integration optimiert
