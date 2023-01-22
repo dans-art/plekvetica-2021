@@ -396,6 +396,8 @@ ul.partner-container {
 .band-single.band-container {
     display: flex;
     column-gap: 5%;
+    width: 100%;
+    flex-wrap: wrap;
 
     .info-text-bar {
         width: 100%;
@@ -403,7 +405,7 @@ ul.partner-container {
     }
 
     .band-content {
-        flex-basis: 70%;
+        flex-basis: 65%;
     }
 
     .meta-container,
@@ -566,5 +568,14 @@ ul.partner-container {
             position: absolute;
             content: '\f015';
         }
+    }
+}
+
+#team-cal-navi {
+    display: flex;
+    gap: 2em;
+
+    a {
+        width: 50%;
     }
 }

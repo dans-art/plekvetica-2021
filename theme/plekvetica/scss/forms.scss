@@ -525,7 +525,7 @@ input[type=checkbox]{
   }
 
   #band-social{
-    label{
+    .social_media_label{
       display: none;
     }
     .input-icon{
@@ -562,6 +562,9 @@ input[type=checkbox]{
 
   #band-videos{
     display: none;
+  }
+  #band-social .band-videos-container .input-instructions{
+    padding-left: 0;
   }
 
   #add-band-video{

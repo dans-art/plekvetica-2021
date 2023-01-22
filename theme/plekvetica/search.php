@@ -26,7 +26,7 @@ get_header(); ?>
 		do_action('generate_before_main_content');
 
 		if(empty(get_search_query())){
-			echo '<h1>'. __('Search for: Rick Astley','pleklang') . '</h1>';
+			echo '<h1>'. __('Search for: Rick Astley','plekvetica') . '</h1>';
 			PlekTemplateHandler::load_template('rick-roll', 'components', null);
 		}else{ 
 		?>
@@ -43,20 +43,20 @@ get_header(); ?>
 		</header>
 
 		<div class="plek-search-bands">
-			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Bands', 'pleklang')); ?>
+			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Bands', 'plekvetica')); ?>
 			<?php echo $plek_search_handler -> get_bands(); ?>
 
 		</div>
 		<div class="plek-search-photos">
-			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Photos', 'pleklang')); ?>
+			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Photos', 'plekvetica')); ?>
 			<?php echo $plek_search_handler -> get_photos(); ?>
 		</div>
 		<div class="plek-search-videos">
-			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Videos', 'pleklang')); ?>
+			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Videos', 'plekvetica')); ?>
 			<?php echo $plek_search_handler -> get_videos(); ?>
 		</div>
 		<div class="plek-search-events">
-			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Events', 'pleklang')); ?>
+			<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Events', 'plekvetica')); ?>
 			<?php //echo $plek_search_handler -> get_events(); ?>
 			<?php 
 			global $plek_event_blocks;
@@ -65,7 +65,7 @@ get_header(); ?>
 			<?php if (!empty($events)) : ?>
                 <?php echo $events; ?>
             <?php else : ?>
-                <span class="plek-no-events"><?php echo __('No Events found', 'pleklang'); ?></span>
+                <span class="plek-no-events"><?php echo __('No Events found', 'plekvetica'); ?></span>
             <?php endif; ?>
 		</div>
 

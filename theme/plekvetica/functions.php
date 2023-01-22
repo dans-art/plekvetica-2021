@@ -11,8 +11,22 @@ add_filter('disable_wp_rest_api_post_var', [$plek_theme, 'disable_wp_rest_api_po
 
 add_filter('auth_cookie_expiration', [$plek_theme, 'keep_me_logged_in']);
 
+add_action('wp_head', [$plek_theme, 'wp_head_action']);
+
 class plekTheme
 {
+
+    public function wp_head_action(){
+        echo '<!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-38853620-4"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag(\'js\', new Date());
+          gtag(\'config\', \'UA-38853620-4\');
+        </script>"';
+
+    }
 
     public function plek_nav_items($items, $args)
     {
@@ -21,7 +35,7 @@ class plekTheme
             //Replace the sub-menu
             $items = str_replace('class="sub-menu"', 'class="plek-sub-menu"', $items);
             //Add Search Bar
-            $placeholder = __('Search...', 'pleklang');;
+            $placeholder = __('Search...', 'plekvetica');;
             $items .= "<li class='plek-menu-search'>
             <a class='icon' href='#'><i class='fas fa-search'></i></a>
             <ul>
