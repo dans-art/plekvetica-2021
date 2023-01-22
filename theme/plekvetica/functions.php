@@ -24,7 +24,7 @@ class plekTheme
           function gtag(){dataLayer.push(arguments);}
           gtag(\'js\', new Date());
           gtag(\'config\', \'UA-38853620-4\');
-        </script>"';
+        </script>';
 
     }
 
