@@ -32,10 +32,11 @@ $watermark = PLEK_PATH . 'images\watermarks\ticketraffle-2-2.png';
 }*/
 
 $pm = new PlekNewsletter;
+
 //$user = new TNP_User;
 //s($user);
 
-s($pm -> update_lists());
-s($pm -> update_organizer());
+
+echo $pm -> update_all_lists();
 
 //s($pm -> update_organizer());

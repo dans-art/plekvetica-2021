@@ -44,12 +44,19 @@ class PlekUserHandler
     /**
      * Gets all the members considered team members
      * All of the users who have a role defined in $team_roles will be returned
+     * 
+     * @param bool $only_shown - Only returns the users which are set as active members  
      *
      * @return array Array with WP_User objects
      */
-    public static function get_team_members()
+    public static function get_team_members($only_shown = false)
     {
         $args = ['role__in' => array_flip(self::$team_roles)];
+        if($only_shown){
+            $args['meta_key'] = 'show_member';
+            $args['meta_value'] = '1';
+            $args['meta_compare'] = '=';
+        }
         $users = get_users($args);
         return $users;
     }

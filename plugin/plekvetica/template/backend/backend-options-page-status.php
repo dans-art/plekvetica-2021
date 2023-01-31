@@ -32,3 +32,8 @@ if ($check !== true) {
     echo 'All good, ' . count($pg->genres) . ' Genres active';
 }
 ?>
+<h2>Newsletter</h2>
+<?php 
+$pnl = new PlekNewsletter;
+echo $pnl -> update_all_lists();
+?>
