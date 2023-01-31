@@ -31,28 +31,11 @@ $watermark = PLEK_PATH . 'images\watermarks\ticketraffle-2-2.png';
 	echo '<img src="'.$save_url.'"/>';
 }*/
 
-function update_coauthors()
-{
-	$pe = new PlekEvents;
-	$events = tribe_get_events(['fields' => 'ids', 'posts_per_page' => -1]);
-	$updated_events = array();
-	$added_authors = 0;
+$pm = new PlekNewsletter;
+//$user = new TNP_User;
+//s($user);
 
-	foreach ($events as $event_id) {
-		$pe->load_event($event_id);
-		$co_authors = get_coauthors($event_id);
-		if (!empty($co_authors)) {
-			foreach ($co_authors as $user) {
-				if (intval($user->ID) === intval($pe->get_field_value('post_author'))) {
-					continue;
-				}
-				$updated_events[$event_id][] = $pe -> set_event_author($user -> ID);
-				$added_authors++;
-			}
-		}
-	}
-	s($added_authors);
-	s($updated_events);
-	return true;
-}
-update_coauthors();
+s($pm -> update_lists());
+s($pm -> update_organizer());
+
+//s($pm -> update_organizer());
