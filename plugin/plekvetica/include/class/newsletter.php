@@ -370,7 +370,7 @@ class PlekNewsletter
 
     /**
      * Updates all the lists and also the list names
-     *
+     * 
      * @return string Summary of the changes
      */
     private function update_all_lists()
