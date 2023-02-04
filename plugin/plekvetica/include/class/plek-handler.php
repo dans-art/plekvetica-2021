@@ -865,7 +865,11 @@ class PlekHandler
         //Save
         if (!empty($accredi_note)) {
             //Saves the rejection reason
-            $pe->set_accreditation_note($accredi_note, $organizer_id);
+            if($pe->set_accreditation_note($accredi_note, $organizer_id) !== false){
+                //Reload event
+                $pe -> load_event($event_id);
+                $accredi_note = $pe->get_accreditation_note_formatted(__('Latest Notes', 'plekvetica'));
+            }
         }
         $update = $pe->set_akkredi_status($event_id, $status_code);
         if($update !== true){

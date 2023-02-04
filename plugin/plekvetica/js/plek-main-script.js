@@ -539,8 +539,7 @@ let plek_main = {
      * @param {object} formdata 
      * @returns 
      */
-    get_url_query_data(formdata) {
-        let items = ['order', 'direction', 's', 'search_reviews'];
+    get_url_query_data(formdata, items = ['order', 'direction', 's', 'search_reviews']) {
         let url = new URLSearchParams(window.location.search);
         jQuery(items).each(function (id, name) {
             let val = url.get(name);

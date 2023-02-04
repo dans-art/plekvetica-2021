@@ -1578,14 +1578,36 @@ class PlekEvents extends PlekEventHandler
     }
 
     /**
+     * Get the accreditation notes as formatted list
+     *
+     * @return string Empty string if no messages found, list otherwise
+     */
+    public function get_accreditation_note_formatted($title = "")
+    {
+        $accredi_messages = $this->get_accreditation_note(true, false);
+        if (count($accredi_messages) === 0) {
+            return "";
+        }
+        $out = '<div class="bold">' . $title . '</div><ul>';
+
+        foreach ($accredi_messages as $time => $message) {
+            $out .= '<li>' . date('d-m-Y H:i', $time) . ' - ' . $message . '</li>';
+        }
+        $out .= '</ul>';
+        return $out;
+    }
+
+    /**
      * Sets an accreditation note
      * @todo: Allow for multiple messages
      * @param [type] $note
      * @param int $organizer_id
-     * @return void
+     * @return string|bool String with note on success, false on error
      */
     public function set_accreditation_note($note, $organizer_id = null)
     {
+        global $plek_handler;
+
         if (!$this->get_ID()) {
             return false;
         }
@@ -1598,14 +1620,17 @@ class PlekEvents extends PlekEventHandler
         }
         //Add user info
         $user = wp_get_current_user();
-        if($user -> ID !== 0){
-            $note .= (!empty($user->display_name)) ? ' [' . sprintf(__('by: %s', 'plekvetica'), $user->display_name).']' : '';
+        if ($user->ID !== 0) {
+            $note .= (!empty($user->display_name)) ? ' [' . sprintf(__('by: %s', 'plekvetica'), $user->display_name) . ']' : '';
         }
-        
+
         //Add the note
         $existing_notes = $this->get_accreditation_note(true);
         $existing_notes[time()] = $note;
-
-        return update_field('accreditation_note', $existing_notes, $this->get_ID());
+        $add = $plek_handler->update_field('accreditation_note', $existing_notes, $this->get_ID());
+        if ($add === true) {
+            return $note;
+        }
+        return false;
     }
 }

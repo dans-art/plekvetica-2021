@@ -32,7 +32,7 @@ $status_selector = [
 
 $pe = new PlekEvents;
 $po = new PlekOrganizerHandler;
-$organi_name = $po -> get_organizer_name_by_id($organizer_id);
+$organi_name = $po->get_organizer_name_by_id($organizer_id);
 
 if (!$pe->load_event($event_id)) {
     echo $pe->get_error(true);
@@ -40,7 +40,6 @@ if (!$pe->load_event($event_id)) {
 }
 
 $current_accreditation_status = $pe->get_field_value('akk_status');
-$accredi_messages = $pe->get_accreditation_note(true, false);
 
 ?>
 <form id="accreditation-manager" action="<?php echo $page; ?>" method="post">
@@ -91,14 +90,9 @@ $accredi_messages = $pe->get_accreditation_note(true, false);
                         <textarea id="accredi-reason" name="accredi-reason" placeholder="<?php echo __('Definitive confirmation will be sent via mail, Meeting point is the box office, rejected because of..., etc.', 'plekvetica'); ?> "></textarea>
                     </div>
                     <div class="status-history">
-                        <?php if (count($accredi_messages) > 0) : ?>
-                            <div class="bold"><?php echo __('Latest Notes', 'plekvetica'); ?></div>
-                            <ul>
-                                <?php foreach ($accredi_messages as $time => $message) : ?>
-                                    <li> <?php echo date('d-m-Y H:i', $time); ?> - <?php echo $message; ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        <?php endif; ?>
+                        <?php
+                        echo $pe->get_accreditation_note_formatted(__('Latest Notes', 'plekvetica'));
+                        ?>
                     </div>
                 </div>
             </div>

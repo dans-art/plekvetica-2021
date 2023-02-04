@@ -325,6 +325,16 @@ class PlekAjaxHandler
                     $this->set_error($error_msg);
                 }
                 break;
+                case 'manage_accreditation':
+                    global $plek_handler;
+                    $update = $plek_handler->update_organizer_accreditation_answer();
+                    if(is_array($update)){
+                        $data = json_encode($update);
+                        $this -> set_success($data);
+                    }else{
+                        $this -> set_error($update);
+                    }
+                    break;
             default:
                 # code...
                 $this->set_error(__('You are not allowed to use this request or function not found', 'plekvetica'));
