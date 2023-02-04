@@ -389,4 +389,26 @@ class PlekNewsletter
         }
         return '<div>' . $result . '</div>';
     }
+
+    /**
+     * Shows a preview of a email newsletter
+     *
+     * @param int $id
+     * @return string The Newsletter message as html code. Shortcodes applied
+     */
+    private function get_newsletter_preview($id){
+        global $wpdb;
+        $id = (int) $id;
+        $query = "SELECT `message` FROM ".NEWSLETTER_EMAILS_TABLE." WHERE `id` = '$id'";
+        $result = $wpdb->get_results($query);
+
+        if(!isset($result[0] -> message) OR empty($result[0] -> message)){
+            return __('No Newsletter found','plekvetica');
+        }
+
+        //Apply shortcodes and codes from the newsletter plugin
+        return do_shortcode($result[0] -> message);
+        
+
+    }
 }

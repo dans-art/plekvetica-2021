@@ -5,7 +5,7 @@ Description: Child theme for Generatepress theme
 Author: Daniel Spycher
 Author URI: 
 Template: generatepress
-Version: 1.1.1
+Version: 1.1
 Text Domain:  plekvetica
 */
 body { color: white; }
@@ -926,6 +926,22 @@ input[type=checkbox] { margin: 1rem 0 0 0; height: 1.5rem; width: 1.5rem; filter
   .inside-footer-widgets .footer-widget-1, .inside-footer-widgets .footer-widget-2, .inside-footer-widgets .footer-widget-3 { width: 33%; }
   footer.site-info { width: 100%; clear: both; text-align: center; }
   footer.site-info .copyright-bar { width: 100%; } }
+#accreditation-manager .bold { font-weight: bold; margin-bottom: 0.7em; }
+#accreditation-manager .event { display: flex; justify-content: flex-start; gap: 1em; margin-top: 1em; }
+#accreditation-manager .crew ul, #accreditation-manager .crew ul li { padding-left: 0; margin-left: 0; list-style: none; }
+#accreditation-manager .left-col { width: 30%; }
+#accreditation-manager .right-col { padding-top: 3em; width: 70%; }
+#accreditation-manager .status-selector { list-style-type: none; padding-left: 0; margin-left: 0; }
+#accreditation-manager .status-selector label { padding-left: 0.5em; vertical-align: top; }
+#accreditation-manager .status-selector label[for="status-no"] { color: #D9042B; }
+#accreditation-manager .status-selector label[for="status-ab"] { color: #268c37; }
+#accreditation-manager .status-selector label[for="status-abc"] { color: #FAAD2B; }
+#accreditation-manager .status-selector input { appearance: none; font-size: 1em; border: 2px solid #8C262E; border-radius: 50%; width: 1.2em; height: 1.2em; color: #8C262E; }
+#accreditation-manager .status-selector input:checked { background-color: white; }
+
+@media (max-width: 768px) { #accreditation-manager .event { display: flex; justify-content: flex-start; gap: 0em; flex-direction: column; }
+  #accreditation-manager .left-col, #accreditation-manager .right-col { width: 100%; }
+  #accreditation-manager .left-col { text-align: center; } }
 /*Breakpoints have to be at the end to avoid override*/
 @media (min-width: 4000px) { #post-27146 .info-text-line { left: 20vw; } }
 @media (min-width: 2000px) { #post-27146 .info-text-line { left: 10vw; } }

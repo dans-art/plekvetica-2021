@@ -1383,7 +1383,7 @@ class PlekEventHandler
     /**
      * Loads the Status text. If no code is given, the status of the current loaded event will be returned.
      *
-     * @param string $status_code - (aw, ab, aa, no, iq, ib, ia) are accepted.
+     * @param string $status_code - (aw, ab, abc, aa, no, iq, ib, ibc, ia) are accepted.
      * @return string The status code or false if not found.
      */
     public function get_event_status_text(string $status_code = '')
@@ -1403,6 +1403,10 @@ class PlekEventHandler
             case 'ab':
             case 'ib':
                 return __('Confirmed', 'plekvetica');
+                break;
+            case 'abc':
+            case 'ibc':
+                return __('Confirmed with reserve', 'plekvetica');
                 break;
             case 'aa':
             case 'ia':
@@ -1566,7 +1570,7 @@ class PlekEventHandler
     public function set_akkredi_status(int $event_id, string $status_code)
     {
         global $plek_handler;
-        $allowed_codes = array('aw', 'ab', 'aa', 'no');
+        $allowed_codes = array('aw', 'ab', 'abc',  'aa', 'no');
         if (array_search($status_code, $allowed_codes) === false) {
             return __('Error: Status code not allowed', 'plekvetica');
         }
@@ -1598,7 +1602,7 @@ class PlekEventHandler
         }
 
         //Set Event to featured if status code is ab (accreditation confirmed)
-        if ($status_code === 'ab') {
+        if ($status_code === 'ab' OR $status_code === 'abc') {
             return ($this->update_event_meta($event_id, '_tribe_featured', '1') === false) ? __('Error while updating the event featured status', 'plekvetica') : true;
         }
 

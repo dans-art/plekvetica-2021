@@ -37,6 +37,6 @@ $pm = new PlekNewsletter;
 //s($user);
 
 
-echo $pm -> update_all_lists();
+echo $pm -> get_newsletter_preview(11);
 
 //s($pm -> update_organizer());

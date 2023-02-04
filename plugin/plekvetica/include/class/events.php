@@ -194,7 +194,7 @@ class PlekEvents extends PlekEventHandler
         $this->event['meta'] = tribe_get_event_meta($event_id);
 
         //Add custom meta fields
-        $this -> event['meta']['event_coauthor_id'] = get_post_meta($event_id, 'event_coauthor_id');
+        $this->event['meta']['event_coauthor_id'] = get_post_meta($event_id, 'event_coauthor_id');
         return;
     }
 
@@ -1557,7 +1557,8 @@ class PlekEvents extends PlekEventHandler
             $notes = array($notes);
         }
         if ($raw) {
-            return $notes;
+            //remove empty fields
+            return array_filter($notes);
         }
         if (empty($notes)) {
             return '';
@@ -1569,7 +1570,7 @@ class PlekEvents extends PlekEventHandler
         }
         $return = array();
         foreach ($notes as $time => $message) {
-            if (!empty($message)) {
+            if (!empty($message) and $time !== 0) {
                 $return[] = date('d-m-Y H:i', $time) . ' - ' . $message;
             }
         }
@@ -1580,16 +1581,31 @@ class PlekEvents extends PlekEventHandler
      * Sets an accreditation note
      * @todo: Allow for multiple messages
      * @param [type] $note
+     * @param int $organizer_id
      * @return void
      */
-    public function set_accreditation_note($note)
+    public function set_accreditation_note($note, $organizer_id = null)
     {
         if (!$this->get_ID()) {
             return false;
         }
-        $existing_note = $this->get_accreditation_note(true);
-        $existing_note[time()] = $note;
 
-        return update_field('accreditation_note', $existing_note, $this->get_ID());
+        //Add organizer info
+        if ($organizer_id !== null) {
+            $po = new PlekOrganizerHandler;
+            $organizer_name = $po->get_organizer_name_by_id($organizer_id);
+            $note .= ' (' . sprintf(__('Organizer: %s', 'plekvetica'), $organizer_name) . ')';
+        }
+        //Add user info
+        $user = wp_get_current_user();
+        if($user -> ID !== 0){
+            $note .= (!empty($user->display_name)) ? ' [' . sprintf(__('by: %s', 'plekvetica'), $user->display_name).']' : '';
+        }
+        
+        //Add the note
+        $existing_notes = $this->get_accreditation_note(true);
+        $existing_notes[time()] = $note;
+
+        return update_field('accreditation_note', $existing_notes, $this->get_ID());
     }
 }
