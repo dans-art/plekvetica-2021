@@ -906,4 +906,16 @@ class PlekHandler
         ];
     }
 
+    /**
+     * Adds routes for the rest API
+     *
+     * @return void
+     */
+    public function register_rest_routes(){
+        register_rest_route('plek-events/v1', '/search/', [
+            'methods' => 'GET',
+            'callback' => [new PlekEvents, 'rest_search_events']
+        ]);
+    }
+
 }

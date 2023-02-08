@@ -1633,4 +1633,63 @@ class PlekEvents extends PlekEventHandler
         }
         return false;
     }
+
+    /**
+     * The Rest API 
+     *
+     * @return void
+     */
+    public function rest_search_events($data)
+    {
+        global $wpdb;
+        if (!isset($data['query'])) {
+            return [
+                'code' => 'rest_missing_query',
+                'message' => __('No query given. Add ?query=searchfor to the url', 'plekvetica'),
+                'data' => ['status' => 404]
+            ];
+        }
+
+        // @todo: Sanitize the query
+        $query = htmlspecialchars($data['query']);
+        $result = $wpdb->get_results(
+            $query = $wpdb->prepare(
+                "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME) as startdate
+            FROM `{$wpdb->prefix}posts` as posts 
+            LEFT JOIN {$wpdb->prefix}postmeta as date
+            ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
+            WHERE post_title LIKE '%s'
+            AND post_type = 'tribe_events'
+            AND posts.post_status IN ('publish')
+    
+            GROUP BY posts.ID
+            ORDER BY date.meta_value DESC
+            LIMIT 50",
+                '%' . $wpdb->esc_like($query) . '%'
+            )
+        );
+
+
+        if (empty($result)) {
+            return [
+                'code' => 'rest_no_event_found',
+                'message' => __('No Events found', 'plekvetica'),
+                'data' => ['status' => 404]
+            ];
+        }
+
+        $ret_array = array();
+        foreach ($result as $item) {
+            $time = strtotime($item->startdate);
+            $past_event = ($time < time()) ? true : false;
+            $ret_array[] = [
+                'id' => $item->ID,
+                'title' => $item->post_title,
+                'startdate' => date('d.m.Y', $time),
+                'poster' => get_the_post_thumbnail_url($item->ID, 'thumbnail'),
+                'past_event' => $past_event
+            ];
+        }
+        return $ret_array;
+    }
 }
