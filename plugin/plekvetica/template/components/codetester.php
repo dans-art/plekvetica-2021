@@ -24,6 +24,16 @@ $save_path = ABSPATH . 'wp-content\uploads\2022\Plakat_GNP_OBSCURA_420x594_web_m
 $save_url = 'https://localhost/plekvetica/wp-content/uploads/2022/Plakat_GNP_OBSCURA_420x594_web_marked.jpg';
 $watermark = PLEK_PATH . 'images\watermarks\ticketraffle-2-2.png';
 
+
+$pe -> load_event(66497);
+?>
+<div>
+<?php 
+s(nl2br($pe-> get_event_promo_text()));
+?>
+</div>
+<?php 
+
 /*if(!$pf -> create_watermarked_image($orig_photo, $watermark, $save_path)){
 	s($pf->errors->get_error_messages());
 }else{
@@ -37,6 +47,6 @@ $pm = new PlekNewsletter;
 //s($user);
 
 
-echo $pm -> get_newsletter_preview(11);
+//echo $pm -> get_newsletter_preview(11);
 
 //s($pm -> update_organizer());

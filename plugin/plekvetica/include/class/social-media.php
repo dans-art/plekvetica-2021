@@ -71,7 +71,7 @@ class plekSocialMedia
     {
         $fb = (!$this->facebook_object) ? $this->facebook_login() : (object) $this->facebook_object;
         $photo_data = [
-            'message' => htmlspecialchars($msg),
+            'message' => $msg,
             'source' => $fb->fileToUpload($path)
         ];
         try {
@@ -329,6 +329,7 @@ class plekSocialMedia
      * Undocumented function
      *
      * @param [type] $event_id
+     * @todo: remove!?
      * @return void
      */
     public function post_ticketraffle_to_facebook($event_id){

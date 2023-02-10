@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plekvetica - 2021\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-10 19:37+0000\n"
+"POT-Creation-Date: 2023-02-10 19:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: include/class/plek-handler.php:885
 #, php-format
-msgid "%s - accreditation request sent to %s"
+msgid "%s - accreditation request set to %s"
 msgstr ""
 
 #: template/event/meta/details.php:18
