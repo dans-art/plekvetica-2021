@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plekvetica - 2021\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-10 19:50+0000\n"
+"POT-Creation-Date: 2023-02-10 19:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -2658,14 +2658,14 @@ msgstr ""
 msgid "Welcome to Plekvetica!"
 msgstr ""
 
-#: include/class/event-handler.php:694 include/class/event-handler.php:698
+#: include/class/event-handler.php:698
 #, php-format
 msgid "When: %s"
 msgstr ""
 
 #: include/class/event-handler.php:694
 #, php-format
-msgid "Where: %s"
+msgid "When: %s, Where: %s"
 msgstr ""
 
 #: template/event/event-raffle-item.php:44

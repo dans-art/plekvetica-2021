@@ -691,11 +691,11 @@ class PlekEventHandler
                 break;
             case 2:
                 $text = __("Better get ready for this Event! 💪", 'plekvetica') . PHP_EOL;
-                $text .= sprintf(__('When: %s, Where: %s', 'plekvetica'), $this->get_start_date('d. F Y'), $this->get_venue_name()) . PHP_EOL;
+                $text .= sprintf(__("When: %s", 'plekvetica'), $this->get_start_date('d. F Y')) . ', ' . sprintf(__("Where: %s", 'plekvetica'), $this->get_venue_name()) . PHP_EOL;
                 break;
             case 3:
-                $text = sprintf(__("🥳🎶🤘 Party @ %s 🤘🎶🥳", 'plekvetica'),$this->get_venue_name()) . PHP_EOL;
-                $text .= sprintf(__('When: %s', 'plekvetica'), $this->get_start_date('d. F Y') ) . PHP_EOL;
+                $text = sprintf(__("🥳🎶🤘 Party @ %s 🤘🎶🥳", 'plekvetica'), $this->get_venue_name()) . PHP_EOL;
+                $text .= sprintf(__('When: %s', 'plekvetica'), $this->get_start_date('d. F Y')) . PHP_EOL;
                 break;
             case 4:
                 $text = __('🤘🤘🤘 Recommended by us! 🤘🤘🤘', 'plekvetica') . PHP_EOL;

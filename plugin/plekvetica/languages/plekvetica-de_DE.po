@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2023-02-10 19:39+0000\n"
+"PO-Revision-Date: 2023-02-10 19:51+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -2717,15 +2717,15 @@ msgstr "Webseite"
 msgid "Welcome to Plekvetica!"
 msgstr "Willkommen bei Plekvetica!"
 
-#: include/class/event-handler.php:698
+#: include/class/event-handler.php:694 include/class/event-handler.php:698
 #, php-format
 msgid "When: %s"
 msgstr "Wann: %s"
 
 #: include/class/event-handler.php:694
 #, php-format
-msgid "When: %s, Where: %s"
-msgstr "Wann: %, Wo: %s"
+msgid "Where: %s"
+msgstr "Wo: %s"
 
 #: template/event/event-raffle-item.php:44
 #, php-format
