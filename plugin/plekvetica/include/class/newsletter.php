@@ -396,19 +396,53 @@ class PlekNewsletter
      * @param int $id
      * @return string The Newsletter message as html code. Shortcodes applied
      */
-    private function get_newsletter_preview($id){
+    private function get_newsletter_preview($id)
+    {
         global $wpdb;
         $id = (int) $id;
-        $query = "SELECT `message` FROM ".NEWSLETTER_EMAILS_TABLE." WHERE `id` = '$id'";
+        $query = "SELECT `message` FROM " . NEWSLETTER_EMAILS_TABLE . " WHERE `id` = '$id'";
         $result = $wpdb->get_results($query);
 
-        if(!isset($result[0] -> message) OR empty($result[0] -> message)){
-            return __('No Newsletter found','plekvetica');
+        if (!isset($result[0]->message) or empty($result[0]->message)) {
+            return __('No Newsletter found', 'plekvetica');
         }
 
         //Apply shortcodes and codes from the newsletter plugin
-        return do_shortcode($result[0] -> message);
-        
+        return do_shortcode($this -> insert_dummy_tags($result[0]->message));
+    }
 
+    /**
+     * Replaces the Newsletter tags with dummy information
+     *
+     * @param string $message The Message with newsletter Tags
+     * @return string Message with the replaced tags
+     */
+    private function insert_dummy_tags($message)
+    {
+        $tags = [
+            'blog_url' => site_url(),
+            'blog_title' => get_bloginfo('name'),
+            'blog_description' => get_bloginfo('description'),
+            'date' => date('d-m-Y'),
+            'date_NNN' => date('d-m-Y'),
+            'id' => '1',
+            'name' => 'Hans Tester',
+            'surname' => 'Locher',
+            'title' => 'Mr',
+            'email' => 'tester@plekvetica.ch',
+            'profile_N' => '13',
+            'ip' => '12345611',
+            'subscription_confirm_url' => 'https://localhost/plekvetica/?na=c&nk=16-e9fafb3d4d',
+            'unsubscription_url' => 'https://localhost/plekvetica/?na=u&nk=16-e9fafb3d4d&nek=12-c5cdff8d63',
+            'unsubscription_confirm_url' => 'https://localhost/plekvetica/?na=uc&nk=16-e9fafb3d4d&nek=12-c5cdff8d63',
+            'profile_url' => 'https://localhost/plekvetica/?na=profile&nk=16-e9fafb3d4d&nek=12-c5cdff8d63',
+            'company_name' => 'Plevetica',
+            'company_address' => 'Lischen 75a, 3635 Uebeschi',
+            'company_legal' => '© Copyright 2015 - 2018'
+        ];
+        foreach ($tags as $tag => $val) {
+            $message = str_replace('{' . $tag . '}', $val, $message);
+        }
+        return $message;
     }
 }
