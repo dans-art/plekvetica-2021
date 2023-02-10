@@ -29,7 +29,7 @@ $pe -> load_event(66497);
 ?>
 <div>
 <?php 
-s(nl2br($pe-> get_event_promo_text()));
+s($plek_handler->clean_url('https://open.spotify.com/artist/278ZYwGhdK6QTzE3MFePnP?autoplay=true'));
 ?>
 </div>
 <?php 

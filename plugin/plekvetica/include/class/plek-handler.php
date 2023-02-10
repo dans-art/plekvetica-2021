@@ -500,6 +500,7 @@ class PlekHandler
         $removeAttr['facebook'] = array("notif_t", "notif_id", "ref");
         $removeAttr['ticketcorner.ch'] = array("affiliate", "utm_source", "utm_medium", "utm_campaign");
         $removeAttr['starticket.ch'] = array("PartnerID");
+        $removeAttr['spotify.com'] = array("autoplay");
 
         $url_split = parse_url(htmlspecialchars_decode($url));
         if (empty($url_split['host']) or empty($url_split['query'])) {

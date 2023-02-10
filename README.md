@@ -1,5 +1,17 @@
 # plekvetica-2021
 
+Version 3.0 - 2023.02.10
+- Neue Übersetzungen hinzugefügt
+- Verschiedene Texte für die Facebook Promo funktion
+- Neuer Akkreditierungsanfrage manager (Für Veranstalter)
+- Neuer Akkreditierungsstatus: Bestätigt mit vorbehalt
+- Funktion fürs automatische befüllen von Newsletterlisten
+- Autoren Feld bei "Event bearbeiten" hinzugefügt
+- Co-Author Plugin entfernt
+- Behoben: Es wurden nicht alle Events eines Team-Mitgliedes angezeigt
+- Formatierung wird beim einfügen im Event entfernt
+- Div. Fehler behoben
+
 Version 2.5.0
 - Fix: Facebook publisher
 - Facebook API integration optimiert

@@ -1033,7 +1033,7 @@ class PlekBandHandler
         $acf['herkunft'] = $origin;
         $acf['videos'] = $videos;
         $acf['band_genre'] = $genre;
-        $acf['spotify_id'] = $spotify;
+        $acf['spotify_id'] = $plek_handler -> clean_url($spotify);
         $acf['youtube_url'] = $youtube;
         $acf['twitter_url'] = $twitter;
         $acf['fetched_spotify_data'] = $fetched_spotify_data;
