@@ -40,6 +40,7 @@ s($plek_handler->clean_url('https://open.spotify.com/artist/278ZYwGhdK6QTzE3MFeP
 
 	echo '<img src="'.$save_url.'"/>';
 }*/
+PlekTemplateHandler::load_template('email-header', 'email');
 
 $pm = new PlekNewsletter;
 

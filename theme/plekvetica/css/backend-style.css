@@ -1,8 +1,9 @@
-.block-editor__container .editor-styles-wrapper { background-color: #424242; }
+/*.block-editor__container .editor-styles-wrapper { background-color: #424242; }*/
 
 .toplevel_page_plek-options img { max-width: 18px; }
 
 .plek-hidden { display: none; }
+
 
 .plek-button-floating{
     min-width: 2em;
@@ -22,7 +23,7 @@
 }
 
 .plek-button-floating.bottom-right{
-    position: absolute;
+    position: fixed;
     right: 1em;
     bottom: 5em;
 }

@@ -275,19 +275,35 @@ class PlekHandler
     public function enqueue_scripts()
     {
         $plugin_meta = get_plugin_data(PLEK_PATH . 'plekvetica.php');
-        $this->version = (!empty($plugin_meta['Version']) and $plugin_meta['Version'] !== null) ? $plugin_meta['Version'] : "2.0";
+        $this->version = (!empty($plugin_meta['Version']) and $plugin_meta['Version'] !== null) ? $plugin_meta['Version'] : "3.0";
 
         if ($this->is_dev_server()) {
-            wp_enqueue_script('plek-topbar', PLEK_PLUGIN_DIR_URL . 'plugins/topbar/topbar.min.js', $this->version);
+            wp_enqueue_script('plek-topbar', PLEK_PLUGIN_DIR_URL . 'plugins/topbar/topbar.min.js', [], $this->version);
             wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.js', ['jquery'], $this->version);
             wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.js', ['jquery', 'wp-i18n'], $this->version);
         } else {
-            wp_enqueue_script('plek-topbar', PLEK_PLUGIN_DIR_URL . 'plugins/topbar/topbar.min.js', $this->version);
+            wp_enqueue_script('plek-topbar', PLEK_PLUGIN_DIR_URL . 'plugins/topbar/topbar.min.js', [], $this->version);
             wp_enqueue_script('plek-language', PLEK_PLUGIN_DIR_URL . 'js/plek-language.min.js', ['jquery', 'wp-i18n'], $this->version);
             wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js', ['jquery', 'plek-language'], $this->version);
         }
 
         wp_set_script_translations('plek-language', 'plekvetica', PLEK_PATH . "/languages");
+    }
+
+    /**
+     * Enqueues scripts for the backend
+     *
+     * @return void
+     */
+    public function enqueue_scripts_admin()
+    {
+        $plugin_meta = get_plugin_data(PLEK_PATH . 'plekvetica.php');
+        $this->version = (!empty($plugin_meta['Version']) and $plugin_meta['Version'] !== null) ? $plugin_meta['Version'] : "3.0";
+        if ($this->is_dev_server()) {
+            wp_enqueue_script('plek-topbar', PLEK_PLUGIN_DIR_URL . 'js/backend-scripts.js', ['jquery'], $this->version);
+        } else {
+            wp_enqueue_script('plek-topbar', PLEK_PLUGIN_DIR_URL . 'js/backend-scripts.js', ['jquery'], $this->version);
+        }
     }
 
     /**
@@ -836,7 +852,7 @@ class PlekHandler
         if (isset($_REQUEST['submit-accredi']) and $_REQUEST['submit-accredi'] === 'submit') {
             //Save the Data
             $update = $this->update_organizer_accreditation_answer();
-            $system_message = (is_string($update))? $update : __('Event accreditation updated', 'plekvetica'); ;
+            $system_message = (is_string($update)) ? $update : __('Event accreditation updated', 'plekvetica');;
         }
         return PlekTemplateHandler::load_template_to_var('accredi_management', 'event/organizer', $event_id, $organizer_id, $system_message);
     }
@@ -866,24 +882,24 @@ class PlekHandler
         //Save
         if (!empty($accredi_note)) {
             //Saves the rejection reason
-            if($pe->set_accreditation_note($accredi_note, $organizer_id) !== false){
+            if ($pe->set_accreditation_note($accredi_note, $organizer_id) !== false) {
                 //Reload event
-                $pe -> load_event($event_id);
+                $pe->load_event($event_id);
                 $accredi_note = $pe->get_accreditation_note_formatted(__('Latest Notes', 'plekvetica'));
             }
         }
         $update = $pe->set_akkredi_status($event_id, $status_code);
-        if($update !== true){
+        if ($update !== true) {
             //Some error occurred
             return $update;
         }
 
         //Send info to admin
         $pn = new PlekNotificationHandler;
-        $status = $pe -> get_event_status_text($status_code);
+        $status = $pe->get_event_status_text($status_code);
         $pn->push_to_role(
             'accredi_manager',
-            sprintf(__('%s - accreditation request sent to %s', 'plekvetica'), $pe -> get_name(), $status),
+            sprintf(__('%s - accreditation request sent to %s', 'plekvetica'), $pe->get_name(), $status),
             PlekTemplateHandler::load_template_to_var('accreditation-admin-info', 'email/event', $pe, $organizer_id, $status),
             get_permalink($event_id)
         );
@@ -912,11 +928,11 @@ class PlekHandler
      *
      * @return void
      */
-    public function register_rest_routes(){
+    public function register_rest_routes()
+    {
         register_rest_route('plek-events/v1', '/search/', [
             'methods' => 'GET',
             'callback' => [new PlekEvents, 'rest_search_events']
         ]);
     }
-
 }
