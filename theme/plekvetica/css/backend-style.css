@@ -4,4 +4,27 @@
 
 .plek-hidden { display: none; }
 
+.plek-button-floating{
+    min-width: 2em;
+    height: 2em;
+    border-radius: 5px;
+    background-color: #8C262E;
+    z-index: 9999;
+    position: absolute;
+    padding: 0.5em 1em;
+
+}
+.plek-button-floating a{
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+    line-height: 1.5em;
+}
+
+.plek-button-floating.bottom-right{
+    position: absolute;
+    right: 1em;
+    bottom: 5em;
+}
+
 /*# sourceMappingURL=backend-style.css.map */

@@ -396,10 +396,22 @@ class PlekNewsletter
      * @param int $id
      * @return string The Newsletter message as html code. Shortcodes applied
      */
-    private function get_newsletter_preview($id)
+    private function get_newsletter_preview_shortcode($atts)
     {
         global $wpdb;
-        $id = (int) $id;
+        $short_atts = shortcode_atts(
+            array(
+                'id' => null,
+            ),
+            $atts
+        );
+        $id_get = (isset($_GET['id'])) ? $_GET['id'] : null;
+        $id = (int) ($short_atts['id'] !== null) ? $short_atts['id'] : $id_get;
+
+        if ($id === null or $id === 0) {
+            return __('No ID given', 'plekvetica');
+        }
+
         $query = "SELECT `message` FROM " . NEWSLETTER_EMAILS_TABLE . " WHERE `id` = '$id'";
         $result = $wpdb->get_results($query);
 
@@ -408,7 +420,7 @@ class PlekNewsletter
         }
 
         //Apply shortcodes and codes from the newsletter plugin
-        return do_shortcode($this -> insert_dummy_tags($result[0]->message));
+        return do_shortcode($this->insert_dummy_tags($result[0]->message));
     }
 
     /**
@@ -420,6 +432,7 @@ class PlekNewsletter
     private function insert_dummy_tags($message)
     {
         $tags = [
+            'email_subject' => 'Preview Email Subject',
             'blog_url' => site_url(),
             'blog_title' => get_bloginfo('name'),
             'blog_description' => get_bloginfo('description'),
@@ -444,5 +457,25 @@ class PlekNewsletter
             $message = str_replace('{' . $tag . '}', $val, $message);
         }
         return $message;
+    }
+
+    /**
+     * Prints a button to preview the newsletter 
+     *
+     * @return void
+     */
+    private function add_preview_button_action()
+    {
+        $newsletter_page = get_page_by_path('newsletter-preview');
+        if (!$newsletter_page) {
+            return false; //Do nothing if page not found
+        }
+        $newsletter_id = (isset($_GET['id'])) ? $_GET['id'] : null;
+        if ($newsletter_id === null) {
+            return false;
+        }
+        $link = get_permalink($newsletter_page) . '?id=' . $newsletter_id;
+        $link = "<a href='$link' target='_blank'>Preview Newsletter</div>";
+        echo "<div class='plek-button-floating bottom-right'>$link</div>";
     }
 }

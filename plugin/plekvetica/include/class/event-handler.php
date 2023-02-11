@@ -1514,9 +1514,9 @@ class PlekEventHandler
     public function get_status_codes($type = 'event_status')
     {
         if ($type === 'interview_status') {
-            return ['null', 'iw', 'ia', 'ib', 'no'];
+            return ['null', 'iw', 'ia', 'ib', 'ibc', 'no'];
         } else {
-            return ['null', 'aw', 'aa', 'ab', 'no'];
+            return ['null', 'aw', 'aa', 'ab', 'abc', 'no'];
         }
     }
 

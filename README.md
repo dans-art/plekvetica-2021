@@ -10,6 +10,7 @@ Version 3.0 - 2023.02.10
 - Co-Author Plugin entfernt
 - Behoben: Es wurden nicht alle Events eines Team-Mitgliedes angezeigt
 - Formatierung wird beim einfügen im Event entfernt
+- Newsletter Preview hinzugefügt
 - Div. Fehler behoben
 
 Version 2.5.0

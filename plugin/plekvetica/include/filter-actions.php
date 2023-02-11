@@ -96,6 +96,8 @@ add_filter('manage_tribe_organizer_posts_custom_column', [new PlekOrganizerHandl
 //Rest API
 add_action('rest_api_init', [$plek_handler, 'register_rest_routes']);
 
+//Create Newsletter Page: Adds a preview Button at the end of the page
+add_action('admin_footer-admin_page_newsletter_emails_composer',[new PlekNewsletter, 'add_preview_button_action']);
 
 
 //Remove the Date and author from the post
