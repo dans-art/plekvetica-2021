@@ -935,4 +935,6 @@ class PlekHandler
             'callback' => [new PlekEvents, 'rest_search_events']
         ]);
     }
+
+
 }
