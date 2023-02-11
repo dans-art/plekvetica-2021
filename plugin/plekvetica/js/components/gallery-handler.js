@@ -288,6 +288,106 @@ var plek_gallery_handler = {
     },
 
     /**
+     * Batch Processing: Instead of uploading each image one by one, you can try uploading them in batches. This way, you can reduce the number of requests being sent to the server, which would reduce the load on the browser and prevent it from crashing.
+
+Async/Await: Instead of using a loop to upload the images, you can use async/await to make the upload process asynchronous. This way, the browser wouldn't have to wait for each image to be uploaded before moving on to the next one, which would reduce the load on the browser and prevent it from crashing.
+
+File Size Optimization: Before uploading the images, you can try to optimize the file size of the images to reduce the load on the browser and prevent it from crashing. You can use image compression techniques to reduce the file size of the images.
+
+Error Handling: You can add error handling to the code to catch any errors that may occur during the upload process and prevent the browser from crashing.
+
+     * async upload_images_click_action(button) {
+  let gallery_id = jQuery(button).attr('data-gallery_id');
+  let album_id = jQuery(button).attr('data-album_id');
+  let files = jQuery('#review_images').prop('files');
+
+  if(files.length === 0) {
+    plekerror.display_error(null, __('No Images selected!', 'plekvetica'), 'Image upload error');
+    return;
+  }
+
+  this.update_gallery_button_status(gallery_id, 'uploading');
+  plek_main.activate_button_loader('#review_images_upload_btn', __('Uploading images...', 'plekvetica'));
+
+  // Batch processing
+  const batchSize = 20;
+  let batches = [];
+  while (files.length) {
+    batches.push(files.splice(0, batchSize));
+  }
+
+  for (const batch of batches) {
+    let formDataArray = [];
+    for (const file of batch) {
+      if (file.size > plek_gallery_handler.max_upload_size) {
+        continue;
+      }
+
+      let formdata = new FormData();
+      formdata.append('file_data', file);
+      formDataArray.push(formdata);
+    }
+
+    // Upload images in batch
+    try {
+      await Promise.all(formDataArray.map(async (formdata, index) => {
+        let item = jQuery('#images-uploaded-container .image_to_upload')[index];
+        jQuery('#images-uploaded-container').attr('data-album_id', album_id);
+        jQuery('#images-uploaded-container').attr('data-gallery_id', gallery_id);
+        jQuery(item).addClass('upload_in_progress');
+        jQuery(item).addClass('current_upload');
+
+        await plek_gallery_handler.upload_image(index, formdata, gallery_id);
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}
+     */
+
+/**
+ * 
+ * Alternative 
+ * 
+ * 
+ * async function uploadImages(files, galleryId, albumId) {
+  if (files.length === 0) {
+    displayError(null, "No Images selected!", "Image upload error");
+    return;
+  }
+
+  updateGalleryButtonStatus(galleryId, "uploading");
+  activateButtonLoader("#review_images_upload_btn", "Uploading images...");
+
+  let promises = [];
+  let container = "#images-uploaded-container";
+  let items = jQuery(container + " .image_to_upload");
+  
+  jQuery(container).attr("data-album_id", albumId);
+  jQuery(container).attr("data-gallery_id", galleryId);
+
+  for (let i = 0; i < files.length && i < 30; i++) {
+    let file = files[i];
+    if (file.size > maxUploadSize) {
+      continue;
+    }
+
+    let formData = new FormData();
+    formData.append("file_data", file);
+
+    jQuery(items[i]).addClass("upload_in_progress");
+    jQuery(items[i]).addClass("current_upload");
+
+    promises.push(uploadImage(i, formData, galleryId));
+  }
+
+  await Promise.all(promises);
+}
+ * 
+ */
+
+    /**
      * Sets the clicked image as the preview for the gallery
      * @param {object} image The clicked image
      */

@@ -36,38 +36,25 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
                         $pe->load_event($event_id);
                         $event_name =  $pe->get_name();
                         $security_key = md5($event_id . 'confirm_accreditation');
-                        $confirm_accredi_button_link = get_permalink(
+                        $manage_accredi_button_link = get_permalink(
                             $plek_handler->get_plek_option('plek_ex_actions_page')
-                        ) . '?action=confirm_accreditation&event_id=' . $event_id . '&organizer_id=' . $organizer_id . '&key=' . $security_key;
-                        $reject_accredi_button_link = get_permalink(
-                            $plek_handler->get_plek_option('plek_ex_actions_page')
-                        ) . '?action=reject_accreditation&event_id=' . $event_id . '&organizer_id=' . $organizer_id . '&key=' . $security_key;
+                        ) . '?action=manage_accreditation&event_id=' . $event_id . '&organizer_id=' . $organizer_id . '&key=' . $security_key;
                         ?>
                         <a href="<?php echo get_permalink($pe->get_ID()); ?>" target="_blank"><?php echo $event_name; ?></a><br />
                         <?php echo $pe->get_event_date('d.m.Y'); ?><br />
                         <?php echo $pe->get_event_akkredi_crew_formated('<br/>');
                         ?><br />
-                        <?php 
-                        $reject_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" fill="#ffffff" viewBox="0 -100 512 512"><path d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z"/></svg>';
-                        PlekTemplateHandler::load_template(
-                            'button',
-                            'components',
-                            $reject_accredi_button_link,
-                            $reject_icon . ' ' . sprintf(__('Reject accreditation for %s', 'plekvetica'), $event_name),
-                            '_blank'
-                        ); ?>
                         <?php
-                        $confirm_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" fill="#ffffff" viewBox="0 -100 512 512"><path d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>';
                         PlekTemplateHandler::load_template(
                             'button',
                             'components',
-                            $confirm_accredi_button_link,
-                            $confirm_icon . ' ' . sprintf(__('Confirm accreditation for %s', 'plekvetica'), $event_name),
+                            $manage_accredi_button_link,
+                            sprintf(__('Manage accreditation for %s', 'plekvetica'), $event_name),
                             '_blank',
                             '',
                             '',
                             '',
-                            'background-color:' . $color_green_light, //From email-styles.php
+                            'background-color:' . $color_red_light, //From email-styles.php
                         ); ?><br />
                         <br />
                     <?php endforeach; ?>

@@ -136,7 +136,7 @@ let plek_band = {
             var videos = jQuery('#band-videos').val().split("\n");
         }
         jQuery(videos).each(function (i, val) {
-            if(plek_main.empty(val)){
+            if(empty(val)){
                 return;
             }
             plek_band.load_youtube_video(val, i);
@@ -444,10 +444,14 @@ let plek_band = {
                 break;
             case "spotify":
                 //(https://open.spotify.com/artist/1IQ2e1buppatiN1bxUVkrk?si=P07Tx2AlQ5m6ZTsnce6lzQ)
+                //https://open.spotify.com/artist/278ZYwGhdK6QTzE3MFePnP?autoplay=true
                 var input_arr = url.split('/');
                 var artist_index = input_arr.findIndex(element => element === 'artist');
+                
                 if (artist_index !== -1) {
-                    return input_arr[artist_index + 1]; //Get the item after the artist index 
+                    const id_plus_params = input_arr[artist_index + 1];
+                    const split_params = id_plus_params.split('?'); //Split the url parameters (278ZYwGhdK6QTzE3MFePnP?autoplay=true)
+                    return split_params[0];//Get the artist ID only. 
                 }
                 break;
 

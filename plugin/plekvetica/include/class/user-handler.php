@@ -44,12 +44,44 @@ class PlekUserHandler
     /**
      * Gets all the members considered team members
      * All of the users who have a role defined in $team_roles will be returned
+     * 
+     * @param bool $only_shown - Only returns the users which are set as active members  
      *
      * @return array Array with WP_User objects
      */
-    public static function get_team_members(){
+    public static function get_team_members($only_shown = false)
+    {
         $args = ['role__in' => array_flip(self::$team_roles)];
+        if($only_shown){
+            $args['meta_key'] = 'show_member';
+            $args['meta_value'] = '1';
+            $args['meta_compare'] = '=';
+        }
         $users = get_users($args);
+        return $users;
+    }
+
+    /**
+     * Get all the users
+     *
+     * @return array An array with user ID and display_name [id => '', display_name => ''],..
+     */
+    public static function get_all_users($exclude_locked = false)
+    {
+        $users = get_users(
+            [
+                'fields' => ['id', 'display_name'],
+                'role__not_in' => 'exuser',
+            ]
+        );
+        if($exclude_locked){
+            foreach($users as $index => $user_obj){
+                if(isset($user_obj -> id) AND !empty(get_user_meta($user_obj-> id, 'plek_user_lock_key', true))){
+                    //User is locked, remove
+                    unset($users[$index]);
+                }
+            }
+        }
         return $users;
     }
 
@@ -285,10 +317,10 @@ class PlekUserHandler
             return true;
         }*/
 
-        if(PlekUserHandler::user_is_in_team()){
+        if (PlekUserHandler::user_is_in_team()) {
             return true;
         }
-        
+
         if (!is_object($event)) {
             $plek_events = new PlekEvents;
             $plek_events->load_event($event, 'all');
@@ -549,7 +581,7 @@ class PlekUserHandler
         $role_to_search = (!is_array($rolename)) ? array($rolename) : $rolename;
         foreach ($role_to_search as $role => $role_name) { //role_slug => Role Nicename
             //Search by Index or by description (In some cases the $role is the Index instead of the role-slug)
-            if (array_search($role, $roles) !== false OR array_search($role_name, $roles) !== false) {
+            if (array_search($role, $roles) !== false or array_search($role_name, $roles) !== false) {
                 return true;
             }
         }
@@ -687,12 +719,12 @@ class PlekUserHandler
      *
      * @param string $rolename
      * @param boolean $return_only_ids
-     * @return WP_User object
+     * @return array WP_User objects
      */
-    public function get_users_by_role($rolename, $return_only_ids = false)
+    public function get_users_by_role($rolename, $return_only_ids = false, $fields = 'all')
     {
         $rolename = htmlspecialchars($rolename);
-        $fields = ($return_only_ids) ? 'ID' : 'all';
+        $fields = ($return_only_ids) ? 'ID' : $fields;
         $search = get_users(['role__in' => $rolename, 'fields' => $fields]);
         return $search;
     }
@@ -761,13 +793,14 @@ class PlekUserHandler
     {
         return self::$plek_custom_roles;
     }
-    
+
     /**
      * Returns all the available roles
      *
      * @return array The roles
      */
-    public static function get_all_user_roles(){
+    public static function get_all_user_roles()
+    {
         $user = self::$plek_custom_roles;
         $team = self::$team_roles;
         return array_merge($team, $user);

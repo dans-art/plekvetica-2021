@@ -672,14 +672,47 @@ class PlekEventHandler
         }
     }
 
+    /**
+     * Gets the Event promo Text and ticketlink.
+     *
+     * @todo: Allow for custom text input
+     * @return string The promo text
+     */
     public function get_event_promo_text()
     {
         $event_url = $this->get_permalink();
-        $text = "Plekvetica Event Tipp!" . PHP_EOL;
-        $text .= $this->get_start_date('d. F Y') . " @ " . $this->get_venue_name() . PHP_EOL;
-        $text .= "Bands: " . $this->get_bands_string() . PHP_EOL;
-        $text .= "Alle Infos:" . PHP_EOL;
-        return $text . $event_url;
+        $ticket_link = $this->get_event_ticket_link_url();
+
+        $rand = rand(0, 4);
+        switch ($rand) {
+            case 1:
+                $text = __("👇 Don't miss this!", 'plekvetica') . PHP_EOL;
+                $text .= sprintf(__('On %s there will be a firework of great bands @ %s', 'plekvetica'), $this->get_start_date('d. F Y'), $this->get_venue_name()) . PHP_EOL;
+                break;
+            case 2:
+                $text = __("Better get ready for this Event! 💪", 'plekvetica') . PHP_EOL;
+                $text .= sprintf(__("When: %s", 'plekvetica'), $this->get_start_date('d. F Y')) . ', ' . sprintf(__("Where: %s", 'plekvetica'), $this->get_venue_name()) . PHP_EOL;
+                break;
+            case 3:
+                $text = sprintf(__("🥳🎶🤘 Party @ %s 🤘🎶🥳", 'plekvetica'), $this->get_venue_name()) . PHP_EOL;
+                $text .= sprintf(__('When: %s', 'plekvetica'), $this->get_start_date('d. F Y')) . PHP_EOL;
+                break;
+            case 4:
+                $text = __('🤘🤘🤘 Recommended by us! 🤘🤘🤘', 'plekvetica') . PHP_EOL;
+                $text .= $this->get_start_date('d. F Y') . " @ " . $this->get_venue_name() . PHP_EOL;
+                break;
+            default:
+                $text = __('Plekvetica Event Tipp!', 'plekvetica') . PHP_EOL;
+                $text .= $this->get_start_date('d. F Y') . " @ " . $this->get_venue_name() . PHP_EOL;
+                break;
+        }
+
+        $text .= __('🎶 Bands:', 'plekvetica') . " " . $this->get_bands_string() . PHP_EOL;
+        $text .= __('ℹ️ All Infos:', 'plekvetica') . PHP_EOL;
+        $text .= $event_url . PHP_EOL;
+        $text .= __('🎫 Buy your tickets here:', 'plekvetica') . PHP_EOL;
+        $text .= $ticket_link;
+        return $text;
     }
 
     public function get_ticket_raffle_text()
@@ -1143,17 +1176,15 @@ class PlekEventHandler
     }
 
     /**
-     * Get the Event Ticket link
+     * Get the Event Ticket link as an a tag
      * It will filter out tracker and unwanted parts of the url and injects plekvetica affiliate parameters.
      *
-     * @return void
+     * @return string HTML Link
      */
     public function get_event_ticket_link()
     {
         global $plek_handler;
-        $link = $this->get_field_value('ticket-url');
-        $link = $plek_handler->clean_url($link);
-        $link = $this->inject_affiliate_code($link);
+        $link = $this->get_event_ticket_link_url();
         $link_icon = '<i class="fas fa-ticket-alt"></i>';
         if (strpos($link, 'starticket.ch') or strpos($link, 'seetickets.ch')) {
             $link_icon = "<img src='" . $plek_handler->get_plek_option('plek_seetickets_logo') . "' alt='Seeticket.ch'/>";
@@ -1162,6 +1193,19 @@ class PlekEventHandler
             $link_icon = "<img src='" . $plek_handler->get_plek_option('plek_ticketcorner_logo') . "' alt='ticketcorner.ch'/>";
         }
         return "<a href='$link' target='_blank' >$link_icon</a>";
+    }
+
+    /**
+     * Gets the event ticket url
+     *
+     * @return string The ticket url, cleaned and injected with the affiliate link
+     */
+    public function get_event_ticket_link_url()
+    {
+        global $plek_handler;
+        $link = $this->get_field_value('ticket-url');
+        $link = $plek_handler->clean_url($link);
+        return $this->inject_affiliate_code($link);
     }
 
 
@@ -1383,7 +1427,7 @@ class PlekEventHandler
     /**
      * Loads the Status text. If no code is given, the status of the current loaded event will be returned.
      *
-     * @param string $status_code - (aw, ab, aa, no, iq, ib, ia) are accepted.
+     * @param string $status_code - (aw, ab, abc, aa, no, iq, ib, ibc, ia) are accepted.
      * @return string The status code or false if not found.
      */
     public function get_event_status_text(string $status_code = '')
@@ -1403,6 +1447,10 @@ class PlekEventHandler
             case 'ab':
             case 'ib':
                 return __('Confirmed', 'plekvetica');
+                break;
+            case 'abc':
+            case 'ibc':
+                return __('Confirmed with reserve', 'plekvetica');
                 break;
             case 'aa':
             case 'ia':
@@ -1466,9 +1514,9 @@ class PlekEventHandler
     public function get_status_codes($type = 'event_status')
     {
         if ($type === 'interview_status') {
-            return ['null', 'iw', 'ia', 'ib', 'no'];
+            return ['null', 'iw', 'ia', 'ib', 'ibc', 'no'];
         } else {
-            return ['null', 'aw', 'aa', 'ab', 'no'];
+            return ['null', 'aw', 'aa', 'ab', 'abc', 'no'];
         }
     }
 
@@ -1566,7 +1614,7 @@ class PlekEventHandler
     public function set_akkredi_status(int $event_id, string $status_code)
     {
         global $plek_handler;
-        $allowed_codes = array('aw', 'ab', 'aa', 'no');
+        $allowed_codes = array('aw', 'ab', 'abc',  'aa', 'no');
         if (array_search($status_code, $allowed_codes) === false) {
             return __('Error: Status code not allowed', 'plekvetica');
         }
@@ -1598,7 +1646,7 @@ class PlekEventHandler
         }
 
         //Set Event to featured if status code is ab (accreditation confirmed)
-        if ($status_code === 'ab') {
+        if ($status_code === 'ab' or $status_code === 'abc') {
             return ($this->update_event_meta($event_id, '_tribe_featured', '1') === false) ? __('Error while updating the event featured status', 'plekvetica') : true;
         }
 

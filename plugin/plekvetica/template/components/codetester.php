@@ -24,6 +24,16 @@ $save_path = ABSPATH . 'wp-content\uploads\2022\Plakat_GNP_OBSCURA_420x594_web_m
 $save_url = 'https://localhost/plekvetica/wp-content/uploads/2022/Plakat_GNP_OBSCURA_420x594_web_marked.jpg';
 $watermark = PLEK_PATH . 'images\watermarks\ticketraffle-2-2.png';
 
+
+$pe -> load_event(66497);
+?>
+<div>
+<?php 
+s($plek_handler->clean_url('https://open.spotify.com/artist/278ZYwGhdK6QTzE3MFePnP?autoplay=true'));
+?>
+</div>
+<?php 
+
 /*if(!$pf -> create_watermarked_image($orig_photo, $watermark, $save_path)){
 	s($pf->errors->get_error_messages());
 }else{
@@ -31,28 +41,12 @@ $watermark = PLEK_PATH . 'images\watermarks\ticketraffle-2-2.png';
 	echo '<img src="'.$save_url.'"/>';
 }*/
 
-function update_coauthors()
-{
-	$pe = new PlekEvents;
-	$events = tribe_get_events(['fields' => 'ids', 'posts_per_page' => -1]);
-	$updated_events = array();
-	$added_authors = 0;
+$pm = new PlekNewsletter;
 
-	foreach ($events as $event_id) {
-		$pe->load_event($event_id);
-		$co_authors = get_coauthors($event_id);
-		if (!empty($co_authors)) {
-			foreach ($co_authors as $user) {
-				if (intval($user->ID) === intval($pe->get_field_value('post_author'))) {
-					continue;
-				}
-				$updated_events[$event_id][] = $pe -> set_event_author($user -> ID);
-				$added_authors++;
-			}
-		}
-	}
-	s($added_authors);
-	s($updated_events);
-	return true;
-}
-update_coauthors();
+//$user = new TNP_User;
+//s($user);
+
+
+//echo $pm -> get_newsletter_preview(11);
+
+//s($pm -> update_organizer());

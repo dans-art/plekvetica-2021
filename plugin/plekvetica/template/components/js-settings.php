@@ -126,3 +126,15 @@ global $plek_handler;
 		});
 	</script>
 <?php endif; ?>
+
+<?php if ($type === 'manage_accreditation') : ?>
+	<?php
+	global $plek_handler;
+	add_action('wp_footer', [$plek_handler, 'enqueue_accredi_management']);
+	?>
+	<script type="text/javascript" defer='defer'>
+		jQuery(document).ready(function() {
+			document.accredi_manager = new AccreditationManager();
+		});
+	</script>
+<?php endif; ?>

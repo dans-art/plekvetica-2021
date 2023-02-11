@@ -196,7 +196,7 @@ class PlekEventBlocks extends PlekEvents
 
             case 'search_events':
                 global $plek_search_handler;
-                $query = isset($_REQUEST['s'])?$_REQUEST['s']:null;
+                $query = isset($_REQUEST['s']) ? $_REQUEST['s'] : null;
                 if (empty($query)) {
                     $ret['data'] = "";
                     break;
@@ -205,15 +205,15 @@ class PlekEventBlocks extends PlekEvents
                 $this->block_total_posts = (isset($plek_event->total_posts['search_tribe_events'])) ? $plek_event->total_posts['search_tribe_events'] : 0;
                 break;
             case 'all_reviews':
-                $this -> display_type = 'event-list-item-review';
+                $this->display_type = 'event-list-item-review';
                 $ret['data'] =  $plek_event->load_all_reviews();
                 $this->block_total_posts = (isset($plek_event->total_posts['all_review_events'])) ? $plek_event->total_posts['all_review_events'] : 0;
                 break;
-    
+
             case 'search_events_review':
-                $this -> display_type = 'event-list-item-review';
+                $this->display_type = 'event-list-item-review';
                 global $plek_search_handler;
-                $search_string = isset($_REQUEST['search_reviews'])?$_REQUEST['search_reviews']:null;
+                $search_string = isset($_REQUEST['search_reviews']) ? $_REQUEST['search_reviews'] : null;
                 $post_ids = $plek_search_handler->search_tribe_events($search_string, true);
                 if (!is_array($post_ids)) {
                     $ret['data'] = array();
@@ -267,10 +267,10 @@ class PlekEventBlocks extends PlekEvents
         if (is_array($content)) {
             foreach ($content as $index => $content_data) {
                 if ($block_id === 'my_events' and $this->add_current_date_separator === true) {
-                    $html .= $this->show_date_separator($last_events_date, $content_data->startdate);
+                    $html .= (isset($content_data->startdate)) ? $this->show_date_separator($last_events_date, $content_data->startdate) : '';
                 }
                 $html .= PlekTemplateHandler::load_template_to_var($this->display_type, $this->template_dir, $content_data, $index, $this->separate_by, $last_events_date);
-                $last_events_date = (isset($content_data->startdate))?$content_data->startdate:'';
+                $last_events_date = (isset($content_data->startdate)) ? $content_data->startdate : '';
             }
             $html .= PlekTemplateHandler::load_template_to_var('pagination-buttons', 'components', $total_posts, $this->number_of_posts, 'ajax-block-loader-button', $block_id, $posts_type);
 

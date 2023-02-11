@@ -3,6 +3,7 @@
 $plek_theme = new plekTheme;
 
 add_action('after_setup_theme', [$plek_theme, 'plek_theme_setup']);
+add_action('admin_init', [$plek_theme, 'add_backend_style']);
 
 add_filter('generate_copyright', [$plek_theme, 'plek_footer_creds_text']);
 add_filter('wp_nav_menu_items', [$plek_theme, 'plek_nav_items'], 10, 2);
@@ -24,7 +25,7 @@ class plekTheme
           function gtag(){dataLayer.push(arguments);}
           gtag(\'js\', new Date());
           gtag(\'config\', \'UA-38853620-4\');
-        </script>"';
+        </script>';
 
     }
 
@@ -68,6 +69,16 @@ class plekTheme
         add_editor_style('css/backend-style.css'); //This is not the same file as the one in the plugin dir!
         return;
     }
+
+    /**
+     * Enqueues the backend style
+     *
+     * @return void
+     */
+    public function add_backend_style(){
+        wp_enqueue_style( 'backend-style', get_stylesheet_directory_uri(  ).'/css/backend-style.css' );
+    }
+
 
     /**
      * Enables the REST API for Contact Form 7 if the API is disabled by Disable WP REST API Plugin

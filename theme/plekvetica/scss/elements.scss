@@ -333,6 +333,11 @@ blockquote{
     content: '\f058';
     color: $color-green;
   }
+  & span.abc:before,
+  & span.ibc:before{
+    content: '\f058';
+    color: $color-yellow;
+  }
   & span.aw:before,
   & span.iw:before{
     content: '\f06a';
@@ -908,6 +913,9 @@ margin: 4px 0px 0px 0;
   }
   &[cstatus="ab"]{
     color:$color-green;
+  }
+  &[cstatus="abc"]{
+    color:$color-yellow;
   }
   &[cstatus="no"]{
     color:$color-red;

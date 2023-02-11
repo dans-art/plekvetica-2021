@@ -194,7 +194,7 @@ class PlekEvents extends PlekEventHandler
         $this->event['meta'] = tribe_get_event_meta($event_id);
 
         //Add custom meta fields
-        $this -> event['meta']['event_coauthor_id'] = get_post_meta($event_id, 'event_coauthor_id');
+        $this->event['meta']['event_coauthor_id'] = get_post_meta($event_id, 'event_coauthor_id');
         return;
     }
 
@@ -1557,7 +1557,8 @@ class PlekEvents extends PlekEventHandler
             $notes = array($notes);
         }
         if ($raw) {
-            return $notes;
+            //remove empty fields
+            return array_filter($notes);
         }
         if (empty($notes)) {
             return '';
@@ -1569,7 +1570,7 @@ class PlekEvents extends PlekEventHandler
         }
         $return = array();
         foreach ($notes as $time => $message) {
-            if (!empty($message)) {
+            if (!empty($message) and $time !== 0) {
                 $return[] = date('d-m-Y H:i', $time) . ' - ' . $message;
             }
         }
@@ -1577,19 +1578,118 @@ class PlekEvents extends PlekEventHandler
     }
 
     /**
+     * Get the accreditation notes as formatted list
+     *
+     * @return string Empty string if no messages found, list otherwise
+     */
+    public function get_accreditation_note_formatted($title = "")
+    {
+        $accredi_messages = $this->get_accreditation_note(true, false);
+        if (count($accredi_messages) === 0) {
+            return "";
+        }
+        $out = '<div class="bold">' . $title . '</div><ul>';
+
+        foreach ($accredi_messages as $time => $message) {
+            $out .= '<li>' . date('d-m-Y H:i', $time) . ' - ' . $message . '</li>';
+        }
+        $out .= '</ul>';
+        return $out;
+    }
+
+    /**
      * Sets an accreditation note
      * @todo: Allow for multiple messages
      * @param [type] $note
-     * @return void
+     * @param int $organizer_id
+     * @return string|bool String with note on success, false on error
      */
-    public function set_accreditation_note($note)
+    public function set_accreditation_note($note, $organizer_id = null)
     {
+        global $plek_handler;
+
         if (!$this->get_ID()) {
             return false;
         }
-        $existing_note = $this->get_accreditation_note(true);
-        $existing_note[time()] = $note;
 
-        return update_field('accreditation_note', $existing_note, $this->get_ID());
+        //Add organizer info
+        if ($organizer_id !== null) {
+            $po = new PlekOrganizerHandler;
+            $organizer_name = $po->get_organizer_name_by_id($organizer_id);
+            $note .= ' (' . sprintf(__('Organizer: %s', 'plekvetica'), $organizer_name) . ')';
+        }
+        //Add user info
+        $user = wp_get_current_user();
+        if ($user->ID !== 0) {
+            $note .= (!empty($user->display_name)) ? ' [' . sprintf(__('by: %s', 'plekvetica'), $user->display_name) . ']' : '';
+        }
+
+        //Add the note
+        $existing_notes = $this->get_accreditation_note(true);
+        $existing_notes[time()] = $note;
+        $add = $plek_handler->update_field('accreditation_note', $existing_notes, $this->get_ID());
+        if ($add === true) {
+            return $note;
+        }
+        return false;
+    }
+
+    /**
+     * The Rest API 
+     *
+     * @return void
+     */
+    public function rest_search_events($data)
+    {
+        global $wpdb;
+        if (!isset($data['query'])) {
+            return [
+                'code' => 'rest_missing_query',
+                'message' => __('No query given. Add ?query=searchfor to the url', 'plekvetica'),
+                'data' => ['status' => 404]
+            ];
+        }
+
+        // @todo: Sanitize the query
+        $query = htmlspecialchars($data['query']);
+        $result = $wpdb->get_results(
+            $query = $wpdb->prepare(
+                "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME) as startdate
+            FROM `{$wpdb->prefix}posts` as posts 
+            LEFT JOIN {$wpdb->prefix}postmeta as date
+            ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
+            WHERE post_title LIKE '%s'
+            AND post_type = 'tribe_events'
+            AND posts.post_status IN ('publish')
+    
+            GROUP BY posts.ID
+            ORDER BY date.meta_value DESC
+            LIMIT 50",
+                '%' . $wpdb->esc_like($query) . '%'
+            )
+        );
+
+
+        if (empty($result)) {
+            return [
+                'code' => 'rest_no_event_found',
+                'message' => __('No Events found', 'plekvetica'),
+                'data' => ['status' => 404]
+            ];
+        }
+
+        $ret_array = array();
+        foreach ($result as $item) {
+            $time = strtotime($item->startdate);
+            $past_event = ($time < time()) ? true : false;
+            $ret_array[] = [
+                'id' => $item->ID,
+                'title' => $item->post_title,
+                'startdate' => date('d.m.Y', $time),
+                'poster' => get_the_post_thumbnail_url($item->ID, 'thumbnail'),
+                'past_event' => $past_event
+            ];
+        }
+        return $ret_array;
     }
 }

@@ -93,14 +93,19 @@ add_filter('pre_get_posts', [new PlekBandHandler, 'bandpage_pagination_hack']);
 add_filter('manage_tribe_organizer_posts_columns', [new PlekOrganizerHandler, 'filter_manage_tribe_organizer_posts_custom_columns'], 10, 2); //Add columns to the organizer page
 add_filter('manage_tribe_organizer_posts_custom_column', [new PlekOrganizerHandler, 'filter_manage_tribe_organizer_posts_custom_column'], 10, 2); //Add content to custom column
 
+//Rest API
+add_action('rest_api_init', [$plek_handler, 'register_rest_routes']);
+
+//Create Newsletter Page: Adds a preview Button at the end of the page
+add_action('admin_footer-admin_page_newsletter_emails_composer',[new PlekNewsletter, 'add_preview_button_action']);
 
 
 //Remove the Date and author from the post
-add_filter( "generate_entry_meta_post_types", function($arr){
+add_filter("generate_entry_meta_post_types", function ($arr) {
   return (get_post_type() === 'post') ? [] : $arr;
 }, 11);
 //Remove the categories from the post footer
-add_filter( "generate_footer_meta_post_types", function($arr){
+add_filter("generate_footer_meta_post_types", function ($arr) {
   return (get_post_type() === 'post') ? [] : $arr;
 }, 11);
 
@@ -112,9 +117,9 @@ add_filter('login_headertext', 'my_login_logo_url_title'); */
 
 
 //Display all filters
-add_filter('all', function($hookname){
+add_filter('all', function ($hookname) {
   $match = 'manage'; //The filter to search for
-  if(strpos($hookname, $match) !== false){
+  if (strpos($hookname, $match) !== false) {
     //echo '&nbsp;&nbsp;'.$hookname.'&nbsp;&nbsp;';
   }
   return $hookname;

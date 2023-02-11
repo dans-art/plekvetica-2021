@@ -49,6 +49,7 @@ body{
     @import 'form-old.scss'; //Delete this once the old form is replaced!
     @import 'posts.scss';
     @import 'crossbrowser-compatibility.scss';
+    @import 'accreditation.scss';
 
     /*Breakpoints have to be at the end to avoid override*/
     @import 'breakpoints.scss';

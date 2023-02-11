@@ -300,6 +300,18 @@ class PlekHandler
         wp_enqueue_script('plek-spotify', PLEK_PLUGIN_DIR_URL . 'js/spotify/spotify-web-api.js', [], $this->version);
     }
 
+    /**
+     * Enqueues the accredi management script
+     *
+     * @return void
+     */
+    public function enqueue_accredi_management()
+    {
+        wp_enqueue_script('plek-accredi-manager', PLEK_PLUGIN_DIR_URL . 'js/accreditation-management.js', ['jquery'], $this->version);
+        wp_set_script_translations('plek-accredi-manager', 'plekvetica', PLEK_PATH . "/languages");
+    }
+
+
     public function enqueue_select2()
     {
         wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css');
@@ -488,6 +500,7 @@ class PlekHandler
         $removeAttr['facebook'] = array("notif_t", "notif_id", "ref");
         $removeAttr['ticketcorner.ch'] = array("affiliate", "utm_source", "utm_medium", "utm_campaign");
         $removeAttr['starticket.ch'] = array("PartnerID");
+        $removeAttr['spotify.com'] = array("autoplay");
 
         $url_split = parse_url(htmlspecialchars_decode($url));
         if (empty($url_split['host']) or empty($url_split['query'])) {
@@ -669,7 +682,7 @@ class PlekHandler
                 //Remove the styles
                 $this->clear_style_tags($items, $this->get_allowed_styles($type));
                 //Remove the classes
-                $this -> clear_classes($items);
+                $this->clear_classes($items);
             }
         }
 
@@ -760,10 +773,9 @@ class PlekHandler
              * Confirms the accreditation by the organizer
              */
             case 'confirm_accreditation':
-                return $this->handle_organizer_accreditation_confirmation();
-                break;
             case 'reject_accreditation':
-                return $this->handle_organizer_accreditation_reject();
+            case 'manage_accreditation':
+                return $this->manage_accreditation_from_organizer();
                 break;
             default:
                 return __('Action not found or not supported', 'plekvetica');
@@ -808,82 +820,103 @@ class PlekHandler
         return implode('.', $parts);
     }
 
-    /**
-     * Handles the accreditation reject
-     *
-     * @return string The Form or success message
-     */
-    public function handle_organizer_accreditation_reject()
-    {
-        $pe = new PlekEvents;
-        $event_id = (isset($_GET['event_id'])) ? $_GET['event_id'] : null;
 
-        $pn = new PlekNotificationHandler;
+    public function manage_accreditation_from_organizer()
+    {
+        $system_message = "";
+        $event_id = (isset($_GET['event_id'])) ? $_GET['event_id'] : null;
+        $organizer_id = isset($_REQUEST['organizer_id']) ? intval($_REQUEST['organizer_id']) : null;
+
+        //Check if user is allowed to do this action
         $security_key = (isset($_GET['key'])) ? $_GET['key'] : null;
         if ($security_key !== md5($event_id . 'confirm_accreditation')) {
             return __('You are not allowed to run this action', 'plekvetica');
         }
-        $pe->load_event($event_id);
-        //Ask for the reason first
-        if (isset($_REQUEST['rejection_reason'])) {
-            //Saves the rejection reason
-            $pe->set_accreditation_note($_REQUEST['rejection_reason']);
-            return PlekTemplateHandler::load_template_to_var('accredi_reject_message', 'event/organizer', $event_id);
-        }
 
-        $reject = $pe->reject_accreditation($event_id);
-
-        if ($reject === true) {
-            //Send info to accredi Manager
-            $pn->push_to_role(
-                'accredi_manager',
-                __('Accreditation rejected', 'plekvetica'),
-                PlekTemplateHandler::load_template_to_var('accreditation-rejected-admin-info', 'email/event'),
-                get_permalink($event_id)
-            );
-            return PlekTemplateHandler::load_template_to_var('accreditation-rejection-reason-form', 'event/organizer', $pe);
-        } else {
-            return sprintf(__('Error: Accreditation could not be rejected! (%s)', 'plekvetica'), $reject);
+        if (isset($_REQUEST['submit-accredi']) and $_REQUEST['submit-accredi'] === 'submit') {
+            //Save the Data
+            $update = $this->update_organizer_accreditation_answer();
+            $system_message = (is_string($update))? $update : __('Event accreditation updated', 'plekvetica'); ;
         }
+        return PlekTemplateHandler::load_template_to_var('accredi_management', 'event/organizer', $event_id, $organizer_id, $system_message);
     }
 
     /**
-     * Handles the confirmation of the accreditation request
+     * Saves the answer form a accreditation request to the db.
+     *
+     * @return array|string String with error message on error, otherwise array with saved data.
+     */
+    public function update_organizer_accreditation_answer()
+    {
+        //Get the data and sanitize
+        $event_id = isset($_REQUEST['event_id']) ? intval($_REQUEST['event_id']) : null;
+        $key = isset($_REQUEST['key']) ? $_REQUEST['key'] : null;
+        $organizer_id = isset($_REQUEST['organizer_id']) ? intval($_REQUEST['organizer_id']) : null;
+        $status_code = isset($_REQUEST['status']) ? sanitize_key($_REQUEST['status']) : null;
+        $accredi_note = isset($_REQUEST['accredi-reason']) ? sanitize_textarea_field($_REQUEST['accredi-reason']) : null;
+
+        //Validate - Just a primitive validation to prevent fraud
+        if ($key !== md5($event_id . 'confirm_accreditation')) {
+            return __('You are not allowed to run this action', 'plekvetica');
+        }
+
+        $pe = new PlekEvents;
+        $pe->load_event($event_id);
+
+        //Save
+        if (!empty($accredi_note)) {
+            //Saves the rejection reason
+            if($pe->set_accreditation_note($accredi_note, $organizer_id) !== false){
+                //Reload event
+                $pe -> load_event($event_id);
+                $accredi_note = $pe->get_accreditation_note_formatted(__('Latest Notes', 'plekvetica'));
+            }
+        }
+        $update = $pe->set_akkredi_status($event_id, $status_code);
+        if($update !== true){
+            //Some error occurred
+            return $update;
+        }
+
+        //Send info to admin
+        $pn = new PlekNotificationHandler;
+        $status = $pe -> get_event_status_text($status_code);
+        $pn->push_to_role(
+            'accredi_manager',
+            sprintf(__('%s - accreditation request sent to %s', 'plekvetica'), $pe -> get_name(), $status),
+            PlekTemplateHandler::load_template_to_var('accreditation-admin-info', 'email/event', $pe, $organizer_id, $status),
+            get_permalink($event_id)
+        );
+
+        //SimpleHistory log
+        apply_filters(
+            'simple_history_log',
+            'Accreditation managed for ' . $pe->get_name(),
+            array(
+                'organizer_id' => $organizer_id,
+                'Status' => $status,
+                'Message' => $accredi_note
+            )
+        );
+
+        return [
+            'event_id' => $event_id,
+            'organizer_id' => $organizer_id,
+            'status_code' => $status_code,
+            'accredi_note' => $accredi_note
+        ];
+    }
+
+    /**
+     * Adds routes for the rest API
      *
      * @return void
      */
-    public function handle_organizer_accreditation_confirmation()
-    {
-        $pe = new PlekEvents;
-        $pn = new PlekNotificationHandler;
-        $attach = "";
-        $event_id = (isset($_GET['event_id'])) ? $_GET['event_id'] : null;
-        $security_key = (isset($_GET['key'])) ? $_GET['key'] : null;
-        if ($security_key !== md5($event_id . 'confirm_accreditation')) {
-            return __('You are not allowed to run this action', 'plekvetica');
-        }
-
-        $pe->load_event($event_id);
-        if (!isset($_REQUEST['confirmation_note'])) {
-            $attach .=  PlekTemplateHandler::load_template_to_var('accreditation-confirmation-note-form', 'event/organizer', $pe);
-        } else {
-            //Save note and skip reconfirmation
-            $pe->set_accreditation_note($_REQUEST['confirmation_note']);
-            return __('Note saved. Thanks!', 'plekvetica');
-        }
-
-        $confirm = $pe->confirm_accreditation($event_id);
-        if ($confirm === true) {
-            //Send info to accredi Manager
-            $pn->push_to_role(
-                'accredi_manager',
-                __('Accreditation confirmed', 'plekvetica'),
-                PlekTemplateHandler::load_template_to_var('accreditation-confirmed-admin-info', 'email/event'),
-                get_permalink($event_id)
-            );
-            return PlekTemplateHandler::load_template_to_var('accredi_confirm_message', 'event/organizer', $event_id) . $attach;
-        } else {
-            return sprintf(__('Error: Accreditation could not be confirmed! (%s)', 'plekvetica'), $confirm);
-        }
+    public function register_rest_routes(){
+        register_rest_route('plek-events/v1', '/search/', [
+            'methods' => 'GET',
+            'callback' => [new PlekEvents, 'rest_search_events']
+        ]);
     }
+
 }
