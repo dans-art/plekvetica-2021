@@ -3,15 +3,15 @@
 Version 3.0 - 2023.02.10
 - Neue Übersetzungen hinzugefügt
 - Verschiedene Texte für die Facebook Promo funktion
-- Neuer Akkreditierungsanfrage manager (Für Veranstalter)
-- Neuer Akkreditierungsstatus: Bestätigt mit vorbehalt
+- Neuer Akkreditierungsanfrage Manager (Für Veranstalter)
+- Neuer Akkreditierungsstatus: Bestätigt mit Vorbehalt
 - Funktion fürs automatische befüllen von Newsletterlisten
 - Autoren Feld bei "Event bearbeiten" hinzugefügt
-- Co-Author Plugin entfernt
+- Co-Author Plugin entfernt -> Ersetzt durch interne Funktion.
 - Behoben: Es wurden nicht alle Events eines Team-Mitgliedes angezeigt
 - Formatierung wird beim einfügen im Event entfernt
 - Newsletter Preview hinzugefügt
-- Div. Fehler behoben
+- Div. Fehler behoben
 
 Version 2.5.0
 - Fix: Facebook publisher
