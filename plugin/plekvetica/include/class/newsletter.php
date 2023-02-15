@@ -30,7 +30,7 @@ class PlekNewsletter
      */
     public function __construct()
     {
-        if (is_plugin_active('newsletter/plugin.php')) {
+        if (function_exists('is_plugin_active') AND is_plugin_active('newsletter/plugin.php')) {
             $this->plugin_installed = true;
         }
     }
