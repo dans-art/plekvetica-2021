@@ -10,7 +10,15 @@
             "type": "true_false",
             "instructions": "Definiert, ob ein Member unter \"About\" angezeigt wird",
             "required": 0,
-            "conditional_logic": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_63ecb29cd50ba",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -239,5 +247,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1676457147
+    "modified": 1676458928
 }

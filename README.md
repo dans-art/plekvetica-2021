@@ -1,6 +1,9 @@
 # plekvetica-2021
 
 
+Version 3.0.2 - 2023.02.15
+- Fehler behoben welche das nutzen externer Funktonen für Gäste blockierte
+
 Version 3.0.1 - 2023.02.15
 - Teammitlieder werden nun in passiv und aktiv unterschieden
 
