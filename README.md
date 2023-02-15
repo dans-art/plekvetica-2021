@@ -1,6 +1,9 @@
 # plekvetica-2021
 
 
+Version 3.0.1 - 2023.02.15
+- Teammitlieder werden nun in passiv und aktiv unterschieden
+
 Version 3.0 - 2023.02.10
 - Neue Übersetzungen hinzugefügt
 - Verschiedene Texte für die Facebook Promo funktion

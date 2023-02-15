@@ -1393,6 +1393,52 @@ article.plek-event-item-compact {
 .post-type-archive-tribe_events .entry-header {
   padding: 40px 0 0 40px; }
 
+/* Add Event button*/
+#add-event-floating-button {
+  display: block;
+  position: fixed;
+  right: 1.6rem;
+  bottom: 5rem;
+  z-index: 10; }
+
+#add-event-floating-button span,
+#add-event-floating-button a {
+  background-color: #8C262E;
+  padding: 0;
+  margin: 0;
+  color: white;
+  text-align: center; }
+
+#add-event-floating-button span {
+  /*display: none;*/
+  display: inline-block;
+  opacity: 0;
+  margin-right: 1em;
+  width: 0rem;
+  height: 3rem;
+  border-radius: 2rem;
+  position: absolute;
+  right: 3em;
+  padding-top: 0.7em;
+  overflow: hidden;
+  -webkit-transition: opacity 1s ease;
+  -moz-transition: opacity 1s ease;
+  -ms-transition: opacity 1s ease;
+  -o-transition: opacity 1s ease;
+  transition: opacity 1s ease; }
+
+#add-event-floating-button a {
+  width: 3rem;
+  height: 3rem;
+  font-size: 3rem;
+  display: inline-block;
+  border-radius: 50%;
+  line-height: 1em; }
+
+#add-event-floating-button a:hover + span {
+  opacity: 1;
+  width: 10rem; }
+
 #tribe-events-pg-template .single-view .info-text-bar {
   width: 100%; }
 #tribe-events-pg-template .single-view #event-content {

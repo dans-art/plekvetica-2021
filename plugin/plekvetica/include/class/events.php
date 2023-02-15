@@ -1692,4 +1692,18 @@ class PlekEvents extends PlekEventHandler
         }
         return $ret_array;
     }
+
+    /**
+     * Add floating button for add Event
+     *
+     * @return void
+     */
+    public function add_content_before_tribe_events_views_action(){
+        global $plek_handler;
+        $event_add_page_id = $plek_handler -> get_plek_option('add_event_page_id');
+        $add_event_page_url = get_permalink( $event_add_page_id );
+        $button_text = __('Add event','plekvetica');
+        echo "<div id='add-event-floating-button'><a href='$add_event_page_url'>+</a><span>$button_text</span></div>";
+        //s(tribe_is_event_query());
+    }
 }

@@ -22,7 +22,13 @@ add_filter('wp_mail', [new PlekNotificationHandler, 'filter_wp_mail'], 1, 1);
 
 add_action('init', [$plek_handler, 'load_textdomain']); //load language 
 add_action('wp_head', [$plek_handler, 'enqueue_scripts']);
+add_action('admin_init', [$plek_handler, 'enqueue_scripts_admin']);
 add_action('wp_head', [$plek_handler, 'enqueue_ajax_functions']);
+
+//Before Calendar view
+add_action( 'tribe_events_views_v2_view_messages_before_render', [$plek_event, 'add_content_before_tribe_events_views_action'] );
+
+//Footer
 add_action('wp_footer', [$plek_handler, 'add_general_js_settings'], 0, 99);
 
 add_action('admin_menu', [$backend_class, 'plek_add_menu']);

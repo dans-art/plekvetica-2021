@@ -27,8 +27,20 @@ class PlekUserHandler
      *
      * @return void
      */
-    public static function get_team_roles()
+    public static function get_team_roles($simple_array = false)
     {
+        if ($simple_array) {
+            return array(
+                'administrator',
+                'plekmanager',
+                'cutter',
+                'eventmanager',
+                'interviewer',
+                'photographer',
+                'reviewwriter',
+                'videograph'
+            );
+        }
         return array(
             'administrator' => __('Administrator', 'plekvetica'),
             'plekmanager' => __('Plekvetica Manager', 'plekvetica'),
@@ -52,8 +64,8 @@ class PlekUserHandler
     public static function get_team_members($only_shown = false)
     {
         $args = ['role__in' => array_flip(self::$team_roles)];
-        if($only_shown){
-            $args['meta_key'] = 'show_member';
+        if ($only_shown) {
+            $args['meta_key'] = 'active_member';
             $args['meta_value'] = '1';
             $args['meta_compare'] = '=';
         }
@@ -74,9 +86,9 @@ class PlekUserHandler
                 'role__not_in' => 'exuser',
             ]
         );
-        if($exclude_locked){
-            foreach($users as $index => $user_obj){
-                if(isset($user_obj -> id) AND !empty(get_user_meta($user_obj-> id, 'plek_user_lock_key', true))){
+        if ($exclude_locked) {
+            foreach ($users as $index => $user_obj) {
+                if (isset($user_obj->id) and !empty(get_user_meta($user_obj->id, 'plek_user_lock_key', true))) {
                     //User is locked, remove
                     unset($users[$index]);
                 }
