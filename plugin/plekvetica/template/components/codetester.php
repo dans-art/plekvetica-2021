@@ -24,12 +24,13 @@ $save_path = ABSPATH . 'wp-content\uploads\2022\Plakat_GNP_OBSCURA_420x594_web_m
 $save_url = 'https://localhost/plekvetica/wp-content/uploads/2022/Plakat_GNP_OBSCURA_420x594_web_marked.jpg';
 $watermark = PLEK_PATH . 'images\watermarks\ticketraffle-2-2.png';
 
-
+$authors_handler = new PlekAuthorHandler;
 $pe -> load_event(66497);
+
 ?>
 <div>
 <?php 
-s($plek_handler->clean_url('https://open.spotify.com/artist/278ZYwGhdK6QTzE3MFePnP?autoplay=true'));
+//s($plek_handler->clean_url('https://open.spotify.com/artist/278ZYwGhdK6QTzE3MFePnP?autoplay=true'));
 ?>
 </div>
 <?php 
@@ -40,7 +41,7 @@ s($plek_handler->clean_url('https://open.spotify.com/artist/278ZYwGhdK6QTzE3MFeP
 
 	echo '<img src="'.$save_url.'"/>';
 }*/
-PlekTemplateHandler::load_template('email-header', 'email');
+//PlekTemplateHandler::load_template('email-header', 'email');
 
 $pm = new PlekNewsletter;
 

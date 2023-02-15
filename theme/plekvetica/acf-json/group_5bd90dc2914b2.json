@@ -1,0 +1,243 @@
+{
+    "key": "group_5bd90dc2914b2",
+    "title": "Plekvetica Autor Settings",
+    "fields": [
+        {
+            "key": "field_5bdb2ef2ea1e4",
+            "label": "Aktivmitglied",
+            "name": "active_member",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Definiert, ob ein Member unter \"About\" angezeigt wird",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_63ecb29cd50ba",
+            "label": "Passivmitglied",
+            "name": "passive_member",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Definiert, ob ein Member unter \"About\" angezeigt wird",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5bdb2ef2ea1e4",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_5bdb2f10ea1e5",
+            "label": "Dabei seit",
+            "name": "since",
+            "aria-label": "",
+            "type": "date_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "display_format": "j. F Y",
+            "return_format": "Ymd",
+            "first_day": 1
+        },
+        {
+            "key": "field_5bdb2f35ea1e6",
+            "label": "Bild",
+            "name": "bild",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "Portrait Bild des Members",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "thumbnail",
+            "library": "all",
+            "min_width": 200,
+            "min_height": 200,
+            "min_size": "",
+            "max_width": 2500,
+            "max_height": 2500,
+            "max_size": "0.4",
+            "mime_types": "jpg,jpeg"
+        },
+        {
+            "key": "field_5bdb2f7c211b3",
+            "label": "Header-Bild",
+            "name": "header_bild",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "Bild des Headers",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "url",
+            "preview_size": "thumbnail",
+            "library": "all",
+            "min_width": 1200,
+            "min_height": 250,
+            "min_size": "",
+            "max_width": 3000,
+            "max_height": 3000,
+            "max_size": "0.2",
+            "mime_types": "jpg,jpeg"
+        },
+        {
+            "key": "field_5bdb2fcd211b4",
+            "label": "Youtube Video",
+            "name": "youtube_video",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "ID eines YT Videos",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_5bdb2fee211b5",
+            "label": "Eigene Projekte",
+            "name": "eigene_projekte",
+            "aria-label": "",
+            "type": "wysiwyg",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1,
+            "delay": 1
+        },
+        {
+            "key": "field_60fc8cdabc683",
+            "label": "Veranstalter ID",
+            "name": "organizer_id",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Id des Veranstalters, welche mit diesem Account verknüpft ist.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "min": "",
+            "max": "",
+            "step": ""
+        },
+        {
+            "key": "field_60fc8ceebc684",
+            "label": "Band ID",
+            "name": "band_id",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Id der Band, welche mit diesem Account verknüpft ist.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_6192d9ca6477e",
+            "label": "User Lock Key",
+            "name": "plek_user_lock_key",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Der Individuelle Lock Key. Wenn dieser gesetzt ist, ist das Konto gesperrt.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "user_form",
+                "operator": "==",
+                "value": "all"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1676457147
+}

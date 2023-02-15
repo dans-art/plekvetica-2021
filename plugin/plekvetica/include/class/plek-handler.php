@@ -170,11 +170,23 @@ class PlekHandler
         return $acf['choices'];
     }
 
-
-    public function plek_get_team_shortcode()
+    /**
+     * Get all the active members of plekvetica
+     *
+     * @param array $atts The attributes given by the shortcode
+     * @return string The formatted authors
+     */
+    public function plek_get_team_shortcode($atts)
     {
+        $short_atts = shortcode_atts(
+            array(
+                'get' => 'active',
+            ),
+            $atts
+        );
+
         $authors_handler = new PlekAuthorHandler;
-        $authors = $authors_handler->get_all_team_authors();
+        $authors = $authors_handler->get_all_team_authors($short_atts['get']);
         return PlekTemplateHandler::load_template_to_var('author-post-items', 'posts', $authors);
     }
 
@@ -935,6 +947,4 @@ class PlekHandler
             'callback' => [new PlekEvents, 'rest_search_events']
         ]);
     }
-
-
 }
