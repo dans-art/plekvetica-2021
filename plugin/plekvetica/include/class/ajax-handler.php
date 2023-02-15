@@ -218,7 +218,7 @@ class PlekAjaxHandler
                 $event_id = $this->get_ajax_data('id');
                 $plek_event->load_event($event_id);
                 $send = PlekNotificationHandler::send_review_to_promoter($event_id);
-                if($send === true){
+                if ($send === true) {
                     $this->set_success(__('Email sent!', 'plekvetica'));
                 } else {
                     $this->set_error($send); //Error Message from function
@@ -325,16 +325,16 @@ class PlekAjaxHandler
                     $this->set_error($error_msg);
                 }
                 break;
-                case 'manage_accreditation':
-                    global $plek_handler;
-                    $update = $plek_handler->update_organizer_accreditation_answer();
-                    if(is_array($update)){
-                        $data = json_encode($update);
-                        $this -> set_success($data);
-                    }else{
-                        $this -> set_error($update);
-                    }
-                    break;
+            case 'manage_accreditation':
+                global $plek_handler;
+                $update = $plek_handler->update_organizer_accreditation_answer();
+                if (is_array($update)) {
+                    $data = json_encode($update);
+                    $this->set_success($data);
+                } else {
+                    $this->set_error($update);
+                }
+                break;
             default:
                 # code...
                 $this->set_error(__('You are not allowed to use this request or function not found', 'plekvetica'));
@@ -372,6 +372,16 @@ class PlekAjaxHandler
                     $this->set_success(__('Event reported', 'plekvetica'));
                 } else {
                     $this->set_error($report);
+                }
+                break;
+            case 'manage_accreditation':
+                global $plek_handler;
+                $update = $plek_handler->update_organizer_accreditation_answer();
+                if (is_array($update)) {
+                    $data = json_encode($update);
+                    $this->set_success($data);
+                } else {
+                    $this->set_error($update);
                 }
                 break;
             default:
