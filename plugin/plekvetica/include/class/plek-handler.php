@@ -13,8 +13,12 @@ class PlekHandler
     public function __construct()
     {
         $this->placeholder_image = PLEK_PLUGIN_DIR_URL . 'images/placeholder/default_placeholder.jpg';
-        $plugin_meta = get_plugin_data(PLEK_PATH . 'plekvetica.php');
-        $this->version = (!empty($plugin_meta['Version']) and $plugin_meta['Version'] !== null) ? $plugin_meta['Version'] : "2.3";
+        if(function_exists('get_plugin_data')){
+            $plugin_meta = get_plugin_data(PLEK_PATH . 'plekvetica.php');
+            $this->version = (!empty($plugin_meta['Version']) and $plugin_meta['Version'] !== null) ? $plugin_meta['Version'] : "3.0.2";
+        }else{
+            $this -> version = '3.0.2';
+        }
     }
 
     public function set_js_error($msg)
@@ -911,7 +915,7 @@ class PlekHandler
         $status = $pe->get_event_status_text($status_code);
         $pn->push_to_role(
             'accredi_manager',
-            sprintf(__('%s - accreditation request sent to %s', 'plekvetica'), $pe->get_name(), $status),
+            sprintf(__('%s - accreditation status set to %s', 'plekvetica'), $pe->get_name(), $status),
             PlekTemplateHandler::load_template_to_var('accreditation-admin-info', 'email/event', $pe, $organizer_id, $status),
             get_permalink($event_id)
         );
