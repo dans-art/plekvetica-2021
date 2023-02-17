@@ -8,8 +8,8 @@ $subject = (isset($template_args[0])) ? $template_args[0] : ''; // The email Sub
 $email_attr = (isset($template_args[1])) ? $template_args[1] : ''; // The email attributes as an array
 
 $name = (isset($email_attr[0])) ? $email_attr[0] : ''; // The name of the user
-$email = (isset($email_attr[1])) ? $email_attr[1] : '';
-$plek_lock_key = (isset($email_attr[2])) ? $email_attr[2] : '';
+$email = (isset($email_attr[1])) ? urlencode($email_attr[1]) : '';
+$plek_lock_key = (isset($email_attr[2])) ? urlencode($email_attr[2]) : '';
 $my_plek_url = (isset($email_attr[3])) ? $email_attr[3] : '';
 
 $unlock_url = "{$my_plek_url}?unlock={$email}&key={$plek_lock_key}";

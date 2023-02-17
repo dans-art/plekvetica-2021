@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plekvetica - 2021\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 12:35+0000\n"
+"POT-Creation-Date: 2023-02-17 14:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -108,12 +108,12 @@ msgstr ""
 msgid "Acc Team"
 msgstr ""
 
-#: template/system/login.php:35
+#: template/system/login.php:50
 msgid "Account activated! Welcome to Plekvetica!"
 msgstr ""
 
-#: template/system/login.php:44
-msgid "Account could not be activated."
+#: template/system/login.php:59
+msgid "Account could not be activated. Please report to info@plekvetica.ch"
 msgstr ""
 
 #: include/class/ajax-handler.php:678
@@ -123,7 +123,7 @@ msgid ""
 "%s."
 msgstr ""
 
-#: template/system/login.php:38
+#: template/system/login.php:42
 msgid "Account is already unlocked."
 msgstr ""
 
@@ -971,6 +971,14 @@ msgstr ""
 msgid "Failed to send mail."
 msgstr ""
 
+#: template/system/login.php:54
+msgid "Failed to unlock. Update error."
+msgstr ""
+
+#: template/system/login.php:46
+msgid "Failed to unlock. Wrong key!"
+msgstr ""
+
 #: include/class/event-handler.php:2429
 msgid "Failed to update post author"
 msgstr ""
@@ -1122,7 +1130,7 @@ msgstr ""
 msgid "Hey %s, Some of your followed Bands are playing at %s"
 msgstr ""
 
-#: include/class/user-handler.php:1068
+#: include/class/user-handler.php:1074
 #: template/email/organizer/organizer-accreditation-request.php:26
 #, php-format
 msgid "Hi, %s"
@@ -1479,7 +1487,7 @@ msgstr ""
 msgid "New Review published"
 msgstr ""
 
-#: include/class/user-handler.php:955
+#: include/class/user-handler.php:962
 msgid "New user account activated"
 msgstr ""
 
@@ -1680,7 +1688,7 @@ msgstr ""
 msgid "No type found"
 msgstr ""
 
-#: include/class/user-handler.php:1007
+#: include/class/user-handler.php:1013
 msgid "No username or email provided"
 msgstr ""
 
@@ -1688,7 +1696,7 @@ msgstr ""
 msgid "No videos found."
 msgstr ""
 
-#: include/class/youtube.php:262
+#: include/class/youtube.php:264
 msgid "No Youtube Video ID found"
 msgstr ""
 
@@ -1781,7 +1789,7 @@ msgstr ""
 msgid "Origin"
 msgstr ""
 
-#: include/class/user-handler.php:1070
+#: include/class/user-handler.php:1076
 msgid "Otherwise you can ignore this message."
 msgstr ""
 
@@ -2008,7 +2016,7 @@ msgstr ""
 msgid "Reset password"
 msgstr ""
 
-#: include/class/user-handler.php:1071
+#: include/class/user-handler.php:1077
 msgid "Reset password request"
 msgstr ""
 
@@ -2366,7 +2374,7 @@ msgstr ""
 msgid "The Organizer has been added to the Database"
 msgstr ""
 
-#: include/class/user-handler.php:1040
+#: include/class/user-handler.php:1046
 msgid "The passwords have to match"
 msgstr ""
 
@@ -2397,7 +2405,7 @@ msgstr ""
 msgid "There has ben a new Review published at plekvetica.ch:"
 msgstr ""
 
-#: include/class/user-handler.php:1069
+#: include/class/user-handler.php:1075
 msgid ""
 "There was a new password requested for your account. If you aware of this "
 "action, please continue with the link below and set a new password."
@@ -2597,6 +2605,12 @@ msgstr ""
 
 #: include/class/notification-handler.php:520
 msgid "User"
+msgstr ""
+
+#: template/system/login.php:38
+msgid ""
+"User not found. If you think this is an error, please report to "
+"info@plekvetica.ch"
 msgstr ""
 
 #: template/backend/backend-options-page-status.php:15

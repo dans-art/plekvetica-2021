@@ -937,32 +937,38 @@ class PlekUserHandler
         $email = sanitize_email($_REQUEST['unlock']);
         $user = get_user_by('email', $email);
         $unlock_key = get_user_meta($user->ID, 'plek_user_lock_key', true);
+        if ($user->ID === 0 OR $user === false) {
+            $_GET['user_unlock_message'] = 'user_not_found';
+            return;
+        }
         if (empty($unlock_key)) {
-            $_GET['user_already_unlocked'] = true;
+            $_GET['user_unlock_message'] = 'user_already_unlocked';
             return;
         }
-        if ($unlock_key === $_REQUEST['key']) {
-            //Remove the lock_key
-            if (update_user_meta($user->ID, 'plek_user_lock_key', '')) {
-                $_GET['user_unlocked'] = true;
-                //Login the user
-                wp_clear_auth_cookie();
-                wp_set_current_user($user->ID);
-                wp_set_auth_cookie($user->ID, 1);
+        if ($unlock_key !== $_REQUEST['key']) {
+            $_GET['user_unlock_message'] = 'wrong_unlock_key';
+            return;
+        }
+        //Remove the lock_key
+        if (update_user_meta($user->ID, 'plek_user_lock_key', '')) {
+            $_GET['user_unlock_message'] = 'user_unlocked';
+            //Login the user
+            wp_clear_auth_cookie();
+            wp_set_current_user($user->ID);
+            wp_set_auth_cookie($user->ID, 1);
 
-                //Send Info to Admin
-                $admin_email = $plek_handler->get_plek_option('admin_email');
-                $subject = __('New user account activated', 'plekvetica');
-                $emailer = new PlekEmailSender;
-                $emailer->set_to($admin_email);
-                $emailer->set_subject($subject);
-                $emailer->set_default();
-                $emailer->set_message_from_template("user/new-user-admin-info", $subject, $user->display_name, $email, $user->ID);
-                $emailer->send_mail();
-                return;
-            }
+            //Send Info to Admin
+            $admin_email = $plek_handler->get_plek_option('admin_email');
+            $subject = __('New user account activated', 'plekvetica');
+            $emailer = new PlekEmailSender;
+            $emailer->set_to($admin_email);
+            $emailer->set_subject($subject);
+            $emailer->set_default();
+            $emailer->set_message_from_template("user/new-user-admin-info", $subject, $user->display_name, $email, $user->ID);
+            $emailer->send_mail();
             return;
         }
+        $_GET['user_unlock_message'] = 'update_lock_key_error';
         return;
     }
 

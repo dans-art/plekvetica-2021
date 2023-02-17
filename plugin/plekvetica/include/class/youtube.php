@@ -89,7 +89,9 @@ class plekYoutube
             $data->post_content = $snip->description;
             $data->thumbnails = $snip->thumbnails;
             $data->type = $this->get_yt_type_by_title($snip->title);
-            $data->class = strtolower(str_replace(' ', '', $data->type)); //Remove Whitespace
+            if(!empty($data->type)){
+                $data->class = strtolower(str_replace(' ', '', $data->type)); //Remove Whitespace
+            }
             $ret_arr[$id]['data'] = $data;
         }
         return $ret_arr;

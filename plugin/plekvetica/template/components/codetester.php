@@ -27,6 +27,16 @@ $watermark = PLEK_PATH . 'images\watermarks\ticketraffle-2-2.png';
 $authors_handler = new PlekAuthorHandler;
 $pe -> load_event(66497);
 
+
+	
+if(function_exists('wpfc_exclude_current_page')){
+	wpfc_exclude_current_page();
+}
+
+
+$pb = new PlekEventBlocks();
+
+s(home_url( add_query_arg( 'plek_clear_cache', 'all' ) ));
 ?>
 <div>
 <?php 
