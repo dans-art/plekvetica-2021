@@ -1,6 +1,10 @@
 # plekvetica-2021
 
 
+Version 3.0.3 - 2023.02.17
+- Fehler beim Entsperren des neuen users behoben.
+- Cache für Block inhalte aktiviert
+
 Version 3.0.2 - 2023.02.15
 - Fehler behoben welche das nutzen externer Funktonen für Gäste blockierte
 

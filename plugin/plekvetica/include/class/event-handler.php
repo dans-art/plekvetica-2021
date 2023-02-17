@@ -1130,7 +1130,7 @@ class PlekEventHandler
     public function get_event_revisions()
     {
         $rev = $this->get_field_value('event_revisions');
-        $rev_arr = json_decode($rev);
+        $rev_arr = !empty($rev) ? json_decode($rev) : null;
         if (empty($rev_arr)) {
             return false;
         }
@@ -1261,7 +1261,7 @@ class PlekEventHandler
     public function get_event_interviews($return_as_string = false)
     {
         $interviews = $this->get_field_value('interview_with');
-        $int_arr = explode(PHP_EOL, $interviews);
+        $int_arr = !empty($interviews) ? explode(PHP_EOL, $interviews) : [];
         $ret_arr = [];
         $ret_string = "";
         if (empty($interviews)) {

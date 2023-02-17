@@ -20,7 +20,7 @@ $content = (isset($template_args[1])) ? $template_args[1] : ''; //Content of the
 
 <div id="plek-login-container">
     <?php
-    if (PlekUserHandler::current_user_is_locked()) {
+    if (PlekUserHandler::current_user_is_locked() AND !PlekUserHandler::is_user_unlock_page()) {
         $message = __('You account is currently locked. Please check your mail for unlocking instructions', 'plekvetica');
         PlekTemplateHandler::load_template('user-notice', 'system', 'info', $message);
     ?>
@@ -31,19 +31,34 @@ $content = (isset($template_args[1])) ? $template_args[1] : ''; //Content of the
     ?>
     <?php if (PlekUserHandler::is_user_unlock_page()) : ?>
         <?php
-        if (isset($_GET['user_unlocked'])) {
-            $activate_ok = __('Account activated! Welcome to Plekvetica!', 'plekvetica');
-            PlekTemplateHandler::load_template('user-notice', 'system', 'info', $activate_ok);
-        } elseif (isset($_GET['user_already_unlocked'])) {
-            $activate_error = __('Account is already unlocked.', 'plekvetica');
-            PlekTemplateHandler::load_template('user-notice', 'system', 'warning', $activate_error);
-        } else {
-            //If user unlock page but user is not locked
-            //This can happen, when user is not logged in, or user is not locked.
-            if (PlekUserHandler::current_user_is_locked() === false) {
-                $activate_error = __('Account could not be activated.', 'plekvetica');
+        $unlocked_message = $_GET['user_unlock_message'];
+
+        switch ($unlocked_message) {
+            case 'user_not_found':
+                $activate_error = __('User not found. If you think this is an error, please report to info@plekvetica.ch', 'plekvetica');
+                PlekTemplateHandler::load_template('user-notice', 'system', 'warning', $activate_error);
+                break;
+            case 'user_already_unlocked':
+                $activate_error = __('Account is already unlocked.', 'plekvetica');
+                PlekTemplateHandler::load_template('user-notice', 'system', 'warning', $activate_error);
+                break;
+            case 'wrong_unlock_key':
+                $activate_error = __('Failed to unlock. Wrong key!', 'plekvetica');
+                PlekTemplateHandler::load_template('user-notice', 'system', 'warning', $activate_error);
+                break;
+            case 'user_unlocked':
+                $activate_ok = __('Account activated! Welcome to Plekvetica!', 'plekvetica');
+                PlekTemplateHandler::load_template('user-notice', 'system', 'info', $activate_ok);
+                break;
+            case 'update_lock_key_error':
+                $activate_error = __('Failed to unlock. Update error.', 'plekvetica');
                 PlekTemplateHandler::load_template('user-notice', 'system', 'error', $activate_error);
-            }
+                break;
+
+            default:
+                $activate_error = __('Account could not be activated. Please report to info@plekvetica.ch', 'plekvetica');
+                PlekTemplateHandler::load_template('user-notice', 'system', 'error', $activate_error);
+                break;
         }
         ?>
     <?php endif; ?>

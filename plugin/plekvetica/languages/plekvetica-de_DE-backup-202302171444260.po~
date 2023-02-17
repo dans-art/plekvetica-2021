@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2023-02-17 14:44+0000\n"
+"PO-Revision-Date: 2023-02-15 12:37+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -111,14 +111,13 @@ msgstr "Acc Status"
 msgid "Acc Team"
 msgstr "Acc Team"
 
-#: template/system/login.php:50
+#: template/system/login.php:35
 msgid "Account activated! Welcome to Plekvetica!"
 msgstr "Konto aktiviert! Willkommen bei Plekvetica!"
 
-#: template/system/login.php:59
-msgid "Account could not be activated. Please report to info@plekvetica.ch"
-msgstr ""
-"Konto konnte nicht aktiviert werden. Bitte melde dies an info@plekvetica.ch"
+#: template/system/login.php:44
+msgid "Account could not be activated."
+msgstr "Konto konnte nicht aktiviert werden."
 
 #: include/class/ajax-handler.php:678
 #, php-format
@@ -129,7 +128,7 @@ msgstr ""
 "Konto erstellt, aber es konnte keine Bestätigung-Email gesendet werden. "
 "Bitte kontaktiere dazu den IT Support: %s."
 
-#: template/system/login.php:42
+#: template/system/login.php:38
 msgid "Account is already unlocked."
 msgstr "Konto ist bereits entsperrt."
 
@@ -984,14 +983,6 @@ msgstr "Speichern der Einstellungen fehlgeschlagen"
 msgid "Failed to send mail."
 msgstr "Email senden fehlgeschlagen."
 
-#: template/system/login.php:54
-msgid "Failed to unlock. Update error."
-msgstr "Fehler beim Entsperren. Aktualisierungsfehler."
-
-#: template/system/login.php:46
-msgid "Failed to unlock. Wrong key!"
-msgstr "Fehler beim Entsperren. Falscher Schlüssel!"
-
 #: include/class/event-handler.php:2429
 msgid "Failed to update post author"
 msgstr "Fehler beim aktualisieren des Beitrag Autors"
@@ -1147,7 +1138,7 @@ msgstr "Hallo, %s"
 msgid "Hey %s, Some of your followed Bands are playing at %s"
 msgstr "Hallo %s, Einige der Bands welchen du folgst spielen am %s"
 
-#: include/class/user-handler.php:1074
+#: include/class/user-handler.php:1068
 #: template/email/organizer/organizer-accreditation-request.php:26
 #, php-format
 msgid "Hi, %s"
@@ -1513,7 +1504,7 @@ msgstr ""
 msgid "New Review published"
 msgstr "Neues Review veröffentlicht"
 
-#: include/class/user-handler.php:962
+#: include/class/user-handler.php:955
 msgid "New user account activated"
 msgstr "Neues Konto aktiviert"
 
@@ -1718,7 +1709,7 @@ msgstr "Keine Zeit definiert"
 msgid "No type found"
 msgstr "Kein Typ gefunden"
 
-#: include/class/user-handler.php:1013
+#: include/class/user-handler.php:1007
 msgid "No username or email provided"
 msgstr "Kein Benutzername oder Passwort angegeben."
 
@@ -1726,7 +1717,7 @@ msgstr "Kein Benutzername oder Passwort angegeben."
 msgid "No videos found."
 msgstr "Keine Videos gefunden."
 
-#: include/class/youtube.php:264
+#: include/class/youtube.php:262
 msgid "No Youtube Video ID found"
 msgstr "Keine YouTube-Video-ID gefunden"
 
@@ -1823,7 +1814,7 @@ msgstr "Veranstalter: %s"
 msgid "Origin"
 msgstr "Herkunft"
 
-#: include/class/user-handler.php:1076
+#: include/class/user-handler.php:1070
 msgid "Otherwise you can ignore this message."
 msgstr "Falls nicht, kannst du diese Nachricht ignorieren."
 
@@ -2056,7 +2047,7 @@ msgstr "Angefragt"
 msgid "Reset password"
 msgstr "Passwort zurücksetzen"
 
-#: include/class/user-handler.php:1077
+#: include/class/user-handler.php:1071
 msgid "Reset password request"
 msgstr "Passwort zurücksetzen"
 
@@ -2427,7 +2418,7 @@ msgstr ""
 msgid "The Organizer has been added to the Database"
 msgstr "Der Veranstalter wurde zur Datenbank hinzugefügt"
 
-#: include/class/user-handler.php:1046
+#: include/class/user-handler.php:1040
 msgid "The passwords have to match"
 msgstr "Die Passwörter müssen übereinstimmen"
 
@@ -2458,7 +2449,7 @@ msgstr "Es gibt keine registrierten Mitglieder"
 msgid "There has ben a new Review published at plekvetica.ch:"
 msgstr "Auf plekvetica.ch wurde ein neues Review veröffentlicht:"
 
-#: include/class/user-handler.php:1075
+#: include/class/user-handler.php:1069
 msgid ""
 "There was a new password requested for your account. If you aware of this "
 "action, please continue with the link below and set a new password."
@@ -2664,13 +2655,6 @@ msgstr "Nutze diesen Link um deinen Event zu updaten:"
 #: include/class/notification-handler.php:520
 msgid "User"
 msgstr "Nutzer"
-
-#: template/system/login.php:38
-msgid ""
-"User not found. If you think this is an error, please report to "
-"info@plekvetica.ch"
-msgstr ""
-"Nutzer konnte nicht gefunden werden. Bitte melde dies an info@plekvetica.ch"
 
 #: template/backend/backend-options-page-status.php:15
 msgid "User roles exists."
