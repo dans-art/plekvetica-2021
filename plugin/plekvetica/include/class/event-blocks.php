@@ -255,8 +255,10 @@ class PlekEventBlocks extends PlekEvents
     {
 
         //Check if the data exists in the cache
-        $cache_key = 'plekblock_' . $block_id . '_' . get_current_user_id() . '-' . md5(implode('', $data));
-        $cache_context = 'plek_block';
+        $url = $_SERVER['REQUEST_URI'];
+        $parameters = $_REQUEST;
+        $cache_key = 'plekblock_' . $block_id . '_' . get_current_user_id() . '-' . md5(implode('', $data) . $url . $parameters);
+        $cache_context = 'plek_block_'.$block_id;
         $cached = PlekCacheHandler::get_cache($cache_key, $cache_context);
 
         if ($enable_cache and $cached) {
