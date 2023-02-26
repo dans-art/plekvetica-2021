@@ -12,10 +12,7 @@ class PlekEventBlocks extends PlekEvents
 
     public function __construct()
     {
-        //Check if cache needs to be deleted
-        if (isset($_REQUEST['plek_clear_cache']) and $_REQUEST['plek_clear_cache'] === 'all') {
-            add_action('init', [$this, 'delete_block_transients']); //Call with the init function to make sure that a user can be found
-        }
+
     }
 
     //Get user blocks
@@ -256,7 +253,7 @@ class PlekEventBlocks extends PlekEvents
 
         //Check if the data exists in the cache
         $url = $_SERVER['REQUEST_URI'];
-        $parameters = $_REQUEST;
+        $parameters = implode("",$_REQUEST);
         $cache_key = 'plekblock_' . $block_id . '_' . get_current_user_id() . '-' . md5(implode('', $data) . $url . $parameters);
         $cache_context = 'plek_block_'.$block_id;
         $cached = PlekCacheHandler::get_cache($cache_key, $cache_context);
@@ -398,45 +395,4 @@ class PlekEventBlocks extends PlekEvents
         return;
     }
 
-    /**
-     * Removes all the block transients and forces the data to reload
-     * 
-     * @param bool only_current_user Will delete only the current users transients
-     * @todo Check how many rows where affected
-     * @return bool true at the end
-     */
-    public function delete_block_transients($only_current_user = true)
-    {
-        $blocks = [
-            'my_week',
-            'my_events',
-            'my_missing_reviews',
-            'band_events',
-            'my_band_follows',
-            'my_event_watchlist',
-            'bands',
-            'search_events',
-            'all_reviews',
-            'search_events_review'
-        ];
-        $user = ($only_current_user) ? get_current_user_id() . '-' : ''; //Add the 
-
-        global $wpdb;
-
-        foreach ($blocks as $block_id) {
-            $like = "%" . '_transient_timeout_plekblock_' . $block_id . '_' . $user . "%";
-            //Reset the timeout
-            $result = $wpdb->get_results(
-                //"UPDATE `plek_options` SET `option_value` = '1676736041' WHERE `plek_options`.`option_id` = 9569171;"
-                $wpdb->prepare(
-                    "UPDATE {$wpdb->prefix}options
-                SET `option_value` = '%s'
-                WHERE option_name LIKE %s",
-                    0,
-                    $like
-                )
-            );
-        }
-        return true;
-    }
 }

@@ -480,7 +480,6 @@ let plek_main = {
         send_data = plek_main.get_block_data(container, send_data, button);
         send_data = plek_main.get_url_query_data(send_data);
 
-
         jQuery.ajax({
             url: window.ajaxurl,
             type: 'POST',
@@ -505,6 +504,7 @@ let plek_main = {
                         window.history.pushState({}, "Page", plek_main.url_add_page(page, block_id, send_data));
                         //document.title = plek_main.default_values.original_document_title + ' - Page '+page;
                         plek_main.scroll_to_block(block_id);
+                        
                     }
                 }
                 jQuery(button).text(text);
@@ -578,7 +578,7 @@ let plek_main = {
         }
 
         /** Add the search query, if not existing */
-        if (url_object.get(s) !== null && query.search('s=') === 0) {
+        if (url_object.get('s') !== null && query.search('s=') === 0) {
             new_url = new_url + separator + 's=' + url_object.get(s);
         }
         return new_url;
