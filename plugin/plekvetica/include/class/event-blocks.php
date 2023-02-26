@@ -12,10 +12,7 @@ class PlekEventBlocks extends PlekEvents
 
     public function __construct()
     {
-        //Check if cache needs to be deleted
-        if(isset($_REQUEST['plek_clear_cache']) AND $_REQUEST['plek_clear_cache'] === 'all'){
-            add_action('init', [$this, 'delete_block_transients'] ); //Call with the init function to make sure that a user can be found
-        }
+
     }
 
     //Get user blocks
@@ -251,14 +248,18 @@ class PlekEventBlocks extends PlekEvents
      * @param array $data 
      * @return string HTML formated Event list
      */
-    public function get_block(string $block_id, array $data = array())
+    public function get_block(string $block_id, array $data = array(), $enable_cache = true)
     {
 
         //Check if the data exists in the cache
-        $cache_key = 'plekblock_' . $block_id . '_' . get_current_user_id() . '-' . md5(implode('', $data));
-        $cached = get_transient($cache_key);
+        $url = $_SERVER['REQUEST_URI'];
+        $parameters = implode("",$_REQUEST);
+        $cache_key = 'plekblock_' . $block_id . '_' . get_current_user_id() . '-' . md5(implode('', $data) . $url . $parameters);
+        $cache_context = 'plek_block_'.$block_id;
+        $cached = PlekCacheHandler::get_cache($cache_key, $cache_context);
 
-        if ($cached) {
+        if ($enable_cache and $cached) {
+            //Only return the cached content if any data is available
             return $cached;
         }
         $this->set_block_paged($block_id);
@@ -291,10 +292,12 @@ class PlekEventBlocks extends PlekEvents
 
             $html_data = $this->get_block_container_html_data($data, $block_id, $page_obj->page, $this->number_of_posts);
             $this->reset_paged();
-            $content = PlekTemplateHandler::load_template_to_var($this->template_container, $this->template_dir, $block_id, $html_data, $html);
+            $content_html = PlekTemplateHandler::load_template_to_var($this->template_container, $this->template_dir, $block_id, $html_data, $html);
             //Save to cache
-            set_transient($cache_key, $content, 3600 * 24); //Cache for 24h
-            return $content;
+            if ($enable_cache and !$cached) {
+                PlekCacheHandler::set_cache($cache_key, $content_html, $content, $cache_context);
+            }
+            return $content_html;
         }
         $this->reset_paged();
         return false;
@@ -392,45 +395,4 @@ class PlekEventBlocks extends PlekEvents
         return;
     }
 
-    /**
-     * Removes all the block transients and forces the data to reload
-     * 
-     * @param bool only_current_user Will delete only the current users transients
-     * @todo Check how many rows where affected
-     * @return bool true at the end
-     */
-    public function delete_block_transients($only_current_user = true)
-    {
-        $blocks = [
-            'my_week',
-            'my_events',
-            'my_missing_reviews',
-            'band_events',
-            'my_band_follows',
-            'my_event_watchlist',
-            'bands',
-            'search_events',
-            'all_reviews',
-            'search_events_review'
-        ];
-        $user = ($only_current_user) ? get_current_user_id().'-' : ''; //Add the 
-
-        global $wpdb;
-
-        foreach ($blocks as $block_id) {
-            $like = "%" . '_transient_timeout_plekblock_'.$block_id.'_'.$user . "%";
-            //Reset the timeout
-            $result = $wpdb->get_results(
-                //"UPDATE `plek_options` SET `option_value` = '1676736041' WHERE `plek_options`.`option_id` = 9569171;"
-                $wpdb->prepare(
-                    "UPDATE {$wpdb->prefix}options
-                SET `option_value` = '%s'
-                WHERE option_name LIKE %s",
-                    0, $like
-                )
-            );
-
-        }
-        return true;
-    }
 }

@@ -60,7 +60,7 @@ get_header(); ?>
 			<?php //echo $plek_search_handler -> get_events(); ?>
 			<?php 
 			global $plek_event_blocks;
-			$events = $plek_event_blocks->get_block('search_events');
+			$events = $plek_event_blocks->get_block('search_events',[]);
 			?>
 			<?php if (!empty($events)) : ?>
                 <?php echo $events; ?>

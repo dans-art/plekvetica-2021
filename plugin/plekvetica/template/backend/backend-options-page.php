@@ -31,6 +31,9 @@ if (isset($_REQUEST['settings-updated'])) {
     <a href="?page=plek-options&tab=api" class="nav-tab <?php if ($current_tab === 'api') {
                                                             echo 'nav-tab-active';
                                                         } ?>"><?php echo __('API', 'plekvetica'); ?></a>
+    <a href="?page=plek-options&tab=cache" class="nav-tab <?php if ($current_tab === 'cache') {
+                                                            echo 'nav-tab-active';
+                                                        } ?>"><?php echo __('Cache', 'plekvetica'); ?></a>
 </nav>
 
 <div class="tab-content">
@@ -44,6 +47,9 @@ if (isset($_REQUEST['settings-updated'])) {
             break;
         case 'api':
             PlekTemplateHandler::load_template('backend-options-page-api', 'backend');
+            break;
+        case 'cache':
+            PlekTemplateHandler::load_template('backend-options-page-cache', 'backend');
             break;
 
         default:

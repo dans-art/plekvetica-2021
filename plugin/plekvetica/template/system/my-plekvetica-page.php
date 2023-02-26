@@ -59,10 +59,4 @@ if (PlekUserHandler::user_is_in_team()) {
     PlekTemplateHandler::load_template('partner-page', 'system/userpage', $user);
 }
 
-//Delete cache option
-if (PlekUserHandler::user_is_in_team()) {
-    $link = home_url(add_query_arg('plek_clear_cache', 'all'));
-    echo sprintf("<a href='%s'>%s</a>", $link, __('Clear Cache', 'plekvetica'));
-}
-
 ?>
