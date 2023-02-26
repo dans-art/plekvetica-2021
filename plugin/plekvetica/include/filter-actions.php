@@ -21,6 +21,20 @@ add_filter('coauthors_edit_author_cap', function ($caps) {
 add_filter('wp_mail', [new PlekNotificationHandler, 'filter_wp_mail'], 1, 1);
 
 add_action('init', [$plek_handler, 'load_textdomain']); //load language 
+/*add_filter( 'determine_locale', function($locale){
+  if(function_exists('get_user_locale')){
+    return get_user_locale(  );
+  }
+  return $locale;
+} );
+add_filter('locale', function($locale){
+  if(function_exists('get_user_locale')){
+    //return get_user_locale(  );
+  }
+  return 'en_US';
+  return $locale;
+}, 100 );
+*/
 add_action('wp_head', [$plek_handler, 'enqueue_scripts']);
 add_action('admin_init', [$plek_handler, 'enqueue_scripts_admin']);
 add_action('wp_head', [$plek_handler, 'enqueue_ajax_functions']);

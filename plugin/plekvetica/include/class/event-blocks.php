@@ -13,8 +13,8 @@ class PlekEventBlocks extends PlekEvents
     public function __construct()
     {
         //Check if cache needs to be deleted
-        if(isset($_REQUEST['plek_clear_cache']) AND $_REQUEST['plek_clear_cache'] === 'all'){
-            add_action('init', [$this, 'delete_block_transients'] ); //Call with the init function to make sure that a user can be found
+        if (isset($_REQUEST['plek_clear_cache']) and $_REQUEST['plek_clear_cache'] === 'all') {
+            add_action('init', [$this, 'delete_block_transients']); //Call with the init function to make sure that a user can be found
         }
     }
 
@@ -251,14 +251,15 @@ class PlekEventBlocks extends PlekEvents
      * @param array $data 
      * @return string HTML formated Event list
      */
-    public function get_block(string $block_id, array $data = array())
+    public function get_block(string $block_id, array $data = array(), $enable_cache = true)
     {
 
         //Check if the data exists in the cache
         $cache_key = 'plekblock_' . $block_id . '_' . get_current_user_id() . '-' . md5(implode('', $data));
         $cached = get_transient($cache_key);
 
-        if ($cached) {
+        if ($enable_cache and !empty($data) and $cached) {
+            //Only return the cached content if any data is available
             return $cached;
         }
         $this->set_block_paged($block_id);
@@ -293,7 +294,9 @@ class PlekEventBlocks extends PlekEvents
             $this->reset_paged();
             $content = PlekTemplateHandler::load_template_to_var($this->template_container, $this->template_dir, $block_id, $html_data, $html);
             //Save to cache
-            set_transient($cache_key, $content, 3600 * 24); //Cache for 24h
+            if($enable_cache AND !empty($data)){
+                set_transient($cache_key, $content, 3600 * 72); //Cache for 3 days
+            }
             return $content;
         }
         $this->reset_paged();
@@ -413,12 +416,12 @@ class PlekEventBlocks extends PlekEvents
             'all_reviews',
             'search_events_review'
         ];
-        $user = ($only_current_user) ? get_current_user_id().'-' : ''; //Add the 
+        $user = ($only_current_user) ? get_current_user_id() . '-' : ''; //Add the 
 
         global $wpdb;
 
         foreach ($blocks as $block_id) {
-            $like = "%" . '_transient_timeout_plekblock_'.$block_id.'_'.$user . "%";
+            $like = "%" . '_transient_timeout_plekblock_' . $block_id . '_' . $user . "%";
             //Reset the timeout
             $result = $wpdb->get_results(
                 //"UPDATE `plek_options` SET `option_value` = '1676736041' WHERE `plek_options`.`option_id` = 9569171;"
@@ -426,10 +429,10 @@ class PlekEventBlocks extends PlekEvents
                     "UPDATE {$wpdb->prefix}options
                 SET `option_value` = '%s'
                 WHERE option_name LIKE %s",
-                    0, $like
+                    0,
+                    $like
                 )
             );
-
         }
         return true;
     }

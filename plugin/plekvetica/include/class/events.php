@@ -651,6 +651,8 @@ class PlekEvents extends PlekEventHandler
         LEFT JOIN {$wpdb->prefix}posts as posts
         ON posts.ID = user.post_id
         AND posts.post_type = 'tribe_events'
+
+
         LEFT JOIN {$wpdb->prefix}postmeta as status
         ON posts.ID = status.post_id
         AND status.meta_key = 'akk_status'
@@ -675,7 +677,7 @@ class PlekEvents extends PlekEventHandler
         ON posts.ID = postponed.post_id
         AND postponed.meta_key = 'postponed_event'
         
-        WHERE user.`meta_key` LIKE 'akkreditiert'
+        WHERE user.`meta_key` = 'akkreditiert'
         AND user.`meta_value` LIKE '%s'
         AND posts.ID IS NOT NULL
         AND status.meta_value = 'ab'
@@ -687,6 +689,7 @@ class PlekEvents extends PlekEventHandler
         AND enddate.meta_value < '%s'
         GROUP BY posts.ID
         ORDER BY startdate.meta_value DESC", $like, $today);
+
         $posts = $wpdb->get_results($query);
         return $posts;
     }
