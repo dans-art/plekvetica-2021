@@ -28,4 +28,19 @@
     bottom: 5em;
 }
 
+.plek-message{
+    border: 1px solid;
+    padding: 1em;
+    margin: 0.5em 1em;
+}
+
+.plek-message.red{
+    color: rgb(175, 25, 25);
+    border: 1px solid rgb(175, 25, 25);
+}
+.plek-message.green{
+    color: rgb(25, 175, 25);
+    border: 1px solid rgb(25, 175, 25);
+}
+
 /*# sourceMappingURL=backend-style.css.map */

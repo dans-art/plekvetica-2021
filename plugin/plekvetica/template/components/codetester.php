@@ -36,7 +36,11 @@ if(function_exists('wpfc_exclude_current_page')){
 
 $pb = new PlekEventBlocks();
 
-s(home_url( add_query_arg( 'plek_clear_cache', 'all' ) ));
+//s(PlekCacheHandler::set_cache('test_cache_1', 'I\'m cached',[1,2,3], 'test2'));
+//s(PlekCacheHandler::get_cache('test_cache_1', 'test'));
+s(PlekCacheHandler::flush_cache_by_post_id(1));
+
+
 ?>
 <div>
 <?php 

@@ -1839,6 +1839,9 @@ class PlekEventHandler
             return $validator->get_errors();
         }
 
+        //Flush the cache
+        PlekCacheHandler::flush_cache_by_post_id($event_id);
+
         //Update the Band order / times
         $plek_handler->update_field('band_order_time', $plek_ajax_handler->get_ajax_data('band_order_time'), $event_id);
 

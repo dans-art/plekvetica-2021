@@ -240,6 +240,9 @@ class PlekHandler
         //Don't display the password protection if user is in team
         global $post;
         $whitelist = array('team-kalender');
+        if(!isset($post->post_name)){
+            return $required;
+        }
         if (array_search($post->post_name, $whitelist) !== false) {
             if (PlekUserHandler::user_is_in_team()) {
                 return false;
@@ -366,6 +369,7 @@ class PlekHandler
         //Add the user roles and create the db
         PlekUserHandler::add_user_roles();
         PlekNotificationHandler::create_database();
+        PlekCacheHandler::create_database();
 
         $this->register_cron_jobs();
         //Updates the genres

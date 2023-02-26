@@ -256,9 +256,10 @@ class PlekEventBlocks extends PlekEvents
 
         //Check if the data exists in the cache
         $cache_key = 'plekblock_' . $block_id . '_' . get_current_user_id() . '-' . md5(implode('', $data));
-        $cached = get_transient($cache_key);
+        $cache_context = 'plek_block';
+        $cached = PlekCacheHandler::get_cache($cache_key, $cache_context);
 
-        if ($enable_cache and !empty($data) and $cached) {
+        if ($enable_cache and $cached) {
             //Only return the cached content if any data is available
             return $cached;
         }
@@ -292,12 +293,12 @@ class PlekEventBlocks extends PlekEvents
 
             $html_data = $this->get_block_container_html_data($data, $block_id, $page_obj->page, $this->number_of_posts);
             $this->reset_paged();
-            $content = PlekTemplateHandler::load_template_to_var($this->template_container, $this->template_dir, $block_id, $html_data, $html);
+            $content_html = PlekTemplateHandler::load_template_to_var($this->template_container, $this->template_dir, $block_id, $html_data, $html);
             //Save to cache
-            if($enable_cache AND !empty($data)){
-                set_transient($cache_key, $content, 3600 * 72); //Cache for 3 days
+            if ($enable_cache and !$cached) {
+                PlekCacheHandler::set_cache($cache_key, $content_html, $content, $cache_context);
             }
-            return $content;
+            return $content_html;
         }
         $this->reset_paged();
         return false;

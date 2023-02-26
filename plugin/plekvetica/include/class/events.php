@@ -636,6 +636,13 @@ class PlekEvents extends PlekEventHandler
         return $events;
     }
 
+
+    /**
+     * Loads all the events of the user that have no review yet.
+     *
+     * @param string $user_login
+     * @return array The posts found
+     */
     public function get_user_missing_review_events(string $user_login = "")
     {
         global $wpdb;

@@ -609,8 +609,7 @@ class PlekNotificationHandler extends WP_List_Table
         $charset_collate = $wpdb->get_charset_collate();
         $db_version = get_option('plek_db_version');
 
-        //$notify_id = $wpdb -> get_var("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '{$table_name}' AND column_name = 'id'");
-        //$message_id_column = $wpdb -> get_var("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '{$table_name}' AND column_name = 'message_id'");
+
         if ($db_version === null) {
             $notifi = "CREATE TABLE IF NOT EXISTS {$table_name} (
               id bigint(20) NOT NULL AUTO_INCREMENT,

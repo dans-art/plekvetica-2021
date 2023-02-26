@@ -79,6 +79,15 @@ class PlekBackend /*extends WP_List_Table*/
             'plek-options-api',
             [$this, 'render_options'],
         );
+
+        add_submenu_page(
+            'plek-options',
+            __('Cache', 'plekvetica'),
+            __('Cache', 'plekvetica'),
+            'manage_options',
+            'plek-options-cache',
+            [$this, 'render_options'],
+        );
     }
 
     /**
@@ -101,11 +110,15 @@ class PlekBackend /*extends WP_List_Table*/
 
         //register_setting('plek_facebook_options', 'plek_facebook_options', [$this, 'plek_options_validate']);
         register_setting('plek_general_options', 'plek_general_options', [$this, 'plek_options_validate']);
+        register_setting('plek_cache_options', 'plek_cache_options', [$this, 'plek_options_validate']);
         register_setting('plek_api_options', 'plek_api_options', [$this, 'plek_options_validate']);
 
         add_settings_section('plek_event_settings', 'Eventeinstellungen', null, 'plek_general_options');
         add_settings_section('plek_facebook_settings', 'Facebook', null, 'plek_api_options');
         add_settings_section('plek_spotify_settings', 'Spotify', null, 'plek_api_options');
+
+        add_settings_section('plek_cache_settings', 'Cache', null, 'plek_cache_options');
+
 
         add_settings_field('plek_seetickets_logo', 'SeeTickets (Starticket) Logo', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'plek_seetickets_logo', 'type' => 'file', 'class' => 'logo_image'));
         add_settings_field('plek_ticketcorner_logo', 'Ticketcorner Logo', [$this, 'get_settings_option'], 'plek_general_options', 'plek_event_settings', array('label_for' => 'plek_ticketcorner_logo', 'type' => 'file', 'class' => 'logo_image'));
@@ -200,6 +213,24 @@ class PlekBackend /*extends WP_List_Table*/
             'plek_spotify_settings',
             array('label_for' => 'plek_spotify_refresh_token', 'type' => 'ignore', 'option_name' => 'plek_api_options', 'class' => 'plek-hidden')
         );
+
+        /** Cache settings */
+        add_settings_field(
+            'plek_activate_cache',
+            'Activate cache',
+            [$this, 'get_settings_option'],
+            'plek_cache_options',
+            'plek_cache_settings',
+            array('label_for' => 'plek_activate_cache', 'type' => 'checkbox', 'option_name' => 'plek_cache_options')
+        );
+        add_settings_field(
+            'plek_flush_cache',
+            'Flush cache',
+            [$this, 'get_settings_option'],
+            'plek_cache_options',
+            'plek_cache_settings',
+            array('label_for' => 'plek_flush_cache', 'type' => 'onetime_checkbox', 'option_name' => 'plek_cache_options')
+        );
     }
 
     /**
@@ -223,6 +254,16 @@ class PlekBackend /*extends WP_List_Table*/
             $input['plek_ticketcorner_logo'] = $urls["url"];
         } else {
             $input['plek_ticketcorner_logo'] =  $plek_handler->get_plek_option('plek_ticketcorner_logo');
+        }
+
+        if (isset($input['plek_flush_cache']) and $input['plek_flush_cache'] === 'yes') {
+            //Flush all caches
+            $flush = PlekCacheHandler::flush_all();
+            if ($flush !== true) {
+                set_transient('plek_cache_message', PlekTemplateHandler::load_template_to_var('plek-message', 'components', $flush, 'red'), 1);
+            } else {
+                set_transient('plek_cache_message', PlekTemplateHandler::load_template_to_var('plek-message', 'components',  __('All cached data got deleted', 'plekvetica'), 'green'), 1);
+            }
         }
         return $input;
     }
@@ -268,6 +309,9 @@ class PlekBackend /*extends WP_List_Table*/
             case 'checkbox':
                 $checked = ($options_val === 'yes') ? 'checked' : '';
                 echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='checkbox' value='yes' $checked />";
+                break;
+            case 'onetime_checkbox':
+                echo "<input id='$label_for' name='" . $option_name . "[$label_for]' type='checkbox' value='yes' />";
                 break;
             case 'file':
                 echo (!empty($options_val)) ? "<img src='$options_val' />" : "No Image uploaded.";
