@@ -1978,7 +1978,7 @@ class PlekEventHandler
         $acf['is_review'] =  true;
 
         if (empty($acf['text_review'])) {
-            $acf['text_review'] = " "; //Workaround to avoid displaying the original post content. 
+            $acf['text_review'] = "&nbsp;"; //Workaround to avoid displaying the original post content. 
         }
 
         //Updates the sortorder in the Album. 
@@ -2028,6 +2028,9 @@ class PlekEventHandler
 
         //Add the accredi crew to the autors
         $this->accredi_crew_to_wp_authors();
+
+        //Flush the cache
+        PlekCacheHandler::flush_cache_by_key_search('plekblock_all_reviews', 'plek_block_all_reviews');
 
 
         if (!empty($failed)) {

@@ -211,6 +211,47 @@ class PlekCacheHandler
         );
         return true;
     }
+    /**
+     * Deletes the cached data and the relationships form the db
+     *
+     * @param string $cache_key
+     * @param string $context
+     * @return bool true on success, false on error
+     */
+    public static function flush_cache_by_key_search($cache_key, $context = 'default')
+    {
+        if (empty($cache_key)) {
+            return false;
+        }
+        global $wpdb;
+        $like = '%' . $wpdb->esc_like($cache_key) . '%';
+        $query = $wpdb->prepare("SELECT cache_id
+        FROM `{$wpdb->prefix}plek_cache_content`
+        WHERE `cache_key` LIKE '%s'
+        AND `context` = '%s'", $like, $context);
+
+        $item = $wpdb->get_row($query);
+        if (!$item) {
+            return sprintf(__('Failed to get cached data: %s', 'plekvetica'), $wpdb->last_error);
+        }
+        if (!isset($item->cache_id)) {
+            return false;
+        }
+        $id = intval($item->cache_id);
+        //Delete from relationship table
+        $wpdb->delete(
+            $wpdb->prefix . 'plek_cache_relationship',
+            ['cache_id' => $id],
+            ['%d']
+        );
+        //Delete from content table
+        $wpdb->delete(
+            $wpdb->prefix . 'plek_cache_content',
+            ['cache_id' => $id],
+            ['%d']
+        );
+        return true;
+    }
 
     /**
      * Flushes all the cached items

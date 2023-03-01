@@ -90,6 +90,16 @@ class PlekHandler
         return (!empty($my_plek_id)) ? get_permalink($my_plek_id) : "https://plekvetica.ch/my-plekvetica";
     }
 
+    /**
+     * Removes the domain part from an url
+     *
+     * @param string $url
+     * @return string
+     */
+    public function url_remove_domain($url){
+        return str_replace($_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'], '', $url);
+    }
+
     public function print_url(string $url)
     {
         $new_url = $url;
