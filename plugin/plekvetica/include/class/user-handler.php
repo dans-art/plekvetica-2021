@@ -886,10 +886,13 @@ class PlekUserHandler
      * Sends a email to the new user to unlock the account
      *
      * @param array $new_user - The username and user_meta key for plek_user_lock_key
-     * @return void
+     * @return bool false on error, true on success 
      */
-    public function send_email_to_new_user(array $new_user)
+    public function send_email_to_new_user($new_user)
     {
+        if(!is_array($new_user)){
+            return false;
+        }
         global $plek_ajax_handler;
         global $plek_ajax_errors;
         global $plek_handler;

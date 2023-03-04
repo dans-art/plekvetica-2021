@@ -34,7 +34,7 @@ class plekYoutube
         $atts['per_page'] = $posts_per_page;
         $atts['pageToken'] = htmlspecialchars($page);
         $vids = $yotuwp->prepare($atts);
-        if (empty($vids) OR !is_object($vids)) {
+        if (empty($vids) or !is_object($vids)) {
             return null;
         }
         return $this->yotuwp_to_plek_events($vids);
@@ -89,7 +89,7 @@ class plekYoutube
             $data->post_content = $snip->description;
             $data->thumbnails = $snip->thumbnails;
             $data->type = $this->get_yt_type_by_title($snip->title);
-            if(!empty($data->type)){
+            if (!empty($data->type)) {
                 $data->class = strtolower(str_replace(' ', '', $data->type)); //Remove Whitespace
             }
             $ret_arr[$id]['data'] = $data;
@@ -152,12 +152,13 @@ class plekYoutube
      * @param array $id_arr An array with one ore more youtube video ids
      * @return bool|string false if no id is found, string with html code on success
      */
-    public function videos_do_shortcode(array $id_arr){
-        $videos = implode(',',$id_arr);
-        $per_page = $this -> videos_per_page;
-        $columns = $this -> grid_columns;
+    public function videos_do_shortcode($id_arr)
+    {
+        $videos = is_array($id_arr) ? implode(',', $id_arr) : $id_arr;
+        $per_page = $this->videos_per_page;
+        $columns = $this->grid_columns;
         $video_html = do_shortcode("[yotuwp type='videos' id='$videos' column='$columns' per_page='$per_page']");
-        if(!strpos($video_html, 'yotu-video-thumb-wrp')){
+        if (!strpos($video_html, 'yotu-video-thumb-wrp')) {
             return false;
         }
         return $video_html;
@@ -169,12 +170,13 @@ class plekYoutube
      * @param array $ids
      * @return null|array Null if no ids, array with video ids
      */
-    public function extract_video_ids(array $ids){
-        if(empty($ids)){
+    public function extract_video_ids($ids)
+    {
+        if (empty($ids) or !is_array($ids)) {
             return null;
         }
         $ret_ids = [];
-        foreach($ids as $video){
+        foreach ($ids as $video) {
             $url = parse_url($video);
             $id = null;
             if (count($url) === 1 and !empty($url['path'])) {
@@ -184,7 +186,7 @@ class plekYoutube
             } elseif (!empty($url['path'])) {
                 $id = preg_replace('/^\//', '', $url['path']); //$video was the short link (https://youtu.be/jsRQE0O2_XY)
             }
-            if($id !== null){
+            if ($id !== null) {
                 $ret_ids[] = $id;
             }
         }
@@ -201,10 +203,10 @@ class plekYoutube
      * @return null|string null if video id is empty, string on success 
      * @todo Replace with Shortcode: do_shortcode("[yotuwp type='videos' id='$videos' column='$columns' per_page='$per_page']"); ??
      */
-    public function youtube_videos_nativ(array $video_ids = [], $search_obj = null)
+    public function youtube_videos_nativ($video_ids = [], $search_obj = null)
     {
         global $yotuwp, $yotuwp_inline_script;
-        if (empty($video_ids) or empty($search_obj)) {
+        if (!is_array($video_ids) or empty($video_ids) or empty($search_obj)) {
             return null;
         }
 
@@ -220,20 +222,19 @@ class plekYoutube
         wp_enqueue_style('jquery-owlcarousel');
         wp_enqueue_style('jquery-owlcarousel-theme');
 
-        $videos_per_page = $this -> videos_per_page;
+        $videos_per_page = $this->videos_per_page;
         $search_obj->totalPage = ceil(count($video_ids) / $videos_per_page);
         $search_obj->pageInfo->totalResults = count($video_ids);
         $search_obj->pageInfo->resultsPerPage = ($search_obj->pageInfo->totalResults < $videos_per_page) ? $search_obj->pageInfo->totalResults : $videos_per_page;
 
-        if ( isset( $search_obj -> items ) AND count( $search_obj->items) >0) {
-			foreach( $search_obj->items as $video ) {
-				$videoId 	= $yotuwp->getVideoId( $video );
-				$ids[] 		= $videoId;
-				$info 		= array( yotuwp_video_title($video), yotuwp_video_description($video) );
-				$yotuwp_inline_script .= "yotuwp.data.videos['" . $videoId . "'] = " . json_encode( $info, true ) . ';';
-				
-			}
-		}
+        if (isset($search_obj->items) and count($search_obj->items) > 0) {
+            foreach ($search_obj->items as $video) {
+                $videoId     = $yotuwp->getVideoId($video);
+                $ids[]         = $videoId;
+                $info         = array(yotuwp_video_title($video), yotuwp_video_description($video));
+                $yotuwp_inline_script .= "yotuwp.data.videos['" . $videoId . "'] = " . json_encode($info, true) . ';';
+            }
+        }
 
         $yotuwp_settings = $yotuwp->options;
         //$yotuwp_settings = array();
@@ -241,7 +242,7 @@ class plekYoutube
         $yotuwp_settings['type'] = 'videos';
         //$yotuwp_settings['pagination'] = 'on';
         //$yotuwp_settings['pagitype'] = 'loadmore';
-        $yotuwp_settings['column'] = $this -> grid_columns;
+        $yotuwp_settings['column'] = $this->grid_columns;
         $yotuwp_settings['per_page'] = $videos_per_page;
         $yotuwp_settings['template'] = 'grid';
         //$yotuwp_settings['title'] = 'on';
@@ -258,13 +259,14 @@ class plekYoutube
         return $yotuwp->views->display('grid', $search_obj, $yotuwp_settings);
     }
 
-    public function get_ajax_single_video(){
+    public function get_ajax_single_video()
+    {
         $id = (isset($_REQUEST['video_id'])) ? $_REQUEST['video_id'] : null;
-        if($id === null){
-            return __('No Youtube Video ID found','plekvetica');
+        if ($id === null) {
+            return __('No Youtube Video ID found', 'plekvetica');
         }
-        $id = $this -> extract_video_ids(array($id));
+        $id = $this->extract_video_ids(array($id));
         //$this -> videos_per_page = 1;
-        return $this -> videos_do_shortcode($id);
+        return $this->videos_do_shortcode($id);
     }
 }

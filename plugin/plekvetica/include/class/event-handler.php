@@ -987,9 +987,17 @@ class PlekEventHandler
         return (!empty($this->event['timetable'])) ? true : false;
     }
 
-    public function format_bands(array $bands)
+    /**
+     * Formats the band metadata
+     *
+     * @param array $bands
+     * @return string The formatted bands
+     */
+    public function format_bands($bands)
     {
-
+        if(!is_array($bands)){
+            return $bands;
+        }
         return PlekTemplateHandler::load_template('bands', 'event/meta', $bands);
     }
 
@@ -2607,8 +2615,11 @@ class PlekEventHandler
      * @param array $bands - Array with band ids (array("666","747"))
      * @return array The Bands array with all the bands as type int
      */
-    public function filter_band_array(array $bands)
+    public function filter_band_array($bands)
     {
+        if(!is_array($bands)){
+            return $bands;
+        }
         foreach ($bands as $index => $b) {
             $bands[$index] = (int) $b;
         }

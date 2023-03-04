@@ -109,9 +109,19 @@ class PlekSearchHandler
         return $display;
     }
 
-    public function load_tribe_events_from_ids(array $ids)
+
+    /**
+     * Loads the events from an array of ids
+     *
+     * @param array $ids
+     * @return array|string String if no events found, array with event details on success
+     */
+    public function load_tribe_events_from_ids($ids)
     {
-        if (!empty($ids) and isset(current($ids)->ID)) {
+        if(is_string($ids)){
+            return $ids;
+        }
+        if (is_array($ids) AND !empty($ids) and isset(current($ids)->ID)) {
             $event_array = array();
             foreach ($ids as $item) {
                 $id = $item->ID;
@@ -233,10 +243,13 @@ class PlekSearchHandler
      * 
      *@todo This function is currently unused!
      * @param array $band_ids - array of band/tag ids
-     * @return array
+     * @return array Found posts or empty array on error
      */
-    public function search_events_with_bands_ids(array $band_ids)
+    public function search_events_with_bands_ids($band_ids)
     {
+        if(!is_array($band_ids)){
+            return [];
+        }
         $post_args = array(
             'posts_per_page' => -1,
             'post_type' => 'tribe_events',
@@ -246,20 +259,4 @@ class PlekSearchHandler
         return $posts;
     }
 
-    /*public function remove_duplicates(array $object_array)
-    {
-        $end_array = array();
-        foreach ($object_array as $obj) {
-            if (!isset($obj->ID)) {
-                continue;
-            }
-            if (isset($end_array[$obj->ID])) {
-                continue;
-            }
-            $end_array[$obj->ID] = $obj;
-        }
-        //sort the array, newest posts first.
-        krsort($end_array);
-        return $end_array;
-    }*/
 }

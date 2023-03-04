@@ -160,8 +160,11 @@ class PlekEvents extends PlekEventHandler
      * @param array $tribe_event - Array from $yotuwp -> prepare function
      * @return void
      */
-    public function load_event_from_youtube(array $yt)
+    public function load_event_from_youtube( $yt)
     {
+        if(!is_array($yt)){
+            return;
+        }
         $this->event['data'] = $yt['data'];
         return;
     }
@@ -741,9 +744,12 @@ class PlekEvents extends PlekEventHandler
      * @param array $terms Terms Array
      * @return void true on success, false if terms is empty
      */
-    private function process_terms(array $terms)
+    private function process_terms( $terms)
     {
         if (empty($terms)) {
+            return false;
+        }
+        if(!is_array($terms)){
             return false;
         }
         foreach ($terms as $line) {

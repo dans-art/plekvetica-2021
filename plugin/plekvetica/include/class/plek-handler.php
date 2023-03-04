@@ -579,10 +579,13 @@ class PlekHandler
      * Builds an URL together which was separated by the parse_url function
      *
      * @param array $parse_url_array
-     * @return void
+     * @return string The new url or empty string on error
      */
-    function build_url(array $parse_url_array)
+    function build_url($parse_url_array)
     {
+        if(!is_array($parse_url_array)){
+            return "";
+        }
         $e = $parse_url_array;
         return (isset($e['host']) ? (
             (isset($e['scheme']) ? "$e[scheme]://" : '//') .

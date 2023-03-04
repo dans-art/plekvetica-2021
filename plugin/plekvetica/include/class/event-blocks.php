@@ -299,6 +299,9 @@ class PlekEventBlocks extends PlekEvents
                 PlekCacheHandler::set_cache($cache_key, $content_html, $content, $cache_context);
             }
             return $content_html;
+        }else{
+            //Return the content if it is no array. This can contain a error message, etc.
+            return $content;
         }
         $this->reset_paged();
         return false;
