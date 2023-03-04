@@ -338,7 +338,7 @@ class PlekFormValidator
         }
 
         //Check for max_length
-        if(isset($this->max_lenght[$fieldname])){
+        if(isset($this->max_length[$fieldname])){
             if ($this->max_length[$fieldname] !== 0 and !empty($value) and strlen($value) > $this->max_length[$fieldname]) {
                 $calc_length = (int)(strlen($value) - $this->max_length[$fieldname]);
                 $msg = sprintf(__('Entry is %d characters too long.', 'plekvetica'), $calc_length);

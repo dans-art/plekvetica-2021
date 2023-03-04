@@ -55,21 +55,15 @@ class SpotifyWebAPI
     /**
      * Try to fetch a snapshot ID from a response.
      *
-     * @param string object|array The parsed response body.
+     * @param object|array $body The parsed response body.
      *
      * @return string|bool A snapshot ID or false if none exists.
      */
     protected function getSnapshotId($body)
     {
-        if (isset($body->snapshot_id)) {
-            return $body->snapshot_id;
-        }
+        $body = (array) $body;
 
-        if (isset($body['snapshot_id'])) {
-            return $body['snapshot_id'];
-        }
-
-        return false;
+        return $body['snapshot_id'] ?? null;
     }
 
     /**
@@ -147,7 +141,7 @@ class SpotifyWebAPI
     /**
      * Convert an array to a comma-separated string. If it's already a string, do nothing.
      *
-     * @param array|string The value to convert.
+     * @param array|string $value The value to convert.
      *
      * @return string A comma-separated string.
      */
@@ -622,7 +616,7 @@ class SpotifyWebAPI
      *
      * @param string $albumId ID or URI of the album.
      * @param array|object $options Optional. Options for the album.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
      *
      * @return array|object The requested album. Type is controlled by the `return_assoc` option.
      */
@@ -642,7 +636,7 @@ class SpotifyWebAPI
      *
      * @param array $albumIds IDs or URIs of the albums.
      * @param array|object $options Optional. Options for the albums.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
      *
      * @return array|object The requested albums. Type is controlled by the `return_assoc` option.
      */
@@ -668,7 +662,7 @@ class SpotifyWebAPI
      * @param array|object $options Optional. Options for the tracks.
      * - int limit Optional. Limit the number of tracks.
      * - int offset Optional. Number of tracks to skip.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
      *
      * @return array|object The requested album tracks. Type is controlled by the `return_assoc` option.
      */
@@ -777,7 +771,7 @@ class SpotifyWebAPI
      *
      * @param string $artistId ID or URI of the artist.
      * @param array|object $options Options for the tracks.
-     * - string country Required. An ISO 3166-1 alpha-2 country code specifying the country to get the top tracks for.
+     * - string country Required. ISO 3166-1 alpha-2 country code specifying the country to get the top tracks for.
      *
      * @return array|object The artist's top tracks. Type is controlled by the `return_assoc` option.
      */
@@ -805,6 +799,52 @@ class SpotifyWebAPI
         $uri = '/v1/audio-analysis/' . $trackId;
 
         $this->lastResponse = $this->sendRequest('GET', $uri);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get an audiobook.
+     * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-an-audiobook
+     *
+     * @param string $audiobookId ID or URI of the audiobook.
+     * @param array|object $options Optional. Options for the audiobook.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, limit results to audiobooks available in that market.
+     *
+     * @return array|object The requested audiobook. Type is controlled by the `return_assoc` option.
+     */
+    public function getAudiobook($audiobookId, $options = [])
+    {
+        $audiobookId = $this->uriToId($audiobookId, 'show');
+        $uri = '/v1/audiobooks/' . $audiobookId;
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get multiple audiobooks.
+     * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-multiple-audiobooks
+     *
+     * @param array $audiobookIds IDs or URIs of the audiobooks.
+     * @param array|object $options Optional. Options for the audiobooks.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, limit results to audiobooks available in that market.
+     *
+     * @return array|object The requested audiobooks. Type is controlled by the `return_assoc` option.
+     */
+    public function getAudiobooks($audiobookIds, $options = [])
+    {
+        $audiobookIds = $this->uriToId($audiobookIds, 'show');
+        $audiobookIds = $this->toCommaString($audiobookIds);
+
+        $options = array_merge((array) $options, [
+            'ids' => $this->toCommaString($audiobookIds),
+        ]);
+
+        $uri = '/v1/audiobooks/';
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
 
         return $this->lastResponse['body'];
     }
@@ -843,7 +883,7 @@ class SpotifyWebAPI
      *
      * @param array|object $options Optional. Options for the categories.
      * - string locale Optional. Language to show categories in, for example 'sv_SE'.
-     * - string country Optional. An ISO 3166-1 alpha-2 country code. Show categories from this country.
+     * - string country Optional. ISO 3166-1 alpha-2 country code. Show categories from this country.
      * - int limit Optional. Limit the number of categories.
      * - int offset Optional. Number of categories to skip.
      *
@@ -866,7 +906,7 @@ class SpotifyWebAPI
      *
      * @param array|object $options Optional. Options for the category.
      * - string locale Optional. Language to show category in, for example 'sv_SE'.
-     * - string country Optional. An ISO 3166-1 alpha-2 country code. Show category from this country.
+     * - string country Optional. ISO 3166-1 alpha-2 country code. Show category from this country.
      *
      * @return array|object The category. Type is controlled by the `return_assoc` option.
      */
@@ -886,7 +926,7 @@ class SpotifyWebAPI
      * @param string $categoryId ID of the category.
      *
      * @param array|object $options Optional. Options for the category's playlists.
-     * - string country Optional. An ISO 3166-1 alpha-2 country code. Show category playlists from this country.
+     * - string country Optional. ISO 3166-1 alpha-2 country code. Show category playlists from this country.
      * - int limit Optional. Limit the number of playlists.
      * - int offset Optional. Number of playlists to skip.
      *
@@ -902,12 +942,56 @@ class SpotifyWebAPI
     }
 
     /**
+     * Get a chapter.
+     * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-chapter
+     *
+     * @param string $chapterId ID or URI of the chapter.
+     * @param array|object $options Optional. Options for the chapter.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
+     *
+     * @return array|object The requested chapter. Type is controlled by the `return_assoc` option.
+     */
+    public function getChapter($chapterId, $options = [])
+    {
+        $chapterId = $this->uriToId($chapterId, 'episode');
+        $uri = '/v1/chapters/' . $chapterId;
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get multiple chapters.
+     * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-several-chapters
+     *
+     * @param array $chapterIds IDs or URIs of the chapters.
+     * @param array|object $options Optional. Options for the chapters.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
+     *
+     * @return array|object The requested chapters. Type is controlled by the `return_assoc` option.
+     */
+    public function getChapters($chapterIds, $options = [])
+    {
+        $chapterIds = $this->uriToId($chapterIds, 'episode');
+        $options = array_merge((array) $options, [
+            'ids' => $this->toCommaString($chapterIds),
+        ]);
+
+        $uri = '/v1/chapters/';
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
      * Get an episode.
      * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-an-episode
      *
      * @param string $episodeId ID or URI of the episode.
      * @param array|object $options Optional. Options for the episode.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
      *
      * @return array|object The requested episode. Type is controlled by the `return_assoc` option.
      */
@@ -927,7 +1011,7 @@ class SpotifyWebAPI
      *
      * @param array $episodeIds IDs or URIs of the episodes.
      * @param array|object $options Optional. Options for the episodes.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
      *
      * @return array|object The requested episodes. Type is controlled by the `return_assoc` option.
      */
@@ -951,7 +1035,7 @@ class SpotifyWebAPI
      *
      * @param array|object $options Optional. Options for the playlists.
      * - string locale Optional. Language to show playlists in, for example 'sv_SE'.
-     * - string country Optional. An ISO 3166-1 alpha-2 country code. Show playlists from this country.
+     * - string country Optional. ISO 3166-1 alpha-2 country code. Show playlists from this country.
      * - string timestamp Optional. A ISO 8601 timestamp. Show playlists relevant to this date and time.
      * - int limit Optional. Limit the number of playlists.
      * - int offset Optional. Number of playlists to skip.
@@ -1038,7 +1122,7 @@ class SpotifyWebAPI
      * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-the-users-currently-playing-track
      *
      * @param array|object $options Optional. Options for the track.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
      * - string|array additional_types Optional. Types of media to return info about.
      *
      * @return array|object The user's currently playing track. Type is controlled by the `return_assoc` option.
@@ -1077,7 +1161,7 @@ class SpotifyWebAPI
      * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-information-about-the-users-current-playback
      *
      * @param array|object $options Optional. Options for the info.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
      * - string|array additional_types Optional. Types of media to return info about.
      *
      * @return array|object The user's playback information. Type is controlled by the `return_assoc` option.
@@ -1117,6 +1201,22 @@ class SpotifyWebAPI
     }
 
     /**
+     * Get the current user’s queue.
+     *
+     * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-queue
+     *
+     * @return array|object The currently playing song and queue. Type is controlled by the `return_assoc` option.
+     */
+    public function getMyQueue()
+    {
+        $uri = '/v1/me/player/queue';
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, []);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
       * Get the current user’s recently played tracks.
       * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-recently-played
       *
@@ -1143,7 +1243,7 @@ class SpotifyWebAPI
      * @param array|object $options Optional. Options for the albums.
      * - int limit Optional. Number of albums to return.
      * - int offset Optional. Number of albums to skip.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
      *
      * @return array|object The user's saved albums. Type is controlled by the `return_assoc` option.
      */
@@ -1163,7 +1263,7 @@ class SpotifyWebAPI
      * @param array|object $options Optional. Options for the episodes.
      * - int limit Optional. Number of episodes to return.
      * - int offset Optional. Number of episodes to skip.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
      *
      * @return array|object The user's saved episodes. Type is controlled by the `return_assoc` option.
      */
@@ -1183,7 +1283,7 @@ class SpotifyWebAPI
      * @param array|object $options Optional. Options for the tracks.
      * - int limit Optional. Limit the number of tracks.
      * - int offset Optional. Number of tracks to skip.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
      *
      * @return array|object The user's saved tracks. Type is controlled by the `return_assoc` option.
      */
@@ -1241,7 +1341,7 @@ class SpotifyWebAPI
      * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-new-releases
      *
      * @param array|object $options Optional. Options for the items.
-     * - string country Optional. An ISO 3166-1 alpha-2 country code. Show items relevant to this country.
+     * - string country Optional. ISO 3166-1 alpha-2 country code. Show items relevant to this country.
      * - int limit Optional. Limit the number of items.
      * - int offset Optional. Number of items to skip.
      *
@@ -1263,7 +1363,7 @@ class SpotifyWebAPI
      * @param string $playlistId ID or URI of the playlist.
      * @param array|object $options Optional. Options for the playlist.
      * - string|array fields Optional. A list of fields to return. See Spotify docs for more info.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
      * - string|array additional_types Optional. Types of media to return info about.
      *
      * @return array|object The user's playlist. Type is controlled by the `return_assoc` option.
@@ -1317,7 +1417,7 @@ class SpotifyWebAPI
      * - string|array fields Optional. A list of fields to return. See Spotify docs for more info.
      * - int limit Optional. Limit the number of tracks.
      * - int offset Optional. Number of tracks to skip.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
      * - string|array additional_types Optional. Types of media to return info about.
      *
      * @return array|object The tracks in the playlist. Type is controlled by the `return_assoc` option.
@@ -1349,7 +1449,7 @@ class SpotifyWebAPI
      *
      * @param array|object $options Optional. Options for the recommendations.
      * - int limit Optional. Limit the number of recommendations.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
      * - mixed max_* Optional. Max value for one of the tunable track attributes.
      * - mixed min_* Optional. Min value for one of the tunable track attributes.
      * - array seed_artists Artist IDs to seed by.
@@ -1392,7 +1492,7 @@ class SpotifyWebAPI
      *
      * @param string $showId ID or URI of the show.
      * @param array|object $options Optional. Options for the show.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, limit results to shows available in that market.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, limit results to shows available in that market.
      *
      * @return array|object The requested show. Type is controlled by the `return_assoc` option.
      */
@@ -1410,11 +1510,11 @@ class SpotifyWebAPI
      * Get a show's episodes.
      * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a-shows-episodes
      *
-     * @param string $albumId ID or URI of the album.
+     * @param string $showId ID or URI of the album.
      * @param array|object $options Optional. Options for the episodes.
      * - int limit Optional. Limit the number of episodes.
      * - int offset Optional. Number of episodes to skip.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
      *
      * @return array|object The requested show episodes. Type is controlled by the `return_assoc` option.
      */
@@ -1434,7 +1534,7 @@ class SpotifyWebAPI
      *
      * @param array $showIds IDs or URIs of the shows.
      * @param array|object $options Optional. Options for the shows.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, limit results to shows available in that market.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, limit results to shows available in that market.
      *
      * @return array|object The requested shows. Type is controlled by the `return_assoc` option.
      */
@@ -1458,7 +1558,7 @@ class SpotifyWebAPI
      *
      * @param string $trackId ID or URI of the track.
      * @param array|object $options Optional. Options for the track.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
      *
      * @return array|object The requested track. Type is controlled by the `return_assoc` option.
      */
@@ -1478,7 +1578,7 @@ class SpotifyWebAPI
      *
      * @param array $trackIds IDs or URIs of the tracks.
      * @param array|object $options Optional. Options for the tracks.
-     * - string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+     * - string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
      *
      * @return array|object The requested tracks. Type is controlled by the `return_assoc` option.
      */
@@ -1929,11 +2029,13 @@ class SpotifyWebAPI
      *
      * @param string $accessToken The access token.
      *
-     * @return void
+     * @return self
      */
     public function setAccessToken($accessToken)
     {
         $this->accessToken = $accessToken;
+
+        return $this;
     }
 
     /**
@@ -1941,11 +2043,13 @@ class SpotifyWebAPI
      *
      * @param array|object $options Options to set.
      *
-     * @return void
+     * @return self
      */
     public function setOptions($options)
     {
         $this->options = array_merge($this->options, (array) $options);
+
+        return $this;
     }
 
     /**
@@ -1953,11 +2057,13 @@ class SpotifyWebAPI
      *
      * @param Session $session The Session object.
      *
-     * @return void
+     * @return self
      */
     public function setSession($session)
     {
         $this->session = $session;
+
+        return $this;
     }
 
     /**

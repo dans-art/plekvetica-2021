@@ -1,4 +1,32 @@
 # Changelog
+## 5.6.0 (2023-02-11)
+* The following setters now returns `self`: ([fe2e90f](https://github.com/jwilsson/spotify-web-api-php/commit/fe2e90f355b1c699a6e27dacb3d2771e69e00223))
+    * `Request::setOptions()`
+    * `Session::setAccessToken()`
+    * `Session::setClientId()`
+    * `Session::setClientSecret()`
+    * `Session::setRedirectUri()`
+    * `Session::setRefreshToken()`
+    * `SpotifyWebAPI::setAccessToken()`
+    * `SpotifyWebAPI::setOptions()`
+    * `SpotifyWebAPI::setSession()`
+* Updated CA bundle. ([84bf7a2](https://github.com/jwilsson/spotify-web-api-php/commit/84bf7a26b41c2ef909de6219bb772c55449e67f0))
+
+## 5.5.0 (2022-12-12)
+* Added missiing `$options` argument to `SpotifyWebAPI::getAudiobook()` and `SpotifyWebAPI::getAudiobooks()` methods. ([12293f1](https://github.com/jwilsson/spotify-web-api-php/commit/12293f137255188e42d238427cae3ed78e08d904))
+
+## 5.4.0 (2022-10-16)
+* Added methods to get info about audiobooks: ([f79b95e](https://github.com/jwilsson/spotify-web-api-php/commit/f79b95ec511e5c940d69569614d198082b7b8ad4)):
+    * `SpotifyWebAPI::getAudiobook()`
+    * `SpotifyWebAPI::getAudiobooks()`
+    * `SpotifyWebAPI::getChapter()`
+    * `SpotifyWebAPI::getChapters()`
+* Updated CA bundle. ([987e99a](https://github.com/jwilsson/spotify-web-api-php/commit/987e99a865fe1863b38ab631c354a7b430c77338))
+
+## 5.3.0 (2022-09-03)
+* Added the `SpotifyWebAPI::getMyQueue()` method to get the current user's queue. ([710b70d](https://github.com/jwilsson/spotify-web-api-php/commit/710b70d13ce9ffabc3e01cfff847fdb1067111bf))
+* Updated CA bundle. ([7e4994b](https://github.com/jwilsson/spotify-web-api-php/commit/7e4994bf9ebc6c1efa22414a63068309c0cd5abe))
+
 ## 5.2.0 (2022-07-16)
 * Added `additional_types` option support to `SpotifyWebAPI::getPlaylist()` and `SpotifyWebAPI::getPlaylistTracks()`. ([9c3d117](https://github.com/jwilsson/spotify-web-api-php/commit/9c3d117a1c4cc86b0fe5ae7f84d490d2bf8d5758))
 * Updated inline docs with missing options on multiple methods. ([7b49453](https://github.com/jwilsson/spotify-web-api-php/commit/7b49453c412901bb78bda370e58098779a31d679))

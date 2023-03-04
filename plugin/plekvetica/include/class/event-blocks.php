@@ -255,7 +255,7 @@ class PlekEventBlocks extends PlekEvents
         $url = $_SERVER['REQUEST_URI'];
         $parameters = implode("",$_REQUEST);
    
-        $cache_key = 'plekblock_' . $block_id . '_' . get_current_user_id() . '-' . md5(implode('', $data) . $url . $parameters);
+        $cache_key = PlekCacheHandler::generate_key('plekblock_' . $block_id, json_encode($data) . $url . $parameters);
         $cache_context = 'plek_block_'.$block_id;
         $cached = PlekCacheHandler::get_cache($cache_key, $cache_context);
 

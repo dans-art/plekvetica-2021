@@ -1817,6 +1817,8 @@ class PlekEventHandler
 
     /**
      * Saves the basic event data
+     * Flushes the cached items for the event
+     * Flushes the recently added cache
      *
      * @return mixed Event ID on sucess, error message on error.
      */
@@ -1849,6 +1851,9 @@ class PlekEventHandler
 
         //Flush the cache
         PlekCacheHandler::flush_cache_by_post_id($event_id);
+        if(!$is_event_edit){
+            PlekCacheHandler::flush_cache_by_key_search('recently_added', 'events');
+        }
 
         //Update the Band order / times
         $plek_handler->update_field('band_order_time', $plek_ajax_handler->get_ajax_data('band_order_time'), $event_id);

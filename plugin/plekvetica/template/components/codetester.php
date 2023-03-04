@@ -39,13 +39,15 @@ $pb = new PlekEventBlocks();
 //s(PlekCacheHandler::set_cache('test_cache_1', 'I\'m cached',[1,2,3], 'test2'));
 //s(PlekCacheHandler::get_cache('test_cache_1', 'test'));
 //s(PlekCacheHandler::flush_cache_by_post_id(1));
-
+/*
 $myplek_url = $plek_handler -> get_my_plekvetica_link();
 s($myplek_url);
 s($plek_handler->url_remove_domain($myplek_url));
 s($_SERVER['REQUEST_URI']);
 $_SERVER['REQUEST_URI'] = $plek_handler->url_remove_domain($myplek_url);
 s($_SERVER['REQUEST_URI']);
+*/
+s(PlekCacheHandler::flush_cache_by_key_search('recently_added', 'events'));
 ?>
 <div>
 <?php 

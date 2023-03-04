@@ -19,6 +19,25 @@ class PlekCacheHandler
         return ($cache_option === 'yes') ? true : false;
     }
 
+
+    /**
+     * Creates a key out of the data and the user.
+     *
+     * @param string $name the name of the key
+     * @param array|string $data Can be data from $_POST, $_GET, etc.
+     * @param int $user_id The user id, or current user if null
+     * @return string The key
+     */
+    public static function generate_key($name, $data, $user_id = null)
+    {
+        $data = (is_array($data)) ? json_encode($data) : $data;
+        if (!is_string($data)) {
+            $data = date('Y-m-d');
+        }
+        $user_id = (is_int($user_id)) ? $user_id : get_current_user_id();
+        return strval($name) . '_' . strval($user_id) . '_' . md5($data);
+    }
+
     /**
      * Gets the cached item
      *
@@ -32,6 +51,7 @@ class PlekCacheHandler
             return false;
         }
         global $wpdb;
+        global $plek_handler;
         $query = $wpdb->prepare("SELECT content
         FROM `{$wpdb->prefix}plek_cache_content`
         WHERE `cache_key` = '%s'
@@ -42,7 +62,13 @@ class PlekCacheHandler
         if (!empty($last_error)) {
             return sprintf(__('Failed to get cached data: %s', 'plekvetica'), $last_error);
         }
-        return (isset($content->content)) ? $content->content : false;
+        if (isset($content->content)) {
+            if($plek_handler -> is_dev_server()){
+                    s('Loaded from cache: '. $key. ' -- '. $context.'<br/>');
+            }
+            return $content->content;
+        }
+        return false;
     }
 
     /**

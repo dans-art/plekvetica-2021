@@ -292,15 +292,25 @@ class RequestTest extends PHPUnit\Framework\TestCase
         $request->send('GET', 'https://non-existent/get');
     }
 
+    public function testSendUnknownError()
+    {
+        $this->expectException(SpotifyWebAPI\SpotifyWebAPIException::class);
+        $this->expectExceptionMessage('An unknown error occurred.');
+
+        $request = new SpotifyWebAPI\Request();
+        $request->send('GET', 'https://httpbin.org/status/400');
+    }
+
     public function testSetOptions()
     {
         $request = new SpotifyWebAPI\Request();
-        $request->setOptions([
+        $returnedValue = $request->setOptions([
             'return_assoc' => true,
         ]);
 
         $response = $request->send('GET', 'https://httpbin.org/get');
 
         $this->assertArrayHasKey('url', $response['body']);
+        $this->assertEquals($request, $returnedValue);
     }
 }
