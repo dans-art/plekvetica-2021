@@ -454,7 +454,7 @@ class PlekBandHandler
      * @param array $genres Array from ACF "get_field()"
      * @return array formated array
      */
-    public function format_band_array(array $genres)
+    public function format_band_array($genres)
     {
         if (!is_array($genres)) {
             return array();
@@ -830,8 +830,17 @@ class PlekBandHandler
         return json_encode($bands_formated, JSON_UNESCAPED_UNICODE);
     }
 
-    public function format_band_genres(array $genres)
+/**
+ * Formats the band genres from array to comma separated string
+ *
+ * @param array $genres
+ * @return string The formated array
+ */
+    public function format_band_genres($genres)
     {
+        if(!is_array($genres)){
+            return $genres;
+        }
         $ret_arr = array();
         foreach ($genres as $genre) {
             if (isset($genre['label'])) {

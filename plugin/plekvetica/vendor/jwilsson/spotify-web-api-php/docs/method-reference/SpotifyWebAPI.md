@@ -27,10 +27,14 @@
 * [getArtistAlbums](#getartistalbums)
 * [getArtistTopTracks](#getartisttoptracks)
 * [getAudioAnalysis](#getaudioanalysis)
+* [getAudiobook](#getaudiobook)
+* [getAudiobooks](#getaudiobooks)
 * [getAudioFeatures](#getaudiofeatures)
 * [getCategoriesList](#getcategorieslist)
 * [getCategory](#getcategory)
 * [getCategoryPlaylists](#getcategoryplaylists)
+* [getChapter](#getchapter)
+* [getChapters](#getchapters)
 * [getEpisode](#getepisode)
 * [getEpisodes](#getepisodes)
 * [getFeaturedPlaylists](#getfeaturedplaylists)
@@ -42,6 +46,7 @@
 * [getMyDevices](#getmydevices)
 * [getMyCurrentPlaybackInfo](#getmycurrentplaybackinfo)
 * [getMyPlaylists](#getmyplaylists)
+* [getMyQueue](#getmyqueue)
 * [getMyRecentTracks](#getmyrecenttracks)
 * [getMySavedAlbums](#getmysavedalbums)
 * [getMySavedEpisodes](#getmysavedepisodes)
@@ -411,7 +416,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a
 #### Arguments
 * `$albumId` **string** - ID or URI of the album.
 * `$options` **array\|object** - Optional. Options for the album.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+    * string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
 
 #### Return values
 * **array\|object** The requested album. Type is controlled by the `return_assoc` option.
@@ -430,7 +435,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-m
 #### Arguments
 * `$albumIds` **array** - IDs or URIs of the albums.
 * `$options` **array\|object** - Optional. Options for the albums.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+    * string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
 
 #### Return values
 * **array\|object** The requested albums. Type is controlled by the `return_assoc` option.
@@ -451,7 +456,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a
 * `$options` **array\|object** - Optional. Options for the tracks.
     * int limit Optional. Limit the number of tracks.
     * int offset Optional. Number of tracks to skip.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+    * string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
 
 #### Return values
 * **array\|object** The requested album tracks. Type is controlled by the `return_assoc` option.
@@ -543,7 +548,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a
 #### Arguments
 * `$artistId` **string** - ID or URI of the artist.
 * `$options` **array\|object** - Options for the tracks.
-    * string country Required. An ISO 3166-1 alpha-2 country code specifying the country to get the top tracks for.
+    * string country Required. ISO 3166-1 alpha-2 country code specifying the country to get the top tracks for.
 
 #### Return values
 * **array\|object** The artist's top tracks. Type is controlled by the `return_assoc` option.
@@ -564,6 +569,44 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a
 
 #### Return values
 * **object** The track's audio analysis. Type is controlled by the `return_assoc` option.
+
+---
+### getAudiobook
+
+
+```php
+SpotifyWebAPI::getAudiobook($audiobookId, $options)
+```
+
+Get an audiobook.<br>
+https://developer.spotify.com/documentation/web-api/reference/#/operations/get-an-audiobook
+
+#### Arguments
+* `$audiobookId` **string** - ID or URI of the audiobook.
+* `$options` **array\|object** - Optional. Options for the audiobook.
+    * string market Optional. ISO 3166-1 alpha-2 country code, limit results to audiobooks available in that market.
+
+#### Return values
+* **array\|object** The requested audiobook. Type is controlled by the `return_assoc` option.
+
+---
+### getAudiobooks
+
+
+```php
+SpotifyWebAPI::getAudiobooks($audiobookIds, $options)
+```
+
+Get multiple audiobooks.<br>
+https://developer.spotify.com/documentation/web-api/reference/#/operations/get-multiple-audiobooks
+
+#### Arguments
+* `$audiobookIds` **array** - IDs or URIs of the audiobooks.
+* `$options` **array\|object** - Optional. Options for the audiobooks.
+    * string market Optional. ISO 3166-1 alpha-2 country code, limit results to audiobooks available in that market.
+
+#### Return values
+* **array\|object** The requested audiobooks. Type is controlled by the `return_assoc` option.
 
 ---
 ### getAudioFeatures
@@ -596,7 +639,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-c
 #### Arguments
 * `$options` **array\|object** - Optional. Options for the categories.
     * string locale Optional. Language to show categories in, for example 'sv_SE'.
-    * string country Optional. An ISO 3166-1 alpha-2 country code. Show categories from this country.
+    * string country Optional. ISO 3166-1 alpha-2 country code. Show categories from this country.
     * int limit Optional. Limit the number of categories.
     * int offset Optional. Number of categories to skip.
 
@@ -618,7 +661,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a
 * `$categoryId` **string** - ID of the category.
 * `$options` **array\|object** - Optional. Options for the category.
     * string locale Optional. Language to show category in, for example 'sv_SE'.
-    * string country Optional. An ISO 3166-1 alpha-2 country code. Show category from this country.
+    * string country Optional. ISO 3166-1 alpha-2 country code. Show category from this country.
 
 #### Return values
 * **array\|object** The category. Type is controlled by the `return_assoc` option.
@@ -637,12 +680,50 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a
 #### Arguments
 * `$categoryId` **string** - ID of the category.
 * `$options` **array\|object** - Optional. Options for the category's playlists.
-    * string country Optional. An ISO 3166-1 alpha-2 country code. Show category playlists from this country.
+    * string country Optional. ISO 3166-1 alpha-2 country code. Show category playlists from this country.
     * int limit Optional. Limit the number of playlists.
     * int offset Optional. Number of playlists to skip.
 
 #### Return values
 * **array\|object** The list of playlists. Type is controlled by the `return_assoc` option.
+
+---
+### getChapter
+
+
+```php
+SpotifyWebAPI::getChapter($chapterId, $options)
+```
+
+Get a chapter.<br>
+https://developer.spotify.com/documentation/web-api/reference/#/operations/get-chapter
+
+#### Arguments
+* `$chapterId` **string** - ID or URI of the chapter.
+* `$options` **array\|object** - Optional. Options for the chapter.
+    * string market Optional. ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
+
+#### Return values
+* **array\|object** The requested chapter. Type is controlled by the `return_assoc` option.
+
+---
+### getChapters
+
+
+```php
+SpotifyWebAPI::getChapters($chapterIds, $options)
+```
+
+Get multiple chapters.<br>
+https://developer.spotify.com/documentation/web-api/reference/#/operations/get-several-chapters
+
+#### Arguments
+* `$chapterIds` **array** - IDs or URIs of the chapters.
+* `$options` **array\|object** - Optional. Options for the chapters.
+    * string market Optional. ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
+
+#### Return values
+* **array\|object** The requested chapters. Type is controlled by the `return_assoc` option.
 
 ---
 ### getEpisode
@@ -658,7 +739,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a
 #### Arguments
 * `$episodeId` **string** - ID or URI of the episode.
 * `$options` **array\|object** - Optional. Options for the episode.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
+    * string market Optional. ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
 
 #### Return values
 * **array\|object** The requested episode. Type is controlled by the `return_assoc` option.
@@ -677,7 +758,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-m
 #### Arguments
 * `$episodeIds` **array** - IDs or URIs of the episodes.
 * `$options` **array\|object** - Optional. Options for the episodes.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
+    * string market Optional. ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
 
 #### Return values
 * **array\|object** The requested episodes. Type is controlled by the `return_assoc` option.
@@ -696,7 +777,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-f
 #### Arguments
 * `$options` **array\|object** - Optional. Options for the playlists.
     * string locale Optional. Language to show playlists in, for example 'sv_SE'.
-    * string country Optional. An ISO 3166-1 alpha-2 country code. Show playlists from this country.
+    * string country Optional. ISO 3166-1 alpha-2 country code. Show playlists from this country.
     * string timestamp Optional. A ISO 8601 timestamp. Show playlists relevant to this date and time.
     * int limit Optional. Limit the number of playlists.
     * int offset Optional. Number of playlists to skip.
@@ -782,7 +863,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-t
 
 #### Arguments
 * `$options` **array\|object** - Optional. Options for the track.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+    * string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
     * string\|array additional_types Optional. Types of media to return info about.
 
 #### Return values
@@ -816,7 +897,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-i
 
 #### Arguments
 * `$options` **array\|object** - Optional. Options for the info.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+    * string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
     * string\|array additional_types Optional. Types of media to return info about.
 
 #### Return values
@@ -840,6 +921,21 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a
 
 #### Return values
 * **array\|object** The user's playlists. Type is controlled by the `return_assoc` option.
+
+---
+### getMyQueue
+
+
+```php
+SpotifyWebAPI::getMyQueue()
+```
+
+Get the current user’s queue.<br>
+https://developer.spotify.com/documentation/web-api/reference/#/operations/get-queue
+
+
+#### Return values
+* **array\|object** The currently playing song and queue. Type is controlled by the `return_assoc` option.
 
 ---
 ### getMyRecentTracks
@@ -876,7 +972,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-u
 * `$options` **array\|object** - Optional. Options for the albums.
     * int limit Optional. Number of albums to return.
     * int offset Optional. Number of albums to skip.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+    * string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
 
 #### Return values
 * **array\|object** The user's saved albums. Type is controlled by the `return_assoc` option.
@@ -896,7 +992,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-u
 * `$options` **array\|object** - Optional. Options for the episodes.
     * int limit Optional. Number of episodes to return.
     * int offset Optional. Number of episodes to skip.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
+    * string market Optional. ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
 
 #### Return values
 * **array\|object** The user's saved episodes. Type is controlled by the `return_assoc` option.
@@ -916,7 +1012,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-u
 * `$options` **array\|object** - Optional. Options for the tracks.
     * int limit Optional. Limit the number of tracks.
     * int offset Optional. Number of tracks to skip.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+    * string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
 
 #### Return values
 * **array\|object** The user's saved tracks. Type is controlled by the `return_assoc` option.
@@ -974,7 +1070,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-n
 
 #### Arguments
 * `$options` **array\|object** - Optional. Options for the items.
-    * string country Optional. An ISO 3166-1 alpha-2 country code. Show items relevant to this country.
+    * string country Optional. ISO 3166-1 alpha-2 country code. Show items relevant to this country.
     * int limit Optional. Limit the number of items.
     * int offset Optional. Number of items to skip.
 
@@ -996,7 +1092,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-p
 * `$playlistId` **string** - ID or URI of the playlist.
 * `$options` **array\|object** - Optional. Options for the playlist.
     * string\|array fields Optional. A list of fields to return. See Spotify docs for more info.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+    * string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
     * string\|array additional_types Optional. Types of media to return info about.
 
 #### Return values
@@ -1036,7 +1132,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-p
     * string\|array fields Optional. A list of fields to return. See Spotify docs for more info.
     * int limit Optional. Limit the number of tracks.
     * int offset Optional. Number of tracks to skip.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+    * string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
     * string\|array additional_types Optional. Types of media to return info about.
 
 #### Return values
@@ -1056,7 +1152,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-r
 #### Arguments
 * `$options` **array\|object** - Optional. Options for the recommendations.
     * int limit Optional. Limit the number of recommendations.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+    * string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
     * mixed max_* Optional. Max value for one of the tunable track attributes.
     * mixed min_* Optional. Min value for one of the tunable track attributes.
     * array seed_artists Artist IDs to seed by.
@@ -1095,7 +1191,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a
 #### Arguments
 * `$showId` **string** - ID or URI of the show.
 * `$options` **array\|object** - Optional. Options for the show.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, limit results to shows available in that market.
+    * string market Optional. ISO 3166-1 alpha-2 country code, limit results to shows available in that market.
 
 #### Return values
 * **array\|object** The requested show. Type is controlled by the `return_assoc` option.
@@ -1112,11 +1208,11 @@ Get a show's episodes.<br>
 https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a-shows-episodes
 
 #### Arguments
-* `$showId` **mixed**
+* `$showId` **string** - ID or URI of the album.
 * `$options` **array\|object** - Optional. Options for the episodes.
     * int limit Optional. Limit the number of episodes.
     * int offset Optional. Number of episodes to skip.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
+    * string market Optional. ISO 3166-1 alpha-2 country code, limit results to episodes available in that market.
 
 #### Return values
 * **array\|object** The requested show episodes. Type is controlled by the `return_assoc` option.
@@ -1135,7 +1231,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-m
 #### Arguments
 * `$showIds` **array** - IDs or URIs of the shows.
 * `$options` **array\|object** - Optional. Options for the shows.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, limit results to shows available in that market.
+    * string market Optional. ISO 3166-1 alpha-2 country code, limit results to shows available in that market.
 
 #### Return values
 * **array\|object** The requested shows. Type is controlled by the `return_assoc` option.
@@ -1154,7 +1250,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-t
 #### Arguments
 * `$trackId` **string** - ID or URI of the track.
 * `$options` **array\|object** - Optional. Options for the track.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+    * string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
 
 #### Return values
 * **array\|object** The requested track. Type is controlled by the `return_assoc` option.
@@ -1173,7 +1269,7 @@ https://developer.spotify.com/documentation/web-api/reference/#/operations/get-s
 #### Arguments
 * `$trackIds` **array** - IDs or URIs of the tracks.
 * `$options` **array\|object** - Optional. Options for the tracks.
-    * string market Optional. An ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
+    * string market Optional. ISO 3166-1 alpha-2 country code, provide this if you wish to apply Track Relinking.
 
 #### Return values
 * **array\|object** The requested tracks. Type is controlled by the `return_assoc` option.
@@ -1523,7 +1619,7 @@ Set the access token to use.
 * `$accessToken` **string** - The access token.
 
 #### Return values
-* **void**
+* **self** 
 
 ---
 ### setOptions
@@ -1539,7 +1635,7 @@ Set options
 * `$options` **array\|object** - Options to set.
 
 #### Return values
-* **void**
+* **self** 
 
 ---
 ### setSession
@@ -1555,7 +1651,7 @@ Set the Session object to use.
 * `$session` **\SpotifyWebAPI\Session** - The Session object.
 
 #### Return values
-* **void**
+* **self** 
 
 ---
 ### shuffle

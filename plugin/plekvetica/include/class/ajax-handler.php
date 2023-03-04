@@ -873,13 +873,31 @@ class PlekAjaxHandler
         return $this->get_ajax_data('do');
     }
 
-    public function get_ajax_data(string $field = '')
+    /**
+     * Gets the ajax data for a field
+     *
+     * @param string $field
+     * @return string The data from the $_REQUEST or empty sting if no field name given
+     */
+    public function get_ajax_data($field = '')
     {
+        if (!is_string($field)) {
+            return "";
+        }
         return (isset($_REQUEST[$field])) ? $_REQUEST[$field] : "";
     }
 
-    public function get_ajax_files_data(string $field = '')
+    /**
+     * Gets the 'name' property of a $_FILES array
+     *
+     * @param string $field
+     * @return string The name of the file
+     */
+    public function get_ajax_files_data($field = '')
     {
+        if (!is_string($field)) {
+            return "";
+        }
         return (isset($_FILES[$field]['name']) and !empty($_FILES[$field]['name'])) ? $_FILES[$field] : "";
     }
 
@@ -890,8 +908,11 @@ class PlekAjaxHandler
      * @param string $field - The fieldname
      * @return array The array
      */
-    public function get_ajax_data_as_array(string $field = '', bool $escape = false)
+    public function get_ajax_data_as_array($field = '', bool $escape = false)
     {
+        if(!is_string($field)){
+            return [];
+        }
         $value = (isset($_REQUEST[$field])) ? stripslashes($_REQUEST[$field]) : "";
         $val_arr = json_decode($value);
         if ($escape and is_array($val_arr)) {
@@ -903,13 +924,18 @@ class PlekAjaxHandler
         return is_array($val_arr) ? $val_arr : [$val_arr]; //Convert to array if no array
     }
 
-
-
     /**
      * Returns the Value from a $_Request field and applies htmlspecialchars() function 
+     *
+     * @param string $field
+     * @param boolean $remove_unallowed_tags
+     * @return string The value from the $_REQUEST
      */
-    public function get_ajax_data_esc(string $field = '', $remove_unallowed_tags = false)
+    public function get_ajax_data_esc($field = '', $remove_unallowed_tags = false)
     {
+        if(!is_string($field)){
+            return "";
+        }
         global $plek_handler;
         $forbidden_tags = $plek_handler->get_forbidden_tags('textarea');
         if (isset($_REQUEST[$field]) and is_string($_REQUEST[$field])) {
@@ -962,8 +988,17 @@ class PlekAjaxHandler
         return;
     }
 
-    public function set_error_array(array $errors)
+    /**
+     * Adds the errors to the error array
+     *
+     * @param array $errors
+     * @return string|void String if input is no array, void on success.
+     */
+    public function set_error_array($errors)
     {
+        if (!is_array($errors)) {
+            return $errors;
+        }
         if (empty($this->error)) {
             $this->error = $errors;
         } else {
@@ -972,8 +1007,17 @@ class PlekAjaxHandler
         return;
     }
 
-    public function set_system_error(string $message)
+    /**
+     * Sets an system error message.
+     *
+     * @param string $message
+     * @return bool|void Void on success, false on error
+     */
+    public function set_system_error($message)
     {
+        if(!is_string($message)){
+            return false;
+        }
         $this->system_error[] = $message;
         return;
     }

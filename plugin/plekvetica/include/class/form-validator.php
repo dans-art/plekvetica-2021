@@ -338,7 +338,7 @@ class PlekFormValidator
         }
 
         //Check for max_length
-        if(isset($this->max_lenght[$fieldname])){
+        if(isset($this->max_length[$fieldname])){
             if ($this->max_length[$fieldname] !== 0 and !empty($value) and strlen($value) > $this->max_length[$fieldname]) {
                 $calc_length = (int)(strlen($value) - $this->max_length[$fieldname]);
                 $msg = sprintf(__('Entry is %d characters too long.', 'plekvetica'), $calc_length);
@@ -408,7 +408,7 @@ class PlekFormValidator
      * @param bool $ignore_unset_fields - If unset fields should be ignored. If set to true, only fields with set type will be validated.
      * @return bool true on success, false on error
      */
-    public function all_fields_are_valid(array $input = null, $ignore_unset_fields = false)
+    public function all_fields_are_valid($input = null, $ignore_unset_fields = false)
     {
         $input = ($input === null) ? $_REQUEST : $input; //The input to check
         $fields = $this -> fieldname; //Contains all the fields set by the set function

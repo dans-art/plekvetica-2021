@@ -160,8 +160,11 @@ class PlekEvents extends PlekEventHandler
      * @param array $tribe_event - Array from $yotuwp -> prepare function
      * @return void
      */
-    public function load_event_from_youtube(array $yt)
+    public function load_event_from_youtube($yt)
     {
+        if (!is_array($yt)) {
+            return;
+        }
         $this->event['data'] = $yt['data'];
         return;
     }
@@ -741,9 +744,12 @@ class PlekEvents extends PlekEventHandler
      * @param array $terms Terms Array
      * @return void true on success, false if terms is empty
      */
-    private function process_terms(array $terms)
+    private function process_terms($terms)
     {
         if (empty($terms)) {
+            return false;
+        }
+        if (!is_array($terms)) {
             return false;
         }
         foreach ($terms as $line) {
@@ -1259,24 +1265,38 @@ class PlekEvents extends PlekEventHandler
      */
     public function plek_event_recently_added_shortcode($atts = [])
     {
+        global $wpdb;
         $short_args = shortcode_atts(
             array(
                 'nr_posts' => '25',
             ),
             $atts
         );
-        $post_status = PlekUserHandler::user_is_in_team() ? array('publish', 'draft') : 'publish';
-        $events = get_posts([
-            'posts_per_page' => $short_args['nr_posts'],
-            'order'       => 'DESC',
-            'orderby' => 'ID',
-            'post_status' => $post_status,
-            'post_type' => 'tribe_events'
-        ]);
+        $post_status = PlekUserHandler::user_is_in_team() ? "'publish', 'draft'" : "'publish'";
+        $nr_posts = intval($short_args['nr_posts']);
+
+
+        $query = $wpdb -> prepare("SELECT {$wpdb->prefix}posts.ID
+        FROM {$wpdb->prefix}posts
+        WHERE 1=1
+        AND {$wpdb->prefix}posts.post_type = 'tribe_events'
+        AND {$wpdb->prefix}posts.post_status IN ($post_status)
+        ORDER BY ID DESC
+        LIMIT 0, %d", $nr_posts);
+
+        $cache_key = PlekCacheHandler::generate_key('recently_added', $query);
+        $cached = PlekCacheHandler::get_cache($cache_key, 'events');
+        if ($cached) {
+            return $cached;
+        }
+        
+        $events = $wpdb->get_results($query);
         if (empty($events)) {
             return __('No new Events found', 'plekvetica');
         }
-        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'new_events');
+        $content = PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'new_events');
+        PlekCacheHandler::set_cache($cache_key, $content, $events, 'events');
+        return $content;
     }
 
     /**
@@ -1708,11 +1728,12 @@ class PlekEvents extends PlekEventHandler
      *
      * @return void
      */
-    public function add_content_before_tribe_events_views_action(){
+    public function add_content_before_tribe_events_views_action()
+    {
         global $plek_handler;
-        $event_add_page_id = $plek_handler -> get_plek_option('add_event_page_id');
-        $add_event_page_url = get_permalink( $event_add_page_id );
-        $button_text = __('Add event','plekvetica');
+        $event_add_page_id = $plek_handler->get_plek_option('add_event_page_id');
+        $add_event_page_url = get_permalink($event_add_page_id);
+        $button_text = __('Add event', 'plekvetica');
         echo "<div id='add-event-floating-button'><a href='$add_event_page_url'>+</a><span>$button_text</span></div>";
         //s(tribe_is_event_query());
     }

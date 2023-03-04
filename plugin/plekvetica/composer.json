@@ -1,5 +1,12 @@
 {
     "require": {
         "jwilsson/spotify-web-api-php": "^5.2"
-    }
+    },
+    "extra": {
+        "laravel": {
+          "dont-discover": [
+            "barryvdh/laravel-ide-helper"
+          ]
+        }
+      }
 }

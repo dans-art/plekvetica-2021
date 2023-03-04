@@ -987,9 +987,17 @@ class PlekEventHandler
         return (!empty($this->event['timetable'])) ? true : false;
     }
 
-    public function format_bands(array $bands)
+    /**
+     * Formats the band metadata
+     *
+     * @param array $bands
+     * @return string The formatted bands
+     */
+    public function format_bands($bands)
     {
-
+        if(!is_array($bands)){
+            return $bands;
+        }
         return PlekTemplateHandler::load_template('bands', 'event/meta', $bands);
     }
 
@@ -1809,6 +1817,8 @@ class PlekEventHandler
 
     /**
      * Saves the basic event data
+     * Flushes the cached items for the event
+     * Flushes the recently added cache
      *
      * @return mixed Event ID on sucess, error message on error.
      */
@@ -1841,6 +1851,9 @@ class PlekEventHandler
 
         //Flush the cache
         PlekCacheHandler::flush_cache_by_post_id($event_id);
+        if(!$is_event_edit){
+            PlekCacheHandler::flush_cache_by_key_search('recently_added', 'events');
+        }
 
         //Update the Band order / times
         $plek_handler->update_field('band_order_time', $plek_ajax_handler->get_ajax_data('band_order_time'), $event_id);
@@ -2607,8 +2620,11 @@ class PlekEventHandler
      * @param array $bands - Array with band ids (array("666","747"))
      * @return array The Bands array with all the bands as type int
      */
-    public function filter_band_array(array $bands)
+    public function filter_band_array($bands)
     {
+        if(!is_array($bands)){
+            return $bands;
+        }
         foreach ($bands as $index => $b) {
             $bands[$index] = (int) $b;
         }
