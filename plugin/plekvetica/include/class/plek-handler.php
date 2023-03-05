@@ -13,11 +13,11 @@ class PlekHandler
     public function __construct()
     {
         $this->placeholder_image = PLEK_PLUGIN_DIR_URL . 'images/placeholder/default_placeholder.jpg';
-        if(function_exists('get_plugin_data')){
+        if (function_exists('get_plugin_data')) {
             $plugin_meta = get_plugin_data(PLEK_PATH . 'plekvetica.php');
             $this->version = (!empty($plugin_meta['Version']) and $plugin_meta['Version'] !== null) ? $plugin_meta['Version'] : "3.0.2";
-        }else{
-            $this -> version = '3.0.2';
+        } else {
+            $this->version = '3.0.2';
         }
     }
 
@@ -96,8 +96,9 @@ class PlekHandler
      * @param string $url
      * @return string
      */
-    public function url_remove_domain($url){
-        return str_replace($_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'], '', $url);
+    public function url_remove_domain($url)
+    {
+        return str_replace($_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'], '', $url);
     }
 
     public function print_url(string $url)
@@ -250,7 +251,7 @@ class PlekHandler
         //Don't display the password protection if user is in team
         global $post;
         $whitelist = array('team-kalender');
-        if(!isset($post->post_name)){
+        if (!isset($post->post_name)) {
             return $required;
         }
         if (array_search($post->post_name, $whitelist) !== false) {
@@ -363,11 +364,17 @@ class PlekHandler
         wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array('jquery'));
     }
 
+    /**
+     * Enqueue the context menu scripts
+     *
+     * @return void
+     */
     public function enqueue_context_menu()
     {
         global $plek_handler;
         wp_enqueue_style('plek-contextMenu-style', PLEK_PLUGIN_DIR_URL . 'css/jquery.contextMenu.min.css', array('generate-child'));
-        wp_enqueue_script('plek-contextMenu-script',  PLEK_PLUGIN_DIR_URL . 'js/components/context-menu.min.js', array('jquery', 'plek-script', 'plek-language'), $plek_handler->version);
+        wp_enqueue_script('jquery-contextMenu-script',  PLEK_PLUGIN_DIR_URL . 'js/components/jquery-contextmenu.min.js', array('jquery'), $plek_handler->version, true);
+        wp_enqueue_script('plek-contextMenu-script',  PLEK_PLUGIN_DIR_URL . 'js/components/context-menu.min.js', array('jquery', 'plek-main-script', 'plek-language'), $plek_handler->version, true);
         wp_set_script_translations('plek-contextMenu-script', 'plekvetica', PLEK_PATH . "/languages");
     }
 
@@ -583,7 +590,7 @@ class PlekHandler
      */
     function build_url($parse_url_array)
     {
-        if(!is_array($parse_url_array)){
+        if (!is_array($parse_url_array)) {
             return "";
         }
         $e = $parse_url_array;

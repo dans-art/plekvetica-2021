@@ -27,7 +27,7 @@ if (!is_object($gallery_object)) {
     </div>
     <div id="event-photos-content">
         <?php
-        echo do_shortcode('[ngg src="galleries" ids="' . $gallery_object->gid . '" display="thumbnail" ]');
+        echo do_shortcode('[ngg src="galleries" ids="' . $gallery_object->gid . '" display="thumbnail" order_by="imagedate"]');
         ?>
     </div>
 </div>

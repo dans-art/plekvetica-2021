@@ -65,7 +65,9 @@ s(PlekCacheHandler::flush_cache_by_key_search('recently_added', 'events'));
 //PlekTemplateHandler::load_template('email-header', 'email');
 
 $pm = new PlekNewsletter;
-
+global $nggdb;
+s($nggdb);
+s(get_class_methods($nggdb));
 //$user = new TNP_User;
 //s($user);
 
