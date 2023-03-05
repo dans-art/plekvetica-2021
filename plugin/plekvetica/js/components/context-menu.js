@@ -21,7 +21,7 @@ jQuery(document).ready(function() {
       */
      jQuery(function() {
          jQuery.contextMenu({
-             selector: '.plek_is_gallery .image-wrapper', 
+             selector: '.nextgen_pro_thumbnail_grid .image-wrapper', 
              callback: function(key, options) {
                  cb_contextMenu(key,options,this);
              },
