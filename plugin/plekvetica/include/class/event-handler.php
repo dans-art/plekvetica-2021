@@ -715,9 +715,13 @@ class PlekEventHandler
         return $text;
     }
 
+    /**
+     * Get the text for the ticket raffle
+     *
+     * @return string The HTML Text
+     */
     public function get_ticket_raffle_text()
     {
-        $event_url = $this->get_permalink();
         return PlekTemplateHandler::load_template_to_var('ticket-raffle', 'socialmedia/facebook', $this);
     }
     /**
@@ -1370,6 +1374,9 @@ class PlekEventHandler
             return false;
         }
         $crew = $this->get_event_akkredi_crew($this->get_ID());
+        if(!is_array($crew)){
+            return false;
+        }
         foreach ($crew as $user_login) {
             $user = get_user_by('login', $user_login);
             if (isset($user->ID) and $user->ID !== 0) {
@@ -2044,6 +2051,7 @@ class PlekEventHandler
 
         //Flush the cache
         PlekCacheHandler::flush_cache_by_key_search('plekblock_all_reviews', 'plek_block_all_reviews');
+        PlekCacheHandler::flush_cache_by_post_id($event_id);
 
 
         if (!empty($failed)) {

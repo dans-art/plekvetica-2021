@@ -351,6 +351,7 @@
         }
     }
 
+
 }
 
 @media (max-width: 768px) {
@@ -524,6 +525,36 @@
             max-width: 47%;
         }
     }
+
+    /* Style fixes for the Event calendar*/
+
+    #tribe-events-pg-template .tribe-events-calendar-list article {
+
+        &.tribe-events-calendar-list__event {
+            flex-direction: column;
+            flex-basis: 100%;
+        }
+
+        .tribe-events-calendar-list__event-date-tag-mobile,
+        .tribe-events-calendar-list__event-date-tag-mobile .tribe-events-calendar-list__event-date-tag-datetime {
+            text-align: center;
+        }
+
+        .tribe-events-calendar-list__event-featured-image-wrapper {
+            width: 100%;
+        }
+
+        .tribe-events-calendar-list__event-featured-image-wrapper img {
+            max-width: 600px;
+        }
+
+        .tribe-events-calendar-list__event-details {
+            width: 100%;
+        }
+
+    }
+
+
 
 }
 
@@ -810,13 +841,14 @@
     }
 
     /*Band Edit page*/
-    .plek-form #band-social .item-con{
+    .plek-form #band-social .item-con {
         flex-direction: column;
 
-        .band-social-input{
+        .band-social-input {
             margin-top: 0.5em;
         }
-        .input-icon{
+
+        .input-icon {
             min-height: 1.2em;
         }
     }

@@ -149,6 +149,7 @@ class PlekCacheHandler
 
     /**
      * Removes the items from the cache by post id
+     * Supports the plek caching system as well as the WP Fastest Cache
      *
      * @param  $post_id - The post ID
      * @return bool|string True on success, message on error
@@ -167,6 +168,12 @@ class PlekCacheHandler
         }
         if (empty($cache_ids)) {
             return sprintf(__('No cached items found for post id: %s', 'plekvetica'), $post_id);
+        }
+
+        //Clear the WP Fastest Cache cache
+        if(class_exists('WpFastestCache')){
+            $wpfc = new WpFastestCache();
+            $wpfc -> singleDeleteCache(false, $post_id);
         }
 
         //Remove all the items
@@ -191,6 +198,7 @@ class PlekCacheHandler
                 $removed++;
             }
         }
+
         if (count($cache_ids) !== $removed) {
             return sprintf(__('Failed to remove all cached objects. %d objects found, %d objects deleted', 'plekvetica'), count($cache_ids), $removed);
         }

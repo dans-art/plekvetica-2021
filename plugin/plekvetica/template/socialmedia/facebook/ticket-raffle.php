@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 extract(get_defined_vars());
 
 //This Template has no args
-$event = (isset($template_args[0])) ? $template_args[0] : new PlekEvents; //The Event ID
+$event = (isset($template_args[0])) ? $template_args[0] : new PlekEvents; //The Event object
 $organizer = $event->get_organizers_as_facebook_id();
 $win_conditions = $event->get_field('win_conditions');
 $start_date = $event->get_start_date('', true);
@@ -20,7 +20,7 @@ array_walk($organizer, function (&$val, $key) {
     if(strlen($key) > 2){
         $val =  '@[' . $key . ']';
     }
-});
+}); 
 ?>
 
 Mitmachen und Gewinnen! 🤩
@@ -30,7 +30,7 @@ Was müsst ihr dafür tun? Ganz einfach:
 2. Schreibt einen Kommentar mit wem ihr an den Event wollt.
 Und schon seid ihr im Los-Kessel. 🤘😀🤘
 
-Teilnahmeschluss ist der <?php echo date('d M Y', $start_date - (60 * 60 * 24 * 3)); /*Event Date minus 3 Days*/ ?> um 12:12Uhr
+Teilnahmeschluss ist der <?php echo date('d M Y', $start_date - $event -> ticket_raffle_due_time); ?> um 12:12Uhr
 Die Gewinner werden über den Facebook-Messenger von uns spätestens 2 Tage vor dem Event benachrichtigt.
 
 Viel Glück! 🙂

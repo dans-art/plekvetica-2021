@@ -16,6 +16,7 @@ class PlekEvents extends PlekEventHandler
     public string $poster_placeholder = '';
     public string $default_event_currency = 'CHF';
     public array $total_posts = array();
+    public int $ticket_raffle_due_time = (60*60*24*10); //Ten days in seconds
 
     protected $errors = array();
 
