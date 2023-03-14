@@ -1656,6 +1656,11 @@ class PlekEventHandler
                 get_the_title($event_id),
                 $this->get_event_status_text($status_code)
             );
+            //Add accreditation note if any
+            $akkredi_notes = $pe -> get_accreditation_note_formatted();
+            if(!empty($akkredi_notes)){
+                $message = $message . __('The accreditation has some notes:','plekvetica') . '<br/>'.  $akkredi_notes;
+            }
             $action = get_permalink($event_id);
             $notify->push_accredi_members($event_id, 'event', $subject, $message, $action);
         }

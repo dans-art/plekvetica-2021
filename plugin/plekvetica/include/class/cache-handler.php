@@ -30,7 +30,7 @@ class PlekCacheHandler
      */
     public static function generate_key($name, $data, $user_id = null)
     {
-        $data = (is_array($data)) ? json_encode($data) : $data;
+        $data = (is_array($data) OR is_object($data)) ? json_encode($data) : $data;
         if (!is_string($data)) {
             $data = date('Y-m-d');
         }
@@ -64,7 +64,7 @@ class PlekCacheHandler
         }
         if (isset($content->content)) {
             if($plek_handler -> is_dev_server()){
-                    s('Loaded from cache: '. $key. ' -- '. $context.'<br/>');
+                    echo sprintf("<script type='text/javascript'>console.log('Loaded content from cache: %s')</script>", $key. ' :: '.$context);
             }
             return $content->content;
         }

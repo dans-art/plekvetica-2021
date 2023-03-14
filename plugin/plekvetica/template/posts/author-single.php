@@ -41,17 +41,33 @@ $page_obj = $plek_event->get_pages_object();
                     <div class="tribe-events-calendar-list">
                         <div class="tribe-common-g-row tribe-events-calendar-list__event-row plek-post-type-author">
                             <div class="tribe-events-calendar-list__event-wrapper tribe-common-g-col">
+                                <?php 
+                                //Try to load from cache
+                                $key = PlekCacheHandler::generate_key('author_'.$author->user_login.'_posts', $page_obj);
+                                $cached = PlekCacheHandler::get_cache($key, 'author_posts_page');
+                                if($cached){
+                                    echo $cached;
+                                }else{
+                                    $all_events = "";
+                                    $post_ids = [];
+                                ?>
                                 <?php foreach ($author_posts as $post) : ?>
                                     <?php
                                     $list_event = new PlekEvents();
-                                    $list_event->load_event_from_tribe_events($post); ?>
-                                    <?php PlekTemplateHandler::load_template('event-list-item', 'event', $list_event); ?>
+                                    $list_event->load_event_from_tribe_events($post); 
+                                    $post_ids[] = $post -> ID;
+                                    $all_events .= PlekTemplateHandler::load_template_to_var('event-list-item', 'event', $list_event); 
+                                    ?>
                                 <?php endforeach; ?>
                                 <?php
+                                echo $all_events;
+                                PlekCacheHandler::set_cache($key,$all_events,$post_ids,'author_posts_page');
+                                } //EndElse
+
                                 if ($total_posts !== null) {
                                     echo $plek_event->get_pages_count_formated($total_posts);
                                     if ($plek_event->display_more_events_button($total_posts)) {
-                                        echo $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_pagenum_link($page_obj->page + 1), __('Load more events', 'plekvetica'), '_self', 'load_more_reviews', 'ajax-loader-button');
+                                        echo $load_more = PlekTemplateHandler::load_template_to_var('button', 'components', get_home_url().'/author/'.$author->user_login.'?page='.$page_obj->page + 1, __('Load more events', 'plekvetica'), '_self', 'load_more_reviews', 'ajax-loader-button');
                                     }
                                 }
                                 ?>

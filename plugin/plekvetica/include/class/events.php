@@ -1043,7 +1043,11 @@ class PlekEvents extends PlekEventHandler
         if ($obj->posts_per_page === 0) {
             $obj->posts_per_page = 10; //Should not be 0, otherwise no posts will shown.
         }
-        $obj->page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
+        if(isset($_GET['page'])){
+            $obj -> page = intval($_GET['page']);
+        }else{
+            $obj->page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
+        }
         $obj->offset =  (int) ($obj->page > 1) ? ($obj->page - 1) * $obj->posts_per_page : 0;
         $obj->total_pages = (int) ($total_posts > 0) ? ceil(($total_posts / $posts_per_page)) : 0;
         $obj->total_posts = (int) $total_posts;

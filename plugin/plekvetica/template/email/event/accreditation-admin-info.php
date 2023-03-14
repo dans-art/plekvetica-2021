@@ -14,7 +14,8 @@ extract(get_defined_vars());
 
 $event = (isset($template_args[0])) ? $template_args[0] : new PlekEvents; //The Event ID
 $organizer_id = (isset($template_args[1])) ? $template_args[1] : 0; //The organizer ID
-$status = (isset($template_args[2])) ? $template_args[2] : 'Undefined'; //The organizer ID
+$status = (isset($template_args[2])) ? $template_args[2] : 'Undefined'; //The status set
+$accredi_notes = (isset($template_args[3])) ? $template_args[3] : ''; //The accreditation note
 $date = date("d-m-Y H:i:s");
 
 $plek_organi = new PlekOrganizerHandler;
@@ -25,7 +26,7 @@ $organi_contact = $plek_organi->get_organizer_media_contact($organizer_id);
 $organi_name = (is_array($organi_contact)) ? implode(', ', $organi_contact) : $organi_contact;
 
 $user = wp_get_current_user();
-$set_by = (!empty($user -> display_name)) ? $user -> display_name : $organi_name;
+$set_by = (!empty($user->display_name)) ? $user->display_name : $organi_name;
 ?>
 
 <div>
@@ -34,8 +35,11 @@ $set_by = (!empty($user -> display_name)) ? $user -> display_name : $organi_name
     <ul>
         <li><?php echo __('Organizer', 'plekvetica') ?>: <?php echo tribe_get_organizer($organizer_id); ?></li>
         <li><?php echo __('Media contact', 'plekvetica') ?>: <?php echo $organi_name; ?></li>
-        <li><?php echo __('Date','plekvetica'); ?>: <?php echo $date; ?></li>
-        <li><?php echo __('Status set','plekvetica'); ?>: <?php echo $status; ?></li>
-        <li><?php echo __('Status set by','plekvetica'); ?>: <?php echo $set_by; ?></li>
+        <li><?php echo __('Date', 'plekvetica'); ?>: <?php echo $date; ?></li>
+        <li><?php echo __('Status set', 'plekvetica'); ?>: <?php echo $status; ?></li>
+        <li><?php echo __('Status set by', 'plekvetica'); ?>: <?php echo $set_by; ?></li>
     </ul>
+    <?php if (!empty($accredi_notes)) : ?>
+        <?php echo $accredi_notes; ?>
+    <?php endif; ?>
 </div>
