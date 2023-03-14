@@ -340,6 +340,10 @@ class PlekAjaxHandler
                 $this->set_error(__('You are not allowed to use this request or function not found', 'plekvetica'));
                 break;
         }
+        //Clear the cache
+        if (isset($event_id)) {
+            PlekCacheHandler::flush_cache_by_post_id($event_id);
+        }
         echo $this->get_ajax_return();
         die();
     }
@@ -353,6 +357,8 @@ class PlekAjaxHandler
     {
         global $plek_event;
         $do = $this->get_ajax_do();
+        $event_id = $this->get_ajax_data('event_id');
+
         switch ($do) {
             case 'toggle_watchlist':
                 $this->set_error(__('You have to be logged in to perform this action', 'plekvetica'));
@@ -388,6 +394,10 @@ class PlekAjaxHandler
                 # code...
                 $this->set_error(__('You are not allowed to use this function', 'plekvetica'));
                 break;
+        }
+        //Clear the cache
+        if (isset($event_id)) {
+            PlekCacheHandler::flush_cache_by_post_id($event_id);
         }
         echo $this->get_ajax_return();
         die();
@@ -910,7 +920,7 @@ class PlekAjaxHandler
      */
     public function get_ajax_data_as_array($field = '', bool $escape = false)
     {
-        if(!is_string($field)){
+        if (!is_string($field)) {
             return [];
         }
         $value = (isset($_REQUEST[$field])) ? stripslashes($_REQUEST[$field]) : "";
@@ -933,7 +943,7 @@ class PlekAjaxHandler
      */
     public function get_ajax_data_esc($field = '', $remove_unallowed_tags = false)
     {
-        if(!is_string($field)){
+        if (!is_string($field)) {
             return "";
         }
         global $plek_handler;
@@ -1015,7 +1025,7 @@ class PlekAjaxHandler
      */
     public function set_system_error($message)
     {
-        if(!is_string($message)){
+        if (!is_string($message)) {
             return false;
         }
         $this->system_error[] = $message;

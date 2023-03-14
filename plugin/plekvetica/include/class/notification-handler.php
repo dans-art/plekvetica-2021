@@ -1063,8 +1063,8 @@ class PlekNotificationHandler extends WP_List_Table
     public function daily_cron_job()
     {
         //Send reminder to do the ticket raffle
-        $from = date('Y-m-d', time() + 60 * 60 * 24 * 2) . ' 06:00:00'; //Two day from now
-        $to = date('Y-m-d', time() + 60 * 60 * 24 * 3) . ' 06:00:00'; //Three day from now
+        $from = date('Y-m-d', time() + 60 * 60 * 24 * 11) . ' 06:00:00'; //11 days from now
+        $to = date('Y-m-d', time() + 60 * 60 * 24 * 12) . ' 06:00:00'; //12 day from now
         $raffle =  do_shortcode("[plek_get_all_raffle from='$from' to='$to' return_bool=true]", false);
         if (!empty($raffle)) {
             PlekNotificationHandler::push_to_admin('Tickets to raffle', $raffle);

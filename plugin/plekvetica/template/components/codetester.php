@@ -26,7 +26,7 @@ $watermark = PLEK_PATH . 'images\watermarks\ticketraffle-2-2.png';
 
 $authors_handler = new PlekAuthorHandler;
 $pe -> load_event(66497);
-
+s($pe);
 
 	
 if(function_exists('wpfc_exclude_current_page')){
@@ -47,10 +47,10 @@ s($_SERVER['REQUEST_URI']);
 $_SERVER['REQUEST_URI'] = $plek_handler->url_remove_domain($myplek_url);
 s($_SERVER['REQUEST_URI']);
 */
-s(PlekCacheHandler::flush_cache_by_key_search('recently_added', 'events'));
-?>
-<div>
-<?php 
+
+
+
+ 
 //s($plek_handler->clean_url('https://open.spotify.com/artist/278ZYwGhdK6QTzE3MFePnP?autoplay=true'));
 ?>
 </div>
@@ -65,9 +65,7 @@ s(PlekCacheHandler::flush_cache_by_key_search('recently_added', 'events'));
 //PlekTemplateHandler::load_template('email-header', 'email');
 
 $pm = new PlekNewsletter;
-global $nggdb;
-s($nggdb);
-s(get_class_methods($nggdb));
+
 //$user = new TNP_User;
 //s($user);
 
@@ -75,3 +73,5 @@ s(get_class_methods($nggdb));
 //echo $pm -> get_newsletter_preview(11);
 
 //s($pm -> update_organizer());
+
+echo PlekTemplateHandler::load_template_to_var('ticket-raffle', 'socialmedia/facebook', $pe);
