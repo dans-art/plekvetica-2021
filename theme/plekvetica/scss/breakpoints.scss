@@ -509,6 +509,17 @@
             max-width: unset;
         }
 
+        .accredi_status{
+            flex-basis: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+            & *{
+                width: 100%;
+            }
+        }
+
     }
 
     /* Review Image uploader */

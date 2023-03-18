@@ -1420,7 +1420,7 @@ class PlekEventHandler
      *@param bool|string $separator - If string, the output will be string, separated by the given string
      * @return false|string|array false if no crew is found, string if separator is defined or array.
      */
-    public function get_event_akkredi_crew_formated($separator = false)
+    public function get_event_akkredi_crew_formatted($separator = false)
     {
         $crew = $this->get_event_akkredi_crew();
         if (!is_array($crew)) {
@@ -1656,6 +1656,11 @@ class PlekEventHandler
                 get_the_title($event_id),
                 $this->get_event_status_text($status_code)
             );
+            //Add accreditation note if any
+            $akkredi_notes = $pe -> get_accreditation_note_formatted();
+            if(!empty($akkredi_notes)){
+                $message = $message . '<br/>' . __('The accreditation has some notes:','plekvetica') . '<br/>'.  $akkredi_notes;
+            }
             $action = get_permalink($event_id);
             $notify->push_accredi_members($event_id, 'event', $subject, $message, $action);
         }
@@ -3027,7 +3032,7 @@ class PlekEventHandler
      * @param string $after_item - String to add after the item
      * @return string The HTML Code
      */
-    public function get_missing_event_details_formated($all = true, $output = 'br', $before_item = '', $after_item = '')
+    public function get_missing_event_details_formatted($all = true, $output = 'br', $before_item = '', $after_item = '')
     {
         $missing = $this->get_missing_event_details();
         if (empty($missing)) {

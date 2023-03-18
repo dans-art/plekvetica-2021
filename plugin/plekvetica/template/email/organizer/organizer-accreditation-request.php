@@ -42,7 +42,7 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
                         ?>
                         <a href="<?php echo get_permalink($pe->get_ID()); ?>" target="_blank"><?php echo $event_name; ?></a><br />
                         <?php echo $pe->get_event_date('d.m.Y'); ?><br />
-                        <?php echo $pe->get_event_akkredi_crew_formated('<br/>');
+                        <?php echo $pe->get_event_akkredi_crew_formatted('<br/>');
                         ?><br />
                         <?php
                         PlekTemplateHandler::load_template(

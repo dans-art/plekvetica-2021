@@ -58,7 +58,7 @@ $total_open_requests = 0;
                     }
                 }
 
-                $acc_crew = ($list_event->get_event_akkredi_crew()) ? $list_event->get_event_akkredi_crew_formated('<br/>') : __('Nobody', 'plekvetica');
+                $acc_crew = ($list_event->get_event_akkredi_crew()) ? $list_event->get_event_akkredi_crew_formatted('<br/>') : __('Nobody', 'plekvetica');
                 $canceled = ($list_event->is_canceled()) ? '<i>X</i>' : false;
                 $featured = ($list_event->is_featured()) ? '<i>F</i>' : false;
                 $missing_details = ($list_event->get_missing_event_details()) ? '<i>M</i>' : false;

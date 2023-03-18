@@ -20,11 +20,11 @@ include(PLEK_PATH . 'template/email/email-styles.php');
             color: <?php echo $text_color; ?> !important;
         }
 
-        a {
+        .email-content a {
             color: <?php echo $link_color; ?> !important;
         }
 
-        a.plek-button {
+        .email-content a.plek-button {
             background-color: <?php echo $color_red_light; ?>;
             text-align: center;
             color: <?php echo $text_color; ?> !important;
@@ -33,18 +33,18 @@ include(PLEK_PATH . 'template/email/email-styles.php');
             display: block;
         }
 
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
+        .email-content h1,
+        .email-content h2,
+        .email-content h3,
+        .email-content h4,
+        .email-content h5,
+        .email-content h6 {
             color: <?php echo $text_color; ?> !important;
         }
     </style>
 </head>
 
-<body>
+<body id="email-content">
     <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo $email_bg; ?>" style="background-color: <?php echo $email_bg; ?>; color: <?php echo $text_color; ?>; max-width:800px; margin: 0 auto;" color="<?php echo $text_color; ?>">
         <tr>
             <td>

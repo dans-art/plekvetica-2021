@@ -21,6 +21,7 @@ class PlekAuthorHandler
                     'role__in' => $roles,
                     'meta_key' => 'active_member',
                     'meta_value' => '1',
+                    'orderby' => 'id'
                 ));
                 break;
             case 'passive':
@@ -28,11 +29,13 @@ class PlekAuthorHandler
                     'role__in' => $roles,
                     'meta_key' => 'passive_member',
                     'meta_value' => '1',
+                    'orderby' => 'id'
                 ));
                 break;
             default:
                 $authors = get_users(array(
-                    'role__in' => $roles
+                    'role__in' => $roles,
+                    'orderby' => 'id'
                 ));
                 break;
         }

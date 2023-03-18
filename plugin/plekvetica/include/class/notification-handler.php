@@ -223,8 +223,35 @@ class PlekNotificationHandler extends WP_List_Table
         return false;
     }
 
-    public static function push_to_band_user($band_id){
+    /**
+     * Sends a email to the manager of a band
+     *
+     * @param int $band_id
+     * @param string $subject
+     * @param string $message
+     * @return bool True on success, error message on failure
+     */
+    public static function push_to_band_user($band_id, $subject, $message, $link)
+    {
+        $sent = 0;
+        $users = PlekUserHandler::get_user_by_band_id($band_id);
+        if (is_array($users) and !empty($users)) {
+            foreach ($users as $user_id) {
+                $user = get_user_by('ID', $user_id);
+                s($user);
+                $message = PlekTemplateHandler::load_template_to_var('default-email', 'email', $subject, [$message, $link]);
 
+                //Send the mail
+                $emailer = new PlekEmailSender;
+                if($emailer->send_mail($user->user_email, $subject, $message)){
+                    $sent++;
+                }
+            }
+            if($sent !== count($users)){
+                return false;
+            }
+            return true;
+        }
     }
 
     /**
@@ -1072,7 +1099,7 @@ class PlekNotificationHandler extends WP_List_Table
 
         //Updates the newsletter lists
         $pm = new PlekNewsletter;
-        $pm -> update_all_lists();
+        $pm->update_all_lists();
 
         // This is for debug. Check later, if this runs every day!
         apply_filters(
@@ -1088,7 +1115,7 @@ class PlekNotificationHandler extends WP_List_Table
      */
     public static function send_review_to_promoter($event_id = null)
     {
-        //Get the Reviews from the past 2 days
+        //Get the Review by event ID
         $meta_query['is_review'] = array('key' => 'is_review', 'compare' => '=', 'value' => '1');
         $args = [
             'eventDisplay'   => 'custom',
@@ -1097,18 +1124,18 @@ class PlekNotificationHandler extends WP_List_Table
             'ID' => intval($event_id)
         ];
         $events = tribe_get_events($args);
- 
+
         if (empty($events)) {
-            return __('No Event found, or Event is not a Review','plekvetica');
+            return __('No Event found, or Event is not a Review', 'plekvetica');
         }
-        if(count($events) > 1){
-            return __('More than one Event found. This should not happen!','plekvetica');
+        if (count($events) > 1) {
+            return __('More than one Event found. This should not happen!', 'plekvetica');
         }
 
         foreach ($events as $event) {
             $promo_set = get_field('organizer_review_promo_sent', $event->ID);
-            if ($promo_set === '1' OR $promo_set === true) {
-                return __('Email already sent!','plekvetica');
+            if ($promo_set === '1' or $promo_set === true) {
+                return __('Email already sent!', 'plekvetica');
             }
             //Load the Event
             $pe = new PlekEvents;
@@ -1116,7 +1143,7 @@ class PlekNotificationHandler extends WP_List_Table
             //Load the organizers
             $organizer = $pe->get_field_value('_EventOrganizerID', true);
             if (!is_array($organizer)) {
-                return __('No Organizer found!','plekvetica');
+                return __('No Organizer found!', 'plekvetica');
             }
             //Craft the email
             $email_subject = __('A new review has ben published at Plekvetica', 'plekvetica');
@@ -1124,7 +1151,7 @@ class PlekNotificationHandler extends WP_List_Table
             foreach ($organizer as $organi_id) {
                 //Get the promoter email (ACF)
                 $promo_email = get_field('email_organi_promoter', $organi_id);
- 
+
                 //Fallback, try to get the regular email
                 if (empty($promo_email)) {
                     $promo_email = get_post_meta($organi_id, '_OrganizerEmail', true);
@@ -1132,7 +1159,7 @@ class PlekNotificationHandler extends WP_List_Table
                 //No promo and no regular email found
                 if (empty($promo_email)) {
                     //No email found, skip organizer
-                    return __('No Organizer email found!','plekvetica');
+                    return __('No Organizer email found!', 'plekvetica');
                 }
                 if (is_email($promo_email)) {
                     $emailer = new PlekEmailSender;
@@ -1158,5 +1185,48 @@ class PlekNotificationHandler extends WP_List_Table
             //self::push_to_band_user($band);
         }
         return true;
+    }
+    
+    /**
+     * Sends a email to all the bands users of an event
+     *
+     * @param int $event_id
+     * @return int The number of users reached
+     */
+    public static function send_review_to_bands($event_id)
+    {
+        //Get the Review by event ID
+        $meta_query['is_review'] = array('key' => 'is_review', 'compare' => '=', 'value' => '1');
+        $args = [
+            'eventDisplay'   => 'custom',
+            'order'       => 'ASC',
+            'meta_query' => $meta_query,
+            'ID' => intval($event_id)
+        ];
+        $events = tribe_get_events($args);
+
+        if (empty($events)) {
+            return __('No Event found, or Event is not a Review', 'plekvetica');
+        }
+        if (count($events) > 1) {
+            return __('More than one Event found. This should not happen!', 'plekvetica');
+        }
+        $sent = 0;
+        foreach ($events as $event) {
+            $pe = new PlekEvents;
+            $pe->load_event_from_tribe_events($event);
+            $bands = $pe->get_bands_ids();
+            if (is_array($bands) and empty($bands)) {
+                continue;
+            }
+            foreach ($bands as $band_id) {
+                $email_subject = __('A new review has ben published at Plekvetica', 'plekvetica');
+                $email_message = PlekTemplateHandler::load_template_to_var('band-new-review-info', 'email/band', $pe);
+                if(self::push_to_band_user($band_id, $email_subject, $email_message, get_permalink($pe->get_ID())) === true){
+                    $sent++;
+                }
+            }
+        }
+        return $sent;
     }
 }

@@ -3,9 +3,9 @@ msgstr ""
 "Project-Id-Version: Plekvetica\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-24 14:49+0000\n"
-"PO-Revision-Date: 2023-03-18 10:21+0000\n"
+"PO-Revision-Date: 2022-12-09 20:16+0000\n"
 "Last-Translator: Dänu\n"
-"Language-Team: German\n"
+"Language-Team: Deutsch\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
@@ -48,10 +48,6 @@ msgstr "Konzertfotos"
 msgid "No Events found"
 msgstr "Keine Events gefunden"
 
-#. Name of the template
-msgid "No-Styles"
-msgstr "Ohne Style"
-
 #: search.php:51
 msgid "Photos"
 msgstr "Fotos"
@@ -76,7 +72,7 @@ msgstr "Review"
 msgid "Search for: Rick Astley"
 msgstr "Suche nach: Rick Astley"
 
-#: functions.php:39
+#: functions.php:24
 msgid "Search..."
 msgstr "Suche..."
 

@@ -940,7 +940,7 @@ class PlekHandler
         $pn->push_to_role(
             'accredi_manager',
             sprintf(__('%s - accreditation status set to %s', 'plekvetica'), $pe->get_name(), $status),
-            PlekTemplateHandler::load_template_to_var('accreditation-admin-info', 'email/event', $pe, $organizer_id, $status),
+            PlekTemplateHandler::load_template_to_var('accreditation-admin-info', 'email/event', $pe, $organizer_id, $status, $accredi_note),
             get_permalink($event_id)
         );
 

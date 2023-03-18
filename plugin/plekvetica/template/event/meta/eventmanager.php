@@ -91,14 +91,14 @@ $missing_details = $plek_event->get_missing_event_details();
     <?php
     //Review info email Button  
     $sent = get_field('organizer_review_promo_sent', $plek_event->get_ID()); 
-    if (PlekUserHandler::current_user_can_edit($plek_event) and $plek_event->is_review() AND !($sent === '1' OR $sent === true)) : ?>
+    if (current_user_can('plekmanager') and $plek_event->is_review() AND !($sent === '1' OR $sent === true)) : ?>
         <?php
         global $plek_handler;
         $plek_handler->enqueue_toastr();
         $rev = $plek_event->get_event_revisions();
         ?>
         <a id="sendEventReview" name="sendEventReview" class="plek-button full-width blue" data-eventid="<?php echo $event_id; ?>">
-            <?php echo __('Send Review Mail to Organizer', 'plekvetica'); ?>
+            <?php echo __('Send review email to organizer & band', 'plekvetica'); ?>
         </a>
     <?php endif; ?>
 

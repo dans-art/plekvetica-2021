@@ -25,8 +25,8 @@ $save_url = 'https://localhost/plekvetica/wp-content/uploads/2022/Plakat_GNP_OBS
 $watermark = PLEK_PATH . 'images\watermarks\ticketraffle-2-2.png';
 
 $authors_handler = new PlekAuthorHandler;
-$pe -> load_event(66497);
-s($pe);
+$pe -> load_event(85443);
+//s($pe);
 
 	
 if(function_exists('wpfc_exclude_current_page')){
@@ -56,22 +56,5 @@ s($_SERVER['REQUEST_URI']);
 </div>
 <?php 
 
-/*if(!$pf -> create_watermarked_image($orig_photo, $watermark, $save_path)){
-	s($pf->errors->get_error_messages());
-}else{
-
-	echo '<img src="'.$save_url.'"/>';
-}*/
-//PlekTemplateHandler::load_template('email-header', 'email');
-
-$pm = new PlekNewsletter;
-
-//$user = new TNP_User;
-//s($user);
-
-
-//echo $pm -> get_newsletter_preview(11);
-
-//s($pm -> update_organizer());
-
-echo PlekTemplateHandler::load_template_to_var('ticket-raffle', 'socialmedia/facebook', $pe);
+//s(PlekNotificationHandler::send_review_to_bands(85443));
+echo  PlekTemplateHandler::load_template_to_var('band-new-review-info', 'email/band', $pe);

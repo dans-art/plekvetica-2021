@@ -3247,6 +3247,13 @@ input[type=checkbox] {
       display: none; }
     .plek-post-type-team-calendar .event_poster {
       max-width: unset; }
+    .plek-post-type-team-calendar .accredi_status {
+      flex-basis: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column; }
+      .plek-post-type-team-calendar .accredi_status * {
+        width: 100%; }
 
   /* Review Image uploader */
   #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete {

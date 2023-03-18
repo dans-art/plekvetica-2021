@@ -1091,4 +1091,15 @@ class PlekUserHandler
         $defaults['headers'] = "Content-Type: text/html; charset=UTF-8";
         return $defaults;
     }
+
+    /**
+     * Gets the user that manages a band by ID
+     *
+     * @param int $band_id
+     * @return int False if band is not managed, otherwise an array with the user_ids
+     */
+    public static function get_user_by_band_id($band_id){
+        $plek_band = new PlekBandHandler;
+        return $plek_band -> band_is_managed($band_id);
+    }
 }
