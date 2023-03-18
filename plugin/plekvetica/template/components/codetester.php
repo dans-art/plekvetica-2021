@@ -57,13 +57,13 @@ s($_SERVER['REQUEST_URI']);
 <?php 
 
 //s($pn->push_notification([1008], 'band_info', "Band Info", "this is a message", get_permalink()));
-s($pn->push_to_band_follower(87627));
+//s($pn->push_to_band_follower(87627));
 
 
 //s(PlekNotificationHandler::send_review_to_bands(85443));
 
 //Fetches the lates notifications
-global $wpdb;
+/*global $wpdb;
 $query = "SELECT *
 	FROM `{$wpdb->prefix}plek_notifications` as notify
 	LEFT JOIN `{$wpdb->prefix}plek_notifications_msg` as msg
@@ -115,6 +115,6 @@ foreach ($notifications as $notify) {
 	$counter++;
 }
 return ($counter === 0) ? false : $counter;
-			
+*/			
 
 //echo  PlekTemplateHandler::load_template_to_var('band-new-review-info', 'email/band', $pe);

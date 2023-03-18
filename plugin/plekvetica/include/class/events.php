@@ -931,11 +931,11 @@ class PlekEvents extends PlekEventHandler
         AND status.meta_value = 'ab'
         AND canceled.meta_value NOT LIKE '1'
 
-        AND review.meta_value NOT LIKE '1'
+        AND (review.meta_value != '1' OR review.meta_value IS NULL)
         AND enddate.meta_value < '%s'
         GROUP BY posts.ID
         ORDER BY startdate.meta_value DESC", $today);
-        
+
         $posts = $wpdb->get_results($query);
 
         if (empty($posts)) {
