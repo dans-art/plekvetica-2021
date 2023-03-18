@@ -696,7 +696,7 @@ class PlekEvents extends PlekEventHandler
 
         AND (POSITION(postponed.post_id IN postponed.meta_value) > 30 OR postponed.meta_value = '' OR postponed.meta_value IS NULL)
 
-        AND review.meta_value NOT LIKE '1'
+        AND (review.meta_value != '1' OR review.meta_value IS NULL)
         AND enddate.meta_value < '%s'
         GROUP BY posts.ID
         ORDER BY startdate.meta_value DESC", $like, $today);
@@ -980,7 +980,7 @@ class PlekEvents extends PlekEventHandler
      * Gets all the Events without confirmed accreditation status (ab)
      * @todo: Sort by organizer ID...? Group by ID
      *
-     * @return string The HTML code returend by the event-team-calendar-accredi template
+     * @return string The HTML code returned by the event-team-calendar-accredi template
      */
     public function plek_event_team_accredi_shortcode()
     {
@@ -1108,13 +1108,13 @@ class PlekEvents extends PlekEventHandler
     }
 
     /**
-     * Gets the formated pages and post count.
+     * Gets the formatted pages and post count.
      * Like: Show Events 1 to 10 from 200
      * @todo: add this to the template files. Add the to_posts to the pages_obj
      *
      * @param integer $total_posts - Number of total posts.
      * @param integer/null $number_of_posts - Number of posts.
-     * @return string - Formated string
+     * @return string - Formatted string
      */
     public function get_pages_count_formated(int $total_posts, $number_of_posts = null)
     {
@@ -1127,7 +1127,7 @@ class PlekEvents extends PlekEventHandler
      * Shortcode Function
      * Gets the all the Events with a raffle and which are in the future.
      *
-     * @return string Formated HTML
+     * @return string Formatted HTML
      */
     public function plek_get_all_raffle_shortcode($atts)
     {
@@ -1234,7 +1234,7 @@ class PlekEvents extends PlekEventHandler
      * Shortcode Function
      * Gets the newest four videos.
      *
-     * @return string Formated HTML
+     * @return string Formatted HTML
      */
     public function plek_get_videos_shortcode()
     {
@@ -1316,7 +1316,7 @@ class PlekEvents extends PlekEventHandler
     /**
      * Loads the latest added Events
      *
-     * @return string The formated Events
+     * @return string The formatted Events
      */
     public function plek_event_recently_added_shortcode($atts = [])
     {
@@ -1355,7 +1355,7 @@ class PlekEvents extends PlekEventHandler
     }
 
     /**
-     * Displays all the events with no confirmed or declined akkreditation status.
+     * Displays all the events with no confirmed or declined accreditation status.
      *
      * @param array $atts
      * @return void
