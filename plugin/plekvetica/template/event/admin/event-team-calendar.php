@@ -46,12 +46,12 @@ $total_events = count($events);
                 $organizer = $list_event->get_organizers('<br/>');
                 $location = tribe_get_venue($list_event->get_ID());
 
-                $acc_crew = ($list_event->get_event_akkredi_crew()) ? $list_event->get_event_akkredi_crew_formated('<br/>') : __('Nobody', 'plekvetica');
+                $acc_crew = ($list_event->get_event_akkredi_crew()) ? $list_event->get_event_akkredi_crew_formatted('<br/>') : __('Nobody', 'plekvetica');
                 $acc_status = (current_user_can('plekmanager') or current_user_can('administrator')) ? PlekTemplateHandler::load_template_to_var('acc-status-dropdown', 'event/admin/components', $list_event) : $list_event->get_event_status_text();
                 $canceled = ($list_event->is_canceled()) ? '<i title = "' . __('Event has ben canceled', 'plekvetica') . '" class="fas fa-calendar-times"></i>' : false;
                 $featured = ($list_event->is_featured()) ? '<i  title = "' . __('Event is featured event', 'plekvetica') . '" class="fas fa-star"></i>' : false;
                 $featured_missing = (!$list_event->is_featured() and $list_event->get_field_value('akk_status') === 'ab') ? '<i  title = "' . __('Event should be featured event, but isn\'t!', 'plekvetica') . '" class="fas fa-star-half"></i>' : false;
-                $missing_details = ($list_event->get_missing_event_details()) ? __('Missing:', 'plekvetica') . '<br/>' . $list_event->get_missing_event_details_formated(true, 'br', '<i class="far fa-times-circle"></i>') : false;
+                $missing_details = ($list_event->get_missing_event_details()) ? __('Missing:', 'plekvetica') . '<br/>' . $list_event->get_missing_event_details_formatted(true, 'br', '<i class="far fa-times-circle"></i>') : false;
             ?>
                 <tr class='event-list-item <?php echo ($list_event->is_canceled()) ? 'event-canceled' : ''; ?> <?php echo ($featured_missing) ? 'event-missing-featured' : ''; ?> <?php echo ($missing_details) ? 'event-missing-details' : ''; ?>'>
                     <td class="event_poster"><?php echo $poster; ?></td>
@@ -69,11 +69,10 @@ $total_events = count($events);
                             </div>
                         <?php endif; ?>
                     </td>
-                    <td>
+                    <td class="accredi_status">
                         <?php
-                        echo $acc_status;
-                        echo '<br/>';
-                        echo $list_event->get_accreditation_note(false, true);
+                        echo "<div>$acc_status</div>";
+                        echo "<div>".$list_event->get_accreditation_note(false, true)."</div>"; 
                         ?>
                     </td>
                     <td><?php echo $acc_crew; ?></td>

@@ -58,7 +58,7 @@ $current_accreditation_status = $pe->get_field_value('akk_status');
             <div class="crew-actions">
                 <div class="crew">
                     <?php
-                    $crew = $pe->get_event_akkredi_crew_formated();
+                    $crew = $pe->get_event_akkredi_crew_formatted();
                     ?>
                     <?php if (is_array($crew)) : ?>
                         <div class="bold">

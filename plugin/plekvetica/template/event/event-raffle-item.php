@@ -8,6 +8,7 @@ if (!$event) {
 $startDatetime = $event->get_field_value('_EventStartDate');
 $stime = strtotime($startDatetime);
 $poster = $event->get_poster();
+$win_conditions = $event->get_field_value('win_conditions');
 ?>
 <article class="tribe-events-calendar-list__event <?php echo $event->get_event_classes(); ?>">
 
@@ -40,8 +41,8 @@ $poster = $event->get_poster();
                 <div class="plek-message"><?php echo __('Unpublished Event', 'plekvetica'); ?></div>
             <?php endif; ?>
             <div class="win-conditions">
-                <?php if ($event->get_field_value('win_conditions') !== null) : ?>
-                    <?php echo sprintf(__('Win %s Tickets for','plekvetica'), $event->get_field('win_conditions')); ?>
+                <?php if ($win_conditions !== null) : ?>
+                    <?php echo ($win_conditions === 'None') ? __('Win Tickets for', 'plekvetica') : sprintf(__('Win %s Tickets for', 'plekvetica'), $win_conditions); ?>
                 <?php endif; ?>
             </div>
             <h3 class="tribe-events-calendar-list__event-title tribe-common-h6 tribe-common-h4--min-medium">

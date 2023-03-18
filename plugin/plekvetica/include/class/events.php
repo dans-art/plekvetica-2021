@@ -851,7 +851,7 @@ class PlekEvents extends PlekEventHandler
      * Shortcode Function
      * Gets the latest four review events. For the start page
      *
-     * @return string Formated HTML
+     * @return string Formatted HTML
      */
     public function plek_get_reviews_shortcode()
     {
@@ -875,7 +875,7 @@ class PlekEvents extends PlekEventHandler
      * Shortcode Function
      * Gets the latest review events.
      *
-     * @return string Formated HTML
+     * @return string Formatted HTML
      */
     public function plek_get_all_reviews_shortcode()
     {
@@ -892,6 +892,56 @@ class PlekEvents extends PlekEventHandler
         } else {
             return $events;
         }
+    }
+
+    /**
+     * Returns all the events with a missing review
+     *
+     * @return string The formatted events
+     */
+    public function plek_get_all_missing_reviews_shortcode(){
+        global $wpdb;
+        $today = date('Y-m-d H:i:s');
+        $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , 
+        status.meta_value as akk_status, startdate.meta_value as startdate, enddate.meta_value as enddate, review.meta_value as review
+        FROM `{$wpdb->prefix}posts` as posts
+        
+        LEFT JOIN {$wpdb->prefix}postmeta as status
+        ON posts.ID = status.post_id
+        AND status.meta_key = 'akk_status'
+
+        LEFT JOIN {$wpdb->prefix}postmeta as startdate
+        ON posts.ID = startdate.post_id
+        AND startdate.meta_key = '_EventStartDate'
+        
+        LEFT JOIN {$wpdb->prefix}postmeta as enddate
+        ON posts.ID = enddate.post_id
+        AND enddate.meta_key = '_EventEndDate'
+        
+        LEFT JOIN {$wpdb->prefix}postmeta as review
+        ON posts.ID = review.post_id
+        AND review.meta_key = 'is_review'
+        
+        LEFT JOIN {$wpdb->prefix}postmeta as canceled
+        ON posts.ID = canceled.post_id
+        AND canceled.meta_key = 'cancel_event'
+        
+        WHERE posts.post_type = 'tribe_events'
+        AND posts.ID IS NOT NULL
+        AND status.meta_value = 'ab'
+        AND canceled.meta_value NOT LIKE '1'
+
+        AND review.meta_value NOT LIKE '1'
+        AND enddate.meta_value < '%s'
+        GROUP BY posts.ID
+        ORDER BY startdate.meta_value DESC", $today);
+        
+        $posts = $wpdb->get_results($query);
+
+        if (empty($posts)) {
+            return __('No reviews found', 'plekvetica');
+        }
+        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $posts, 'reviews');
     }
 
     /**

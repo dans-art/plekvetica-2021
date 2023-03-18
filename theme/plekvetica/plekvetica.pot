@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plekvetica\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-24 14:49+0000\n"
+"POT-Creation-Date: 2023-03-18 10:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -49,6 +49,10 @@ msgstr ""
 msgid "No Events found"
 msgstr ""
 
+#. Name of the template
+msgid "No-Styles"
+msgstr ""
+
 #: search.php:51
 msgid "Photos"
 msgstr ""
@@ -73,7 +77,7 @@ msgstr ""
 msgid "Search for: Rick Astley"
 msgstr ""
 
-#: functions.php:24
+#: functions.php:39
 msgid "Search..."
 msgstr ""
 

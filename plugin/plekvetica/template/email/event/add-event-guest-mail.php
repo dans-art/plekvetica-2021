@@ -8,7 +8,7 @@ $event = (isset($template_args[0])) ? $template_args[0] : new PlekEvents; //The 
 $user_name = (isset($template_args[1])) ? $template_args[1] : 'Unbekannt'; // The email attributes as an array
 $user_email = (isset($template_args[2])) ? $template_args[2] : 'unbekannt@plekvetica.ch'; // The email attributes as an array
 
-$missing_details = $event->get_missing_event_details_formated(true, 'list');
+$missing_details = $event->get_missing_event_details_formatted(true, 'list');
 
 $subject = __('Thanks for your contribution', 'plekvetica');
 $edit_link = $event->get_edit_event_link($event->get_ID()) . '&guest_edit=' . md5($user_name . $user_email);

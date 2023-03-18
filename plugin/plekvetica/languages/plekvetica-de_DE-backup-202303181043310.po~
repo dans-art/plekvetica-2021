@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2023-03-18 10:43+0000\n"
+"PO-Revision-Date: 2023-03-18 10:33+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -2245,9 +2245,8 @@ msgid "Select Organizer"
 msgstr "Wähle Veranstalter"
 
 #: template/event/meta/eventmanager.php:101
-#| msgid "Send Review Mail to Organizer"
-msgid "Send review email to organizer & band"
-msgstr "Sende Email an den Veranstalter & Bands"
+msgid "Send Review Mail to Organizer"
+msgstr "Sende Email an den Veranstalter"
 
 #: js/main-event-single.js:139
 msgid "Sending email..."
