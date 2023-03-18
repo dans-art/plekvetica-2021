@@ -1,4 +1,8 @@
 <?php
+/**
+ * Default email template for the organizer
+ * 
+ */
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
@@ -31,6 +35,6 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
 </table><!-- Content Table End-->
 <?php
 
-PlekTemplateHandler::load_template('email-footer', 'email');
+PlekTemplateHandler::load_template('organizer/email-footer-organizer', 'email');
 
 ?>

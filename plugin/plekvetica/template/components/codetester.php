@@ -56,5 +56,65 @@ s($_SERVER['REQUEST_URI']);
 </div>
 <?php 
 
+//s($pn->push_notification([1008], 'band_info', "Band Info", "this is a message", get_permalink()));
+s($pn->push_to_band_follower(87627));
+
+
 //s(PlekNotificationHandler::send_review_to_bands(85443));
-echo  PlekTemplateHandler::load_template_to_var('band-new-review-info', 'email/band', $pe);
+
+//Fetches the lates notifications
+global $wpdb;
+$query = "SELECT *
+	FROM `{$wpdb->prefix}plek_notifications` as notify
+	LEFT JOIN `{$wpdb->prefix}plek_notifications_msg` as msg
+	ON notify.message_id = msg.msg_id
+	WHERE notify.`email_send` = 0
+	AND notify.`dismissed` = 0
+	ORDER BY notify.`id` ASC
+	LIMIT 5";
+$notifications = $wpdb->get_results($query);
+if (empty($notifications)) {
+	return false;
+}
+$counter = 0;
+foreach ($notifications as $notify) {
+	$user = get_user_by('ID', $notify->user_id);
+	if (!isset($user->user_email)) {
+		continue;
+	}
+	if ($notify->notify_type === 'added_event_guest_info') {
+		if ($this->maybe_send_add_event_guest_info($notify->subject, $notify->message)) {
+			$this->notification_email_sent($notify->id);
+		}
+		continue;
+	}
+	$role = PlekUserHandler::get_user_primary_role($user->user_login);
+	//Set the template by notification_type
+	switch ($role) {
+		case 'plek-band':
+			$template = "band/band-email";
+			break;
+		case 'plek-organi':
+			$template = "organizer/organizer-email";
+			break;
+			default:
+			$template = "default-email";
+			break;
+	}
+	$emailer = new PlekEmailSender;
+	$emailer->set_default();
+	$subject = (isset($notify->subject)) ? $notify->subject : __('News from Plekvetica', 'plekvetica');
+	$message = (isset($notify->message)) ? $notify->message : '';
+	$action = (isset($notify->action_link)) ? $notify->action_link : '';
+	$emailer->set_to($user->user_email);
+	$emailer->set_subject($subject);
+	
+	print($emailer->set_message_from_template($template, $subject, $message, $action));
+	//$emailer->send_mail();
+	$pn->notification_email_sent($notify->id);
+	$counter++;
+}
+return ($counter === 0) ? false : $counter;
+			
+
+//echo  PlekTemplateHandler::load_template_to_var('band-new-review-info', 'email/band', $pe);

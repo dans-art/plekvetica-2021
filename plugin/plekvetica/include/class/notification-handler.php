@@ -21,12 +21,12 @@ class PlekNotificationHandler extends WP_List_Table
      * @todo: Push notification to Mobile App
      *
      * @param array $user_ids
+     * @param string $type - The type of the notification
      * @param string $subject - Subject of the message / Title
      * @param string $message - THe Message to show
      * @param string $action - The link to click. Should be a valid html link
-     * @param string $type - The type of the notification
      * @return int|false Id of the inserted row or false on error.
-     * @todo: Make proper error handling, support HTML formated text
+     * @todo: Make proper error handling, support HTML formatted text
      */
     public function push_notification($user_ids = array(), $type = '', $subject = '', $message = '', $action = '')
     {
@@ -206,9 +206,8 @@ class PlekNotificationHandler extends WP_List_Table
         if (!empty($follower) and is_array($follower)) {
             foreach ($follower as $user_id => $bands) {
                 $message = PlekTemplateHandler::load_template_to_var('new_event_band_info', 'email/event', $event_id, $user_id, $bands);
-                $link = get_permalink($event_id);
-                echo $message;
-                $this->push_notification($user_id, 'event_band_info', __('This Event may interest you', 'plekvetica'), $message, $link);
+                $link = "";
+                $this->push_notification($user_id, 'event_band_follower_info', __('This Event may interest you', 'plekvetica'), $message, $link);
             }
             $nr_info_user = count($follower);
             apply_filters(
@@ -229,28 +228,14 @@ class PlekNotificationHandler extends WP_List_Table
      * @param int $band_id
      * @param string $subject
      * @param string $message
-     * @return bool True on success, error message on failure
+     * @return int|bool False on error, number of messages sent on success
      */
     public static function push_to_band_user($band_id, $subject, $message, $link)
     {
-        $sent = 0;
         $users = PlekUserHandler::get_user_by_band_id($band_id);
         if (is_array($users) and !empty($users)) {
-            foreach ($users as $user_id) {
-                $user = get_user_by('ID', $user_id);
-                s($user);
-                $message = PlekTemplateHandler::load_template_to_var('default-email', 'email', $subject, [$message, $link]);
-
-                //Send the mail
-                $emailer = new PlekEmailSender;
-                if($emailer->send_mail($user->user_email, $subject, $message)){
-                    $sent++;
-                }
-            }
-            if($sent !== count($users)){
-                return false;
-            }
-            return true;
+            $pn = new self;
+            return $pn->push_notification($users, 'band_user_info', $subject, $message, $link);
         }
     }
 
@@ -782,7 +767,7 @@ class PlekNotificationHandler extends WP_List_Table
      *
      * @return int|false Number of send emails or false on error
      */
-    public function send_unsend_email_notifications()
+    public function send_unsent_email_notifications()
     {
         global $wpdb;
         $query = "SELECT *
@@ -809,6 +794,19 @@ class PlekNotificationHandler extends WP_List_Table
                 }
                 continue;
             }
+            $role = PlekUserHandler::get_user_primary_role($user->user_login);
+            //Set the template by notification_type
+            switch ($role) {
+                case 'plek-band':
+                    $template = "band/band-email";
+                    break;
+                case 'plek-organi':
+                    $template = "organizer/organizer-email";
+                    break;
+                    default:
+                    $template = "default-email";
+                    break;
+            }
             $emailer = new PlekEmailSender;
             $emailer->set_default();
             $subject = (isset($notify->subject)) ? $notify->subject : __('News from Plekvetica', 'plekvetica');
@@ -816,7 +814,7 @@ class PlekNotificationHandler extends WP_List_Table
             $action = (isset($notify->action_link)) ? $notify->action_link : '';
             $emailer->set_to($user->user_email);
             $emailer->set_subject($subject);
-            $emailer->set_message_from_template('', $subject, $message, $action);
+            $emailer->set_message_from_template($template, $subject, $message, $action);
             $emailer->send_mail();
             $this->notification_email_sent($notify->id);
             $counter++;
@@ -1186,7 +1184,7 @@ class PlekNotificationHandler extends WP_List_Table
         }
         return true;
     }
-    
+
     /**
      * Sends a email to all the bands users of an event
      *
@@ -1222,7 +1220,7 @@ class PlekNotificationHandler extends WP_List_Table
             foreach ($bands as $band_id) {
                 $email_subject = __('A new review has ben published at Plekvetica', 'plekvetica');
                 $email_message = PlekTemplateHandler::load_template_to_var('band-new-review-info', 'email/band', $pe);
-                if(self::push_to_band_user($band_id, $email_subject, $email_message, get_permalink($pe->get_ID())) === true){
+                if (self::push_to_band_user($band_id, $email_subject, $email_message, null) === true) {
                     $sent++;
                 }
             }

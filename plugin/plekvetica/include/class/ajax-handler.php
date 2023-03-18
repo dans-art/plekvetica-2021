@@ -218,10 +218,12 @@ class PlekAjaxHandler
                 $event_id = $this->get_ajax_data('id');
                 $plek_event->load_event($event_id);
                 $send = PlekNotificationHandler::send_review_to_promoter($event_id);
-                if ($send === true) {
+                $send_band = PlekNotificationHandler::send_review_to_bands($event_id);
+                if ($send === true AND is_int($send_band)) {
                     $this->set_success(__('Email sent!', 'plekvetica'));
                 } else {
                     $this->set_error($send); //Error Message from function
+                    $this->set_error($send_band); //Error Message from function
                 }
                 break;
             case 'remove_akkredi_member':

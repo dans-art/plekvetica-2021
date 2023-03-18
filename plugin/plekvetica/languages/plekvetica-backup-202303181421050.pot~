@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plekvetica - 2021\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-18 14:21+0000\n"
+"POT-Creation-Date: 2023-03-18 13:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -63,14 +63,17 @@ msgstr ""
 msgid "A new Band \"%s\" has been added."
 msgstr ""
 
+#: template/email/event/new_event_band_info.php:22
+msgid "A new Event with your favorite Band got added to Plekvetica!"
+msgstr ""
+
 #: include/class/organizer-handler.php:171
-#: template/components/codetester.php:61
 #, php-format
 msgid "A new Organizer \"%s\" has been added."
 msgstr ""
 
-#: include/class/notification-handler.php:1147
-#: include/class/notification-handler.php:1221
+#: include/class/notification-handler.php:1148
+#: include/class/notification-handler.php:1222
 #: template/email/band/band-new-review-info.php:12
 #: template/email/organizer/organizer-new-review-info.php:12
 msgid "A new review has ben published at Plekvetica"
@@ -155,7 +158,7 @@ msgstr ""
 msgid "Accreditation request added"
 msgstr ""
 
-#: include/class/notification-handler.php:270
+#: include/class/notification-handler.php:271
 #: template/email/organizer/organizer-accreditation-request.php:14
 msgid "Accreditation request from Plekvetica"
 msgstr ""
@@ -253,7 +256,7 @@ msgid "Add Venue"
 msgstr ""
 
 #: include/class/band-handler.php:931 include/class/organizer-handler.php:172
-#: include/class/venue-handler.php:155 template/components/codetester.php:62
+#: include/class/venue-handler.php:155
 msgid "Added by"
 msgstr ""
 
@@ -495,7 +498,7 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: include/class/notification-handler.php:531
+#: include/class/notification-handler.php:532
 msgid "Created"
 msgstr ""
 
@@ -558,7 +561,7 @@ msgid ""
 "office, rejected because of..., etc."
 msgstr ""
 
-#: include/class/notification-handler.php:569
+#: include/class/notification-handler.php:570
 msgid "Delete"
 msgstr ""
 
@@ -575,7 +578,7 @@ msgstr ""
 msgid "Details"
 msgstr ""
 
-#: include/class/notification-handler.php:536
+#: include/class/notification-handler.php:537
 msgid "Dismissed"
 msgstr ""
 
@@ -624,7 +627,7 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: include/class/notification-handler.php:1136
+#: include/class/notification-handler.php:1137
 msgid "Email already sent!"
 msgstr ""
 
@@ -632,7 +635,7 @@ msgstr ""
 msgid "eMail not configured"
 msgstr ""
 
-#: include/class/notification-handler.php:537
+#: include/class/notification-handler.php:538
 msgid "Email send"
 msgstr ""
 
@@ -759,7 +762,7 @@ msgstr ""
 msgid "Error, no Events found"
 msgstr ""
 
-#: include/class/notification-handler.php:589
+#: include/class/notification-handler.php:590
 #, php-format
 msgid "Error: %s "
 msgstr ""
@@ -1093,7 +1096,7 @@ msgstr ""
 msgid "Filetype not supported"
 msgstr ""
 
-#: include/class/notification-handler.php:434
+#: include/class/notification-handler.php:435
 #: template/components/review-search-bar.php:16
 msgid "Find"
 msgstr ""
@@ -1184,9 +1187,9 @@ msgstr ""
 msgid "Hello, %s"
 msgstr ""
 
-#: template/email/event/new_event_band_info.php:22
+#: template/email/event/new_event_band_info.php:25
 #, php-format
-msgid "Hey %s, a new Event got added with your favorite band"
+msgid "Hey %s, Some of your followed Bands are playing at %s"
 msgstr ""
 
 #: include/class/user-handler.php:1077
@@ -1320,7 +1323,7 @@ msgstr ""
 msgid "Let us know by writing to %s"
 msgstr ""
 
-#: include/class/notification-handler.php:535
+#: include/class/notification-handler.php:536
 msgid "Link"
 msgstr ""
 
@@ -1428,7 +1431,7 @@ msgstr ""
 msgid "Member is already set"
 msgstr ""
 
-#: include/class/notification-handler.php:867
+#: include/class/notification-handler.php:868
 msgid "Missing accreditation requests"
 msgstr ""
 
@@ -1456,8 +1459,8 @@ msgstr ""
 msgid "Modifikationen und spezielle Funktionen für die Plekvetica Seite."
 msgstr ""
 
-#: include/class/notification-handler.php:1130
-#: include/class/notification-handler.php:1210
+#: include/class/notification-handler.php:1131
+#: include/class/notification-handler.php:1211
 msgid "More than one Event found. This should not happen!"
 msgstr ""
 
@@ -1525,7 +1528,6 @@ msgid "New Event added, please publish"
 msgstr ""
 
 #: include/class/organizer-handler.php:174
-#: template/components/codetester.php:64
 msgid "New Organizer added"
 msgstr ""
 
@@ -1565,8 +1567,7 @@ msgstr ""
 msgid "New Venue added"
 msgstr ""
 
-#: include/class/notification-handler.php:812
-#: template/components/codetester.php:109
+#: include/class/notification-handler.php:813
 msgid "News from Plekvetica"
 msgstr ""
 
@@ -1579,7 +1580,7 @@ msgstr ""
 msgid "Nice try! No Robots allowed here!"
 msgstr ""
 
-#: include/class/notification-handler.php:466
+#: include/class/notification-handler.php:467
 msgid "No"
 msgstr ""
 
@@ -1622,8 +1623,8 @@ msgstr ""
 msgid "No data received"
 msgstr ""
 
-#: include/class/notification-handler.php:1127
-#: include/class/notification-handler.php:1207
+#: include/class/notification-handler.php:1128
+#: include/class/notification-handler.php:1208
 msgid "No Event found, or Event is not a Review"
 msgstr ""
 
@@ -1636,7 +1637,7 @@ msgstr ""
 msgid "No Event ID found."
 msgstr ""
 
-#: include/class/notification-handler.php:268
+#: include/class/notification-handler.php:269
 msgid "No Event ID given. Expects an Array with the Event IDs"
 msgstr ""
 
@@ -1709,15 +1710,15 @@ msgstr ""
 msgid "No Newsletter found"
 msgstr ""
 
-#: include/class/notification-handler.php:592
+#: include/class/notification-handler.php:593
 msgid "No Notifications to show"
 msgstr ""
 
-#: include/class/notification-handler.php:1160
+#: include/class/notification-handler.php:1161
 msgid "No Organizer email found!"
 msgstr ""
 
-#: include/class/notification-handler.php:1144
+#: include/class/notification-handler.php:1145
 msgid "No Organizer found!"
 msgstr ""
 
@@ -1762,7 +1763,7 @@ msgstr ""
 msgid "No Time defined"
 msgstr ""
 
-#: include/class/notification-handler.php:275
+#: include/class/notification-handler.php:276
 msgid "No type found"
 msgstr ""
 
@@ -1837,7 +1838,7 @@ msgid ""
 "Organizer already set. Please contact the site owner to change the organizer."
 msgstr ""
 
-#: include/class/notification-handler.php:262
+#: include/class/notification-handler.php:263
 msgid "Organizer contact data not found"
 msgstr ""
 
@@ -2052,7 +2053,7 @@ msgstr ""
 msgid "Publish Event"
 msgstr ""
 
-#: include/class/notification-handler.php:570
+#: include/class/notification-handler.php:571
 msgid "Push again"
 msgstr ""
 
@@ -2288,7 +2289,7 @@ msgid ""
 "Band you like to add does not exist."
 msgstr ""
 
-#: include/class/notification-handler.php:868
+#: include/class/notification-handler.php:869
 msgid "Some Events are not requested yet..."
 msgstr ""
 
@@ -2338,7 +2339,7 @@ msgstr ""
 msgid "Street and Number"
 msgstr ""
 
-#: include/class/notification-handler.php:534
+#: include/class/notification-handler.php:535
 msgid "Subject and Message"
 msgstr ""
 
@@ -2417,13 +2418,6 @@ msgstr ""
 #: template/email/event/new_event_band_info.php:41
 #, php-format
 msgid "The Event %s got added to the Plekvetica Eventcalendar."
-msgstr ""
-
-#: template/email/event/new_event_band_info.php:25
-#, php-format
-msgid ""
-"The Event %s got added to the Plekvetica Eventcalendar. Part of the lineup "
-"are bands followed by you:"
 msgstr ""
 
 #: template/email/event/accreditation-confirmed-admin-info.php:30
@@ -2507,7 +2501,7 @@ msgid ""
 "action, please continue with the link below and set a new password."
 msgstr ""
 
-#: include/class/notification-handler.php:1067
+#: include/class/notification-handler.php:1068
 msgid "There was an unfinished event found, please add the event details:"
 msgstr ""
 
@@ -2546,7 +2540,7 @@ msgstr ""
 msgid "This event has been postponed from %s to %s"
 msgstr ""
 
-#: include/class/notification-handler.php:210
+#: include/class/notification-handler.php:211
 msgid "This Event may interest you"
 msgstr ""
 
@@ -2653,7 +2647,7 @@ msgstr ""
 msgid "Twitter"
 msgstr ""
 
-#: include/class/notification-handler.php:533
+#: include/class/notification-handler.php:534
 msgid "Type"
 msgstr ""
 
@@ -2709,7 +2703,7 @@ msgstr ""
 msgid "Use this link to update the Event: "
 msgstr ""
 
-#: include/class/notification-handler.php:532
+#: include/class/notification-handler.php:533
 msgid "User"
 msgstr ""
 
@@ -2834,7 +2828,7 @@ msgstr ""
 msgid "Wrong Format. Notice: %s"
 msgstr ""
 
-#: include/class/notification-handler.php:466
+#: include/class/notification-handler.php:467
 msgid "Yes"
 msgstr ""
 

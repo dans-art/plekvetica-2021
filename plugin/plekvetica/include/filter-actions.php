@@ -60,7 +60,7 @@ add_action('wp_login_failed', [$plek_login_handler, 'wp_login_failed_action']);
 add_action('wp_authenticate', [$plek_login_handler, 'wp_authenticate_action'], 1, 2);
 
 //Cron Jobs
-add_action('plek_cron_send_unsend_email_notifications', [new PlekNotificationHandler, 'send_unsend_email_notifications']);
+add_action('plek_cron_send_unsent_email_notifications', [new PlekNotificationHandler, 'send_unsent_email_notifications']);
 add_action('plek_cron_send_accredi_reminder', [new PlekNotificationHandler, 'send_accredi_reminder']);
 add_action('plek_cron_update_all_band_scores', [new PlekBandHandler, 'update_all_band_scores']);
 add_action('plek_cron_weekly_cron', [new PlekNotificationHandler, 'weekly_cron_job']);
