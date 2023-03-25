@@ -63,7 +63,7 @@ class PlekCacheHandler
             return sprintf(__('Failed to get cached data: %s', 'plekvetica'), $last_error);
         }
         if (isset($content->content)) {
-            if($plek_handler -> is_dev_server()){
+            if($plek_handler -> is_dev_server() AND !wp_doing_ajax()){
                     echo sprintf("<script type='text/javascript'>console.log('Loaded content from cache: %s')</script>", $key. ' :: '.$context);
             }
             return $content->content;

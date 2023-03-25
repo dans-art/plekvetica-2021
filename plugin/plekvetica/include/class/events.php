@@ -16,7 +16,7 @@ class PlekEvents extends PlekEventHandler
     public string $poster_placeholder = '';
     public string $default_event_currency = 'CHF';
     public array $total_posts = array();
-    public int $ticket_raffle_due_time = (60*60*24*10); //Ten days in seconds
+    public int $ticket_raffle_due_time = (60 * 60 * 24 * 10); //Ten days in seconds
 
     protected $errors = array();
 
@@ -899,7 +899,8 @@ class PlekEvents extends PlekEventHandler
      *
      * @return string The formatted events
      */
-    public function plek_get_all_missing_reviews_shortcode(){
+    public function plek_get_all_missing_reviews_shortcode()
+    {
         global $wpdb;
         $today = date('Y-m-d H:i:s');
         $query = $wpdb->prepare("SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , 
@@ -1093,9 +1094,9 @@ class PlekEvents extends PlekEventHandler
         if ($obj->posts_per_page === 0) {
             $obj->posts_per_page = 10; //Should not be 0, otherwise no posts will shown.
         }
-        if(isset($_GET['page'])){
-            $obj -> page = intval($_GET['page']);
-        }else{
+        if (isset($_GET['page'])) {
+            $obj->page = intval($_GET['page']);
+        } else {
             $obj->page = (int) (get_query_var('paged')) ? get_query_var('paged') : 1;
         }
         $obj->offset =  (int) ($obj->page > 1) ? ($obj->page - 1) * $obj->posts_per_page : 0;
@@ -1331,7 +1332,7 @@ class PlekEvents extends PlekEventHandler
         $nr_posts = intval($short_args['nr_posts']);
 
 
-        $query = $wpdb -> prepare("SELECT {$wpdb->prefix}posts.ID
+        $query = $wpdb->prepare("SELECT {$wpdb->prefix}posts.ID
         FROM {$wpdb->prefix}posts
         WHERE 1=1
         AND {$wpdb->prefix}posts.post_type = 'tribe_events'
@@ -1344,7 +1345,7 @@ class PlekEvents extends PlekEventHandler
         if ($cached) {
             return $cached;
         }
-        
+
         $events = $wpdb->get_results($query);
         if (empty($events)) {
             return __('No new Events found', 'plekvetica');
@@ -1474,10 +1475,12 @@ class PlekEvents extends PlekEventHandler
     {
         $social = new plekSocialMedia();
         $message = $this->get_event_promo_text();
-        $path = $this->get_poster_path();
-        $post = $social->post_photo_to_facebook($message, $path);
+        $link = $this->get_permalink();
+        $post = $social->post_link_to_facebook($message, $link);
         if ($post === true) {
             $this->increment_social_media_post_count('facebook', 'promote_event');
+        } else {
+            return strval($post) . ' - ' . $link;
         }
         return $post;
     }
@@ -1506,6 +1509,7 @@ class PlekEvents extends PlekEventHandler
         //Get the poster paths
         $poster = $this->get_poster_path();
         $raffle_poster = $plek_handler->add_to_filename($poster, '_raffle'); //This will override existing posters with the same name.
+        $raffle_poster_url = $pf -> get_url_from_path($raffle_poster);
 
         //Create the new Poster
         $watermark = $pf->get_watermak_file($win_conditions);
@@ -1520,6 +1524,9 @@ class PlekEvents extends PlekEventHandler
         $post = $social->post_photo_to_facebook($message, $raffle_poster);
         if ($post === true) {
             $this->increment_social_media_post_count('facebook', 'ticket_raffle');
+        } else {
+            //Posting failed. Return path of poster with error message
+            return strval($post) . ' - ' . $raffle_poster_url;
         }
 
         //Add the link to the acf for the ticket raffle

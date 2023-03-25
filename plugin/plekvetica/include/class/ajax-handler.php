@@ -745,6 +745,7 @@ class PlekAjaxHandler
                     $return_arr['content'] = "<span class='plek-no-open-reviews'>" . __('Super! No missing Reviews.', 'plekvetica') . "</span>";
                 }
                 $return_arr['count'] = 0;
+                //echo json_encode($return_arr, JSON_UNESCAPED_UNICODE);
                 echo json_encode($return_arr, JSON_UNESCAPED_UNICODE);
                 break;
         }

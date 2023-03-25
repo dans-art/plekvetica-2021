@@ -208,4 +208,18 @@ class PlekFileHandler
         $this->image_options['type'] = $file_type;
         $this->image_options['quality'] = $quality;
     }
+
+
+    /**
+     * Converts a absolute path to a valid url
+     *
+     * @param string $path
+     * @return string the URL
+     */
+    public function get_url_from_path($path){
+        $path = str_replace('\\', '/', $path);
+        $base_path = get_home_path(); 
+        $base_url = get_home_url(). '/';
+        return str_replace($base_path, $base_url, $path );
+    }
 }
