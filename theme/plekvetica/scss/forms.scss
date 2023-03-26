@@ -712,6 +712,10 @@ input[type=checkbox]{
     padding: 0 0.5rem;
   }
 
+  .image_upload_add_btn{
+    display: flex;
+  }
+
   .image_upload_status{
     flex-basis: 2rem;
     text-align: center;
@@ -720,6 +724,7 @@ input[type=checkbox]{
       font-family: "FontAwesome";
       display: block;
       width: 100%;
+      min-width: 2em;
     }
     
     &.status-missing::before{
@@ -738,6 +743,18 @@ input[type=checkbox]{
       background-color: $text-color;
     }
 
+  }
+  .image_edit_images{
+    flex-basis: 2rem;
+    text-align: center;
+
+    &::before{
+      font-family: "FontAwesome";
+      display: block;
+      width: 100%;
+      min-width: 2em;
+      content: "\f044"; // Edit
+    }
   }
   
   span.band_name {

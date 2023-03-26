@@ -26,4 +26,22 @@
         overflow: hidden;
     }
 }
+.gallery-image-container{
+    display: flex;
+    justify-content: flex-start;
+    gap: 1em;
+    flex-wrap: wrap;
 
+    .gallery-image-item{
+        position: relative;
+        flex-basis: 23%;
+    }
+    .gallery-image-item .remove-image{
+        position: absolute;
+        right: 5px;
+        top: 0px;
+        font-size: 2em;
+        color: red;
+        cursor: pointer;
+    }
+}

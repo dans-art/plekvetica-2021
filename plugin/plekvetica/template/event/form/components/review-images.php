@@ -51,6 +51,8 @@ $current_album = $event_object->get_field_value('gallery_id');
 		<?php echo __('Select images', 'plekvetica') ?>
 	</button>
 </div>
+<div id='event-review-images-edit-container' class="plek-event-form-container">
+</div>
 <div id='images-uploaded-container' class="plek-event-form-container">
 
 </div>

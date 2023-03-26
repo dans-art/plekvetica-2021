@@ -113,6 +113,7 @@ global $plek_handler;
 	</script>
 <?php endif; ?>
 
+
 <?php if ($type === 'init_spotify') : ?>
 	<?php
 	global $plek_handler;

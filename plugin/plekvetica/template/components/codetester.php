@@ -36,6 +36,10 @@ if(function_exists('wpfc_exclude_current_page')){
 
 $pb = new PlekEventBlocks();
 
+$pg = new PlekGalleryHandler;
+
+echo $pg -> get_gallery_grid_admin(19);
+
 //s(PlekCacheHandler::set_cache('test_cache_1', 'I\'m cached',[1,2,3], 'test2'));
 //s(PlekCacheHandler::get_cache('test_cache_1', 'test'));
 //s(PlekCacheHandler::flush_cache_by_post_id(1));
@@ -119,10 +123,8 @@ return ($counter === 0) ? false : $counter;
 
 //echo  PlekTemplateHandler::load_template_to_var('band-new-review-info', 'email/band', $pe);
 
-s($psm -> post_photo_to_facebook("test URL", 'https://plekvetica.ch/wp-content/uploads/2023/03/334671868_1263656924220731_7098651684671861621_n-2-216x300.jpg'));
-
 /** Facebook API */
-?>
+/*?>
 <script>
 
   function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
@@ -180,3 +182,4 @@ s($psm -> post_photo_to_facebook("test URL", 'https://plekvetica.ch/wp-content/u
 
 <!-- Load the JS SDK asynchronously -->
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+*/

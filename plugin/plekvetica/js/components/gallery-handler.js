@@ -5,7 +5,7 @@ var plek_gallery_handler = {
 
     nonce: null,
     album_ids: null,
-    max_upload_size : 0,
+    max_upload_size: 0,
 
     construct() {
         this.max_upload_size = 1048576; //1mb in binary
@@ -22,6 +22,18 @@ var plek_gallery_handler = {
 
         jQuery('#review_images').on('change', function (event) {
             plek_gallery_handler.image_upload_form_change_action(this);
+        });
+
+        jQuery(document).on("click", '.gallery-image-item .remove-image', function (e) {
+            const id = jQuery(e.target).parent().data('image_id');
+            plek_gallery_handler.delete_image(id);
+        });
+        jQuery(document).on("click", '.image_edit_images', function (e) {
+            const gallery_id = jQuery(e.target).data('gallery_id');
+            //Hide the upload container
+            jQuery('#event-review-images-upload-container').hide();
+            jQuery('#images-uploaded-container').hide();
+            plek_gallery_handler.get_images_of_gallery(gallery_id);
         });
 
         jQuery(document).ready(() => {
@@ -125,8 +137,11 @@ var plek_gallery_handler = {
         //activate the loader button
         plek_main.activate_button_loader(button);
 
-        if(plek_gallery_handler.lock_add_images_button === true){
-            plekerror.display_error(null, __('Please wait for the album and galleries to be created.','plekvetica'));
+        //Hide the edit Image container
+        jQuery('#event-review-images-edit-container').html("");
+        
+        if (plek_gallery_handler.lock_add_images_button === true) {
+            plekerror.display_error(null, __('Please wait for the album and galleries to be created.', 'plekvetica'));
             return;
         }
         plek_gallery_handler.lock_add_images_button = true;
@@ -149,7 +164,7 @@ var plek_gallery_handler = {
         let album_id = jQuery(button).attr('data-album_id');
 
         //Nothing to create / All created, show upload dialog
-        
+
         let upload_btn = img_con.find('#review_images_upload_btn');
 
         img_con.show();
@@ -157,7 +172,7 @@ var plek_gallery_handler = {
         //Set the gallery name
         let band_name = jQuery(button).parent().find('.band_name').text();
         let band_playtime = jQuery(button).parent().find('.playtime').text();
-        jQuery('#event-review-images-upload-container').find('.gallery_title').text(band_playtime + ' ' +  band_name);
+        jQuery('#event-review-images-upload-container').find('.gallery_title').text(band_playtime + ' ' + band_name);
 
         //Empty all the Images from before
         jQuery('#images-uploaded-container').html('');
@@ -220,17 +235,17 @@ var plek_gallery_handler = {
      * @param {string} status_type Status to set. done, uploading and missing are accepted.
      * @returns 
      */
-    update_gallery_button_status(gallery_id, status_type){
+    update_gallery_button_status(gallery_id, status_type) {
         let css_status = '';
         switch (status_type) {
             case 'done':
                 css_status = 'status-ok';
                 break;
-                case 'uploading':
+            case 'uploading':
                 css_status = 'status-uploading';
                 break;
-                
-                default: //status missing
+
+            default: //status missing
                 css_status = 'status-missing';
                 break;
         }
@@ -255,7 +270,7 @@ var plek_gallery_handler = {
 
         let files = jQuery('#review_images').prop('files');
 
-        if(files.length === 0){
+        if (files.length === 0) {
             plekerror.display_error(null, __('No Images selected!', 'plekvetica'), 'Image upload error');
             return;
         }
@@ -266,9 +281,9 @@ var plek_gallery_handler = {
         //Add the button loader
         plek_main.activate_button_loader('#review_images_upload_btn', __('Uploading images...', 'plekvetica'));
 
-        for(let index = 0; index < files.length; index++){
+        for (let index = 0; index < files.length; index++) {
             let upload = files[index];
-            if(upload.size > plek_gallery_handler.max_upload_size){
+            if (upload.size > plek_gallery_handler.max_upload_size) {
                 //Skip item if filesize to big
                 return;
             }
@@ -346,57 +361,57 @@ Error Handling: You can add error handling to the code to catch any errors that 
 }
      */
 
-/**
- * 
- * Alternative 
- * 
- * 
- * async function uploadImages(files, galleryId, albumId) {
-  if (files.length === 0) {
-    displayError(null, "No Images selected!", "Image upload error");
-    return;
-  }
-
-  updateGalleryButtonStatus(galleryId, "uploading");
-  activateButtonLoader("#review_images_upload_btn", "Uploading images...");
-
-  let promises = [];
-  let container = "#images-uploaded-container";
-  let items = jQuery(container + " .image_to_upload");
-  
-  jQuery(container).attr("data-album_id", albumId);
-  jQuery(container).attr("data-gallery_id", galleryId);
-
-  for (let i = 0; i < files.length && i < 30; i++) {
-    let file = files[i];
-    if (file.size > maxUploadSize) {
-      continue;
+    /**
+     * 
+     * Alternative 
+     * 
+     * 
+     * async function uploadImages(files, galleryId, albumId) {
+      if (files.length === 0) {
+        displayError(null, "No Images selected!", "Image upload error");
+        return;
+      }
+    
+      updateGalleryButtonStatus(galleryId, "uploading");
+      activateButtonLoader("#review_images_upload_btn", "Uploading images...");
+    
+      let promises = [];
+      let container = "#images-uploaded-container";
+      let items = jQuery(container + " .image_to_upload");
+      
+      jQuery(container).attr("data-album_id", albumId);
+      jQuery(container).attr("data-gallery_id", galleryId);
+    
+      for (let i = 0; i < files.length && i < 30; i++) {
+        let file = files[i];
+        if (file.size > maxUploadSize) {
+          continue;
+        }
+    
+        let formData = new FormData();
+        formData.append("file_data", file);
+    
+        jQuery(items[i]).addClass("upload_in_progress");
+        jQuery(items[i]).addClass("current_upload");
+    
+        promises.push(uploadImage(i, formData, galleryId));
+      }
+    
+      await Promise.all(promises);
     }
-
-    let formData = new FormData();
-    formData.append("file_data", file);
-
-    jQuery(items[i]).addClass("upload_in_progress");
-    jQuery(items[i]).addClass("current_upload");
-
-    promises.push(uploadImage(i, formData, galleryId));
-  }
-
-  await Promise.all(promises);
-}
- * 
- */
+     * 
+     */
 
     /**
      * Sets the clicked image as the preview for the gallery
      * @param {object} image The clicked image
      */
-    set_gallery_preview_click_action(image){
+    set_gallery_preview_click_action(image) {
         let gallery_id = jQuery(image).parent().attr('data-gallery_id');
         let image_id = jQuery(image).attr('data-image_id');
         let img_element = jQuery(image).find('img');
         plek_main.activate_loader_style(img_element);
-        
+
         let formdata = new FormData();
         formdata.append('action', 'plek_ajax_gallery_actions');
         formdata.append('do', 'set_preview_image');
@@ -414,9 +429,9 @@ Error Handling: You can add error handling to the code to catch any errors that 
             success: function success(data) {
                 console.log("uploaded");
                 //Check for errors
-                if(plek_main.response_has_errors(data)){
-                    plekerror.display_error('', plek_main.get_first_error_from_ajax_request(data),__('Upload Error','plekvetica'));
-                }else{
+                if (plek_main.response_has_errors(data)) {
+                    plekerror.display_error('', plek_main.get_first_error_from_ajax_request(data), __('Upload Error', 'plekvetica'));
+                } else {
                     plekerror.display_info(__('Gallery preview', 'plekvetica'), plek_main.get_first_success_from_ajax_request(data));
                     //Remove the gallery preview class from all other image containers
                     jQuery('.image_to_upload.upload_complete img').removeClass('gallery-preview');
@@ -451,7 +466,7 @@ Error Handling: You can add error handling to the code to catch any errors that 
         jQuery.each(files, function (index, upload) {
             //Display the preview
             index = existing_count + index;
-            if(upload.size > plek_gallery_handler.max_upload_size){
+            if (upload.size > plek_gallery_handler.max_upload_size) {
                 plekerror.display_error(null, __('Imagesize is to big for: ', 'plekvetica') + upload.name, 'Image upload error');
                 return;
             }
@@ -489,11 +504,11 @@ Error Handling: You can add error handling to the code to catch any errors that 
                 console.log("uploaded");
                 //Check for errors
                 let success = true;
-                if(plek_main.response_has_errors(data)){
+                if (plek_main.response_has_errors(data)) {
                     success = false;
-                    plekerror.display_error('', plek_main.get_first_error_from_ajax_request(data),__('Upload Error','plekvetica'));
+                    plekerror.display_error('', plek_main.get_first_error_from_ajax_request(data), __('Upload Error', 'plekvetica'));
                 }
-                let image_id = (success) ? plek_main.get_first_success_from_ajax_request(data): 0;
+                let image_id = (success) ? plek_main.get_first_success_from_ajax_request(data) : 0;
                 plek_gallery_handler.upload_image_progess_update(index, gallery_id, success, image_id);
                 return true;
             },
@@ -513,7 +528,7 @@ Error Handling: You can add error handling to the code to catch any errors that 
         let container = '#images-uploaded-container';
         let button = jQuery(`.image_upload_add_btn[data-gallery_id='${gallery_id}']`);
         let button_status = jQuery(button).find('.image_upload_status');
-        let item = jQuery(container + ' #image_'+index);
+        let item = jQuery(container + ' #image_' + index);
         let items_total = jQuery(container + ' .image_to_upload').length;
         if (empty(item)) {
             console.log("Preview Image not found!");
@@ -521,14 +536,14 @@ Error Handling: You can add error handling to the code to catch any errors that 
         }
 
         //Indicator for the preview picture
-        if(is_success){
+        if (is_success) {
             jQuery(item).addClass("upload_complete");
             jQuery(item).attr("data-image_id", image_id);
-        }else{
+        } else {
             jQuery(item).addClass("upload_failed");
         }
         jQuery(item).removeClass('upload_in_progress');
-        
+
         let items_done = jQuery(container + ' .image_to_upload.current_upload.upload_complete').length;
         let items_failed = jQuery(container + ' .image_to_upload.current_upload.upload_failed').length;
         let percentage_complete = ((items_done + items_failed) / items_total * 100);
@@ -543,7 +558,7 @@ Error Handling: You can add error handling to the code to catch any errors that 
 
         if (percentage_complete === 100) {
             //All uploaded.            
-            
+
             //Empty the file upload input
             jQuery('#review_images').val('');
 
@@ -554,7 +569,7 @@ Error Handling: You can add error handling to the code to catch any errors that 
             plek_main.deactivate_button_loader('#review_images_upload_btn', __('Upload images', 'plekvetica'));
 
             plekerror.display_info(__('Image upload', 'plekvetica'), __('Images uploaded: ', 'plekvetica') + items_done);
-            
+
         }
         return;
 
@@ -580,6 +595,83 @@ Error Handling: You can add error handling to the code to catch any errors that 
         });
         return gallery_ids;
     },
+
+    /**
+     * Deletes an Image
+     * @param {int} image_id 
+     */
+    delete_image(image_id) {
+        let formdata = new FormData();
+        formdata.append('action', 'plek_ajax_gallery_actions');
+        formdata.append('do', 'remove_image');
+        formdata.append('image_id', image_id);
+
+        return jQuery.ajax({
+            url: ajaxurl,
+            data: formdata,
+            type: 'POST',
+            cache: false,
+            processData: false,
+            contentType: false,
+            async: false,
+            success: function success(data) {
+                console.log(data);
+                //Check for errors
+                let success = true;
+                if (plek_main.response_has_errors(data)) {
+                    success = false;
+                    plekerror.display_error('', plek_main.get_first_error_from_ajax_request(data), __('Error', 'plekvetica'));
+                    return;
+                }
+                //Remove the image from the grid
+                const image_id = plek_main.get_success_item_from_ajax_request(data, 0);
+                const message = plek_main.get_success_item_from_ajax_request(data, 1);
+                jQuery(`.gallery-image-item[data-image_id="${image_id}"]`).remove();
+
+                plekerror.display_info(__('Success', 'plekvetica'), message);
+                return true;
+            },
+            error: function error(data) {
+
+            }
+        });
+    },
+
+    get_images_of_gallery(gallery_id){
+        let formdata = new FormData();
+        formdata.append('action', 'plek_ajax_gallery_actions');
+        formdata.append('do', 'get_images_html');
+        formdata.append('gallery_id', gallery_id);
+
+        return jQuery.ajax({
+            url: ajaxurl,
+            data: formdata,
+            type: 'POST',
+            cache: false,
+            processData: false,
+            contentType: false,
+            async: false,
+            success: function success(data) {
+                console.log(data);
+                //Check for errors
+                let success = true;
+                if (plek_main.response_has_errors(data)) {
+                    success = false;
+                    plekerror.display_error('', plek_main.get_first_error_from_ajax_request(data), __('Error', 'plekvetica'));
+                    return;
+                }
+                //Remove the image from the grid
+                const html_data = plek_main.get_success_item_from_ajax_request(data, 0);
+                jQuery('#event-review-images-edit-container').html(html_data);
+
+                plekerror.display_info(__('Success', 'plekvetica'), message);
+                return true;
+            },
+            error: function error(data) {
+
+            }
+        });
+    }
 
 }
 
