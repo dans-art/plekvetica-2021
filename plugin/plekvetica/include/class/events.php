@@ -1521,12 +1521,12 @@ class PlekEvents extends PlekEventHandler
         }
 
         //Make the post
-        $post = $social->post_photo_to_facebook($message, $raffle_poster);
+        $post = $social->post_photo_to_facebook($message, $raffle_poster_url);
         if ($post === true) {
             $this->increment_social_media_post_count('facebook', 'ticket_raffle');
         } else {
-            //Posting failed. Return path of poster with error message
-            return strval($post) . ' - ' . $raffle_poster_url;
+            //Posting failed. Return url of poster, text to post and error message
+            return strval($post) . ' - ' . $raffle_poster_url . ' - ' . $message;
         }
 
         //Add the link to the acf for the ticket raffle
