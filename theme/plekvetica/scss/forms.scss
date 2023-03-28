@@ -1,39 +1,41 @@
 //Form Styles
 
 //Default Form Styles
-form{
-  .plek-field-error{
+form {
+  .plek-field-error {
     color: $color-red;
     display: block;
   }
 }
 
-div.plek-review-search{
+div.plek-review-search {
   margin-bottom: 1em;
 
-  form{
+  form {
     display: flex;
     flex-direction: row;
     justify-content: stretch;
   }
 
-  form label{
+  form label {
     width: 20%;
   }
-  form label:first-child{
+
+  form label:first-child {
     width: 80%;
   }
+
   form button,
-  form input{
+  form input {
     width: 100%;
   }
 }
 
 .login-form,
-.reset-password{
+.reset-password {
 
-  p{
-    display:flex;
+  p {
+    display: flex;
     justify-content: flex-start;
     flex-direction: column;
   }
@@ -42,39 +44,39 @@ div.plek-review-search{
 /* Add Event */
 
 .plek-event-form-container,
-.submit.plek-button{
+.submit.plek-button {
   margin-left: 20%;
-  }
+}
 
- .plek-event-form-container{
+.plek-event-form-container {
 
   margin-bottom: 2em;
   width: 80%;
   position: relative;
   max-width: 750px;
 
-  .plek-field-error{
+  .plek-field-error {
     padding: 0.5em 0;
   }
- }
+}
 
- .event-default-container{
+.event-default-container {
   display: flex;
   flex-direction: column;
   margin-top: 1em;
 }
 
-.event-price-container{
+.event-price-container {
   justify-content: space-between;
   flex-grow: 1;
 
-  div{
+  div {
     width: 100%;
-  }  
+  }
 }
 
 
-input[type=checkbox]{
+input[type=checkbox] {
   margin: 1rem 0 0 0;
   height: 1.5rem;
   width: 1.5rem;
@@ -83,54 +85,58 @@ input[type=checkbox]{
 
 .event-basic-container {
 
-  .event-name-container{
+  .event-name-container {
     display: flex;
     flex-direction: column;
     margin-bottom: 1em;
   }
 
-  .event-date-container label{
+  .event-date-container label {
     width: 100%;
   }
-  .event-date-picker{
+
+  .event-date-picker {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 
-    .date-input-container{
+    .date-input-container {
       flex-basis: 45%;
 
-      input{
+      input {
         width: 100%;
       }
     }
-    .date-to-seperator{
+
+    .date-to-seperator {
       flex-basis: 10%;
       text-align: center;
       align-self: center;
     }
   }
-  .plek-multi-date{
+
+  .plek-multi-date {
     display: inline;
   }
 
 }
 
-.event-search-bar-container{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: space-between;
+.event-search-bar-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-between;
 
-    input{
-      flex-basis: 100%;
-    }
+  input {
+    flex-basis: 100%;
+  }
 }
 
-.submit.plek-button input{
+.submit.plek-button input {
   width: 100%;
 }
-.plek-search-overlay{
+
+.plek-search-overlay {
   position: absolute;
   background-color: $color-gray-light;
   max-width: 755px;
@@ -140,74 +146,78 @@ input[type=checkbox]{
 }
 
 #event-organizer-proposal,
-.plek-search-overlay{
-  .item{
+.plek-search-overlay {
+  .item {
     padding: 1em;
 
     &:hover,
-    &:focus{
+    &:focus {
       background-color: $color-gray;
       cursor: pointer;
     }
   }
 
-.overlay-header{
+  .overlay-header {
     text-align: center;
   }
-  img{
+
+  img {
     max-height: 1em;
   }
-  .title{
+
+  .title {
     font-size: 1.1em;
     font-weight: bold;
   }
-  .subtitle{
+
+  .subtitle {
     padding-left: 2em;
   }
 
   //Hide items
   .button-container,
-  .remove-item{
+  .remove-item {
     display: none;
   }
 
 }
 
-#event_band_overlay .plek-add-item{
-  .title-container{
+#event_band_overlay .plek-add-item {
+  .title-container {
     display: flex;
     align-content: center;
     align-items: center;
     text-align: left;
   }
-  
-  .title-group{
+
+  .title-group {
     padding-left: 1em;
   }
 
-  .item-title{
+  .item-title {
     font-weight: bold;
   }
-  .subtitle{
+
+  .subtitle {
     padding-left: 0;
   }
 }
 
-#event-band-selection{
+#event-band-selection {
 
   color: black;
 
-  .plek-select-item{
-    padding:0;
+  .plek-select-item {
+    padding: 0;
     background: $text-color;
     margin: 0.2em 0;
   }
 
-  .remove-item:first-child{
+  .remove-item:first-child {
     display: none; //Hide the first item, only used for the organizer and location
   }
 
-  .item-title{
+  .item-title {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -219,18 +229,18 @@ input[type=checkbox]{
     margin: 0.5em;
   }
 
-  .title-container{
+  .title-container {
     display: flex;
     align-items: center;
     padding: 0 0.5em;
 
-    .item-title{
+    .item-title {
       font-weight: bold;
     }
   }
 
   .sort-button,
-  .sort-button i{
+  .sort-button i {
     cursor: n-resize;
   }
 
@@ -248,17 +258,17 @@ input[type=checkbox]{
     word-wrap: normal;
   }
 
-  .band-time{
+  .band-time {
     position: relative;
     display: flex;
     align-items: center;
     padding: 0;
 
-    .time-label{
+    .time-label {
       width: 100%;
     }
 
-    input{
+    input {
       position: absolute;
       left: 0;
       top: 0;
@@ -269,7 +279,7 @@ input[type=checkbox]{
   }
 }
 
-#event-organizer-proposal{
+#event-organizer-proposal {
 
   .event-organizer-proposal-item {
     display: flex;
@@ -277,48 +287,48 @@ input[type=checkbox]{
     align-items: center;
     color: $featured-color;
 
-    .title::before{
+    .title::before {
       font-family: "FontAwesome";
       content: "\f0e8";
       padding-right: 0.5em;
     }
 
-    .subtitle{
+    .subtitle {
       display: none;
     }
   }
 
 }
 
-#event-organizer-selection{
-  .organi-apply-proposal-btn{
+#event-organizer-selection {
+  .organi-apply-proposal-btn {
     display: none;
   }
 }
 
-.overlay_background{
+.overlay_background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height:0;
+  height: 0;
   z-index: 9;
   opacity: 0.3;
   background-color: $color-gray-dark;
 }
 
-.plek-overlay-container{
+.plek-overlay-container {
 
   width: 100%;
   left: 0;
   right: 0;
 
-  .overlay_background{
+  .overlay_background {
     background-color: rgba(24, 2, 2, 0.93);
     z-index: 9999;
   }
 
-  .overlay_content{
+  .overlay_content {
     width: 80%;
     margin: 10%;
     background-color: $color-gray;
@@ -331,34 +341,37 @@ input[type=checkbox]{
 
 }
 
-.item.plek-select-item .title{
+.item.plek-select-item .title {
   display: flex;
-  
-  img{
+
+  img {
     max-height: 1em;
     margin-right: 1em;
   }
-  .remove-item{
+
+  .remove-item {
     margin-right: 1em;
   }
-  i{
+
+  i {
     cursor: pointer;
     font-size: 1.2em;
   }
 }
+
 .item.plek-add-item .subtitle,
-.item.plek-select-item .subtitle{
-  .country{
+.item.plek-select-item .subtitle {
+  .country {
     display: block;
   }
 }
 
 .item.plek-add-item {
-	width: 100%;
-	margin: 0.2em 0;
+  width: 100%;
+  margin: 0.2em 0;
   position: relative;
 
-  &.exact-match-result .title-container::after{
+  &.exact-match-result .title-container::after {
     position: absolute;
     right: 1rem;
     font-family: "Font Awesome 5 Free";
@@ -368,8 +381,8 @@ input[type=checkbox]{
   }
 }
 
-.event-prices-container{
-  input{
+.event-prices-container {
+  input {
     width: 100%;
   }
 }
@@ -379,8 +392,8 @@ input[type=checkbox]{
 /* Add Event Form Login*/
 
 #plek-event-guest-login-form-container {
-	display: flex;
-	justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
   margin: 1em 0;
   gap: 1em;
 
@@ -392,93 +405,95 @@ input[type=checkbox]{
   }
 }
 
-#plek-event-member-login-form-container{
-  .login-submit{
+#plek-event-member-login-form-container {
+  .login-submit {
     display: none;
   }
 }
 
 #plek-event-member-login-form-container,
-#plek-event-guest-login-form-container{
+#plek-event-guest-login-form-container {
   margin: 0px 10%;
 }
 
 #select-login-type {
-	display: flex;
-	gap: 1em;
+  display: flex;
+  gap: 1em;
 }
 
 /* Register User*/
 
-#register-new-user-form .submit.plek-button{
+#register-new-user-form .submit.plek-button {
   width: 100%;
   margin-left: 0;
-  }
+}
 
 /* User Settings form, Band form*/
-.band-edit-container{
+.band-edit-container {
   width: 100%;
 }
 
-.plek-form{
+.plek-form {
   margin-left: 2%;
   width: 96%;
 
-  h2{
+  h2 {
     margin-left: -1em;
     margin-top: 1em;
   }
 
-  .plek-hidden{
+  .plek-hidden {
     display: none;
   }
 
   input:not([type="checkbox"]),
   textarea,
-  select{
+  select {
     width: 100%;
     margin-bottom: 0.5em;
   }
-  label{
+
+  label {
     width: 100%;
     display: block;
     padding-top: 0.5em;
   }
 
-  label.checkbox-label{
+  label.checkbox-label {
     width: auto;
     display: inline;
   }
 
-  button.plek-button{
+  button.plek-button {
     width: 24%;
     white-space: normal;
   }
-  
+
   button.plek-button.selected,
-  a.plek-button.selected{
+  a.plek-button.selected {
     background-color: $color-gray-light;
   }
 
-  
-  button.plek-button.full-width{
+
+  button.plek-button.full-width {
     width: 100%;
   }
 
 
-  #user-settings-submit{
+  #user-settings-submit {
     background-color: $color-red-light;
   }
-  .plek-button-cancel{
+
+  .plek-button-cancel {
     background-color: $color-gray;
     color: $text-color;
 
-    &:hover{
+    &:hover {
       color: $color-red-light-two;
     }
   }
 
-  .buttons{
+  .buttons {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -486,101 +501,112 @@ input[type=checkbox]{
   }
 
   /*Band Form*/
-  #band-basic-infos{
-    img{
+  #band-basic-infos {
+    img {
       max-width: 200px;
     }
   }
-  .band-edit-container{
+
+  .band-edit-container {
     width: 100%;
     flex: 1;
   }
 
-  #band-social-icons{
-    .icons{
+  #band-social-icons {
+    .icons {
       display: flex;
       padding: 0.5em 0;
     }
-    .band-social-icon span{
+
+    .band-social-icon span {
       font-size: 2em;
       padding: 0 0.2em;
-      cursor: url("../plekvetica/assets/metalhand.cur"), pointer; 
+      cursor: url("../plekvetica/assets/metalhand.cur"), pointer;
     }
 
-    .fa-facebook-square{
-      color:#3b5998;
+    .fa-facebook-square {
+      color: #3b5998;
     }
-    .fa-instagram{
-      color:#e95950;
+
+    .fa-instagram {
+      color: #e95950;
     }
-    .fa-youtube-square{
-      color:#bb0000;
+
+    .fa-youtube-square {
+      color: #bb0000;
     }
-    .fa-spotify{
-      color:#00e461;
+
+    .fa-spotify {
+      color: #00e461;
     }
-    .fa-twitter{
-      color:#55acee;
+
+    .fa-twitter {
+      color: #55acee;
     }
   }
 
-  #band-social{
-    .social_media_label{
+  #band-social {
+    .social_media_label {
       display: none;
     }
-    .input-icon{
+
+    .input-icon {
       width: 10%;
       font-size: 2em;
       text-align: left;
       padding-left: 0.2em;
 
-      &::before{
+      &::before {
         position: relative;
         top: 6px;
       }
     }
-    .band-social-input{
+
+    .band-social-input {
       margin-top: 0.2em;
       margin-bottom: 0;
       flex-basis: 90%;
     }
 
-    .input-instructions{
+    .input-instructions {
       padding-left: 10%;
       font-size: 0.8em;
       padding-top: 0.2em;
     }
-    .band-videos-container{
+
+    .band-videos-container {
       margin-top: 0.5em;
     }
-    .item-con{
+
+    .item-con {
       justify-content: space-between;
       flex-wrap: wrap;
 
     }
   }
 
-  #band-videos{
+  #band-videos {
     display: none;
   }
-  #band-social .band-videos-container .input-instructions{
+
+  #band-social .band-videos-container .input-instructions {
     padding-left: 0;
   }
 
-  #add-band-video{
+  #add-band-video {
     width: 35%;
   }
 
-  #band-genre-loader{
+  #band-genre-loader {
     display: flex;
   }
 
-  #plek-memeber-perks{
-    ul{
+  #plek-memeber-perks {
+    ul {
       list-style: '';
     }
 
-    li::before{
+    li::before {
       content: "\f00c";
       font-family: 'FontAwesome';
       padding-right: 1rem;
@@ -590,17 +616,17 @@ input[type=checkbox]{
 }
 
 //File Upload Button
-.plek-image-upload-container{
+.plek-image-upload-container {
   display: flex;
   gap: 1em;
 
-  .upload-button{
+  .upload-button {
     margin-top: 2em;
     position: relative;
     display: flex;
     align-self: center;
 
-    input{
+    input {
       position: absolute;
       top: 0;
       left: 0;
@@ -612,17 +638,17 @@ input[type=checkbox]{
     }
   }
 
-  .plek-button{
+  .plek-button {
     margin-top: -2em !important;
   }
 
-  .upload-image{
+  .upload-image {
     max-width: 200px;
     max-height: 300px;
     overflow: hidden;
   }
 
-  .image_preloaded_id{
+  .image_preloaded_id {
     display: none;
   }
 
@@ -631,115 +657,147 @@ input[type=checkbox]{
 
 //Add/Edit Event form
 
-.plek-form{
-  .wp-editor-container{
+.plek-form {
+  .wp-editor-container {
     border: 0px;
   }
 }
 
-.event-basic-container .event-date-picker .date-input-container{
+.event-basic-container .event-date-picker .date-input-container {
 
   flex-basis: 100%;
 
-  input{
+  input {
     text-align: center;
   }
 }
 
 .event-band-none-checkbox,
-.event-date-multi-check-container{
+.event-date-multi-check-container {
   padding-top: 0.7em;
 }
 
 .item.plek-select-item {
-	padding: 0.7em 0;
+  padding: 0.7em 0;
 }
 
 .event-price-container {
-	display: flex;
-	gap: 1em;
+  display: flex;
+  gap: 1em;
 
-  .price-box{
+  .price-box {
     display: flex;
     flex-wrap: wrap;
 
-    select{
+    select {
       flex-basis: 60%;
       text-align: center;
       flex: 1 0 0;
     }
-    input{
+
+    input {
       flex: 1 0 50%;
     }
 
-    .plek-field-error{
+    .plek-field-error {
       flex-basis: 100%;
     }
   }
 }
 
-.plek-search-overlay{
+.plek-search-overlay {
 
-  button.plek-button{
-      width: 90%;
-      margin-top: 0;
-      margin: 0.3em 5%;
+  button.plek-button {
+    width: 90%;
+    margin-top: 0;
+    margin: 0.3em 5%;
   }
 }
 
 //Review Event form
-#edit_event_review_form{
-  
-  #event-review-images-upload-container{
+#edit_event_review_form {
+
+  #event-review-images-upload-container {
     display: none;
   }
-  
+
   .review_band_images_container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    gap: 1%;
+
+    .plek-button {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
-  
+
   span.image_upload_add_btn.plek-button {
     flex-basis: 2.5rem;
     font-size: 1.5rem;
     padding: 0;
   }
 
-  span.band_origin{
+  span.band_origin {
     flex-basis: 2.5rem;
     padding: 0 0.5rem;
   }
 
-  .image_upload_status{
+  .image_upload_add_btn {
+    display: flex;
+  }
+
+  .image_upload_status {
     flex-basis: 2rem;
     text-align: center;
 
-    &::before{
+    &::before {
       font-family: "FontAwesome";
       display: block;
       width: 100%;
+      min-width: 2em;
+      height: 48px;
+      //display: flex;
+      padding-top: 6px;
     }
-    
-    &.status-missing::before{
+
+    &.status-missing::before {
       content: "\f0fe"; //plus-square
     }
-    
-    &.status-uploading::before{
+
+    &.status-uploading::before {
       content: "\f102"; //Double arrow up
       color: $color-blue;
       background-color: $text-color;
     }
 
-    &.status-ok::before{
+    &.status-ok::before {
       content: "\f00c"; //Check
       color: $color-green;
       background-color: $text-color;
     }
 
   }
-  
+
+  .image_edit_images {
+    flex-basis: 2rem;
+    text-align: center;
+    padding: 5px;
+
+    &::before {
+      font-family: "FontAwesome";
+      display: block;
+      width: 100%;
+      min-width: 2em;
+      content: "\f044"; // Edit
+    }
+  }
+
   span.band_name {
     min-width: 55%;
   }
@@ -750,7 +808,7 @@ input[type=checkbox]{
 
   span.playtime {
     padding: 0 0.5rem;
-}
+  }
 
   div#images-uploaded-container {
     display: flex;
@@ -758,34 +816,35 @@ input[type=checkbox]{
     flex-wrap: wrap;
     position: relative;
 
-    .image_to_upload.upload_complete{
+    .image_to_upload.upload_complete {
       height: 19vw;
       overflow: hidden;
       max-height: 207px;
     }
 
-    .image_to_upload{
+    .image_to_upload {
       flex-basis: 20%;
       max-width: 20%;
       position: relative;
 
-      &::before{
+      &::before {
         font-family: "FontAwesome";
         font-size: 1.5rem;
         position: absolute;
         right: 1rem;
-        text-shadow: 2px 2px 7px black,2px 2px 7px black,2px 2px 7px black,2px 2px 7px black,2px 2px 7px black;
+        text-shadow: 2px 2px 7px black, 2px 2px 7px black, 2px 2px 7px black, 2px 2px 7px black, 2px 2px 7px black;
         font-weight: bold;
       }
-      &.upload_complete::before{
+
+      &.upload_complete::before {
         content: "\f058"; //Checkmark in circle
         color: $color-green;
       }
 
-      &.upload_complete:hover{
+      &.upload_complete:hover {
         cursor: url("../plekvetica/assets/metalhand.cur"), pointer;
 
-        &::after{
+        &::after {
           content: "\f302";
           position: absolute;
           left: 42%;
@@ -796,48 +855,49 @@ input[type=checkbox]{
 
       }
 
-      &.upload_complete img{
+      &.upload_complete img {
         object-fit: cover;
         width: 100%;
         height: 50%;
       }
 
-  
-      &.upload_failed::before{
+
+      &.upload_failed::before {
         content: "\f057"; //X in circle
         color: $color-red;
       }
 
-      .gallery-preview{
+      .gallery-preview {
         border: $color-green 3px solid;
       }
     }
   }
 
-  
+
 }
 
 //Submit button container for edit and review from.
 .submit-event-edit-review-from,
-.submit-event-edit-from{
+.submit-event-edit-from {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
 
-  #back_to_event_btn{
+  #back_to_event_btn {
     background-color: $color-gray;
   }
 
-  div{
+  div {
     flex-basis: 50%;
   }
 
-  .input_loader{
+  .input_loader {
     top: -5px;
   }
 
 }
-#back_to_event_btn{
+
+#back_to_event_btn {
   flex-basis: 50%;
 }
 
@@ -846,7 +906,7 @@ input[type=checkbox]{
 
   position: relative;
 
-  input[type=file]{
+  input[type=file] {
     width: 100%;
     min-height: 3rem;
     position: absolute;
@@ -856,7 +916,7 @@ input[type=checkbox]{
     cursor: pointer;
   }
 
-  .upload-box{
+  .upload-box {
     width: 100%;
     background-color: $text-color;
     color: $color-gray;
@@ -864,12 +924,10 @@ input[type=checkbox]{
     padding: 2rem;
     height: 10rem;
 
-    .icon{
-        font-size: 3rem;
+    .icon {
+      font-size: 3rem;
     }
   }
 
-  
+
 }
-
-

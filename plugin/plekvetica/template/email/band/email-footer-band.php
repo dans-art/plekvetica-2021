@@ -4,8 +4,13 @@ if (!defined('ABSPATH')) {
 }
 
 include(PLEK_PATH . 'template/email/email-styles.php');
-
+global $plek_handler;
+$my_plekvetica_link = '<a href="' . $plek_handler->get_my_plekvetica_link() . '" target="_blank" style="color: '.$link_color.' ;">My Plekvetica</a>';
 ?>
+<div style="background-color:<?php echo $email_bg_dark; ?>; padding: 20px;  margin: 0; font-family: <?php echo $font_family; ?>;">
+    <strong><?php echo __('Are your Events up to date?', 'plekvetica') ?></strong><br/>
+    <?php echo sprintf(__('Review and update them on your %s page', 'plekvetica'), $my_plekvetica_link); ?>
+</div>
 <table id="footer" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo $email_bg_dark; ?>" color="<?php echo $text_color; ?>" style="padding: 30px 0 40px 0;  margin: 0; font-family: <?php echo $font_family; ?>;">
     <tr id="email-menu-social-links" width='100%'>
         <td width="100%" style="text-align: center;">

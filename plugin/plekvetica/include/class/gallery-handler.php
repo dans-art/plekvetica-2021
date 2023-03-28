@@ -4,6 +4,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
+
 class PlekGalleryHandler
 {
 
@@ -238,7 +239,7 @@ class PlekGalleryHandler
         }
         $path = '/wp-content/gallery/' . date('Y') . '/' . sanitize_title($gallery_name) . '/';
         $author = get_current_user_id();
-       
+
         $new_gallery = $nggdb->add_gallery($gallery_name, $path, $description, 0, 0, $author);
 
         if (is_int($new_gallery)) {
@@ -309,7 +310,7 @@ class PlekGalleryHandler
         if (!@move_uploaded_file($temp_file, $gallery_path . $filename)) {
             return __('Error, the file could not be moved to : ', 'nggallery') . esc_html($gallery_path);
         }
-        
+
         $image_id = nggAdmin::add_Images($gallery_id, array($filename));
 
         //Resize the original image to the max image size set in the ngg options
@@ -410,6 +411,63 @@ class PlekGalleryHandler
         return $filename;
     }
 
+
+    /**
+     * Returns a array with all the image within a gallery
+     *
+     * @param int $gallery_id
+     * @return string|array Array with the images on success, string with error message on error
+     */
+    public function get_images_by_gallery_id($gallery_id)
+    {
+        if (empty($gallery_id)) {
+            return sprintf(__('No gallery with ID %s found', 'plekvetica'), $gallery_id);
+        }
+        $gallery_mapper = C_Gallery_Mapper::get_instance();
+        $gallery = $gallery_mapper->find($gallery_id);
+        $gallery_name = (isset($gallery->name)) ? $gallery->name : $gallery_id;
+        $gallery_path = $gallery->path;
+        //Get the images
+        $images = nggdb::get_gallery($gallery_id);
+        if (empty($images)) {
+            return sprintf(__('No images found for gallery %s', 'plekvetica'), $gallery_name);
+        }
+        $images_clean = [];
+        //s($images);
+        foreach ($images as $img_object) {
+            if (isset($img_object->_cache['meta_data']['thumbnail']) and isset($img_object->_orig_image_id)) {
+                $images_clean[$img_object->_orig_image_id] = [
+                    'thumbnail' => $img_object->_cache['meta_data']['thumbnail'],
+                    'url_thumbnail' => get_home_url(null, $gallery_path) . $img_object->_cache['thumbFolder'] . $img_object->_cache['meta_data']['thumbnail']['filename'],
+                    'full' => $img_object->_cache['meta_data']['full'],
+                    'url_full' => get_home_url(null, $gallery_path) . '/' . $img_object->_cache['filename'],
+                    'is_preview' => ($gallery->previewpic === intval($img_object->_orig_image_id)) ? true : false,  
+                    'title' => $img_object->_cache['meta_data']['title'],
+                ];
+            }
+        }
+        return $images_clean;
+    }
+
+    /**
+     * Gets a formatted grid of the gallery images
+     *
+     * @param int $gallery_id
+     * @return string Error message or html with images
+     */
+    public function get_gallery_grid_admin($gallery_id)
+    {
+        $images = $this->get_images_by_gallery_id($gallery_id);
+        if (!is_array($images)) {
+            return $images; //Return the error message if response is not an array
+        }
+        $images_html = "";
+        foreach ($images as $id => $img) {
+            $images_html .= PlekTemplateHandler::load_template_to_var('admin_gallery_grid_item', 'gallery', $id, $img);
+        }
+        return PlekTemplateHandler::load_template_to_var('admin_gallery_grid_item_container', 'gallery', $gallery_id, $images_html);
+    }
+
     /**
      * Finds a album by name.
      *
@@ -464,24 +522,45 @@ class PlekGalleryHandler
      *
      * @return string  Error or success message
      */
-    public function set_preview_image(){
+    public function set_preview_image()
+    {
         global $plek_ajax_handler;
-        $image_id = intval($plek_ajax_handler->get_ajax_data_esc('image_id')); 
+        $image_id = intval($plek_ajax_handler->get_ajax_data_esc('image_id'));
         $gallery_id = intval($plek_ajax_handler->get_ajax_data_esc('gallery_id'));
 
         $gallery_mapper = C_Gallery_Mapper::get_instance();
         $gallery = $gallery_mapper->find($gallery_id);
-	    if (!$gallery) {
-            return __('Gallery not found','plekvetica');
-
-	    }
-        if($gallery->previewpic !== $image_id){
+        if (!$gallery) {
+            return __('Gallery not found', 'plekvetica');
+        }
+        if ($gallery->previewpic !== $image_id) {
             $gallery->previewpic = $image_id;
-            if(!$gallery_mapper->save($gallery)){
-                return __('Gallery preview not set because of unknown error','plekvetica');
+            if (!$gallery_mapper->save($gallery)) {
+                return __('Gallery preview not set because of unknown error', 'plekvetica');
             }
         }
 
-        return __('Gallery preview successfully set','plekvetica');
+        return __('Gallery preview successfully set', 'plekvetica');
+    }
+
+    /**
+     * Removes an image
+     *
+     * @param int $id
+     * @return true|string True on success, string with error message on error
+     */
+    public function delete_image($id)
+    {
+        if (empty($id)) {
+            return __('No image id provided', 'plekvetica');
+        }
+        if(!PlekUserHandler::user_is_in_team()){
+            return __('You have no permissions to delete images','plekvetica');
+        }
+        if (C_Image_Mapper::get_instance()->destroy($id) === 1) {
+            return true;
+        } else {
+            return __('Error deleting the image', 'plekvetica');
+        }
     }
 }

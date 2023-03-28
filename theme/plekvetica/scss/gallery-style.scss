@@ -1,22 +1,23 @@
 /* Gallery Styles*/
 
-.plek_album_con{
+.plek_album_con {
     display: flex;
     flex-direction: row;
     column-gap: 2%;
     flex-wrap: wrap;
 
-    .image_container{
+    .image_container {
         width: 49%;
         min-width: 200px;
     }
 }
-.image_link_wrapper{
+
+.image_link_wrapper {
     display: flex;
     flex-direction: column;
     padding-bottom: 1em;
 
-    a{
+    a {
         color: $text-color;
     }
 
@@ -27,3 +28,46 @@
     }
 }
 
+.gallery-image-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 4%;
+    flex-wrap: wrap;
+
+    .gallery-image-item {
+        position: relative;
+        flex-basis: 22%;
+    }
+
+    .gallery-image-item .remove-image {
+        position: absolute;
+        right: 5px;
+        top: 0px;
+        font-size: 2em;
+        color: $color-red;
+        cursor: url("../plekvetica/assets/metalhand.cur"), pointer;
+
+    }
+
+    .gallery-image-item .set-preview-image {
+        position: absolute;
+        left: 10px;
+        top: 0px;
+        font-size: 1.5em;
+        color: $color-green;
+        cursor: url("../plekvetica/assets/metalhand.cur"), pointer;
+    }
+
+    .gallery-preview {
+        border: $color-green 3px solid;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .gallery-image-container {
+    
+        .gallery-image-item {
+            flex-basis: 48%;
+        }
+    }
+}

@@ -534,7 +534,7 @@ let plek_band = {
         event.preventDefault();
         const button = event.currentTarget;
         //const linkUrl = event.dataTransfer.getData('text/plain');
-        debugger;
+        //debugger;
 
     },
     /**

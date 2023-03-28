@@ -457,11 +457,11 @@ class PlekHandler
     public function register_cron_jobs()
     {
         //Remove all the schedules
-        wp_clear_scheduled_hook("send_unsend_email_notifications");
+        wp_clear_scheduled_hook("send_unsent_email_notifications");
         wp_clear_scheduled_hook("update_all_band_scores");
         wp_clear_scheduled_hook("plek_cron_send_akkredi_reminder");
         //The new and active ones
-        wp_clear_scheduled_hook("plek_cron_send_unsend_email_notifications");
+        wp_clear_scheduled_hook("plek_cron_send_unsent_email_notifications");
         wp_clear_scheduled_hook("plek_cron_send_accredi_reminder");
         wp_clear_scheduled_hook("plek_cron_update_all_band_scores");
         //Update 2.3.0
@@ -473,8 +473,8 @@ class PlekHandler
         wp_clear_scheduled_hook("plek_cron_daily_cron");
 
         //Send the email notifications
-        if (!wp_next_scheduled('plek_cron_send_unsend_email_notifications')) {
-            wp_schedule_event(time(), 'plekeverysixmin', 'plek_cron_send_unsend_email_notifications');
+        if (!wp_next_scheduled('plek_cron_send_unsent_email_notifications')) {
+            wp_schedule_event(time(), 'plekeverysixmin', 'plek_cron_send_unsent_email_notifications');
         }
 
         //Send the akkreditation reminder

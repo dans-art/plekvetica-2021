@@ -19,10 +19,10 @@ $event_link = "<a href='" . get_permalink($event_id) . "' target='_blank'>" . $e
 $pb = new PlekBandHandler;
 ?>
 <div>
-    <div><?php echo __('A new Event with your favorite Band got added to Plekvetica!', 'plekvetica') ?></div>
-    <br />
+    <h1><?php echo sprintf(__('Hey %s, a new Event got added with your favorite band', 'plekvetica'), $user_name); ?></h1>
+
     <?php if (is_array($band_ids) and !empty($band_ids) and count($band_ids) > 1) : ?>
-        <?php echo sprintf(__('Hey %s, Some of your followed Bands are playing at %s', 'plekvetica'), $user_name, $event_link); ?>
+        <?php echo sprintf(__('The Event %s got added to the Plekvetica Eventcalendar. Part of the lineup are bands followed by you:', 'plekvetica'), $event_link); ?><br />
         <ul>
             <?php foreach ($band_ids as $band_id) : ?>
                 <?php
@@ -41,8 +41,13 @@ $pb = new PlekBandHandler;
         <?php echo sprintf(__('The Event %s got added to the Plekvetica Eventcalendar.', 'plekvetica'), $event_link); ?>
         <br />
         <?php echo sprintf(__('"%s" is playing at this Event.', 'plekvetica'), $band_name); ?>
+        <br />
     <?php endif; ?>
     <br />
-    <br />
-    <?php echo __('You are getting this eMail because you followed the mentioned Bands on plekvetica.ch.', 'plekvetica'); ?>
+    <p>
+        <?php echo __('You are getting this eMail because you followed the mentioned Bands on plekvetica.ch.', 'plekvetica'); ?>
+    </p>
+    <p>
+        <?php echo sprintf(__('Best regards, %s', 'plekvetica'), 'Das Plekvetica-Team'); ?>
+    </p>
 </div>

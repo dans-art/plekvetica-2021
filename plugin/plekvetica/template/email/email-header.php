@@ -24,6 +24,10 @@ include(PLEK_PATH . 'template/email/email-styles.php');
             color: <?php echo $link_color; ?> !important;
         }
 
+        .email-content *{
+            font-family: "Josefin Sans", sans-serif;
+        }
+
         .email-content a.plek-button {
             background-color: <?php echo $color_red_light; ?>;
             text-align: center;
@@ -45,7 +49,7 @@ include(PLEK_PATH . 'template/email/email-styles.php');
 </head>
 
 <body id="email-content">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo $email_bg; ?>" style="background-color: <?php echo $email_bg; ?>; color: <?php echo $text_color; ?>; max-width:800px; margin: 0 auto;" color="<?php echo $text_color; ?>">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="<?php echo $email_bg; ?>" style="background-color: <?php echo $email_bg; ?>; color: <?php echo $text_color; ?>; max-width:800px; margin: 0 auto;" color="<?php echo $text_color; ?> font-family: <?php echo $font_family; ?>;">
         <tr>
             <td>
                 <table id="header" width="100%" cellpadding="0" cellspacing="0" bgcolor="<?php echo $email_bg_dark; ?>" style="padding: 20px 0; margin: 0; text-align: center; ">

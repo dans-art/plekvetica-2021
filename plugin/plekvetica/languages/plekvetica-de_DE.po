@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2023-03-18 10:43+0000\n"
+"PO-Revision-Date: 2023-03-18 14:26+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -65,17 +65,14 @@ msgstr ""
 msgid "A new Band \"%s\" has been added."
 msgstr "Eine neue Band \"%s\" wurde hinzugefügt."
 
-#: template/email/event/new_event_band_info.php:22
-msgid "A new Event with your favorite Band got added to Plekvetica!"
-msgstr "Ein neuer Event deiner Lieblingsband wurde bei Plekvetica hinzugefügt!"
-
 #: include/class/organizer-handler.php:171
+#: template/components/codetester.php:61
 #, php-format
 msgid "A new Organizer \"%s\" has been added."
 msgstr "Ein neuer Veranstalter \"%s\" wurde hinzugefügt."
 
-#: include/class/notification-handler.php:1149
-#: include/class/notification-handler.php:1223
+#: include/class/notification-handler.php:1147
+#: include/class/notification-handler.php:1221
 #: template/email/band/band-new-review-info.php:12
 #: template/email/organizer/organizer-new-review-info.php:12
 msgid "A new review has ben published at Plekvetica"
@@ -122,7 +119,7 @@ msgid "Account could not be activated. Please report to info@plekvetica.ch"
 msgstr ""
 "Konto konnte nicht aktiviert werden. Bitte melde dies an info@plekvetica.ch"
 
-#: include/class/ajax-handler.php:688
+#: include/class/ajax-handler.php:690
 #, php-format
 msgid ""
 "Account created but failed to send an email. Please contact the IT Support: "
@@ -160,11 +157,11 @@ msgstr "Akkreditierungs Hinweis"
 msgid "Accreditation request"
 msgstr "Akkreditationsanfrage"
 
-#: include/class/ajax-handler.php:242
+#: include/class/ajax-handler.php:244
 msgid "Accreditation request added"
 msgstr "Akkreditierungsanfrage wurde hinzugefügt"
 
-#: include/class/notification-handler.php:285
+#: include/class/notification-handler.php:270
 #: template/email/organizer/organizer-accreditation-request.php:14
 msgid "Accreditation request from Plekvetica"
 msgstr "Akkreditationsanfrage von Plekvetica"
@@ -173,11 +170,11 @@ msgstr "Akkreditationsanfrage von Plekvetica"
 msgid "Accreditation request note"
 msgstr "Noitiz zur Akkreditierungsanfrage"
 
-#: include/class/ajax-handler.php:232
+#: include/class/ajax-handler.php:234
 msgid "Accreditation request removed"
 msgstr "Akkreditierungsanfrage entfernt"
 
-#: include/class/ajax-handler.php:322
+#: include/class/ajax-handler.php:324
 msgid "Accreditation request sent to organizer"
 msgstr "Akkreditationsanfrage an den Veranstalter geschickt."
 
@@ -262,7 +259,7 @@ msgid "Add Venue"
 msgstr "Ort hinzufügen"
 
 #: include/class/band-handler.php:931 include/class/organizer-handler.php:172
-#: include/class/venue-handler.php:155
+#: include/class/venue-handler.php:155 template/components/codetester.php:62
 msgid "Added by"
 msgstr "Hinzugefügt von"
 
@@ -274,7 +271,7 @@ msgstr "Hinzugefügte Events werden automatisch veröffentlicht / überprüft"
 msgid "Administrator"
 msgstr "Administrator"
 
-#: template/email/band/band-new-review-info.php:22
+#: template/email/band/band-new-review-info.php:17
 #: template/email/organizer/organizer-new-review-info.php:22
 msgid "Ahoy!"
 msgstr "Ahoy!"
@@ -307,7 +304,8 @@ msgstr "Anzahl tickets zum verlosen"
 msgid "API"
 msgstr "API"
 
-#: template/email/email-footer-band.php:11
+#: template/email/band/email-footer-band.php:11
+#: template/email/organizer/email-footer-organizer.php:11
 msgid "Are your Events up to date?"
 msgstr "Sind deine Events up-to-date?"
 
@@ -333,15 +331,15 @@ msgstr "Band"
 msgid "Band Events"
 msgstr "Band-Events"
 
-#: include/class/ajax-handler.php:825
+#: include/class/ajax-handler.php:827
 msgid "Band ID or Event ID not provided"
 msgstr "Band ID oder Event ID nicht übergeben"
 
-#: include/class/ajax-handler.php:439 include/class/ajax-handler.php:492
+#: include/class/ajax-handler.php:441 include/class/ajax-handler.php:494
 msgid "Band is unique"
 msgstr "Band ist einzigartig"
 
-#: include/class/ajax-handler.php:428 include/class/ajax-handler.php:470
+#: include/class/ajax-handler.php:430 include/class/ajax-handler.php:472
 msgid "Band saved"
 msgstr "Band gespeichert"
 
@@ -382,7 +380,7 @@ msgstr "Bands zum verwalten"
 msgid "Bandscore"
 msgstr "Bandscore"
 
-#: template/email/band/band-new-review-info.php:31
+#: template/email/band/band-new-review-info.php:26
 #: template/email/organizer/organizer-accreditation-request.php:66
 #: template/email/organizer/organizer-new-review-info.php:31
 #, php-format
@@ -452,7 +450,7 @@ msgstr "Ändere Event Status"
 msgid "Changing Status was unsuccessful"
 msgstr "Konnte den Status nicht ändern"
 
-#: template/email/band/band-new-review-info.php:28
+#: template/email/band/band-new-review-info.php:23
 #: template/email/organizer/organizer-new-review-info.php:28
 msgid "Check it out here:"
 msgstr "Schau es dir hier an:"
@@ -505,7 +503,7 @@ msgstr "Konnte die Galerien des Albums nicht speichern."
 msgid "Country"
 msgstr "Land"
 
-#: include/class/notification-handler.php:546
+#: include/class/notification-handler.php:531
 msgid "Created"
 msgstr "Erstellt"
 
@@ -570,7 +568,7 @@ msgstr ""
 "Definitive Zusage kommt per Mail, Treffpunkt ist die Abendkasse, abgelehnt "
 "weil..., etc."
 
-#: include/class/notification-handler.php:584
+#: include/class/notification-handler.php:569
 msgid "Delete"
 msgstr "Löschen"
 
@@ -587,7 +585,7 @@ msgstr "Beschreibung"
 msgid "Details"
 msgstr "Details"
 
-#: include/class/notification-handler.php:551
+#: include/class/notification-handler.php:536
 msgid "Dismissed"
 msgstr "Gelesen"
 
@@ -636,7 +634,7 @@ msgstr "Bearbeitungsfunktion für deine Events"
 msgid "Email"
 msgstr "Email"
 
-#: include/class/notification-handler.php:1138
+#: include/class/notification-handler.php:1136
 msgid "Email already sent!"
 msgstr "Email wurde schon gesendet!"
 
@@ -644,11 +642,11 @@ msgstr "Email wurde schon gesendet!"
 msgid "eMail not configured"
 msgstr "eMail ist nicht eingestellt"
 
-#: include/class/notification-handler.php:552
+#: include/class/notification-handler.php:537
 msgid "Email send"
 msgstr "E-Mail gesendet"
 
-#: include/class/ajax-handler.php:222
+#: include/class/ajax-handler.php:223
 msgid "Email sent!"
 msgstr "Email gesendet!"
 
@@ -705,7 +703,7 @@ msgstr "Fehler beim Speichern der Band (%s)"
 msgid "Error uploading file"
 msgstr "Fehler beim hochladen der Datei"
 
-#: include/class/ajax-handler.php:268 include/class/ajax-handler.php:483
+#: include/class/ajax-handler.php:270 include/class/ajax-handler.php:485
 msgid "Error while changing the following status"
 msgstr "Fehler beim ändern des \"folgen\" status"
 
@@ -717,7 +715,7 @@ msgstr "Fehler beim erstellen eines neuen Albums"
 msgid "Error while creating a new gallery"
 msgstr "Fehler beim erstellen einer neuen Galerie"
 
-#: include/class/ajax-handler.php:681
+#: include/class/ajax-handler.php:683
 msgid "Error while creating a new user"
 msgstr "Fehler während des erstellen des neuen Benutzer"
 
@@ -730,7 +728,7 @@ msgstr "Fehler beim erstellen des Albums oder Galerie."
 msgid "Error while deleting the cache: %s"
 msgstr "Fehler beim löschen des Zwischenspeichers: %s"
 
-#: include/class/ajax-handler.php:277 include/class/ajax-handler.php:372
+#: include/class/ajax-handler.php:279 include/class/ajax-handler.php:374
 msgid "Error while loading the data"
 msgstr "Fehler beim laden der Daten"
 
@@ -771,7 +769,7 @@ msgstr "Fehler beim aktualisieren des hervorgehoben Status."
 msgid "Error, no Events found"
 msgstr "Fehler, keine Events gefunden"
 
-#: include/class/notification-handler.php:604
+#: include/class/notification-handler.php:589
 #, php-format
 msgid "Error: %s "
 msgstr "Fehler: %s "
@@ -874,11 +872,11 @@ msgstr "Event Poster"
 msgid "Event poster of %s"
 msgstr "Event Poster von %s"
 
-#: include/class/ajax-handler.php:301
+#: include/class/ajax-handler.php:303
 msgid "Event published"
 msgstr "Event veröffentlicht"
 
-#: include/class/ajax-handler.php:283 include/class/ajax-handler.php:378
+#: include/class/ajax-handler.php:285 include/class/ajax-handler.php:380
 msgid "Event reported"
 msgstr "Event gemeldet"
 
@@ -982,15 +980,15 @@ msgstr "Facebook URL"
 msgid "Failed to add post_ids (%s) to cache relationship"
 msgstr "Fehler beim hinzufügen von der post_id (%s) zum Zwischenspeicher"
 
-#: include/class/ajax-handler.php:780
+#: include/class/ajax-handler.php:782
 msgid "Failed to add the album to the event"
 msgstr "Album konnte nicht zum Event hinzugefügt werden"
 
-#: include/class/ajax-handler.php:817
+#: include/class/ajax-handler.php:819
 msgid "Failed to add the gallery to the band"
 msgstr "Galerie konnte nicht zur Band hinzugefügt werden"
 
-#: include/class/ajax-handler.php:813
+#: include/class/ajax-handler.php:815
 msgid "Failed to add the gallery to the event"
 msgstr "Galerie konnte nicht zum Event hinzugefügt werden"
 
@@ -1043,7 +1041,7 @@ msgstr "Fehler beim speichern der Metadaten für: %s"
 msgid "Failed to save the Settings"
 msgstr "Speichern der Einstellungen fehlgeschlagen"
 
-#: include/class/ajax-handler.php:324
+#: include/class/ajax-handler.php:326
 msgid "Failed to send mail."
 msgstr "Email senden fehlgeschlagen."
 
@@ -1112,7 +1110,7 @@ msgstr "Datei gewählt"
 msgid "Filetype not supported"
 msgstr "Dateityp nicht unterstützt"
 
-#: include/class/notification-handler.php:449
+#: include/class/notification-handler.php:434
 #: template/components/review-search-bar.php:16
 msgid "Find"
 msgstr "Finden"
@@ -1205,10 +1203,10 @@ msgstr "Hallo %s"
 msgid "Hello, %s"
 msgstr "Hallo, %s"
 
-#: template/email/event/new_event_band_info.php:25
+#: template/email/event/new_event_band_info.php:22
 #, php-format
-msgid "Hey %s, Some of your followed Bands are playing at %s"
-msgstr "Hallo %s, Einige der Bands welchen du folgst spielen am %s"
+msgid "Hey %s, a new Event got added with your favorite band"
+msgstr "Hey %s, ein neuer Event mit deiner Lieblingsband wurde hinzugefügt"
 
 #: include/class/user-handler.php:1077
 #: template/email/organizer/organizer-accreditation-request.php:26
@@ -1336,7 +1334,12 @@ msgstr "Nachname"
 msgid "Latest Notes"
 msgstr "Letzte Notizen"
 
-#: include/class/notification-handler.php:550
+#: template/email/organizer/email-footer-organizer.php:16
+#, php-format
+msgid "Let us know by writing to %s"
+msgstr "Lass es und wissen indem du eine eMail an %s sendest"
+
+#: include/class/notification-handler.php:535
 msgid "Link"
 msgstr "Link"
 
@@ -1445,7 +1448,7 @@ msgstr "Mitglied ist bereits entfernt"
 msgid "Member is already set"
 msgstr "Mitglied ist bereits eingetragen"
 
-#: include/class/notification-handler.php:869
+#: include/class/notification-handler.php:867
 msgid "Missing accreditation requests"
 msgstr "Fehlende Akkreditations anfragen"
 
@@ -1473,8 +1476,8 @@ msgstr "Fehlend:"
 msgid "Modifikationen und spezielle Funktionen für die Plekvetica Seite."
 msgstr "Modifikationen und spezielle Funktionen für die Plekvetica-Seite."
 
-#: include/class/notification-handler.php:1132
-#: include/class/notification-handler.php:1212
+#: include/class/notification-handler.php:1130
+#: include/class/notification-handler.php:1210
 msgid "More than one Event found. This should not happen!"
 msgstr "Mehr ale ein Event wurde gefunden. Das sollte nicht passieren."
 
@@ -1531,7 +1534,7 @@ msgstr "Name des Events"
 msgid "New account"
 msgstr "Neues Konto"
 
-#: include/class/ajax-handler.php:691
+#: include/class/ajax-handler.php:693
 #| msgid "New account created! Check your email to complete the sign up."
 msgid "New account created! Check your email to complete the sign-up."
 msgstr ""
@@ -1547,6 +1550,7 @@ msgid "New Event added, please publish"
 msgstr "Neuer Event eingetragen, bitte veröffentlichen"
 
 #: include/class/organizer-handler.php:174
+#: template/components/codetester.php:64
 msgid "New Organizer added"
 msgstr "Neuer Veranstalter hinzugefügt"
 
@@ -1562,12 +1566,12 @@ msgstr "Neues Passwort"
 msgid "New password repeat"
 msgstr "Wiederhole neues Passwort"
 
-#: include/class/ajax-handler.php:700
+#: include/class/ajax-handler.php:702
 msgid "New password request sent. Please check your email."
 msgstr ""
 "Passwort zurücksetzen anfrage wurde versendet. Bitte überprüfe deine E-Mail"
 
-#: include/class/ajax-handler.php:709
+#: include/class/ajax-handler.php:711
 msgid "New password set. You can login now with your new password."
 msgstr ""
 "Passwort wurde gespeichert. Du kannst dich nun mit deinem neuen Passwort "
@@ -1589,7 +1593,8 @@ msgstr "Neuer Benutzer entsperrt!"
 msgid "New Venue added"
 msgstr "Neuer Ort hinzugefügt"
 
-#: include/class/notification-handler.php:814
+#: include/class/notification-handler.php:812
+#: template/components/codetester.php:109
 msgid "News from Plekvetica"
 msgstr "Neuigkeiten von Plekvetica"
 
@@ -1602,7 +1607,7 @@ msgstr "Weiter"
 msgid "Nice try! No Robots allowed here!"
 msgstr "Netter versuch! Hier sind keine Roboter erlaubt!"
 
-#: include/class/notification-handler.php:481
+#: include/class/notification-handler.php:466
 msgid "No"
 msgstr "Nein"
 
@@ -1645,8 +1650,8 @@ msgstr "Keine Elemente gefunden für die Beitrags-ID: %s"
 msgid "No data received"
 msgstr "Keine Daten erhalten"
 
-#: include/class/notification-handler.php:1129
-#: include/class/notification-handler.php:1209
+#: include/class/notification-handler.php:1127
+#: include/class/notification-handler.php:1207
 msgid "No Event found, or Event is not a Review"
 msgstr "Kein Event gefunden, oder Event ist kein Review"
 
@@ -1659,7 +1664,7 @@ msgstr "Keine Event ID gefunden"
 msgid "No Event ID found."
 msgstr "Keine Event ID gefunden."
 
-#: include/class/notification-handler.php:283
+#: include/class/notification-handler.php:268
 msgid "No Event ID given. Expects an Array with the Event IDs"
 msgstr "Keine Event ID übergeben. Erwartet ein Array mit Event ID's"
 
@@ -1734,15 +1739,15 @@ msgstr "Keine neuen Events gefunden"
 msgid "No Newsletter found"
 msgstr "Kein Newsletter gefunden"
 
-#: include/class/notification-handler.php:607
+#: include/class/notification-handler.php:592
 msgid "No Notifications to show"
 msgstr "Keine Benachrichtigungen zum anzeigen"
 
-#: include/class/notification-handler.php:1162
+#: include/class/notification-handler.php:1160
 msgid "No Organizer email found!"
 msgstr "Keine Veranstalter Email gefunden!"
 
-#: include/class/notification-handler.php:1146
+#: include/class/notification-handler.php:1144
 msgid "No Organizer found!"
 msgstr "Kein Veranstalter gefunden!"
 
@@ -1789,7 +1794,7 @@ msgstr "Keine Team-Mitglieder gefunden."
 msgid "No Time defined"
 msgstr "Keine Zeit definiert"
 
-#: include/class/notification-handler.php:290
+#: include/class/notification-handler.php:275
 msgid "No type found"
 msgstr "Kein Typ gefunden"
 
@@ -1868,7 +1873,7 @@ msgstr ""
 "Veranstalter bereits gesetzt. Bitte Kontaktiere den Administrator um den "
 "Veranstalter zu ändern."
 
-#: include/class/notification-handler.php:277
+#: include/class/notification-handler.php:262
 msgid "Organizer contact data not found"
 msgstr "Veranstalter Kontaktdaten nicht gefunden"
 
@@ -1880,7 +1885,7 @@ msgstr "Veranstalter konnte nicht aktualisiert werden"
 msgid "Organizer Info"
 msgstr "Veranstalter Info"
 
-#: include/class/ajax-handler.php:572 include/class/ajax-handler.php:600
+#: include/class/ajax-handler.php:574 include/class/ajax-handler.php:602
 msgid "Organizer saved"
 msgstr "Veranstalter gespeichert"
 
@@ -2087,7 +2092,7 @@ msgstr "Provinz oder Region"
 msgid "Publish Event"
 msgstr "Event veröffentlichen"
 
-#: include/class/notification-handler.php:585
+#: include/class/notification-handler.php:570
 msgid "Push again"
 msgstr "Nochmal senden"
 
@@ -2139,7 +2144,8 @@ msgstr "Passwort zurücksetzen"
 msgid "Review"
 msgstr "Review"
 
-#: template/email/email-footer-band.php:12
+#: template/email/band/email-footer-band.php:12
+#: template/email/organizer/email-footer-organizer.php:12
 #, php-format
 msgid "Review and update them on your %s page"
 msgstr "Anschauen und updaten kannst du diese auf deiner %s Seite"
@@ -2269,7 +2275,7 @@ msgstr "Einstellungen"
 msgid "Settings check passed"
 msgstr "Einstellungen sind ok"
 
-#: include/class/ajax-handler.php:630
+#: include/class/ajax-handler.php:632
 msgid "Settings saved"
 msgstr "Einstellungen gespeichert"
 
@@ -2327,7 +2333,7 @@ msgstr ""
 "Einige Bands mit dem Namen \"%s\" wurden gefunden. <br/>%s<br/>Bitte "
 "überprüfe, ob die Band welche du hinzufügen willst nicht existiert."
 
-#: include/class/notification-handler.php:870
+#: include/class/notification-handler.php:868
 msgid "Some Events are not requested yet..."
 msgstr "Einige Events wurden noch nicht angefragt..."
 
@@ -2369,7 +2375,7 @@ msgstr "Status gesetzt"
 msgid "Status set by"
 msgstr "Status gesetzt durch"
 
-#: include/class/ajax-handler.php:253
+#: include/class/ajax-handler.php:255
 msgid "Status updated"
 msgstr "Status aktualisiert"
 
@@ -2377,7 +2383,7 @@ msgstr "Status aktualisiert"
 msgid "Street and Number"
 msgstr "Strasse und Nummer"
 
-#: include/class/notification-handler.php:549
+#: include/class/notification-handler.php:534
 msgid "Subject and Message"
 msgstr "Betreff und Nachricht"
 
@@ -2385,7 +2391,7 @@ msgstr "Betreff und Nachricht"
 msgid "Success"
 msgstr "Erfolgreich"
 
-#: include/class/ajax-handler.php:743
+#: include/class/ajax-handler.php:745
 msgid "Super! No missing Reviews."
 msgstr "Super! Keine fehlenden Reviews."
 
@@ -2467,6 +2473,15 @@ msgstr ""
 msgid "The Event %s got added to the Plekvetica Eventcalendar."
 msgstr "Der Event %s wurde zum Plekvetica Eventkalender hinzugefügt."
 
+#: template/email/event/new_event_band_info.php:25
+#, php-format
+msgid ""
+"The Event %s got added to the Plekvetica Eventcalendar. Part of the lineup "
+"are bands followed by you:"
+msgstr ""
+"Der Event %s wurde zum Plekvetica Eventkalender hinzugefügt. Ein Teil des "
+"Lineups sind Bands, welchen du folgst:"
+
 #: template/email/event/accreditation-confirmed-admin-info.php:30
 #| msgid "The Event got confirmed by the organizer"
 msgid "The Event %s got confirmed by the organizer."
@@ -2539,7 +2554,7 @@ msgstr "Für die nächsten 7 Tage gibt es keine Events!"
 msgid "There are no registered Members"
 msgstr "Es gibt keine registrierten Mitglieder"
 
-#: template/email/band/band-new-review-info.php:23
+#: template/email/band/band-new-review-info.php:18
 #: template/email/organizer/organizer-new-review-info.php:23
 msgid "There has ben a new Review published at plekvetica.ch:"
 msgstr "Auf plekvetica.ch wurde ein neues Review veröffentlicht:"
@@ -2552,7 +2567,7 @@ msgstr ""
 "Für dein Konto wurde ein neues Passwort angefordert. Wenn du dies warst, "
 "klicke den unten stehenden Link um ein neues Passwort zu setzen."
 
-#: include/class/notification-handler.php:1069
+#: include/class/notification-handler.php:1067
 msgid "There was an unfinished event found, please add the event details:"
 msgstr ""
 "Es wurde ein unvollständiger Event gefunden. Bitte ergänze die Details der "
@@ -2593,7 +2608,7 @@ msgstr "Dieser Event wurde verschoben"
 msgid "This event has been postponed from %s to %s"
 msgstr "Der Event wurde verschoben vom %s auf den %s"
 
-#: include/class/notification-handler.php:211
+#: include/class/notification-handler.php:210
 msgid "This Event may interest you"
 msgstr "Dieser Event könnte dich interessieren"
 
@@ -2701,7 +2716,7 @@ msgstr "Total Einträge:"
 msgid "Twitter"
 msgstr "Twitter"
 
-#: include/class/notification-handler.php:548
+#: include/class/notification-handler.php:533
 msgid "Type"
 msgstr "Typ"
 
@@ -2757,7 +2772,7 @@ msgstr "URL"
 msgid "Use this link to update the Event: "
 msgstr "Nutze diesen Link um deinen Event zu updaten:"
 
-#: include/class/notification-handler.php:547
+#: include/class/notification-handler.php:532
 msgid "User"
 msgstr "Nutzer"
 
@@ -2794,7 +2809,7 @@ msgstr "Ort und Veranstalter"
 msgid "Venue could not be updated"
 msgstr "Der Ort konnte nicht aktualisiert werden "
 
-#: include/class/ajax-handler.php:517 include/class/ajax-handler.php:545
+#: include/class/ajax-handler.php:519 include/class/ajax-handler.php:547
 msgid "Venue saved"
 msgstr "Ort gespeichert"
 
@@ -2885,7 +2900,7 @@ msgstr "Falsches Format."
 msgid "Wrong Format. Notice: %s"
 msgstr "Falsches Format. Hinweis: %s"
 
-#: include/class/notification-handler.php:481
+#: include/class/notification-handler.php:466
 msgid "Yes"
 msgstr "Ja"
 
@@ -2948,12 +2963,12 @@ msgstr "Du bist nicht berechtigt, diesen Ort zu bearbeiten!"
 msgid "You are not allowed to run this action"
 msgstr "Du hast keine Berechtigung diese Aktion durchzuführen."
 
-#: include/class/ajax-handler.php:291 include/class/ajax-handler.php:310
-#: include/class/ajax-handler.php:395
+#: include/class/ajax-handler.php:293 include/class/ajax-handler.php:312
+#: include/class/ajax-handler.php:397
 msgid "You are not allowed to use this function"
 msgstr "Du bist nicht berechtigt diese Funktion zu nutzen."
 
-#: include/class/ajax-handler.php:340
+#: include/class/ajax-handler.php:342
 msgid "You are not allowed to use this request or function not found"
 msgstr ""
 "Du bist nicht berechtigt diese Anfrage zu nutzen oder die Funktion wurde "
@@ -2990,13 +3005,17 @@ msgstr ""
 msgid "You can manage your accreditation requests on this page."
 msgstr "Du kannst die Akkreditierungsanfrage auf dieser Seite verwalten."
 
-#: include/class/ajax-handler.php:694
+#: include/class/ajax-handler.php:696
 msgid "You have to be logged in in order to save the settings."
 msgstr "Du musst eingeloggt sein, um die Einstellungen zu speichern."
 
-#: include/class/ajax-handler.php:364 include/class/ajax-handler.php:422
+#: include/class/ajax-handler.php:366 include/class/ajax-handler.php:424
 msgid "You have to be logged in to perform this action"
 msgstr "Du musst eingeloggt sein, um diese Aktion auszuführen"
+
+#: template/email/organizer/email-footer-organizer.php:15
+msgid "You like to promote your Events?"
+msgstr "Willst du deine Events promoten?"
 
 #: template/email/user/new-user.php:29
 msgid ""

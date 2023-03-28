@@ -218,10 +218,12 @@ class PlekAjaxHandler
                 $event_id = $this->get_ajax_data('id');
                 $plek_event->load_event($event_id);
                 $send = PlekNotificationHandler::send_review_to_promoter($event_id);
-                if ($send === true) {
+                $send_band = PlekNotificationHandler::send_review_to_bands($event_id);
+                if ($send === true and is_int($send_band)) {
                     $this->set_success(__('Email sent!', 'plekvetica'));
                 } else {
                     $this->set_error($send); //Error Message from function
+                    $this->set_error($send_band); //Error Message from function
                 }
                 break;
             case 'remove_akkredi_member':
@@ -743,6 +745,7 @@ class PlekAjaxHandler
                     $return_arr['content'] = "<span class='plek-no-open-reviews'>" . __('Super! No missing Reviews.', 'plekvetica') . "</span>";
                 }
                 $return_arr['count'] = 0;
+                //echo json_encode($return_arr, JSON_UNESCAPED_UNICODE);
                 echo json_encode($return_arr, JSON_UNESCAPED_UNICODE);
                 break;
         }
@@ -836,6 +839,27 @@ class PlekAjaxHandler
                     $this->set_success($image);
                 } else {
                     $this->set_error($image);
+                }
+                break;
+            case 'remove_image':
+                $gallery_handler = new PlekGalleryHandler;
+                $image_id = $this->get_ajax_data('image_id');
+                $delete_image = $gallery_handler->delete_image($image_id);
+                if($delete_image === true){
+                    $this->set_success($image_id);
+                    $this->set_success(__('Image deleted','plekvetica'));
+                }else{
+                    $this->set_error($delete_image);
+                }
+                break;
+            case 'get_images_html':
+                $gallery_handler = new PlekGalleryHandler;
+                $gallery_id = $this->get_ajax_data('gallery_id');
+                $gallery = $gallery_handler->get_gallery_grid_admin($gallery_id);
+                if(strlen($gallery) > 150){ //If it is a short output, it is probably a error
+                    $this->set_success($gallery);
+                }else{
+                    $this->set_error($gallery);
                 }
                 break;
             case 'set_preview_image':

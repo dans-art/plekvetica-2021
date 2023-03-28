@@ -23,6 +23,9 @@ if (is_int($band_gallery)) {
     <span class='image_upload_add_btn plek-button' data-band_id='<?php echo $band_id; ?>' data-gallery_id='<?php echo (!empty($band_gallery)) ? $band_gallery : ''; ?>' data-album_id='<?php echo (!empty($album_id)) ? $album_id : ''; ?>'>
         <span class='image_upload_status status-<?php echo (!empty($band_gallery) and !empty($image_count)) ? 'ok' : 'missing'; ?>'></span>
     </span>
+    <?php if (!empty($band_gallery)) : ?>
+        <span class='image_edit_images plek-button' data-gallery_id='<?php echo (!empty($band_gallery)) ? $band_gallery : ''; ?>'></span>
+    <?php endif; ?>
     <span class='playtime'><?php echo $playtime; ?></span>
     <span class='band_origin'><?php echo $band_origin_formated; ?></span>
     <span class='band_name'><?php echo $band_name; ?></span>

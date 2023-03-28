@@ -1,4 +1,8 @@
 <?php
+/**
+ * Default email template for the band
+ * 
+ */
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
@@ -9,7 +13,6 @@ $email_attr = (isset($template_args[1])) ? $template_args[1] : ''; // The email 
 
 $message = (isset($email_attr[0])) ? $email_attr[0] : ''; // The Message
 $link = (isset($email_attr[1])) ? $email_attr[1] : ''; // The Link to a page
-
 include(PLEK_PATH . 'template/email/email-styles.php');
 
 PlekTemplateHandler::load_template('email-header', 'email', $subject);
@@ -31,6 +34,6 @@ PlekTemplateHandler::load_template('email-header', 'email', $subject);
 </table><!-- Content Table End-->
 <?php
 
-PlekTemplateHandler::load_template('email-footer', 'email');
+PlekTemplateHandler::load_template('band/email-footer-band', 'email');
 
 ?>
