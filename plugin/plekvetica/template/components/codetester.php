@@ -38,7 +38,7 @@ $pb = new PlekEventBlocks();
 
 $pg = new PlekGalleryHandler;
 
-echo $pg -> get_gallery_grid_admin(19);
+echo $pg -> get_gallery_grid_admin(450);
 
 //s(PlekCacheHandler::set_cache('test_cache_1', 'I\'m cached',[1,2,3], 'test2'));
 //s(PlekCacheHandler::get_cache('test_cache_1', 'test'));

@@ -1391,19 +1391,31 @@ article.plek-event-item-compact {
 .gallery-image-container {
   display: flex;
   justify-content: flex-start;
-  gap: 1em;
+  gap: 4%;
   flex-wrap: wrap; }
   .gallery-image-container .gallery-image-item {
     position: relative;
-    flex-basis: 23%; }
+    flex-basis: 22%; }
   .gallery-image-container .gallery-image-item .remove-image {
     position: absolute;
     right: 5px;
     top: 0px;
     font-size: 2em;
-    color: red;
-    cursor: pointer; }
+    color: #D9042B;
+    cursor: url("../plekvetica/assets/metalhand.cur"), pointer; }
+  .gallery-image-container .gallery-image-item .set-preview-image {
+    position: absolute;
+    left: 10px;
+    top: 0px;
+    font-size: 1.5em;
+    color: #268c37;
+    cursor: url("../plekvetica/assets/metalhand.cur"), pointer; }
+  .gallery-image-container .gallery-preview {
+    border: #268c37 3px solid; }
 
+@media screen and (max-width: 767px) {
+  .gallery-image-container .gallery-image-item {
+    flex-basis: 48%; } }
 #post-27146 .info-text-line {
   position: absolute;
   left: 0;
@@ -2253,7 +2265,14 @@ input[type=checkbox] {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center; }
+  align-items: center;
+  gap: 1%; }
+  #edit_event_review_form .review_band_images_container .plek-button {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
 #edit_event_review_form span.image_upload_add_btn.plek-button {
   flex-basis: 2.5rem;
   font-size: 1.5rem;
@@ -2270,7 +2289,9 @@ input[type=checkbox] {
     font-family: "FontAwesome";
     display: block;
     width: 100%;
-    min-width: 2em; }
+    min-width: 2em;
+    height: 48px;
+    padding-top: 6px; }
   #edit_event_review_form .image_upload_status.status-missing::before {
     content: "\f0fe"; }
   #edit_event_review_form .image_upload_status.status-uploading::before {
@@ -2283,7 +2304,8 @@ input[type=checkbox] {
     background-color: white; }
 #edit_event_review_form .image_edit_images {
   flex-basis: 2rem;
-  text-align: center; }
+  text-align: center;
+  padding: 5px; }
   #edit_event_review_form .image_edit_images::before {
     font-family: "FontAwesome";
     display: block;
@@ -2314,7 +2336,7 @@ input[type=checkbox] {
       font-size: 1.5rem;
       position: absolute;
       right: 1rem;
-      text-shadow: 2px 2px 7px black,2px 2px 7px black,2px 2px 7px black,2px 2px 7px black,2px 2px 7px black;
+      text-shadow: 2px 2px 7px black, 2px 2px 7px black, 2px 2px 7px black, 2px 2px 7px black, 2px 2px 7px black;
       font-weight: bold; }
     #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete::before {
       content: "\f058";

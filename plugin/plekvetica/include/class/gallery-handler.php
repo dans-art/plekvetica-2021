@@ -441,6 +441,8 @@ class PlekGalleryHandler
                     'url_thumbnail' => get_home_url(null, $gallery_path) . $img_object->_cache['thumbFolder'] . $img_object->_cache['meta_data']['thumbnail']['filename'],
                     'full' => $img_object->_cache['meta_data']['full'],
                     'url_full' => get_home_url(null, $gallery_path) . '/' . $img_object->_cache['filename'],
+                    'is_preview' => ($gallery->previewpic === intval($img_object->_orig_image_id)) ? true : false,  
+                    'title' => $img_object->_cache['meta_data']['title'],
                 ];
             }
         }

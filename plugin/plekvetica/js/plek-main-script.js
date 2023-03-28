@@ -65,6 +65,7 @@ let plek_main = {
      * @param {object} element 
      */
     activate_loader_style(element) {
+        console.log("Activate loader style");
         jQuery(element).addClass('loader');
         if (jQuery(element).is("input")) {
             //Loader does not work on input fields. Add loader after button

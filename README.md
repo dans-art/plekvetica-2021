@@ -1,6 +1,10 @@
 # plekvetica-2021
 
 
+Version 3.3.0 - 2023.03.28
+- Fixed: Facebook image poster
+- Added: Edit images of gallery @ edit review page
+
 Version 3.2.1 - 2023.03.18
 - Fixed: Band review info not sent
 - Improved email styling

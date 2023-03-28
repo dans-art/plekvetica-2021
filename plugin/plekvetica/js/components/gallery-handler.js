@@ -19,6 +19,13 @@ var plek_gallery_handler = {
         jQuery('#images-uploaded-container').on('click', '.image_to_upload.upload_complete', function (event) {
             plek_gallery_handler.set_gallery_preview_click_action(this);
         });
+        //Edit images container, set preview image
+        jQuery(document).on('click', '.gallery-image-container .set-preview-image', function (event) {
+            const img_con = jQuery(event.target).closest('.gallery-image-item');
+            const image_id = jQuery(img_con).data('image_id');
+            const gallery_id = jQuery(img_con).closest('.gallery-image-container').data('gallery_id');
+            plek_gallery_handler.set_gallery_preview_click_action(img_con, gallery_id, image_id);
+        });
 
         jQuery('#review_images').on('change', function (event) {
             plek_gallery_handler.image_upload_form_change_action(this);
@@ -33,7 +40,7 @@ var plek_gallery_handler = {
             //Hide the upload container
             jQuery('#event-review-images-upload-container').hide();
             jQuery('#images-uploaded-container').hide();
-            plek_gallery_handler.get_images_of_gallery(gallery_id);
+            plek_gallery_handler.get_images_of_gallery(gallery_id, e.target);
         });
 
         jQuery(document).ready(() => {
@@ -404,11 +411,15 @@ Error Handling: You can add error handling to the code to catch any errors that 
 
     /**
      * Sets the clicked image as the preview for the gallery
-     * @param {object} image The clicked image
+     * @param {object} image The clicked image container. Can be any element except for img
      */
-    set_gallery_preview_click_action(image) {
-        let gallery_id = jQuery(image).parent().attr('data-gallery_id');
-        let image_id = jQuery(image).attr('data-image_id');
+    set_gallery_preview_click_action(image, gallery_id = null, image_id = null) {
+        if(empty(gallery_id)){
+            gallery_id = jQuery(image).parent().attr('data-gallery_id');
+        }
+        if(empty(image_id)){
+            image_id = jQuery(image).attr('data-image_id');
+        }
         let img_element = jQuery(image).find('img');
         plek_main.activate_loader_style(img_element);
 
@@ -435,6 +446,7 @@ Error Handling: You can add error handling to the code to catch any errors that 
                     plekerror.display_info(__('Gallery preview', 'plekvetica'), plek_main.get_first_success_from_ajax_request(data));
                     //Remove the gallery preview class from all other image containers
                     jQuery('.image_to_upload.upload_complete img').removeClass('gallery-preview');
+                    jQuery('.gallery-image-container img').removeClass('gallery-preview');
                     //Mark the Image as title image
                     jQuery(img_element).addClass('gallery-preview');
                 }
@@ -637,12 +649,14 @@ Error Handling: You can add error handling to the code to catch any errors that 
         });
     },
 
-    get_images_of_gallery(gallery_id){
+    get_images_of_gallery(gallery_id, button){
         let formdata = new FormData();
         formdata.append('action', 'plek_ajax_gallery_actions');
         formdata.append('do', 'get_images_html');
         formdata.append('gallery_id', gallery_id);
 
+        plek_main.activate_loader_style(button);
+        
         return jQuery.ajax({
             url: ajaxurl,
             data: formdata,
@@ -653,6 +667,7 @@ Error Handling: You can add error handling to the code to catch any errors that 
             async: false,
             success: function success(data) {
                 console.log(data);
+                plek_main.deactivate_loader_style(button);
                 //Check for errors
                 let success = true;
                 if (plek_main.response_has_errors(data)) {
@@ -663,8 +678,6 @@ Error Handling: You can add error handling to the code to catch any errors that 
                 //Remove the image from the grid
                 const html_data = plek_main.get_success_item_from_ajax_request(data, 0);
                 jQuery('#event-review-images-edit-container').html(html_data);
-
-                plekerror.display_info(__('Success', 'plekvetica'), message);
                 return true;
             },
             error: function error(data) {
