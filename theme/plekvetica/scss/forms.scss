@@ -313,7 +313,7 @@ input[type=checkbox] {
   width: 100%;
   height: 0;
   z-index: 9;
-  opacity: 0.3;
+  opacity: 0.8;
   background-color: $color-gray-dark;
 }
 
@@ -324,7 +324,7 @@ input[type=checkbox] {
   right: 0;
 
   .overlay_background {
-    background-color: rgba(24, 2, 2, 0.93);
+    background-color: rgba(24, 2, 2, 1);
     z-index: 9999;
   }
 
@@ -337,6 +337,8 @@ input[type=checkbox] {
     position: absolute;
     left: 0;
     top: 0;
+    border: 10px solid $color-gray-light;
+    border-radius: 3px;
   }
 
 }

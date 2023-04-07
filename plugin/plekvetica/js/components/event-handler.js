@@ -236,10 +236,14 @@ var plekevent = {
                 //Update the timestamp, if time set.
                 this.update_band_timestamp(item);
             }
-
             //Set the date from the input
-            plek_manage_event.flatpickr_band_options.defaultDate = plekevent.get_band_default_date(jQuery(item).closest('.plek-select-item'));
-            jQuery(item).flatpickr(plek_manage_event.flatpickr_band_options); //Load the Flatpickr
+            try {
+                plek_manage_event.flatpickr_band_options.defaultDate = plekevent.get_band_default_date(jQuery(item).closest('.plek-select-item'));
+                jQuery(item).flatpickr(plek_manage_event.flatpickr_band_options); //Load the Flatpickr
+                
+            } catch (error) {
+                console.log(error);
+            }
         });
 
         if (last_item === '0') {
@@ -844,7 +848,12 @@ var plekevent = {
             case 'event_organizer':
                 return this.get_selector_ids('event-organizer-selection');
                 break;
-
+            case 'event_start_date':
+            case 'event_end_date':
+                const date_data = jQuery('#' + name).val();
+                const date = new Date(date_data);
+                return plek_main.get_formated_date(date.getTime() / 1000, "Y-m-d H:i:s", false);
+                break;
             default:
                 return jQuery('#' + name).val();
                 break;

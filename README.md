@@ -1,6 +1,12 @@
 # plekvetica-2021
 
 
+Version 3.3.1 - 2023.04.07
+- Fixed: Time not set correctly when timezone was different
+- Fixed: Form did not work without flatpickr
+- Fixed: Flatpickr is not a requirement anymore
+- Added: Recommendations for Spotify artists on Add / Edit Band 
+
 Version 3.3.0 - 2023.03.28
 - Fixed: Facebook image poster
 - Added: Edit images of gallery @ edit review page

@@ -756,7 +756,7 @@ let plek_main = {
      * @param {string} format The format to return
      * @returns String The date without timezone or false if not timestamp received
      */
-    get_formated_date(timestamp, format = '') {
+    get_formated_date(timestamp, format = '', fix_timezone = true) {
 
         var length = format.length;
         if (length === 0) {
@@ -773,8 +773,11 @@ let plek_main = {
             //Timezone fix
             let time = js_date.getTime();
             let offset = js_date.getTimezoneOffset() * 60000;
-
-            let fixed_js_date = new Date(time + offset);
+            if(fix_timezone){
+                var fixed_js_date = new Date(time + offset);
+            }else{
+                var fixed_js_date = new Date(time);
+            }
             //let fixed_js_date = js_date; //Don't fix the timezone offset
 
             switch (item) {

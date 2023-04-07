@@ -5,6 +5,7 @@
 let plek_band = {
 
     default_button_texts: {},
+    spotify_bands_found: null,
 
 
     construct() {
@@ -23,14 +24,39 @@ let plek_band = {
 
             //@todo: Make this work
             //If a link is dropped to the social icon
-           /* jQuery('#band-social-icons .band-social-icon span').on('drop', function (event) {
-                plek_band.drop_the_link_like_its_hot(event);
-            });*/
+            /* jQuery('#band-social-icons .band-social-icon span').on('drop', function (event) {
+                 plek_band.drop_the_link_like_its_hot(event);
+             });*/
 
             //Check on spotify for additional data
             jQuery(document).on("focusout", '#band-link-spotify', function () {
                 plek_band.check_for_band_on_spotify(this);
             });
+
+            //Searches bands on spotify.
+            jQuery(document).on("focusout", '#band-name', (e) => {
+                plek_band.search_bands_on_spotify(e.target);
+            });
+
+            //Show found bands on spotify input.
+            jQuery(document).on("click", '[data-form-id="band-link-spotify"]', (e) => {
+                plek_band.display_found_bands();
+            });
+
+            //Adds the spotify ID to the spotify field
+            jQuery(document).on("click", ".spotify-artist-found-item button", (e) => {
+                const id = jQuery(e.target).data('spotify-id');
+                plektemplate.remove_overlay('spotify_bands');
+                //Set the ID
+                jQuery("#band-link-spotify").val(id);
+                //Fetch the data again
+                plek_band.check_for_band_on_spotify("#band-link-spotify");
+            });
+
+            jQuery(document).ready(() => {
+                plek_band.on_bandform_ready();
+            });
+
         } else {
             //Frontend and other functions, which are not on the edit band page
             jQuery(document).on("click", '.plek-follow-band-btn', function () {
@@ -39,6 +65,16 @@ let plek_band = {
 
         }
 
+    },
+
+    /**
+     * Fires when the document is ready and it is a bandform
+     */
+    on_bandform_ready() {
+        // Search for bands if spotify link is not set
+        if (empty(jQuery("#band-link-spotify").val()) && !empty(jQuery("#band-name").val())) {
+            plek_band.search_bands_on_spotify(jQuery("#band-name"));
+        }
     },
 
     /**
@@ -136,7 +172,7 @@ let plek_band = {
             var videos = jQuery('#band-videos').val().split("\n");
         }
         jQuery(videos).each(function (i, val) {
-            if(empty(val)){
+            if (empty(val)) {
                 return;
             }
             plek_band.load_youtube_video(val, i);
@@ -447,7 +483,7 @@ let plek_band = {
                 //https://open.spotify.com/artist/278ZYwGhdK6QTzE3MFePnP?autoplay=true
                 var input_arr = url.split('/');
                 var artist_index = input_arr.findIndex(element => element === 'artist');
-                
+
                 if (artist_index !== -1) {
                     const id_plus_params = input_arr[artist_index + 1];
                     const split_params = id_plus_params.split('?'); //Split the url parameters (278ZYwGhdK6QTzE3MFePnP?autoplay=true)
@@ -530,7 +566,7 @@ let plek_band = {
         jQuery('#' + form_id + '-container').css('display', 'flex');
     },
 
-    drop_the_link_like_its_hot(event){
+    drop_the_link_like_its_hot(event) {
         event.preventDefault();
         const button = event.currentTarget;
         //const linkUrl = event.dataTransfer.getData('text/plain');
@@ -563,7 +599,10 @@ let plek_band = {
                         sprintf(__('Name missmatch. The Artist ID you provided does not match with the given name.<br/>Band form Spotify: %s', 'plekvetica'), data.name));
                 }
                 //Check for Poster and set it.
-                if (empty(jQuery('#band-logo').val()) && plek_band.band_image_is_placeholder() === true) {
+                if (
+                    (empty(jQuery('#band-logo').val()) && plek_band.band_image_is_placeholder() === true) ||
+                    (jQuery('#band-logo-image img').attr('src').search('scdn.co/image') > 0)
+                ) {
                     let band_image = data.images[0].url;
                     console.log(band_image);
                     jQuery('#band-logo-url').val(band_image);
@@ -585,6 +624,55 @@ let plek_band = {
             }
         );
     },
+    /**
+     * Searches the Band by bandname
+     * @param {*} item 
+     * @returns 
+     */
+    search_bands_on_spotify(item) {
+        let input = jQuery(item).val();
+        if (empty(input)) {
+            return false;
+        }
+        //Load data from Spotify
+        document.spotify.searchArtists(input, { limit: 10 }).then(
+            function (data) {
+                plek_band.spotify_bands_found = data;
+                console.log("Spotify Bands found");
+            },
+            function (error) {
+                console.error(error);
+                plekerror.display_spotify_error_message(error);
+            }
+        );
+    },
+    //Shows the found bands
+    display_found_bands() {
+        if (empty(plek_band.spotify_bands_found) || empty(plek_band.spotify_bands_found.artists.items)) {
+            return;
+        }
+        let bands_html = "";
+        const band_found_title = "<h2>" + __('Bands found on Spotify', 'plekvetica') + "</h2>";
+        for (const [key, value] of plek_band.spotify_bands_found.artists.items.entries()) {
+            if (value.type !== "artist") {
+                return;
+            }
+            const add_button_text = __('Add', 'plekvetica');
+            const genres = value.genres.join(", ");
+            const image = (!empty(value.images[0].url)) ? value.images[0].url : "";
+            const item = `<div class="spotify-artist-found-item">
+            <div class="spotify-artist-image"><img src="${image}" /></div>
+            <div class="spotify-artist-data">
+                <div class="spotify-artist-name"><h3>${value.name}</h3></div>
+                <div class="spotify-artist-genres">${genres}</div>
+            </div>
+            <button class="plek-button" data-spotify-id="${value.id}">${add_button_text}</button>
+            </div>`;
+            bands_html += item;
+        }
+        plektemplate.add_overlay("spotify_bands", band_found_title + bands_html, __('Dismiss suggestions', 'plekvetica'));
+        plektemplate.show_overlay("spotify_bands");
+    }
 
 
 }
