@@ -5,7 +5,9 @@ Version 3.3.1 - 2023.04.07
 - Fixed: Time not set correctly when timezone was different
 - Fixed: Form did not work without flatpickr
 - Fixed: Flatpickr is not a requirement anymore
-- Added: Recommendations for Spotify artists on Add / Edit Band 
+- Added: Recommendations for Spotify artists on Add / Edit Band
+- Added: Function to flush the cache by user
+- Added: Function to rebuild the cache for a single user
 
 Version 3.3.0 - 2023.03.28
 - Fixed: Facebook image poster
