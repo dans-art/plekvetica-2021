@@ -851,6 +851,9 @@ var plekevent = {
             case 'event_start_date':
             case 'event_end_date':
                 const date_data = jQuery('#' + name).val();
+                if(empty(date_data)){
+                    return date_data;
+                }
                 const date = new Date(date_data);
                 return plek_main.get_formated_date(date.getTime() / 1000, "Y-m-d H:i:s", false);
                 break;
