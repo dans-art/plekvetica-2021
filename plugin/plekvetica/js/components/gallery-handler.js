@@ -14,7 +14,7 @@ var plek_gallery_handler = {
             plek_gallery_handler.add_images_click_action(this);
         });
         jQuery('#review_images_upload_btn').on('click', function (event) {
-            plek_gallery_handler.upload_images_click_action(this);
+            plek_gallery_handler.upload_images_click_action_v2(this);
         });
         jQuery('#images-uploaded-container').on('click', '.image_to_upload.upload_complete', function (event) {
             plek_gallery_handler.set_gallery_preview_click_action(this);
@@ -51,7 +51,7 @@ var plek_gallery_handler = {
     /**
      * Creates a new gallery
      * @param {string} event_id - The id of the event
-     * @param {string} band_id - The id of the band. This is used to create the correct album for multiday events in php
+     * @param {string} band_id - The id of the band. This is used to create the correct album for multi-day events in php
      */
     create_gallery(event_id, band_id, album_id) {
         var datab = new FormData();
@@ -89,7 +89,7 @@ var plek_gallery_handler = {
     /**
      * Creates a new NGG Album
      * @param {string} event_id - The id of the event
-     * @param {string} band_id - The id of the band. This is used to create the correct album for multiday events in php
+     * @param {string} band_id - The id of the band. This is used to create the correct album for multi-day events in php
      */
     create_album(event_id = '', band_id = '') {
         var datab = new FormData();
@@ -111,7 +111,7 @@ var plek_gallery_handler = {
                     //No errors, all good.
                     let response = plek_main.get_first_success_from_ajax_request(data);
 
-                    //Checks if event is multiday. If not, it will add the album id to all the band_gallery items.
+                    //Checks if event is multi-day. If not, it will add the album id to all the band_gallery items.
                     let is_multiday = plek_main.get_success_item_from_ajax_request(data, 2); //Get the multiday value from the response.
                     if (!is_multiday) {
                         jQuery('.review_band_images_container .image_upload_add_btn').data('album_id', response);
@@ -146,7 +146,7 @@ var plek_gallery_handler = {
 
         //Hide the edit Image container
         jQuery('#event-review-images-edit-container').html("");
-        
+
         if (plek_gallery_handler.lock_add_images_button === true) {
             plekerror.display_error(null, __('Please wait for the album and galleries to be created.', 'plekvetica'));
             return;
@@ -268,7 +268,7 @@ var plek_gallery_handler = {
     },
     /**
  * Fires when the button is clicked to upload images
- * 
+ * @deprecated Old, bad performant function
  * @param {object} button The clicked button 
  */
     async upload_images_click_action(button) {
@@ -308,116 +308,88 @@ var plek_gallery_handler = {
             await plek_gallery_handler.upload_image(index, formdata, gallery_id);
         }
     },
-
     /**
-     * Batch Processing: Instead of uploading each image one by one, you can try uploading them in batches. This way, you can reduce the number of requests being sent to the server, which would reduce the load on the browser and prevent it from crashing.
+ * Fires when the button is clicked to upload images
+ * 
+ * @param {object} button The clicked button 
+ */
+    async upload_images_click_action_v2(button) {
+        const gallery_id = jQuery(button).attr('data-gallery_id');
+        const album_id = jQuery(button).attr('data-album_id');
+        const files = jQuery('#review_images').prop('files');
 
-Async/Await: Instead of using a loop to upload the images, you can use async/await to make the upload process asynchronous. This way, the browser wouldn't have to wait for each image to be uploaded before moving on to the next one, which would reduce the load on the browser and prevent it from crashing.
-
-File Size Optimization: Before uploading the images, you can try to optimize the file size of the images to reduce the load on the browser and prevent it from crashing. You can use image compression techniques to reduce the file size of the images.
-
-Error Handling: You can add error handling to the code to catch any errors that may occur during the upload process and prevent the browser from crashing.
-
-     * async upload_images_click_action(button) {
-  let gallery_id = jQuery(button).attr('data-gallery_id');
-  let album_id = jQuery(button).attr('data-album_id');
-  let files = jQuery('#review_images').prop('files');
-
-  if(files.length === 0) {
-    plekerror.display_error(null, __('No Images selected!', 'plekvetica'), 'Image upload error');
-    return;
-  }
-
-  this.update_gallery_button_status(gallery_id, 'uploading');
-  plek_main.activate_button_loader('#review_images_upload_btn', __('Uploading images...', 'plekvetica'));
-
-  // Batch processing
-  const batchSize = 20;
-  let batches = [];
-  while (files.length) {
-    batches.push(files.splice(0, batchSize));
-  }
-
-  for (const batch of batches) {
-    let formDataArray = [];
-    for (const file of batch) {
-      if (file.size > plek_gallery_handler.max_upload_size) {
-        continue;
-      }
-
-      let formdata = new FormData();
-      formdata.append('file_data', file);
-      formDataArray.push(formdata);
-    }
-
-    // Upload images in batch
-    try {
-      await Promise.all(formDataArray.map(async (formdata, index) => {
-        let item = jQuery('#images-uploaded-container .image_to_upload')[index];
-        jQuery('#images-uploaded-container').attr('data-album_id', album_id);
-        jQuery('#images-uploaded-container').attr('data-gallery_id', gallery_id);
-        jQuery(item).addClass('upload_in_progress');
-        jQuery(item).addClass('current_upload');
-
-        await plek_gallery_handler.upload_image(index, formdata, gallery_id);
-      }));
-    } catch (error) {
-      console.error(error);
-    }
-  }
-}
-     */
-
-    /**
-     * 
-     * Alternative 
-     * 
-     * 
-     * async function uploadImages(files, galleryId, albumId) {
-      if (files.length === 0) {
-        displayError(null, "No Images selected!", "Image upload error");
-        return;
-      }
-    
-      updateGalleryButtonStatus(galleryId, "uploading");
-      activateButtonLoader("#review_images_upload_btn", "Uploading images...");
-    
-      let promises = [];
-      let container = "#images-uploaded-container";
-      let items = jQuery(container + " .image_to_upload");
-      
-      jQuery(container).attr("data-album_id", albumId);
-      jQuery(container).attr("data-gallery_id", galleryId);
-    
-      for (let i = 0; i < files.length && i < 30; i++) {
-        let file = files[i];
-        if (file.size > maxUploadSize) {
-          continue;
+        if (files.length === 0) {
+            plekerror.display_error(null, __('No Images selected!', 'plekvetica'), 'Image upload error');
+            return;
         }
-    
-        let formData = new FormData();
-        formData.append("file_data", file);
-    
-        jQuery(items[i]).addClass("upload_in_progress");
-        jQuery(items[i]).addClass("current_upload");
-    
-        promises.push(uploadImage(i, formData, galleryId));
-      }
-    
-      await Promise.all(promises);
-    }
-     * 
-     */
+
+        //Set the button to status uploading
+        this.update_gallery_button_status(gallery_id, 'uploading');
+        //Add the button loader
+        plek_main.activate_button_loader('#review_images_upload_btn', __('Uploading images...', 'plekvetica'));
+
+        const image_upload_con = '#images-uploaded-container';
+        const items = jQuery(image_upload_con + ' .image_to_upload');
+        jQuery(image_upload_con).attr('data-album_id', album_id);
+        jQuery(image_upload_con).attr('data-gallery_id', gallery_id);
+
+        const uploads = Array.from(files).map(async (upload, index) => {
+            if (upload.size > plek_gallery_handler.max_upload_size) {
+                //Skip item if file size to big
+                return;
+            }
+
+            //Upload the images
+
+            const formdata = new FormData();
+            formdata.append('file_data', upload);
+            formdata.append('action', 'plek_ajax_gallery_actions');
+            formdata.append('do', 'add_image');
+            formdata.append('gallery_id', gallery_id);
+
+            //Mark the image as being uploaded
+            const item = items[index];
+            jQuery(item).addClass('upload_in_progress');
+            jQuery(item).addClass('current_upload');
+
+            try {
+                const image_upload = await jQuery.ajax({
+                    url: ajaxurl,
+                    data: formdata,
+                    type: 'POST',
+                    cache: false,
+                    processData: false,
+                    contentType: false
+                });
+                // Check for errors
+                let success = true;
+                if (plek_main.response_has_errors(image_upload)) {
+                    success = false;
+                    plekerror.display_error('', plek_main.get_first_error_from_ajax_request(image_upload), __('Upload Error', 'plekvetica'));
+                }
+                const image_id = (success) ? plek_main.get_first_success_from_ajax_request(image_upload) : 0;
+                plek_gallery_handler.upload_image_progess_update(index, gallery_id, success, image_id);
+                return true;
+            } catch (error) {
+                console.log('upload error:', error);
+                return false;
+            }
+
+        }); //End Array.from
+
+        await Promise.all(uploads);
+    },
+
 
     /**
      * Sets the clicked image as the preview for the gallery
      * @param {object} image The clicked image container. Can be any element except for img
      */
     set_gallery_preview_click_action(image, gallery_id = null, image_id = null) {
-        if(empty(gallery_id)){
+        if (empty(gallery_id)) {
             gallery_id = jQuery(image).parent().attr('data-gallery_id');
         }
-        if(empty(image_id)){
+        if (empty(image_id)) {
             image_id = jQuery(image).attr('data-image_id');
         }
         let img_element = jQuery(image).find('img');
@@ -496,7 +468,8 @@ Error Handling: You can add error handling to the code to catch any errors that 
     /**
      * Uploads a image to the server to add it to a gallery.
      * @param {formdata} formdata 
-     * @param {int} gallery_id 
+     * @param {int} gallery_id
+     * @deprecated: Not used anymore, remove
      */
     async upload_image(index, formdata, gallery_id) {
 
@@ -649,14 +622,14 @@ Error Handling: You can add error handling to the code to catch any errors that 
         });
     },
 
-    get_images_of_gallery(gallery_id, button){
+    get_images_of_gallery(gallery_id, button) {
         let formdata = new FormData();
         formdata.append('action', 'plek_ajax_gallery_actions');
         formdata.append('do', 'get_images_html');
         formdata.append('gallery_id', gallery_id);
 
         plek_main.activate_loader_style(button);
-        
+
         return jQuery.ajax({
             url: ajaxurl,
             data: formdata,

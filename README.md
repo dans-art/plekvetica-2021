@@ -12,6 +12,7 @@ Version 3.3.1 - 2023.04.07
 - Updated translations, added 8 new language strings
 - Added function to get all users with invalid cache
 - Added caching support for events loaded via shortcode (Homepage)
+- Improved the performance of the image uploader tool
 
 Version 3.3.0 - 2023.03.28
 - Fixed: Facebook image poster
