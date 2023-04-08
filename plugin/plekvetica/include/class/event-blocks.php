@@ -12,7 +12,6 @@ class PlekEventBlocks extends PlekEvents
 
     public function __construct()
     {
-
     }
 
     //Get user blocks
@@ -240,23 +239,22 @@ class PlekEventBlocks extends PlekEvents
      * Define set_display_type() first to change the template to use for each event.
      * Available are: my_events, my_week
      * @todo: my_watchlist
-     * @todo: cache block content
      * @todo: Reset the total posts to the pages object default.
      * @todo: Support for Ajax band posts
      *
      * @param string $block_id
      * @param array $data 
-     * @return string HTML formated Event list
+     * @return string HTML formatted Event list
      */
     public function get_block(string $block_id, array $data = array(), $enable_cache = true)
     {
         //Check if the data exists in the cache
-        $url = $_SERVER['REQUEST_URI'];
-        $parameters = implode("",$_REQUEST);
-   
+        $url = (wp_doing_ajax()) ? "ajax" : $_SERVER['REQUEST_URI'];
+        $parameters = implode("", $_REQUEST);
+
         $cache_key = PlekCacheHandler::generate_key('plekblock_' . $block_id, json_encode($data) . $url . $parameters);
 
-        $cache_context = 'plek_block_'.$block_id;
+        $cache_context = 'plek_block_' . $block_id;
         $cached = PlekCacheHandler::get_cache($cache_key, $cache_context);
 
         if ($enable_cache and $cached) {
@@ -299,7 +297,7 @@ class PlekEventBlocks extends PlekEvents
                 PlekCacheHandler::set_cache($cache_key, $content_html, $content, $cache_context);
             }
             return $content_html;
-        }else{
+        } else {
             //Return the content if it is no array. This can contain a error message, etc.
             return $content;
         }
@@ -398,5 +396,4 @@ class PlekEventBlocks extends PlekEvents
         set_query_var('paged', $this->original_paged);
         return;
     }
-
 }

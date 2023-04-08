@@ -833,6 +833,14 @@ class PlekEvents extends PlekEventHandler
      */
     public function plek_get_featured_shortcode()
     {
+        $cache_key = PlekCacheHandler::generate_key('plek_featured_event', []);
+        $cached = PlekCacheHandler::get_cache($cache_key, 'shortcode');
+
+        if ($cached) {
+            //Only return the cached content if any data is available
+            return $cached;
+        }
+
         //load from cache?
         $events = tribe_get_events([
             'eventDisplay'   => 'custom',
@@ -844,7 +852,9 @@ class PlekEvents extends PlekEventHandler
         if (empty($events)) {
             return __('No Featured Events found', 'plekvetica');
         }
-        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'featured');
+        $events_formatted = PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'featured');
+        PlekCacheHandler::set_cache($cache_key,$events_formatted,$events,'shortcode');
+        return $events_formatted;
     }
 
     /**
@@ -855,7 +865,14 @@ class PlekEvents extends PlekEventHandler
      */
     public function plek_get_reviews_shortcode()
     {
-        //load from cache?
+        $cache_key = PlekCacheHandler::generate_key('plek_review_events', []);
+        $cached = PlekCacheHandler::get_cache($cache_key, 'shortcode');
+
+        if ($cached) {
+            //Only return the cached content if any data is available
+            return $cached;
+        }
+
         $meta_query = array();
         $meta_query['is_review'] = array('key' => 'is_review', 'compare' => '=', 'value' => '1');
         $events = tribe_get_events([
@@ -868,7 +885,9 @@ class PlekEvents extends PlekEventHandler
         if (empty($events)) {
             return __('No reviews found', 'plekvetica');
         }
-        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'reviews');
+        $events_formatted = PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'reviews');
+        PlekCacheHandler::set_cache($cache_key,$events_formatted,$events,'shortcode');
+        return $events_formatted;
     }
 
     /**
@@ -1240,12 +1259,21 @@ class PlekEvents extends PlekEventHandler
     public function plek_get_videos_shortcode()
     {
 
+        $cache_key = PlekCacheHandler::generate_key('plek_videos', []);
+        $cached = PlekCacheHandler::get_cache($cache_key, 'shortcode');
+
+        if ($cached) {
+            //Only return the cached content if any data is available
+            return $cached;
+        }
         $yt = new plekYoutube;
         $vids = $yt->get_youtube_videos_from_channel(4);
         if (empty($vids)) {
             return __('No videos found.', 'plekvetica');
         }
-        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $vids, 'youtube');
+        $videos_formatted = PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $vids, 'youtube');
+        PlekCacheHandler::set_cache($cache_key,$videos_formatted,[],'shortcode');
+        return $videos_formatted;
     }
 
     /**

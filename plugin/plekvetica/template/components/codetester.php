@@ -38,8 +38,11 @@ $pb = new PlekEventBlocks();
 
 $pg = new PlekGalleryHandler;
 
-s(PlekCacheHandler::rebuild_cache(1));
+//s(PlekCacheHandler::rebuild_cache(7));
 
+s(PlekUserHandler::get_uncached_users());
+
+PlekCacheHandler::rebuild_all_caches();
 ?>
 </div>
 <?php 

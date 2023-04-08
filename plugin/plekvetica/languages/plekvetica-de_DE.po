@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2023-03-18 14:26+0000\n"
+"PO-Revision-Date: 2023-04-08 08:00+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -25,7 +25,7 @@ msgstr "\"%s\" spielt an diesem Event."
 msgid "\"%s\" needs an update"
 msgstr "\"%s\" braucht eine Überarbeitung"
 
-#: include/class/plek-handler.php:942
+#: include/class/plek-handler.php:953
 #, php-format
 #| msgid "%s - accreditation request sent to %s"
 msgid "%s - accreditation status set to %s"
@@ -66,7 +66,6 @@ msgid "A new Band \"%s\" has been added."
 msgstr "Eine neue Band \"%s\" wurde hinzugefügt."
 
 #: include/class/organizer-handler.php:171
-#: template/components/codetester.php:61
 #, php-format
 msgid "A new Organizer \"%s\" has been added."
 msgstr "Ein neuer Veranstalter \"%s\" wurde hinzugefügt."
@@ -195,7 +194,7 @@ msgstr "Akkreditierte Mitglieder"
 msgid "Action not found or not supported"
 msgstr "Aktion nicht gefunden oder nicht unterstützt"
 
-#: template/band/band-form.php:95
+#: template/band/band-form.php:95 js/manage-band.js:660
 msgid "Add"
 msgstr "Hinzufügen"
 
@@ -217,11 +216,11 @@ msgstr "Als Gast hinzufügen"
 msgid "Add Band"
 msgstr "Band hinzufügen"
 
-#: include/class/events.php:1791
+#: include/class/events.php:1826
 msgid "Add event"
 msgstr "Event hinzufügen"
 
-#: js/components/event-handler.js:469
+#: js/components/event-handler.js:473
 msgid "Add Event details"
 msgstr "Event details hinzufügen"
 
@@ -259,7 +258,7 @@ msgid "Add Venue"
 msgstr "Ort hinzufügen"
 
 #: include/class/band-handler.php:931 include/class/organizer-handler.php:172
-#: include/class/venue-handler.php:155 template/components/codetester.php:62
+#: include/class/venue-handler.php:155
 msgid "Added by"
 msgstr "Hinzugefügt von"
 
@@ -276,7 +275,7 @@ msgstr "Administrator"
 msgid "Ahoy!"
 msgstr "Ahoy!"
 
-#: include/class/gallery-handler.php:347
+#: include/class/gallery-handler.php:348
 msgid "Album not found"
 msgstr "Album nicht gefunden"
 
@@ -304,6 +303,7 @@ msgstr "Anzahl tickets zum verlosen"
 msgid "API"
 msgstr "API"
 
+#: template/email/email-footer-band.php:11
 #: template/email/band/email-footer-band.php:11
 #: template/email/organizer/email-footer-organizer.php:11
 msgid "Are your Events up to date?"
@@ -314,7 +314,7 @@ msgstr "Sind deine Events up-to-date?"
 msgid "Authors"
 msgstr "Autoren"
 
-#: js/manage-band.js:348 js/manage-event.js:360 js/manage-user.js:236
+#: js/manage-band.js:384 js/manage-event.js:360 js/manage-user.js:236
 msgid "Back"
 msgstr "Zurück"
 
@@ -331,7 +331,7 @@ msgstr "Band"
 msgid "Band Events"
 msgstr "Band-Events"
 
-#: include/class/ajax-handler.php:827
+#: include/class/ajax-handler.php:828
 msgid "Band ID or Event ID not provided"
 msgstr "Band ID oder Event ID nicht übergeben"
 
@@ -372,6 +372,10 @@ msgstr "Bands"
 msgid "Bands %d to %d of %d"
 msgstr "Bands %d bis %d von %d"
 
+#: js/manage-band.js:655
+msgid "Bands found on Spotify"
+msgstr "Auf Spotify gefundene Bands"
+
 #: template/system/user-settings/band-settings-form.php:13
 msgid "Bands to manage"
 msgstr "Bands zum verwalten"
@@ -381,6 +385,7 @@ msgid "Bandscore"
 msgstr "Bandscore"
 
 #: template/email/band/band-new-review-info.php:26
+#: template/email/event/new_event_band_info.php:51
 #: template/email/organizer/organizer-accreditation-request.php:66
 #: template/email/organizer/organizer-new-review-info.php:31
 #, php-format
@@ -399,7 +404,7 @@ msgstr "Booleanischer Wert"
 msgid "Boxoffice"
 msgstr "Abendkasse"
 
-#: include/class/events.php:1709
+#: include/class/events.php:1744
 #, php-format
 msgid "by: %s"
 msgstr "von: %s"
@@ -495,7 +500,7 @@ msgstr "Link zum Foto kopieren"
 msgid "Could not find the artist. Please check the ID or URL again"
 msgstr "Konnte den Künstler nicht finden. Bitte prüfe die ID oder die URL"
 
-#: include/class/gallery-handler.php:353
+#: include/class/gallery-handler.php:354
 msgid "Could not save the albums galleries."
 msgstr "Konnte die Galerien des Albums nicht speichern."
 
@@ -519,7 +524,7 @@ msgstr "Videobearbeiter"
 msgid "Daniel Spycher"
 msgstr "Daniel Spycher"
 
-#: js/components/event-handler.js:463
+#: js/components/event-handler.js:467
 msgid "Data saved!"
 msgstr "Daten gespeichert!"
 
@@ -536,7 +541,7 @@ msgid "Date"
 msgstr "Datum"
 
 #: include/class/form-validator.php:532 template/event/meta/datetime.php:9
-#: template/event/form/components/date.php:20
+#: template/event/form/components/date.php:21
 msgid "Date & Time"
 msgstr "Datum & Zeit"
 
@@ -584,6 +589,10 @@ msgstr "Beschreibung"
 #: template/band/meta/details.php:23 template/event/meta/details.php:11
 msgid "Details"
 msgstr "Details"
+
+#: js/manage-band.js:673
+msgid "Dismiss suggestions"
+msgstr "Verschläge ablehnen"
 
 #: include/class/notification-handler.php:536
 msgid "Dismissed"
@@ -660,7 +669,8 @@ msgid "Entry is %d characters too long."
 msgstr "Eintrag ist %d Zeichen zu lang."
 
 #: js/accreditation-management.js:45 js/accreditation-management.js:58
-#: js/plek-main-script.js:423 js/components/gallery-handler.js:141
+#: js/plek-main-script.js:424 js/components/gallery-handler.js:163
+#: js/components/gallery-handler.js:635 js/components/gallery-handler.js:675
 msgid "Error"
 msgstr "Fehler"
 
@@ -671,6 +681,10 @@ msgstr "Fehler 404: Galerie nicht gefunden"
 #: include/class/file-handler.php:56
 msgid "Error adding the image to the database."
 msgstr "Fehler beim Hinzufügen des Bildes zur Datenbank."
+
+#: include/class/gallery-handler.php:563
+msgid "Error deleting the image"
+msgstr "Fehler beim löschen des Bildes"
 
 #: template/system/login/new-password-form.php:15
 msgid "Error in reset key"
@@ -683,10 +697,10 @@ msgstr "Fehler bei laden der Daten"
 #: js/main-event-single.js:194 js/main-event-single.js:219
 #: js/main-event-single.js:249 js/main-event-single.js:276
 #: js/main-event-single.js:309 js/main-event-single.js:331
-#: js/manage-band.js:355 js/manage-band.js:391 js/manage-event.js:366
+#: js/manage-band.js:391 js/manage-band.js:427 js/manage-event.js:366
 #: js/manage-user.js:107 js/manage-user.js:154 js/manage-user.js:204
-#: js/manage-user.js:243 js/components/event-handler.js:483
-#: js/components/event-handler.js:587
+#: js/manage-user.js:243 js/components/event-handler.js:487
+#: js/components/event-handler.js:591
 msgid "Error loading data. "
 msgstr "Fehler beim laden der Daten."
 
@@ -699,7 +713,7 @@ msgstr "Fehler beim Speichern der Kontoinformationen"
 msgid "Error saving Band (%s)"
 msgstr "Fehler beim Speichern der Band (%s)"
 
-#: include/class/gallery-handler.php:283
+#: include/class/gallery-handler.php:284
 msgid "Error uploading file"
 msgstr "Fehler beim hochladen der Datei"
 
@@ -707,11 +721,11 @@ msgstr "Fehler beim hochladen der Datei"
 msgid "Error while changing the following status"
 msgstr "Fehler beim ändern des \"folgen\" status"
 
-#: js/components/gallery-handler.js:195
+#: js/components/gallery-handler.js:217
 msgid "Error while creating a new album"
 msgstr "Fehler beim erstellen eines neuen Albums"
 
-#: js/components/gallery-handler.js:205
+#: js/components/gallery-handler.js:227
 msgid "Error while creating a new gallery"
 msgstr "Fehler beim erstellen einer neuen Galerie"
 
@@ -719,11 +733,11 @@ msgstr "Fehler beim erstellen einer neuen Galerie"
 msgid "Error while creating a new user"
 msgstr "Fehler während des erstellen des neuen Benutzer"
 
-#: js/components/gallery-handler.js:141
+#: js/components/gallery-handler.js:163
 msgid "Error while creating album or gallery"
 msgstr "Fehler beim erstellen des Albums oder Galerie."
 
-#: include/class/cache-handler.php:314
+#: include/class/cache-handler.php:415
 #, php-format
 msgid "Error while deleting the cache: %s"
 msgstr "Fehler beim löschen des Zwischenspeichers: %s"
@@ -737,11 +751,11 @@ msgstr "Fehler beim laden der Daten"
 msgid "Error while resizing the image: %s."
 msgstr "Fehler beim ändern der Grösse des Bildes: %s."
 
-#: include/class/gallery-handler.php:222
+#: include/class/gallery-handler.php:223
 msgid "Error while saving the new Album."
 msgstr "Fehler beim erstellen eines neuen Albums."
 
-#: include/class/gallery-handler.php:247
+#: include/class/gallery-handler.php:248
 msgid "Error while saving the new Gallery."
 msgstr "Fehler beim erstellen einer neuen Galerie."
 
@@ -798,7 +812,7 @@ msgstr "Fehler: Benutzerobjekt konnte nicht geladen werden."
 msgid "Event"
 msgstr "Event"
 
-#: include/class/plek-handler.php:895 js/accreditation-management.js:47
+#: include/class/plek-handler.php:906 js/accreditation-management.js:47
 msgid "Event accreditation updated"
 msgstr "Event Akkreditierung aktualisiert"
 
@@ -884,8 +898,8 @@ msgstr "Event gemeldet"
 msgid "Event Review saved"
 msgstr "Event Review gespeichert"
 
-#: js/components/event-handler.js:433 js/components/event-handler.js:453
-#: js/components/event-handler.js:458
+#: js/components/event-handler.js:437 js/components/event-handler.js:457
+#: js/components/event-handler.js:462
 msgid "Event saved!"
 msgstr "Event gespeichert!"
 
@@ -936,7 +950,7 @@ msgstr "Eventmanager Tipp"
 msgid "Events"
 msgstr "Events"
 
-#: include/class/events.php:1123 template/components/pagination-buttons.php:73
+#: include/class/events.php:1143 template/components/pagination-buttons.php:73
 #, php-format
 msgid "Events %d to %d of %d"
 msgstr "Events %d bis %d von %d"
@@ -980,19 +994,19 @@ msgstr "Facebook URL"
 msgid "Failed to add post_ids (%s) to cache relationship"
 msgstr "Fehler beim hinzufügen von der post_id (%s) zum Zwischenspeicher"
 
-#: include/class/ajax-handler.php:782
+#: include/class/ajax-handler.php:783
 msgid "Failed to add the album to the event"
 msgstr "Album konnte nicht zum Event hinzugefügt werden"
 
-#: include/class/ajax-handler.php:819
+#: include/class/ajax-handler.php:820
 msgid "Failed to add the gallery to the band"
 msgstr "Galerie konnte nicht zur Band hinzugefügt werden"
 
-#: include/class/ajax-handler.php:815
+#: include/class/ajax-handler.php:816
 msgid "Failed to add the gallery to the event"
 msgstr "Galerie konnte nicht zum Event hinzugefügt werden"
 
-#: include/class/gallery-handler.php:301
+#: include/class/gallery-handler.php:302
 msgid "Failed to create new gallery dir: "
 msgstr "Fehler beim erstellen eines neuen Galerie Verzeichnis."
 
@@ -1001,22 +1015,22 @@ msgstr "Fehler beim erstellen eines neuen Galerie Verzeichnis."
 msgid "Failed to create new user (%s)"
 msgstr "Neuer Benutzer konnte nicht angelegt werden (%s)"
 
-#: include/class/cache-handler.php:167
+#: include/class/cache-handler.php:229
 #, php-format
 msgid "Failed to flush cache for : %s, Error: %s"
 msgstr "Fehler beim löschen des Zwischenspeichers für: %s, Fehler: %s"
 
-#: include/class/cache-handler.php:63 include/class/cache-handler.php:228
-#: include/class/cache-handler.php:269
+#: include/class/cache-handler.php:63 include/class/cache-handler.php:290
+#: include/class/cache-handler.php:331
 #, php-format
 msgid "Failed to get cached data: %s"
 msgstr "Fehler beim abrufen der Zwischenspeicher-Daten: %s"
 
-#: include/class/events.php:1501
+#: include/class/events.php:1532
 msgid "Failed to load Text for the Facebook ticket raffle"
 msgstr "Konnte den Text für die Facebook Ticket Verlosung nicht laden."
 
-#: include/class/cache-handler.php:203
+#: include/class/cache-handler.php:265
 #, php-format
 msgid ""
 "Failed to remove all cached objects. %d objects found, %d objects deleted"
@@ -1093,7 +1107,7 @@ msgstr ""
 "Feld enthält unerlaubte Zeichen. Nur Nummern, Punkt und Bindestrich sind "
 "erlaubt."
 
-#: include/class/gallery-handler.php:293
+#: include/class/gallery-handler.php:294
 msgid "File is not a valid Image. Only JPG's are allowed!."
 msgstr "Bild ist keine valide Bild-Datei. Nur JPG's sind erlaubt!"
 
@@ -1102,7 +1116,7 @@ msgstr "Bild ist keine valide Bild-Datei. Nur JPG's sind erlaubt!"
 msgid "File is too big (Max %d MB)"
 msgstr "Datei ist zu gross (max. %d MB)"
 
-#: js/plek-main-script.js:200
+#: js/plek-main-script.js:201
 msgid "File selected"
 msgstr "Datei gewählt"
 
@@ -1119,7 +1133,7 @@ msgstr "Finden"
 msgid "First Name"
 msgstr "Vorname"
 
-#: include/class/band-handler.php:1312 include/class/events.php:1598
+#: include/class/band-handler.php:1312 include/class/events.php:1633
 #: template/band/meta/details.php:19 template/event/meta/details.php:7
 msgid "Follow"
 msgstr "Folgen"
@@ -1132,7 +1146,7 @@ msgstr "Folge Bands und Events um nie wieder einen Event zu verpassen"
 msgid "Follower"
 msgstr "Follower"
 
-#: js/components/event-handler.js:417
+#: js/components/event-handler.js:421
 msgid "Form error"
 msgstr "Formular Fehler"
 
@@ -1152,21 +1166,21 @@ msgstr "Vollständiger Review Text"
 msgid "Future Events"
 msgstr "Künftige Events"
 
-#: include/class/gallery-handler.php:475
+#: include/class/gallery-handler.php:534
 msgid "Gallery not found"
 msgstr "Galerie nicht gefunden"
 
-#: js/components/gallery-handler.js:420
+#: js/components/gallery-handler.js:446
 msgid "Gallery preview"
 msgstr "Galerie Vorschaubild"
 
-#: include/class/gallery-handler.php:481
+#: include/class/gallery-handler.php:539
 msgid "Gallery preview not set because of unknown error"
 msgstr ""
 "Galerie Vorschaubild konnte nicht gespeichert werden, da ein unbekannter "
 "Fehler aufgetreten ist."
 
-#: include/class/gallery-handler.php:485
+#: include/class/gallery-handler.php:543
 msgid "Gallery preview successfully set"
 msgstr "Vorschaubild der Galerie erfolgreich gespeichert"
 
@@ -1230,7 +1244,11 @@ msgstr "ID des Events nicht gefunden."
 msgid "Image"
 msgstr "Bild"
 
-#: js/components/gallery-handler.js:556
+#: include/class/ajax-handler.php:850
+msgid "Image deleted"
+msgstr "Bild gelöscht"
+
+#: js/components/gallery-handler.js:583
 msgid "Image upload"
 msgstr "Bilder hochladen"
 
@@ -1238,16 +1256,16 @@ msgstr "Bilder hochladen"
 msgid "Images"
 msgstr "Bilder"
 
-#: js/components/gallery-handler.js:556
+#: js/components/gallery-handler.js:583
 msgid "Images uploaded: "
 msgstr "Bilder hochgeladen:"
 
-#: template/event/form/components/review-image-band-item.php:29
-#: template/event/form/components/review-image-impression-items.php:46
+#: template/event/form/components/review-image-band-item.php:32
+#: template/event/form/components/review-image-impression-items.php:49
 msgid "Images:"
 msgstr "Bilder:"
 
-#: js/components/gallery-handler.js:455
+#: js/components/gallery-handler.js:482
 msgid "Imagesize is to big for: "
 msgstr "Bildgrösse ist zu gross für:"
 
@@ -1255,11 +1273,11 @@ msgstr "Bildgrösse ist zu gross für:"
 msgid "Impression"
 msgstr "Impression"
 
-#: template/event/form/components/review-image-impression-items.php:45
+#: template/event/form/components/review-image-impression-items.php:48
 msgid "Impressions"
 msgstr "Impressionen"
 
-#: js/manage-band.js:248 js/manage-band.js:271 js/manage-band.js:386
+#: js/manage-band.js:284 js/manage-band.js:307 js/manage-band.js:422
 msgid "Info"
 msgstr "Info"
 
@@ -1321,7 +1339,7 @@ msgstr "Ungültige Antwort"
 msgid "Involved since:"
 msgstr "Dabei seit:"
 
-#: js/components/template-handler.js:68
+#: js/components/template-handler.js:76
 msgid "Items found:"
 msgstr "Einträge gefunden:"
 
@@ -1329,7 +1347,7 @@ msgstr "Einträge gefunden:"
 msgid "Last Name"
 msgstr "Nachname"
 
-#: include/class/plek-handler.php:928
+#: include/class/plek-handler.php:939
 #: template/event/organizer/accredi_management.php:94
 msgid "Latest Notes"
 msgstr "Letzte Notizen"
@@ -1367,7 +1385,7 @@ msgstr "Link zur Webseite"
 msgid "Links"
 msgstr "Links"
 
-#: include/class/events.php:1175 template/posts/author-single.php:70
+#: include/class/events.php:1195 template/posts/author-single.php:70
 msgid "Load more events"
 msgstr "Weitere Events laden"
 
@@ -1375,7 +1393,7 @@ msgstr "Weitere Events laden"
 msgid "Load more reviews"
 msgstr "Weitere Reviews laden"
 
-#: js/manage-band.js:231
+#: js/manage-band.js:267
 msgid "Loading Video"
 msgstr "Lade Video"
 
@@ -1430,7 +1448,7 @@ msgstr "Verwaltete Bands"
 msgid "Managed by:"
 msgstr "Verwaltet von:"
 
-#: template/event/form/components/date.php:37
+#: template/event/form/components/date.php:38
 msgid "Mark this event as postponed"
 msgstr "Markiere den Event als verschoben"
 
@@ -1481,7 +1499,7 @@ msgstr "Modifikationen und spezielle Funktionen für die Plekvetica-Seite."
 msgid "More than one Event found. This should not happen!"
 msgstr "Mehr ale ein Event wurde gefunden. Das sollte nicht passieren."
 
-#: template/event/form/components/date.php:33
+#: template/event/form/components/date.php:34
 msgid "Multi day event / Define end time"
 msgstr "Event über mehrere Tage / Endzeit definieren"
 
@@ -1517,7 +1535,7 @@ msgstr "Meine Watchlist"
 msgid "Name"
 msgstr "Name"
 
-#: js/manage-band.js:563
+#: js/manage-band.js:599
 #, javascript-format
 msgid ""
 "Name missmatch. The Artist ID you provided does not match with the given "
@@ -1550,7 +1568,6 @@ msgid "New Event added, please publish"
 msgstr "Neuer Event eingetragen, bitte veröffentlichen"
 
 #: include/class/organizer-handler.php:174
-#: template/components/codetester.php:64
 msgid "New Organizer added"
 msgstr "Neuer Veranstalter hinzugefügt"
 
@@ -1594,7 +1611,6 @@ msgid "New Venue added"
 msgstr "Neuer Ort hinzugefügt"
 
 #: include/class/notification-handler.php:812
-#: template/components/codetester.php:109
 msgid "News from Plekvetica"
 msgstr "Neuigkeiten von Plekvetica"
 
@@ -1611,11 +1627,11 @@ msgstr "Netter versuch! Hier sind keine Roboter erlaubt!"
 msgid "No"
 msgstr "Nein"
 
-#: include/class/gallery-handler.php:342
+#: include/class/gallery-handler.php:343
 msgid "No Album ID or Gallery IDs provided"
 msgstr "Keine Album ID oder Galerie ID angegeben"
 
-#: include/class/gallery-handler.php:207
+#: include/class/gallery-handler.php:208
 msgid "No Album name provided"
 msgstr "Kein Album-Name angegeben."
 
@@ -1639,7 +1655,7 @@ msgstr "Für diesen Event sind noch keine Bands bekannt."
 msgid "No bands found."
 msgstr "Keine Bands gefunden."
 
-#: include/class/cache-handler.php:170
+#: include/class/cache-handler.php:232
 #, php-format
 msgid "No cached items found for post id: %s"
 msgstr "Keine Elemente gefunden für die Beitrags-ID: %s"
@@ -1655,12 +1671,12 @@ msgstr "Keine Daten erhalten"
 msgid "No Event found, or Event is not a Review"
 msgstr "Kein Event gefunden, oder Event ist kein Review"
 
-#: include/class/events.php:1312
+#: include/class/events.php:1341
 #: template/event/organizer/accredi_management.php:23
 msgid "No Event ID found"
 msgstr "Keine Event ID gefunden"
 
-#: include/class/events.php:1612 include/class/events.php:1626
+#: include/class/events.php:1647 include/class/events.php:1661
 msgid "No Event ID found."
 msgstr "Keine Event ID gefunden."
 
@@ -1668,7 +1684,7 @@ msgstr "Keine Event ID gefunden."
 msgid "No Event ID given. Expects an Array with the Event IDs"
 msgstr "Keine Event ID übergeben. Erwartet ein Array mit Event ID's"
 
-#: include/class/events.php:1398 include/class/events.php:1761
+#: include/class/events.php:1427 include/class/events.php:1796
 msgid "No Events found"
 msgstr "Keine Events gefunden"
 
@@ -1685,7 +1701,7 @@ msgstr "Es wurden keine Events mit dem Suchbegriff &quot;%s&quot; gefunden."
 msgid "No Facebook page ID set"
 msgstr "Keine Facebook Seiten ID definiert"
 
-#: include/class/events.php:845
+#: include/class/events.php:853
 msgid "No Featured Events found"
 msgstr "Keine hervorgehobenen Events gefunden"
 
@@ -1697,15 +1713,20 @@ msgstr "Keine Felder definiert"
 msgid "No fotos found."
 msgstr "Keine Fotos gefunden."
 
-#: include/class/gallery-handler.php:237
+#: include/class/gallery-handler.php:238
 msgid "No Gallery name provided"
 msgstr "Kein Galeriename angegeben"
 
-#: include/class/gallery-handler.php:41
+#: include/class/gallery-handler.php:42
 msgid "No gallery was found. It may have been deleted or moved."
 msgstr ""
 "Es wurde keine Galerie gefunden. Möglicherweise wurde diese gelöscht oder "
 "verschoben."
+
+#: include/class/gallery-handler.php:424
+#, php-format
+msgid "No gallery with ID %s found"
+msgstr "Keine Galerie mit der ID %s gefunden"
 
 #: include/class/newsletter.php:412
 msgid "No ID given"
@@ -1715,7 +1736,16 @@ msgstr "Keine ID übergeben"
 msgid "No Image found"
 msgstr "Kein Bild gefunden"
 
-#: js/components/gallery-handler.js:259
+#: include/class/gallery-handler.php:555
+msgid "No image id provided"
+msgstr "Keine Bild ID übergeben"
+
+#: include/class/gallery-handler.php:433
+#, php-format
+msgid "No images found for gallery %s"
+msgstr "Keine Bilder gefunden für die Galerie %s"
+
+#: js/components/gallery-handler.js:281
 msgid "No Images selected!"
 msgstr "Keine Bilder gewählt"
 
@@ -1731,7 +1761,7 @@ msgstr "Kein Medien Kontakt für diesen Veranstalter definiert"
 msgid "No message defined"
 msgstr "Nachricht undefiniert"
 
-#: include/class/events.php:1350
+#: include/class/events.php:1379
 msgid "No new Events found"
 msgstr "Keine neuen Events gefunden"
 
@@ -1761,24 +1791,20 @@ msgstr ""
 msgid "No photos found for this event."
 msgstr "Für dieses Event wurden keine Fotos gefunden."
 
-#: include/class/cache-handler.php:89
-msgid "No post ids given"
-msgstr "Keine Beitrags-IDs übergeben"
-
-#: include/class/events.php:974 include/class/events.php:1030
+#: include/class/events.php:994 include/class/events.php:1050
 msgid "No posts found"
 msgstr "Keine Beiträge gefunden"
 
-#: include/class/events.php:1733
+#: include/class/events.php:1768
 msgid "No query given. Add ?query=searchfor to the url"
 msgstr "Keine Suchbegriff übergeben. Füge ?=query=searchfor in die URL"
 
-#: include/class/events.php:1179
+#: include/class/events.php:1199
 msgid "No raffles found"
 msgstr "Keine Verlosungen gefunden"
 
-#: include/class/events.php:869 include/class/events.php:891
-#: include/class/events.php:942
+#: include/class/events.php:886 include/class/events.php:910
+#: include/class/events.php:962
 msgid "No reviews found"
 msgstr "Keine Reviews gefunden"
 
@@ -1802,7 +1828,7 @@ msgstr "Kein Typ gefunden"
 msgid "No username or email provided"
 msgstr "Kein Benutzername oder Passwort angegeben."
 
-#: include/class/events.php:1245 include/class/search-handler.php:23
+#: include/class/events.php:1272 include/class/search-handler.php:23
 msgid "No videos found."
 msgstr "Keine Videos gefunden."
 
@@ -1893,7 +1919,7 @@ msgstr "Veranstalter gespeichert"
 msgid "Organizer Settings"
 msgstr "Veranstalter Einstellungen"
 
-#: include/class/events.php:1704
+#: include/class/events.php:1739
 #, php-format
 msgid "Organizer: %s"
 msgstr "Veranstalter: %s"
@@ -1995,7 +2021,7 @@ msgstr "Bitte wähle ein Land"
 msgid "Please select..."
 msgstr "Bitte wählen..."
 
-#: js/components/gallery-handler.js:129
+#: js/components/gallery-handler.js:151
 msgid "Please wait for the album and galleries to be created."
 msgstr "Bitte warten während die Alben und Galerien erstellt werden"
 
@@ -2144,13 +2170,14 @@ msgstr "Passwort zurücksetzen"
 msgid "Review"
 msgstr "Review"
 
+#: template/email/email-footer-band.php:12
 #: template/email/band/email-footer-band.php:12
 #: template/email/organizer/email-footer-organizer.php:12
 #, php-format
 msgid "Review and update them on your %s page"
 msgstr "Anschauen und updaten kannst du diese auf deiner %s Seite"
 
-#: js/components/event-handler.js:573 js/components/event-handler.js:578
+#: js/components/event-handler.js:577 js/components/event-handler.js:582
 msgid "Review status"
 msgstr "Review Status"
 
@@ -2170,7 +2197,7 @@ msgstr "Rolle nicht gefunden in der Einstellungsfunktion."
 msgid "Save"
 msgstr "Speichern"
 
-#: js/manage-band.js:315
+#: js/manage-band.js:351
 msgid "Save Band..."
 msgstr "Speichere Band..."
 
@@ -2343,7 +2370,7 @@ msgstr "Einige Events wurden noch nicht angefragt..."
 msgid "Sorry, you are not allowed to edit this Event!"
 msgstr "Sorry, aber du bist nicht berechtigt, diesen Event zu bearbeiten."
 
-#: include/class/events.php:1287
+#: include/class/events.php:1316
 msgid "Sorry, you are not allowed to edit this post anymore"
 msgstr "Sorry, aber du bist nicht mehr berechtigt, diesen Event zu bearbeiten "
 
@@ -2387,7 +2414,7 @@ msgstr "Strasse und Nummer"
 msgid "Subject and Message"
 msgstr "Betreff und Nachricht"
 
-#: js/accreditation-management.js:47
+#: js/accreditation-management.js:47 js/components/gallery-handler.js:643
 msgid "Success"
 msgstr "Erfolgreich"
 
@@ -2425,7 +2452,7 @@ msgstr ""
 "Danke vielmals für deinen Beitrag im Plekvetica Eventkalender. Unsere "
 "Eventmanager werden die Veranstaltung prüfen und freigeben."
 
-#: js/components/event-handler.js:453
+#: js/components/event-handler.js:457
 #| msgid ""
 #| "Event saved, thanks a lot!<br/>Our Eventmanager will check and publish "
 #| "the Event"
@@ -2514,7 +2541,7 @@ msgstr "Das Formular enthält Fehler, bitte beheben"
 msgid "The from has errors, please fix them"
 msgstr "Das Formular enthält Fehler, bitte beheben"
 
-#: js/components/gallery-handler.js:463
+#: js/components/gallery-handler.js:490
 msgid "The given File is not a valid image"
 msgstr "Die Datei ist keine gültige Bilddatei"
 
@@ -2535,7 +2562,7 @@ msgstr "Die Passwörter müssen übereinstimmen"
 msgid "The provided value is not allowed, please change"
 msgstr "Der angegebene Wert ist nicht erlaubt, bitte ändern"
 
-#: js/components/event-handler.js:572
+#: js/components/event-handler.js:576
 msgid "The Review contains errors, please fix them."
 msgstr "Das Review hat Fehler, bitte behebe diese."
 
@@ -2581,7 +2608,7 @@ msgstr "Dieser Autor hat keine Beschreibung."
 msgid "This Band has no origin information"
 msgstr "Diese Band hat keine Herkunftsinformationen"
 
-#: include/class/event-blocks.php:168
+#: include/class/event-blocks.php:167
 msgid "This Data can only be displayed to team members"
 msgstr "Diese Daten können nur für Team-Mitglieder angezeigt werden"
 
@@ -2622,7 +2649,7 @@ msgstr "Dieser Event wurde vom %s auf den %s verschoben."
 msgid "This file type is not allowed. (Only %s)"
 msgstr "Dieser Dateityp ist nicht zulässig. (Nur %s)"
 
-#: js/components/event-handler.js:417
+#: js/components/event-handler.js:421
 msgid "This form contains errors, please fix them."
 msgstr "Das Formular enthält noch Fehler, bitte korrigiere diese."
 
@@ -2653,7 +2680,7 @@ msgid "Title"
 msgstr "Titel"
 
 #: template/event/meta/datetime.php:16
-#: template/event/form/components/date.php:25
+#: template/event/form/components/date.php:26
 msgid "to"
 msgstr "bis"
 
@@ -2671,7 +2698,7 @@ msgstr ""
 msgid "To many Bands selected! Are you sure you have more than 5 Bands!?"
 msgstr "Zu viele Bands gewählt! Bist du sicher, das du mehr als 5 Bands hast!?"
 
-#: js/components/event-handler.js:456
+#: js/components/event-handler.js:460
 msgid "To my Event"
 msgstr "Zu meinem Event"
 
@@ -2694,7 +2721,7 @@ msgstr "Zur Galerie: %s"
 msgid "To the new event"
 msgstr "Zum neuen Event"
 
-#: include/class/events.php:1565
+#: include/class/events.php:1600
 msgid "Today"
 msgstr "Heute"
 
@@ -2724,7 +2751,7 @@ msgstr "Typ"
 msgid "Undefined"
 msgstr "Undefiniert"
 
-#: include/class/band-handler.php:1310 include/class/events.php:1596
+#: include/class/band-handler.php:1310 include/class/events.php:1631
 #: template/band/meta/details.php:19 template/event/meta/details.php:7
 msgid "Unfollow"
 msgstr "Entfolgen"
@@ -2739,20 +2766,20 @@ msgstr "Event zum veröffentlichen"
 msgid "Update failed!"
 msgstr "Update fehlgeschlagen!"
 
-#: template/components/image-upload-button.php:13 js/plek-main-script.js:748
+#: template/components/image-upload-button.php:13 js/plek-main-script.js:749
 msgid "Upload"
 msgstr "Hochladen"
 
-#: js/components/gallery-handler.js:418 js/components/gallery-handler.js:494
+#: js/components/gallery-handler.js:444 js/components/gallery-handler.js:521
 msgid "Upload Error"
 msgstr "Fehler beim Hochladen"
 
 #: template/event/form/components/review-images.php:49
-#: js/components/gallery-handler.js:554
+#: js/components/gallery-handler.js:581
 msgid "Upload images"
 msgstr "Bilder hochladen"
 
-#: js/components/gallery-handler.js:537
+#: js/components/gallery-handler.js:564
 msgid "Upload: "
 msgstr "Hochladen:"
 
@@ -2760,7 +2787,7 @@ msgstr "Hochladen:"
 msgid "Uploaded file not found"
 msgstr "Hochgeladene Datei nicht gefunden"
 
-#: js/components/gallery-handler.js:267
+#: js/components/gallery-handler.js:289
 msgid "Uploading images..."
 msgstr "Bilder werden hochgeladen..."
 
@@ -2813,7 +2840,7 @@ msgstr "Der Ort konnte nicht aktualisiert werden "
 msgid "Venue saved"
 msgstr "Ort gespeichert"
 
-#: js/manage-band.js:248
+#: js/manage-band.js:284
 msgid "Video not found. Maybe the Video is private or the ID is incorrect"
 msgstr ""
 "Video nicht gefunden. Möglicherweise ist das Video Privat oder die ID ist "
@@ -2871,11 +2898,11 @@ msgstr "Wo: %s"
 msgid "Win %s Tickets for"
 msgstr "Gewinne %s Ticket für"
 
-#: include/class/events.php:1513
+#: include/class/events.php:1545
 msgid "Win condition not supported"
 msgstr "Gewinnkonditionen nicht unterstützt"
 
-#: include/class/events.php:1504
+#: include/class/events.php:1535
 msgid "Win conditions not set"
 msgstr "Gewinnkonditionen nicht definiert"
 
@@ -2930,7 +2957,7 @@ msgstr ""
 "womöglich nicht mehr bearbeiten können.\n"
 "Bist du sicher?"
 
-#: template/email/event/new_event_band_info.php:47
+#: template/email/event/new_event_band_info.php:48
 msgid ""
 "You are getting this eMail because you followed the mentioned Bands on "
 "plekvetica.ch."
@@ -2946,7 +2973,7 @@ msgstr "Du bist nicht berechtigt diese Funktion zu nutzen!"
 msgid "You are not allowed to edit this band!"
 msgstr "Du darfst diese Band nicht bearbeiten!"
 
-#: include/class/events.php:1277
+#: include/class/events.php:1306
 msgid "You are not allowed to edit this Event!"
 msgstr "Du hast keine Erlaubnis, diesen Event zu bearbeiten!"
 
@@ -2959,7 +2986,7 @@ msgstr "Du bist nicht berechtigt, diesen Veranstalter zu bearbeiten!"
 msgid "You are not allowed to edit this venue!"
 msgstr "Du bist nicht berechtigt, diesen Ort zu bearbeiten!"
 
-#: include/class/plek-handler.php:889 include/class/plek-handler.php:916
+#: include/class/plek-handler.php:900 include/class/plek-handler.php:927
 msgid "You are not allowed to run this action"
 msgstr "Du hast keine Berechtigung diese Aktion durchzuführen."
 
@@ -3004,6 +3031,10 @@ msgstr ""
 #: template/event/organizer/accredi_management.php:49
 msgid "You can manage your accreditation requests on this page."
 msgstr "Du kannst die Akkreditierungsanfrage auf dieser Seite verwalten."
+
+#: include/class/gallery-handler.php:558
+msgid "You have no permissions to delete images"
+msgstr "Du hast keine Berechtigungen Bilder zu löschen"
 
 #: include/class/ajax-handler.php:696
 msgid "You have to be logged in in order to save the settings."
@@ -3079,7 +3110,7 @@ msgstr "Youtube"
 msgid "Youtube Video"
 msgstr "Youtube-Video"
 
-#: js/manage-band.js:271
+#: js/manage-band.js:307
 msgid "Youtube Video already added"
 msgstr "Youtube Video bereits hinzugefügt"
 

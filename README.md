@@ -8,6 +8,10 @@ Version 3.3.1 - 2023.04.07
 - Added: Recommendations for Spotify artists on Add / Edit Band
 - Added: Function to flush the cache by user
 - Added: Function to rebuild the cache for a single user
+- Cache gets rebuilt every night
+- Updated translations, added 8 new language strings
+- Added function to get all users with invalid cache
+- Added caching support for events loaded via shortcode (Homepage)
 
 Version 3.3.0 - 2023.03.28
 - Fixed: Facebook image poster
