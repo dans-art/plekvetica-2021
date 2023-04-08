@@ -481,13 +481,11 @@ let plek_band = {
             case "spotify":
                 //(https://open.spotify.com/artist/1IQ2e1buppatiN1bxUVkrk?si=P07Tx2AlQ5m6ZTsnce6lzQ)
                 //https://open.spotify.com/artist/278ZYwGhdK6QTzE3MFePnP?autoplay=true
-                var input_arr = url.split('/');
-                var artist_index = input_arr.findIndex(element => element === 'artist');
-
-                if (artist_index !== -1) {
-                    const id_plus_params = input_arr[artist_index + 1];
-                    const split_params = id_plus_params.split('?'); //Split the url parameters (278ZYwGhdK6QTzE3MFePnP?autoplay=true)
-                    return split_params[0];//Get the artist ID only. 
+                const match = url.match(/artist\/(\w+)/);
+                if (match && match.length > 1) {
+                    return match[1];
+                } else {
+                    return false;
                 }
                 break;
 
@@ -590,6 +588,11 @@ let plek_band = {
         document.spotify.getArtist(input).then(
             function (data) {
                 //Check if the Artist Name matches, suggest genres and add the data to a hidden field
+                const band_image = (!empty(data.images)) ? data.images[0].url : "";
+                if (data.type !== "artist") {
+                    console.log("Spotify link is not an artist");
+                    return;
+                }
                 if (empty(jQuery('#band-name').val())) {
                     jQuery('#band-name').val(data.name);
                 }
@@ -603,10 +606,10 @@ let plek_band = {
                     (empty(jQuery('#band-logo').val()) && plek_band.band_image_is_placeholder() === true) ||
                     (jQuery('#band-logo-image img').attr('src').search('scdn.co/image') > 0)
                 ) {
-                    let band_image = data.images[0].url;
-                    console.log(band_image);
-                    jQuery('#band-logo-url').val(band_image);
-                    jQuery('#band-logo-image img').attr('src', band_image);
+                    if (!empty(band_image)) {
+                        jQuery('#band-logo-url').val(band_image);
+                        jQuery('#band-logo-image img').attr('src', band_image);
+                    }
                 }
                 //Set the band infos
                 let band_infos = {
@@ -614,7 +617,7 @@ let plek_band = {
                     name: data.name,
                     popularity: data.popularity,
                     followers: data.followers.total,
-                    image: data.images[0].url
+                    image: band_image
                 }
                 jQuery('#band-infos').val(JSON.stringify(band_infos));
             },
@@ -653,13 +656,14 @@ let plek_band = {
         }
         let bands_html = "";
         const band_found_title = "<h2>" + __('Bands found on Spotify', 'plekvetica') + "</h2>";
+        const add_button_text = __('Add', 'plekvetica');
+
         for (const [key, value] of plek_band.spotify_bands_found.artists.items.entries()) {
             if (value.type !== "artist") {
-                return;
+                continue;
             }
-            const add_button_text = __('Add', 'plekvetica');
             const genres = value.genres.join(", ");
-            const image = (!empty(value.images[0].url)) ? value.images[0].url : "";
+            const image = (!empty(value.images) && !empty(value.images[0].url)) ? value.images[0].url : "";
             const item = `<div class="spotify-artist-found-item">
             <div class="spotify-artist-image"><img src="${image}" /></div>
             <div class="spotify-artist-data">
