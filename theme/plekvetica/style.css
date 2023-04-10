@@ -2362,6 +2362,9 @@ input[type=checkbox] {
     #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete::before {
       content: "\f058";
       color: #268c37; }
+    #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_in_progress::before {
+      content: "\f102";
+      color: #6278d9; }
     #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete:hover {
       cursor: url("../plekvetica/assets/metalhand.cur"), pointer; }
       #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete:hover::after {

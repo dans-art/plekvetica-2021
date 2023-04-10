@@ -317,6 +317,7 @@ class PlekHandler
             wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js', ['jquery', 'plek-language'], $this->version);
         }
 
+        wp_set_script_translations('plek-main-script', 'plekvetica', PLEK_PATH . "/languages");
         wp_set_script_translations('plek-language', 'plekvetica', PLEK_PATH . "/languages");
     }
 

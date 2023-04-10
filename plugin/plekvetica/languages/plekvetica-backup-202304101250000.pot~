@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plekvetica - 2021\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-10 12:49+0000\n"
+"POT-Creation-Date: 2023-04-10 12:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -659,8 +659,8 @@ msgid "Entry is %d characters too long."
 msgstr ""
 
 #: js/accreditation-management.js:45 js/accreditation-management.js:58
-#: js/plek-main-script.js:424 js/components/gallery-handler.js:174
-#: js/components/gallery-handler.js:642 js/components/gallery-handler.js:682
+#: js/plek-main-script.js:424 js/components/gallery-handler.js:173
+#: js/components/gallery-handler.js:635 js/components/gallery-handler.js:675
 msgid "Error"
 msgstr ""
 
@@ -711,11 +711,11 @@ msgstr ""
 msgid "Error while changing the following status"
 msgstr ""
 
-#: js/components/gallery-handler.js:230
+#: js/components/gallery-handler.js:227
 msgid "Error while creating a new album"
 msgstr ""
 
-#: js/components/gallery-handler.js:240
+#: js/components/gallery-handler.js:237
 msgid "Error while creating a new gallery"
 msgstr ""
 
@@ -723,7 +723,7 @@ msgstr ""
 msgid "Error while creating a new user"
 msgstr ""
 
-#: js/components/gallery-handler.js:174
+#: js/components/gallery-handler.js:173
 msgid "Error while creating album or gallery"
 msgstr ""
 
@@ -1153,7 +1153,7 @@ msgstr ""
 msgid "Gallery not found"
 msgstr ""
 
-#: js/components/gallery-handler.js:443
+#: js/components/gallery-handler.js:440
 msgid "Gallery preview"
 msgstr ""
 
@@ -1229,7 +1229,7 @@ msgstr ""
 msgid "Image deleted"
 msgstr ""
 
-#: js/components/gallery-handler.js:590
+#: js/components/gallery-handler.js:583
 msgid "Image upload"
 msgstr ""
 
@@ -1237,7 +1237,7 @@ msgstr ""
 msgid "Images"
 msgstr ""
 
-#: js/components/gallery-handler.js:590
+#: js/components/gallery-handler.js:583
 msgid "Images uploaded: "
 msgstr ""
 
@@ -1246,7 +1246,7 @@ msgstr ""
 msgid "Images:"
 msgstr ""
 
-#: js/components/gallery-handler.js:480
+#: js/components/gallery-handler.js:476
 msgid "Imagesize is to big for: "
 msgstr ""
 
@@ -1715,7 +1715,7 @@ msgstr ""
 msgid "No images found for gallery %s"
 msgstr ""
 
-#: js/components/gallery-handler.js:294 js/components/gallery-handler.js:335
+#: js/components/gallery-handler.js:291 js/components/gallery-handler.js:332
 msgid "No Images selected!"
 msgstr ""
 
@@ -1981,7 +1981,7 @@ msgstr ""
 msgid "Please select..."
 msgstr ""
 
-#: js/components/gallery-handler.js:162
+#: js/components/gallery-handler.js:161
 msgid "Please wait for the album and galleries to be created."
 msgstr ""
 
@@ -2228,16 +2228,11 @@ msgid "Select Country"
 msgstr ""
 
 #: template/event/form/components/review-images.php:51
-#: js/components/gallery-handler.js:497
 msgid "Select images"
 msgstr ""
 
 #: template/system/user-settings/organizer-settings-form.php:14
 msgid "Select Organizer"
-msgstr ""
-
-#: js/components/gallery-handler.js:203
-msgid "Select Pictures"
 msgstr ""
 
 #: template/event/meta/eventmanager.php:101
@@ -2374,7 +2369,7 @@ msgstr ""
 msgid "Subject and Message"
 msgstr ""
 
-#: js/accreditation-management.js:47 js/components/gallery-handler.js:650
+#: js/accreditation-management.js:47 js/components/gallery-handler.js:643
 msgid "Success"
 msgstr ""
 
@@ -2489,7 +2484,7 @@ msgstr ""
 msgid "The from has errors, please fix them"
 msgstr ""
 
-#: js/components/gallery-handler.js:488
+#: js/components/gallery-handler.js:484
 msgid "The given File is not a valid image"
 msgstr ""
 
@@ -2712,18 +2707,18 @@ msgstr ""
 msgid "Upload"
 msgstr ""
 
-#: js/components/gallery-handler.js:494
+#: js/components/gallery-handler.js:490
 #, javascript-format
 msgid "Upload %s images"
 msgstr ""
 
-#: js/components/gallery-handler.js:387 js/components/gallery-handler.js:441
-#: js/components/gallery-handler.js:527
+#: js/components/gallery-handler.js:384 js/components/gallery-handler.js:438
+#: js/components/gallery-handler.js:520
 msgid "Upload Error"
 msgstr ""
 
 #: template/event/form/components/review-images.php:49
-#: js/components/gallery-handler.js:588
+#: js/components/gallery-handler.js:581
 msgid "Upload images"
 msgstr ""
 
@@ -2731,7 +2726,7 @@ msgstr ""
 msgid "Upload in progress. Please wait till its done."
 msgstr ""
 
-#: js/components/gallery-handler.js:571
+#: js/components/gallery-handler.js:564
 msgid "Upload: "
 msgstr ""
 
@@ -2739,7 +2734,7 @@ msgstr ""
 msgid "Uploaded file not found"
 msgstr ""
 
-#: js/components/gallery-handler.js:302 js/components/gallery-handler.js:342
+#: js/components/gallery-handler.js:299 js/components/gallery-handler.js:339
 msgid "Uploading images..."
 msgstr ""
 

@@ -842,6 +842,11 @@ input[type=checkbox] {
         content: "\f058"; //Checkmark in circle
         color: $color-green;
       }
+ 
+      &.upload_in_progress::before {
+        content: "\f102"; //Double arrow up
+        color: $color-blue;
+      }
 
       &.upload_complete:hover {
         cursor: url("../plekvetica/assets/metalhand.cur"), pointer;

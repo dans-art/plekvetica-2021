@@ -187,7 +187,7 @@ let plek_main = {
         });
 
         /** Change Upload Button Text and show Image */
-        jQuery("input[type='file']").change(function () {
+        jQuery("input[type='file']").not('#review_images').change(function () {
             plek_main.image_upload_button_change(this);
         });
     },

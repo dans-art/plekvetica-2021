@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-10-10 10:15+0000\n"
-"PO-Revision-Date: 2023-04-08 08:00+0000\n"
+"PO-Revision-Date: 2023-04-10 12:50+0000\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -25,7 +25,7 @@ msgstr "\"%s\" spielt an diesem Event."
 msgid "\"%s\" needs an update"
 msgstr "\"%s\" braucht eine Überarbeitung"
 
-#: include/class/plek-handler.php:953
+#: include/class/plek-handler.php:954
 #, php-format
 #| msgid "%s - accreditation request sent to %s"
 msgid "%s - accreditation status set to %s"
@@ -190,11 +190,11 @@ msgstr "Akkreditierungsstatus von \"%s\" wurde auf \"%s\" geändert"
 msgid "Accredited members"
 msgstr "Akkreditierte Mitglieder"
 
-#: include/class/plek-handler.php:837
+#: include/class/plek-handler.php:838
 msgid "Action not found or not supported"
 msgstr "Aktion nicht gefunden oder nicht unterstützt"
 
-#: template/band/band-form.php:95 js/manage-band.js:660
+#: template/band/band-form.php:95 js/manage-band.js:659
 msgid "Add"
 msgstr "Hinzufügen"
 
@@ -216,7 +216,7 @@ msgstr "Als Gast hinzufügen"
 msgid "Add Band"
 msgstr "Band hinzufügen"
 
-#: include/class/events.php:1826
+#: include/class/events.php:1830
 msgid "Add event"
 msgstr "Event hinzufügen"
 
@@ -372,7 +372,7 @@ msgstr "Bands"
 msgid "Bands %d to %d of %d"
 msgstr "Bands %d bis %d von %d"
 
-#: js/manage-band.js:655
+#: js/manage-band.js:658
 msgid "Bands found on Spotify"
 msgstr "Auf Spotify gefundene Bands"
 
@@ -404,7 +404,7 @@ msgstr "Booleanischer Wert"
 msgid "Boxoffice"
 msgstr "Abendkasse"
 
-#: include/class/events.php:1744
+#: include/class/events.php:1748
 #, php-format
 msgid "by: %s"
 msgstr "von: %s"
@@ -590,7 +590,7 @@ msgstr "Beschreibung"
 msgid "Details"
 msgstr "Details"
 
-#: js/manage-band.js:673
+#: js/manage-band.js:677
 msgid "Dismiss suggestions"
 msgstr "Verschläge ablehnen"
 
@@ -669,8 +669,8 @@ msgid "Entry is %d characters too long."
 msgstr "Eintrag ist %d Zeichen zu lang."
 
 #: js/accreditation-management.js:45 js/accreditation-management.js:58
-#: js/plek-main-script.js:424 js/components/gallery-handler.js:163
-#: js/components/gallery-handler.js:635 js/components/gallery-handler.js:675
+#: js/plek-main-script.js:424 js/components/gallery-handler.js:174
+#: js/components/gallery-handler.js:642 js/components/gallery-handler.js:682
 msgid "Error"
 msgstr "Fehler"
 
@@ -721,11 +721,11 @@ msgstr "Fehler beim hochladen der Datei"
 msgid "Error while changing the following status"
 msgstr "Fehler beim ändern des \"folgen\" status"
 
-#: js/components/gallery-handler.js:217
+#: js/components/gallery-handler.js:230
 msgid "Error while creating a new album"
 msgstr "Fehler beim erstellen eines neuen Albums"
 
-#: js/components/gallery-handler.js:227
+#: js/components/gallery-handler.js:240
 msgid "Error while creating a new gallery"
 msgstr "Fehler beim erstellen einer neuen Galerie"
 
@@ -733,7 +733,7 @@ msgstr "Fehler beim erstellen einer neuen Galerie"
 msgid "Error while creating a new user"
 msgstr "Fehler während des erstellen des neuen Benutzer"
 
-#: js/components/gallery-handler.js:163
+#: js/components/gallery-handler.js:174
 msgid "Error while creating album or gallery"
 msgstr "Fehler beim erstellen des Albums oder Galerie."
 
@@ -812,7 +812,7 @@ msgstr "Fehler: Benutzerobjekt konnte nicht geladen werden."
 msgid "Event"
 msgstr "Event"
 
-#: include/class/plek-handler.php:906 js/accreditation-management.js:47
+#: include/class/plek-handler.php:907 js/accreditation-management.js:47
 msgid "Event accreditation updated"
 msgstr "Event Akkreditierung aktualisiert"
 
@@ -955,7 +955,7 @@ msgstr "Events"
 msgid "Events %d to %d of %d"
 msgstr "Events %d bis %d von %d"
 
-#: include/class/plek-handler.php:538
+#: include/class/plek-handler.php:539
 msgid "Every 6 Minutes"
 msgstr "Alle 6 Minuten"
 
@@ -1026,7 +1026,7 @@ msgstr "Fehler beim löschen des Zwischenspeichers für: %s, Fehler: %s"
 msgid "Failed to get cached data: %s"
 msgstr "Fehler beim abrufen der Zwischenspeicher-Daten: %s"
 
-#: include/class/events.php:1532
+#: include/class/events.php:1536
 msgid "Failed to load Text for the Facebook ticket raffle"
 msgstr "Konnte den Text für die Facebook Ticket Verlosung nicht laden."
 
@@ -1133,7 +1133,7 @@ msgstr "Finden"
 msgid "First Name"
 msgstr "Vorname"
 
-#: include/class/band-handler.php:1312 include/class/events.php:1633
+#: include/class/band-handler.php:1312 include/class/events.php:1637
 #: template/band/meta/details.php:19 template/event/meta/details.php:7
 msgid "Follow"
 msgstr "Folgen"
@@ -1170,7 +1170,7 @@ msgstr "Künftige Events"
 msgid "Gallery not found"
 msgstr "Galerie nicht gefunden"
 
-#: js/components/gallery-handler.js:446
+#: js/components/gallery-handler.js:443
 msgid "Gallery preview"
 msgstr "Galerie Vorschaubild"
 
@@ -1248,7 +1248,7 @@ msgstr "Bild"
 msgid "Image deleted"
 msgstr "Bild gelöscht"
 
-#: js/components/gallery-handler.js:583
+#: js/components/gallery-handler.js:590
 msgid "Image upload"
 msgstr "Bilder hochladen"
 
@@ -1256,7 +1256,7 @@ msgstr "Bilder hochladen"
 msgid "Images"
 msgstr "Bilder"
 
-#: js/components/gallery-handler.js:583
+#: js/components/gallery-handler.js:590
 msgid "Images uploaded: "
 msgstr "Bilder hochgeladen:"
 
@@ -1265,7 +1265,7 @@ msgstr "Bilder hochgeladen:"
 msgid "Images:"
 msgstr "Bilder:"
 
-#: js/components/gallery-handler.js:482
+#: js/components/gallery-handler.js:480
 msgid "Imagesize is to big for: "
 msgstr "Bildgrösse ist zu gross für:"
 
@@ -1347,7 +1347,7 @@ msgstr "Einträge gefunden:"
 msgid "Last Name"
 msgstr "Nachname"
 
-#: include/class/plek-handler.php:939
+#: include/class/plek-handler.php:940
 #: template/event/organizer/accredi_management.php:94
 msgid "Latest Notes"
 msgstr "Letzte Notizen"
@@ -1535,7 +1535,7 @@ msgstr "Meine Watchlist"
 msgid "Name"
 msgstr "Name"
 
-#: js/manage-band.js:599
+#: js/manage-band.js:602
 #, javascript-format
 msgid ""
 "Name missmatch. The Artist ID you provided does not match with the given "
@@ -1676,7 +1676,7 @@ msgstr "Kein Event gefunden, oder Event ist kein Review"
 msgid "No Event ID found"
 msgstr "Keine Event ID gefunden"
 
-#: include/class/events.php:1647 include/class/events.php:1661
+#: include/class/events.php:1651 include/class/events.php:1665
 msgid "No Event ID found."
 msgstr "Keine Event ID gefunden."
 
@@ -1684,7 +1684,7 @@ msgstr "Keine Event ID gefunden."
 msgid "No Event ID given. Expects an Array with the Event IDs"
 msgstr "Keine Event ID übergeben. Erwartet ein Array mit Event ID's"
 
-#: include/class/events.php:1427 include/class/events.php:1796
+#: include/class/events.php:1427 include/class/events.php:1800
 msgid "No Events found"
 msgstr "Keine Events gefunden"
 
@@ -1745,7 +1745,7 @@ msgstr "Keine Bild ID übergeben"
 msgid "No images found for gallery %s"
 msgstr "Keine Bilder gefunden für die Galerie %s"
 
-#: js/components/gallery-handler.js:281
+#: js/components/gallery-handler.js:294 js/components/gallery-handler.js:335
 msgid "No Images selected!"
 msgstr "Keine Bilder gewählt"
 
@@ -1795,7 +1795,7 @@ msgstr "Für dieses Event wurden keine Fotos gefunden."
 msgid "No posts found"
 msgstr "Keine Beiträge gefunden"
 
-#: include/class/events.php:1768
+#: include/class/events.php:1772
 msgid "No query given. Add ?query=searchfor to the url"
 msgstr "Keine Suchbegriff übergeben. Füge ?=query=searchfor in die URL"
 
@@ -1919,7 +1919,7 @@ msgstr "Veranstalter gespeichert"
 msgid "Organizer Settings"
 msgstr "Veranstalter Einstellungen"
 
-#: include/class/events.php:1739
+#: include/class/events.php:1743
 #, php-format
 msgid "Organizer: %s"
 msgstr "Veranstalter: %s"
@@ -2021,7 +2021,7 @@ msgstr "Bitte wähle ein Land"
 msgid "Please select..."
 msgstr "Bitte wählen..."
 
-#: js/components/gallery-handler.js:151
+#: js/components/gallery-handler.js:162
 msgid "Please wait for the album and galleries to be created."
 msgstr "Bitte warten während die Alben und Galerien erstellt werden"
 
@@ -2270,12 +2270,17 @@ msgid "Select Country"
 msgstr "Wähle ein Land"
 
 #: template/event/form/components/review-images.php:51
+#: js/components/gallery-handler.js:497
 msgid "Select images"
 msgstr "Wähle Bilder"
 
 #: template/system/user-settings/organizer-settings-form.php:14
 msgid "Select Organizer"
 msgstr "Wähle Veranstalter"
+
+#: js/components/gallery-handler.js:203
+msgid "Select Pictures"
+msgstr "Wähle Bilder"
 
 #: template/event/meta/eventmanager.php:101
 #| msgid "Send Review Mail to Organizer"
@@ -2414,7 +2419,7 @@ msgstr "Strasse und Nummer"
 msgid "Subject and Message"
 msgstr "Betreff und Nachricht"
 
-#: js/accreditation-management.js:47 js/components/gallery-handler.js:643
+#: js/accreditation-management.js:47 js/components/gallery-handler.js:650
 msgid "Success"
 msgstr "Erfolgreich"
 
@@ -2541,7 +2546,7 @@ msgstr "Das Formular enthält Fehler, bitte beheben"
 msgid "The from has errors, please fix them"
 msgstr "Das Formular enthält Fehler, bitte beheben"
 
-#: js/components/gallery-handler.js:490
+#: js/components/gallery-handler.js:488
 msgid "The given File is not a valid image"
 msgstr "Die Datei ist keine gültige Bilddatei"
 
@@ -2721,7 +2726,7 @@ msgstr "Zur Galerie: %s"
 msgid "To the new event"
 msgstr "Zum neuen Event"
 
-#: include/class/events.php:1600
+#: include/class/events.php:1604
 msgid "Today"
 msgstr "Heute"
 
@@ -2751,7 +2756,7 @@ msgstr "Typ"
 msgid "Undefined"
 msgstr "Undefiniert"
 
-#: include/class/band-handler.php:1310 include/class/events.php:1631
+#: include/class/band-handler.php:1310 include/class/events.php:1635
 #: template/band/meta/details.php:19 template/event/meta/details.php:7
 msgid "Unfollow"
 msgstr "Entfolgen"
@@ -2770,16 +2775,26 @@ msgstr "Update fehlgeschlagen!"
 msgid "Upload"
 msgstr "Hochladen"
 
-#: js/components/gallery-handler.js:444 js/components/gallery-handler.js:521
+#: js/components/gallery-handler.js:494
+#, javascript-format
+msgid "Upload %s images"
+msgstr "Hochladen von %s Bilder"
+
+#: js/components/gallery-handler.js:387 js/components/gallery-handler.js:441
+#: js/components/gallery-handler.js:527
 msgid "Upload Error"
 msgstr "Fehler beim Hochladen"
 
 #: template/event/form/components/review-images.php:49
-#: js/components/gallery-handler.js:581
+#: js/components/gallery-handler.js:588
 msgid "Upload images"
 msgstr "Bilder hochladen"
 
-#: js/components/gallery-handler.js:564
+#: js/components/gallery-handler.js:20
+msgid "Upload in progress. Please wait till its done."
+msgstr "Upload im gange. Bitte warten bis dies abgeschlossen ist."
+
+#: js/components/gallery-handler.js:571
 msgid "Upload: "
 msgstr "Hochladen:"
 
@@ -2787,7 +2802,7 @@ msgstr "Hochladen:"
 msgid "Uploaded file not found"
 msgstr "Hochgeladene Datei nicht gefunden"
 
-#: js/components/gallery-handler.js:289
+#: js/components/gallery-handler.js:302 js/components/gallery-handler.js:342
 msgid "Uploading images..."
 msgstr "Bilder werden hochgeladen..."
 
@@ -2898,11 +2913,11 @@ msgstr "Wo: %s"
 msgid "Win %s Tickets for"
 msgstr "Gewinne %s Ticket für"
 
-#: include/class/events.php:1545
+#: include/class/events.php:1549
 msgid "Win condition not supported"
 msgstr "Gewinnkonditionen nicht unterstützt"
 
-#: include/class/events.php:1535
+#: include/class/events.php:1539
 msgid "Win conditions not set"
 msgstr "Gewinnkonditionen nicht definiert"
 
@@ -2986,7 +3001,7 @@ msgstr "Du bist nicht berechtigt, diesen Veranstalter zu bearbeiten!"
 msgid "You are not allowed to edit this venue!"
 msgstr "Du bist nicht berechtigt, diesen Ort zu bearbeiten!"
 
-#: include/class/plek-handler.php:900 include/class/plek-handler.php:927
+#: include/class/plek-handler.php:901 include/class/plek-handler.php:928
 msgid "You are not allowed to run this action"
 msgstr "Du hast keine Berechtigung diese Aktion durchzuführen."
 
