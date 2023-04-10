@@ -40,9 +40,11 @@ $pg = new PlekGalleryHandler;
 
 //s(PlekCacheHandler::rebuild_cache(7));
 
-s(PlekUserHandler::get_uncached_users());
+$plek_bands = new PlekBandHandler;
 
-PlekCacheHandler::rebuild_all_caches();
+//s($plek_bands -> add_band_of_the_month_score_of_user('edit_band', 1010));
+
+echo $plek_bands->get_bands_of_the_month();
 ?>
 </div>
 <?php 

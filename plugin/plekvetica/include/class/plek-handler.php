@@ -852,13 +852,13 @@ class PlekHandler
 
         //Refresh the cache at night
         $hour = date("H");
-        if($hour === "00"){
+        if ($hour === "00") {
             PlekCacheHandler::rebuild_cache(0);
-            SimpleLogger() -> info("Cache rebuild for nopriv user by hourly cron");
+            SimpleLogger()->info("Cache rebuild for nopriv user by hourly cron");
         }
-        if($hour >= "01" AND $hour <= "05" ){
+        if ($hour >= "01" and $hour <= "05") {
             PlekCacheHandler::rebuild_all_caches();
-            SimpleLogger() -> info("Cache rebuild for all users by hourly cron");
+            SimpleLogger()->info("Cache rebuild for all users by hourly cron");
         }
     }
 
@@ -986,5 +986,29 @@ class PlekHandler
             'methods' => 'GET',
             'callback' => [new PlekEvents, 'rest_search_events']
         ]);
+    }
+
+    /**
+     * Creates custom post types
+     *
+     * @return void
+     */
+    public function load_custom_post_types()
+    {
+        register_post_type(
+            'plek_promotions',
+            array(
+                'labels'      => array(
+                    'name'          => __('Promotions', 'plekvetica'),
+                    'singular_name' => __('Promotion', 'plekvetica'),
+                ),
+                'public'      => true,
+                'has_archive' => true,
+                'rewrite'     => array('slug' => 'promotions'),
+                'show_in_rest ' => true,
+                'supports' => ['title', 'editor',  'thumbnail', 'author', 'excerpt', 'custom_fields']
+
+            )
+        );
     }
 }

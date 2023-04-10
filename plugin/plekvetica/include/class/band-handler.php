@@ -830,15 +830,15 @@ class PlekBandHandler
         return json_encode($bands_formated, JSON_UNESCAPED_UNICODE);
     }
 
-/**
- * Formats the band genres from array to comma separated string
- *
- * @param array $genres
- * @return string The formated array
- */
+    /**
+     * Formats the band genres from array to comma separated string
+     *
+     * @param array $genres
+     * @return string The formated array
+     */
     public function format_band_genres($genres)
     {
-        if(!is_array($genres)){
+        if (!is_array($genres)) {
             return $genres;
         }
         $ret_arr = array();
@@ -896,6 +896,8 @@ class PlekBandHandler
             return false;
         }
 
+        $this->add_band_of_the_month_score_of_user('edit_band');
+
         return $this->update_band();
     }
 
@@ -938,6 +940,9 @@ class PlekBandHandler
         $error = $add_term->get_error_message();
         $plek_ajax_errors->add('save_band', $error);
         apply_filters('simple_history_log', $error);
+
+        $this->add_band_of_the_month_score_of_user('add_band');
+
         return false;
     }
 
@@ -1042,7 +1047,7 @@ class PlekBandHandler
         $acf['herkunft'] = $origin;
         $acf['videos'] = $videos;
         $acf['band_genre'] = $genre;
-        $acf['spotify_id'] = $plek_handler -> clean_url($spotify);
+        $acf['spotify_id'] = $plek_handler->clean_url($spotify);
         $acf['youtube_url'] = $youtube;
         $acf['twitter_url'] = $twitter;
         $acf['fetched_spotify_data'] = $fetched_spotify_data;
@@ -1501,5 +1506,115 @@ class PlekBandHandler
             return (isset($object->{$field})) ? $object->{$field} : null;
         }
         return $object;
+    }
+
+    /**
+     * Adds the botm score to all the users bands. If user is not a band, it will return false.
+     *
+     * @param string $type - Type of the action. See update_band_of_the_month_score() for accepted values
+     * @param int $user_id
+     * 
+     * @todo: Check if user did this action the first time this day
+     * @return bool
+     */
+    public function add_band_of_the_month_score_of_user($type, $user_id = null)
+    {
+        $user = ($user_id != null) ? get_user_by('id', $user_id) : wp_get_current_user();
+        if (!PlekUserHandler::user_is_band($user)) {
+            return false;
+        }
+        if(!is_object($user)){
+            return false;
+        }
+        $user_bands = PlekUserHandler::get_user_meta('band_id', $user -> ID);
+        $user_bands = explode(',', $user_bands);
+        foreach ($user_bands as $band_id) {
+            $this->update_band_of_the_month_score($band_id, $type);
+        }
+        return true;
+    }
+
+    /**
+     * Adds points to the botm_score
+     *
+     * @param int $band_id - Id of the Band
+     * @param string $type - add_event, add_band, edit_event, add_event, login
+     * @return bool
+     */
+    public function update_band_of_the_month_score($band_id, $type)
+    {
+        global $plek_handler;
+        $band_id = intval($band_id);
+        if ($band_id === 0) {
+            return false;
+        }
+        $value = 0;
+        switch ($type) {
+            case 'add_event':
+                $value = 10;
+                break;
+            case 'add_band':
+                $value = 10;
+                break;
+            case 'edit_event':
+                $value = 5;
+                break;
+            case 'edit_band':
+                $value = 5;
+                break;
+            case 'login':
+                $value = 1;
+                break;
+            default:
+                $value = 0;
+                break;
+        }
+        $current_value = intval(get_field('botm_score', 'term_' . $band_id));
+        return $plek_handler->update_field('botm_score', $current_value + $value, 'term_' . $band_id);
+    }
+
+    /**
+     * Returns the band of the months.
+     *
+     * @param string $view - Output. Can be html or raw
+     * @return object|string WP_Term if $view is raw, html formatted string otherwise
+     */
+    public function get_bands_of_the_month($view = 'html')
+    {
+        $args = array(
+            'hide_empty' => false,
+            'meta_query' => array(
+                array(
+                    'key'       => 'botm_score',
+                    'value'     => '0',
+                    'compare'   => '>'
+                )
+            ),
+            'taxonomy' => 'post_tag',
+            'order_by' => 'met_value'
+        );
+        $terms = get_terms($args);
+        if(empty($terms)){
+            return null;
+        }
+        if($view === 'raw'){
+            return $terms;
+        }
+        $html = '';
+        foreach($terms as $index => $term){
+            $html .= PlekTemplateHandler::load_template_to_var('band-of-the-month-item', 'band', $term -> term_id, $index +1);
+        }
+        return PlekTemplateHandler::load_template_to_var('band-of-the-month-container', 'band', $html);
+    }
+
+    /**
+     * Resets all botm scores 
+     *
+     * @return int|bool Updated rows or false on error
+     */
+    public function delete_bands_of_the_month_scores()
+    {
+        global $wpdb;
+        //return $wpdb->query( "UPDATE ".$wpdb->prefix."_termmeta SET meta_value = '0' WHERE meta_key === 'botm_score' AND meta_value > 0" );
     }
 }

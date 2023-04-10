@@ -1878,6 +1878,14 @@ class PlekEventHandler
         //Save event to session in case they have to register / forgot their password or don't add any event details.
         PlekNotificationHandler::set_cookie('added_edit_event', $event_id, time() + 60 * 60 * 24 * 5); //Expires after 5 days
 
+        //Add to band score
+        $pb = new PlekBandHandler;
+        if($is_event_edit){
+            $pb -> add_band_of_the_month_score_of_user('edit_event');
+        }else{
+            $pb -> add_band_of_the_month_score_of_user('add_event');
+        }
+
         if (PlekUserHandler::user_is_logged_in()) {
             //Info to Band follower
             //@todo: Send Info to Band followers.

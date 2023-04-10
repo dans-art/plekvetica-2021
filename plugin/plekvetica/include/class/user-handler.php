@@ -1132,4 +1132,28 @@ class PlekUserHandler
         $users = get_users($args);
         return $users;
     }
+
+    /**
+     * Checks if the user is managing the band given
+     *
+     * @param int $user_id - Id of the user. Can be Int or Null. In this case the current user will be checked
+     * @param int $band_id - ID of the band
+     * @return bool|null True if he manages the band, null on error, false if not found
+     */
+    public static function user_is_band_manager($user_id, $band_id){
+        $managing_bands = self::get_user_meta('band_id', $user_id);
+        $managing_bands = explode(',', $managing_bands);
+        if(!is_array($managing_bands)){
+            return null;
+        }
+        foreach($managing_bands as $user_band_id){
+            if(intval($user_band_id) === 0){
+                continue;
+            }
+            if(intval($band_id) === intval($user_band_id)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
