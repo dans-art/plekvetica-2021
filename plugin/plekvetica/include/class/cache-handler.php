@@ -85,9 +85,9 @@ class PlekCacheHandler
         if (!self::cache_is_activated()) {
             return false;
         }
-        if (!is_array($post_ids) or empty($post_ids)) {
+        /*if (!is_array($post_ids) or empty($post_ids)) {
             return __('No post ids given', 'plekvetica');
-        }
+        }*/
         global $wpdb;
 
         $data = [
@@ -146,6 +146,68 @@ class PlekCacheHandler
         return true;
     }
 
+    /**
+     * Recreates the cache for a user
+     *
+     * @param integer $user_id
+     * @todo Cache second page as well?
+     * @return bool true on success.
+     */
+    public static function rebuild_cache($user_id = 0){
+
+        global $plek_handler;
+        global $plek_event_blocks;
+        $plek_events = new PlekEvents;
+        //Flush the user cache
+        self::flush_cache_by_user($user_id);
+
+        $prebuilt_blocks = [
+            'reviews' => ['block' => 'all_reviews', 'page' => get_page_by_path( 'reviews'), 'data' => []],
+            'my_event_watchlist' => ['block' => 'my_event_watchlist', 'page' => get_page_by_path( 'my-plekvetica'), 'data' => []],
+            'my_events' => ['block' => 'my_events', 'page' => get_page_by_path( 'my-plekvetica'), 'data' => []],
+            'my_week' => ['block' => 'my_week', 'page' => get_page_by_path( 'my-plekvetica'), 'data' => []],
+        ];
+        
+
+        //Set the current user
+        wp_set_current_user($user_id);
+
+        //Built Blocks
+        foreach($prebuilt_blocks as $atts){
+            $url = get_permalink($atts['page']);
+            $_SERVER['REQUEST_URI'] = $plek_handler -> url_remove_domain($url);
+            //Create the block and that saves it to the cache
+            $plek_event_blocks->get_block($atts['block'], $atts['data'], true);
+        }
+
+        //Built Shortcode content
+        $plek_events -> plek_get_featured_shortcode(); 
+        $plek_events -> plek_get_reviews_shortcode(); 
+        $plek_events -> plek_get_videos_shortcode();
+        $plek_events -> plek_event_recently_added_shortcode(); 
+
+        //Set the cache for the user
+        $current_user = get_current_user_id();
+        if($current_user > 0){
+           update_user_meta($current_user, 'cached_at', time());
+        }
+        return true;
+        
+    }
+
+    /**
+     * Rebuilds the cache for all users without valid cached data
+     *
+     * @return void
+     */
+    public static function rebuild_all_caches(){
+        //Get the users with no or old cache
+        //Default is 3 days and 20 users at once
+        $users = PlekUserHandler::get_uncached_users();
+        foreach($users as $user_id){
+            self::rebuild_cache($user_id);
+        }
+    }
 
     /**
      * Removes the items from the cache by post id
@@ -285,6 +347,45 @@ class PlekCacheHandler
             ['%d']
         );
         return true;
+    }
+
+    /**
+     * Deletes the cache for one single user
+     *
+     * @param int $user_id
+     * @return bool|int false on error, number of rows deleted 
+     */
+    public static function flush_cache_by_user($user_id){
+        global $wpdb;
+        $like = '%' . $wpdb->esc_like('_'.$user_id.'_') . '%';
+        $query = $wpdb->prepare("SELECT cache_id
+        FROM `{$wpdb->prefix}plek_cache_content`
+        WHERE `cache_key` LIKE '%s'", $like);
+
+        $items = $wpdb->get_results($query);
+
+        if(empty($items)){
+            return false;
+        }
+        $deleted = 0;
+
+        foreach($items as $item){
+            $id = intval($item -> cache_id);
+        //Delete from relationship table
+        $wpdb->delete(
+            $wpdb->prefix . 'plek_cache_relationship',
+            ['cache_id' => $id],
+            ['%d']
+        );
+        //Delete from content table
+        $wpdb->delete(
+            $wpdb->prefix . 'plek_cache_content',
+            ['cache_id' => $id],
+            ['%d']
+        );
+        $deleted++;
+        }
+        return $deleted;
     }
 
     /**

@@ -9,7 +9,8 @@ $start_date_time = $event_object->get_start_date('H:i:s');
 $end_date_time = $event_object->get_end_date('H:i:s');
 
 //Check if the current date is the loaded date. If so, no date was found.
-if($start_date === date_i18n('Y-m-d') AND $start_date_time === date_i18n('H:i:s')){
+
+if($start_date === date_i18n('Y-m-d', time()) AND $start_date_time === date_i18n('H:i:s', time())){
 	$start_date_time = '19:00:00';
 	$end_date_time = '23:30:00';
 }

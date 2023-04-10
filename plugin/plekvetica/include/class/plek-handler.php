@@ -317,6 +317,7 @@ class PlekHandler
             wp_enqueue_script('plek-main-script', PLEK_PLUGIN_DIR_URL . 'js/plek-main-script.min.js', ['jquery', 'plek-language'], $this->version);
         }
 
+        wp_set_script_translations('plek-main-script', 'plekvetica', PLEK_PATH . "/languages");
         wp_set_script_translations('plek-language', 'plekvetica', PLEK_PATH . "/languages");
     }
 
@@ -848,6 +849,17 @@ class PlekHandler
         //Update the spotify token
         $psm = new plekSocialMedia;
         $psm->refresh_spotify_token();
+
+        //Refresh the cache at night
+        $hour = date("H");
+        if($hour === "00"){
+            PlekCacheHandler::rebuild_cache(0);
+            SimpleLogger() -> info("Cache rebuild for nopriv user by hourly cron");
+        }
+        if($hour >= "01" AND $hour <= "05" ){
+            PlekCacheHandler::rebuild_all_caches();
+            SimpleLogger() -> info("Cache rebuild for all users by hourly cron");
+        }
     }
 
     /**

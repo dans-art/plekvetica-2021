@@ -833,6 +833,14 @@ class PlekEvents extends PlekEventHandler
      */
     public function plek_get_featured_shortcode()
     {
+        $cache_key = PlekCacheHandler::generate_key('plek_featured_event', []);
+        $cached = PlekCacheHandler::get_cache($cache_key, 'shortcode');
+
+        if ($cached) {
+            //Only return the cached content if any data is available
+            return $cached;
+        }
+
         //load from cache?
         $events = tribe_get_events([
             'eventDisplay'   => 'custom',
@@ -844,7 +852,9 @@ class PlekEvents extends PlekEventHandler
         if (empty($events)) {
             return __('No Featured Events found', 'plekvetica');
         }
-        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'featured');
+        $events_formatted = PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'featured');
+        PlekCacheHandler::set_cache($cache_key,$events_formatted,$events,'shortcode');
+        return $events_formatted;
     }
 
     /**
@@ -855,7 +865,14 @@ class PlekEvents extends PlekEventHandler
      */
     public function plek_get_reviews_shortcode()
     {
-        //load from cache?
+        $cache_key = PlekCacheHandler::generate_key('plek_review_events', []);
+        $cached = PlekCacheHandler::get_cache($cache_key, 'shortcode');
+
+        if ($cached) {
+            //Only return the cached content if any data is available
+            return $cached;
+        }
+
         $meta_query = array();
         $meta_query['is_review'] = array('key' => 'is_review', 'compare' => '=', 'value' => '1');
         $events = tribe_get_events([
@@ -868,7 +885,9 @@ class PlekEvents extends PlekEventHandler
         if (empty($events)) {
             return __('No reviews found', 'plekvetica');
         }
-        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'reviews');
+        $events_formatted = PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $events, 'reviews');
+        PlekCacheHandler::set_cache($cache_key,$events_formatted,$events,'shortcode');
+        return $events_formatted;
     }
 
     /**
@@ -1240,12 +1259,21 @@ class PlekEvents extends PlekEventHandler
     public function plek_get_videos_shortcode()
     {
 
+        $cache_key = PlekCacheHandler::generate_key('plek_videos', []);
+        $cached = PlekCacheHandler::get_cache($cache_key, 'shortcode');
+
+        if ($cached) {
+            //Only return the cached content if any data is available
+            return $cached;
+        }
         $yt = new plekYoutube;
         $vids = $yt->get_youtube_videos_from_channel(4);
         if (empty($vids)) {
             return __('No videos found.', 'plekvetica');
         }
-        return PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $vids, 'youtube');
+        $videos_formatted = PlekTemplateHandler::load_template_to_var('event-list-container', 'event', $vids, 'youtube');
+        PlekCacheHandler::set_cache($cache_key,$videos_formatted,[],'shortcode');
+        return $videos_formatted;
     }
 
     /**
@@ -1405,7 +1433,7 @@ class PlekEvents extends PlekEventHandler
     public function enqueue_event_form_styles()
     {
         //wp_enqueue_style('flatpickr-style', PLEK_PLUGIN_DIR_URL . 'plugins/flatpickr/flatpickr.min.css');
-        wp_enqueue_style('flatpickr-dark-style', 'https://npmcdn.com/flatpickr/dist/themes/dark.css');
+        wp_enqueue_style('flatpickr-dark-style', 'https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css',[], null);
     }
 
     /**
@@ -1424,8 +1452,8 @@ class PlekEvents extends PlekEventHandler
             $plek_handler->enqueue_select2();
 
             $min = ($plek_handler->is_dev_server()) ? '' : '.min';
-            wp_enqueue_script('flatpickr-cdn-script', 'https://npmcdn.com/flatpickr/dist/flatpickr.min.js', [], $plek_handler->version);
-            wp_enqueue_script('flatpickr-cdn-de-script', 'https://npmcdn.com/flatpickr/dist/l10n/de.js', [], $plek_handler->version);
+            wp_enqueue_script('flatpickr-cdn-script', 'https://npmcdn.com/flatpickr/dist/flatpickr.min.js', [],null);
+            wp_enqueue_script('flatpickr-cdn-de-script', 'https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/de.js', [],null);
             wp_enqueue_script('manage-plek-events', PLEK_PLUGIN_DIR_URL . "js/manage-event{$min}.js", ['jquery', 'plek-language', 'wp-i18n'], $plek_handler->version);
             wp_enqueue_script('plek-jquery-ui', "https://code.jquery.com/ui/1.13.0/jquery-ui.js", ['jquery']);
 
@@ -1439,12 +1467,12 @@ class PlekEvents extends PlekEventHandler
             }
 
             wp_enqueue_script('plek-compare-algorithm', PLEK_PLUGIN_DIR_URL . "js/components/compare-algorithm{$min}.js", ['jquery', 'plek-language', 'manage-plek-events', 'wp-i18n'], $plek_handler->version);
-            wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler.js', ['jquery', 'plek-language', 'wp-i18n'], $plek_handler->version);
+            wp_enqueue_script('plek-gallery-handler', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler.js', ['jquery', 'plek-language', 'wp-i18n'], $plek_handler->version);
 
             //Set the script translations, called by Wordpress load_script_translations()
             wp_set_script_translations('plek-compare-algorithm', 'plekvetica', PLEK_PATH . "/languages");
             wp_set_script_translations('manage-plek-events', 'plekvetica', PLEK_PATH . "/languages");
-            wp_set_script_translations('plek-file-upload-script', 'plekvetica', PLEK_PATH . "/languages");
+            wp_set_script_translations('plek-gallery-handler', 'plekvetica', PLEK_PATH . "/languages");
         });
     }
 
@@ -1460,8 +1488,12 @@ class PlekEvents extends PlekEventHandler
             $plek_handler->enqueue_select2();
 
             $min = ($plek_handler->is_dev_server()) ? '' : '.min';
-            wp_enqueue_script('plek-file-upload-script', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler' . $min . '.js', ['jquery', 'plek-language'], $this->version);
+            wp_enqueue_script('plek-gallery-handler', PLEK_PLUGIN_DIR_URL . 'js/components/gallery-handler' . $min . '.js', ['jquery', 'plek-language'], $this->version);
             wp_enqueue_script('plek-jquery-ui', "https://code.jquery.com/ui/1.13.0/jquery-ui.js", ['jquery']);
+
+            //Set the script translations, called by Wordpress load_script_translations()
+            wp_set_script_translations('plek-gallery-handler', 'plekvetica', PLEK_PATH . "/languages");
+
         });
     }
 

@@ -1102,4 +1102,34 @@ class PlekUserHandler
         $plek_band = new PlekBandHandler;
         return $plek_band -> band_is_managed($band_id);
     }
+
+    /**
+     * Returns all the users without a cached data
+     * Get all users that have a cached entry older that 3 days
+     * @param int $limit The max number of users to get
+     * @param int $time_limit The time in seconds before the cache becomes invalid (default: 259200 -> 3 Days)
+     * 
+     * @return array User ids
+     */
+    public static function get_uncached_users($time_limit = 259200, $limit = 20){
+        $args = [
+            "meta_query" => [
+                "relation" => "OR",
+                [
+                    "key" => "cached_at",
+                    "value" => time() - intval($time_limit),
+                    "compare" => "<",
+                ],
+               [
+                    "key" => "cached_at",
+                    "value" => NULL,
+                    "compare" => "NOT EXISTS",
+                ],
+            ],
+            "fields" => "ID",
+            "number" => intval($limit),
+        ];
+        $users = get_users($args);
+        return $users;
+    }
 }

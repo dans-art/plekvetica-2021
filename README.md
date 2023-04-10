@@ -1,6 +1,32 @@
 # plekvetica-2021
 
 
+Version 3.3.1 - 2023.04.10
+- Fixed: Time not set correctly when timezone was different
+- Fixed: Form did not work without flatpickr
+- Fixed: Flatpickr is not a requirement anymore
+- Added: Recommendations for Spotify artists on Add / Edit Band
+- Added: Function to flush the cache by user
+- Added: Function to rebuild the cache for a single user
+- Cache gets rebuilt every night
+- Updated translations, added 8 new language strings
+- Added function to get all users with invalid cache
+- Added caching support for events loaded via shortcode (Homepage)
+- Improved the performance of the image uploader tool
+
+German:
+- Behoben: Standard Zeit eines neuen Events wurde falsch angezeigt wenn andere Zeitzone
+- Behoben: Formulare funktionierte nicht ohne den Flatpickr (Datumswähler)
+- Behoben: Flatpickr ist keine Voraussetung mehr
+- Hinzugefügt: Empfehlungen von Shopify link wenn Band hinugefügt / bearbeitet wird
+- Hinzugefügt: Funktion um den Cache zu löschen für einen individuellen Nutzer
+- Hinzugefügt: Funktion um den Cache zu erstellen für einen individuellen Nutzer
+- Cache wird neu generiert jede Nacht
+- Übersetzungen wurden überarbeitet, 9 neue Übersetzungen hinzugefügt
+- Hinzugefügt: Funktionen um alle Nutzer mit ungültigem Cache zu bekommen
+- Caching für events welche mit Shortcode generiert wurden (Homepage)
+- Leistung der Galerie Bilder hochladen wurde verbessert
+
 Version 3.3.0 - 2023.03.28
 - Fixed: Facebook image poster
 - Added: Edit images of gallery @ edit review page

@@ -1226,6 +1226,36 @@ article.plek-event-item-compact {
   content: '\f0dd';
   margin-top: -0.46em; }
 
+/* Spotify band suggestions */
+.spotify_suggestions_container {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap; }
+  .spotify_suggestions_container .spotify-artist-found-item {
+    display: flex;
+    gap: 1%;
+    align-items: center;
+    margin-bottom: 1em;
+    flex-direction: column;
+    max-width: 250px;
+    width: 22%; }
+    .spotify_suggestions_container .spotify-artist-found-item .spotify-artist-image {
+      min-height: 150px;
+      height: 100%; }
+    .spotify_suggestions_container .spotify-artist-found-item .spotify-artist-data {
+      height: 100%;
+      word-break: break-all; }
+    .spotify_suggestions_container .spotify-artist-found-item img {
+      max-width: 150px;
+      max-height: 150px;
+      object-fit: fill; }
+    .spotify_suggestions_container .spotify-artist-found-item button {
+      flex-basis: 30%;
+      max-height: 3em; }
+  @media screen and (max-width: 750px) {
+    .spotify_suggestions_container .spotify-artist-found-item {
+      width: 46%; } }
+
 .single-tribe_events #page {
   padding: 0 1em; }
 .single-tribe_events #tribe-events-pg-template {
@@ -2014,7 +2044,7 @@ input[type=checkbox] {
   width: 100%;
   height: 0;
   z-index: 9;
-  opacity: 0.3;
+  opacity: 0.8;
   background-color: #232323; }
 
 .plek-overlay-container {
@@ -2022,7 +2052,7 @@ input[type=checkbox] {
   left: 0;
   right: 0; }
   .plek-overlay-container .overlay_background {
-    background-color: rgba(24, 2, 2, 0.93);
+    background-color: #180202;
     z-index: 9999; }
   .plek-overlay-container .overlay_content {
     width: 80%;
@@ -2032,7 +2062,9 @@ input[type=checkbox] {
     z-index: 10000;
     position: absolute;
     left: 0;
-    top: 0; }
+    top: 0;
+    border: 10px solid #595959;
+    border-radius: 3px; }
 
 .item.plek-select-item .title {
   display: flex; }
@@ -2341,6 +2373,9 @@ input[type=checkbox] {
     #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete::before {
       content: "\f058";
       color: #268c37; }
+    #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_in_progress::before {
+      content: "\f102";
+      color: #6278d9; }
     #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete:hover {
       cursor: url("../plekvetica/assets/metalhand.cur"), pointer; }
       #edit_event_review_form div#images-uploaded-container .image_to_upload.upload_complete:hover::after {
