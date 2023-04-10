@@ -98,33 +98,47 @@
 }
 
 /* Spotify band suggestions */
-.spotify-artist-found-item {
+.spotify_suggestions_container {
   display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 1em;
+  gap: 1em;
+  flex-wrap: wrap;
 
-  .spotify-artist-image {
-    flex-basis: 30%;
-  }
-
-  .spotify-artist-data {
-    flex-basis: 40%;
-  }
-
-  img {
-    max-width: 200px;
-  }
-
-  button {
-    flex-basis: 30%;
-    max-height: 3em;
-  }
-}
-
-@media screen and (max-width: 750px){
   .spotify-artist-found-item {
+    display: flex;
+    gap: 1%;
+    align-items: center;
+    margin-bottom: 1em;
     flex-direction: column;
+    max-width: 250px;
+    width: 22%;
+
+    .spotify-artist-image {
+      min-height: 150px;
+      height: 100%;
+    }
+
+    .spotify-artist-data {
+      height: 100%;
+      word-break: break-all;
+    }
+
+    img {
+      max-width: 150px;
+      max-height: 150px;
+      object-fit: fill;
+    }
+
+    button {
+      flex-basis: 30%;
+      max-height: 3em;
+    }
   }
+
+  @media screen and (max-width: 750px) {
+    .spotify-artist-found-item {
+      width: 46%;
+    }
+  }
+
 
 }

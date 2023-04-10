@@ -1227,24 +1227,35 @@ article.plek-event-item-compact {
   margin-top: -0.46em; }
 
 /* Spotify band suggestions */
-.spotify-artist-found-item {
+.spotify_suggestions_container {
   display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 1em; }
-  .spotify-artist-found-item .spotify-artist-image {
-    flex-basis: 30%; }
-  .spotify-artist-found-item .spotify-artist-data {
-    flex-basis: 40%; }
-  .spotify-artist-found-item img {
-    max-width: 200px; }
-  .spotify-artist-found-item button {
-    flex-basis: 30%;
-    max-height: 3em; }
+  gap: 1em;
+  flex-wrap: wrap; }
+  .spotify_suggestions_container .spotify-artist-found-item {
+    display: flex;
+    gap: 1%;
+    align-items: center;
+    margin-bottom: 1em;
+    flex-direction: column;
+    max-width: 250px;
+    width: 22%; }
+    .spotify_suggestions_container .spotify-artist-found-item .spotify-artist-image {
+      min-height: 150px;
+      height: 100%; }
+    .spotify_suggestions_container .spotify-artist-found-item .spotify-artist-data {
+      height: 100%;
+      word-break: break-all; }
+    .spotify_suggestions_container .spotify-artist-found-item img {
+      max-width: 150px;
+      max-height: 150px;
+      object-fit: fill; }
+    .spotify_suggestions_container .spotify-artist-found-item button {
+      flex-basis: 30%;
+      max-height: 3em; }
+  @media screen and (max-width: 750px) {
+    .spotify_suggestions_container .spotify-artist-found-item {
+      width: 46%; } }
 
-@media screen and (max-width: 750px) {
-  .spotify-artist-found-item {
-    flex-direction: column; } }
 .single-tribe_events #page {
   padding: 0 1em; }
 .single-tribe_events #tribe-events-pg-template {

@@ -667,14 +667,14 @@ let plek_band = {
             const item = `<div class="spotify-artist-found-item">
             <div class="spotify-artist-image"><img src="${image}" /></div>
             <div class="spotify-artist-data">
-                <div class="spotify-artist-name"><h3>${value.name}</h3></div>
+                <div class="spotify-artist-name"><h5>${value.name}</h5></div>
                 <div class="spotify-artist-genres">${genres}</div>
             </div>
             <button class="plek-button" data-spotify-id="${value.id}">${add_button_text}</button>
             </div>`;
             bands_html += item;
         }
-        plektemplate.add_overlay("spotify_bands", band_found_title + bands_html, __('Dismiss suggestions', 'plekvetica'));
+        plektemplate.add_overlay("spotify_bands", band_found_title + "<div class='spotify_suggestions_container'>" + bands_html + "</div>", __('Dismiss suggestions', 'plekvetica'));
         plektemplate.show_overlay("spotify_bands");
     }
 
