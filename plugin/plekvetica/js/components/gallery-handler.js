@@ -23,7 +23,7 @@ var plek_gallery_handler = {
             const filelist = jQuery('#review_images').prop('files');
             this.files_to_upload = Array.from(filelist);
             this.files_count = this.files_to_upload.length; //This is used to calculate the real index of the file
-            
+
             //Add the button loader
             plek_main.activate_button_loader('#review_images_upload_btn', __('Uploading images...', 'plekvetica'));
 
@@ -235,7 +235,6 @@ var plek_gallery_handler = {
                 }
                 album_id = new_album_id;
                 jQuery(button).attr('data-album_id', new_album_id);
-                console.log('album created: ' + new_album_id);
             }
             if (empty(gallery_id)) {
                 let new_gallery_id = await plek_gallery_handler.create_gallery(event_id, band_id, album_id);
@@ -244,7 +243,6 @@ var plek_gallery_handler = {
                     return false;
                 }
                 jQuery(button).attr('data-gallery_id', new_gallery_id);
-                console.log('Gallery added: ' + new_gallery_id);
             }
             return true;
         } catch (error) {
@@ -401,8 +399,6 @@ var plek_gallery_handler = {
 
         await Promise.all(uploads);
         if (this.files_to_upload.length > 0) {
-            console.log("batch done, left:" + this.files_to_upload.length);
-
             this.upload_images_click_action_v2(button, batch_size); //Run it again till all files are uploaded
         }
     },
@@ -437,7 +433,6 @@ var plek_gallery_handler = {
             contentType: false,
             async: false,
             success: function success(data) {
-                console.log("uploaded");
                 //Check for errors
                 if (plek_main.response_has_errors(data)) {
                     plekerror.display_error('', plek_main.get_first_error_from_ajax_request(data), __('Upload Error', 'plekvetica'));
@@ -464,6 +459,7 @@ var plek_gallery_handler = {
      */
     image_upload_form_change_action(files_input) {
         var image_container = jQuery('#images-uploaded-container');
+        image_container.show();
 
         //Empty all the items and reset the counter
         jQuery(image_container).html('');
@@ -521,7 +517,6 @@ var plek_gallery_handler = {
             contentType: false,
             async: false,
             success: function success(data) {
-                console.log("uploaded");
                 //Check for errors
                 let success = true;
                 if (plek_main.response_has_errors(data)) {
@@ -551,8 +546,6 @@ var plek_gallery_handler = {
         let item = jQuery(container + ' [data-name="' + filename + '"]');
         let items_total = jQuery(container + ' .image_to_upload').length;
         if (empty(item)) {
-            console.log("Preview Image not found!");
-            debugger;
             return false;
         }
 
@@ -636,7 +629,6 @@ var plek_gallery_handler = {
             contentType: false,
             async: false,
             success: function success(data) {
-                console.log(data);
                 //Check for errors
                 let success = true;
                 if (plek_main.response_has_errors(data)) {
@@ -675,7 +667,6 @@ var plek_gallery_handler = {
             contentType: false,
             async: false,
             success: function success(data) {
-                console.log(data);
                 plek_main.deactivate_loader_style(button);
                 //Check for errors
                 let success = true;
