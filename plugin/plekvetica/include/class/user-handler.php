@@ -382,10 +382,10 @@ class PlekUserHandler
             case 'plek-band':
                 $managing_bands = PlekUserHandler::get_user_meta('band_id');
                 $managing_bands = explode(',', $managing_bands);
-                $event_bands = $event->get_bands();
+                $event_bands = $event->get_bands_ids();
                 if (!empty($managing_bands)) {
                     foreach ($managing_bands as $band_id) {
-                        if (isset($event_bands[$band_id])) {
+                        if (in_array($band_id, $event_bands)) {                
                             return true; //If one band is found, which is managed by the user, return true.
                         }
                     }

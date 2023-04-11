@@ -133,7 +133,6 @@ add_filter("generate_footer_meta_post_types", function ($arr) {
   return (get_post_type() === 'post') ? [] : $arr;
 }, 11);
 
-
 //Backend Login Logo
 /* add_filter('login_headertext', 'my_login_logo_url_title');
 add_filter('login_headerurl', 'my_login_logo_url');
@@ -141,10 +140,10 @@ add_filter('login_headertext', 'my_login_logo_url_title'); */
 
 
 //Display all filters
-add_filter('all', function ($hookname) {
+/*add_filter('all', function ($hookname) {
   $match = 'manage'; //The filter to search for
   if (strpos($hookname, $match) !== false) {
     //echo '&nbsp;&nbsp;'.$hookname.'&nbsp;&nbsp;';
   }
   return $hookname;
-});
+});*/

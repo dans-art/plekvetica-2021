@@ -408,7 +408,7 @@ class PlekEvents extends PlekEventHandler
 
         $query = $wpdb->prepare(
             "SELECT SQL_CALC_FOUND_ROWS posts.ID, posts.post_title , CAST(date.meta_value AS DATETIME) as startdate, rolemeta.meta_value
-        FROM `{$wpdb->prefix}posts` as posts 
+        FROM `{$wpdb->prefix}posts` as posts
         LEFT JOIN {$wpdb->prefix}postmeta as date
         ON ( date.post_id = posts.ID AND date.meta_key = '_EventStartDate' )
         LEFT JOIN {$wpdb->prefix}postmeta as rolemeta
@@ -418,7 +418,7 @@ class PlekEvents extends PlekEventHandler
         ON (posts.ID = postponed.post_id AND postponed.meta_key = 'postponed_event')
 
         WHERE 
-        (post_author = %d OR rolemeta.meta_value = %d) 
+        (post_author = %d OR rolemeta.meta_value = %d OR (meta.meta_key = 'event_coauthor' AND meta.meta_value = %d))
         AND post_type = 'tribe_events'
         AND posts.post_status IN ('publish', 'draft')
         AND (CAST(date.meta_value AS DATETIME) > %s AND CAST(date.meta_value AS DATETIME) < %s)

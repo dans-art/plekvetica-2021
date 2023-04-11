@@ -1795,7 +1795,7 @@ class PlekEventHandler
      * @param array|string|int $bands The Bands as a array, json-string or by single band-id
      * @return string|bool Name and link to the event if event exists, false otherwise
      */
-    public function event_extsts($date = null, $bands = null)
+    public function event_exists($date = null, $bands = null)
     {
         global $plek_ajax_handler;
         $date = (!is_string($date)) ? $plek_ajax_handler->get_ajax_data_esc('start_date') : $date;
@@ -1881,9 +1881,9 @@ class PlekEventHandler
         //Add to band score
         $pb = new PlekBandHandler;
         if($is_event_edit){
-            $pb -> add_band_of_the_month_score_of_user('edit_event');
+            $pb -> add_band_of_the_month_score_of_user('edit_event', null, $this);
         }else{
-            $pb -> add_band_of_the_month_score_of_user('add_event');
+            $pb -> add_band_of_the_month_score_of_user('add_event', null, $this);
         }
 
         if (PlekUserHandler::user_is_logged_in()) {
@@ -2263,10 +2263,13 @@ class PlekEventHandler
 
         if ($type === 'save_edit_event') {
             $validator->set_type('event_status', 'textshort');
-            $validator->set_type('event_featured', 'bool');
-            $validator->set_type('event_promote', 'bool');
-            $validator->set_type('event_ticket_raffle', 'url');
-            $validator->set_type('event_team', 'int');
+
+            if(PlekUserHandler::user_is_in_team()){
+                $validator->set_type('event_featured', 'bool');
+                $validator->set_type('event_promote', 'bool');
+                $validator->set_type('event_ticket_raffle', 'url');
+                $validator->set_type('event_team', 'int');
+            }
         }
 
         return $validator;

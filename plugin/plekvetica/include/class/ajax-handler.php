@@ -87,7 +87,7 @@ class PlekAjaxHandler
                 break;
             case 'check_event_duplicate':
                 $plek_event = new PlekEvents;
-                $existing = $plek_event->event_extsts();
+                $existing = $plek_event->event_exists();
                 if ($existing) {
                     $this->set_error($existing);
                 } else {
@@ -168,7 +168,7 @@ class PlekAjaxHandler
                 break;
             case 'check_event_duplicate':
                 $plek_event = new PlekEvents;
-                $existing = $plek_event->event_extsts();
+                $existing = $plek_event->event_exists();
                 if ($existing) {
                     $this->set_error($existing);
                 } else {

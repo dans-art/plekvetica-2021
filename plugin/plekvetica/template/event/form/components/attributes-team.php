@@ -16,4 +16,13 @@ $postponed = ($event_object->is_postponed_to_unknown()) ? 'selected' : '';
 			<option value="event_canceled" <?php echo $canceled; ?>><?php echo __('Event has been canceled','plekvetica') ?></option>
 		</select>
 	</div>
+
+	<div class="event-attribute-container">
+		<input type="checkbox" name="event_featured" id="event_featured" class="input" value="1" <?php echo $featured; ?> autocomplete="off"/>
+		<label for="event_featured"><?php echo __('Feature event', 'plekvetica'); ?></label>
+	</div>
+	<div class="event-attribute-container">
+		<input type="checkbox" name="event_promote" id="event_promote" class="input" value="1"  <?php echo $promoted; ?> autocomplete="off"/>
+		<label for="event_promote"><?php echo __('Promote this event', 'plekvetica'); ?></label>
+	</div>
 </div>
