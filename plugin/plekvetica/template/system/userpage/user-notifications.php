@@ -7,7 +7,7 @@ $notify = new PlekNotificationHandler;
 
 //s($notify -> push_notification(array(1,30,999,27), 'band','Mass Message','Only once in the DB?', 'link/to/click'));
 
-//echo $notify -> get_user_notifications_formated();
+//echo $notify -> get_user_notifications_formatted();
 
 
 ?>

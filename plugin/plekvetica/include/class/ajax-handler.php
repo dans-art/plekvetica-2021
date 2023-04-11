@@ -733,7 +733,7 @@ class PlekAjaxHandler
             case 'plek-all-notifications':
                 $return_arr = array();
                 $notify = new PlekNotificationHandler;
-                $return_arr['content'] = $notify->get_user_notifications_formated();
+                $return_arr['content'] = $notify->get_user_notifications_formatted();
                 $return_arr['count'] = $notify->get_number_of_notificaions();
                 echo json_encode($return_arr, JSON_UNESCAPED_UNICODE);
                 break;

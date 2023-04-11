@@ -582,7 +582,7 @@ class PlekNotificationHandler extends WP_List_Table
      * @param [type] $user_id
      * @return void
      */
-    public function get_user_notifications_formated($user_id = null)
+    public function get_user_notifications_formatted($user_id = null)
     {
         $notifications = $this->get_user_notifications($user_id);
         if (is_string($notifications)) {
