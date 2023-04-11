@@ -1523,10 +1523,11 @@ class PlekBandHandler
         if (!PlekUserHandler::user_is_band($user)) {
             return false;
         }
-        if(!is_object($user)){
+        if (!is_object($user)) {
             return false;
         }
-        $user_bands = PlekUserHandler::get_user_meta('band_id', $user -> ID);
+
+        $user_bands = PlekUserHandler::get_user_meta('band_id', $user->ID);
         $user_bands = explode(',', $user_bands);
         foreach ($user_bands as $band_id) {
             $this->update_band_of_the_month_score($band_id, $type);
@@ -1549,26 +1550,43 @@ class PlekBandHandler
             return false;
         }
         $value = 0;
+
         switch ($type) {
             case 'add_event':
                 $value = 10;
+                $max_number_of_actions = 5; //Max actions of this kind per day
                 break;
             case 'add_band':
                 $value = 10;
+                $max_number_of_actions = 10;
                 break;
             case 'edit_event':
                 $value = 5;
+                $max_number_of_actions = 7;
                 break;
             case 'edit_band':
                 $value = 5;
+                $max_number_of_actions = 5;
                 break;
             case 'login':
                 $value = 1;
+                $max_number_of_actions = 1;
                 break;
             default:
                 $value = 0;
                 break;
         }
+        if ($value === 0) {
+            return false;
+        }
+        $nr_of_actions = get_user_meta(get_current_user_id(), 'botm_score_' . $type, true);
+        $nr_of_actions = intval($nr_of_actions);
+        if ($nr_of_actions >= $max_number_of_actions) {
+            //Skip if max number of actions reached
+            return false;
+        }
+
+        update_user_meta(get_current_user_id(), 'botm_score_' . $type, ++$nr_of_actions);
         $current_value = intval(get_field('botm_score', 'term_' . $band_id));
         return $plek_handler->update_field('botm_score', $current_value + $value, 'term_' . $band_id);
     }
@@ -1581,6 +1599,26 @@ class PlekBandHandler
      */
     public function get_bands_of_the_month($view = 'html')
     {
+        global $plek_handler;
+        $botm = $plek_handler -> get_plek_option('bands_of_the_month', 'plek_hidden_options');
+        if(empty($botm)){
+            return __('No bands of the month found','plekvetica');
+        }
+        $botm = json_decode($botm, true);
+        if(isset($botm[$view])){
+            return $botm[$view];
+        }
+        return __('No bands of the month found for the given view','plekvetica');
+    }
+
+    /**
+     * Defines the bands of the month and saves it to the options
+     *
+     * @return void
+     */
+    public function set_bands_of_the_month()
+    {
+        global $plek_handler;
         $args = array(
             'hide_empty' => false,
             'meta_query' => array(
@@ -1591,20 +1629,26 @@ class PlekBandHandler
                 )
             ),
             'taxonomy' => 'post_tag',
-            'order_by' => 'met_value'
+            'orderby' => 'meta_value_num',
+            'order' => 'DESC'
         );
         $terms = get_terms($args);
-        if(empty($terms)){
+        if (empty($terms)) {
             return null;
         }
-        if($view === 'raw'){
-            return $terms;
-        }
+        //get the botm score
+        array_map(function ($term) {
+            $term->botm_score = get_field('botm_score', 'term_' . $term->term_id);
+        }, $terms);
+
         $html = '';
-        foreach($terms as $index => $term){
-            $html .= PlekTemplateHandler::load_template_to_var('band-of-the-month-item', 'band', $term -> term_id, $index +1);
+        foreach ($terms as $index => $term) {
+            $html .= PlekTemplateHandler::load_template_to_var('band-of-the-month-item', 'band', $term->term_id, $index + 1);
         }
-        return PlekTemplateHandler::load_template_to_var('band-of-the-month-container', 'band', $html);
+        $html = PlekTemplateHandler::load_template_to_var('band-of-the-month-container', 'band', $html);
+        $value = ['html' => $html, 'raw' => $terms];
+        $plek_handler -> update_plek_option('bands_of_the_month', json_encode($value), 'plek_hidden_options');
+        return true;
     }
 
     /**
@@ -1615,6 +1659,6 @@ class PlekBandHandler
     public function delete_bands_of_the_month_scores()
     {
         global $wpdb;
-        //return $wpdb->query( "UPDATE ".$wpdb->prefix."_termmeta SET meta_value = '0' WHERE meta_key === 'botm_score' AND meta_value > 0" );
+        return $wpdb->query( "UPDATE ".$wpdb->prefix."termmeta SET meta_value = '0' WHERE meta_key LIKE 'botm_score_' AND meta_value > 0" );
     }
 }

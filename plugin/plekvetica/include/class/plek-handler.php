@@ -71,10 +71,10 @@ class PlekHandler
      */
     public function update_plek_option($options_name, $value, $option_group = 'plek_general_options')
     {
-        $options = get_option($option_group);
         if (empty($options_name)) {
             return null; //Name not given
         }
+        $options = get_option($option_group);
         $options[$options_name] = $value; //Update the individual option
         return update_option($option_group, $options); //Saves the whole options array again.
     }

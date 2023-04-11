@@ -1099,11 +1099,8 @@ class PlekNotificationHandler extends WP_List_Table
         $pm = new PlekNewsletter;
         $pm->update_all_lists();
 
-        // This is for debug. Check later, if this runs every day!
-        apply_filters(
-            'simple_history_log',
-            'plek daily cron job fired'
-        );
+        //Reset the band of the months score limits
+        PlekUserHandler::reset_botm_action_counter();
     }
 
     /**

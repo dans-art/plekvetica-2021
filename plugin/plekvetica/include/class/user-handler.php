@@ -1156,4 +1156,17 @@ class PlekUserHandler
         }
         return false;
     }
+
+    /**
+     * Resets all the band of the month score limits for all users
+     *
+     * @return int|false Number of rows affected
+     */
+    public static function reset_botm_action_counter(){
+        global $wpdb;
+        $like = '%' . $wpdb->esc_like('botm_score_') . '%';
+        $query = $wpdb->prepare("UPDATE ".$wpdb->prefix."usermeta SET meta_value = '0' WHERE meta_key LIKE '%s' AND meta_value > 0", $like);
+        return $wpdb->query($query);
+
+    }
 }
