@@ -2704,7 +2704,7 @@ class PlekEventHandler
         foreach ($this->event['bands'] as $band_id => $item) {
             $band_name = $item['name'];
             $band_origin = (isset($item['herkunft'])) ? $item['herkunft'] : 'NULL';
-            $band_origin_formated = $band_handler->get_flag_formated($band_origin);
+            $band_origin_formated = $band_handler->get_flag_formatted($band_origin);
 
             //$timestamp = array_search($band_id, $this->event['timetable']); //Timestamp or false
             $timestamp = (!empty($this->event['timetable'][$band_id]['timestamp'])) ? $this->event['timetable'][$band_id]['timestamp'] : 0;

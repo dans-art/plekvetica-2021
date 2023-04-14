@@ -11,7 +11,7 @@ $genres = $band_obj->convert_genre_to_nicename($band->genre);
 
 ?>
 <article id="item_<?php echo $index; ?>" class="plek-band-item-compact flex-table-view">
-    <div class='band-country'><?php echo $band_obj->get_flag_formated($band->herkunft); ?></div>
+    <div class='band-country'><?php echo $band_obj->get_flag_formatted($band->herkunft); ?></div>
     <div class='band-name'>
         <a href="<?php echo $band_obj->get_band_link($band->slug); ?>" target="_self"><?php echo $band->name; ?></a>
         <span class='band-genre'><?php echo implode(', ', $genres); ?></span>

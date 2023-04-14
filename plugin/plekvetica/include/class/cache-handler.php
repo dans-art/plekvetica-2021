@@ -28,14 +28,13 @@ class PlekCacheHandler
      * @param int $user_id The user id, or current user if null
      * @return string The key
      */
-    public static function generate_key($name, $data, $user_id = null)
+    public static function generate_key($name, $data)
     {
-        $data = (is_array($data) OR is_object($data)) ? json_encode($data) : $data;
+        $data = (is_array($data) or is_object($data)) ? json_encode($data) : $data;
         if (!is_string($data)) {
             $data = date('Y-m-d');
         }
-        $user_id = (is_int($user_id)) ? $user_id : get_current_user_id();
-        return strval($name) . '_' . strval($user_id) . '_' . md5($data);
+        return strval($name) . '_' . md5($data);
     }
 
     /**
@@ -43,19 +42,22 @@ class PlekCacheHandler
      *
      * @param string $key - The cache identifier
      * @param string $context - The context or group to get the data from
+     * @param int $user_id - The user id of the content go get
      * @return string|bool The cached content or false on error
      */
-    public static function get_cache($key, $context = 'default')
+    public static function get_cache($key, $context = 'default', $user_id = null)
     {
         if (!self::cache_is_activated()) {
             return false;
         }
+        $user_id = (!is_integer($user_id)) ? get_current_user_id() : $user_id;
         global $wpdb;
         global $plek_handler;
         $query = $wpdb->prepare("SELECT content
         FROM `{$wpdb->prefix}plek_cache_content`
-        WHERE `cache_key` = '%s'
-        AND `context` = '%s'", $key, $context);
+        WHERE `cache_key` = '%s' AND
+        `user_id` = '%s'
+        AND `context` = '%s'", $key, $user_id ,$context);
 
         $content = $wpdb->get_row($query);
         $last_error = $wpdb->last_error;
@@ -63,8 +65,13 @@ class PlekCacheHandler
             return sprintf(__('Failed to get cached data: %s', 'plekvetica'), $last_error);
         }
         if (isset($content->content)) {
-            if($plek_handler -> is_dev_server() AND !wp_doing_ajax()){
-                    echo sprintf("<script type='text/javascript'>console.log('Loaded content from cache: %s')</script>", $key. ' :: '.$context);
+            if (
+                $plek_handler->is_dev_server() and
+                !wp_doing_ajax() and
+                !isset($_REQUEST['_locale']) and
+                (!isset($_REQUEST['action']) or $_REQUEST['action'] !== 'edit')
+            ) {
+                echo sprintf("<script type='text/javascript'>console.log('Loaded content from cache: %s')</script>", $key . ' :: ' . $context);
             }
             return $content->content;
         }
@@ -78,9 +85,10 @@ class PlekCacheHandler
      * @param string $content - The content to cache
      * @param array $post_ids - Array with post_ids
      * @param string $context - The group or context of the cache
+     * @param int $user_id - The user id of the cache to set
      * @return bool|string True on success, message on error
      */
-    public static function set_cache($key, $content, $post_ids, $context = 'default')
+    public static function set_cache($key, $content, $post_ids, $context = 'default', $user_id = null)
     {
         if (!self::cache_is_activated()) {
             return false;
@@ -88,15 +96,19 @@ class PlekCacheHandler
         /*if (!is_array($post_ids) or empty($post_ids)) {
             return __('No post ids given', 'plekvetica');
         }*/
+        $user_id = (!is_integer($user_id)) ? get_current_user_id() : $user_id;
+
         global $wpdb;
 
         $data = [
             "cache_key" => $key,
+            "user_id" => $user_id,
             "context" => $context,
             "content" => $content
         ];
         $format = [
             "%s",
+            "%d",
             "%s",
             "%s",
             "%d"
@@ -153,7 +165,8 @@ class PlekCacheHandler
      * @todo Cache second page as well?
      * @return bool true on success.
      */
-    public static function rebuild_cache($user_id = 0){
+    public static function rebuild_cache($user_id = 0)
+    {
 
         global $plek_handler;
         global $plek_event_blocks;
@@ -162,37 +175,36 @@ class PlekCacheHandler
         self::flush_cache_by_user($user_id);
 
         $prebuilt_blocks = [
-            'reviews' => ['block' => 'all_reviews', 'page' => get_page_by_path( 'reviews'), 'data' => []],
-            'my_event_watchlist' => ['block' => 'my_event_watchlist', 'page' => get_page_by_path( 'my-plekvetica'), 'data' => []],
-            'my_events' => ['block' => 'my_events', 'page' => get_page_by_path( 'my-plekvetica'), 'data' => []],
-            'my_week' => ['block' => 'my_week', 'page' => get_page_by_path( 'my-plekvetica'), 'data' => []],
+            'reviews' => ['block' => 'all_reviews', 'page' => get_page_by_path('reviews'), 'data' => []],
+            'my_event_watchlist' => ['block' => 'my_event_watchlist', 'page' => get_page_by_path('my-plekvetica'), 'data' => []],
+            'my_events' => ['block' => 'my_events', 'page' => get_page_by_path('my-plekvetica'), 'data' => []],
+            'my_week' => ['block' => 'my_week', 'page' => get_page_by_path('my-plekvetica'), 'data' => []],
         ];
-        
+
 
         //Set the current user
         wp_set_current_user($user_id);
 
         //Built Blocks
-        foreach($prebuilt_blocks as $atts){
+        foreach ($prebuilt_blocks as $atts) {
             $url = get_permalink($atts['page']);
-            $_SERVER['REQUEST_URI'] = $plek_handler -> url_remove_domain($url);
+            $_SERVER['REQUEST_URI'] = $plek_handler->url_remove_domain($url);
             //Create the block and that saves it to the cache
             $plek_event_blocks->get_block($atts['block'], $atts['data'], true);
         }
 
         //Built Shortcode content
-        $plek_events -> plek_get_featured_shortcode(); 
-        $plek_events -> plek_get_reviews_shortcode(); 
-        $plek_events -> plek_get_videos_shortcode();
-        $plek_events -> plek_event_recently_added_shortcode(); 
+        $plek_events->plek_get_featured_shortcode();
+        $plek_events->plek_get_reviews_shortcode();
+        $plek_events->plek_get_videos_shortcode();
+        $plek_events->plek_event_recently_added_shortcode();
 
         //Set the cache for the user
         $current_user = get_current_user_id();
-        if($current_user > 0){
-           update_user_meta($current_user, 'cached_at', time());
+        if ($current_user > 0) {
+            update_user_meta($current_user, 'cached_at', time());
         }
         return true;
-        
     }
 
     /**
@@ -200,11 +212,12 @@ class PlekCacheHandler
      *
      * @return void
      */
-    public static function rebuild_all_caches(){
+    public static function rebuild_all_caches()
+    {
         //Get the users with no or old cache
         //Default is 3 days and 20 users at once
         $users = PlekUserHandler::get_uncached_users();
-        foreach($users as $user_id){
+        foreach ($users as $user_id) {
             self::rebuild_cache($user_id);
         }
     }
@@ -233,9 +246,9 @@ class PlekCacheHandler
         }
 
         //Clear the WP Fastest Cache cache
-        if(class_exists('WpFastestCache')){
+        if (class_exists('WpFastestCache')) {
             $wpfc = new WpFastestCache();
-            $wpfc -> singleDeleteCache(false, $post_id);
+            $wpfc->singleDeleteCache(false, $post_id);
         }
 
         //Remove all the items
@@ -355,35 +368,36 @@ class PlekCacheHandler
      * @param int $user_id
      * @return bool|int false on error, number of rows deleted 
      */
-    public static function flush_cache_by_user($user_id){
+    public static function flush_cache_by_user($user_id = 0)
+    {
         global $wpdb;
-        $like = '%' . $wpdb->esc_like('_'.$user_id.'_') . '%';
+        $like = intval($user_id);
         $query = $wpdb->prepare("SELECT cache_id
         FROM `{$wpdb->prefix}plek_cache_content`
-        WHERE `cache_key` LIKE '%s'", $like);
+        WHERE `user_id` = '%s'", $like);
 
         $items = $wpdb->get_results($query);
 
-        if(empty($items)){
+        if (empty($items)) {
             return false;
         }
         $deleted = 0;
 
-        foreach($items as $item){
-            $id = intval($item -> cache_id);
-        //Delete from relationship table
-        $wpdb->delete(
-            $wpdb->prefix . 'plek_cache_relationship',
-            ['cache_id' => $id],
-            ['%d']
-        );
-        //Delete from content table
-        $wpdb->delete(
-            $wpdb->prefix . 'plek_cache_content',
-            ['cache_id' => $id],
-            ['%d']
-        );
-        $deleted++;
+        foreach ($items as $item) {
+            $id = intval($item->cache_id);
+            //Delete from relationship table
+            $wpdb->delete(
+                $wpdb->prefix . 'plek_cache_relationship',
+                ['cache_id' => $id],
+                ['%d']
+            );
+            //Delete from content table
+            $wpdb->delete(
+                $wpdb->prefix . 'plek_cache_content',
+                ['cache_id' => $id],
+                ['%d']
+            );
+            $deleted++;
         }
         return $deleted;
     }
@@ -464,6 +478,9 @@ class PlekCacheHandler
         if ($db_version === null or $db_version < 1) {
             self::update_database(1);
         }
+        if ($db_version === null or $db_version < 2) {
+            self::update_database(2);
+        }
         return;
     }
 
@@ -502,6 +519,25 @@ class PlekCacheHandler
                     PRIMARY KEY  id (id)
                   ) $charset_collate;";
                 dbDelta($plek_cache_relation);
+
+                //Updates the db version
+                update_option('plek_cache_db_version', $to_version);
+
+                break;
+            case 2:
+                require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+                //Add the message_id column
+                $table_name = $wpdb->prefix . "plek_cache_content";
+                $plek_cache = "CREATE TABLE {$table_name} (
+                    cache_id bigint (20) NOT NULL AUTO_INCREMENT,
+                    cache_key VARCHAR (255) NOT NULL,
+                    context VARCHAR (255) NOT NULL,
+                    user_id bigint (20) NOT NULL,
+                    content LONGTEXT NOT NULL,
+                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY  id (cache_id)
+                  ) $charset_collate;";
+                dbDelta($plek_cache);
 
                 //Updates the db version
                 update_option('plek_cache_db_version', $to_version);

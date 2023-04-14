@@ -225,6 +225,18 @@ class PlekBandHandler
     }
 
     /**
+     * Get the Band name with link to band.
+     *
+     * @param string $target - Target for the link. _self or _blank
+     * 
+     * @return string Band Name
+     */
+    public function get_name_link($target = '_self')
+    {
+        return '<a href="'.$this -> get_band_link().'" target="'.$target.'">'.$this -> get_name().'</a>';
+    }
+
+    /**
      * Get the Band description.
      *
      * @return string Band Description
@@ -321,7 +333,7 @@ class PlekBandHandler
      *
      * @return string Band logo as img tag
      */
-    public function get_logo_formated()
+    public function get_logo_formatted()
     {
         if (!empty($this->band['bandlogo'])) {
             return "<img src='" . $this->band['bandlogo'] . "' alt='" . $this->get_name() . "'/>";
@@ -338,7 +350,7 @@ class PlekBandHandler
      *
      * @return string Band flag as img tag
      */
-    public function get_flag_formated($country_code = '')
+    public function get_flag_formatted($country_code = '')
     {
         if (empty($country_code) or $country_code === null) {
             $country_code = (isset($this->band['herkunft'])) ? $this->band['herkunft'] : '';
@@ -1623,6 +1635,15 @@ class PlekBandHandler
     }
 
     /**
+     * Shortcode to get the bands of the month
+     *
+     * @return void
+     */
+    public function plek_get_botm_shortcode(){
+        return $this -> get_bands_of_the_month();
+    }
+
+    /**
      * Defines the bands of the month and saves it to the options
      *
      * @return void
@@ -1641,7 +1662,8 @@ class PlekBandHandler
             ),
             'taxonomy' => 'post_tag',
             'orderby' => 'meta_value_num',
-            'order' => 'DESC'
+            'order' => 'DESC',
+            'number' => 4
         );
         $terms = get_terms($args);
         if (empty($terms)) {
@@ -1660,6 +1682,50 @@ class PlekBandHandler
         $value = ['html' => $html, 'raw' => $terms];
         $plek_handler->update_plek_option('bands_of_the_month', json_encode($value), 'plek_hidden_options');
         return true;
+    }
+
+    /**
+     * Gets the current bands of the month as an list
+     *
+     * @return void
+     */
+    public function plek_get_botm_list_shortcode()
+    {
+        $cache_key = PlekCacheHandler::generate_key('botm_list', []);
+        $cached = PlekCacheHandler::get_cache($cache_key, 'bands');
+        if(!empty($cached)){
+            return $cached;
+        }
+        $args = array(
+            'hide_empty' => false,
+            'meta_query' => array(
+                array(
+                    'key'       => 'botm_score',
+                    'value'     => '0',
+                    'compare'   => '>'
+                )
+            ),
+            'taxonomy' => 'post_tag',
+            'orderby' => 'meta_value_num',
+            'order' => 'DESC',
+            'number' => 20
+        );
+        $terms = get_terms($args);
+        if (empty($terms)) {
+            return null;
+        }
+        //get the botm score
+        array_map(function ($term) {
+            $term->botm_score = get_field('botm_score', 'term_' . $term->term_id);
+        }, $terms);
+
+        $html = '';
+        foreach ($terms as $index => $term) {
+            $html .= PlekTemplateHandler::load_template_to_var('band-of-the-month-item-list', 'band', $term->term_id, $index + 1, $term->botm_score);
+        }
+        $html = PlekTemplateHandler::load_template_to_var('band-of-the-month-list-container', 'band', $html);
+        PlekCacheHandler::set_cache($cache_key, $html, [], 'bands');
+        return $html;
     }
 
     /**

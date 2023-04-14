@@ -25,7 +25,7 @@ $follower_count = $band_object->get_follower_count();
   <dl class='event-details-container'>
     <?php if (!empty($country)) : ?>
       <dt><?php echo __('Origin', 'plekvetica'); ?></dt>
-      <dd class="band-flag"><?php echo $band_object->get_flag_formated(); ?> <?php echo $country; ?></dd>
+      <dd class="band-flag"><?php echo $band_object->get_flag_formatted(); ?> <?php echo $country; ?></dd>
     <?php endif; ?>
     <dt><?php echo __('Social & Links', 'plekvetica'); ?></dt>
     <dd class="event-links">

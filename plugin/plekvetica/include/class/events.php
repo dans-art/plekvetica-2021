@@ -764,7 +764,7 @@ class PlekEvents extends PlekEventHandler
                     $band['slug'] = $line->slug;
                     $band['link'] = $band_class->get_band_link($line->slug);
                     $band['bandpage'] = $line->slug;
-                    $band['flag'] = $band_class->get_flag_formated('');
+                    $band['flag'] = $band_class->get_flag_formatted('');
                     $band['videos'] = null;
                     $band['band_genre'] = null;
                     $band['band_sort'] = null;
@@ -776,7 +776,7 @@ class PlekEvents extends PlekEventHandler
                             switch ($name) {
                                 case 'herkunft':
                                     $band['herkunft'] = $value;
-                                    $band['flag'] = $band_class->get_flag_formated($value);
+                                    $band['flag'] = $band_class->get_flag_formatted($value);
                                     break;
                                 case 'videos':
                                     $band['videos'] = preg_split('/\r\n|\r|\n/',  $value);

@@ -42,11 +42,12 @@ $pg = new PlekGalleryHandler;
 
 $plek_bands = new PlekBandHandler;
 
-//s($plek_bands -> add_band_of_the_month_score_of_user('edit_band', 1010));
-//s(SimpleLogger()->info("test"));
+s($plek_bands -> add_band_of_the_month_score_of_user('edit_band', 1010));
+
 s($plek_bands->set_bands_of_the_month());
-s(PlekUserHandler::reset_botm_action_counter());
+//s(PlekUserHandler::reset_botm_action_counter());
 s($plek_bands->get_bands_of_the_month('raw'));
+
 echo $plek_bands->get_bands_of_the_month();
 ?>
 </div>
