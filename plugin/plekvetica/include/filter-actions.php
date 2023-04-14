@@ -20,7 +20,8 @@ add_filter('coauthors_edit_author_cap', function ($caps) {
 
 add_filter('wp_mail', [new PlekNotificationHandler, 'filter_wp_mail'], 1, 1);
 
-add_action('init', [$plek_handler, 'load_textdomain']); //load language 
+add_action('init', [$plek_handler, 'load_textdomain']); //load language
+
 /*add_filter( 'determine_locale', function($locale){
   if(function_exists('get_user_locale')){
     return get_user_locale(  );
@@ -116,6 +117,9 @@ add_filter('manage_tribe_organizer_posts_custom_column', [new PlekOrganizerHandl
 //Rest API
 add_action('rest_api_init', [$plek_handler, 'register_rest_routes']);
 
+// Custom post types
+add_action('init', [$plek_handler, 'load_custom_post_types']);
+
 //Create Newsletter Page: Adds a preview Button at the end of the page
 add_action('admin_footer-admin_page_newsletter_emails_composer',[new PlekNewsletter, 'add_preview_button_action']);
 
@@ -129,7 +133,6 @@ add_filter("generate_footer_meta_post_types", function ($arr) {
   return (get_post_type() === 'post') ? [] : $arr;
 }, 11);
 
-
 //Backend Login Logo
 /* add_filter('login_headertext', 'my_login_logo_url_title');
 add_filter('login_headerurl', 'my_login_logo_url');
@@ -137,10 +140,10 @@ add_filter('login_headertext', 'my_login_logo_url_title'); */
 
 
 //Display all filters
-add_filter('all', function ($hookname) {
+/*add_filter('all', function ($hookname) {
   $match = 'manage'; //The filter to search for
   if (strpos($hookname, $match) !== false) {
     //echo '&nbsp;&nbsp;'.$hookname.'&nbsp;&nbsp;';
   }
   return $hookname;
-});
+});*/

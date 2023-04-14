@@ -48,7 +48,11 @@ if (empty($event_class->get_event())) {
 	<?php endif; ?>
 
 	<?php PlekTemplateHandler::load_template('text-bar', 'components', __('Event attributes', 'plekvetica')); ?>
-	<?php PlekTemplateHandler::load_template('attributes', 'event/form/components', $event_class); ?>
+	<?php if (PlekUserHandler::user_is_in_team()) : ?>
+		<?php PlekTemplateHandler::load_template('attributes-team', 'event/form/components', $event_class); ?>
+	<?php else : ?>
+		<?php PlekTemplateHandler::load_template('attributes', 'event/form/components', $event_class); ?>
+	<?php endif; ?>
 
 	<div id="event-id-field">
 		<input type="hidden" id="event_id" name="event_id" value="<?php echo $event_class->get_id(); ?>" />

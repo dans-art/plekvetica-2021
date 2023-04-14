@@ -1795,7 +1795,7 @@ class PlekEventHandler
      * @param array|string|int $bands The Bands as a array, json-string or by single band-id
      * @return string|bool Name and link to the event if event exists, false otherwise
      */
-    public function event_extsts($date = null, $bands = null)
+    public function event_exists($date = null, $bands = null)
     {
         global $plek_ajax_handler;
         $date = (!is_string($date)) ? $plek_ajax_handler->get_ajax_data_esc('start_date') : $date;
@@ -1877,6 +1877,14 @@ class PlekEventHandler
 
         //Save event to session in case they have to register / forgot their password or don't add any event details.
         PlekNotificationHandler::set_cookie('added_edit_event', $event_id, time() + 60 * 60 * 24 * 5); //Expires after 5 days
+
+        //Add to band score
+        $pb = new PlekBandHandler;
+        if($is_event_edit){
+            $pb -> add_band_of_the_month_score_of_user('edit_event', null, $this);
+        }else{
+            $pb -> add_band_of_the_month_score_of_user('add_event', null, $this);
+        }
 
         if (PlekUserHandler::user_is_logged_in()) {
             //Info to Band follower
@@ -2255,10 +2263,13 @@ class PlekEventHandler
 
         if ($type === 'save_edit_event') {
             $validator->set_type('event_status', 'textshort');
-            $validator->set_type('event_featured', 'bool');
-            $validator->set_type('event_promote', 'bool');
-            $validator->set_type('event_ticket_raffle', 'url');
-            $validator->set_type('event_team', 'int');
+
+            if(PlekUserHandler::user_is_in_team()){
+                $validator->set_type('event_featured', 'bool');
+                $validator->set_type('event_promote', 'bool');
+                $validator->set_type('event_ticket_raffle', 'url');
+                $validator->set_type('event_team', 'int');
+            }
         }
 
         return $validator;
@@ -2693,7 +2704,7 @@ class PlekEventHandler
         foreach ($this->event['bands'] as $band_id => $item) {
             $band_name = $item['name'];
             $band_origin = (isset($item['herkunft'])) ? $item['herkunft'] : 'NULL';
-            $band_origin_formated = $band_handler->get_flag_formated($band_origin);
+            $band_origin_formated = $band_handler->get_flag_formatted($band_origin);
 
             //$timestamp = array_search($band_id, $this->event['timetable']); //Timestamp or false
             $timestamp = (!empty($this->event['timetable'][$band_id]['timestamp'])) ? $this->event['timetable'][$band_id]['timestamp'] : 0;

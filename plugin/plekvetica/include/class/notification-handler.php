@@ -582,7 +582,7 @@ class PlekNotificationHandler extends WP_List_Table
      * @param [type] $user_id
      * @return void
      */
-    public function get_user_notifications_formated($user_id = null)
+    public function get_user_notifications_formatted($user_id = null)
     {
         $notifications = $this->get_user_notifications($user_id);
         if (is_string($notifications)) {
@@ -1099,11 +1099,8 @@ class PlekNotificationHandler extends WP_List_Table
         $pm = new PlekNewsletter;
         $pm->update_all_lists();
 
-        // This is for debug. Check later, if this runs every day!
-        apply_filters(
-            'simple_history_log',
-            'plek daily cron job fired'
-        );
+        //Reset the band of the months score limits
+        PlekUserHandler::reset_botm_action_counter();
     }
 
     /**

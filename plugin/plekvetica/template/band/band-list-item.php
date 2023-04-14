@@ -13,7 +13,7 @@ $genres = $plek_band -> get_genres();
 <div class="band-list-item">
     <div class="band band-<?php echo $plek_band->get_id(); ?>">
         <div class="band-flag">
-            <?php echo $plek_band->get_flag_formated(); ?>
+            <?php echo $plek_band->get_flag_formatted(); ?>
         </div>
         <div>
             <div class="band-name">

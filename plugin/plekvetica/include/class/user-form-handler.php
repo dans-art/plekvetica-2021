@@ -221,6 +221,9 @@ class PlekUserFormHandler extends PlekUserHandler
 
         $user = wp_get_current_user();
         $band_ids = $plek_ajax_handler->get_ajax_data('band-ids');
+        if(!is_array($band_ids)){
+            return false;
+        }
         $band_ids_imploded = implode(',', $band_ids);
 
         if ($plek_handler->update_field('band_id', $band_ids_imploded, 'user_' . $user->ID) === false) {
@@ -228,6 +231,8 @@ class PlekUserFormHandler extends PlekUserHandler
             return false;
         }
 
+        //Flush the user cache
+        PlekCacheHandler::flush_cache_by_user(get_current_user_id());
         return true;
     }
 

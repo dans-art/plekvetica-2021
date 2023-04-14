@@ -9,10 +9,15 @@ $user = PlekUserHandler::load_user_meta($user);
 $my_week_block = $plek_event_blocks->get_block('my_week');
 $my_events_block = $plek_event_blocks->get_block('my_events');
 
-$plek_event_blocks -> set_number_of_posts(5);
+$plek_event_blocks->set_number_of_posts(5);
 $my_watchlist = $plek_event_blocks->get_block('my_event_watchlist');
-$plek_event_blocks -> set_template('band-item-compact','band','block-band-container-nohead');
+$plek_event_blocks->set_template('band-item-compact', 'band', 'block-band-container-nohead');
 $my_band_follows = $plek_event_blocks->get_block('my_band_follows');
+
+//Add scores to the botm score
+$pb = new PlekBandHandler;
+$pb->add_band_of_the_month_score_of_user('login');
+
 ?>
 
 <div class="my-plek-container">

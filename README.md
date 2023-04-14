@@ -1,5 +1,19 @@
 # plekvetica-2021
 
+Version 3.4.0 - 2023.04.14
+- Added: Band of the month feature
+- Updated and improved the caching database
+- Fixed spelling
+- Fixed: Z-Index for overlays
+- Fixed image uploader preview not shown
+
+German:
+- Hinzugefügt: Bands des Monats feature
+- Zwischenspeicher Datenbank aktualisiert
+- Schreibfehler behoben
+- Behoben: Z-Index bei den Overlays
+- Behoben: Bildervorschau beim Bilderuploader wurde nicht angezeigt.
+
 
 Version 3.3.1 - 2023.04.10
 - Fixed: Time not set correctly when timezone was different

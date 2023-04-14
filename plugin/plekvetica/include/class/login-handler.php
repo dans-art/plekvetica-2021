@@ -73,7 +73,7 @@ class PlekLoginHandler
         }
     }
     /**
-     * Rederects to the Login Frontend Page, if Username or Password is empty.
+     * Redirects to the Login Frontend Page, if Username or Password is empty.
      *
      * @param string $username
      * @param string $password
@@ -119,8 +119,8 @@ class PlekLoginHandler
     public static function enqueue_scripts()
     {
         global $plek_handler;
-        $min = ($plek_handler -> is_dev_server()) ? '' : '.min' ;
-        wp_enqueue_script('plek-manage-user-script', PLEK_PLUGIN_DIR_URL . 'js/manage-user'.$min.'.js', ['jquery', 'plek-language'], $plek_handler->version);
+        $min = ($plek_handler->is_dev_server()) ? '' : '.min';
+        wp_enqueue_script('plek-manage-user-script', PLEK_PLUGIN_DIR_URL . 'js/manage-user' . $min . '.js', ['jquery', 'plek-language'], $plek_handler->version);
     }
 
     /**
@@ -149,6 +149,10 @@ class PlekLoginHandler
         wp_clear_auth_cookie();
         wp_set_current_user($login->ID);
         wp_set_auth_cookie($login->ID, $cred['remember']);
+
+        //Add scores to the botm score
+        $pb = new PlekBandHandler;
+        $pb->add_band_of_the_month_score_of_user('login');
 
         return $login->ID;
     }

@@ -382,10 +382,10 @@ class PlekUserHandler
             case 'plek-band':
                 $managing_bands = PlekUserHandler::get_user_meta('band_id');
                 $managing_bands = explode(',', $managing_bands);
-                $event_bands = $event->get_bands();
+                $event_bands = $event->get_bands_ids();
                 if (!empty($managing_bands)) {
                     foreach ($managing_bands as $band_id) {
-                        if (isset($event_bands[$band_id])) {
+                        if (in_array($band_id, $event_bands)) {                
                             return true; //If one band is found, which is managed by the user, return true.
                         }
                     }
@@ -1131,5 +1131,42 @@ class PlekUserHandler
         ];
         $users = get_users($args);
         return $users;
+    }
+
+    /**
+     * Checks if the user is managing the band given
+     *
+     * @param int $user_id - Id of the user. Can be Int or Null. In this case the current user will be checked
+     * @param int $band_id - ID of the band
+     * @return bool|null True if he manages the band, null on error, false if not found
+     */
+    public static function user_is_band_manager($user_id, $band_id){
+        $managing_bands = self::get_user_meta('band_id', $user_id);
+        $managing_bands = explode(',', $managing_bands);
+        if(!is_array($managing_bands)){
+            return null;
+        }
+        foreach($managing_bands as $user_band_id){
+            if(intval($user_band_id) === 0){
+                continue;
+            }
+            if(intval($band_id) === intval($user_band_id)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Resets all the band of the month score limits for all users
+     *
+     * @return int|false Number of rows affected
+     */
+    public static function reset_botm_action_counter(){
+        global $wpdb;
+        $like = '%' . $wpdb->esc_like('botm_score_') . '%';
+        $query = $wpdb->prepare("UPDATE ".$wpdb->prefix."usermeta SET meta_value = '0' WHERE meta_key LIKE '%s' AND meta_value > 0", $like);
+        return $wpdb->query($query);
+
     }
 }
