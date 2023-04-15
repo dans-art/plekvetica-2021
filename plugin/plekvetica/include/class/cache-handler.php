@@ -57,7 +57,7 @@ class PlekCacheHandler
         FROM `{$wpdb->prefix}plek_cache_content`
         WHERE `cache_key` = '%s' AND
         `user_id` = '%s'
-        AND `context` = '%s'", $key, $user_id ,$context);
+        AND `context` = '%s'", $key, $user_id, $context);
 
         $content = $wpdb->get_row($query);
         $last_error = $wpdb->last_error;
@@ -198,6 +198,9 @@ class PlekCacheHandler
         $plek_events->plek_get_reviews_shortcode();
         $plek_events->plek_get_videos_shortcode();
         $plek_events->plek_event_recently_added_shortcode();
+        $plek_band = new PlekBandHandler;
+        $plek_band->plek_get_botm_list_shortcode();
+        $plek_band->plek_band_page_shortcode();
 
         //Set the cache for the user
         $current_user = get_current_user_id();
@@ -210,16 +213,30 @@ class PlekCacheHandler
     /**
      * Rebuilds the cache for all users without valid cached data
      *
-     * @return void
+     * @return int Number of refreshed users
      */
     public static function rebuild_all_caches()
     {
+        $current_user_id = get_current_user_id();
         //Get the users with no or old cache
         //Default is 3 days and 20 users at once
         $users = PlekUserHandler::get_uncached_users();
+        $refreshed_users = [];
         foreach ($users as $user_id) {
-            self::rebuild_cache($user_id);
+            if (self::rebuild_cache($user_id)) {
+                $refreshed_users[] = $user_id;
+            }
         }
+        //Reset the user
+        wp_set_current_user($current_user_id);
+        //Log the event
+        SimpleLogger()->info(
+            sprintf('Cache got rebuilt for %s users', count($refreshed_users)),
+            [
+                'users' => implode(', ', $refreshed_users)
+            ]
+        );
+        return count($refreshed_users);
     }
 
     /**

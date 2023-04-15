@@ -1,5 +1,15 @@
 # plekvetica-2021
 
+Version 3.4.1 - 2023.04.15
+- Improved rebuilt cache
+- Added logger to rebuilt cache
+- Fixed ticket raffle display
+
+German:
+- Zwischenspeicher wurde optimiert
+- Zwischenspeicher Events werden geloggt
+- Behoben: Text der Ticketverlosung
+
 Version 3.4.0 - 2023.04.14
 - Added: Band of the month feature
 - Updated and improved the caching database

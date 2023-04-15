@@ -37,18 +37,15 @@ if(function_exists('wpfc_exclude_current_page')){
 $pb = new PlekEventBlocks();
 
 $pg = new PlekGalleryHandler;
+$pc = new PlekCacheHandler;
 
 //s(PlekCacheHandler::rebuild_cache(7));
 
 $plek_bands = new PlekBandHandler;
 
-s($plek_bands -> add_band_of_the_month_score_of_user('edit_band', 1010));
 
-s($plek_bands->set_bands_of_the_month());
-//s(PlekUserHandler::reset_botm_action_counter());
-s($plek_bands->get_bands_of_the_month('raw'));
+s($pc -> rebuild_all_caches());
 
-echo $plek_bands->get_bands_of_the_month();
 ?>
 </div>
 <?php 
