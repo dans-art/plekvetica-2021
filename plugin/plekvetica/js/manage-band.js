@@ -485,7 +485,7 @@ let plek_band = {
                 if (match && match.length > 1) {
                     return match[1];
                 } else {
-                    return false;
+                    return url; //Just return the url, it may be a spotify link
                 }
                 break;
 

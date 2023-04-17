@@ -6,7 +6,7 @@ extract(get_defined_vars());
 $band_object = isset($template_args[0]) ? $template_args[0] : null;
 $spotify_id = $band_object->get_social_link('spotify_id', false);
 
-if (empty($spotify_id)) {
+if (empty($spotify_id) or $spotify_id === false or $spotify_id === "false") {
     return;
 }
 ?>
