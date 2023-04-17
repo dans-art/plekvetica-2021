@@ -1,5 +1,13 @@
 # plekvetica-2021
 
+Version 3.4.2 - 2023.04.17
+- Fixed Spotify id not saved bug
+- Fixed Edit band will override spotify data
+
+German:
+- Behoben: Spotify ID wird nicht gespeichert
+- Behoben: Beim bearbeiten der Band wurden die Spotify daten gelöscht
+
 Version 3.4.1 - 2023.04.15
 - Improved rebuilt cache
 - Added logger to rebuilt cache

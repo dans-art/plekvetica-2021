@@ -1062,8 +1062,11 @@ class PlekBandHandler
         $acf['spotify_id'] = $plek_handler->clean_url($spotify);
         $acf['youtube_url'] = $youtube;
         $acf['twitter_url'] = $twitter;
-        $acf['fetched_spotify_data'] = $fetched_spotify_data;
         $acf['bio_text'] = $description;
+        if(!empty($fetched_spotify_data)){
+            //Only add the spotify data if it is set, otherwise skip
+            $acf['fetched_spotify_data'] = $fetched_spotify_data;
+        }
 
         //Upload Logo
         if (!empty($plek_ajax_handler->get_ajax_files_data('band-logo'))) {
